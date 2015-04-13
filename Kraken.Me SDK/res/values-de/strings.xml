@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="alert_accessibility">Damit Kraken richtig funktioniert, musst Du die Bedienungshilfe für Kraken.Me aktivieren. Dazu einfach die Bedienungshilfen Einstellungen aufrufen und den Kraken.Me Dienst einschalten.</string>
+    <string name="alert_accessibility_button">Bedienungshilfen Einstellungen öffnen</string>
+
+    <!-- Sensors -->
+    <string name="measurement_log">Log</string>
+    <string name="sensor_accelerometer">Accelerometer</string>
+    <string name="sensor_activity">Aktivität</string>
+    <string name="sensor_connection">Drahtlose Verbindungen</string>
+    <string name="sensor_light">Umgebungslicht</string>
+    <string name="sensor_location">GPS</string>
+    <string name="sensor_ringtone">Klingelton</string>
+    <string name="one_time_sensor_account_reader">Account reader</string>
+    <string name="one_time_sensor_running_processes">Laufende Prozesse</string>
+    <string name="one_time_sensor_running_services">Laufende Dienste</string>
+    <string name="one_time_sensor_running_tasks">Laufende Tasks</string>
+    <string name="sensor_contacts">Kontakte</string>
+    <string name="sensor_calendar">Kalender</string>
+    <string name="sensor_loudness">Lautstärke</string>
+    <string name="sensor_calllog">Anrufliste</string>
+    <string name="sensor_browser_history">Browser Verlauf</string>
+    <string name="sensor_foreground_event">Benutzte Apps</string>
+    <string name="sensor_network_traffic">Datenverbrauch</string>
+
+    <!-- Service -->
+    <string name="service_notfication_text">Kraken Service ist aktiv</string>
+
+    <!-- Data Profiles -->
+    <string-array name="data_profile_titles">
+        <item>Basis</item>
+        <item>Vollständig</item>
+    </string-array>
+    <string-array name="data_profile_descriptions">
+        <item>Aktivität, Benutzte Apps, Browser Verlauf, Accelerometer, Drahtlose Verbindungen, Umgebungslicht, Klingelton</item>
+        <item>Zusätzlich Kalender, GPS, Datenverbrauch, Anrufliste, Kontakte</item>
+    </string-array>
+
+    <!-- Settings -->
+    <string name="data_profile">Datenprofil</string>
+    <string name="pref_activated">Kraken</string>
+    <string name="pref_activated_summary">Kraken Hintergrunddienst aktivieren oder deaktivieren</string>
+    <string name="pref_data">Daten</string>
+    <string name="pref_show_notification_summary">Benachrichtigung bei laufendem Service anzeigen</string>
+    <string name="pref_show_notification">Benachrichtigung</string>
+
+    <!-- Tutorial -->
+    <string name="tutorial_welcome_title">Willkommen zu Kraken!</string>
+    <string name="tutorial_welcome_text">Kraken hilft Dir dabei dein digitales Leben zu verstehen. Gleichzeitig hilfst Du uns dabei unser Forschungsprojekt zu realisieren.</string>
+    <string name="tutorial_dataprofile_title">Datenprofil auswählen</string>
+    <string name="tutorial_dataprofile_text">Du kannst diese und weitere Optionen jederzeit in den Einstellungen der App anpassen.</string>
+    <string name="tutorial_finish_title">Nur noch zwei Schritte</string>
+    <string name="tutorial_finish_accessibility">Damit Kraken richtig funktioniert, musst Du die Bedienungshilfe für Kraken.Me aktivieren. Dazu einfach über den Button die Bedienungshilfen Einstellungen aufrufen und den Kraken.Me Dienst einschalten.</string>
+    <string name="tutorial_accessibility_activate">Jetzt aktivieren</string>
+    <string name="tutorial_finish_login">Um Kraken zu verwenden ist ein Login erforderlich.</string>
+    <string name="tutorial_disclaimer_title">Disclaimer</string>
+    <string name="tutorial_disclaimer_text">Kraken.me sammelt Handlungsdaten und Profilinformationen im Rahmen der Forschung an der Technischen Universität Darmstadt und um dir Dienstleistungen auf Grundlage dieser Daten anzubieten. Daten werden über die Kraken.me Android Applikation, den Kraken.me Desktop Monitor und den Social Hub zur Verbindung mit sozialen Netzen erfasst. Basierend auf den Kraken.me Applikationen die du verwendest und deiner Entscheidung für eines von mehreren Sammelprofilen entscheidest du welche Daten gesammelt werden. Unter folgenden <a href="http://kraken.me/index.html#/datenschutz">Link</a> findest du eine Übersicht über die erhobenen Daten nach Applikation und Sammelprofil.\n\nDie Daten können von uns zu Forschungszwecken und zur Anzeige in den angeschlossenen Kraken.me-Anwendungen mit automatisierten Methoden aufbereitet und analysiert werden. Die Daten werden niemals für kommerzielle Zwecke verwendet. Wir behalten uns das Recht vor Teilmengen der Daten anonymisiert und aggregiert an Dritte weiterzugeben.</string>
+    <string name="accept">Akzeptieren</string>
+    <string name="decline">Ablehnen</string>
+
+    <!-- Login -->
+    <string name="login_description">Um Kraken.Me zu benutzen musst Du Dich über mindestens ein Soziales Netwerk anmelden.</string>
+    <string name="logout">Logout</string>
+
+</resources>
