@@ -1,0 +1,4 @@
+include ':facebookSDK', ':LiveSDK'
+
+project(':facebookSDK').projectDir = new File('libs/facebookSDK')
+project(':LiveSDK').projectDir = new File('libs/LiveSDK/src')
