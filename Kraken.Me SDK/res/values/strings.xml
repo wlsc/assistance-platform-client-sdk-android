@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name" translatable="false">Kraken.Me SDK</string>
+
+    <string name="alert_accessibility">For Kraken to work properly you need to activate the accessibility option. Therefore just open the Accessibility Settings and enable the Kraken.Me service.</string>
+    <string name="alert_accessibility_button">Open Accessibility Settings</string>
+
+    <!-- Sensors -->
+    <string name="measurement_log">Log</string>
+    <string name="sensor_accelerometer">Accelerometer</string>
+    <string name="sensor_activity">Activity</string>
+    <string name="sensor_connection">Wireless connections</string>
+    <string name="sensor_light">Ambient light</string>
+    <string name="sensor_location">Location</string>
+    <string name="sensor_ringtone">Ringtone</string>
+    <string name="one_time_sensor_account_reader">Account reader</string>
+    <string name="one_time_sensor_running_processes">Running processes</string>
+    <string name="one_time_sensor_running_services">Running services</string>
+    <string name="one_time_sensor_running_tasks">Running tasks</string>
+    <string name="sensor_contacts">Contacts</string>
+    <string name="sensor_calendar">Calendar</string>
+    <string name="sensor_loudness">Loudness</string>
+    <string name="sensor_calllog">Call log</string>
+    <string name="sensor_browser_history">Browser history</string>
+    <string name="sensor_network_traffic">Traffic Usage</string>
+    <string name="sensor_foreground_event">Last used apps</string>
+
+    <!-- Service -->
+    <string name="service_notfication_text">Kraken Service is running</string>
+
+    <string name="finish">Done</string>
+    <string name="general">General</string>
+    <string name="login">Login</string>
+    <string name="settings">Settings</string>
+    <string name="next">Next</string>
+    <string name="tutorial">Tutorial</string>
+    <string name="today">Today</string>
+    <string name="yesterday">Yesterday</string>
+    <string name="choose_day">Pick Date</string>
+    <string name="about">About</string>
+
+    <!-- Data Profiles -->
+    <string-array name="data_profile_titles">
+        <item>Basic</item>
+        <item>Extended</item>
+    </string-array>
+    <string-array name="data_profile_descriptions">
+        <item>Activity, used apps, browser history, accelerometer, wireless connections, ambient light, ringtone</item>
+        <item>Adds Calendar, location, traffic usage, call log, contacts</item>
+    </string-array>
+
+    <!-- Settings -->
+    <string name="data_profile">Data profile</string>
+    <string name="pref_activated">Kraken</string>
+    <string name="pref_activated_summary">Activate or deactive Kraken background service</string>
+    <string name="pref_data">Data</string>
+    <string name="pref_show_notification_summary">Show notification about service status</string>
+    <string name="pref_show_notification">Show notifications</string>
+
+    <!-- Tutorial -->
+    <string name="tutorial_welcome_title">Welcome to Kraken!</string>
+    <string name="tutorial_welcome_text">Kraken will help you understand more about your behavior, while enabling us to research new personal assitance methods.</string>
+    <string name="tutorial_dataprofile_title">Pick a data profile</string>
+    <string name="tutorial_dataprofile_text">You will be able to change these settings later.</string>
+    <string name="tutorial_finish_title">Just two more steps</string>
+    <string name="tutorial_finish_accessibility">For Kraken to work properly you need to activate the accessibility option. Therefore just open the Accessibility Settings via the Button and enable the Kraken.Me service.</string>
+    <string name="tutorial_accessibility_activate">Activate now</string>
+    <string name="tutorial_finish_login">You have to login first to use Kraken.</string>
+    <string name="tutorial_disclaimer_title">Disclaimer</string>
+    <string name="tutorial_disclaimer_text">Kraken.me collects activity data and profile information in the context of research at the Technische Universität Darmstadt. Furthermore the data is used to offer services to you. Data is collected by the Kraken.me Android App, the Kraken.me Desktop Monitor and the Social Hub for connections to social networks. Based on the Kraken.me applications you use and your decision for a collection profile you decide which information is collected by the Kraken.me applications. Follow this <a href="http://kraken.me/index.html#/datenschutz">link</a> you find an overview of the data collected, grouped by application and collection profile.\n\nThe data collected by Kraken.me can be used for scientific research and for the visualization of information within Kraken.me applications which apply automated methods of data processing and analysis. We never use your data for commercial purpose. We reserve the right to hand over anonymized and aggregated subsets of the data to third parties.</string>
+    <string name="accept">Accept</string>
+    <string name="decline">Decline</string>
+
+    <!-- Login -->
+    <string name="login_description">Um Kraken.Me zu benutzen musst Du Dich über mindestens ein Soziales Netwerk anmelden.</string>
+    <string name="logout">Logout</string>
+
+
+</resources>
