@@ -30,8 +30,11 @@ proguard/
 
 # Idea non-crucial project fileS
 *.iws﻿
+*.iml
 /.idea/workspace.xml
 /.idea/libraries
+/*/.idea/workspace.xml
+/*/.idea/libraries
 
 # Signing files
 .signing/
