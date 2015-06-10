@@ -59,3 +59,6 @@ Thumbs.db
 # ETC
 /captures
 LiveSDK/src/build
+findbugs-idea.xml
+qaplug_profiles.xml
+runConfigurations.xml
