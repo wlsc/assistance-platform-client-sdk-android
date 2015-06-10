@@ -31,6 +31,14 @@ proguard/
 # Idea non-crucial project fileS
 *.iws﻿
 *.iml
+findbugs-idea.xml
+qaplug_profiles.xml
+runConfigurations.xml
+compiler.xml
+encodings.xml
+gradle.xml
+misc.xml
+vcs.xml
 **/.idea/workspace.xml
 **/.idea/libraries
 
@@ -59,6 +67,3 @@ Thumbs.db
 # ETC
 /captures
 LiveSDK/src/build
-findbugs-idea.xml
-qaplug_profiles.xml
-runConfigurations.xml
