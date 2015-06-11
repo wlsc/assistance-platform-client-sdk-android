@@ -38,7 +38,7 @@ public class CallLogSensor extends AbstractContentObserverSensor {
 			@Override
 			public void run() {
 				syncData();
-				m_context.getContentResolver().registerContentObserver(URI_CALL_LOG, true, m_observer);
+				context.getContentResolver().registerContentObserver(URI_CALL_LOG, true, m_observer);
 			}
 		});
 		thread.setName("CallLogSensorThread");
@@ -49,7 +49,7 @@ public class CallLogSensor extends AbstractContentObserverSensor {
 	protected void syncData() {
 
 		if (m_daoSession == null) {
-            m_daoSession = DatabaseManager.getInstance(m_context).getDaoSession();
+            m_daoSession = DatabaseManager.getInstance(context).getDaoSession();
         }
 			//throw new IllegalAccessError("no valid daoSession available!");
 
@@ -61,7 +61,7 @@ public class CallLogSensor extends AbstractContentObserverSensor {
 		if (lastItem != null)
 			longLastKnownCallLogId = lastItem.getCallId();
 
-		ContentResolver cr = m_context.getContentResolver();
+		ContentResolver cr = context.getContentResolver();
 		Cursor cur = cr
 				.query(android.provider.CallLog.Calls.CONTENT_URI, null, Calls._ID + ">?", new String[] { String.valueOf(longLastKnownCallLogId) }, null);
 		if (cur == null || cur.getCount() == 0)
@@ -85,10 +85,10 @@ public class CallLogSensor extends AbstractContentObserverSensor {
 
         String strFullqualifiedDatabaseClassName = getSensorType().getFullqualifiedDatabaseClassName();
         //SensorData callLogs = flushData(m_daoSession, strFullqualifiedDatabaseClassName);
-        //ServerPushManager.getInstance(m_context).flushManually(callLogs);
+        //ServerPushManager.getInstance(context).flushManually(callLogs);
         ApiMessage.DataWrapper callLogs = flushDataRetro(strFullqualifiedDatabaseClassName);
         if (callLogs != null) {
-            RetroServerPushManager.getInstance(m_context).flushManually(getPushType(), callLogs);
+            RetroServerPushManager.getInstance(context).flushManually(getPushType(), callLogs);
         }
     }
 }

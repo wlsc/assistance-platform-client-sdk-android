@@ -21,7 +21,7 @@ public class RunningAppsReader extends AbstractPeriodicSensor implements ISensor
 
 	public RunningAppsReader(Context context) {
 		super(context);
-		m_activityManager = (ActivityManager) m_context.getSystemService(Context.ACTIVITY_SERVICE);
+		m_activityManager = (ActivityManager) this.context.getSystemService(Context.ACTIVITY_SERVICE);
 
 	}
 

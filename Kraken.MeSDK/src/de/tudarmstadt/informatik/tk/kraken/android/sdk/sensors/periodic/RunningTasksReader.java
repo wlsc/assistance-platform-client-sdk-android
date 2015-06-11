@@ -21,7 +21,7 @@ public class RunningTasksReader extends AbstractPeriodicSensor implements ISenso
 	public RunningTasksReader(Context context) {
 		super(context);
 		setDataIntervallInSec(30);
-		m_activityManager = (ActivityManager) m_context.getSystemService(Context.ACTIVITY_SERVICE);
+		m_activityManager = (ActivityManager) this.context.getSystemService(Context.ACTIVITY_SERVICE);
 	}
 
 	@Override

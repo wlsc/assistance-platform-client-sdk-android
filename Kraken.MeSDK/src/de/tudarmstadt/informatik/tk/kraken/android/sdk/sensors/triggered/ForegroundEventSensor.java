@@ -59,12 +59,12 @@ public class ForegroundEventSensor extends AbstractTriggeredSensor {
 
         mStarted = true;
 
-        mEventFilter = new AccessibilityEventFilter(m_context);
+        mEventFilter = new AccessibilityEventFilter(context);
 
         // register receiver that handles screen on and screen off logic
         IntentFilter filter = new IntentFilter(Intent.ACTION_SCREEN_ON);
         filter.addAction(Intent.ACTION_SCREEN_OFF);
-        m_context.registerReceiver(mReceiver, filter);
+        context.registerReceiver(mReceiver, filter);
 
         SensorForegroundEvent event = new SensorForegroundEvent();
         event.setEventType(EVENT_KRAKEN_START);
@@ -79,7 +79,7 @@ public class ForegroundEventSensor extends AbstractTriggeredSensor {
             // TODO: find out why this exception is thrown
             try {
                 if(mReceiver != null) {
-                    m_context.unregisterReceiver(mReceiver);
+                    context.unregisterReceiver(mReceiver);
                     mReceiver = null;
                 }
             }
@@ -112,7 +112,7 @@ public class ForegroundEventSensor extends AbstractTriggeredSensor {
         Bitmap icon = getAppIcon(packageName);
         String color = getIconColor(packageName, icon);
 
-        File path = new File(m_context.getExternalFilesDir(null).getPath()
+        File path = new File(context.getExternalFilesDir(null).getPath()
                 + File.separator + ICONS_DIR);
         path.mkdirs();
         File file = new File(path, packageName + ".png");
@@ -141,7 +141,7 @@ public class ForegroundEventSensor extends AbstractTriggeredSensor {
     }
 
     private Bitmap getAppIcon(String packageName) {
-        PackageManager pm = m_context.getPackageManager();
+        PackageManager pm = context.getPackageManager();
         try {
             Drawable icon = pm.getApplicationIcon(packageName);
             return ImageUtils.drawableToBitmap(icon);

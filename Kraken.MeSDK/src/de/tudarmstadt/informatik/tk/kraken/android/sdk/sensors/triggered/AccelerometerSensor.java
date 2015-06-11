@@ -34,7 +34,7 @@ public class AccelerometerSensor extends AbstractTriggeredSensor implements Sens
 	public AccelerometerSensor(Context context) {
 		super(context);
 
-		m_sensorManager = (SensorManager) m_context.getSystemService(Context.SENSOR_SERVICE);
+		m_sensorManager = (SensorManager) this.context.getSystemService(Context.SENSOR_SERVICE);
 		m_accelerometerSensor = m_sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
 	}
 

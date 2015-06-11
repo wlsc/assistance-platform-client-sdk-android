@@ -17,7 +17,7 @@ public class RingtoneSensor extends AbstractPeriodicSensor implements ISensor {
 	public RingtoneSensor(Context context) {
 		super(context);
 		setDataIntervallInSec(INIT_DATA_INTERVALL);
-		m_audioManager = (AudioManager) m_context.getSystemService(Context.AUDIO_SERVICE);
+		m_audioManager = (AudioManager) this.context.getSystemService(Context.AUDIO_SERVICE);
 	}
 
 	@Override

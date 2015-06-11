@@ -213,7 +213,7 @@ public class ServerPushManager {
         }
         */
 
-		// new ServerCommunication(m_context).execute(jsonObject);
+		// new ServerCommunication(context).execute(jsonObject);
 	}
 
     private void splitAndSend(List<SensorData> liSensorData) {

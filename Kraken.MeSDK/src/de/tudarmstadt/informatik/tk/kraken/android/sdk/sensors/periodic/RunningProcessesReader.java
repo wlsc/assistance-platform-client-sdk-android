@@ -21,7 +21,7 @@ public class RunningProcessesReader extends AbstractPeriodicSensor implements IS
 	public RunningProcessesReader(Context context) {
 		super(context);
 		setDataIntervallInSec(30);
-		m_activityManager = (ActivityManager) m_context.getSystemService(Context.ACTIVITY_SERVICE);
+		m_activityManager = (ActivityManager) this.context.getSystemService(Context.ACTIVITY_SERVICE);
 		// m_query =
 		// m_daoSession.getSensorRunningProcessesDao().queryBuilder().where(Properties.RunningProcesses.eq("")).build();
 	}

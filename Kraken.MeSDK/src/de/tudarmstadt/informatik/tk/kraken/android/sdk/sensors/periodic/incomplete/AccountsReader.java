@@ -15,7 +15,7 @@ public class AccountsReader extends AbstractPeriodicSensor implements ISensor {
 
 	public AccountsReader(Context context) {
 		super(context);
-		m_accountManager = AccountManager.get(m_context);
+		m_accountManager = AccountManager.get(this.context);
 	}
 
 	@Override

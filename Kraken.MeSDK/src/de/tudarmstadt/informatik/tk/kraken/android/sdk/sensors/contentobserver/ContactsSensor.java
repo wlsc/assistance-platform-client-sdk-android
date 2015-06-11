@@ -63,8 +63,8 @@ public class ContactsSensor extends AbstractContentObserverSensor {
 
         //ContactsContract.CommonDataKinds.StructuredName.
 	
-		//Cursor cursor = m_context.getContentResolver().query(URI_RAW_CONTACTS, null, "deleted=?", new String[] { "0" }, null);
-		Cursor cursor = m_context.getContentResolver().query(URI_CONTACTS, null, Data.IN_VISIBLE_GROUP + " = 1", null, null);
+		//Cursor cursor = context.getContentResolver().query(URI_RAW_CONTACTS, null, "deleted=?", new String[] { "0" }, null);
+		Cursor cursor = context.getContentResolver().query(URI_CONTACTS, null, Data.IN_VISIBLE_GROUP + " = 1", null, null);
 		cursor.moveToFirst();
 		
 		HashMap<Long, SensorContact> allExistingContacts;
@@ -87,7 +87,7 @@ public class ContactsSensor extends AbstractContentObserverSensor {
 			String[] projectionNameParams = new String[] { StructuredName.GIVEN_NAME, StructuredName.FAMILY_NAME };
 			String whereName = ContactsContract.Data.MIMETYPE + " = ? AND " + Data.CONTACT_ID + " = ?";
 			String[] whereNameParams = new String[] { StructuredName.CONTENT_ITEM_TYPE, strContactId };
-			Cursor nameCur = m_context.getContentResolver().query(URI_DATA, projectionNameParams, whereName, whereNameParams, null);
+			Cursor nameCur = context.getContentResolver().query(URI_DATA, projectionNameParams, whereName, whereNameParams, null);
 			if (nameCur.moveToFirst()) {
 				strGivenName = getStringByColumnName(nameCur, StructuredName.GIVEN_NAME);
 				strFamilyName = getStringByColumnName(nameCur, StructuredName.FAMILY_NAME);
@@ -97,7 +97,7 @@ public class ContactsSensor extends AbstractContentObserverSensor {
 			// Fill database object
 			SensorContact sensorContact = new SensorContact();
 			sensorContact.setContactId(Long.valueOf(strContactId));
-			sensorContact.setGlobalContactId(KrakenUtils.getGlobalId(m_context, Long.valueOf(strContactId)));
+			sensorContact.setGlobalContactId(KrakenUtils.getGlobalId(context, Long.valueOf(strContactId)));
 			sensorContact.setDisplayName(getStringByColumnName(cursor, Data.DISPLAY_NAME_PRIMARY));
 			sensorContact.setGivenName(strGivenName);
 			sensorContact.setFamilyName(strFamilyName);
@@ -143,7 +143,7 @@ public class ContactsSensor extends AbstractContentObserverSensor {
             ApiMessage.DataWrapper dataContact = flushDataRetro(strFullqualifiedDatabaseClassName);
             ApiMessage.DataWrapper dataMail = flushDataRetro(strFullqualifiedDatabaseClassName + "Mail");
             ApiMessage.DataWrapper dataNumber = flushDataRetro(strFullqualifiedDatabaseClassName + "Number");
-            RetroServerPushManager.getInstance(m_context).flushManually(getPushType(), dataContact, dataMail, dataNumber);
+            RetroServerPushManager.getInstance(context).flushManually(getPushType(), dataContact, dataMail, dataNumber);
         }
 	}
 
@@ -152,7 +152,7 @@ public class ContactsSensor extends AbstractContentObserverSensor {
 		HashMap<String, SensorContactMail> mapExistingMails = getExistingMails(longContactId);
 
 		String[] columns = new String[] { Email.ADDRESS, Email.TYPE };
-		Cursor emails = m_context.getContentResolver().query(URI_EMAIL, columns, Email.CONTACT_ID + " = " + longContactId, null, null);
+		Cursor emails = context.getContentResolver().query(URI_EMAIL, columns, Email.CONTACT_ID + " = " + longContactId, null, null);
 		while (emails.moveToNext()) {
 			SensorContactMail sensorContactMail = new SensorContactMail();
 //			sensorContactMail.setMailId(getLongByColumnName(emails, Email._ID));
@@ -208,7 +208,7 @@ public class ContactsSensor extends AbstractContentObserverSensor {
 		long longContactId = sensorContact.getContactId();
 		HashMap<Long, SensorContactNumber> mapExistingNumbers = getExistingNumbers(longContactId);
 
-		Cursor curPhones = m_context.getContentResolver().query(URI_PHONE, null, Phone.CONTACT_ID + " = " + longContactId, null, null);
+		Cursor curPhones = context.getContentResolver().query(URI_PHONE, null, Phone.CONTACT_ID + " = " + longContactId, null, null);
 		while (curPhones.moveToNext()) {
 			SensorContactNumber sensorContactNumber = new SensorContactNumber();
 			sensorContactNumber.setNumberId(getLongByColumnName(curPhones, Phone._ID));
@@ -342,7 +342,7 @@ public class ContactsSensor extends AbstractContentObserverSensor {
 		String[] columns = new String[] { Note.NOTE };
 		String where = Data.RAW_CONTACT_ID + " = ? AND " + Data.MIMETYPE + " = ?";
 		String[] whereParameters = new String[] { contactId, Note.CONTENT_ITEM_TYPE };
-		Cursor contacts = m_context.getContentResolver().query(URI_DATA, columns, where, whereParameters, null);
+		Cursor contacts = context.getContentResolver().query(URI_DATA, columns, where, whereParameters, null);
 		if (contacts.moveToFirst()) {
 			note = getStringByColumnName(contacts, Note.NOTE);
 		}
@@ -357,7 +357,7 @@ public class ContactsSensor extends AbstractContentObserverSensor {
 			@Override
 			public void run() {
 				syncData();
-				m_context.getContentResolver().registerContentObserver(URI_CONTACTS, true, m_observer);
+				context.getContentResolver().registerContentObserver(URI_CONTACTS, true, m_observer);
 			}
 		});
 		thread.setName("ContactsSensorThread");

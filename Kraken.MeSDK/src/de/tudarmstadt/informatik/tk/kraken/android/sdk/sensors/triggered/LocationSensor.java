@@ -7,22 +7,22 @@ import android.location.Location;
 import android.os.Bundle;
 
 import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GooglePlayServicesClient;
-import com.google.android.gms.location.LocationClient;
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationServices;
 
 import de.tudarmstadt.informatik.tk.kraken.android.sdk.db.SensorLocation;
 import de.tudarmstadt.informatik.tk.kraken.android.sdk.sensors.ESensorType;
 import de.tudarmstadt.informatik.tk.kraken.android.sdk.sensors.abstract_sensors.AbstractTriggeredSensor;
 import de.tudarmstadt.informatik.tk.kraken.android.sdk.utils.TrafficLocation;
 
-public class LocationSensor extends AbstractTriggeredSensor implements GooglePlayServicesClient.ConnectionCallbacks, GooglePlayServicesClient.OnConnectionFailedListener,
+public class LocationSensor extends AbstractTriggeredSensor implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener,
         LocationListener {
 
     public static enum Configuration {
         ACCURACY, UPDATE_INTERVAL_IN_SECONDS, FASTEST_INTERVAL_IN_SECONDS
-    };
+    }
 
     //------------------- Configuration -------------------
     // Accuracy
@@ -34,7 +34,7 @@ public class LocationSensor extends AbstractTriggeredSensor implements GooglePla
     //-----------------------------------------------------
 
 
-    private LocationClient m_locationClient = null;
+    private GoogleApiClient mGoogleApiClient = null;
     private LocationRequest m_locationRequest = null;
 
     private final static int CONNECTION_FAILURE_RESOLUTION_REQUEST = 9000;
@@ -43,8 +43,17 @@ public class LocationSensor extends AbstractTriggeredSensor implements GooglePla
         super(context);
     }
 
+    /**
+     * Starts sensing
+     */
     public void startSensor() {
-        m_locationClient = new LocationClient(m_context, this, this);
+
+        mGoogleApiClient = new GoogleApiClient.Builder(context)
+                .addApi(LocationServices.API)
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                .build();
+
         // Create the LocationRequest object
         m_locationRequest = LocationRequest.create();
         // Use high accuracy
@@ -53,15 +62,15 @@ public class LocationSensor extends AbstractTriggeredSensor implements GooglePla
         m_locationRequest.setInterval(UPDATE_INTERVAL_IN_SECONDS * 1000);
         // Set the fastest update interval to x seconds
         m_locationRequest.setFastestInterval(FASTEST_INTERVAL_IN_SECONDS * 1000);
-        m_locationClient.connect();
+        mGoogleApiClient.connect();
         m_bIsRunning = true;
-   }
+    }
 
     public void stopSensor() {
-        if (m_locationClient != null) {
-            if (m_locationClient.isConnected()) {
-                m_locationClient.removeLocationUpdates(this);
-                m_locationClient.disconnect();
+        if (mGoogleApiClient != null) {
+            if (mGoogleApiClient.isConnected()) {
+                LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
+                mGoogleApiClient.disconnect();
             }
         }
         m_bIsRunning = false;
@@ -69,7 +78,7 @@ public class LocationSensor extends AbstractTriggeredSensor implements GooglePla
 
     @Override
     public void onConnectionFailed(ConnectionResult connectionResult) {
-		/*
+        /*
 		 * Google Play services can resolve some errors it detects. If the error
 		 * has a resolution, try sending an Intent to start a Google Play
 		 * services activity that can resolve error.
@@ -77,7 +86,7 @@ public class LocationSensor extends AbstractTriggeredSensor implements GooglePla
         if (connectionResult.hasResolution()) {
             try {
                 // Start an Activity that tries to resolve the error
-                connectionResult.startResolutionForResult((Activity) m_context, CONNECTION_FAILURE_RESOLUTION_REQUEST);
+                connectionResult.startResolutionForResult((Activity) context, CONNECTION_FAILURE_RESOLUTION_REQUEST);
 				/*
 				 * Thrown if Google Play services canceled the original
 				 * PendingIntent
@@ -101,17 +110,17 @@ public class LocationSensor extends AbstractTriggeredSensor implements GooglePla
         // maybe this is not a goot choice, because maybe the last location is
         // out-dated?
         // But let's give it a try...
-        Location loc = m_locationClient.getLastLocation();
+        Location loc = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
         if (loc != null)
             onLocationChanged(loc);
 
-        m_locationClient.requestLocationUpdates(m_locationRequest, this);
+        LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, m_locationRequest, this);
     }
 
     @Override
-    public void onDisconnected() {
+    public void onConnectionSuspended(int i) {
         // Display the connection status
-//		Toast.makeText(m_context, "Disconnected. Please re-connect.", Toast.LENGTH_SHORT).show();
+//		Toast.makeText(context, "Disconnected. Please re-connect.", Toast.LENGTH_SHORT).show();
     }
 
     @Override

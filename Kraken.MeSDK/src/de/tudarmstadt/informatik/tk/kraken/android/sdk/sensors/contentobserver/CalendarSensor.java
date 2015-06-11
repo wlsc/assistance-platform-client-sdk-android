@@ -65,7 +65,7 @@ public class CalendarSensor extends AbstractContentObserverSensor {
 		m_bFlushToServer = false;
 
 		// Submit the query
-		ContentResolver cr = m_context.getContentResolver();
+		ContentResolver cr = context.getContentResolver();
 		Cursor cur = cr.query(URI_CALENDAR, PROJECTION_EVENTS, "deleted=?", new String[] { "0" }, null);
 
 		HashMap<Long, SensorCalendarEvent> allExistingEvents;
@@ -133,10 +133,10 @@ public class CalendarSensor extends AbstractContentObserverSensor {
             String strFullqualifiedDatabaseClassName = getSensorType().getFullqualifiedDatabaseClassName();
             //SensorData dataEvents = flushData(m_daoSession, strFullqualifiedDatabaseClassName);
             //SensorData dataReminders = flushData(m_daoSession, strFullqualifiedDatabaseClassName + "Reminder");
-            //ServerPushManager.getInstance(m_context).flushManually(dataEvents, dataReminders);
+            //ServerPushManager.getInstance(context).flushManually(dataEvents, dataReminders);
             ApiMessage.DataWrapper dataEvents = flushDataRetro(strFullqualifiedDatabaseClassName);
             ApiMessage.DataWrapper dataReminders = flushDataRetro(strFullqualifiedDatabaseClassName + "Reminder");
-            RetroServerPushManager.getInstance(m_context).flushManually(getPushType(), dataEvents, dataReminders);
+            RetroServerPushManager.getInstance(context).flushManually(getPushType(), dataEvents, dataReminders);
         }
 	}
 
@@ -152,7 +152,7 @@ public class CalendarSensor extends AbstractContentObserverSensor {
 			String[] selectionArgs = new String[] { String.valueOf(longEventId) };
 
 			// Submit the query
-			ContentResolver cr = m_context.getContentResolver();
+			ContentResolver cr = context.getContentResolver();
 			Cursor cur = cr.query(URI_REMINDER, PROJECTION_REMINDERS, selection, selectionArgs, null);
 
 			// Iterate over eber event
@@ -303,8 +303,8 @@ public class CalendarSensor extends AbstractContentObserverSensor {
 			@Override
 			public void run() {
 				syncData();
-				m_context.getContentResolver().registerContentObserver(URI_CALENDAR, true, m_observer);
-				m_context.getContentResolver().registerContentObserver(URI_REMINDER, true, m_observer);
+				context.getContentResolver().registerContentObserver(URI_CALENDAR, true, m_observer);
+				context.getContentResolver().registerContentObserver(URI_REMINDER, true, m_observer);
 			}
 		});
 		thread.setName("CalendarSensorThread");

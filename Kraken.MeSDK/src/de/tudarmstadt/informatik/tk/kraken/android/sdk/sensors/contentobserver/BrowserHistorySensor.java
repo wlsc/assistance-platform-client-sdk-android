@@ -39,7 +39,7 @@ public class BrowserHistorySensor extends AbstractContentObserverSensor {
 
     @Override
     protected void syncData() {
-        ContentResolver cr = m_context.getContentResolver();
+        ContentResolver cr = context.getContentResolver();
         Cursor cur = cr
                 .query(URI_BROWSER_HISTORY, null, null, null, null);
 
@@ -98,8 +98,8 @@ public class BrowserHistorySensor extends AbstractContentObserverSensor {
 
             //SensorData dataBrowserHistory = flushData(m_daoSession, strFullqualifiedDatabaseClassName);
             ApiMessage.DataWrapper dataBrowserHistory = flushDataRetro(strFullqualifiedDatabaseClassName);
-            //ServerPushManager.getInstance(m_context).flushManually(dataBrowserHistory);
-            RetroServerPushManager.getInstance(m_context).flushManually(getPushType(), dataBrowserHistory);
+            //ServerPushManager.getInstance(context).flushManually(dataBrowserHistory);
+            RetroServerPushManager.getInstance(context).flushManually(getPushType(), dataBrowserHistory);
             //Log.d("kraken", "BrowserHistorySensor FLUSH!");
         }
 
@@ -161,7 +161,7 @@ public class BrowserHistorySensor extends AbstractContentObserverSensor {
             @Override
             public void run() {
                 syncData();
-                m_context.getContentResolver().registerContentObserver(URI_BROWSER_HISTORY, true, m_observer);
+                context.getContentResolver().registerContentObserver(URI_BROWSER_HISTORY, true, m_observer);
             }
         });
         thread.setName("BrowserHistorySensorThread");

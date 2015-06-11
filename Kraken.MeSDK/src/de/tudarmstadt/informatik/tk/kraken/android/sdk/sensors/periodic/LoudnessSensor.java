@@ -95,7 +95,7 @@ public class LoudnessSensor extends AbstractPeriodicSensor implements Callback {
 	public LoudnessSensor(Context context) {
 		super(context);
 		setDataIntervallInSec(INIT_DATA_INTERVALL);
-		TelephonyManager tManager = (TelephonyManager) m_context.getSystemService(Context.TELEPHONY_SERVICE);
+		TelephonyManager tManager = (TelephonyManager) this.context.getSystemService(Context.TELEPHONY_SERVICE);
 		m_phoneListener = new PhoneListener(this);
 		tManager.listen(m_phoneListener, PhoneListener.LISTEN_CALL_STATE);
 	}

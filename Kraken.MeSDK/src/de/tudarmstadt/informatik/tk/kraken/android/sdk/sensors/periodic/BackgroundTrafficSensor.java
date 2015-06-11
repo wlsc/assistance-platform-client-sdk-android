@@ -35,7 +35,7 @@ public class BackgroundTrafficSensor extends AbstractPeriodicSensor implements I
     public BackgroundTrafficSensor(Context context) {
         super(context);
         setDataIntervallInSec(INIT_DATA_INTERVAL);
-        m_PackageManager = m_context.getPackageManager();
+        m_PackageManager = this.context.getPackageManager();
         //initial Data
         SensorNetworkTraffic sensorNetworkTraffic = new SensorNetworkTraffic();
         sensorNetworkTraffic.setAppName(ForegroundTrafficSensor.EVENT_START_KRAKEN);

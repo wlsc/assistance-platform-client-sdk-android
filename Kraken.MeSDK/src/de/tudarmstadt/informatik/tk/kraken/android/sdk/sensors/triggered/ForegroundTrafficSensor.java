@@ -74,9 +74,9 @@ public class ForegroundTrafficSensor extends AbstractTriggeredSensor {
     public ForegroundTrafficSensor(Context context) {
         super(context);
         m_receiver = new Receiver();
-        m_ActivityManager = (ActivityManager) m_context.getSystemService(Context.ACTIVITY_SERVICE);
-        m_PackageManager = m_context.getPackageManager();
-        mEventFilter = new AccessibilityEventFilter(m_context);
+        m_ActivityManager = (ActivityManager) this.context.getSystemService(Context.ACTIVITY_SERVICE);
+        m_PackageManager = this.context.getPackageManager();
+        mEventFilter = new AccessibilityEventFilter(this.context);
     }
 
     /**
@@ -86,7 +86,7 @@ public class ForegroundTrafficSensor extends AbstractTriggeredSensor {
     public void startSensor() {
         IntentFilter filter = new IntentFilter(Intent.ACTION_SCREEN_OFF);
         filter.addAction(Intent.ACTION_SCREEN_ON);
-        m_context.registerReceiver(m_receiver, filter);
+        context.registerReceiver(m_receiver, filter);
         m_bSensorStarted = true;
     }
 
@@ -98,7 +98,7 @@ public class ForegroundTrafficSensor extends AbstractTriggeredSensor {
         if (m_bSensorStarted) {
             try {
                 if (m_receiver != null) {
-                    m_context.unregisterReceiver(m_receiver);
+                    context.unregisterReceiver(m_receiver);
                     m_receiver = null;
                 }
             } catch (IllegalArgumentException e) {

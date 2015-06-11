@@ -38,7 +38,8 @@ import de.tudarmstadt.informatik.tk.kraken.android.sdk.common.MessageType;
 
 public abstract class AbstractSensor implements ISensor {
 
-	protected Context m_context;
+	protected Context context;
+
 	protected DaoSession m_daoSession;
 
 	// for caching
@@ -58,7 +59,7 @@ public abstract class AbstractSensor implements ISensor {
 
 	public AbstractSensor(Context context) {
 		setContext(context);
-		SharedPreferences sharedPreferences = m_context.getApplicationContext().getSharedPreferences(KrakenSdkSettings.PREFERENCES_NAME, Context.MODE_PRIVATE);
+		SharedPreferences sharedPreferences = this.context.getApplicationContext().getSharedPreferences(KrakenSdkSettings.PREFERENCES_NAME, Context.MODE_PRIVATE);
 		m_isDisabledByUser = sharedPreferences.getBoolean(getSensorType().toString() + KrakenSdkSettings.PREFERENCES_SENSOR_DISABLED_BY_USER_POSTFIX, false);
 
 		m_longLastDataFlushTimestamp = sharedPreferences.getLong(getSensorType().toString() + KrakenSdkSettings.PREFERENCES_SENSOR_LAST_PUSHED_TIMESTAMP_POSTFIX, -1);
@@ -125,9 +126,9 @@ public abstract class AbstractSensor implements ISensor {
 
 		if (sendToHandler)
 			sendDatabaseObject(dbObject);
-		//ServerPushManager.getInstance(m_context).inform(this);
+		//ServerPushManager.getInstance(context).inform(this);
         // TODO: remove
-        RetroServerPushManager.getInstance(m_context).inform(this);
+        RetroServerPushManager.getInstance(context).inform(this);
 	}
 
 	protected void sendDatabaseObject(IDbSensor dbObject) {
@@ -149,7 +150,7 @@ public abstract class AbstractSensor implements ISensor {
 			IllegalArgumentException {
 
         if (m_daoSession  == null){
-            m_daoSession = DatabaseManager.getInstance(m_context).getDaoSession();
+            m_daoSession = DatabaseManager.getInstance(context).getDaoSession();
         }
 
 		if (m_daoSession  == null){
@@ -172,7 +173,7 @@ public abstract class AbstractSensor implements ISensor {
 
 	@Override
 	public void setContext(Context context) {
-		m_context = context;
+		this.context = context;
 		if (context instanceof KrakenService)
 			setDaoSession(((KrakenService) context).getDaoSession());
 	}
@@ -190,7 +191,7 @@ public abstract class AbstractSensor implements ISensor {
 	@Override
 	public void setDisabledByUser(boolean bDisabled) {
 		m_isDisabledByUser = bDisabled;
-		SharedPreferences sharedPreferences = m_context.getApplicationContext().getSharedPreferences(KrakenSdkSettings.PREFERENCES_NAME, Context.MODE_PRIVATE);
+		SharedPreferences sharedPreferences = context.getApplicationContext().getSharedPreferences(KrakenSdkSettings.PREFERENCES_NAME, Context.MODE_PRIVATE);
 		sharedPreferences.edit().putBoolean(getSensorType().toString() + KrakenSdkSettings.PREFERENCES_SENSOR_DISABLED_BY_USER_POSTFIX, bDisabled).commit();
 	}
 
@@ -235,7 +236,7 @@ public abstract class AbstractSensor implements ISensor {
 
 			// set timestamp of last query
 			m_longLastDataFlushTimestamp = longTimestamp;
-			//SharedPreferences sharedPreferences = m_context.getApplicationContext().getSharedPreferences(KrakenSdkSettings.PREFERENCES_NAME, Context.MODE_PRIVATE);
+			//SharedPreferences sharedPreferences = context.getApplicationContext().getSharedPreferences(KrakenSdkSettings.PREFERENCES_NAME, Context.MODE_PRIVATE);
 			//sharedPreferences.edit()
 			//		.putLong(strFullQualifiedBeanClassName + KrakenSdkSettings.PREFERENCES_SENSOR_LAST_PUSHED_TIMESTAMP_POSTFIX, m_longLastDataFlushTimestamp).commit();
 
@@ -332,7 +333,7 @@ public abstract class AbstractSensor implements ISensor {
 
             // set timestamp of last query
             m_longLastDataFlushTimestamp = longTimestamp;
-            SharedPreferences sharedPreferences = m_context.getApplicationContext().getSharedPreferences(KrakenSdkSettings.PREFERENCES_NAME, Context.MODE_PRIVATE);
+            SharedPreferences sharedPreferences = context.getApplicationContext().getSharedPreferences(KrakenSdkSettings.PREFERENCES_NAME, Context.MODE_PRIVATE);
             sharedPreferences.edit()
                     .putLong(strFullQualifiedBeanClassName + KrakenSdkSettings.PREFERENCES_SENSOR_LAST_PUSHED_TIMESTAMP_POSTFIX, m_longLastDataFlushTimestamp).commit();
 

@@ -82,7 +82,7 @@ public abstract class AbstractContentObserverSensor extends AbstractSensor {
 	@Override
 	public void stopSensor() {
 		m_bIsRunning = false;
-		m_context.getContentResolver().unregisterContentObserver(m_observer);
+		context.getContentResolver().unregisterContentObserver(m_observer);
 	}
 
 	protected String getStringByColumnName(Cursor cur, String strColumnName) {

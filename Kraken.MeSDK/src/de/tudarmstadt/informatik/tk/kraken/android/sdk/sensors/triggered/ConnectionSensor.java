@@ -57,17 +57,17 @@ public class ConnectionSensor extends AbstractTriggeredSensor {
 	public void startSensor() {
 		IntentFilter filter = new IntentFilter();
 		filter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
-		m_context.registerReceiver(m_receiver, filter);
+		context.registerReceiver(m_receiver, filter);
 		m_bSensorStarted = true;
 	}
 
 	public void stopSensor() {
 		if (m_bSensorStarted) {
-			//ServerPushManager.getInstance(m_context).setWlanConnected(false);
-			RetroServerPushManager.getInstance(m_context).setWlanConnected(false);
+			//ServerPushManager.getInstance(context).setWlanConnected(false);
+			RetroServerPushManager.getInstance(context).setWlanConnected(false);
             // TODO: find out why this exception is thrown
             try {
-                m_context.unregisterReceiver(m_receiver);
+                context.unregisterReceiver(m_receiver);
             }
             catch (IllegalArgumentException e) {
                 e.printStackTrace();
