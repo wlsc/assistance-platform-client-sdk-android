@@ -19,8 +19,7 @@ import retrofit.RestAdapter;
 import retrofit.RetrofitError;
 import retrofit.converter.JacksonConverter;
 
-import static de.tudarmstadt.informatik.tk.kraken.android.sdk.api.entities.ApiResponse
-        .ArrayApiResponse;
+import static de.tudarmstadt.informatik.tk.kraken.android.sdk.api.entities.ApiResponse.ArrayApiResponse;
 
 /**
  * RetroApiManager
