@@ -7,21 +7,20 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.PagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.view.View;
 
-import com.viewpagerindicator.UnderlinePageIndicator;
-
-import de.tudarmstadt.informatik.tk.kraken.sdk.R;
 import de.tudarmstadt.informatik.tk.kraken.android.sdk.preference.PreferenceManager;
-import de.tudarmstadt.informatik.tk.kraken.android.sdk.utils.AccessibilityUtils;
 import de.tudarmstadt.informatik.tk.kraken.android.sdk.ui.activities.accounts.AccountsActivity;
 import de.tudarmstadt.informatik.tk.kraken.android.sdk.ui.fragments.WelcomeDisclaimerFragment;
 import de.tudarmstadt.informatik.tk.kraken.android.sdk.ui.fragments.WelcomeFinishFragment;
 import de.tudarmstadt.informatik.tk.kraken.android.sdk.ui.fragments.WelcomeFragment;
 import de.tudarmstadt.informatik.tk.kraken.android.sdk.ui.fragments.WelcomeSettingsFragment;
 import de.tudarmstadt.informatik.tk.kraken.android.sdk.ui.views.NonSwipeableViewPager;
+import de.tudarmstadt.informatik.tk.kraken.android.sdk.utils.AccessibilityUtils;
 import de.tudarmstadt.informatik.tk.kraken.android.sdk.utils.KrakenServiceManager;
 import de.tudarmstadt.informatik.tk.kraken.android.sdk.utils.KrakenUtils;
+import de.tudarmstadt.informatik.tk.kraken.sdk.R;
 
 /**
  * @author Karsten Planz
@@ -59,9 +58,9 @@ public class WelcomeActivity extends FragmentActivity {
         mPagerAdapter = new ScreenSlidePagerAdapter(getSupportFragmentManager());
         mPager.setAdapter(mPagerAdapter);
 
-        UnderlinePageIndicator indicator = (UnderlinePageIndicator) findViewById(R.id.indicator);
-        indicator.setFades(false);
-        indicator.setViewPager(mPager);
+        ViewPager indicator = (ViewPager) findViewById(R.id.indicator);
+        indicator.setFadingEdgeLength(0);
+        indicator.setAdapter(mPagerAdapter);
     }
 
     @Override
@@ -91,11 +90,10 @@ public class WelcomeActivity extends FragmentActivity {
     }
 
     public void nextPage(View v) {
-        if(mPager.getCurrentItem() == NUM_PAGES-1) {
+        if (mPager.getCurrentItem() == NUM_PAGES - 1) {
             releaseTheKraken();
             finish();
-        }
-        else {
+        } else {
             mPager.setCurrentItem(mPager.getCurrentItem() + 1);
         }
     }

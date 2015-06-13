@@ -19,8 +19,7 @@ public class NonSwipeableViewPager extends ViewPager {
         if (this.enabled) {
             try {
                 return super.onTouchEvent(event);
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }
@@ -32,8 +31,7 @@ public class NonSwipeableViewPager extends ViewPager {
         if (this.enabled) {
             try {
                 return super.onInterceptTouchEvent(event);
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }
