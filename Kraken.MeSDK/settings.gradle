@@ -1,4 +1,4 @@
-include ':facebookSDK', ':LiveSDK'
+include ':krakenSDK:facebookSDK', ':krakenSDK:liveSDK'
 
-project(':facebookSDK').projectDir = new File('libs/facebookSDK')
-project(':LiveSDK').projectDir = new File('libs/LiveSDK/src')
+project(':krakenSDK:facebookSDK').projectDir = new File('libs/facebookSDK')
+project(':krakenSDK:liveSDK').projectDir = new File('libs/LiveSDK/src')
