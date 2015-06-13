@@ -1,18 +1,15 @@
-Note:
------
-There is a known issue with Live SDK for Android, please resync your repo to address the issue. For more info please visit
-http://social.msdn.microsoft.com/Forums/en-US/messengerconnect/thread/6fb7335e-703b-477f-8dbb-00fda1b4aec0
-
 Live SDK for Android 
 ====================
 
-version 5.5
+version 5.6
 
 1. Introduction
 ---------------
 
-The Live SDK for Android library is intended to help developers to easily
-integrate SkyDrive and Hotmail contacts and calendars into their Android apps.
+The Live SDK for Android library is intended to help developers to easily 
+integrate OneDrive and Outlook.com contacts into their Android apps.
+
+For questions on how to use the sdk visit http://stackoverflow.com/questions/tagged/onedrive
 
 2. Reference the API
 --------------------
@@ -64,7 +61,7 @@ The Java Compiler must be version 1.6 or higher.
 3. Documentation
 ----------------
 
-Visit: http://dev.live.com and click the "Documentation" link. 
+Visit: http://dev.onedrive.com and click the "Documentation" link. 
 
 4. Sample project
 -----------------
@@ -72,8 +69,7 @@ Visit: http://dev.live.com and click the "Documentation" link.
 There is a sample project located in the sample directory. Using eclipse this project can be added
 using the File > Import > General > Existing Projects into Workspace wizard. Before the project can be
 properly used, the static variable com.microsoft.live.sample.Config.CLIENT_ID (see Config.java) must
-be changed to your own client ID. For help on obtaining a client ID, please see
-http://go.microsoft.com/fwlink/?LinkId=220871 
+be changed to your own client ID. To obtain a Client ID, visit the [Live SDK App management page] (http://go.microsoft.com/fwlink/p/?LinkId=193157)
 
 5. Known issues:
 ----------------
@@ -82,3 +78,25 @@ http://go.microsoft.com/fwlink/?LinkId=220871
    ignore orientation changes in AndroidManifest.xml.
 
 
+License Agreement
+-----------------
+
+Copyright (c) 2014 Microsoft Corporation
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+ of this software and associated documentation files (the "Software"), to deal
+ in the Software without restriction, including without limitation the rights
+ to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ copies of the Software, and to permit persons to whom the Software is
+ furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+ all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ THE SOFTWARE.

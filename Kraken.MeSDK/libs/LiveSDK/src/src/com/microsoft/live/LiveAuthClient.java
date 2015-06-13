@@ -1,8 +1,24 @@
-//------------------------------------------------------------------------------
-// Copyright (c) 2012 Microsoft Corporation. All rights reserved.
-//
-// Description: See the class level JavaDoc comments.
-//------------------------------------------------------------------------------
+// ------------------------------------------------------------------------------
+// Copyright (c) 2014 Microsoft Corporation
+// 
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+//  of this software and associated documentation files (the "Software"), to deal
+//  in the Software without restriction, including without limitation the rights
+//  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+//  copies of the Software, and to permit persons to whom the Software is
+//  furnished to do so, subject to the following conditions:
+// 
+// The above copyright notice and this permission notice shall be included in
+//  all copies or substantial portions of the Software.
+// 
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+//  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+//  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+//  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+//  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+//  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+//  THE SOFTWARE.
+// ------------------------------------------------------------------------------
 
 package com.microsoft.live;
 
@@ -10,6 +26,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Set;
 
 import org.apache.http.client.HttpClient;
@@ -108,7 +125,7 @@ public class LiveAuthClient {
 
         @Override
         public void visit(OAuthErrorResponse response) {
-            String error = response.getError().toString().toLowerCase();
+            String error = response.getError().toString().toLowerCase(Locale.US);
             String errorDescription = response.getErrorDescription();
             String errorUri = response.getErrorUri();
             LiveAuthException exception = new LiveAuthException(error,
@@ -148,11 +165,11 @@ public class LiveAuthClient {
         public void visit(OAuthSuccessfulResponse response) {
             String refreshToken = response.getRefreshToken();
             if (!TextUtils.isEmpty(refreshToken)) {
-                this.saveRefreshTokenToPerferences(refreshToken);
+                this.saveRefreshTokenToPreferences(refreshToken);
             }
         }
 
-        private boolean saveRefreshTokenToPerferences(String refreshToken) {
+        private boolean saveRefreshTokenToPreferences(String refreshToken) {
             assert !TextUtils.isEmpty(refreshToken);
 
             SharedPreferences settings =
@@ -268,7 +285,7 @@ public class LiveAuthClient {
      * @param listener called on either completion or error during the initialize process.
      */
     public void initialize(Iterable<String> scopes, LiveAuthListener listener) {
-        this.initialize(scopes, listener, null);
+        this.initialize(scopes, listener, null, null);
     }
 
     /**
@@ -288,7 +305,30 @@ public class LiveAuthClient {
      * @param listener called on either completion or error during the initialize process
      * @param userState arbitrary object that is used to determine the caller of the method.
      */
-    public void initialize(Iterable<String> scopes, LiveAuthListener listener, Object userState) {
+    public void initialize(Iterable<String> scopes, LiveAuthListener listener, Object userState ) {
+        initialize(scopes,listener,userState,null);
+    }
+
+    /**
+     * Initializes a new {@link LiveConnectSession} with the given scopes.
+     *
+     * The {@link LiveConnectSession} will be returned by calling
+     * {@link LiveAuthListener#onAuthComplete(LiveStatus, LiveConnectSession, Object)}.
+     * Otherwise, the {@link LiveAuthListener#onAuthError(LiveAuthException, Object)} will be
+     * called. These methods will be called on the main/UI thread.
+     *
+     * If the wl.offline_access scope is used, a refresh_token is stored in the given
+     * {@link Activity}'s {@link SharedPerfences}.
+     *
+     * @param scopes to initialize the {@link LiveConnectSession} with.
+     *        See <a href="http://msdn.microsoft.com/en-us/library/hh243646.aspx">MSDN Live Connect
+     *        Reference's Scopes and permissions</a> for a list of scopes and explanations.
+     * @param listener called on either completion or error during the initialize process
+     * @param userState arbitrary object that is used to determine the caller of the method.
+     * @param refreshToken optional previously saved token to be used by this client.
+     */
+    public void initialize(Iterable<String> scopes, LiveAuthListener listener, Object userState,
+                           String refreshToken ) {
         if (listener == null) {
             listener = NULL_LISTENER;
         }
@@ -304,7 +344,10 @@ public class LiveAuthClient {
         }
         this.scopesFromInitialize = Collections.unmodifiableSet(this.scopesFromInitialize);
 
-        String refreshToken = this.getRefreshTokenFromPreferences();
+        //if no token is provided, try to get one from SharedPreferences
+        if (refreshToken == null) {
+            refreshToken = this.getRefreshTokenFromPreferences();
+        }
 
         if (refreshToken == null) {
             listener.onAuthComplete(LiveStatus.UNKNOWN, null, userState);
@@ -360,7 +403,7 @@ public class LiveAuthClient {
      * @param userState arbitrary object that is used to determine the caller of the method.
      */
     public void initialize(LiveAuthListener listener, Object userState) {
-        this.initialize(null, listener, userState);
+        this.initialize(null, listener, userState, null);
     }
 
     /**

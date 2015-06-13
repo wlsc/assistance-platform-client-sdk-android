@@ -1,14 +1,31 @@
-//------------------------------------------------------------------------------
-// Copyright (c) 2012 Microsoft Corporation. All rights reserved.
-//
-// Description: See the class level JavaDoc comments.
-//------------------------------------------------------------------------------
+// ------------------------------------------------------------------------------
+// Copyright (c) 2014 Microsoft Corporation
+// 
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+//  of this software and associated documentation files (the "Software"), to deal
+//  in the Software without restriction, including without limitation the rights
+//  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+//  copies of the Software, and to permit persons to whom the Software is
+//  furnished to do so, subject to the following conditions:
+// 
+// The above copyright notice and this permission notice shall be included in
+//  all copies or substantial portions of the Software.
+// 
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+//  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+//  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+//  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+//  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+//  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+//  THE SOFTWARE.
+// ------------------------------------------------------------------------------
 
 package com.microsoft.live;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import org.apache.http.Header;
 import org.apache.http.HttpResponse;
@@ -110,7 +127,7 @@ abstract class ApiRequest<ResponseType> {
         String accessToken = session.getAccessToken();
         assert !TextUtils.isEmpty(accessToken);
 
-        String tokenType = OAuth.TokenType.BEARER.toString().toLowerCase();
+        String tokenType = OAuth.TokenType.BEARER.toString().toLowerCase(Locale.US);
         String value = TextUtils.join(" ", new String[]{tokenType, accessToken});
         return new BasicHeader(AUTH.WWW_AUTH_RESP, value);
     }
@@ -157,19 +174,30 @@ abstract class ApiRequest<ResponseType> {
         this.observers = new ArrayList<Observer>();
         this.responseHandler = responseHandler;
         this.path = path;
-
-        UriBuilder builder;
         this.pathUri = Uri.parse(path);
 
-        if (this.pathUri.isAbsolute()) {
+        final int queryStart = path.indexOf("?");
+        final String pathWithoutQuery = path.substring(0, queryStart != -1 ? queryStart : path.length());
+        final Uri uriWithoutQuery = Uri.parse(pathWithoutQuery);
+        final String query;
+        if (queryStart != -1) {
+            query = path.substring(queryStart + 1, path.length());
+        } else {
+            query = "";
+        }
+
+        UriBuilder builder;
+
+        if (uriWithoutQuery.isAbsolute()) {
             // if the path is absolute we will just use that entire path
-            builder = UriBuilder.newInstance(this.pathUri);
+            builder = UriBuilder.newInstance(uriWithoutQuery)
+                                .query(query);
         } else {
             // if it is a relative path then we should use the config's API URI,
             // which is usually something like https://apis.live.net/v5.0
             builder = UriBuilder.newInstance(Config.INSTANCE.getApiUri())
-                                .appendToPath(this.pathUri.getEncodedPath())
-                                .query(this.pathUri.getQuery());
+                                .appendToPath(uriWithoutQuery.getEncodedPath())
+                                .query(query);
         }
 
         responseCodes.setQueryParameterOn(builder);
