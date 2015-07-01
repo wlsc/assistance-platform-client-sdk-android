@@ -18,6 +18,7 @@ import de.tudarmstadt.informatik.tk.kraken.android.sdk.sensors.ESensorType;
 import de.tudarmstadt.informatik.tk.kraken.android.sdk.sensors.SensorManager;
 import de.tudarmstadt.informatik.tk.kraken.android.sdk.sensors.interfaces.ISensor;
 
+@Deprecated
 public class SensorsAdapter extends BaseAdapter {
 
 	List<ISensor> m_liData = new LinkedList<ISensor>();

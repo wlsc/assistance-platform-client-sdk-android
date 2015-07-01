@@ -25,6 +25,7 @@ import de.tudarmstadt.informatik.tk.kraken.sdk.R;
 /**
  * @author Karsten Planz
  */
+@Deprecated
 public class WelcomeActivity extends FragmentActivity {
 
     /**

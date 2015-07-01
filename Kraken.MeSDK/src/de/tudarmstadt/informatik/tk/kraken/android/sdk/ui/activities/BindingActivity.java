@@ -6,6 +6,7 @@ import android.os.Handler.Callback;
 
 import de.tudarmstadt.informatik.tk.kraken.android.sdk.utils.KrakenServiceManager;
 
+@Deprecated
 public abstract class BindingActivity extends Activity implements Callback {
 
     private KrakenServiceManager mServiceManager;

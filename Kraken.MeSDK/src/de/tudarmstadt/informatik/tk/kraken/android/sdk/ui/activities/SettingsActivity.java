@@ -16,6 +16,7 @@ import de.tudarmstadt.informatik.tk.kraken.android.sdk.utils.KrakenServiceManage
 import de.tudarmstadt.informatik.tk.kraken.android.sdk.utils.KrakenUtils;
 
 
+@Deprecated
 public class SettingsActivity extends PreferenceActivity implements Preference.OnPreferenceChangeListener {
 
 

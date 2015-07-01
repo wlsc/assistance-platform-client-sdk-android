@@ -11,6 +11,7 @@ import de.tudarmstadt.informatik.tk.kraken.sdk.R;
 /**
  * @author Karsten Planz
  */
+@Deprecated
 public class WelcomeFragment extends Fragment {
 
     @Override

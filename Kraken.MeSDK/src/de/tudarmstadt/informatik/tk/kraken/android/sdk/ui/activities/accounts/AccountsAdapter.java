@@ -19,6 +19,7 @@ import de.tudarmstadt.informatik.tk.kraken.android.sdk.login.LoginFacebook;
 import de.tudarmstadt.informatik.tk.kraken.android.sdk.login.LoginGoogle;
 import de.tudarmstadt.informatik.tk.kraken.android.sdk.login.LoginLive;
 
+@Deprecated
 public class AccountsAdapter extends BaseAdapter {
 
 	LinkedList<ILoginData> m_liData = new LinkedList<ILoginData>();

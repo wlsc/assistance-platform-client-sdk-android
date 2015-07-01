@@ -15,6 +15,7 @@ import de.tudarmstadt.informatik.tk.kraken.android.sdk.login.LoginFacebook;
 import de.tudarmstadt.informatik.tk.kraken.android.sdk.login.LoginGoogle;
 import de.tudarmstadt.informatik.tk.kraken.android.sdk.ui.activities.accounts.AccountsAdapter;
 
+@Deprecated
 public class AccountsActivity extends Activity {
 
 	private UiLifecycleHelper uiHelper;

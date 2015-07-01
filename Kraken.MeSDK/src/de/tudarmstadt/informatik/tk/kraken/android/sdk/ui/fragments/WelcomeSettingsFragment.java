@@ -22,6 +22,7 @@ import de.tudarmstadt.informatik.tk.kraken.android.sdk.sensors.ESensorType;
 /**
  * @author Karsten Planz
  */
+@Deprecated
 public class WelcomeSettingsFragment extends Fragment implements AdapterView.OnItemClickListener {
 
     private PreferenceManager mPrefs;

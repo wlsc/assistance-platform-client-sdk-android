@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.widget.ListView;
 import de.tudarmstadt.informatik.tk.kraken.sdk.R;
 
+@Deprecated
 public class SensorsActivity extends Activity {
 
 	@Override
