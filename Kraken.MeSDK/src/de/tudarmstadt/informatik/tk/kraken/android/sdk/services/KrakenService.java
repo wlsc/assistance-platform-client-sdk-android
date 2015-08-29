@@ -80,8 +80,9 @@ public class KrakenService extends Service implements Callback {
         mPreferenceManager = PreferenceManager.getInstance(this);
 
 		// GcmManager.getInstance(this).registerAtCloud();
-		
-		startService();
+
+		// TODO: enable it later
+//		startService();
 	}
 
 	private void startService() {

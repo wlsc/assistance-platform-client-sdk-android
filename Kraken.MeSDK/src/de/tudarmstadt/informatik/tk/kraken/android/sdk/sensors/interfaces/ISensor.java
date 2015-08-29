@@ -16,11 +16,10 @@ import de.tudarmstadt.informatik.tk.kraken.android.sdk.sensors.ESensorType;
 
 
 public interface ISensor {
+
 	public void startSensor();
 	public void stopSensor();
 	public ESensorType getSensorType();
-//	public void setDaoSession(DaoSession session);
-//	public void sendDatabaseObject();
 	public void setContext(Context context);
 	public boolean isDisabledByUser();
 	public void setDisabledByUser(boolean bDisabled);

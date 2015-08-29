@@ -16,12 +16,13 @@ public class KrakenDatabaseGenerator {
 
 	private static final String FULL_QUALIFIED_PATH_IDBUPDATABLESENSOR = "de.tudarmstadt.informatik.tk.kraken.android.sdk.interfaces.IDbUpdatableSensor";
 	private static final String FULL_QUALIFIED_PATH_IDBSENSOR = "de.tudarmstadt.informatik.tk.kraken.android.sdk.interfaces.IDbSensor";
-	private static final String OUTPUT_PATH = "../Kraken.Me SDK/src-gen";
+	private static final String OUTPUT_PATH = "../Kraken.MeSDK/src-gen";
 	private static final String PACKAGE = "de.tudarmstadt.informatik.tk.kraken.android.sdk.db";
 
     private static final int SCHEMA_VERSION = 5;
 
     public static void main(String[] args) throws Exception {
+    	new File(OUTPUT_PATH).mkdirs();
 		generateSchema();
 		supressWarningsFiles();
 	}
