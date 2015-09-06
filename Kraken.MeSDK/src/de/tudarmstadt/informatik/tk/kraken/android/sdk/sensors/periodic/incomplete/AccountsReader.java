@@ -4,7 +4,6 @@ import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.content.Context;
 
-import de.tudarmstadt.informatik.tk.kraken.android.sdk.db.SensorAccountsReader;
 import de.tudarmstadt.informatik.tk.kraken.android.sdk.sensors.ESensorType;
 import de.tudarmstadt.informatik.tk.kraken.android.sdk.sensors.abstract_sensors.AbstractPeriodicSensor;
 import de.tudarmstadt.informatik.tk.kraken.android.sdk.sensors.interfaces.ISensor;
@@ -47,9 +46,9 @@ public class AccountsReader extends AbstractPeriodicSensor implements ISensor {
 				sb.append(accounts[i].type + ";");
 			sb.append(accounts[accounts.length - 1]);
 
-			SensorAccountsReader sensor = new SensorAccountsReader();
-			sensor.setAccountTypes(sb.toString());
-			handleDatabaseObject(sensor);
+//			SensorAccountsReader sensor = new SensorAccountsReader();
+//			sensor.setAccountTypes(sb.toString());
+//			handleDatabaseObject(sensor);
 		}
 	}
 

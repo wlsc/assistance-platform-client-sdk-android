@@ -74,8 +74,8 @@ public abstract class AbstractSensor implements ISensor {
 
     protected void handleDatabaseObject(IDbSensor dbObject, boolean bUpdate, boolean setTimestamp, boolean sendToHandler) {
         if (setTimestamp) {
-            long longTimestamp = Calendar.getInstance().getTimeInMillis();
-            dbObject.setTimestamp(longTimestamp);
+//            long longTimestamp = Calendar.getInstance().getTimeInMillis();
+//            dbObject.setTimestamp(longTimestamp);
         }
 
         // init vars

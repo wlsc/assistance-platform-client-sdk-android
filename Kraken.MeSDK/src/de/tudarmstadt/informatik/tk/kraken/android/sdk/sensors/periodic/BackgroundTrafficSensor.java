@@ -3,23 +3,19 @@ package de.tudarmstadt.informatik.tk.kraken.android.sdk.sensors.periodic;
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
-import android.net.TrafficStats;
 
 import java.util.List;
 
 import de.tudarmstadt.informatik.tk.kraken.android.sdk.communication.EPushType;
-import de.tudarmstadt.informatik.tk.kraken.android.sdk.db.SensorNetworkTraffic;
 import de.tudarmstadt.informatik.tk.kraken.android.sdk.sensors.ESensorType;
 import de.tudarmstadt.informatik.tk.kraken.android.sdk.sensors.abstract_sensors.AbstractPeriodicSensor;
 import de.tudarmstadt.informatik.tk.kraken.android.sdk.sensors.interfaces.ISensor;
-import de.tudarmstadt.informatik.tk.kraken.android.sdk.sensors.triggered.ForegroundTrafficSensor;
-import de.tudarmstadt.informatik.tk.kraken.android.sdk.utils.TrafficLocation;
 
 /**
  * This is a Periodic Sensor class which collect the mobile traffic data produced by the apps in the
  * background in periodic intervals. This is important to get the traffic from apps which runs
  * services in background.
- *
+ * <p/>
  * Created by Stefan Hacker on 09.12.14.
  */
 public class BackgroundTrafficSensor extends AbstractPeriodicSensor implements ISensor {
@@ -37,9 +33,9 @@ public class BackgroundTrafficSensor extends AbstractPeriodicSensor implements I
         setDataIntervallInSec(INIT_DATA_INTERVAL);
         m_PackageManager = this.context.getPackageManager();
         //initial Data
-        SensorNetworkTraffic sensorNetworkTraffic = new SensorNetworkTraffic();
-        sensorNetworkTraffic.setAppName(ForegroundTrafficSensor.EVENT_START_KRAKEN);
-        handleDatabaseObject(sensorNetworkTraffic);
+//        SensorNetworkTraffic sensorNetworkTraffic = new SensorNetworkTraffic();
+//        sensorNetworkTraffic.setAppName(ForegroundTrafficSensor.EVENT_START_KRAKEN);
+//        handleDatabaseObject(sensorNetworkTraffic);
         getData();
     }
 
@@ -57,23 +53,25 @@ public class BackgroundTrafficSensor extends AbstractPeriodicSensor implements I
 
     /**
      * Insert data of app in database
+     *
      * @param packageInfo app which will insert in Database
      */
-    private void insertData(ApplicationInfo packageInfo){
-        SensorNetworkTraffic sensorNetworkTraffic = new SensorNetworkTraffic();
-        if(TrafficStats.getUidTxPackets(packageInfo.uid) != 0 || TrafficStats.getUidRxPackets(packageInfo.uid) != 0) {
-            sensorNetworkTraffic.setAppName(packageInfo.packageName);
-            sensorNetworkTraffic.setTxBytes(TrafficStats.getUidTxPackets(packageInfo.uid));
-            sensorNetworkTraffic.setRxBytes(TrafficStats.getUidRxPackets(packageInfo.uid));
-            sensorNetworkTraffic.setBackground(true);
-            sensorNetworkTraffic.setLatitude(TrafficLocation.getInstance().getLatitude());
-            sensorNetworkTraffic.setLongitude(TrafficLocation.getInstance().getLongitude());
-            handleDatabaseObject(sensorNetworkTraffic);
-        }
+    private void insertData(ApplicationInfo packageInfo) {
+//        SensorNetworkTraffic sensorNetworkTraffic = new SensorNetworkTraffic();
+//        if (TrafficStats.getUidTxPackets(packageInfo.uid) != 0 || TrafficStats.getUidRxPackets(packageInfo.uid) != 0) {
+//            sensorNetworkTraffic.setAppName(packageInfo.packageName);
+//            sensorNetworkTraffic.setTxBytes(TrafficStats.getUidTxPackets(packageInfo.uid));
+//            sensorNetworkTraffic.setRxBytes(TrafficStats.getUidRxPackets(packageInfo.uid));
+//            sensorNetworkTraffic.setBackground(true);
+//            sensorNetworkTraffic.setLatitude(TrafficLocation.getInstance().getLatitude());
+//            sensorNetworkTraffic.setLongitude(TrafficLocation.getInstance().getLongitude());
+//            handleDatabaseObject(sensorNetworkTraffic);
+//        }
     }
 
     /**
      * set own sensor type for push manager
+     *
      * @return sensor type of sensor
      */
     @Override
@@ -83,6 +81,7 @@ public class BackgroundTrafficSensor extends AbstractPeriodicSensor implements I
 
     /**
      * set push type of sensor for push manager
+     *
      * @return push type of sensor
      */
     @Override

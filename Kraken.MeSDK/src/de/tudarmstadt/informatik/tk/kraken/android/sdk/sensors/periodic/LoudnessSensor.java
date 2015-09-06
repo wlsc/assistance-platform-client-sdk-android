@@ -13,7 +13,6 @@ import android.telephony.TelephonyManager;
 import java.util.Calendar;
 import java.util.LinkedList;
 
-import de.tudarmstadt.informatik.tk.kraken.android.sdk.db.SensorLoudness;
 import de.tudarmstadt.informatik.tk.kraken.android.sdk.sensors.ESensorType;
 import de.tudarmstadt.informatik.tk.kraken.android.sdk.sensors.abstract_sensors.AbstractPeriodicSensor;
 
@@ -283,10 +282,10 @@ public class LoudnessSensor extends AbstractPeriodicSensor implements Callback {
 			m_leqCalc.resetValues();
 
 			if (leq.samples > 0) {
-				SensorLoudness sensorLoudness = new SensorLoudness();
-				sensorLoudness.setStartTimestamp(startTimestamp);
-				sensorLoudness.setLoudness(calcDB(leq.value));
-				handleDatabaseObject(sensorLoudness);
+//				SensorLoudness sensorLoudness = new SensorLoudness();
+//				sensorLoudness.setStartTimestamp(startTimestamp);
+//				sensorLoudness.setLoudness(calcDB(leq.value));
+//				handleDatabaseObject(sensorLoudness);
 			}
 		}
 	}

@@ -1,13 +1,13 @@
 package de.tudarmstadt.informatik.tk.kraken.android.sdk.sensors.periodic.incomplete;
 
-import java.util.LinkedList;
-import java.util.List;
-
 import android.app.ActivityManager;
 import android.app.ActivityManager.RunningAppProcessInfo;
 import android.app.ActivityManager.RunningServiceInfo;
 import android.content.Context;
-import de.tudarmstadt.informatik.tk.kraken.android.sdk.db.SensorRunningServices;
+
+import java.util.LinkedList;
+import java.util.List;
+
 import de.tudarmstadt.informatik.tk.kraken.android.sdk.sensors.ESensorType;
 import de.tudarmstadt.informatik.tk.kraken.android.sdk.sensors.abstract_sensors.AbstractPeriodicSensor;
 import de.tudarmstadt.informatik.tk.kraken.android.sdk.sensors.interfaces.ISensor;
@@ -30,7 +30,6 @@ public class RunningAppsReader extends AbstractPeriodicSensor implements ISensor
 		return ESensorType.ONE_TIME_SENSOR_RUNNING_SERVICES;
 	}
 
-	@SuppressWarnings("unused")
 	@Override
 	protected void getData() {
 
@@ -52,9 +51,9 @@ public class RunningAppsReader extends AbstractPeriodicSensor implements ISensor
 			// sb.append(liProcesses.get.type + ";");
 			// sb.append(liProcesses[liProcesses.length - 1]);
 
-			SensorRunningServices sensor = new SensorRunningServices();
-			// sensor.setAccountTypes(sb.toString());
-			handleDatabaseObject(sensor);
+//			SensorRunningServices sensor = new SensorRunningServices();
+//			// sensor.setAccountTypes(sb.toString());
+//			handleDatabaseObject(sensor);
 		}
 	}
 

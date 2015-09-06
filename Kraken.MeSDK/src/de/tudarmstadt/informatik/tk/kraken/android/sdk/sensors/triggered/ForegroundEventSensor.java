@@ -17,7 +17,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import de.tudarmstadt.informatik.tk.kraken.android.sdk.communication.EPushType;
-import de.tudarmstadt.informatik.tk.kraken.android.sdk.db.SensorForegroundEvent;
 import de.tudarmstadt.informatik.tk.kraken.android.sdk.sensors.ESensorType;
 import de.tudarmstadt.informatik.tk.kraken.android.sdk.sensors.abstract_sensors.AbstractTriggeredSensor;
 import de.tudarmstadt.informatik.tk.kraken.android.sdk.utils.ImageUtils;
@@ -36,7 +35,7 @@ public class ForegroundEventSensor extends AbstractTriggeredSensor {
     public static final int EVENT_KRAKEN_START = 5;
     public static final int EVENT_KRAKEN_STOP = 6;
 
-    public final static Integer[] SYSTEM_EVENTS = new Integer[] {
+    public final static Integer[] SYSTEM_EVENTS = new Integer[]{
             ForegroundEventSensor.EVENT_SCREEN_OFF,
             ForegroundEventSensor.EVENT_KRAKEN_STOP
     };
@@ -66,45 +65,44 @@ public class ForegroundEventSensor extends AbstractTriggeredSensor {
         filter.addAction(Intent.ACTION_SCREEN_OFF);
         context.registerReceiver(mReceiver, filter);
 
-        SensorForegroundEvent event = new SensorForegroundEvent();
-        event.setEventType(EVENT_KRAKEN_START);
-        event.setTimestamp(System.currentTimeMillis());
-        insertEvent(event);
+//        SensorForegroundEvent event = new SensorForegroundEvent();
+//        event.setEventType(EVENT_KRAKEN_START);
+//        event.setTimestamp(System.currentTimeMillis());
+//        insertEvent(event);
     }
 
     @Override
     public void stopSensor() {
 
-        if(mStarted) {
+        if (mStarted) {
             // TODO: find out why this exception is thrown
             try {
-                if(mReceiver != null) {
+                if (mReceiver != null) {
                     context.unregisterReceiver(mReceiver);
                     mReceiver = null;
                 }
-            }
-            catch (IllegalArgumentException e) {
+            } catch (IllegalArgumentException e) {
                 e.printStackTrace();
             }
 
             mStarted = false;
 
-            SensorForegroundEvent event = new SensorForegroundEvent();
-            event.setEventType(EVENT_KRAKEN_STOP);
-            event.setTimestamp(System.currentTimeMillis());
-            insertEvent(event);
+//            SensorForegroundEvent event = new SensorForegroundEvent();
+//            event.setEventType(EVENT_KRAKEN_STOP);
+//            event.setTimestamp(System.currentTimeMillis());
+//            insertEvent(event);
         }
     }
 
     public void onEvent(AccessibilityEvent event) {
-        if(mStarted) {
-            SensorForegroundEvent foregroundEvent = mEventFilter.filter(event);
-            if (foregroundEvent != null) {
-                String color = storeIcon(foregroundEvent.getPackageName());
-                foregroundEvent.setColor(color);
-                insertEvent(foregroundEvent);
-            }
-        }
+//        if(mStarted) {
+//            SensorForegroundEvent foregroundEvent = mEventFilter.filter(event);
+//            if (foregroundEvent != null) {
+//                String color = storeIcon(foregroundEvent.getPackageName());
+//                foregroundEvent.setColor(color);
+//                insertEvent(foregroundEvent);
+//            }
+//        }
     }
 
     private String storeIcon(String packageName) {
@@ -117,7 +115,7 @@ public class ForegroundEventSensor extends AbstractTriggeredSensor {
         path.mkdirs();
         File file = new File(path, packageName + ".png");
 
-        if(!file.exists()) {
+        if (!file.exists()) {
             storeIconFile(file, icon);
         }
         return color;
@@ -132,7 +130,7 @@ public class ForegroundEventSensor extends AbstractTriggeredSensor {
             e.printStackTrace();
         } finally {
             try {
-                if(stream != null)
+                if (stream != null)
                     stream.close();
             } catch (IOException e) {
                 e.printStackTrace();
@@ -152,19 +150,18 @@ public class ForegroundEventSensor extends AbstractTriggeredSensor {
     }
 
     private String getIconColor(String packageName, Bitmap icon) {
-        if(mIconColorCache.containsKey(packageName)) {
+        if (mIconColorCache.containsKey(packageName)) {
             return mIconColorCache.get(packageName);
-        }
-        else {
+        } else {
             String color = ImageUtils.getMainColor(icon);
             mIconColorCache.put(packageName, color);
             return color;
         }
     }
 
-    private void insertEvent(SensorForegroundEvent foregroundEvent) {
-        handleDatabaseObject(foregroundEvent);
-    }
+//    private void insertEvent(SensorForegroundEvent foregroundEvent) {
+//        handleDatabaseObject(foregroundEvent);
+//    }
 
     @Override
     public ESensorType getSensorType() {
@@ -179,13 +176,13 @@ public class ForegroundEventSensor extends AbstractTriggeredSensor {
 
             Log.d("kraken", "action = " + intent.getAction());
 
-            SensorForegroundEvent foregroundEvent = new SensorForegroundEvent();
-            if (intent.getAction().equals(Intent.ACTION_SCREEN_OFF)) {
-                foregroundEvent.setEventType(EVENT_SCREEN_OFF);
-            } else if (intent.getAction().equals(Intent.ACTION_SCREEN_ON)) {
-                foregroundEvent.setEventType(EVENT_SCREEN_ON);
-            }
-            insertEvent(foregroundEvent);
+//            SensorForegroundEvent foregroundEvent = new SensorForegroundEvent();
+//            if (intent.getAction().equals(Intent.ACTION_SCREEN_OFF)) {
+//                foregroundEvent.setEventType(EVENT_SCREEN_OFF);
+//            } else if (intent.getAction().equals(Intent.ACTION_SCREEN_ON)) {
+//                foregroundEvent.setEventType(EVENT_SCREEN_ON);
+//            }
+//            insertEvent(foregroundEvent);
         }
     }
 

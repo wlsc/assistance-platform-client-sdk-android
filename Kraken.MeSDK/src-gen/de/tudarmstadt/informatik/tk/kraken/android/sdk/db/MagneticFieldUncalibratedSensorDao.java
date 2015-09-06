@@ -24,12 +24,12 @@ public class MagneticFieldUncalibratedSensorDao extends AbstractDao<MagneticFiel
     */
     public static class Properties {
         public final static Property Id = new Property(0, long.class, "id", true, "_id");
-        public final static Property XNoDrift = new Property(1, float.class, "xNoDrift", false, "X_NO_DRIFT");
-        public final static Property YNoDrift = new Property(2, float.class, "yNoDrift", false, "Y_NO_DRIFT");
-        public final static Property ZNoDrift = new Property(3, float.class, "zNoDrift", false, "Z_NO_DRIFT");
-        public final static Property XEstimatedDrift = new Property(4, float.class, "xEstimatedDrift", false, "X_ESTIMATED_DRIFT");
-        public final static Property YEstimatedDrift = new Property(5, float.class, "yEstimatedDrift", false, "Y_ESTIMATED_DRIFT");
-        public final static Property ZEstimatedDrift = new Property(6, float.class, "zEstimatedDrift", false, "Z_ESTIMATED_DRIFT");
+        public final static Property XNoHardIron = new Property(1, float.class, "xNoHardIron", false, "X_NO_HARD_IRON");
+        public final static Property YNoHardIron = new Property(2, float.class, "yNoHardIron", false, "Y_NO_HARD_IRON");
+        public final static Property ZNoHardIron = new Property(3, float.class, "zNoHardIron", false, "Z_NO_HARD_IRON");
+        public final static Property XEstimatedIronBias = new Property(4, float.class, "xEstimatedIronBias", false, "X_ESTIMATED_IRON_BIAS");
+        public final static Property YEstimatedIronBias = new Property(5, float.class, "yEstimatedIronBias", false, "Y_ESTIMATED_IRON_BIAS");
+        public final static Property ZEstimatedIronBias = new Property(6, float.class, "zEstimatedIronBias", false, "Z_ESTIMATED_IRON_BIAS");
         public final static Property Created = new Property(7, String.class, "created", false, "CREATED");
     };
 
@@ -47,12 +47,12 @@ public class MagneticFieldUncalibratedSensorDao extends AbstractDao<MagneticFiel
         String constraint = ifNotExists? "IF NOT EXISTS ": "";
         db.execSQL("CREATE TABLE " + constraint + "\"magnetic_field_uncalibrated_sensor\" (" + //
                 "\"_id\" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL ," + // 0: id
-                "\"X_NO_DRIFT\" REAL NOT NULL ," + // 1: xNoDrift
-                "\"Y_NO_DRIFT\" REAL NOT NULL ," + // 2: yNoDrift
-                "\"Z_NO_DRIFT\" REAL NOT NULL ," + // 3: zNoDrift
-                "\"X_ESTIMATED_DRIFT\" REAL NOT NULL ," + // 4: xEstimatedDrift
-                "\"Y_ESTIMATED_DRIFT\" REAL NOT NULL ," + // 5: yEstimatedDrift
-                "\"Z_ESTIMATED_DRIFT\" REAL NOT NULL ," + // 6: zEstimatedDrift
+                "\"X_NO_HARD_IRON\" REAL NOT NULL ," + // 1: xNoHardIron
+                "\"Y_NO_HARD_IRON\" REAL NOT NULL ," + // 2: yNoHardIron
+                "\"Z_NO_HARD_IRON\" REAL NOT NULL ," + // 3: zNoHardIron
+                "\"X_ESTIMATED_IRON_BIAS\" REAL NOT NULL ," + // 4: xEstimatedIronBias
+                "\"Y_ESTIMATED_IRON_BIAS\" REAL NOT NULL ," + // 5: yEstimatedIronBias
+                "\"Z_ESTIMATED_IRON_BIAS\" REAL NOT NULL ," + // 6: zEstimatedIronBias
                 "\"CREATED\" TEXT NOT NULL );"); // 7: created
         // Add Indexes
         db.execSQL("CREATE INDEX " + constraint + "IDX_magnetic_field_uncalibrated_sensor__id ON magnetic_field_uncalibrated_sensor" +
@@ -70,12 +70,12 @@ public class MagneticFieldUncalibratedSensorDao extends AbstractDao<MagneticFiel
     protected void bindValues(SQLiteStatement stmt, MagneticFieldUncalibratedSensor entity) {
         stmt.clearBindings();
         stmt.bindLong(1, entity.getId());
-        stmt.bindDouble(2, entity.getXNoDrift());
-        stmt.bindDouble(3, entity.getYNoDrift());
-        stmt.bindDouble(4, entity.getZNoDrift());
-        stmt.bindDouble(5, entity.getXEstimatedDrift());
-        stmt.bindDouble(6, entity.getYEstimatedDrift());
-        stmt.bindDouble(7, entity.getZEstimatedDrift());
+        stmt.bindDouble(2, entity.getXNoHardIron());
+        stmt.bindDouble(3, entity.getYNoHardIron());
+        stmt.bindDouble(4, entity.getZNoHardIron());
+        stmt.bindDouble(5, entity.getXEstimatedIronBias());
+        stmt.bindDouble(6, entity.getYEstimatedIronBias());
+        stmt.bindDouble(7, entity.getZEstimatedIronBias());
         stmt.bindString(8, entity.getCreated());
     }
 
@@ -90,12 +90,12 @@ public class MagneticFieldUncalibratedSensorDao extends AbstractDao<MagneticFiel
     public MagneticFieldUncalibratedSensor readEntity(Cursor cursor, int offset) {
         MagneticFieldUncalibratedSensor entity = new MagneticFieldUncalibratedSensor( //
             cursor.getLong(offset + 0), // id
-            cursor.getFloat(offset + 1), // xNoDrift
-            cursor.getFloat(offset + 2), // yNoDrift
-            cursor.getFloat(offset + 3), // zNoDrift
-            cursor.getFloat(offset + 4), // xEstimatedDrift
-            cursor.getFloat(offset + 5), // yEstimatedDrift
-            cursor.getFloat(offset + 6), // zEstimatedDrift
+            cursor.getFloat(offset + 1), // xNoHardIron
+            cursor.getFloat(offset + 2), // yNoHardIron
+            cursor.getFloat(offset + 3), // zNoHardIron
+            cursor.getFloat(offset + 4), // xEstimatedIronBias
+            cursor.getFloat(offset + 5), // yEstimatedIronBias
+            cursor.getFloat(offset + 6), // zEstimatedIronBias
             cursor.getString(offset + 7) // created
         );
         return entity;
@@ -105,12 +105,12 @@ public class MagneticFieldUncalibratedSensorDao extends AbstractDao<MagneticFiel
     @Override
     public void readEntity(Cursor cursor, MagneticFieldUncalibratedSensor entity, int offset) {
         entity.setId(cursor.getLong(offset + 0));
-        entity.setXNoDrift(cursor.getFloat(offset + 1));
-        entity.setYNoDrift(cursor.getFloat(offset + 2));
-        entity.setZNoDrift(cursor.getFloat(offset + 3));
-        entity.setXEstimatedDrift(cursor.getFloat(offset + 4));
-        entity.setYEstimatedDrift(cursor.getFloat(offset + 5));
-        entity.setZEstimatedDrift(cursor.getFloat(offset + 6));
+        entity.setXNoHardIron(cursor.getFloat(offset + 1));
+        entity.setYNoHardIron(cursor.getFloat(offset + 2));
+        entity.setZNoHardIron(cursor.getFloat(offset + 3));
+        entity.setXEstimatedIronBias(cursor.getFloat(offset + 4));
+        entity.setYEstimatedIronBias(cursor.getFloat(offset + 5));
+        entity.setZEstimatedIronBias(cursor.getFloat(offset + 6));
         entity.setCreated(cursor.getString(offset + 7));
      }
     

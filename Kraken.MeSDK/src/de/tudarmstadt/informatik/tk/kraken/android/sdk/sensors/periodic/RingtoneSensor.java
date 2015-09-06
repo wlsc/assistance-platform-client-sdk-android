@@ -3,7 +3,6 @@ package de.tudarmstadt.informatik.tk.kraken.android.sdk.sensors.periodic;
 import android.content.Context;
 import android.media.AudioManager;
 
-import de.tudarmstadt.informatik.tk.kraken.android.sdk.db.SensorRingtone;
 import de.tudarmstadt.informatik.tk.kraken.android.sdk.sensors.ESensorType;
 import de.tudarmstadt.informatik.tk.kraken.android.sdk.sensors.abstract_sensors.AbstractPeriodicSensor;
 import de.tudarmstadt.informatik.tk.kraken.android.sdk.sensors.interfaces.ISensor;
@@ -26,20 +25,20 @@ public class RingtoneSensor extends AbstractPeriodicSensor implements ISensor {
 	}
 
 	public void handleDatabaseObject(int ringMode) {
-		SensorRingtone sensorRingtone = new SensorRingtone();
-		sensorRingtone.setRingtoneMode(ringMode);
-		handleDatabaseObject(sensorRingtone);
+//		SensorRingtone sensorRingtone = new SensorRingtone();
+//		sensorRingtone.setRingtoneMode(ringMode);
+//		handleDatabaseObject(sensorRingtone);
 	}
 
 	@Override
 	protected void getData() {
 //		System.out.println("invoked");
-		int intRingerMode = m_audioManager.getRingerMode();
-		if (intRingerMode != m_intLastRingerMode) {
-			SensorRingtone sensorRingtone = new SensorRingtone();
-			sensorRingtone.setRingtoneMode(m_audioManager.getRingerMode());
-			handleDatabaseObject(sensorRingtone);
-		}
+//		int intRingerMode = m_audioManager.getRingerMode();
+//		if (intRingerMode != m_intLastRingerMode) {
+//			SensorRingtone sensorRingtone = new SensorRingtone();
+//			sensorRingtone.setRingtoneMode(m_audioManager.getRingerMode());
+//			handleDatabaseObject(sensorRingtone);
+//		}
 	}
 
 }

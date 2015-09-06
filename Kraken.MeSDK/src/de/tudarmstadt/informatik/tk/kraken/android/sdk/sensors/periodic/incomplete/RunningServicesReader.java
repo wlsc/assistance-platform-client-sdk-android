@@ -7,7 +7,6 @@ import android.content.Context;
 import java.util.LinkedList;
 import java.util.List;
 
-import de.tudarmstadt.informatik.tk.kraken.android.sdk.db.SensorRunningServices;
 import de.tudarmstadt.informatik.tk.kraken.android.sdk.sensors.ESensorType;
 import de.tudarmstadt.informatik.tk.kraken.android.sdk.sensors.abstract_sensors.AbstractPeriodicSensor;
 import de.tudarmstadt.informatik.tk.kraken.android.sdk.sensors.interfaces.ISensor;
@@ -52,9 +51,9 @@ public class RunningServicesReader extends AbstractPeriodicSensor implements ISe
 			// sb.append(liProcesses.get.type + ";");
 			// sb.append(liProcesses[liProcesses.length - 1]);
 
-			SensorRunningServices sensor = new SensorRunningServices();
-			// sensor.setAccountTypes(sb.toString());
-			handleDatabaseObject(sensor);
+//			SensorRunningServices sensor = new SensorRunningServices();
+//			// sensor.setAccountTypes(sb.toString());
+//			handleDatabaseObject(sensor);
 		}
 	}
 

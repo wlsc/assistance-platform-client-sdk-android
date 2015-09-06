@@ -11,9 +11,6 @@ import android.view.accessibility.AccessibilityEvent;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import de.tudarmstadt.informatik.tk.kraken.android.sdk.db.SensorForegroundEvent;
-import de.tudarmstadt.informatik.tk.kraken.android.sdk.sensors.triggered.ForegroundEventSensor;
-
 import static android.content.pm.PackageManager.NameNotFoundException;
 
 public class AccessibilityEventFilter {
@@ -24,8 +21,8 @@ public class AccessibilityEventFilter {
 
     private static final long MIN_DURATION_APP_CHANGE = 5 * ONE_SECOND;
 
-    private static final String[] BROWSER_PACKAGES = new String[] {
-        "com.android.chrome"
+    private static final String[] BROWSER_PACKAGES = new String[]{
+            "com.android.chrome"
     };
 
 
@@ -51,105 +48,104 @@ public class AccessibilityEventFilter {
      * @param event AccessibilityEvent
      * @return ForegroundEvent
      */
-    public SensorForegroundEvent filter(AccessibilityEvent event) {
-
-        if(event == null || event.getPackageName() == null) {
-            return null;
-        }
-
-        String packageName = event.getPackageName().toString();
-        String className = event.getClassName() == null? null : event.getClassName().toString();
-        String appName = getAppName(packageName);
-
-        SensorForegroundEvent foregroundEvent = new SensorForegroundEvent();
-        foregroundEvent.setPackageName(packageName);
-        foregroundEvent.setAppName(appName);
-        foregroundEvent.setClassName(className);
-
-        switch (event.getEventType()) {
-
-            case AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED:
-
-                String activityLabel = getActivityLabel(packageName, className);
-                foregroundEvent.setActivityLabel(activityLabel);
-                foregroundEvent.setKeystrokes(keyStrokes);
-
-                /** new app in foreground */
-                if (!lastApp.equals(packageName)) {
-
-                    if((System.currentTimeMillis() - lastTimestamp) < MIN_DURATION_APP_CHANGE) {
-                        //break;
-                    }
-
-                    foregroundEvent.setEventType(ForegroundEventSensor.EVENT_APP);
-
-                    lWindow("App", appName, packageName, className, activityLabel);
-
-                    lastTimestamp = System.currentTimeMillis();
-
-                    /** reset the counter */
-                    keyStrokes = 0;
-                }
-                /** same app but different activity */
-                else if (!lastClass.equals(className)) {
-
-                    foregroundEvent.setEventType(ForegroundEventSensor.EVENT_ACTIVITY);
-
-                    lWindow("Activity", appName, packageName, className, activityLabel);
-                }
-                else {
-                    // lMisc(event.getEventType(), appName, packageName, className);
-                    break;
-                }
-
-                /** update current running app */
-                lastApp = packageName;
-                lastClass = className;
-
-                return foregroundEvent;
-
-            /*
-            No longer needed now we have browser history?
-            TODO: remove?
-            case AccessibilityEvent.TYPE_VIEW_TEXT_SELECTION_CHANGED:
-
-                String text = getEventText(event);
-
-                Log.d("kraken", "is url? " + text + " --> " + isUrl(text));
-                //lMisc(event.getEventType(), appName, packageName, className);
-
-                boolean isBrowser = Arrays.asList(BROWSER_PACKAGES).contains(packageName);
-
-                // check if the content is a valid url and save it
-                if (isBrowser && isUrl(text)) {
-
-                    foregroundEvent.setEventType(ForegroundEventSensor.EVENT_URL);
-                    foregroundEvent.setUrl(text);
-
-                    lUrl(text, appName, packageName, className);
-
-                    return foregroundEvent;
-                }
-
-                break;
-            */
-
-            case AccessibilityEvent.TYPE_VIEW_TEXT_CHANGED:
-
-                /** increment the counter */
-                keyStrokes++;
-
-                break;
-
-            default:
-
-                // lMisc(event.getEventType(), appName, packageName, className);
-
-        }
-
-        return null;
-    }
-
+//    public SensorForegroundEvent filter(AccessibilityEvent event) {
+//
+//        if(event == null || event.getPackageName() == null) {
+//            return null;
+//        }
+//
+//        String packageName = event.getPackageName().toString();
+//        String className = event.getClassName() == null? null : event.getClassName().toString();
+//        String appName = getAppName(packageName);
+//
+//        SensorForegroundEvent foregroundEvent = new SensorForegroundEvent();
+//        foregroundEvent.setPackageName(packageName);
+//        foregroundEvent.setAppName(appName);
+//        foregroundEvent.setClassName(className);
+//
+//        switch (event.getEventType()) {
+//
+//            case AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED:
+//
+//                String activityLabel = getActivityLabel(packageName, className);
+//                foregroundEvent.setActivityLabel(activityLabel);
+//                foregroundEvent.setKeystrokes(keyStrokes);
+//
+//                /** new app in foreground */
+//                if (!lastApp.equals(packageName)) {
+//
+//                    if((System.currentTimeMillis() - lastTimestamp) < MIN_DURATION_APP_CHANGE) {
+//                        //break;
+//                    }
+//
+//                    foregroundEvent.setEventType(ForegroundEventSensor.EVENT_APP);
+//
+//                    lWindow("App", appName, packageName, className, activityLabel);
+//
+//                    lastTimestamp = System.currentTimeMillis();
+//
+//                    /** reset the counter */
+//                    keyStrokes = 0;
+//                }
+//                /** same app but different activity */
+//                else if (!lastClass.equals(className)) {
+//
+//                    foregroundEvent.setEventType(ForegroundEventSensor.EVENT_ACTIVITY);
+//
+//                    lWindow("Activity", appName, packageName, className, activityLabel);
+//                }
+//                else {
+//                    // lMisc(event.getEventType(), appName, packageName, className);
+//                    break;
+//                }
+//
+//                /** update current running app */
+//                lastApp = packageName;
+//                lastClass = className;
+//
+//                return foregroundEvent;
+//
+//            /*
+//            No longer needed now we have browser history?
+//            TODO: remove?
+//            case AccessibilityEvent.TYPE_VIEW_TEXT_SELECTION_CHANGED:
+//
+//                String text = getEventText(event);
+//
+//                Log.d("kraken", "is url? " + text + " --> " + isUrl(text));
+//                //lMisc(event.getEventType(), appName, packageName, className);
+//
+//                boolean isBrowser = Arrays.asList(BROWSER_PACKAGES).contains(packageName);
+//
+//                // check if the content is a valid url and save it
+//                if (isBrowser && isUrl(text)) {
+//
+//                    foregroundEvent.setEventType(ForegroundEventSensor.EVENT_URL);
+//                    foregroundEvent.setUrl(text);
+//
+//                    lUrl(text, appName, packageName, className);
+//
+//                    return foregroundEvent;
+//                }
+//
+//                break;
+//            */
+//
+//            case AccessibilityEvent.TYPE_VIEW_TEXT_CHANGED:
+//
+//                /** increment the counter */
+//                keyStrokes++;
+//
+//                break;
+//
+//            default:
+//
+//                // lMisc(event.getEventType(), appName, packageName, className);
+//
+//        }
+//
+//        return null;
+//    }
     private void lMisc(int type, String appName, String packageName, String className) {
         l("[%s] %s, %s, %s", type, appName, packageName, className);
     }
@@ -181,13 +177,13 @@ public class AccessibilityEventFilter {
         try {
             ai = pm.getApplicationInfo(packageName, 0);
         } catch (NameNotFoundException e) {
-           e.printStackTrace();
+            e.printStackTrace();
         }
         return ai != null ? pm.getApplicationLabel(ai).toString() : null;
     }
 
     public String getActivityLabel(String packageName, String className) {
-        if(packageName == null || className == null) {
+        if (packageName == null || className == null) {
             return null;
         }
         ComponentName cn = new ComponentName(packageName, className);
@@ -205,9 +201,9 @@ public class AccessibilityEventFilter {
         Matcher matcher = getUrlPattern().matcher(text);
         return matcher.matches();
     }
-    
+
     private Pattern getUrlPattern() {
-        if(mUrlPattern == null) {
+        if (mUrlPattern == null) {
             mUrlPattern = Pattern.compile("(?:(?:http|https):\\/\\/)?([-a-zA-Z0-9.]{2,256}\\.[a-z]{2,4})\\b(?:\\/[-a-zA-Z0-9@:%_\\+.~#?&//=]*)?");
         }
         return mUrlPattern;

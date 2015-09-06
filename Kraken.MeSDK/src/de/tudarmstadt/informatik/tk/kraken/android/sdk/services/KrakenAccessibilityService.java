@@ -12,7 +12,7 @@ import de.tudarmstadt.informatik.tk.kraken.android.sdk.sensors.triggered.Foregro
 
 public class KrakenAccessibilityService extends AccessibilityService {
 
-    private static final String TAG = "KrakenAccessibilityService";
+    private static final String TAG = KrakenAccessibilityService.class.getSimpleName();
 
     private ForegroundEventSensor mForegroundSensor;
     private ForegroundTrafficSensor mForegroundTrafficSensor;
@@ -32,20 +32,20 @@ public class KrakenAccessibilityService extends AccessibilityService {
     }
 
     @Override
-	public void onAccessibilityEvent(AccessibilityEvent event) {
+    public void onAccessibilityEvent(AccessibilityEvent event) {
 
         //Log.d(TAG, "onAccessibilityEvent");
 
         mForegroundSensor.onEvent(event);
 
-        mForegroundTrafficSensor.onEvent(event);
+//        mForegroundTrafficSensor.onEvent(event);
     }
 
-	@Override
-	public void onInterrupt() {
+    @Override
+    public void onInterrupt() {
 
         Log.d(TAG, "onInterrupt");
-	}
+    }
 
     @Override
     public boolean onUnbind(Intent intent) {

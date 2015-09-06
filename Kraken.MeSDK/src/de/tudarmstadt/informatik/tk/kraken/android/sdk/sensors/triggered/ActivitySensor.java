@@ -14,7 +14,6 @@ import com.google.android.gms.location.DetectedActivity;
 
 import java.util.List;
 
-import de.tudarmstadt.informatik.tk.kraken.android.sdk.db.SensorActivity;
 import de.tudarmstadt.informatik.tk.kraken.android.sdk.sensors.ESensorType;
 import de.tudarmstadt.informatik.tk.kraken.android.sdk.sensors.abstract_sensors.AbstractTriggeredSensor;
 
@@ -125,21 +124,21 @@ public class ActivitySensor extends AbstractTriggeredSensor implements GoogleApi
     }
 
     public void sendData(List<DetectedActivity> liActivities) {
-        for (int i = 0; i < liActivities.size(); i++) {
-            DetectedActivity act = liActivities.get(i);
-
-            SensorActivity sensorAct = new SensorActivity();
-            sensorAct.setType(act.getType());
-            sensorAct.setConfidence(act.getConfidence());
-            sensorAct.setRanking(i);
-            handleDatabaseObject(sensorAct);
-        }
+//        for (int i = 0; i < liActivities.size(); i++) {
+//            DetectedActivity act = liActivities.get(i);
+//
+//            SensorActivity sensorAct = new SensorActivity();
+//            sensorAct.setType(act.getType());
+//            sensorAct.setConfidence(act.getConfidence());
+//            sensorAct.setRanking(i);
+//            handleDatabaseObject(sensorAct);
+//        }
     }
 
     public void sendData(DetectedActivity act) {
-        SensorActivity sensorAct = new SensorActivity();
-        sensorAct.setType(act.getType());
-        sensorAct.setConfidence(act.getConfidence());
-        handleDatabaseObject(sensorAct);
+//        SensorActivity sensorAct = new SensorActivity();
+//        sensorAct.setType(act.getType());
+//        sensorAct.setConfidence(act.getConfidence());
+//        handleDatabaseObject(sensorAct);
     }
 }

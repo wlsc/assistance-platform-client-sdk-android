@@ -12,10 +12,8 @@ import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 
-import de.tudarmstadt.informatik.tk.kraken.android.sdk.db.SensorLocation;
 import de.tudarmstadt.informatik.tk.kraken.android.sdk.sensors.ESensorType;
 import de.tudarmstadt.informatik.tk.kraken.android.sdk.sensors.abstract_sensors.AbstractTriggeredSensor;
-import de.tudarmstadt.informatik.tk.kraken.android.sdk.utils.TrafficLocation;
 
 public class LocationSensor extends AbstractTriggeredSensor implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener,
         LocationListener {
@@ -125,15 +123,15 @@ public class LocationSensor extends AbstractTriggeredSensor implements GoogleApi
 
     @Override
     public void onLocationChanged(android.location.Location location) {
-        SensorLocation sensorLocation = new SensorLocation();
-        sensorLocation.setAccuracy(location.getAccuracy());
-        sensorLocation.setLongitude(location.getLongitude());
-        sensorLocation.setLatitude(location.getLatitude());
-        sensorLocation.setSpeed(location.getSpeed());
-        sensorLocation.setProvider(location.getProvider());
-        handleDatabaseObject(sensorLocation);
-        TrafficLocation.getInstance().setLatitude(location.getLatitude());
-        TrafficLocation.getInstance().setLongitude(location.getLongitude());
+//        SensorLocation sensorLocation = new SensorLocation();
+//        sensorLocation.setAccuracy(location.getAccuracy());
+//        sensorLocation.setLongitude(location.getLongitude());
+//        sensorLocation.setLatitude(location.getLatitude());
+//        sensorLocation.setSpeed(location.getSpeed());
+//        sensorLocation.setProvider(location.getProvider());
+//        handleDatabaseObject(sensorLocation);
+//        TrafficLocation.getInstance().setLatitude(location.getLatitude());
+//        TrafficLocation.getInstance().setLongitude(location.getLongitude());
     }
 
     @Override

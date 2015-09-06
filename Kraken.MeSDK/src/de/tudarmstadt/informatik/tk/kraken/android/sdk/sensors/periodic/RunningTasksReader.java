@@ -1,13 +1,12 @@
 package de.tudarmstadt.informatik.tk.kraken.android.sdk.sensors.periodic;
 
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.List;
-
 import android.app.ActivityManager;
 import android.app.ActivityManager.RunningTaskInfo;
 import android.content.Context;
-import de.tudarmstadt.informatik.tk.kraken.android.sdk.db.SensorRunningTasks;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import de.tudarmstadt.informatik.tk.kraken.android.sdk.sensors.ESensorType;
 import de.tudarmstadt.informatik.tk.kraken.android.sdk.sensors.abstract_sensors.AbstractPeriodicSensor;
 import de.tudarmstadt.informatik.tk.kraken.android.sdk.sensors.interfaces.ISensor;
@@ -51,16 +50,16 @@ public class RunningTasksReader extends AbstractPeriodicSensor implements ISenso
 		if (bTasksChanged) {
 			m_liLastTasks = liTasksNames;
 
-			long longTimestamp = Calendar.getInstance().getTimeInMillis();
-			i = 0;
-			for (String taskName : liTasksNames) {
-				SensorRunningTasks sensor = new SensorRunningTasks();
-				sensor.setRunningTasks(taskName);
-				sensor.setStackPosition(i);
-				sensor.setTimestamp(longTimestamp);
-				handleDatabaseObject(sensor, false, false, true);
-				i++;
-			}
+//			long longTimestamp = Calendar.getInstance().getTimeInMillis();
+//			i = 0;
+//			for (String taskName : liTasksNames) {
+//				SensorRunningTasks sensor = new SensorRunningTasks();
+//				sensor.setRunningTasks(taskName);
+//				sensor.setStackPosition(i);
+//				sensor.setTimestamp(longTimestamp);
+//				handleDatabaseObject(sensor, false, false, true);
+//				i++;
+//			}
 		}
 
 	}

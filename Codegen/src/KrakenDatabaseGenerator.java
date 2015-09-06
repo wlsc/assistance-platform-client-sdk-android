@@ -19,7 +19,7 @@ public class KrakenDatabaseGenerator {
 	private static final String OUTPUT_PATH = "../Kraken.MeSDK/src-gen";
 	private static final String MAIN_PACKAGE = "de.tudarmstadt.informatik.tk.kraken.android.sdk.db";
 
-    private static final int SCHEMA_VERSION = 1;
+    private static final int SCHEMA_VERSION = 6;
 
     public static void main(String[] args) throws Exception {
     	new File(OUTPUT_PATH).mkdirs();
@@ -190,8 +190,8 @@ public class KrakenDatabaseGenerator {
 		
 		// ----- GYROSCOPE (UNCALIBRATED) -----
 		// REQUIRED
-		Entity gyroscopeUncalibrated = schema.addEntity("MagneticFieldUncalibratedSensor");
-		gyroscopeUncalibrated.setTableName("magnetic_field_uncalibrated_sensor");
+		Entity gyroscopeUncalibrated = schema.addEntity("GyroscopeUncalibratedSensor");
+		gyroscopeUncalibrated.setTableName("gyroscope_uncalibrated_sensor");
 		gyroscopeUncalibrated.addIdProperty().notNull().primaryKey().autoincrement().index();
 		gyroscopeUncalibrated.implementsInterface(PACKAGE_SENSOR);
 		gyroscopeUncalibrated.addFloatProperty("xNoDrift").notNull();

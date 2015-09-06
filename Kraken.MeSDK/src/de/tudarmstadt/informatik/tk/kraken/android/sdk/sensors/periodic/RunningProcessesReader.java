@@ -1,13 +1,13 @@
 package de.tudarmstadt.informatik.tk.kraken.android.sdk.sensors.periodic;
 
+import android.app.ActivityManager;
+import android.app.ActivityManager.RunningAppProcessInfo;
+import android.content.Context;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-import android.app.ActivityManager;
-import android.app.ActivityManager.RunningAppProcessInfo;
-import android.content.Context;
-import de.tudarmstadt.informatik.tk.kraken.android.sdk.db.SensorRunningProcesses;
 import de.tudarmstadt.informatik.tk.kraken.android.sdk.sensors.ESensorType;
 import de.tudarmstadt.informatik.tk.kraken.android.sdk.sensors.abstract_sensors.AbstractPeriodicSensor;
 import de.tudarmstadt.informatik.tk.kraken.android.sdk.sensors.interfaces.ISensor;
@@ -53,10 +53,10 @@ public class RunningProcessesReader extends AbstractPeriodicSensor implements IS
 				// List<SensorRunningProcesses> li = m_query.list();
 				// if (li == null || li.size() == 0)
 				// {
-				SensorRunningProcesses sensor = new SensorRunningProcesses();
-				sensor.setRunningProcesses(processName);
-				sensor.setTimestamp(longTimestamp);
-				handleDatabaseObject(sensor, false, false, true);
+//				SensorRunningProcesses sensor = new SensorRunningProcesses();
+//				sensor.setRunningProcesses(processName);
+//				sensor.setTimestamp(longTimestamp);
+//				handleDatabaseObject(sensor, false, false, true);
 				// }
 			}
 		}

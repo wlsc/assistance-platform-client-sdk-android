@@ -1,22 +1,11 @@
 package de.tudarmstadt.informatik.tk.kraken.android.sdk.sensors.contentobserver;
 
-import android.annotation.SuppressLint;
-import android.content.ContentResolver;
 import android.content.Context;
-import android.database.Cursor;
 import android.net.Uri;
 import android.provider.Browser;
-import android.util.Log;
 
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.HashMap;
 
-import de.tudarmstadt.informatik.tk.kraken.android.sdk.communication.RetroServerPushManager;
-import de.tudarmstadt.informatik.tk.kraken.android.sdk.db.SensorBrowserHistory;
-import de.tudarmstadt.informatik.tk.kraken.android.sdk.api.entities.ApiMessage;
 import de.tudarmstadt.informatik.tk.kraken.android.sdk.sensors.ESensorType;
 import de.tudarmstadt.informatik.tk.kraken.android.sdk.sensors.abstract_sensors.AbstractContentObserverSensor;
 
@@ -39,119 +28,117 @@ public class BrowserHistorySensor extends AbstractContentObserverSensor {
 
     @Override
     protected void syncData() {
-        ContentResolver cr = context.getContentResolver();
-        Cursor cur = cr
-                .query(URI_BROWSER_HISTORY, null, null, null, null);
-
-        Log.d("kraken", "BrowserHistorySensor syncData");
-
-        if (cur == null)
-            return;
-
-        HashMap<Long, SensorBrowserHistory> allExistingHistory;
-        try {
-            allExistingHistory = getAllExistingHistory();
-        } catch (Exception e) {
-            e.printStackTrace();
-            return;
-        }
-
-        while (cur.moveToNext() && m_bIsRunning) {
-            long id = getLongByColumnName(cur, Browser.BookmarkColumns._ID);
-            String title = getStringByColumnName(cur, Browser.BookmarkColumns.TITLE);
-            String url = getStringByColumnName(cur, Browser.BookmarkColumns.URL);
-            boolean bookmark = getBoolByColumnName(cur, Browser.BookmarkColumns.BOOKMARK);
-            long created = getLongByColumnName(cur, Browser.BookmarkColumns.CREATED);
-            long lastVisited = getLongByColumnName(cur, Browser.BookmarkColumns.DATE);
-            int visits = getIntByColumnName(cur, Browser.BookmarkColumns.VISITS);
-            //byte[] favicon = cur.getBlob(cur.getColumnIndex(Browser.BookmarkColumns.FAVICON));
-
-            try {
-                new URL(url);
-            } catch (MalformedURLException e) {
-                continue;
-            }
-
-            SensorBrowserHistory browserHistory = new SensorBrowserHistory(null,
-                    id, url, title, lastVisited, visits, bookmark, created, true, false, false);
-
-            //Log.d("kraken", "BrowserHistorySensor new Item");
-
-            try {
-                if (checkForHistoryChange(allExistingHistory, browserHistory))
-                {
-                    //Log.d("kraken", "BrowserHistorySensor checkForHistoryChange true");
-                    //Log.d("kraken", "BrowserHistorySensor: " + title + ", " + url + ", " + bookmark + ", " + created + ", " + lastVisited + ", " + visits);
-                    handleDatabaseObject(browserHistory, !browserHistory.getIsNew(), false, true);
-                    m_bFlushToServer = true;
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-
-            //int faviconSize = favicon == null? 0 : favicon.length;
-            //Log.d("kraken", title + ", " + url + ", " + bookmark + ", " + created + ", " + lastVisited + ", " + visits + ", " + faviconSize);
-        }
-
-        if (m_bFlushToServer) {
-            String strFullqualifiedDatabaseClassName = getSensorType().getFullqualifiedDatabaseClassName();
-
-            //SensorData dataBrowserHistory = flushData(m_daoSession, strFullqualifiedDatabaseClassName);
-            ApiMessage.DataWrapper dataBrowserHistory = flushDataRetro(strFullqualifiedDatabaseClassName);
-            //ServerPushManager.getInstance(context).flushManually(dataBrowserHistory);
-            RetroServerPushManager.getInstance(context).flushManually(getPushType(), dataBrowserHistory);
-            //Log.d("kraken", "BrowserHistorySensor FLUSH!");
-        }
-
-        cur.close();
+//        ContentResolver cr = context.getContentResolver();
+//        Cursor cur = cr
+//                .query(URI_BROWSER_HISTORY, null, null, null, null);
+//
+//        Log.d("kraken", "BrowserHistorySensor syncData");
+//
+//        if (cur == null)
+//            return;
+//
+//        HashMap<Long, SensorBrowserHistory> allExistingHistory;
+//        try {
+//            allExistingHistory = getAllExistingHistory();
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            return;
+//        }
+//
+//        while (cur.moveToNext() && m_bIsRunning) {
+//            long id = getLongByColumnName(cur, Browser.BookmarkColumns._ID);
+//            String title = getStringByColumnName(cur, Browser.BookmarkColumns.TITLE);
+//            String url = getStringByColumnName(cur, Browser.BookmarkColumns.URL);
+//            boolean bookmark = getBoolByColumnName(cur, Browser.BookmarkColumns.BOOKMARK);
+//            long created = getLongByColumnName(cur, Browser.BookmarkColumns.CREATED);
+//            long lastVisited = getLongByColumnName(cur, Browser.BookmarkColumns.DATE);
+//            int visits = getIntByColumnName(cur, Browser.BookmarkColumns.VISITS);
+//            //byte[] favicon = cur.getBlob(cur.getColumnIndex(Browser.BookmarkColumns.FAVICON));
+//
+//            try {
+//                new URL(url);
+//            } catch (MalformedURLException e) {
+//                continue;
+//            }
+//
+//            SensorBrowserHistory browserHistory = new SensorBrowserHistory(null,
+//                    id, url, title, lastVisited, visits, bookmark, created, true, false, false);
+//
+//            //Log.d("kraken", "BrowserHistorySensor new Item");
+//
+//            try {
+//                if (checkForHistoryChange(allExistingHistory, browserHistory))
+//                {
+//                    //Log.d("kraken", "BrowserHistorySensor checkForHistoryChange true");
+//                    //Log.d("kraken", "BrowserHistorySensor: " + title + ", " + url + ", " + bookmark + ", " + created + ", " + lastVisited + ", " + visits);
+//                    handleDatabaseObject(browserHistory, !browserHistory.getIsNew(), false, true);
+//                    m_bFlushToServer = true;
+//                }
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//            }
+//
+//            //int faviconSize = favicon == null? 0 : favicon.length;
+//            //Log.d("kraken", title + ", " + url + ", " + bookmark + ", " + created + ", " + lastVisited + ", " + visits + ", " + faviconSize);
+//        }
+//
+//        if (m_bFlushToServer) {
+//            String strFullqualifiedDatabaseClassName = getSensorType().getFullqualifiedDatabaseClassName();
+//
+//            //SensorData dataBrowserHistory = flushData(m_daoSession, strFullqualifiedDatabaseClassName);
+//            ApiMessage.DataWrapper dataBrowserHistory = flushDataRetro(strFullqualifiedDatabaseClassName);
+//            //ServerPushManager.getInstance(context).flushManually(dataBrowserHistory);
+//            RetroServerPushManager.getInstance(context).flushManually(getPushType(), dataBrowserHistory);
+//            //Log.d("kraken", "BrowserHistorySensor FLUSH!");
+//        }
+//
+//        cur.close();
     }
 
-    @SuppressLint("UseSparseArrays")
-    private HashMap<Long, SensorBrowserHistory> getAllExistingHistory() throws NoSuchMethodException, NoSuchFieldException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+//    private HashMap<Long, SensorBrowserHistory> getAllExistingHistory() throws NoSuchMethodException, NoSuchFieldException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+//
+//        if (m_methodForGetAllExistingHistory == null)
+//        {
+//            m_methodForGetAllExistingHistory = SensorBrowserHistory.class.getDeclaredMethod("getHistoryId");
+//            m_methodForGetAllExistingHistory.setAccessible(true);
+//        }
+//        return getAllExistingEntries(SensorBrowserHistory.class, m_methodForGetAllExistingHistory);
+//    }
 
-        if (m_methodForGetAllExistingHistory == null)
-        {
-            m_methodForGetAllExistingHistory = SensorBrowserHistory.class.getDeclaredMethod("getHistoryId");
-            m_methodForGetAllExistingHistory.setAccessible(true);
-        }
-        return getAllExistingEntries(SensorBrowserHistory.class, m_methodForGetAllExistingHistory);
-    }
+//    private boolean checkForHistoryChange(HashMap<Long, SensorBrowserHistory> map, SensorBrowserHistory newSensorBrowserHistory) throws Exception {
+//        try {
+//            long id = newSensorBrowserHistory.getHistoryId();
+//            SensorBrowserHistory existingReminder = map.get(id);
+//
+//            if (m_checkDifferenceMethodForHistoryChange == null || m_getKeyMethodForSensorContact == null)
+//            {
+//                m_getKeyMethodForSensorContact = SensorBrowserHistory.class.getDeclaredMethod("getHistoryId");
+//                m_getKeyMethodForSensorContact.setAccessible(true);
+//                m_checkDifferenceMethodForHistoryChange = getClass().getDeclaredMethod("hasHistoryDifference", new Class[]{SensorBrowserHistory.class, SensorBrowserHistory.class});
+//                m_checkDifferenceMethodForHistoryChange.setAccessible(true);
+//            }
+//            boolean result = checkForChange(map, newSensorBrowserHistory, m_getKeyMethodForSensorContact, m_checkDifferenceMethodForHistoryChange);
+//            if (!result)
+//            {
+//                newSensorBrowserHistory.setId(existingReminder.getId());
+//            }
+//            return result;
+//        } catch (Exception e) {
+//            throw new Exception(e);
+//        }
+//    }
 
-    private boolean checkForHistoryChange(HashMap<Long, SensorBrowserHistory> map, SensorBrowserHistory newSensorBrowserHistory) throws Exception {
-        try {
-            long id = newSensorBrowserHistory.getHistoryId();
-            SensorBrowserHistory existingReminder = map.get(id);
-
-            if (m_checkDifferenceMethodForHistoryChange == null || m_getKeyMethodForSensorContact == null)
-            {
-                m_getKeyMethodForSensorContact = SensorBrowserHistory.class.getDeclaredMethod("getHistoryId");
-                m_getKeyMethodForSensorContact.setAccessible(true);
-                m_checkDifferenceMethodForHistoryChange = getClass().getDeclaredMethod("hasHistoryDifference", new Class[]{SensorBrowserHistory.class, SensorBrowserHistory.class});
-                m_checkDifferenceMethodForHistoryChange.setAccessible(true);
-            }
-            boolean result = checkForChange(map, newSensorBrowserHistory, m_getKeyMethodForSensorContact, m_checkDifferenceMethodForHistoryChange);
-            if (!result)
-            {
-                newSensorBrowserHistory.setId(existingReminder.getId());
-            }
-            return result;
-        } catch (Exception e) {
-            throw new Exception(e);
-        }
-    }
-
-    @SuppressWarnings("unused")
-    private boolean hasHistoryDifference(SensorBrowserHistory existingHistory, SensorBrowserHistory newHistory) {
-        if (checkForDifference(existingHistory.getTitle(), newHistory.getTitle()))
-            return true;
-        if (checkForDifference(existingHistory.getUrl(), newHistory.getUrl()))
-            return true;
-        if (checkForDifference(existingHistory.getLastVisited(), newHistory.getLastVisited()))
-            return true;
-        if (checkForDifference(existingHistory.getVisits(), newHistory.getVisits()))
-            return true;
-        return false;
-    }
+//    private boolean hasHistoryDifference(SensorBrowserHistory existingHistory, SensorBrowserHistory newHistory) {
+//        if (checkForDifference(existingHistory.getTitle(), newHistory.getTitle()))
+//            return true;
+//        if (checkForDifference(existingHistory.getUrl(), newHistory.getUrl()))
+//            return true;
+//        if (checkForDifference(existingHistory.getLastVisited(), newHistory.getLastVisited()))
+//            return true;
+//        if (checkForDifference(existingHistory.getVisits(), newHistory.getVisits()))
+//            return true;
+//        return false;
+//    }
 
     @Override
     public void startSensor() {

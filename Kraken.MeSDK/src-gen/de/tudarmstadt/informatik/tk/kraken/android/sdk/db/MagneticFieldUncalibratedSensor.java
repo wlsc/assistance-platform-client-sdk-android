@@ -7,12 +7,12 @@ package de.tudarmstadt.informatik.tk.kraken.android.sdk.db;
 public class MagneticFieldUncalibratedSensor implements de.tudarmstadt.informatik.tk.kraken.android.sdk.interfaces.IDbSensor {
 
     private long id;
-    private float xNoDrift;
-    private float yNoDrift;
-    private float zNoDrift;
-    private float xEstimatedDrift;
-    private float yEstimatedDrift;
-    private float zEstimatedDrift;
+    private float xNoHardIron;
+    private float yNoHardIron;
+    private float zNoHardIron;
+    private float xEstimatedIronBias;
+    private float yEstimatedIronBias;
+    private float zEstimatedIronBias;
     /** Not-null value. */
     private String created;
 
@@ -23,14 +23,14 @@ public class MagneticFieldUncalibratedSensor implements de.tudarmstadt.informati
         this.id = id;
     }
 
-    public MagneticFieldUncalibratedSensor(long id, float xNoDrift, float yNoDrift, float zNoDrift, float xEstimatedDrift, float yEstimatedDrift, float zEstimatedDrift, String created) {
+    public MagneticFieldUncalibratedSensor(long id, float xNoHardIron, float yNoHardIron, float zNoHardIron, float xEstimatedIronBias, float yEstimatedIronBias, float zEstimatedIronBias, String created) {
         this.id = id;
-        this.xNoDrift = xNoDrift;
-        this.yNoDrift = yNoDrift;
-        this.zNoDrift = zNoDrift;
-        this.xEstimatedDrift = xEstimatedDrift;
-        this.yEstimatedDrift = yEstimatedDrift;
-        this.zEstimatedDrift = zEstimatedDrift;
+        this.xNoHardIron = xNoHardIron;
+        this.yNoHardIron = yNoHardIron;
+        this.zNoHardIron = zNoHardIron;
+        this.xEstimatedIronBias = xEstimatedIronBias;
+        this.yEstimatedIronBias = yEstimatedIronBias;
+        this.zEstimatedIronBias = zEstimatedIronBias;
         this.created = created;
     }
 
@@ -42,52 +42,52 @@ public class MagneticFieldUncalibratedSensor implements de.tudarmstadt.informati
         this.id = id;
     }
 
-    public float getXNoDrift() {
-        return xNoDrift;
+    public float getXNoHardIron() {
+        return xNoHardIron;
     }
 
-    public void setXNoDrift(float xNoDrift) {
-        this.xNoDrift = xNoDrift;
+    public void setXNoHardIron(float xNoHardIron) {
+        this.xNoHardIron = xNoHardIron;
     }
 
-    public float getYNoDrift() {
-        return yNoDrift;
+    public float getYNoHardIron() {
+        return yNoHardIron;
     }
 
-    public void setYNoDrift(float yNoDrift) {
-        this.yNoDrift = yNoDrift;
+    public void setYNoHardIron(float yNoHardIron) {
+        this.yNoHardIron = yNoHardIron;
     }
 
-    public float getZNoDrift() {
-        return zNoDrift;
+    public float getZNoHardIron() {
+        return zNoHardIron;
     }
 
-    public void setZNoDrift(float zNoDrift) {
-        this.zNoDrift = zNoDrift;
+    public void setZNoHardIron(float zNoHardIron) {
+        this.zNoHardIron = zNoHardIron;
     }
 
-    public float getXEstimatedDrift() {
-        return xEstimatedDrift;
+    public float getXEstimatedIronBias() {
+        return xEstimatedIronBias;
     }
 
-    public void setXEstimatedDrift(float xEstimatedDrift) {
-        this.xEstimatedDrift = xEstimatedDrift;
+    public void setXEstimatedIronBias(float xEstimatedIronBias) {
+        this.xEstimatedIronBias = xEstimatedIronBias;
     }
 
-    public float getYEstimatedDrift() {
-        return yEstimatedDrift;
+    public float getYEstimatedIronBias() {
+        return yEstimatedIronBias;
     }
 
-    public void setYEstimatedDrift(float yEstimatedDrift) {
-        this.yEstimatedDrift = yEstimatedDrift;
+    public void setYEstimatedIronBias(float yEstimatedIronBias) {
+        this.yEstimatedIronBias = yEstimatedIronBias;
     }
 
-    public float getZEstimatedDrift() {
-        return zEstimatedDrift;
+    public float getZEstimatedIronBias() {
+        return zEstimatedIronBias;
     }
 
-    public void setZEstimatedDrift(float zEstimatedDrift) {
-        this.zEstimatedDrift = zEstimatedDrift;
+    public void setZEstimatedIronBias(float zEstimatedIronBias) {
+        this.zEstimatedIronBias = zEstimatedIronBias;
     }
 
     /** Not-null value. */

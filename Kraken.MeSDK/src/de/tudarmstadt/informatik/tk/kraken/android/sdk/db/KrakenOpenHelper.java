@@ -23,7 +23,7 @@ public class KrakenOpenHelper extends DaoMaster.OpenHelper {
         switch (oldVersion) {
             // FIXME I guess this is some compatibility stuff, maybe it can go away?
             case 1:
-                addColumn(db, SensorContactDao.TABLENAME, SensorContactDao.Properties.GlobalContactId, "LONG");
+//                addColumn(db, SensorContactDao.TABLENAME, SensorContactDao.Properties.GlobalContactId, "LONG");
                 break;
             default:
                 return;
