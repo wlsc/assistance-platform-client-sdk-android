@@ -14,12 +14,12 @@ import de.greenrobot.daogenerator.Schema;
 
 public class KrakenDatabaseGenerator {
 
-	private static final String FULL_QUALIFIED_PATH_IDBUPDATABLESENSOR = "de.tudarmstadt.informatik.tk.kraken.android.sdk.interfaces.IDbUpdatableSensor";
-	private static final String FULL_QUALIFIED_PATH_IDBSENSOR = "de.tudarmstadt.informatik.tk.kraken.android.sdk.interfaces.IDbSensor";
+	private static final String PACKAGE_UPDATABLE_SENSOR = "de.tudarmstadt.informatik.tk.kraken.android.sdk.interfaces.IDbUpdatableSensor";
+	private static final String PACKAGE_SENSOR = "de.tudarmstadt.informatik.tk.kraken.android.sdk.interfaces.IDbSensor";
 	private static final String OUTPUT_PATH = "../Kraken.MeSDK/src-gen";
-	private static final String PACKAGE = "de.tudarmstadt.informatik.tk.kraken.android.sdk.db";
+	private static final String MAIN_PACKAGE = "de.tudarmstadt.informatik.tk.kraken.android.sdk.db";
 
-    private static final int SCHEMA_VERSION = 5;
+    private static final int SCHEMA_VERSION = 1;
 
     public static void main(String[] args) throws Exception {
     	new File(OUTPUT_PATH).mkdirs();
@@ -27,12 +27,446 @@ public class KrakenDatabaseGenerator {
 		supressWarningsFiles();
 	}
 
+	private static void generateSchema() throws Exception, IOException {
+		Schema schema = new Schema(SCHEMA_VERSION, MAIN_PACKAGE);
+		
+		// ****************************************
+		// ------------ COMMON SENSORS ------------
+		// ****************************************
+		
+		// ----- GPS Position -----
+		// REQUIRED
+		Entity positionSensor = schema.addEntity("PositionSensor");
+		positionSensor.setTableName("position_sensor");
+		positionSensor.addIdProperty().notNull().primaryKey().autoincrement().index();
+		positionSensor.implementsInterface(PACKAGE_SENSOR);
+		positionSensor.addDoubleProperty("latitude");
+		positionSensor.addDoubleProperty("longitude");
+		positionSensor.addDoubleProperty("accuracyHorizontal");
+		positionSensor.addFloatProperty("speed");
+		positionSensor.addStringProperty("created").notNull();
+		// OPTIONAL
+		positionSensor.addDoubleProperty("altitude");
+		positionSensor.addDoubleProperty("accuracyVertical");
+		positionSensor.addIntProperty("course");
+		positionSensor.addIntProperty("floor");
+		
+		// ----- Gyroscope -----
+		// REQUIRED
+		Entity gyroscopeSensor = schema.addEntity("GyroscopeSensor");
+		gyroscopeSensor.setTableName("gyroscope_sensor");
+		gyroscopeSensor.addIdProperty().notNull().primaryKey().autoincrement().index();
+		gyroscopeSensor.implementsInterface(PACKAGE_SENSOR);
+		gyroscopeSensor.addDoubleProperty("x");
+		gyroscopeSensor.addDoubleProperty("y");
+		gyroscopeSensor.addDoubleProperty("z");
+		gyroscopeSensor.addStringProperty("created").notNull();
+		// OPTIONAL
+		// none
+		
+		// ----- Accelerometer -----
+		// REQUIRED
+		Entity accelerometerSensor = schema.addEntity("AccelerometerSensor");
+		accelerometerSensor.setTableName("accelerometer_sensor");
+		accelerometerSensor.addIdProperty().notNull().primaryKey().autoincrement().index();
+		accelerometerSensor.implementsInterface(PACKAGE_SENSOR);
+		accelerometerSensor.addDoubleProperty("x");
+		accelerometerSensor.addDoubleProperty("y");
+		accelerometerSensor.addDoubleProperty("z");
+		accelerometerSensor.addStringProperty("created").notNull();
+		// OPTIONAL
+		accelerometerSensor.addIntProperty("accuracy");
+		
+		// ----- Magnetic Field -----
+		// REQUIRED
+		Entity magneticFieldSensor = schema.addEntity("MagneticFieldSensor");
+		magneticFieldSensor.setTableName("magnetic_field_sensor");
+		magneticFieldSensor.addIdProperty().notNull().primaryKey().autoincrement().index();
+		magneticFieldSensor.implementsInterface(PACKAGE_SENSOR);
+		magneticFieldSensor.addDoubleProperty("x");
+		magneticFieldSensor.addDoubleProperty("y");
+		magneticFieldSensor.addDoubleProperty("z");
+		magneticFieldSensor.addStringProperty("created").notNull();
+		// OPTIONAL
+		magneticFieldSensor.addIntProperty("accuracy");
+		
+		// ********************************
+		// ------------ EVENTS ------------
+		// ********************************
+		
+		// ----- Motion Activity -----
+		// REQUIRED
+		Entity motionActivitySensor = schema.addEntity("MotionActivityEvent");
+		motionActivitySensor.setTableName("motion_activity_event");
+		motionActivitySensor.addIdProperty().notNull().primaryKey().autoincrement().index();
+		motionActivitySensor.implementsInterface(PACKAGE_SENSOR);
+		motionActivitySensor.addBooleanProperty("walking");
+		motionActivitySensor.addBooleanProperty("running");
+		motionActivitySensor.addBooleanProperty("cycling");
+		motionActivitySensor.addBooleanProperty("driving");
+		motionActivitySensor.addBooleanProperty("stationary");
+		motionActivitySensor.addBooleanProperty("unknown");
+		motionActivitySensor.addIntProperty("accuracy");
+		motionActivitySensor.addStringProperty("created").notNull();
+		// OPTIONAL
+		motionActivitySensor.addBooleanProperty("onFoot");
+		motionActivitySensor.addBooleanProperty("tilting");
+
+		// ----- Connection -----
+		// REQUIRED
+		Entity connectionEvent = schema.addEntity("ConnectionEvent");
+		connectionEvent.setTableName("connection_event");
+		connectionEvent.addIdProperty().notNull().primaryKey().autoincrement().index();
+		connectionEvent.implementsInterface(PACKAGE_SENSOR);
+		connectionEvent.addBooleanProperty("isWifi");
+		connectionEvent.addBooleanProperty("isMobile");
+		connectionEvent.addStringProperty("created").notNull();
+		// OPTIONAL
+		// none
+
+		// ----- Connection -----
+		// REQUIRED
+		Entity wifiConnectionEvent = schema.addEntity("WifiConnectionEvent");
+		wifiConnectionEvent.setTableName("wifi_connection_event");
+		wifiConnectionEvent.addIdProperty().notNull().primaryKey().autoincrement().index();
+		wifiConnectionEvent.implementsInterface(PACKAGE_SENSOR);
+		wifiConnectionEvent.addStringProperty("ssid");
+		wifiConnectionEvent.addStringProperty("bssid");
+		wifiConnectionEvent.addStringProperty("created").notNull();
+		// OPTIONAL
+		wifiConnectionEvent.addIntProperty("channel");
+		wifiConnectionEvent.addIntProperty("frequency");
+		wifiConnectionEvent.addIntProperty("linkSpeed");
+		wifiConnectionEvent.addIntProperty("signalStrength");
+		wifiConnectionEvent.addIntProperty("networkId");
+		
+		// ----- Mobile Connection -----
+		// REQUIRED
+		Entity mobileConnectionEvent = schema.addEntity("MobileConnectionEvent");
+		mobileConnectionEvent.setTableName("mobile_connection_event");
+		mobileConnectionEvent.addIdProperty().notNull().primaryKey().autoincrement().index();
+		mobileConnectionEvent.implementsInterface(PACKAGE_SENSOR);
+		mobileConnectionEvent.addStringProperty("carrierName");
+		mobileConnectionEvent.addStringProperty("mobileCarrierCode");
+		mobileConnectionEvent.addStringProperty("mobileNetworkCode");
+		mobileConnectionEvent.addStringProperty("created").notNull();
+		// OPTIONAL
+		mobileConnectionEvent.addBooleanProperty("voipAvailable");
+		
+		// ----- Loudness -----
+		// REQUIRED
+		Entity loudnessEvent = schema.addEntity("LoudnessEvent");
+		loudnessEvent.setTableName("loudness_event");
+		loudnessEvent.addIdProperty().notNull().primaryKey().autoincrement().index();
+		loudnessEvent.implementsInterface(PACKAGE_SENSOR);
+		loudnessEvent.addFloatProperty("loudness").notNull();
+		loudnessEvent.addStringProperty("created").notNull();
+		// OPTIONAL
+		// none
+		
+		// -------------------------------------------------------------------------------------------
+		// -------------------------------------------------------------------------------------------
+		// -------------------------------------------------------------------------------------------
+		
+		// *********************
+		// ** ANDROID SENSORS **
+		// *********************
+		
+		// ----- MAGNETIC FIELD (UNCALIBRATED) -----
+		// REQUIRED
+		Entity magneticFieldUncalibrated = schema.addEntity("MagneticFieldUncalibratedSensor");
+		magneticFieldUncalibrated.setTableName("magnetic_field_uncalibrated_sensor");
+		magneticFieldUncalibrated.addIdProperty().notNull().primaryKey().autoincrement().index();
+		magneticFieldUncalibrated.implementsInterface(PACKAGE_SENSOR);
+		magneticFieldUncalibrated.addFloatProperty("xNoHardIron").notNull();
+		magneticFieldUncalibrated.addFloatProperty("yNoHardIron").notNull();
+		magneticFieldUncalibrated.addFloatProperty("zNoHardIron").notNull();
+		magneticFieldUncalibrated.addFloatProperty("xEstimatedIronBias").notNull();
+		magneticFieldUncalibrated.addFloatProperty("yEstimatedIronBias").notNull();
+		magneticFieldUncalibrated.addFloatProperty("zEstimatedIronBias").notNull();
+		magneticFieldUncalibrated.addStringProperty("created").notNull();
+		// OPTIONAL
+		// none
+		
+		// ----- GYROSCOPE (UNCALIBRATED) -----
+		// REQUIRED
+		Entity gyroscopeUncalibrated = schema.addEntity("MagneticFieldUncalibratedSensor");
+		gyroscopeUncalibrated.setTableName("magnetic_field_uncalibrated_sensor");
+		gyroscopeUncalibrated.addIdProperty().notNull().primaryKey().autoincrement().index();
+		gyroscopeUncalibrated.implementsInterface(PACKAGE_SENSOR);
+		gyroscopeUncalibrated.addFloatProperty("xNoDrift").notNull();
+		gyroscopeUncalibrated.addFloatProperty("yNoDrift").notNull();
+		gyroscopeUncalibrated.addFloatProperty("zNoDrift").notNull();
+		gyroscopeUncalibrated.addFloatProperty("xEstimatedDrift").notNull();
+		gyroscopeUncalibrated.addFloatProperty("yEstimatedDrift").notNull();
+		gyroscopeUncalibrated.addFloatProperty("zEstimatedDrift").notNull();
+		gyroscopeUncalibrated.addStringProperty("created").notNull();
+		// OPTIONAL
+		// none
+
+		new DaoGenerator().generateAll(schema, OUTPUT_PATH);
+	}
+	
+	private static void generateOLDSchema() throws Exception, IOException {
+		Schema schema = new Schema(SCHEMA_VERSION, MAIN_PACKAGE);
+
+		// ------------ SENSORS ------------
+		Entity measurementLogger = schema.addEntity("SensorMeasurementLog");
+		measurementLogger.addIdProperty();
+		measurementLogger.implementsInterface(PACKAGE_SENSOR);
+		measurementLogger.addBooleanProperty("started");
+		measurementLogger.addLongProperty("timestamp");
+
+		// ----- Accelerometer -----
+		Entity sensorAccelerometer = schema.addEntity("SensorAccelerometer");
+		sensorAccelerometer.addIdProperty();
+		sensorAccelerometer.implementsInterface(PACKAGE_SENSOR);
+		sensorAccelerometer.addIntProperty("accuracy");
+		sensorAccelerometer.addFloatProperty("accelerationX");
+		sensorAccelerometer.addFloatProperty("accelerationY");
+		sensorAccelerometer.addFloatProperty("accelerationZ");
+		sensorAccelerometer.addLongProperty("timestamp");
+
+		// ----- Activity -----
+		Entity sensorActivity = schema.addEntity("SensorActivity");
+		sensorActivity.addIdProperty();
+		sensorActivity.implementsInterface(PACKAGE_SENSOR);
+		sensorActivity.addIntProperty("type");
+		sensorActivity.addIntProperty("confidence");
+		sensorActivity.addIntProperty("ranking");
+		sensorActivity.addLongProperty("timestamp");
+
+		// ----- Network -----
+		Entity sensorNetwork = schema.addEntity("SensorConnection");
+		sensorNetwork.addIdProperty();
+		sensorNetwork.implementsInterface(PACKAGE_SENSOR);
+		sensorNetwork.addIntProperty("activeNetwork");
+		sensorNetwork.addBooleanProperty("mobileIsAvailable");
+		sensorNetwork.addIntProperty("mobileState");
+		sensorNetwork.addIntProperty("wlanState");
+		sensorNetwork.addBooleanProperty("wlanIsAvailable");
+		sensorNetwork.addLongProperty("timestamp");
+
+        // ----- Network Traffic-----
+        Entity sensorNetworkTraffic = schema.addEntity("SensorNetworkTraffic");
+        sensorNetworkTraffic.addIdProperty();
+        sensorNetworkTraffic.implementsInterface(PACKAGE_SENSOR);
+        sensorNetworkTraffic.addStringProperty("appName");
+        sensorNetworkTraffic.addLongProperty("rxBytes");
+        sensorNetworkTraffic.addLongProperty("txBytes");
+        sensorNetworkTraffic.addLongProperty("timestamp");
+        sensorNetworkTraffic.addBooleanProperty("background");
+        sensorNetworkTraffic.addDoubleProperty("longitude");
+        sensorNetworkTraffic.addDoubleProperty("latitude");
+        
+		// ----- Light -----
+		Entity sensorLight = schema.addEntity("SensorLight");
+		sensorLight.addIdProperty();
+		sensorLight.implementsInterface(PACKAGE_SENSOR);
+		sensorLight.addIntProperty("accuracy");
+		sensorLight.addFloatProperty("value");
+		sensorLight.addLongProperty("timestamp");
+
+		// ----- Location -----
+		Entity sensorLocation = schema.addEntity("SensorLocation");
+		sensorLocation.addIdProperty();
+		sensorLocation.implementsInterface(PACKAGE_SENSOR);
+		sensorLocation.addFloatProperty("accuracy");
+		sensorLocation.addDoubleProperty("longitude");
+		sensorLocation.addDoubleProperty("latitude");
+		sensorLocation.addFloatProperty("speed");
+		sensorLocation.addStringProperty("provider");
+		sensorLocation.addLongProperty("timestamp");
+
+		// ----- Ringtone -----
+		Entity sensorRingtone = schema.addEntity("SensorRingtone");
+		sensorRingtone.addIdProperty();
+		sensorRingtone.implementsInterface(PACKAGE_SENSOR);
+		sensorRingtone.addIntProperty("ringtoneMode");
+		sensorRingtone.addLongProperty("timestamp");
+
+		// ----- Loudness -----
+		Entity sensorLoudness = schema.addEntity("SensorLoudness");
+		sensorLoudness.addIdProperty();
+		sensorLoudness.implementsInterface(PACKAGE_SENSOR);
+		sensorLoudness.addFloatProperty("loudness");
+		sensorLoudness.addLongProperty("startTimestamp");
+		sensorLoudness.addLongProperty("timestamp");
+
+		// ----- Accounts -----
+		Entity sensorAccountsReader = schema.addEntity("SensorAccountsReader");
+		sensorAccountsReader.addIdProperty();
+		sensorAccountsReader.implementsInterface(PACKAGE_SENSOR);
+		sensorAccountsReader.addStringProperty("accountTypes");
+		sensorAccountsReader.addLongProperty("timestamp");
+
+		// ----- Running Processes -----
+		Entity sensorRunningProcesses = schema.addEntity("SensorRunningProcesses");
+		sensorRunningProcesses.addIdProperty();
+		sensorRunningProcesses.implementsInterface(PACKAGE_SENSOR);
+		sensorRunningProcesses.addStringProperty("runningProcesses");
+		sensorRunningProcesses.addLongProperty("timestamp");
+
+		// ----- Running Services -----
+		Entity sensorRunningServices = schema.addEntity("SensorRunningServices");
+		sensorRunningServices.addIdProperty();
+		sensorRunningServices.implementsInterface(PACKAGE_SENSOR);
+		sensorRunningServices.addStringProperty("runningServices");
+		sensorRunningServices.addLongProperty("timestamp");
+
+		// ----- Running Tasks -----
+		Entity sensorRunningTasks = schema.addEntity("SensorRunningTasks");
+		sensorRunningTasks.addIdProperty();
+		sensorRunningTasks.implementsInterface(PACKAGE_SENSOR);
+		sensorRunningTasks.addStringProperty("runningTasks");
+		sensorRunningTasks.addIntProperty("stackPosition");
+		sensorRunningTasks.addLongProperty("timestamp");
+
+		// ----- Contacts -----
+		Entity sensorContact = schema.addEntity("SensorContact");
+		sensorContact.addIdProperty();
+		sensorContact.implementsInterface(PACKAGE_UPDATABLE_SENSOR);
+		sensorContact.addLongProperty("contactId");
+		sensorContact.addLongProperty("globalContactId");
+		sensorContact.addStringProperty("displayName");
+		sensorContact.addStringProperty("givenName");
+		sensorContact.addStringProperty("familyName");
+		sensorContact.addIntProperty("starred");
+		sensorContact.addIntProperty("lastTimeContacted");
+		sensorContact.addIntProperty("timesContacted");
+		sensorContact.addStringProperty("note");
+		sensorContact.addLongProperty("timestamp");
+		sensorContact.addBooleanProperty("isNew");
+		sensorContact.addBooleanProperty("isUpdated");
+		sensorContact.addBooleanProperty("isDeleted");
+
+		// ----- Contact Numbers -----
+		Entity contactNumbers = schema.addEntity("SensorContactNumber");
+		contactNumbers.addIdProperty();
+		contactNumbers.implementsInterface(PACKAGE_UPDATABLE_SENSOR);
+		Property fkContact = contactNumbers.addLongProperty("fkContact").notNull().getProperty();
+		sensorContact.addToMany(contactNumbers, fkContact);
+		contactNumbers.addLongProperty("numberId");
+		contactNumbers.addLongProperty("contactId");
+		contactNumbers.addStringProperty("type");
+		contactNumbers.addStringProperty("number");
+		contactNumbers.addLongProperty("timestamp");
+		contactNumbers.addBooleanProperty("isNew");
+		contactNumbers.addBooleanProperty("isUpdated");
+		contactNumbers.addBooleanProperty("isDeleted");
+
+		// ----- Contact Mail Addresses -----
+		Entity contactMails = schema.addEntity("SensorContactMail");
+		contactMails.addIdProperty();
+		contactMails.implementsInterface(PACKAGE_UPDATABLE_SENSOR);
+		fkContact = contactMails.addLongProperty("fkContact").notNull().getProperty();
+		sensorContact.addToMany(contactMails, fkContact);
+		contactMails.addLongProperty("mailId");
+		contactMails.addLongProperty("contactId");
+		contactMails.addStringProperty("address");
+		contactMails.addStringProperty("type");
+		contactMails.addLongProperty("timestamp");
+		contactMails.addBooleanProperty("isNew");
+		contactMails.addBooleanProperty("isUpdated");
+		contactMails.addBooleanProperty("isDeleted");
+
+		// ----- Calendar Events -----
+		Entity calendarEvent = schema.addEntity("SensorCalendarEvent");
+		calendarEvent.addIdProperty();
+		calendarEvent.implementsInterface(PACKAGE_UPDATABLE_SENSOR);
+		calendarEvent.addLongProperty("eventId");
+		calendarEvent.addLongProperty("calendarId");
+		calendarEvent.addBooleanProperty("allDay");
+		calendarEvent.addIntProperty("availability");
+		calendarEvent.addStringProperty("description");
+		calendarEvent.addLongProperty("timestampStart");
+		calendarEvent.addLongProperty("timestampEnd");
+		calendarEvent.addStringProperty("duration");
+		calendarEvent.addStringProperty("location");
+		calendarEvent.addStringProperty("timezoneStart");
+		calendarEvent.addStringProperty("timezoneEnd");
+		calendarEvent.addStringProperty("recurrenceExceptionDate");
+		calendarEvent.addStringProperty("recurrenceExceptionRule");
+		calendarEvent.addBooleanProperty("hasAlarm");
+		calendarEvent.addLongProperty("lastDate");
+		calendarEvent.addBooleanProperty("originalAllDay");
+		calendarEvent.addStringProperty("originalId");
+		calendarEvent.addLongProperty("originalInstanceTime");
+		calendarEvent.addStringProperty("recurrenceDate");
+		calendarEvent.addStringProperty("recurrenceRule");
+		calendarEvent.addIntProperty("status");
+		calendarEvent.addStringProperty("title");
+		calendarEvent.addLongProperty("timestamp");
+		calendarEvent.addBooleanProperty("isNew");
+		calendarEvent.addBooleanProperty("isUpdated");
+		calendarEvent.addBooleanProperty("isDeleted");
+
+		// ----- Calendar Reminders -----
+		Entity calendarEventReminder = schema.addEntity("SensorCalendarEventReminder");
+		calendarEventReminder.addIdProperty();
+		calendarEventReminder.implementsInterface(PACKAGE_UPDATABLE_SENSOR);
+		calendarEventReminder.addLongProperty("reminderId");
+		calendarEventReminder.addLongProperty("eventId");
+		calendarEventReminder.addIntProperty("method");
+		calendarEventReminder.addIntProperty("minutes");
+		calendarEventReminder.addLongProperty("timestamp");
+		calendarEventReminder.addBooleanProperty("isNew");
+		calendarEventReminder.addBooleanProperty("isUpdated");
+		calendarEventReminder.addBooleanProperty("isDeleted");
+
+		// ----- Contacts -----
+		Entity sensorCallLog = schema.addEntity("SensorCallLog");
+		sensorCallLog.addIdProperty();
+		sensorCallLog.implementsInterface(PACKAGE_UPDATABLE_SENSOR);
+		sensorCallLog.addLongProperty("callId");
+		sensorCallLog.addIntProperty("type");
+		sensorCallLog.addStringProperty("name");
+		sensorCallLog.addStringProperty("number");
+		sensorCallLog.addLongProperty("date");
+		sensorCallLog.addLongProperty("duration");
+		sensorCallLog.addLongProperty("timestamp");
+		sensorCallLog.addBooleanProperty("isNew");
+		sensorCallLog.addBooleanProperty("isUpdated");
+		sensorCallLog.addBooleanProperty("isDeleted");
+
+        // ----- Browser History -----
+        Entity sensorBrowserHistory = schema.addEntity("SensorBrowserHistory");
+        sensorBrowserHistory.addIdProperty();
+        sensorBrowserHistory.implementsInterface(PACKAGE_UPDATABLE_SENSOR);
+        sensorBrowserHistory.addLongProperty("historyId");
+        sensorBrowserHistory.addStringProperty("url");
+        sensorBrowserHistory.addStringProperty("title");
+        sensorBrowserHistory.addLongProperty("lastVisited");
+        sensorBrowserHistory.addIntProperty("visits");
+        sensorBrowserHistory.addBooleanProperty("bookmark");
+        sensorBrowserHistory.addLongProperty("timestamp");
+        sensorBrowserHistory.addBooleanProperty("isNew");
+        sensorBrowserHistory.addBooleanProperty("isUpdated");
+        sensorBrowserHistory.addBooleanProperty("isDeleted");
+
+        // ----- Foreground Events -----
+        Entity sensorForegroundEvent = schema.addEntity("SensorForegroundEvent");
+        sensorForegroundEvent.addIdProperty();
+        sensorForegroundEvent.implementsInterface(PACKAGE_SENSOR);
+        sensorForegroundEvent.addStringProperty("packageName");
+        sensorForegroundEvent.addStringProperty("appName");
+        sensorForegroundEvent.addStringProperty("className");
+        sensorForegroundEvent.addStringProperty("activityLabel");
+        sensorForegroundEvent.addStringProperty("color");
+        sensorForegroundEvent.addStringProperty("url");
+        sensorForegroundEvent.addIntProperty("eventType");
+        sensorForegroundEvent.addIntProperty("keystrokes");
+        sensorForegroundEvent.addLongProperty("timestamp");
+
+		new DaoGenerator().generateAll(schema, OUTPUT_PATH);
+	}
+	
 	private static void supressWarningsFiles() {
 		System.out.println("--------------------------------------------------------");
 		System.out.println("Processing every generated file to add needed '@SupressWarning(\"serial\")' to avoid compile warnings.");
 		long longStart = System.currentTimeMillis();
 
-		String strPackagePath = PACKAGE.replaceAll("\\.", "/");
+		String strPackagePath = MAIN_PACKAGE.replaceAll("\\.", "/");
 		File directory = new File(OUTPUT_PATH + "/" + strPackagePath);
 		System.out.println(directory.getAbsolutePath());
 		directory.getAbsolutePath();
@@ -94,261 +528,7 @@ public class KrakenDatabaseGenerator {
 		long longDuration = longEnd - longStart;
 		System.out.println("Processed " + i + " files in " + longDuration + "ms. " + u + " files were manipulated.");
 	}
-
-	private static void generateSchema() throws Exception, IOException {
-		Schema schema = new Schema(SCHEMA_VERSION, PACKAGE);
-
-		// ------------ SENSORS ------------
-		Entity measurementLogger = schema.addEntity("SensorMeasurementLog");
-		measurementLogger.addIdProperty();
-		measurementLogger.implementsInterface(FULL_QUALIFIED_PATH_IDBSENSOR);
-		measurementLogger.addBooleanProperty("started");
-		measurementLogger.addLongProperty("timestamp");
-
-		// ----- Accelerometer -----
-		Entity sensorAccelerometer = schema.addEntity("SensorAccelerometer");
-		sensorAccelerometer.addIdProperty();
-		sensorAccelerometer.implementsInterface(FULL_QUALIFIED_PATH_IDBSENSOR);
-		sensorAccelerometer.addIntProperty("accuracy");
-		sensorAccelerometer.addFloatProperty("accelerationX");
-		sensorAccelerometer.addFloatProperty("accelerationY");
-		sensorAccelerometer.addFloatProperty("accelerationZ");
-		sensorAccelerometer.addLongProperty("timestamp");
-
-		// ----- Activity -----
-		Entity sensorActivity = schema.addEntity("SensorActivity");
-		sensorActivity.addIdProperty();
-		sensorActivity.implementsInterface(FULL_QUALIFIED_PATH_IDBSENSOR);
-		sensorActivity.addIntProperty("type");
-		sensorActivity.addIntProperty("confidence");
-		sensorActivity.addIntProperty("ranking");
-		sensorActivity.addLongProperty("timestamp");
-
-		// ----- Network -----
-		Entity sensorNetwork = schema.addEntity("SensorConnection");
-		sensorNetwork.addIdProperty();
-		sensorNetwork.implementsInterface(FULL_QUALIFIED_PATH_IDBSENSOR);
-		sensorNetwork.addIntProperty("activeNetwork");
-		sensorNetwork.addBooleanProperty("mobileIsAvailable");
-		sensorNetwork.addIntProperty("mobileState");
-		sensorNetwork.addIntProperty("wlanState");
-		sensorNetwork.addBooleanProperty("wlanIsAvailable");
-		sensorNetwork.addLongProperty("timestamp");
-
-        // ----- Network Traffic-----
-        Entity sensorNetworkTraffic = schema.addEntity("SensorNetworkTraffic");
-        sensorNetworkTraffic.addIdProperty();
-        sensorNetworkTraffic.implementsInterface(FULL_QUALIFIED_PATH_IDBSENSOR);
-        sensorNetworkTraffic.addStringProperty("appName");
-        sensorNetworkTraffic.addLongProperty("rxBytes");
-        sensorNetworkTraffic.addLongProperty("txBytes");
-        sensorNetworkTraffic.addLongProperty("timestamp");
-        sensorNetworkTraffic.addBooleanProperty("background");
-        sensorNetworkTraffic.addDoubleProperty("longitude");
-        sensorNetworkTraffic.addDoubleProperty("latitude");
-        
-		// ----- Light -----
-		Entity sensorLight = schema.addEntity("SensorLight");
-		sensorLight.addIdProperty();
-		sensorLight.implementsInterface(FULL_QUALIFIED_PATH_IDBSENSOR);
-		sensorLight.addIntProperty("accuracy");
-		sensorLight.addFloatProperty("value");
-		sensorLight.addLongProperty("timestamp");
-
-		// ----- Location -----
-		Entity sensorLocation = schema.addEntity("SensorLocation");
-		sensorLocation.addIdProperty();
-		sensorLocation.implementsInterface(FULL_QUALIFIED_PATH_IDBSENSOR);
-		sensorLocation.addFloatProperty("accuracy");
-		sensorLocation.addDoubleProperty("longitude");
-		sensorLocation.addDoubleProperty("latitude");
-		sensorLocation.addFloatProperty("speed");
-		sensorLocation.addStringProperty("provider");
-		sensorLocation.addLongProperty("timestamp");
-
-		// ----- Ringtone -----
-		Entity sensorRingtone = schema.addEntity("SensorRingtone");
-		sensorRingtone.addIdProperty();
-		sensorRingtone.implementsInterface(FULL_QUALIFIED_PATH_IDBSENSOR);
-		sensorRingtone.addIntProperty("ringtoneMode");
-		sensorRingtone.addLongProperty("timestamp");
-
-		// ----- Loudness -----
-		Entity sensorLoudness = schema.addEntity("SensorLoudness");
-		sensorLoudness.addIdProperty();
-		sensorLoudness.implementsInterface(FULL_QUALIFIED_PATH_IDBSENSOR);
-		sensorLoudness.addFloatProperty("loudness");
-		sensorLoudness.addLongProperty("startTimestamp");
-		sensorLoudness.addLongProperty("timestamp");
-
-		// ----- Accounts -----
-		Entity sensorAccountsReader = schema.addEntity("SensorAccountsReader");
-		sensorAccountsReader.addIdProperty();
-		sensorAccountsReader.implementsInterface(FULL_QUALIFIED_PATH_IDBSENSOR);
-		sensorAccountsReader.addStringProperty("accountTypes");
-		sensorAccountsReader.addLongProperty("timestamp");
-
-		// ----- Running Processes -----
-		Entity sensorRunningProcesses = schema.addEntity("SensorRunningProcesses");
-		sensorRunningProcesses.addIdProperty();
-		sensorRunningProcesses.implementsInterface(FULL_QUALIFIED_PATH_IDBSENSOR);
-		sensorRunningProcesses.addStringProperty("runningProcesses");
-		sensorRunningProcesses.addLongProperty("timestamp");
-
-		// ----- Running Services -----
-		Entity sensorRunningServices = schema.addEntity("SensorRunningServices");
-		sensorRunningServices.addIdProperty();
-		sensorRunningServices.implementsInterface(FULL_QUALIFIED_PATH_IDBSENSOR);
-		sensorRunningServices.addStringProperty("runningServices");
-		sensorRunningServices.addLongProperty("timestamp");
-
-		// ----- Running Tasks -----
-		Entity sensorRunningTasks = schema.addEntity("SensorRunningTasks");
-		sensorRunningTasks.addIdProperty();
-		sensorRunningTasks.implementsInterface(FULL_QUALIFIED_PATH_IDBSENSOR);
-		sensorRunningTasks.addStringProperty("runningTasks");
-		sensorRunningTasks.addIntProperty("stackPosition");
-		sensorRunningTasks.addLongProperty("timestamp");
-
-		// ----- Contacts -----
-		Entity sensorContact = schema.addEntity("SensorContact");
-		sensorContact.addIdProperty();
-		sensorContact.implementsInterface(FULL_QUALIFIED_PATH_IDBUPDATABLESENSOR);
-		sensorContact.addLongProperty("contactId");
-		sensorContact.addLongProperty("globalContactId");
-		sensorContact.addStringProperty("displayName");
-		sensorContact.addStringProperty("givenName");
-		sensorContact.addStringProperty("familyName");
-		sensorContact.addIntProperty("starred");
-		sensorContact.addIntProperty("lastTimeContacted");
-		sensorContact.addIntProperty("timesContacted");
-		sensorContact.addStringProperty("note");
-		sensorContact.addLongProperty("timestamp");
-		sensorContact.addBooleanProperty("isNew");
-		sensorContact.addBooleanProperty("isUpdated");
-		sensorContact.addBooleanProperty("isDeleted");
-
-		// ----- Contact Numbers -----
-		Entity contactNumbers = schema.addEntity("SensorContactNumber");
-		contactNumbers.addIdProperty();
-		contactNumbers.implementsInterface(FULL_QUALIFIED_PATH_IDBUPDATABLESENSOR);
-		Property fkContact = contactNumbers.addLongProperty("fkContact").notNull().getProperty();
-		sensorContact.addToMany(contactNumbers, fkContact);
-		contactNumbers.addLongProperty("numberId");
-		contactNumbers.addLongProperty("contactId");
-		contactNumbers.addStringProperty("type");
-		contactNumbers.addStringProperty("number");
-		contactNumbers.addLongProperty("timestamp");
-		contactNumbers.addBooleanProperty("isNew");
-		contactNumbers.addBooleanProperty("isUpdated");
-		contactNumbers.addBooleanProperty("isDeleted");
-
-		// ----- Contact Mail Addresses -----
-		Entity contactMails = schema.addEntity("SensorContactMail");
-		contactMails.addIdProperty();
-		contactMails.implementsInterface(FULL_QUALIFIED_PATH_IDBUPDATABLESENSOR);
-		fkContact = contactMails.addLongProperty("fkContact").notNull().getProperty();
-		sensorContact.addToMany(contactMails, fkContact);
-		contactMails.addLongProperty("mailId");
-		contactMails.addLongProperty("contactId");
-		contactMails.addStringProperty("address");
-		contactMails.addStringProperty("type");
-		contactMails.addLongProperty("timestamp");
-		contactMails.addBooleanProperty("isNew");
-		contactMails.addBooleanProperty("isUpdated");
-		contactMails.addBooleanProperty("isDeleted");
-
-		// ----- Calendar Events -----
-		Entity calendarEvent = schema.addEntity("SensorCalendarEvent");
-		calendarEvent.addIdProperty();
-		calendarEvent.implementsInterface(FULL_QUALIFIED_PATH_IDBUPDATABLESENSOR);
-		calendarEvent.addLongProperty("eventId");
-		calendarEvent.addLongProperty("calendarId");
-		calendarEvent.addBooleanProperty("allDay");
-		calendarEvent.addIntProperty("availability");
-		calendarEvent.addStringProperty("description");
-		calendarEvent.addLongProperty("timestampStart");
-		calendarEvent.addLongProperty("timestampEnd");
-		calendarEvent.addStringProperty("duration");
-		calendarEvent.addStringProperty("location");
-		calendarEvent.addStringProperty("timezoneStart");
-		calendarEvent.addStringProperty("timezoneEnd");
-		calendarEvent.addStringProperty("recurrenceExceptionDate");
-		calendarEvent.addStringProperty("recurrenceExceptionRule");
-		calendarEvent.addBooleanProperty("hasAlarm");
-		calendarEvent.addLongProperty("lastDate");
-		calendarEvent.addBooleanProperty("originalAllDay");
-		calendarEvent.addStringProperty("originalId");
-		calendarEvent.addLongProperty("originalInstanceTime");
-		calendarEvent.addStringProperty("recurrenceDate");
-		calendarEvent.addStringProperty("recurrenceRule");
-		calendarEvent.addIntProperty("status");
-		calendarEvent.addStringProperty("title");
-		calendarEvent.addLongProperty("timestamp");
-		calendarEvent.addBooleanProperty("isNew");
-		calendarEvent.addBooleanProperty("isUpdated");
-		calendarEvent.addBooleanProperty("isDeleted");
-
-		// ----- Calendar Reminders -----
-		Entity calendarEventReminder = schema.addEntity("SensorCalendarEventReminder");
-		calendarEventReminder.addIdProperty();
-		calendarEventReminder.implementsInterface(FULL_QUALIFIED_PATH_IDBUPDATABLESENSOR);
-		calendarEventReminder.addLongProperty("reminderId");
-		calendarEventReminder.addLongProperty("eventId");
-		calendarEventReminder.addIntProperty("method");
-		calendarEventReminder.addIntProperty("minutes");
-		calendarEventReminder.addLongProperty("timestamp");
-		calendarEventReminder.addBooleanProperty("isNew");
-		calendarEventReminder.addBooleanProperty("isUpdated");
-		calendarEventReminder.addBooleanProperty("isDeleted");
-
-		// ----- Contacts -----
-		Entity sensorCallLog = schema.addEntity("SensorCallLog");
-		sensorCallLog.addIdProperty();
-		sensorCallLog.implementsInterface(FULL_QUALIFIED_PATH_IDBUPDATABLESENSOR);
-		sensorCallLog.addLongProperty("callId");
-		sensorCallLog.addIntProperty("type");
-		sensorCallLog.addStringProperty("name");
-		sensorCallLog.addStringProperty("number");
-		sensorCallLog.addLongProperty("date");
-		sensorCallLog.addLongProperty("duration");
-		sensorCallLog.addLongProperty("timestamp");
-		sensorCallLog.addBooleanProperty("isNew");
-		sensorCallLog.addBooleanProperty("isUpdated");
-		sensorCallLog.addBooleanProperty("isDeleted");
-
-        // ----- Browser History -----
-        Entity sensorBrowserHistory = schema.addEntity("SensorBrowserHistory");
-        sensorBrowserHistory.addIdProperty();
-        sensorBrowserHistory.implementsInterface(FULL_QUALIFIED_PATH_IDBUPDATABLESENSOR);
-        sensorBrowserHistory.addLongProperty("historyId");
-        sensorBrowserHistory.addStringProperty("url");
-        sensorBrowserHistory.addStringProperty("title");
-        sensorBrowserHistory.addLongProperty("lastVisited");
-        sensorBrowserHistory.addIntProperty("visits");
-        sensorBrowserHistory.addBooleanProperty("bookmark");
-        sensorBrowserHistory.addLongProperty("timestamp");
-        sensorBrowserHistory.addBooleanProperty("isNew");
-        sensorBrowserHistory.addBooleanProperty("isUpdated");
-        sensorBrowserHistory.addBooleanProperty("isDeleted");
-
-        // ----- Foreground Events -----
-        Entity sensorForegroundEvent = schema.addEntity("SensorForegroundEvent");
-        sensorForegroundEvent.addIdProperty();
-        sensorForegroundEvent.implementsInterface(FULL_QUALIFIED_PATH_IDBSENSOR);
-        sensorForegroundEvent.addStringProperty("packageName");
-        sensorForegroundEvent.addStringProperty("appName");
-        sensorForegroundEvent.addStringProperty("className");
-        sensorForegroundEvent.addStringProperty("activityLabel");
-        sensorForegroundEvent.addStringProperty("color");
-        sensorForegroundEvent.addStringProperty("url");
-        sensorForegroundEvent.addIntProperty("eventType");
-        sensorForegroundEvent.addIntProperty("keystrokes");
-        sensorForegroundEvent.addLongProperty("timestamp");
-
-		new DaoGenerator().generateAll(schema, OUTPUT_PATH);
-	}
-
+	
 	public KrakenDatabaseGenerator() throws Exception {
 
 	}

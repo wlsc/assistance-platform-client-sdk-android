@@ -9,49 +9,29 @@ import de.greenrobot.dao.AbstractDaoSession;
 import de.greenrobot.dao.identityscope.IdentityScopeType;
 import de.greenrobot.dao.internal.DaoConfig;
 
-import de.tudarmstadt.informatik.tk.kraken.android.sdk.db.SensorMeasurementLog;
-import de.tudarmstadt.informatik.tk.kraken.android.sdk.db.SensorAccelerometer;
-import de.tudarmstadt.informatik.tk.kraken.android.sdk.db.SensorActivity;
-import de.tudarmstadt.informatik.tk.kraken.android.sdk.db.SensorConnection;
-import de.tudarmstadt.informatik.tk.kraken.android.sdk.db.SensorNetworkTraffic;
-import de.tudarmstadt.informatik.tk.kraken.android.sdk.db.SensorLight;
-import de.tudarmstadt.informatik.tk.kraken.android.sdk.db.SensorLocation;
-import de.tudarmstadt.informatik.tk.kraken.android.sdk.db.SensorRingtone;
-import de.tudarmstadt.informatik.tk.kraken.android.sdk.db.SensorLoudness;
-import de.tudarmstadt.informatik.tk.kraken.android.sdk.db.SensorAccountsReader;
-import de.tudarmstadt.informatik.tk.kraken.android.sdk.db.SensorRunningProcesses;
-import de.tudarmstadt.informatik.tk.kraken.android.sdk.db.SensorRunningServices;
-import de.tudarmstadt.informatik.tk.kraken.android.sdk.db.SensorRunningTasks;
-import de.tudarmstadt.informatik.tk.kraken.android.sdk.db.SensorContact;
-import de.tudarmstadt.informatik.tk.kraken.android.sdk.db.SensorContactNumber;
-import de.tudarmstadt.informatik.tk.kraken.android.sdk.db.SensorContactMail;
-import de.tudarmstadt.informatik.tk.kraken.android.sdk.db.SensorCalendarEvent;
-import de.tudarmstadt.informatik.tk.kraken.android.sdk.db.SensorCalendarEventReminder;
-import de.tudarmstadt.informatik.tk.kraken.android.sdk.db.SensorCallLog;
-import de.tudarmstadt.informatik.tk.kraken.android.sdk.db.SensorBrowserHistory;
-import de.tudarmstadt.informatik.tk.kraken.android.sdk.db.SensorForegroundEvent;
+import de.tudarmstadt.informatik.tk.kraken.android.sdk.db.PositionSensor;
+import de.tudarmstadt.informatik.tk.kraken.android.sdk.db.GyroscopeSensor;
+import de.tudarmstadt.informatik.tk.kraken.android.sdk.db.AccelerometerSensor;
+import de.tudarmstadt.informatik.tk.kraken.android.sdk.db.MagneticFieldSensor;
+import de.tudarmstadt.informatik.tk.kraken.android.sdk.db.MotionActivityEvent;
+import de.tudarmstadt.informatik.tk.kraken.android.sdk.db.ConnectionEvent;
+import de.tudarmstadt.informatik.tk.kraken.android.sdk.db.WifiConnectionEvent;
+import de.tudarmstadt.informatik.tk.kraken.android.sdk.db.MobileConnectionEvent;
+import de.tudarmstadt.informatik.tk.kraken.android.sdk.db.LoudnessEvent;
+import de.tudarmstadt.informatik.tk.kraken.android.sdk.db.MagneticFieldUncalibratedSensor;
+import de.tudarmstadt.informatik.tk.kraken.android.sdk.db.MagneticFieldUncalibratedSensor;
 
-import de.tudarmstadt.informatik.tk.kraken.android.sdk.db.SensorMeasurementLogDao;
-import de.tudarmstadt.informatik.tk.kraken.android.sdk.db.SensorAccelerometerDao;
-import de.tudarmstadt.informatik.tk.kraken.android.sdk.db.SensorActivityDao;
-import de.tudarmstadt.informatik.tk.kraken.android.sdk.db.SensorConnectionDao;
-import de.tudarmstadt.informatik.tk.kraken.android.sdk.db.SensorNetworkTrafficDao;
-import de.tudarmstadt.informatik.tk.kraken.android.sdk.db.SensorLightDao;
-import de.tudarmstadt.informatik.tk.kraken.android.sdk.db.SensorLocationDao;
-import de.tudarmstadt.informatik.tk.kraken.android.sdk.db.SensorRingtoneDao;
-import de.tudarmstadt.informatik.tk.kraken.android.sdk.db.SensorLoudnessDao;
-import de.tudarmstadt.informatik.tk.kraken.android.sdk.db.SensorAccountsReaderDao;
-import de.tudarmstadt.informatik.tk.kraken.android.sdk.db.SensorRunningProcessesDao;
-import de.tudarmstadt.informatik.tk.kraken.android.sdk.db.SensorRunningServicesDao;
-import de.tudarmstadt.informatik.tk.kraken.android.sdk.db.SensorRunningTasksDao;
-import de.tudarmstadt.informatik.tk.kraken.android.sdk.db.SensorContactDao;
-import de.tudarmstadt.informatik.tk.kraken.android.sdk.db.SensorContactNumberDao;
-import de.tudarmstadt.informatik.tk.kraken.android.sdk.db.SensorContactMailDao;
-import de.tudarmstadt.informatik.tk.kraken.android.sdk.db.SensorCalendarEventDao;
-import de.tudarmstadt.informatik.tk.kraken.android.sdk.db.SensorCalendarEventReminderDao;
-import de.tudarmstadt.informatik.tk.kraken.android.sdk.db.SensorCallLogDao;
-import de.tudarmstadt.informatik.tk.kraken.android.sdk.db.SensorBrowserHistoryDao;
-import de.tudarmstadt.informatik.tk.kraken.android.sdk.db.SensorForegroundEventDao;
+import de.tudarmstadt.informatik.tk.kraken.android.sdk.db.PositionSensorDao;
+import de.tudarmstadt.informatik.tk.kraken.android.sdk.db.GyroscopeSensorDao;
+import de.tudarmstadt.informatik.tk.kraken.android.sdk.db.AccelerometerSensorDao;
+import de.tudarmstadt.informatik.tk.kraken.android.sdk.db.MagneticFieldSensorDao;
+import de.tudarmstadt.informatik.tk.kraken.android.sdk.db.MotionActivityEventDao;
+import de.tudarmstadt.informatik.tk.kraken.android.sdk.db.ConnectionEventDao;
+import de.tudarmstadt.informatik.tk.kraken.android.sdk.db.WifiConnectionEventDao;
+import de.tudarmstadt.informatik.tk.kraken.android.sdk.db.MobileConnectionEventDao;
+import de.tudarmstadt.informatik.tk.kraken.android.sdk.db.LoudnessEventDao;
+import de.tudarmstadt.informatik.tk.kraken.android.sdk.db.MagneticFieldUncalibratedSensorDao;
+import de.tudarmstadt.informatik.tk.kraken.android.sdk.db.MagneticFieldUncalibratedSensorDao;
 
 // THIS CODE IS GENERATED BY greenDAO, DO NOT EDIT.
 
@@ -62,268 +42,148 @@ import de.tudarmstadt.informatik.tk.kraken.android.sdk.db.SensorForegroundEventD
  */
 public class DaoSession extends AbstractDaoSession {
 
-    private final DaoConfig sensorMeasurementLogDaoConfig;
-    private final DaoConfig sensorAccelerometerDaoConfig;
-    private final DaoConfig sensorActivityDaoConfig;
-    private final DaoConfig sensorConnectionDaoConfig;
-    private final DaoConfig sensorNetworkTrafficDaoConfig;
-    private final DaoConfig sensorLightDaoConfig;
-    private final DaoConfig sensorLocationDaoConfig;
-    private final DaoConfig sensorRingtoneDaoConfig;
-    private final DaoConfig sensorLoudnessDaoConfig;
-    private final DaoConfig sensorAccountsReaderDaoConfig;
-    private final DaoConfig sensorRunningProcessesDaoConfig;
-    private final DaoConfig sensorRunningServicesDaoConfig;
-    private final DaoConfig sensorRunningTasksDaoConfig;
-    private final DaoConfig sensorContactDaoConfig;
-    private final DaoConfig sensorContactNumberDaoConfig;
-    private final DaoConfig sensorContactMailDaoConfig;
-    private final DaoConfig sensorCalendarEventDaoConfig;
-    private final DaoConfig sensorCalendarEventReminderDaoConfig;
-    private final DaoConfig sensorCallLogDaoConfig;
-    private final DaoConfig sensorBrowserHistoryDaoConfig;
-    private final DaoConfig sensorForegroundEventDaoConfig;
+    private final DaoConfig positionSensorDaoConfig;
+    private final DaoConfig gyroscopeSensorDaoConfig;
+    private final DaoConfig accelerometerSensorDaoConfig;
+    private final DaoConfig magneticFieldSensorDaoConfig;
+    private final DaoConfig motionActivityEventDaoConfig;
+    private final DaoConfig connectionEventDaoConfig;
+    private final DaoConfig wifiConnectionEventDaoConfig;
+    private final DaoConfig mobileConnectionEventDaoConfig;
+    private final DaoConfig loudnessEventDaoConfig;
+    private final DaoConfig magneticFieldUncalibratedSensorDaoConfig;
+    private final DaoConfig magneticFieldUncalibratedSensorDaoConfig;
 
-    private final SensorMeasurementLogDao sensorMeasurementLogDao;
-    private final SensorAccelerometerDao sensorAccelerometerDao;
-    private final SensorActivityDao sensorActivityDao;
-    private final SensorConnectionDao sensorConnectionDao;
-    private final SensorNetworkTrafficDao sensorNetworkTrafficDao;
-    private final SensorLightDao sensorLightDao;
-    private final SensorLocationDao sensorLocationDao;
-    private final SensorRingtoneDao sensorRingtoneDao;
-    private final SensorLoudnessDao sensorLoudnessDao;
-    private final SensorAccountsReaderDao sensorAccountsReaderDao;
-    private final SensorRunningProcessesDao sensorRunningProcessesDao;
-    private final SensorRunningServicesDao sensorRunningServicesDao;
-    private final SensorRunningTasksDao sensorRunningTasksDao;
-    private final SensorContactDao sensorContactDao;
-    private final SensorContactNumberDao sensorContactNumberDao;
-    private final SensorContactMailDao sensorContactMailDao;
-    private final SensorCalendarEventDao sensorCalendarEventDao;
-    private final SensorCalendarEventReminderDao sensorCalendarEventReminderDao;
-    private final SensorCallLogDao sensorCallLogDao;
-    private final SensorBrowserHistoryDao sensorBrowserHistoryDao;
-    private final SensorForegroundEventDao sensorForegroundEventDao;
+    private final PositionSensorDao positionSensorDao;
+    private final GyroscopeSensorDao gyroscopeSensorDao;
+    private final AccelerometerSensorDao accelerometerSensorDao;
+    private final MagneticFieldSensorDao magneticFieldSensorDao;
+    private final MotionActivityEventDao motionActivityEventDao;
+    private final ConnectionEventDao connectionEventDao;
+    private final WifiConnectionEventDao wifiConnectionEventDao;
+    private final MobileConnectionEventDao mobileConnectionEventDao;
+    private final LoudnessEventDao loudnessEventDao;
+    private final MagneticFieldUncalibratedSensorDao magneticFieldUncalibratedSensorDao;
+    private final MagneticFieldUncalibratedSensorDao magneticFieldUncalibratedSensorDao;
 
     public DaoSession(SQLiteDatabase db, IdentityScopeType type, Map<Class<? extends AbstractDao<?, ?>>, DaoConfig>
             daoConfigMap) {
         super(db);
 
-        sensorMeasurementLogDaoConfig = daoConfigMap.get(SensorMeasurementLogDao.class).clone();
-        sensorMeasurementLogDaoConfig.initIdentityScope(type);
+        positionSensorDaoConfig = daoConfigMap.get(PositionSensorDao.class).clone();
+        positionSensorDaoConfig.initIdentityScope(type);
 
-        sensorAccelerometerDaoConfig = daoConfigMap.get(SensorAccelerometerDao.class).clone();
-        sensorAccelerometerDaoConfig.initIdentityScope(type);
+        gyroscopeSensorDaoConfig = daoConfigMap.get(GyroscopeSensorDao.class).clone();
+        gyroscopeSensorDaoConfig.initIdentityScope(type);
 
-        sensorActivityDaoConfig = daoConfigMap.get(SensorActivityDao.class).clone();
-        sensorActivityDaoConfig.initIdentityScope(type);
+        accelerometerSensorDaoConfig = daoConfigMap.get(AccelerometerSensorDao.class).clone();
+        accelerometerSensorDaoConfig.initIdentityScope(type);
 
-        sensorConnectionDaoConfig = daoConfigMap.get(SensorConnectionDao.class).clone();
-        sensorConnectionDaoConfig.initIdentityScope(type);
+        magneticFieldSensorDaoConfig = daoConfigMap.get(MagneticFieldSensorDao.class).clone();
+        magneticFieldSensorDaoConfig.initIdentityScope(type);
 
-        sensorNetworkTrafficDaoConfig = daoConfigMap.get(SensorNetworkTrafficDao.class).clone();
-        sensorNetworkTrafficDaoConfig.initIdentityScope(type);
+        motionActivityEventDaoConfig = daoConfigMap.get(MotionActivityEventDao.class).clone();
+        motionActivityEventDaoConfig.initIdentityScope(type);
 
-        sensorLightDaoConfig = daoConfigMap.get(SensorLightDao.class).clone();
-        sensorLightDaoConfig.initIdentityScope(type);
+        connectionEventDaoConfig = daoConfigMap.get(ConnectionEventDao.class).clone();
+        connectionEventDaoConfig.initIdentityScope(type);
 
-        sensorLocationDaoConfig = daoConfigMap.get(SensorLocationDao.class).clone();
-        sensorLocationDaoConfig.initIdentityScope(type);
+        wifiConnectionEventDaoConfig = daoConfigMap.get(WifiConnectionEventDao.class).clone();
+        wifiConnectionEventDaoConfig.initIdentityScope(type);
 
-        sensorRingtoneDaoConfig = daoConfigMap.get(SensorRingtoneDao.class).clone();
-        sensorRingtoneDaoConfig.initIdentityScope(type);
+        mobileConnectionEventDaoConfig = daoConfigMap.get(MobileConnectionEventDao.class).clone();
+        mobileConnectionEventDaoConfig.initIdentityScope(type);
 
-        sensorLoudnessDaoConfig = daoConfigMap.get(SensorLoudnessDao.class).clone();
-        sensorLoudnessDaoConfig.initIdentityScope(type);
+        loudnessEventDaoConfig = daoConfigMap.get(LoudnessEventDao.class).clone();
+        loudnessEventDaoConfig.initIdentityScope(type);
 
-        sensorAccountsReaderDaoConfig = daoConfigMap.get(SensorAccountsReaderDao.class).clone();
-        sensorAccountsReaderDaoConfig.initIdentityScope(type);
+        magneticFieldUncalibratedSensorDaoConfig = daoConfigMap.get(MagneticFieldUncalibratedSensorDao.class).clone();
+        magneticFieldUncalibratedSensorDaoConfig.initIdentityScope(type);
 
-        sensorRunningProcessesDaoConfig = daoConfigMap.get(SensorRunningProcessesDao.class).clone();
-        sensorRunningProcessesDaoConfig.initIdentityScope(type);
+        magneticFieldUncalibratedSensorDaoConfig = daoConfigMap.get(MagneticFieldUncalibratedSensorDao.class).clone();
+        magneticFieldUncalibratedSensorDaoConfig.initIdentityScope(type);
 
-        sensorRunningServicesDaoConfig = daoConfigMap.get(SensorRunningServicesDao.class).clone();
-        sensorRunningServicesDaoConfig.initIdentityScope(type);
+        positionSensorDao = new PositionSensorDao(positionSensorDaoConfig, this);
+        gyroscopeSensorDao = new GyroscopeSensorDao(gyroscopeSensorDaoConfig, this);
+        accelerometerSensorDao = new AccelerometerSensorDao(accelerometerSensorDaoConfig, this);
+        magneticFieldSensorDao = new MagneticFieldSensorDao(magneticFieldSensorDaoConfig, this);
+        motionActivityEventDao = new MotionActivityEventDao(motionActivityEventDaoConfig, this);
+        connectionEventDao = new ConnectionEventDao(connectionEventDaoConfig, this);
+        wifiConnectionEventDao = new WifiConnectionEventDao(wifiConnectionEventDaoConfig, this);
+        mobileConnectionEventDao = new MobileConnectionEventDao(mobileConnectionEventDaoConfig, this);
+        loudnessEventDao = new LoudnessEventDao(loudnessEventDaoConfig, this);
+        magneticFieldUncalibratedSensorDao = new MagneticFieldUncalibratedSensorDao(magneticFieldUncalibratedSensorDaoConfig, this);
+        magneticFieldUncalibratedSensorDao = new MagneticFieldUncalibratedSensorDao(magneticFieldUncalibratedSensorDaoConfig, this);
 
-        sensorRunningTasksDaoConfig = daoConfigMap.get(SensorRunningTasksDao.class).clone();
-        sensorRunningTasksDaoConfig.initIdentityScope(type);
-
-        sensorContactDaoConfig = daoConfigMap.get(SensorContactDao.class).clone();
-        sensorContactDaoConfig.initIdentityScope(type);
-
-        sensorContactNumberDaoConfig = daoConfigMap.get(SensorContactNumberDao.class).clone();
-        sensorContactNumberDaoConfig.initIdentityScope(type);
-
-        sensorContactMailDaoConfig = daoConfigMap.get(SensorContactMailDao.class).clone();
-        sensorContactMailDaoConfig.initIdentityScope(type);
-
-        sensorCalendarEventDaoConfig = daoConfigMap.get(SensorCalendarEventDao.class).clone();
-        sensorCalendarEventDaoConfig.initIdentityScope(type);
-
-        sensorCalendarEventReminderDaoConfig = daoConfigMap.get(SensorCalendarEventReminderDao.class).clone();
-        sensorCalendarEventReminderDaoConfig.initIdentityScope(type);
-
-        sensorCallLogDaoConfig = daoConfigMap.get(SensorCallLogDao.class).clone();
-        sensorCallLogDaoConfig.initIdentityScope(type);
-
-        sensorBrowserHistoryDaoConfig = daoConfigMap.get(SensorBrowserHistoryDao.class).clone();
-        sensorBrowserHistoryDaoConfig.initIdentityScope(type);
-
-        sensorForegroundEventDaoConfig = daoConfigMap.get(SensorForegroundEventDao.class).clone();
-        sensorForegroundEventDaoConfig.initIdentityScope(type);
-
-        sensorMeasurementLogDao = new SensorMeasurementLogDao(sensorMeasurementLogDaoConfig, this);
-        sensorAccelerometerDao = new SensorAccelerometerDao(sensorAccelerometerDaoConfig, this);
-        sensorActivityDao = new SensorActivityDao(sensorActivityDaoConfig, this);
-        sensorConnectionDao = new SensorConnectionDao(sensorConnectionDaoConfig, this);
-        sensorNetworkTrafficDao = new SensorNetworkTrafficDao(sensorNetworkTrafficDaoConfig, this);
-        sensorLightDao = new SensorLightDao(sensorLightDaoConfig, this);
-        sensorLocationDao = new SensorLocationDao(sensorLocationDaoConfig, this);
-        sensorRingtoneDao = new SensorRingtoneDao(sensorRingtoneDaoConfig, this);
-        sensorLoudnessDao = new SensorLoudnessDao(sensorLoudnessDaoConfig, this);
-        sensorAccountsReaderDao = new SensorAccountsReaderDao(sensorAccountsReaderDaoConfig, this);
-        sensorRunningProcessesDao = new SensorRunningProcessesDao(sensorRunningProcessesDaoConfig, this);
-        sensorRunningServicesDao = new SensorRunningServicesDao(sensorRunningServicesDaoConfig, this);
-        sensorRunningTasksDao = new SensorRunningTasksDao(sensorRunningTasksDaoConfig, this);
-        sensorContactDao = new SensorContactDao(sensorContactDaoConfig, this);
-        sensorContactNumberDao = new SensorContactNumberDao(sensorContactNumberDaoConfig, this);
-        sensorContactMailDao = new SensorContactMailDao(sensorContactMailDaoConfig, this);
-        sensorCalendarEventDao = new SensorCalendarEventDao(sensorCalendarEventDaoConfig, this);
-        sensorCalendarEventReminderDao = new SensorCalendarEventReminderDao(sensorCalendarEventReminderDaoConfig, this);
-        sensorCallLogDao = new SensorCallLogDao(sensorCallLogDaoConfig, this);
-        sensorBrowserHistoryDao = new SensorBrowserHistoryDao(sensorBrowserHistoryDaoConfig, this);
-        sensorForegroundEventDao = new SensorForegroundEventDao(sensorForegroundEventDaoConfig, this);
-
-        registerDao(SensorMeasurementLog.class, sensorMeasurementLogDao);
-        registerDao(SensorAccelerometer.class, sensorAccelerometerDao);
-        registerDao(SensorActivity.class, sensorActivityDao);
-        registerDao(SensorConnection.class, sensorConnectionDao);
-        registerDao(SensorNetworkTraffic.class, sensorNetworkTrafficDao);
-        registerDao(SensorLight.class, sensorLightDao);
-        registerDao(SensorLocation.class, sensorLocationDao);
-        registerDao(SensorRingtone.class, sensorRingtoneDao);
-        registerDao(SensorLoudness.class, sensorLoudnessDao);
-        registerDao(SensorAccountsReader.class, sensorAccountsReaderDao);
-        registerDao(SensorRunningProcesses.class, sensorRunningProcessesDao);
-        registerDao(SensorRunningServices.class, sensorRunningServicesDao);
-        registerDao(SensorRunningTasks.class, sensorRunningTasksDao);
-        registerDao(SensorContact.class, sensorContactDao);
-        registerDao(SensorContactNumber.class, sensorContactNumberDao);
-        registerDao(SensorContactMail.class, sensorContactMailDao);
-        registerDao(SensorCalendarEvent.class, sensorCalendarEventDao);
-        registerDao(SensorCalendarEventReminder.class, sensorCalendarEventReminderDao);
-        registerDao(SensorCallLog.class, sensorCallLogDao);
-        registerDao(SensorBrowserHistory.class, sensorBrowserHistoryDao);
-        registerDao(SensorForegroundEvent.class, sensorForegroundEventDao);
+        registerDao(PositionSensor.class, positionSensorDao);
+        registerDao(GyroscopeSensor.class, gyroscopeSensorDao);
+        registerDao(AccelerometerSensor.class, accelerometerSensorDao);
+        registerDao(MagneticFieldSensor.class, magneticFieldSensorDao);
+        registerDao(MotionActivityEvent.class, motionActivityEventDao);
+        registerDao(ConnectionEvent.class, connectionEventDao);
+        registerDao(WifiConnectionEvent.class, wifiConnectionEventDao);
+        registerDao(MobileConnectionEvent.class, mobileConnectionEventDao);
+        registerDao(LoudnessEvent.class, loudnessEventDao);
+        registerDao(MagneticFieldUncalibratedSensor.class, magneticFieldUncalibratedSensorDao);
+        registerDao(MagneticFieldUncalibratedSensor.class, magneticFieldUncalibratedSensorDao);
     }
     
     public void clear() {
-        sensorMeasurementLogDaoConfig.getIdentityScope().clear();
-        sensorAccelerometerDaoConfig.getIdentityScope().clear();
-        sensorActivityDaoConfig.getIdentityScope().clear();
-        sensorConnectionDaoConfig.getIdentityScope().clear();
-        sensorNetworkTrafficDaoConfig.getIdentityScope().clear();
-        sensorLightDaoConfig.getIdentityScope().clear();
-        sensorLocationDaoConfig.getIdentityScope().clear();
-        sensorRingtoneDaoConfig.getIdentityScope().clear();
-        sensorLoudnessDaoConfig.getIdentityScope().clear();
-        sensorAccountsReaderDaoConfig.getIdentityScope().clear();
-        sensorRunningProcessesDaoConfig.getIdentityScope().clear();
-        sensorRunningServicesDaoConfig.getIdentityScope().clear();
-        sensorRunningTasksDaoConfig.getIdentityScope().clear();
-        sensorContactDaoConfig.getIdentityScope().clear();
-        sensorContactNumberDaoConfig.getIdentityScope().clear();
-        sensorContactMailDaoConfig.getIdentityScope().clear();
-        sensorCalendarEventDaoConfig.getIdentityScope().clear();
-        sensorCalendarEventReminderDaoConfig.getIdentityScope().clear();
-        sensorCallLogDaoConfig.getIdentityScope().clear();
-        sensorBrowserHistoryDaoConfig.getIdentityScope().clear();
-        sensorForegroundEventDaoConfig.getIdentityScope().clear();
+        positionSensorDaoConfig.getIdentityScope().clear();
+        gyroscopeSensorDaoConfig.getIdentityScope().clear();
+        accelerometerSensorDaoConfig.getIdentityScope().clear();
+        magneticFieldSensorDaoConfig.getIdentityScope().clear();
+        motionActivityEventDaoConfig.getIdentityScope().clear();
+        connectionEventDaoConfig.getIdentityScope().clear();
+        wifiConnectionEventDaoConfig.getIdentityScope().clear();
+        mobileConnectionEventDaoConfig.getIdentityScope().clear();
+        loudnessEventDaoConfig.getIdentityScope().clear();
+        magneticFieldUncalibratedSensorDaoConfig.getIdentityScope().clear();
+        magneticFieldUncalibratedSensorDaoConfig.getIdentityScope().clear();
     }
 
-    public SensorMeasurementLogDao getSensorMeasurementLogDao() {
-        return sensorMeasurementLogDao;
+    public PositionSensorDao getPositionSensorDao() {
+        return positionSensorDao;
     }
 
-    public SensorAccelerometerDao getSensorAccelerometerDao() {
-        return sensorAccelerometerDao;
+    public GyroscopeSensorDao getGyroscopeSensorDao() {
+        return gyroscopeSensorDao;
     }
 
-    public SensorActivityDao getSensorActivityDao() {
-        return sensorActivityDao;
+    public AccelerometerSensorDao getAccelerometerSensorDao() {
+        return accelerometerSensorDao;
     }
 
-    public SensorConnectionDao getSensorConnectionDao() {
-        return sensorConnectionDao;
+    public MagneticFieldSensorDao getMagneticFieldSensorDao() {
+        return magneticFieldSensorDao;
     }
 
-    public SensorNetworkTrafficDao getSensorNetworkTrafficDao() {
-        return sensorNetworkTrafficDao;
+    public MotionActivityEventDao getMotionActivityEventDao() {
+        return motionActivityEventDao;
     }
 
-    public SensorLightDao getSensorLightDao() {
-        return sensorLightDao;
+    public ConnectionEventDao getConnectionEventDao() {
+        return connectionEventDao;
     }
 
-    public SensorLocationDao getSensorLocationDao() {
-        return sensorLocationDao;
+    public WifiConnectionEventDao getWifiConnectionEventDao() {
+        return wifiConnectionEventDao;
     }
 
-    public SensorRingtoneDao getSensorRingtoneDao() {
-        return sensorRingtoneDao;
+    public MobileConnectionEventDao getMobileConnectionEventDao() {
+        return mobileConnectionEventDao;
     }
 
-    public SensorLoudnessDao getSensorLoudnessDao() {
-        return sensorLoudnessDao;
+    public LoudnessEventDao getLoudnessEventDao() {
+        return loudnessEventDao;
     }
 
-    public SensorAccountsReaderDao getSensorAccountsReaderDao() {
-        return sensorAccountsReaderDao;
+    public MagneticFieldUncalibratedSensorDao getMagneticFieldUncalibratedSensorDao() {
+        return magneticFieldUncalibratedSensorDao;
     }
 
-    public SensorRunningProcessesDao getSensorRunningProcessesDao() {
-        return sensorRunningProcessesDao;
-    }
-
-    public SensorRunningServicesDao getSensorRunningServicesDao() {
-        return sensorRunningServicesDao;
-    }
-
-    public SensorRunningTasksDao getSensorRunningTasksDao() {
-        return sensorRunningTasksDao;
-    }
-
-    public SensorContactDao getSensorContactDao() {
-        return sensorContactDao;
-    }
-
-    public SensorContactNumberDao getSensorContactNumberDao() {
-        return sensorContactNumberDao;
-    }
-
-    public SensorContactMailDao getSensorContactMailDao() {
-        return sensorContactMailDao;
-    }
-
-    public SensorCalendarEventDao getSensorCalendarEventDao() {
-        return sensorCalendarEventDao;
-    }
-
-    public SensorCalendarEventReminderDao getSensorCalendarEventReminderDao() {
-        return sensorCalendarEventReminderDao;
-    }
-
-    public SensorCallLogDao getSensorCallLogDao() {
-        return sensorCallLogDao;
-    }
-
-    public SensorBrowserHistoryDao getSensorBrowserHistoryDao() {
-        return sensorBrowserHistoryDao;
-    }
-
-    public SensorForegroundEventDao getSensorForegroundEventDao() {
-        return sensorForegroundEventDao;
+    public MagneticFieldUncalibratedSensorDao getMagneticFieldUncalibratedSensorDao() {
+        return magneticFieldUncalibratedSensorDao;
     }
 
 }
