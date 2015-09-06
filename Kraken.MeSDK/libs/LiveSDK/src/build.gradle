@@ -1,17 +1,13 @@
 buildscript {
     repositories {
-        mavenCentral()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:1.2.3'
     }
 }
 apply plugin: 'com.android.library'
-
 repositories {
     mavenCentral()
 }
-
 android {
     compileSdkVersion 21
     buildToolsVersion "22.0.1"
@@ -19,7 +15,7 @@ android {
     sourceSets {
         main {
             manifest.srcFile 'AndroidManifest.xml'
-            java.srcDirs = ['src','internal']
+            java.srcDirs = ['src', 'internal']
             resources.srcDirs = ['src']
             aidl.srcDirs = ['src']
             renderscript.srcDirs = ['src']
@@ -31,4 +27,11 @@ android {
         }
     }
 
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_7
+        targetCompatibility JavaVersion.VERSION_1_7
+    }
+}
+
+dependencies {
 }
