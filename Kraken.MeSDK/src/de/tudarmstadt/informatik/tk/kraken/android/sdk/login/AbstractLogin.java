@@ -7,16 +7,15 @@ import android.os.Bundle;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import de.tudarmstadt.informatik.tk.kraken.android.sdk.communication.Authentication;
-import de.tudarmstadt.informatik.tk.kraken.android.sdk.communication.IServerCommunicationResponseHandler;
-import de.tudarmstadt.informatik.tk.kraken.android.sdk.communication.ServerCommunication;
-import de.tudarmstadt.informatik.tk.kraken.android.sdk.communication.SdkAuthentication;
-import de.tudarmstadt.informatik.tk.kraken.android.sdk.utils.KrakenUtils;
-import de.tudarmstadt.informatik.tk.kraken.android.sdk.services.KrakenService;
-import de.tudarmstadt.informatik.tk.kraken.android.sdk.ui.activities.accounts.AccountsAdapter;
 import de.tudarmstadt.informatik.tk.kraken.android.sdk.common.MessageType;
 import de.tudarmstadt.informatik.tk.kraken.android.sdk.common.SocialNetworkProvider;
 import de.tudarmstadt.informatik.tk.kraken.android.sdk.common.authentication.AccountVO;
+import de.tudarmstadt.informatik.tk.kraken.android.sdk.communication.Authentication;
+import de.tudarmstadt.informatik.tk.kraken.android.sdk.communication.IServerCommunicationResponseHandler;
+import de.tudarmstadt.informatik.tk.kraken.android.sdk.communication.SdkAuthentication;
+import de.tudarmstadt.informatik.tk.kraken.android.sdk.communication.ServerCommunication;
+import de.tudarmstadt.informatik.tk.kraken.android.sdk.ui.activities.accounts.AccountsAdapter;
+import de.tudarmstadt.informatik.tk.kraken.android.sdk.utils.KrakenUtils;
 
 
 public abstract class AbstractLogin implements ILoginData {
@@ -60,13 +59,13 @@ public abstract class AbstractLogin implements ILoginData {
 	public void handleReceivedToken(AccountVO vo, final Activity context) {
 
 		vo.setProvider(getSocialNetworkProvider());
-		JSONObject jsonVo = KrakenService.getJacksonObjectMapper().convertValue(vo, JSONObject.class);
+//		JSONObject jsonVo = KrakenService.getJacksonObjectMapper().convertValue(vo, JSONObject.class);
 
 		final JSONObject jsonObject = new JSONObject();
 		try {
-			jsonObject.put("type", MessageType.LOGIN);
-			jsonObject.put("account", jsonVo);
-			jsonObject.put("device", buildDeviceInfoJson());
+//			jsonObject.put("type", MessageType.LOGIN);
+//			jsonObject.put("account", jsonVo);
+//			jsonObject.put("device", buildDeviceInfoJson());
 
 			context.runOnUiThread(new Runnable() {
 

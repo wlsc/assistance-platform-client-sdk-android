@@ -16,10 +16,8 @@ import java.util.Set;
 import de.tudarmstadt.informatik.tk.kraken.android.sdk.api.entities.CalendarEvent;
 import de.tudarmstadt.informatik.tk.kraken.android.sdk.api.entities.ForegroundEvent;
 import de.tudarmstadt.informatik.tk.kraken.android.sdk.communication.ESensorType;
-import de.tudarmstadt.informatik.tk.kraken.android.sdk.communication
-        .IServerCommunicationResponseHandler;
+import de.tudarmstadt.informatik.tk.kraken.android.sdk.communication.IServerCommunicationResponseHandler;
 import de.tudarmstadt.informatik.tk.kraken.android.sdk.communication.ServerCommunication;
-import de.tudarmstadt.informatik.tk.kraken.android.sdk.utils.KrakenUtils;
 
 
 
@@ -95,8 +93,8 @@ public class ApiManager {
                     List<T> sensorData = new LinkedList<>();
                     for (int i = 0; i < jsonData.length(); i++) {
                         JSONObject item = jsonData.getJSONObject(i);
-                        T sensorDataItem = KrakenUtils.getJacksonObjectMapper().convertValue(item, classType);
-                        sensorData.add(sensorDataItem);
+//                        T sensorDataItem = KrakenUtils.getJacksonObjectMapper().convertValue(item, classType);
+//                        sensorData.add(sensorDataItem);
                     }
                     mCallback.onData(sensorData);
                 } catch (JSONException | ClassCastException e) {
@@ -134,8 +132,8 @@ public class ApiManager {
                     List<CalendarEvent> calendarEvents = new LinkedList<>();
                     for (int i = 0; i < jsonData.length(); i++) {
                         JSONObject item = jsonData.getJSONObject(i);
-                        CalendarEvent sensorDataItem = KrakenUtils.getJacksonObjectMapper().convertValue(item, CalendarEvent.class);
-                        calendarEvents.add(sensorDataItem);
+//                        CalendarEvent sensorDataItem = KrakenUtils.getJacksonObjectMapper().convertValue(item, CalendarEvent.class);
+//                        calendarEvents.add(sensorDataItem);
                     }
                     mCallback.onData(calendarEvents);
                 } catch (JSONException | ClassCastException e) {
@@ -177,8 +175,8 @@ public class ApiManager {
                             List<ForegroundEvent> calendarEvents = new LinkedList<>();
                             for (int i = 0; i < jsonData.length(); i++) {
                                 JSONObject item = jsonData.getJSONObject(i);
-                                ForegroundEvent sensorDataItem = KrakenUtils.getJacksonObjectMapper().convertValue(item, ForegroundEvent.class);
-                                calendarEvents.add(sensorDataItem);
+//                                ForegroundEvent sensorDataItem = KrakenUtils.getJacksonObjectMapper().convertValue(item, ForegroundEvent.class);
+//                                calendarEvents.add(sensorDataItem);
                             }
                             mCallback.onData(calendarEvents);
                         } catch (JSONException | ClassCastException e) {

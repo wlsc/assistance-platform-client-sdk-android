@@ -3,7 +3,6 @@ package de.tudarmstadt.informatik.tk.kraken.android.sdk.services;
 import android.annotation.TargetApi;
 import android.app.Notification;
 import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
 import android.content.res.Resources;
@@ -18,15 +17,10 @@ import android.os.Message;
 import android.os.Messenger;
 import android.os.Parcelable;
 import android.os.RemoteException;
-import android.support.v4.app.TaskStackBuilder;
 import android.util.Log;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jsonorg.JsonOrgModule;
 
 import java.io.Serializable;
 
-import de.tudarmstadt.informatik.tk.kraken.sdk.R;
 import de.tudarmstadt.informatik.tk.kraken.android.sdk.ActivityCommunicator;
 import de.tudarmstadt.informatik.tk.kraken.android.sdk.communication.RetroServerPushManager;
 import de.tudarmstadt.informatik.tk.kraken.android.sdk.db.DaoSession;
@@ -34,8 +28,10 @@ import de.tudarmstadt.informatik.tk.kraken.android.sdk.preference.PreferenceMana
 import de.tudarmstadt.informatik.tk.kraken.android.sdk.sensors.ECommandType;
 import de.tudarmstadt.informatik.tk.kraken.android.sdk.sensors.SensorManager;
 import de.tudarmstadt.informatik.tk.kraken.android.sdk.sensors.interfaces.ISensor;
-//import de.tudarmstadt.informatik.tk.kraken.android.ui.activities.MainActivity;
 import de.tudarmstadt.informatik.tk.kraken.android.sdk.utils.DatabaseManager;
+import de.tudarmstadt.informatik.tk.kraken.sdk.R;
+
+//import de.tudarmstadt.informatik.tk.kraken.android.ui.activities.MainActivity;
 
 public class KrakenService extends Service implements Callback {
 
@@ -47,7 +43,7 @@ public class KrakenService extends Service implements Callback {
 	final private Messenger m_Messenger = new Messenger(new Handler(this));
 
 	private SensorManager m_sensorManager;
-	private static ObjectMapper m_mapper;
+//	private static ObjectMapper m_mapper;
     private PreferenceManager mPreferenceManager;
     private DatabaseManager mDatabaseManager;
 
@@ -229,14 +225,14 @@ public class KrakenService extends Service implements Callback {
 		// return m_serviceBinder;
 	}
 
-	public static ObjectMapper getJacksonObjectMapper() {
-		if (m_mapper == null)
-		{
-			m_mapper = new ObjectMapper();
-			m_mapper.registerModule(new JsonOrgModule());
-		}
-		return m_mapper;
-	}
+//	public static ObjectMapper getJacksonObjectMapper() {
+//		if (m_mapper == null)
+//		{
+//			m_mapper = new ObjectMapper();
+//			m_mapper.registerModule(new JsonOrgModule());
+//		}
+//		return m_mapper;
+//	}
 
 	private void setActivityHandler(Messenger messenger) {
 		ActivityCommunicator.setMessenger(messenger, this);

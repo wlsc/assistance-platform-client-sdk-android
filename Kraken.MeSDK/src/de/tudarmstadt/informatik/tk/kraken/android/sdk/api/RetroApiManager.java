@@ -2,6 +2,8 @@ package de.tudarmstadt.informatik.tk.kraken.android.sdk.api;
 
 import android.content.Context;
 
+import com.google.gson.GsonBuilder;
+
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
@@ -17,7 +19,7 @@ import de.tudarmstadt.informatik.tk.kraken.android.sdk.utils.KrakenUtils;
 import retrofit.Callback;
 import retrofit.RestAdapter;
 import retrofit.RetrofitError;
-import retrofit.converter.JacksonConverter;
+import retrofit.converter.GsonConverter;
 
 import static de.tudarmstadt.informatik.tk.kraken.android.sdk.api.entities.ApiResponse.ArrayApiResponse;
 
@@ -36,11 +38,12 @@ public class RetroApiManager {
     public RetroApiManager(Context context) {
         mContext = context;
 
+        GsonBuilder gsonBuilder = new GsonBuilder().excludeFieldsWithoutExposeAnnotation();
+
         ExecutorService executor = Executors.newCachedThreadPool();
         RestAdapter restAdapter = new RestAdapter.Builder()
                 .setEndpoint(KrakenSdkSettings.SERVER_URL)
-                        //.setEndpoint("http://localhost")
-                .setConverter(new JacksonConverter())
+                .setConverter(new GsonConverter(gsonBuilder.create()))
                 .setExecutors(executor, executor)
                 .setLogLevel(RestAdapter.LogLevel.NONE)
                 .build();

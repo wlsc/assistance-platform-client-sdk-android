@@ -2,9 +2,6 @@ package de.tudarmstadt.informatik.tk.kraken.android.sdk.utils;
 
 import android.content.Context;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jsonorg.JsonOrgModule;
-
 import de.tudarmstadt.informatik.tk.kraken.android.sdk.KrakenSdkSettings;
 import de.tudarmstadt.informatik.tk.kraken.android.sdk.communication.SdkAuthentication;
 import de.tudarmstadt.informatik.tk.kraken.android.sdk.preference.PreferenceManager;
@@ -19,7 +16,7 @@ import static android.provider.Settings.Secure;
 public class KrakenUtils {
 
 
-    private static ObjectMapper mMapper;
+//    private static ObjectMapper mMapper;
 
     public static void initDataProfile(Context context, String dataProfile) {
 
@@ -66,12 +63,12 @@ public class KrakenUtils {
         return Long.valueOf(hashCode);
     }
 
-    public static ObjectMapper getJacksonObjectMapper() {
-        if (mMapper == null) {
-            mMapper = new ObjectMapper();
-            mMapper.registerModule(new JsonOrgModule());
-        }
-        return mMapper;
-    }
+//    public static ObjectMapper getJacksonObjectMapper() {
+//        if (mMapper == null) {
+//            mMapper = new ObjectMapper();
+//            mMapper.registerModule(new JsonOrgModule());
+//        }
+//        return mMapper;
+//    }
 
 }

@@ -1,7 +1,5 @@
 package de.tudarmstadt.informatik.tk.kraken.android.sdk.api.entities;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 import java.util.Date;
 
 public class ForegroundEvent {
@@ -16,7 +14,6 @@ public class ForegroundEvent {
 
     private Long id;
     private String title;
-    @JsonProperty("package")
     private String packageName;
     private String color;
     private Date start;

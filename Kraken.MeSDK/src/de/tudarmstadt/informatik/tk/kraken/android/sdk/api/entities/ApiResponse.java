@@ -1,7 +1,5 @@
 package de.tudarmstadt.informatik.tk.kraken.android.sdk.api.entities;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
 import org.json.JSONObject;
 
 import java.util.List;
@@ -11,7 +9,6 @@ import java.util.List;
  *
  * @author Karsten Planz
  */
-@JsonIgnoreProperties(ignoreUnknown=true)
 public class ApiResponse {
     public boolean succ;
     public long t_server;
