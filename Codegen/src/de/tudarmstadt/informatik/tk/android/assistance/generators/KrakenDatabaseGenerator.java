@@ -88,14 +88,19 @@ public class KrakenDatabaseGenerator {
 		Entity module = schema.addEntity("Module");
 		module.setTableName("module");
 		module.addIdProperty().notNull().primaryKey().autoincrement().index();
-		module.addStringProperty("packageName").notNull().index();
+		module.addStringProperty("package_name").notNull().index();
 		module.addStringProperty("title").notNull();
-		module.addStringProperty("logoUrl").notNull();
-		module.addStringProperty("descriptionShort").notNull();
-		module.addStringProperty("descriptionFull").notNull();
+		module.addStringProperty("logo_url").notNull();
+		module.addStringProperty("description_short").notNull();
+		module.addStringProperty("description_full").notNull();
 		module.addStringProperty("copyright").notNull();
-		module.addStringProperty("supportEmail").notNull();
+		module.addStringProperty("support_email").notNull();
+		module.addBooleanProperty("enabled").notNull();
 		module.addStringProperty("created").notNull();
+		
+		Property moduleFKUserProperty = module.addLongProperty("user_id").notNull().index().getProperty();
+		module.addToOne(user, moduleFKUserProperty);
+		user.addToMany(module, moduleFKUserProperty);
 		
 		// ----- Module capability scheme -----
 		Entity moduleCapability = schema.addEntity("ModuleCapability");

@@ -12,27 +12,32 @@ public class Module {
 
     private long id;
     /** Not-null value. */
-    private String packageName;
+    private String package_name;
     /** Not-null value. */
     private String title;
     /** Not-null value. */
-    private String logoUrl;
+    private String logo_url;
     /** Not-null value. */
-    private String descriptionShort;
+    private String description_short;
     /** Not-null value. */
-    private String descriptionFull;
+    private String description_full;
     /** Not-null value. */
     private String copyright;
     /** Not-null value. */
-    private String supportEmail;
+    private String support_email;
+    private boolean enabled;
     /** Not-null value. */
     private String created;
+    private long user_id;
 
     /** Used to resolve relations */
     private transient DaoSession daoSession;
 
     /** Used for active entity operations. */
     private transient ModuleDao myDao;
+
+    private User user;
+    private Long user__resolvedKey;
 
     private List<ModuleCapability> moduleCapabilityList;
 
@@ -43,16 +48,18 @@ public class Module {
         this.id = id;
     }
 
-    public Module(long id, String packageName, String title, String logoUrl, String descriptionShort, String descriptionFull, String copyright, String supportEmail, String created) {
+    public Module(long id, String package_name, String title, String logo_url, String description_short, String description_full, String copyright, String support_email, boolean enabled, String created, long user_id) {
         this.id = id;
-        this.packageName = packageName;
+        this.package_name = package_name;
         this.title = title;
-        this.logoUrl = logoUrl;
-        this.descriptionShort = descriptionShort;
-        this.descriptionFull = descriptionFull;
+        this.logo_url = logo_url;
+        this.description_short = description_short;
+        this.description_full = description_full;
         this.copyright = copyright;
-        this.supportEmail = supportEmail;
+        this.support_email = support_email;
+        this.enabled = enabled;
         this.created = created;
+        this.user_id = user_id;
     }
 
     /** called by internal mechanisms, do not call yourself. */
@@ -70,13 +77,13 @@ public class Module {
     }
 
     /** Not-null value. */
-    public String getPackageName() {
-        return packageName;
+    public String getPackage_name() {
+        return package_name;
     }
 
     /** Not-null value; ensure this value is available before it is saved to the database. */
-    public void setPackageName(String packageName) {
-        this.packageName = packageName;
+    public void setPackage_name(String package_name) {
+        this.package_name = package_name;
     }
 
     /** Not-null value. */
@@ -90,33 +97,33 @@ public class Module {
     }
 
     /** Not-null value. */
-    public String getLogoUrl() {
-        return logoUrl;
+    public String getLogo_url() {
+        return logo_url;
     }
 
     /** Not-null value; ensure this value is available before it is saved to the database. */
-    public void setLogoUrl(String logoUrl) {
-        this.logoUrl = logoUrl;
+    public void setLogo_url(String logo_url) {
+        this.logo_url = logo_url;
     }
 
     /** Not-null value. */
-    public String getDescriptionShort() {
-        return descriptionShort;
+    public String getDescription_short() {
+        return description_short;
     }
 
     /** Not-null value; ensure this value is available before it is saved to the database. */
-    public void setDescriptionShort(String descriptionShort) {
-        this.descriptionShort = descriptionShort;
+    public void setDescription_short(String description_short) {
+        this.description_short = description_short;
     }
 
     /** Not-null value. */
-    public String getDescriptionFull() {
-        return descriptionFull;
+    public String getDescription_full() {
+        return description_full;
     }
 
     /** Not-null value; ensure this value is available before it is saved to the database. */
-    public void setDescriptionFull(String descriptionFull) {
-        this.descriptionFull = descriptionFull;
+    public void setDescription_full(String description_full) {
+        this.description_full = description_full;
     }
 
     /** Not-null value. */
@@ -130,13 +137,21 @@ public class Module {
     }
 
     /** Not-null value. */
-    public String getSupportEmail() {
-        return supportEmail;
+    public String getSupport_email() {
+        return support_email;
     }
 
     /** Not-null value; ensure this value is available before it is saved to the database. */
-    public void setSupportEmail(String supportEmail) {
-        this.supportEmail = supportEmail;
+    public void setSupport_email(String support_email) {
+        this.support_email = support_email;
+    }
+
+    public boolean getEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
     }
 
     /** Not-null value. */
@@ -147,6 +162,42 @@ public class Module {
     /** Not-null value; ensure this value is available before it is saved to the database. */
     public void setCreated(String created) {
         this.created = created;
+    }
+
+    public long getUser_id() {
+        return user_id;
+    }
+
+    public void setUser_id(long user_id) {
+        this.user_id = user_id;
+    }
+
+    /** To-one relationship, resolved on first access. */
+    public User getUser() {
+        long __key = this.user_id;
+        if (user__resolvedKey == null || !user__resolvedKey.equals(__key)) {
+            if (daoSession == null) {
+                throw new DaoException("Entity is detached from DAO context");
+            }
+            UserDao targetDao = daoSession.getUserDao();
+            User userNew = targetDao.load(__key);
+            synchronized (this) {
+                user = userNew;
+            	user__resolvedKey = __key;
+            }
+        }
+        return user;
+    }
+
+    public void setUser(User user) {
+        if (user == null) {
+            throw new DaoException("To-one property 'user_id' has not-null constraint; cannot set to-one to null");
+        }
+        synchronized (this) {
+            this.user = user;
+            user_id = user.getId();
+            user__resolvedKey = user_id;
+        }
     }
 
     /** To-many relationship, resolved on first access (and after reset). Changes to to-many relations are not persisted, make changes to the target entity. */

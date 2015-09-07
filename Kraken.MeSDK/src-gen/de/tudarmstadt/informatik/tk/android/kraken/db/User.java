@@ -27,6 +27,7 @@ public class User {
     private transient UserDao myDao;
 
     private List<UserSocialProfile> userSocialProfileList;
+    private List<Module> moduleList;
 
     public User() {
     }
@@ -131,6 +132,28 @@ public class User {
     /** Resets a to-many relationship, making the next get call to query for a fresh result. */
     public synchronized void resetUserSocialProfileList() {
         userSocialProfileList = null;
+    }
+
+    /** To-many relationship, resolved on first access (and after reset). Changes to to-many relations are not persisted, make changes to the target entity. */
+    public List<Module> getModuleList() {
+        if (moduleList == null) {
+            if (daoSession == null) {
+                throw new DaoException("Entity is detached from DAO context");
+            }
+            ModuleDao targetDao = daoSession.getModuleDao();
+            List<Module> moduleListNew = targetDao._queryUser_ModuleList(id);
+            synchronized (this) {
+                if(moduleList == null) {
+                    moduleList = moduleListNew;
+                }
+            }
+        }
+        return moduleList;
+    }
+
+    /** Resets a to-many relationship, making the next get call to query for a fresh result. */
+    public synchronized void resetModuleList() {
+        moduleList = null;
     }
 
     /** Convenient call for {@link AbstractDao#delete(Object)}. Entity must attached to an entity context. */
