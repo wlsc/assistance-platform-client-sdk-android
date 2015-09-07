@@ -85,11 +85,29 @@ public class KrakenDatabaseGenerator {
 		login.addToMany(device, deviceFKLoginProperty);
 		
 		// ----- Module installation scheme -----
-//		Entity module = schema.addEntity("Module");
-//		module.setTableName("module");
-//		module.addIdProperty().notNull().primaryKey().autoincrement().index();
-//		module.addStringProperty("token").notNull().index();
+		Entity module = schema.addEntity("Module");
+		module.setTableName("module");
+		module.addIdProperty().notNull().primaryKey().autoincrement().index();
+		module.addStringProperty("package").notNull().index();
+		module.addStringProperty("title").notNull();
+		module.addStringProperty("logoUrl").notNull();
+		module.addStringProperty("descriptionShort").notNull();
+		module.addStringProperty("descriptionFull").notNull();
+		module.addStringProperty("copyright").notNull();
+		module.addStringProperty("supportEmail").notNull();
+		module.addStringProperty("created").notNull();
 		
+		// ----- Module capability scheme -----
+		Entity moduleCapability = schema.addEntity("ModuleCapability");
+		moduleCapability.setTableName("module_capability");
+		moduleCapability.addIdProperty().notNull().primaryKey().autoincrement().index();
+		moduleCapability.addStringProperty("type").notNull().index();
+		moduleCapability.addDoubleProperty("frequency").notNull();
+		moduleCapability.addStringProperty("created").notNull();
+		
+		Property moduleCapabilityFKModuleProperty = moduleCapability.addLongProperty("module_id").notNull().index().getProperty();
+		moduleCapability.addToOne(module, moduleCapabilityFKModuleProperty);
+		module.addToMany(moduleCapability, moduleCapabilityFKModuleProperty);
 		
 		
 		// ****************************************

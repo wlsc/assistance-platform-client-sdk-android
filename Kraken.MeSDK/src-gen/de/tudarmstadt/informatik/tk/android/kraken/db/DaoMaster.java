@@ -12,6 +12,8 @@ import de.tudarmstadt.informatik.tk.android.kraken.db.UserDao;
 import de.tudarmstadt.informatik.tk.android.kraken.db.UserSocialProfileDao;
 import de.tudarmstadt.informatik.tk.android.kraken.db.LoginDao;
 import de.tudarmstadt.informatik.tk.android.kraken.db.DeviceDao;
+import de.tudarmstadt.informatik.tk.android.kraken.db.ModuleDao;
+import de.tudarmstadt.informatik.tk.android.kraken.db.ModuleCapabilityDao;
 import de.tudarmstadt.informatik.tk.android.kraken.db.PositionSensorDao;
 import de.tudarmstadt.informatik.tk.android.kraken.db.GyroscopeSensorDao;
 import de.tudarmstadt.informatik.tk.android.kraken.db.AccelerometerSensorDao;
@@ -37,6 +39,8 @@ public class DaoMaster extends AbstractDaoMaster {
         UserSocialProfileDao.createTable(db, ifNotExists);
         LoginDao.createTable(db, ifNotExists);
         DeviceDao.createTable(db, ifNotExists);
+        ModuleDao.createTable(db, ifNotExists);
+        ModuleCapabilityDao.createTable(db, ifNotExists);
         PositionSensorDao.createTable(db, ifNotExists);
         GyroscopeSensorDao.createTable(db, ifNotExists);
         AccelerometerSensorDao.createTable(db, ifNotExists);
@@ -56,6 +60,8 @@ public class DaoMaster extends AbstractDaoMaster {
         UserSocialProfileDao.dropTable(db, ifExists);
         LoginDao.dropTable(db, ifExists);
         DeviceDao.dropTable(db, ifExists);
+        ModuleDao.dropTable(db, ifExists);
+        ModuleCapabilityDao.dropTable(db, ifExists);
         PositionSensorDao.dropTable(db, ifExists);
         GyroscopeSensorDao.dropTable(db, ifExists);
         AccelerometerSensorDao.dropTable(db, ifExists);
@@ -102,6 +108,8 @@ public class DaoMaster extends AbstractDaoMaster {
         registerDaoClass(UserSocialProfileDao.class);
         registerDaoClass(LoginDao.class);
         registerDaoClass(DeviceDao.class);
+        registerDaoClass(ModuleDao.class);
+        registerDaoClass(ModuleCapabilityDao.class);
         registerDaoClass(PositionSensorDao.class);
         registerDaoClass(GyroscopeSensorDao.class);
         registerDaoClass(AccelerometerSensorDao.class);
