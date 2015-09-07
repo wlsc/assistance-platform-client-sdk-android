@@ -25,7 +25,7 @@ public class LoginDao extends AbstractDao<Login, Long> {
     public static class Properties {
         public final static Property Id = new Property(0, long.class, "id", true, "_id");
         public final static Property Token = new Property(1, String.class, "token", false, "TOKEN");
-        public final static Property Server_device_id = new Property(2, String.class, "server_device_id", false, "SERVER_DEVICE_ID");
+        public final static Property Server_device_id = new Property(2, Long.class, "server_device_id", false, "SERVER_DEVICE_ID");
         public final static Property Last_email = new Property(3, String.class, "last_email", false, "LAST_EMAIL");
         public final static Property Created = new Property(4, String.class, "created", false, "CREATED");
     };
@@ -48,7 +48,7 @@ public class LoginDao extends AbstractDao<Login, Long> {
         db.execSQL("CREATE TABLE " + constraint + "\"login\" (" + //
                 "\"_id\" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL ," + // 0: id
                 "\"TOKEN\" TEXT NOT NULL ," + // 1: token
-                "\"SERVER_DEVICE_ID\" TEXT," + // 2: server_device_id
+                "\"SERVER_DEVICE_ID\" INTEGER," + // 2: server_device_id
                 "\"LAST_EMAIL\" TEXT NOT NULL ," + // 3: last_email
                 "\"CREATED\" TEXT NOT NULL );"); // 4: created
         // Add Indexes
@@ -71,9 +71,9 @@ public class LoginDao extends AbstractDao<Login, Long> {
         stmt.bindLong(1, entity.getId());
         stmt.bindString(2, entity.getToken());
  
-        String server_device_id = entity.getServer_device_id();
+        Long server_device_id = entity.getServer_device_id();
         if (server_device_id != null) {
-            stmt.bindString(3, server_device_id);
+            stmt.bindLong(3, server_device_id);
         }
         stmt.bindString(4, entity.getLast_email());
         stmt.bindString(5, entity.getCreated());
@@ -97,7 +97,7 @@ public class LoginDao extends AbstractDao<Login, Long> {
         Login entity = new Login( //
             cursor.getLong(offset + 0), // id
             cursor.getString(offset + 1), // token
-            cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // server_device_id
+            cursor.isNull(offset + 2) ? null : cursor.getLong(offset + 2), // server_device_id
             cursor.getString(offset + 3), // last_email
             cursor.getString(offset + 4) // created
         );
@@ -109,7 +109,7 @@ public class LoginDao extends AbstractDao<Login, Long> {
     public void readEntity(Cursor cursor, Login entity, int offset) {
         entity.setId(cursor.getLong(offset + 0));
         entity.setToken(cursor.getString(offset + 1));
-        entity.setServer_device_id(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
+        entity.setServer_device_id(cursor.isNull(offset + 2) ? null : cursor.getLong(offset + 2));
         entity.setLast_email(cursor.getString(offset + 3));
         entity.setCreated(cursor.getString(offset + 4));
      }

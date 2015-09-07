@@ -35,7 +35,7 @@ public class DeviceDao extends AbstractDao<Device, Long> {
         public final static Property Brand = new Property(4, String.class, "brand", false, "BRAND");
         public final static Property Model = new Property(5, String.class, "model", false, "MODEL");
         public final static Property Created = new Property(6, String.class, "created", false, "CREATED");
-        public final static Property Device_id = new Property(7, long.class, "device_id", false, "DEVICE_ID");
+        public final static Property Login_id = new Property(7, long.class, "login_id", false, "LOGIN_ID");
     };
 
     private DaoSession daoSession;
@@ -62,12 +62,12 @@ public class DeviceDao extends AbstractDao<Device, Long> {
                 "\"BRAND\" TEXT," + // 4: brand
                 "\"MODEL\" TEXT," + // 5: model
                 "\"CREATED\" TEXT NOT NULL ," + // 6: created
-                "\"DEVICE_ID\" INTEGER NOT NULL );"); // 7: device_id
+                "\"LOGIN_ID\" INTEGER NOT NULL );"); // 7: login_id
         // Add Indexes
         db.execSQL("CREATE INDEX " + constraint + "IDX_device__id ON device" +
                 " (\"_id\");");
-        db.execSQL("CREATE INDEX " + constraint + "IDX_device_DEVICE_ID ON device" +
-                " (\"DEVICE_ID\");");
+        db.execSQL("CREATE INDEX " + constraint + "IDX_device_LOGIN_ID ON device" +
+                " (\"LOGIN_ID\");");
     }
 
     /** Drops the underlying database table. */
@@ -107,7 +107,7 @@ public class DeviceDao extends AbstractDao<Device, Long> {
             stmt.bindString(6, model);
         }
         stmt.bindString(7, entity.getCreated());
-        stmt.bindLong(8, entity.getDevice_id());
+        stmt.bindLong(8, entity.getLogin_id());
     }
 
     @Override
@@ -133,7 +133,7 @@ public class DeviceDao extends AbstractDao<Device, Long> {
             cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4), // brand
             cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5), // model
             cursor.getString(offset + 6), // created
-            cursor.getLong(offset + 7) // device_id
+            cursor.getLong(offset + 7) // login_id
         );
         return entity;
     }
@@ -148,7 +148,7 @@ public class DeviceDao extends AbstractDao<Device, Long> {
         entity.setBrand(cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4));
         entity.setModel(cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5));
         entity.setCreated(cursor.getString(offset + 6));
-        entity.setDevice_id(cursor.getLong(offset + 7));
+        entity.setLogin_id(cursor.getLong(offset + 7));
      }
     
     /** @inheritdoc */
@@ -175,16 +175,16 @@ public class DeviceDao extends AbstractDao<Device, Long> {
     }
     
     /** Internal query to resolve the "deviceList" to-many relationship of Login. */
-    public List<Device> _queryLogin_DeviceList(long device_id) {
+    public List<Device> _queryLogin_DeviceList(long login_id) {
         synchronized (this) {
             if (login_DeviceListQuery == null) {
                 QueryBuilder<Device> queryBuilder = queryBuilder();
-                queryBuilder.where(Properties.Device_id.eq(null));
+                queryBuilder.where(Properties.Login_id.eq(null));
                 login_DeviceListQuery = queryBuilder.build();
             }
         }
         Query<Device> query = login_DeviceListQuery.forCurrentThread();
-        query.setParameter(0, device_id);
+        query.setParameter(0, login_id);
         return query.list();
     }
 
@@ -197,7 +197,7 @@ public class DeviceDao extends AbstractDao<Device, Long> {
             builder.append(',');
             SqlUtils.appendColumns(builder, "T0", daoSession.getLoginDao().getAllColumns());
             builder.append(" FROM device T");
-            builder.append(" LEFT JOIN login T0 ON T.\"DEVICE_ID\"=T0.\"_id\"");
+            builder.append(" LEFT JOIN login T0 ON T.\"LOGIN_ID\"=T0.\"_id\"");
             builder.append(' ');
             selectDeep = builder.toString();
         }

@@ -91,7 +91,7 @@ public abstract class AbstractSensor implements ISensor {
             if (m_sensorClass != dbEntry.getClass()) {
                 m_sensorClass = dbEntry.getClass();
                 try {
-                    m_daoObject = getDaoObject(m_sensorClass);
+                    m_daoObject = getDaoEntry(m_sensorClass);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -143,15 +143,14 @@ public abstract class AbstractSensor implements ISensor {
         ActivityCommunicator.getInstance().handleData(data);
     }
 
-    protected AbstractDao<?, Long> getDaoObject(Class<? extends IDbSensor> sensorClass) throws NoSuchFieldException, IllegalAccessException,
+    protected AbstractDao<?, Long> getDaoEntry(Class<? extends IDbSensor> sensorClass) throws NoSuchFieldException, IllegalAccessException,
             IllegalArgumentException {
 
         String strSimpleClassNameOfDBObject = sensorClass.getSimpleName();
-        return getDaoObject(strSimpleClassNameOfDBObject);
+        return getDaoEntry(strSimpleClassNameOfDBObject);
     }
 
-    @SuppressWarnings("unchecked")
-    protected AbstractDao<?, Long> getDaoObject(String strClassNameWithoutDaoPostfix) throws NoSuchFieldException, IllegalAccessException,
+    protected AbstractDao<?, Long> getDaoEntry(String strClassNameWithoutDaoPostfix) throws NoSuchFieldException, IllegalAccessException,
             IllegalArgumentException {
 
         if (m_daoSession == null) {
@@ -211,7 +210,6 @@ public abstract class AbstractSensor implements ISensor {
         return flushData(daoSession, strClassName);
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public SensorData flushData(DaoSession daoSession, String strFullQualifiedBeanClassName) throws JSONException {
 
@@ -225,7 +223,7 @@ public abstract class AbstractSensor implements ISensor {
                 // getting database bean
                 m_sensorClass = (Class<? extends IDbSensor>) Class.forName(strFullQualifiedBeanClassName);
                 // get the *Dao object for doing a query
-                m_daoObject = getDaoObject(m_sensorClass);
+                m_daoObject = getDaoEntry(m_sensorClass);
                 m_propTimestamp = null;
             }
 
@@ -241,9 +239,6 @@ public abstract class AbstractSensor implements ISensor {
 
             // set timestamp of last query
             m_longLastDataFlushTimestamp = longTimestamp;
-            //SharedPreferences sharedPreferences = context.getApplicationContext().getSharedPreferences(KrakenSdkSettings.PREFERENCES_NAME, Context.MODE_PRIVATE);
-            //sharedPreferences.edit()
-            //		.putLong(strFullQualifiedBeanClassName + KrakenSdkSettings.PREFERENCES_SENSOR_LAST_PUSHED_TIMESTAMP_POSTFIX, m_longLastDataFlushTimestamp).commit();
 
             // handle every entry and convert it to Json
             List<? extends IDbSensor> list = query.list();
@@ -322,7 +317,7 @@ public abstract class AbstractSensor implements ISensor {
                 // getting database bean
                 m_sensorClass = (Class<? extends IDbSensor>) Class.forName(strFullQualifiedBeanClassName);
                 // get the *Dao object for doing a query
-                m_daoObject = getDaoObject(m_sensorClass);
+                m_daoObject = getDaoEntry(m_sensorClass);
                 m_propTimestamp = null;
             }
 
@@ -415,7 +410,7 @@ public abstract class AbstractSensor implements ISensor {
                 // getting database bean
                 m_sensorClass = (Class<? extends IDbSensor>) Class.forName(strFullqualifiedSensorClassName);
                 // get the *Dao object for doing a query
-                m_daoObject = getDaoObject(m_sensorClass);
+                m_daoObject = getDaoEntry(m_sensorClass);
             }
 
             // We assume that every entry in this list is of the same type!

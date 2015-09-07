@@ -141,7 +141,7 @@ public abstract class AbstractContentObserverSensor extends AbstractSensor {
 	@SuppressLint("UseSparseArrays")
 	@SuppressWarnings("unchecked")
 	protected <T, E extends IDbSensor> HashMap<T, E> getAllExistingEntries(Class<E> sensorClass, Method getKeyMethod) throws NoSuchFieldException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
-		AbstractDao<?, Long> daoObject = getDaoObject(sensorClass);
+		AbstractDao<?, Long> daoObject = getDaoEntry(sensorClass);
 		List<E> list = (List<E>) daoObject.queryBuilder().list();
 		 
 		HashMap<T, E> map = new HashMap<T, E>();

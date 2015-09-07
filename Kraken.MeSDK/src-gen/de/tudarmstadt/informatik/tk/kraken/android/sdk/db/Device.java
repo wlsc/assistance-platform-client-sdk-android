@@ -17,7 +17,7 @@ public class Device {
     private String model;
     /** Not-null value. */
     private String created;
-    private long device_id;
+    private long login_id;
 
     /** Used to resolve relations */
     private transient DaoSession daoSession;
@@ -36,7 +36,7 @@ public class Device {
         this.id = id;
     }
 
-    public Device(long id, String device_identifier, String os, String os_version, String brand, String model, String created, long device_id) {
+    public Device(long id, String device_identifier, String os, String os_version, String brand, String model, String created, long login_id) {
         this.id = id;
         this.device_identifier = device_identifier;
         this.os = os;
@@ -44,7 +44,7 @@ public class Device {
         this.brand = brand;
         this.model = model;
         this.created = created;
-        this.device_id = device_id;
+        this.login_id = login_id;
     }
 
     /** called by internal mechanisms, do not call yourself. */
@@ -111,17 +111,17 @@ public class Device {
         this.created = created;
     }
 
-    public long getDevice_id() {
-        return device_id;
+    public long getLogin_id() {
+        return login_id;
     }
 
-    public void setDevice_id(long device_id) {
-        this.device_id = device_id;
+    public void setLogin_id(long login_id) {
+        this.login_id = login_id;
     }
 
     /** To-one relationship, resolved on first access. */
     public Login getLogin() {
-        long __key = this.device_id;
+        long __key = this.login_id;
         if (login__resolvedKey == null || !login__resolvedKey.equals(__key)) {
             if (daoSession == null) {
                 throw new DaoException("Entity is detached from DAO context");
@@ -138,12 +138,12 @@ public class Device {
 
     public void setLogin(Login login) {
         if (login == null) {
-            throw new DaoException("To-one property 'device_id' has not-null constraint; cannot set to-one to null");
+            throw new DaoException("To-one property 'login_id' has not-null constraint; cannot set to-one to null");
         }
         synchronized (this) {
             this.login = login;
-            device_id = login.getId();
-            login__resolvedKey = device_id;
+            login_id = login.getId();
+            login__resolvedKey = login_id;
         }
     }
 

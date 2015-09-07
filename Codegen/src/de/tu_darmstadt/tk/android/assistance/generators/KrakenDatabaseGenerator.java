@@ -65,7 +65,7 @@ public class KrakenDatabaseGenerator {
 		login.setTableName("login");
 		login.addIdProperty().notNull().primaryKey().autoincrement().index();
 		login.addStringProperty("token").notNull().index();
-		login.addStringProperty("server_device_id");
+		login.addLongProperty("server_device_id");
 		login.addStringProperty("last_email").notNull();
 		login.addStringProperty("created").notNull();
 		
@@ -80,7 +80,7 @@ public class KrakenDatabaseGenerator {
 		device.addStringProperty("model");
 		device.addStringProperty("created").notNull();
 		
-		Property deviceFKLoginProperty = device.addLongProperty("device_id").notNull().index().getProperty();
+		Property deviceFKLoginProperty = device.addLongProperty("login_id").notNull().index().getProperty();
 		device.addToOne(login, deviceFKLoginProperty);
 		login.addToMany(device, deviceFKLoginProperty);
 		

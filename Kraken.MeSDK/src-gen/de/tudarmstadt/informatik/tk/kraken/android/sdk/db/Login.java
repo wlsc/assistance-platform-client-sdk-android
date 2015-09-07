@@ -13,7 +13,7 @@ public class Login {
     private long id;
     /** Not-null value. */
     private String token;
-    private String server_device_id;
+    private Long server_device_id;
     /** Not-null value. */
     private String last_email;
     /** Not-null value. */
@@ -34,7 +34,7 @@ public class Login {
         this.id = id;
     }
 
-    public Login(long id, String token, String server_device_id, String last_email, String created) {
+    public Login(long id, String token, Long server_device_id, String last_email, String created) {
         this.id = id;
         this.token = token;
         this.server_device_id = server_device_id;
@@ -66,11 +66,11 @@ public class Login {
         this.token = token;
     }
 
-    public String getServer_device_id() {
+    public Long getServer_device_id() {
         return server_device_id;
     }
 
-    public void setServer_device_id(String server_device_id) {
+    public void setServer_device_id(Long server_device_id) {
         this.server_device_id = server_device_id;
     }
 
