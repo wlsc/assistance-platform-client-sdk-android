@@ -29,7 +29,7 @@
     <!-- for GCM, only for devices lower that 4.0.4 -->
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <permission
-        android:name="de.tudarmstadt.informatik.tk.kraken.android.permission.C2D_MESSAGE"
+        android:name="de.tudarmstadt.informatik.tk.android.permission.C2D_MESSAGE"
         android:protectionLevel="signature" />
     <uses-permission android:name="de.tudarmstadt.informatik.tk.kraken.android.permission.C2D_MESSAGE" />
 
@@ -47,18 +47,18 @@
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/app_id" />
 
-        <activity android:name="de.tudarmstadt.informatik.tk.kraken.android.sdk.ui.activities.WelcomeActivity" />
+        <activity android:name="de.tudarmstadt.informatik.tk.android.kraken.ui.activities.WelcomeActivity" />
 
         <activity
-            android:name="de.tudarmstadt.informatik.tk.kraken.android.sdk.ui.activities.SettingsActivity"
+            android:name="de.tudarmstadt.informatik.tk.android.kraken.ui.activities.SettingsActivity"
             android:label="@string/settings" />
 
         <activity
-            android:name="de.tudarmstadt.informatik.tk.kraken.android.sdk.ui.activities.sensors.SensorsActivity"
+            android:name="de.tudarmstadt.informatik.tk.android.kraken.ui.activities.sensors.SensorsActivity"
             android:screenOrientation="portrait" />
 
         <activity
-            android:name="de.tudarmstadt.informatik.tk.kraken.android.sdk.ui.activities.accounts.AccountsActivity"
+            android:name="de.tudarmstadt.informatik.tk.android.kraken.ui.activities.accounts.AccountsActivity"
             android:label="@string/login"
             android:screenOrientation="portrait">
             <intent-filter>
@@ -75,10 +75,10 @@
 
         <activity android:name="com.facebook.LoginActivity" />
 
-        <service android:name="de.tudarmstadt.informatik.tk.kraken.android.sdk.services.KrakenService" />
+        <service android:name="de.tudarmstadt.informatik.tk.android.kraken.services.KrakenService" />
 
         <service
-            android:name="de.tudarmstadt.informatik.tk.kraken.android.sdk.services.KrakenAccessibilityService"
+            android:name="de.tudarmstadt.informatik.tk.android.kraken.services.KrakenAccessibilityService"
             android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE">
             <intent-filter>
                 <action android:name="android.accessibilityservice.AccessibilityService" />
@@ -89,13 +89,13 @@
         </service>
 
         <service
-            android:name="de.tudarmstadt.informatik.tk.kraken.android.sdk.models.sensors.triggered.ActivitySensorService"
+            android:name="de.tudarmstadt.informatik.tk.android.kraken.models.sensors.triggered.ActivitySensorService"
             android:exported="false"
             android:label="ActivitySensorService" />
 
         <!-- Declaring broadcast receiver for BOOT_COMPLETED event -->
         <receiver
-            android:name="de.tudarmstadt.informatik.tk.kraken.android.sdk.receivers.BootReceiver"
+            android:name="de.tudarmstadt.informatik.tk.android.kraken.receivers.BootReceiver"
             android:enabled="true"
             android:exported="false">
             <intent-filter>
@@ -109,7 +109,7 @@
         </receiver>
 
         <receiver
-            android:name="de.tudarmstadt.informatik.tk.kraken.android.sdk.KrakenLoginReceiver"
+            android:name="de.tudarmstadt.informatik.tk.android.kraken.KrakenLoginReceiver"
             android:enabled="true"
             android:permission="de.tudarmstadt.informatik.tk.kraken.dnd2.permission.KRAKEN_LOGIN">
             <intent-filter>
@@ -118,7 +118,7 @@
         </receiver>
 
         <receiver
-            android:name="de.tudarmstadt.informatik.tk.kraken.android.sdk.receivers.GcmBroadcastReceiver"
+            android:name="de.tudarmstadt.informatik.tk.android.kraken.receivers.GcmBroadcastReceiver"
             android:permission="com.google.android.c2dm.permission.SEND">
             <intent-filter>
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
@@ -127,7 +127,7 @@
             </intent-filter>
         </receiver>
 
-        <service android:name="de.tudarmstadt.informatik.tk.kraken.android.sdk.services.GcmIntentService" />
+        <service android:name="de.tudarmstadt.informatik.tk.android.kraken.services.GcmIntentService" />
 
     </application>
 
