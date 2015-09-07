@@ -1,11 +1,12 @@
 package de.tudarmstadt.informatik.tk.kraken.android.sdk;
 
-import de.tudarmstadt.informatik.tk.kraken.android.sdk.sensors.ESensorType;
+
+import de.tudarmstadt.informatik.tk.kraken.android.sdk.models.db.sensors.ESensorType;
 
 public class KrakenSdkSettings {
 
-	public static final String SERVER_URL = "https://kraken.me";
-	//public static final String SERVER_URL = "http://192.168.0.118";
+    public static final String SERVER_URL = "https://kraken.me";
+    //public static final String SERVER_URL = "http://192.168.0.118";
     public static final String PREFERENCES_NAME = "KrakenSDKPreferences";
 
     public static final String PREFERENCES_SENSOR_DISABLED_BY_USER_POSTFIX = "_disabledByUser";

@@ -16,7 +16,7 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 import de.tudarmstadt.informatik.tk.kraken.android.sdk.db.DaoSession;
-import de.tudarmstadt.informatik.tk.kraken.android.sdk.sensors.interfaces.ISensor;
+import de.tudarmstadt.informatik.tk.kraken.android.sdk.models.db.sensors.interfaces.ISensor;
 import de.tudarmstadt.informatik.tk.kraken.android.sdk.services.KrakenService;
 
 public class ServerPushManager {

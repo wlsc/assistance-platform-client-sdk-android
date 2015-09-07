@@ -15,9 +15,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import de.tudarmstadt.informatik.tk.kraken.sdk.R;
+import de.tudarmstadt.informatik.tk.kraken.android.sdk.models.db.sensors.ESensorType;
 import de.tudarmstadt.informatik.tk.kraken.android.sdk.preference.PreferenceManager;
-import de.tudarmstadt.informatik.tk.kraken.android.sdk.sensors.ESensorType;
+import de.tudarmstadt.informatik.tk.kraken.sdk.R;
 
 /**
  * @author Karsten Planz
@@ -76,7 +76,7 @@ public class WelcomeSettingsFragment extends Fragment implements AdapterView.OnI
     }
 
     private String getDataProfileDescription(ESensorType[] sensors) {
-        if(sensors.length == 0) {
+        if (sensors.length == 0) {
             return "";
         }
         StringBuilder description = new StringBuilder();
@@ -97,10 +97,9 @@ public class WelcomeSettingsFragment extends Fragment implements AdapterView.OnI
         ArrayAdapter<String> arrayAdapter = (ArrayAdapter<String>) mListView.getAdapter();
         arrayAdapter.notifyDataSetChanged();
 
-        if(position == 0) {
+        if (position == 0) {
             mPrefs.setDataProfile(PreferenceManager.KRAKEN_DATA_PROFILE_BASIC);
-        }
-        else if(position == 1) {
+        } else if (position == 1) {
             mPrefs.setDataProfile(PreferenceManager.KRAKEN_DATA_PROFILE_FULL);
         }
     }

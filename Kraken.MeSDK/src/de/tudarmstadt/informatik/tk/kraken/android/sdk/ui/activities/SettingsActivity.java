@@ -7,13 +7,13 @@ import android.preference.PreferenceCategory;
 import android.preference.SwitchPreference;
 import android.view.MenuItem;
 
-import de.tudarmstadt.informatik.tk.kraken.sdk.R;
 import de.tudarmstadt.informatik.tk.kraken.android.sdk.KrakenSdkSettings;
+import de.tudarmstadt.informatik.tk.kraken.android.sdk.models.db.sensors.ESensorType;
+import de.tudarmstadt.informatik.tk.kraken.android.sdk.models.db.sensors.SensorManager;
 import de.tudarmstadt.informatik.tk.kraken.android.sdk.preference.PreferenceManager;
-import de.tudarmstadt.informatik.tk.kraken.android.sdk.sensors.ESensorType;
-import de.tudarmstadt.informatik.tk.kraken.android.sdk.sensors.SensorManager;
 import de.tudarmstadt.informatik.tk.kraken.android.sdk.utils.KrakenServiceManager;
 import de.tudarmstadt.informatik.tk.kraken.android.sdk.utils.KrakenUtils;
+import de.tudarmstadt.informatik.tk.kraken.sdk.R;
 
 
 @Deprecated
@@ -42,7 +42,7 @@ public class SettingsActivity extends PreferenceActivity implements Preference.O
         SwitchPreference krakenActivatedPref = (SwitchPreference) findPreference(PreferenceManager.KRAKEN_ACTIVATED);
         krakenActivatedPref.setChecked(serviceRunning);
 
-        PreferenceCategory dataCategory = (PreferenceCategory)findPreference("pref_key_data");
+        PreferenceCategory dataCategory = (PreferenceCategory) findPreference("pref_key_data");
 
         /*
         for(ESensorType sensorType : Settings.SENSORS_PROFILE_BASIC) {
@@ -54,8 +54,8 @@ public class SettingsActivity extends PreferenceActivity implements Preference.O
         }
         */
 
-        for(ESensorType sensorType : KrakenSdkSettings.SENSORS_PROFILE_FULL) {
-            if(sensorType != ESensorType.SENSOR_BACKGROUND_TRAFFIC) {
+        for (ESensorType sensorType : KrakenSdkSettings.SENSORS_PROFILE_FULL) {
+            if (sensorType != ESensorType.SENSOR_BACKGROUND_TRAFFIC) {
                 SwitchPreference pref = new SwitchPreference(this);
                 pref.setKey(KRAKEN_SENSOR_ENABLED_PREFIX + sensorType.toString());
                 pref.setTitle(sensorType.getDisplayName(this));
@@ -77,39 +77,34 @@ public class SettingsActivity extends PreferenceActivity implements Preference.O
         String key = preference.getKey();
         if (key.equals(PreferenceManager.KRAKEN_ACTIVATED)) {
             boolean activated = (boolean) newValue;
-            if(activated) {
+            if (activated) {
                 mServiceManager.startService();
-            }
-            else {
+            } else {
                 mServiceManager.stopService();
             }
-        }
-        else if(key.equals(PreferenceManager.KRAKEN_SHOW_NOTIFICATION)) {
+        } else if (key.equals(PreferenceManager.KRAKEN_SHOW_NOTIFICATION)) {
             mServiceManager.showIcon((boolean) newValue);
-        }
-        else if(key.equals(PreferenceManager.KRAKEN_DATA_PROFILE)) {
+        } else if (key.equals(PreferenceManager.KRAKEN_DATA_PROFILE)) {
             String profile = (String) newValue;
             KrakenUtils.initDataProfile(this, profile);
             updateSensorPrefs(profile);
-        }
-        else if(key.startsWith(KRAKEN_SENSOR_ENABLED_PREFIX)) {
-            boolean disabled = ! (boolean) newValue;
+        } else if (key.startsWith(KRAKEN_SENSOR_ENABLED_PREFIX)) {
+            boolean disabled = !(boolean) newValue;
             ESensorType sensorType = ESensorType.valueOf(key.replaceFirst(KRAKEN_SENSOR_ENABLED_PREFIX, ""));
             mSensorManager.getSensor(sensorType).setDisabledByUser(disabled);
-            if(!disabled) {
+            if (!disabled) {
                 mSensorManager.getSensor(sensorType).startSensor();
                 //start background traffic sensor if data usage slider go on and start location sensor, too
-                if(sensorType == ESensorType.SENSOR_NETWORK_TRAFFIC) {
+                if (sensorType == ESensorType.SENSOR_NETWORK_TRAFFIC) {
                     mSensorManager.getSensor(ESensorType.SENSOR_BACKGROUND_TRAFFIC).startSensor();
                     mSensorManager.getSensor(ESensorType.SENSOR_LOCATION).startSensor();
                     SwitchPreference switchPreference = (SwitchPreference) findPreference(KRAKEN_SENSOR_ENABLED_PREFIX + ESensorType.SENSOR_LOCATION.toString());
                     switchPreference.setChecked(true);
                 }
-            }
-            else {
+            } else {
                 mSensorManager.getSensor(sensorType).stopSensor();
                 //stop background traffic sensor if data usage slider go off and stop location sensor, too
-                if(sensorType == ESensorType.SENSOR_NETWORK_TRAFFIC) {
+                if (sensorType == ESensorType.SENSOR_NETWORK_TRAFFIC) {
                     mSensorManager.getSensor(ESensorType.SENSOR_BACKGROUND_TRAFFIC).stopSensor();
                     mSensorManager.getSensor(ESensorType.SENSOR_NETWORK_TRAFFIC).stopSensor();
                     SwitchPreference switchPreference = (SwitchPreference) findPreference(KRAKEN_SENSOR_ENABLED_PREFIX + ESensorType.SENSOR_LOCATION.toString());
@@ -122,8 +117,8 @@ public class SettingsActivity extends PreferenceActivity implements Preference.O
 
     private void updateSensorPrefs(String profile) {
         boolean basic = profile.equals(PreferenceManager.KRAKEN_DATA_PROFILE_BASIC);
-        for(ESensorType sensorType : KrakenSdkSettings.SENSORS_PROFILE_FULL) {
-            if(sensorType != ESensorType.SENSOR_BACKGROUND_TRAFFIC) {
+        for (ESensorType sensorType : KrakenSdkSettings.SENSORS_PROFILE_FULL) {
+            if (sensorType != ESensorType.SENSOR_BACKGROUND_TRAFFIC) {
                 SwitchPreference preference = (SwitchPreference) findPreference(KRAKEN_SENSOR_ENABLED_PREFIX + sensorType.toString());
                 preference.setEnabled(basic);
                 if (!basic) {

@@ -4,9 +4,9 @@ import android.content.Context;
 
 import de.tudarmstadt.informatik.tk.kraken.android.sdk.KrakenSdkSettings;
 import de.tudarmstadt.informatik.tk.kraken.android.sdk.communication.SdkAuthentication;
+import de.tudarmstadt.informatik.tk.kraken.android.sdk.models.db.sensors.ESensorType;
+import de.tudarmstadt.informatik.tk.kraken.android.sdk.models.db.sensors.SensorManager;
 import de.tudarmstadt.informatik.tk.kraken.android.sdk.preference.PreferenceManager;
-import de.tudarmstadt.informatik.tk.kraken.android.sdk.sensors.ESensorType;
-import de.tudarmstadt.informatik.tk.kraken.android.sdk.sensors.SensorManager;
 
 import static android.provider.Settings.Secure;
 
@@ -20,11 +20,10 @@ public class KrakenUtils {
 
     public static void initDataProfile(Context context, String dataProfile) {
 
-        if(dataProfile.equals(PreferenceManager.KRAKEN_DATA_PROFILE_BASIC)) {
+        if (dataProfile.equals(PreferenceManager.KRAKEN_DATA_PROFILE_BASIC)) {
             enableSensors(context, KrakenSdkSettings.SENSORS_PROFILE_BASIC);
             disableSensors(context, KrakenSdkSettings.SENSORS_PROFILE_FULL);
-        }
-        else if(dataProfile.equals(PreferenceManager.KRAKEN_DATA_PROFILE_FULL)) {
+        } else if (dataProfile.equals(PreferenceManager.KRAKEN_DATA_PROFILE_FULL)) {
             enableSensors(context, KrakenSdkSettings.SENSORS_PROFILE_BASIC);
             enableSensors(context, KrakenSdkSettings.SENSORS_PROFILE_FULL);
         }

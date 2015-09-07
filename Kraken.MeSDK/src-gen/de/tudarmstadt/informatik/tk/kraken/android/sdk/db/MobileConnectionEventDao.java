@@ -19,7 +19,7 @@ public class MobileConnectionEventDao extends AbstractDao<MobileConnectionEvent,
     public static final String TABLENAME = "mobile_connection_event";
 
     /**
-     * Properties of entity MobileConnectionEvent.<br/>
+     * Properties of entity MobileConnectionEventRequest.<br/>
      * Can be used for QueryBuilder and for referencing column names.
     */
     public static class Properties {

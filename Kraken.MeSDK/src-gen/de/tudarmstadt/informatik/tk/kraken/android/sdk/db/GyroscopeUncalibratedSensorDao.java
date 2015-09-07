@@ -19,7 +19,7 @@ public class GyroscopeUncalibratedSensorDao extends AbstractDao<GyroscopeUncalib
     public static final String TABLENAME = "gyroscope_uncalibrated_sensor";
 
     /**
-     * Properties of entity GyroscopeUncalibratedSensor.<br/>
+     * Properties of entity GyroscopeUncalibratedSensorRequest.<br/>
      * Can be used for QueryBuilder and for referencing column names.
     */
     public static class Properties {

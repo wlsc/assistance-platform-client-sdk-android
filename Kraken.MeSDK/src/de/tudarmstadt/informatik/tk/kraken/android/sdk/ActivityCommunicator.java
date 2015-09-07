@@ -7,7 +7,7 @@ import android.os.Messenger;
 import android.os.RemoteException;
 
 import de.tudarmstadt.informatik.tk.kraken.android.sdk.interfaces.IDbSensor;
-import de.tudarmstadt.informatik.tk.kraken.android.sdk.sensors.ESensorType;
+import de.tudarmstadt.informatik.tk.kraken.android.sdk.models.db.sensors.ESensorType;
 
 public class ActivityCommunicator {
 

@@ -10,7 +10,7 @@ import android.os.IBinder;
 import android.os.Message;
 import android.os.Messenger;
 
-import de.tudarmstadt.informatik.tk.kraken.android.sdk.sensors.ECommandType;
+import de.tudarmstadt.informatik.tk.kraken.android.sdk.models.db.sensors.ECommandType;
 import de.tudarmstadt.informatik.tk.kraken.android.sdk.services.KrakenService;
 
 /**
@@ -50,7 +50,7 @@ public class KrakenServiceManager implements Handler.Callback {
     }
 
     public static KrakenServiceManager getInstance(Context context) {
-        if(mInstance == null) {
+        if (mInstance == null) {
             mInstance = new KrakenServiceManager(context);
         }
         return mInstance;
@@ -72,7 +72,7 @@ public class KrakenServiceManager implements Handler.Callback {
     }
 
     public void unbindService() {
-        if(mBound) {
+        if (mBound) {
             mContext.unbindService(mServiceConnection);
             mBound = false;
         }

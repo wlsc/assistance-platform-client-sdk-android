@@ -6,11 +6,21 @@
     <string name="alert_accessibility">For Kraken to work properly you need to activate the accessibility option. Therefore just open the Accessibility Settings and enable the Kraken.Me service.</string>
     <string name="alert_accessibility_button">Open Accessibility Settings</string>
 
-    <!-- Sensors -->
-    <string name="measurement_log">Log</string>
+    <!-- Sensors and Events names -->
+    <string name="sensor_position">GPS position</string>
+    <string name="sensor_gyroscope">Gyroscope</string>
     <string name="sensor_accelerometer">Accelerometer</string>
-    <string name="sensor_activity">Activity</string>
+    <string name="sensor_magnetic_field">Magnetic field</string>
+    <string name="sensor_motion_activity">Motion activity</string>
     <string name="sensor_connection">Wireless connections</string>
+    <string name="sensor_wifi_connection">WI-FI connection</string>
+    <string name="sensor_mobile_connection">Mobile connection</string>
+    <string name="sensor_loudness">Loudness</string>
+    <string name="sensor_magnetic_field_uncalibrated">Magnetic field (uncalibrated)</string>
+    <string name="sensor_gyroscope_uncalibrated">Gyroscope (uncalibrated)</string>
+
+    <string name="measurement_log">Log</string>
+    <string name="sensor_activity">Activity</string>
     <string name="sensor_light">Ambient light</string>
     <string name="sensor_location">Location</string>
     <string name="sensor_ringtone">Ringtone</string>
@@ -20,7 +30,6 @@
     <string name="one_time_sensor_running_tasks">Running tasks</string>
     <string name="sensor_contacts">Contacts</string>
     <string name="sensor_calendar">Calendar</string>
-    <string name="sensor_loudness">Loudness</string>
     <string name="sensor_calllog">Call log</string>
     <string name="sensor_browser_history">Browser history</string>
     <string name="sensor_network_traffic">Traffic Usage</string>

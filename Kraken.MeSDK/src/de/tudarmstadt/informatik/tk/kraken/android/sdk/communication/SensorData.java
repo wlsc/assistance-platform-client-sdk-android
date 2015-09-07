@@ -5,48 +5,48 @@ import org.json.JSONObject;
 import java.util.List;
 
 import de.tudarmstadt.informatik.tk.kraken.android.sdk.interfaces.IDbSensor;
-import de.tudarmstadt.informatik.tk.kraken.android.sdk.sensors.interfaces.ISensor;
+import de.tudarmstadt.informatik.tk.kraken.android.sdk.models.db.sensors.interfaces.ISensor;
 
 public class SensorData {
 
-	private JSONObject m_jsonData;
-	private String m_strFullQualifiedBeanClassName;
-	private ISensor m_sensorObject;
-	private List<? extends IDbSensor> m_liSensorEntities;
-	
-	public SensorData() {
-	}
+    private JSONObject m_jsonData;
+    private String m_strFullQualifiedBeanClassName;
+    private ISensor m_sensorObject;
+    private List<? extends IDbSensor> m_liSensorEntities;
 
-	public JSONObject getJsonData() {
-		return m_jsonData;
-	}
+    public SensorData() {
+    }
 
-	public void setJsonData(JSONObject jsonData) {
-		this.m_jsonData = jsonData;
-	}
+    public JSONObject getJsonData() {
+        return m_jsonData;
+    }
 
-	public String getFullQualifiedBeanClassName() {
-		return m_strFullQualifiedBeanClassName;
-	}
+    public void setJsonData(JSONObject jsonData) {
+        this.m_jsonData = jsonData;
+    }
 
-	public void setFullQualifiedBeanClassName(String strFullQualifiedBeanClassName) {
-		m_strFullQualifiedBeanClassName = strFullQualifiedBeanClassName;
-	}
+    public String getFullQualifiedBeanClassName() {
+        return m_strFullQualifiedBeanClassName;
+    }
 
-	public ISensor getSensor() {
-		return m_sensorObject;
-	}
+    public void setFullQualifiedBeanClassName(String strFullQualifiedBeanClassName) {
+        m_strFullQualifiedBeanClassName = strFullQualifiedBeanClassName;
+    }
 
-	public void setSensor(ISensor sensor) {
-		this.m_sensorObject = sensor;
-	}
+    public ISensor getSensor() {
+        return m_sensorObject;
+    }
 
-	public void setSensorEntities(List<? extends IDbSensor> liSensorEntities) {
-		m_liSensorEntities = liSensorEntities;
-	}
+    public void setSensor(ISensor sensor) {
+        this.m_sensorObject = sensor;
+    }
 
-	public List<? extends IDbSensor> getSensorEntities() {
-		return m_liSensorEntities;
-	}
+    public void setSensorEntities(List<? extends IDbSensor> liSensorEntities) {
+        m_liSensorEntities = liSensorEntities;
+    }
+
+    public List<? extends IDbSensor> getSensorEntities() {
+        return m_liSensorEntities;
+    }
 
 }

@@ -24,10 +24,10 @@ import java.io.Serializable;
 import de.tudarmstadt.informatik.tk.kraken.android.sdk.ActivityCommunicator;
 import de.tudarmstadt.informatik.tk.kraken.android.sdk.communication.RetroServerPushManager;
 import de.tudarmstadt.informatik.tk.kraken.android.sdk.db.DaoSession;
+import de.tudarmstadt.informatik.tk.kraken.android.sdk.models.db.sensors.ECommandType;
+import de.tudarmstadt.informatik.tk.kraken.android.sdk.models.db.sensors.SensorManager;
+import de.tudarmstadt.informatik.tk.kraken.android.sdk.models.db.sensors.interfaces.ISensor;
 import de.tudarmstadt.informatik.tk.kraken.android.sdk.preference.PreferenceManager;
-import de.tudarmstadt.informatik.tk.kraken.android.sdk.sensors.ECommandType;
-import de.tudarmstadt.informatik.tk.kraken.android.sdk.sensors.SensorManager;
-import de.tudarmstadt.informatik.tk.kraken.android.sdk.sensors.interfaces.ISensor;
 import de.tudarmstadt.informatik.tk.kraken.android.sdk.utils.DatabaseManager;
 import de.tudarmstadt.informatik.tk.kraken.sdk.R;
 
@@ -35,15 +35,15 @@ import de.tudarmstadt.informatik.tk.kraken.sdk.R;
 
 public class KrakenService extends Service implements Callback {
 
-	// public static ScheduledExecutorService m_scheduleTaskExecutor;
+    // public static ScheduledExecutorService m_scheduleTaskExecutor;
 
-	private boolean m_bIsRunning = false;
-	private static KrakenService m_service;
+    private boolean m_bIsRunning = false;
+    private static KrakenService m_service;
 
-	final private Messenger m_Messenger = new Messenger(new Handler(this));
+    final private Messenger m_Messenger = new Messenger(new Handler(this));
 
-	private SensorManager m_sensorManager;
-//	private static ObjectMapper m_mapper;
+    private SensorManager m_sensorManager;
+    //	private static ObjectMapper m_mapper;
     private PreferenceManager mPreferenceManager;
     private DatabaseManager mDatabaseManager;
 
@@ -54,64 +54,63 @@ public class KrakenService extends Service implements Callback {
 //		}
 //	}
 
-	public static KrakenService getInstance() {
-		return m_service;
-	}
+    public static KrakenService getInstance() {
+        return m_service;
+    }
 
-	public DaoSession getDaoSession() {
-		return mDatabaseManager.getDaoSession();
-	}
+    public DaoSession getDaoSession() {
+        return mDatabaseManager.getDaoSession();
+    }
 
-	@Override
-	public void onCreate() {
-		super.onCreate();
+    @Override
+    public void onCreate() {
+        super.onCreate();
 
         Log.d("kraken", "Service onCreate");
 
-		m_service = this;
+        m_service = this;
 
-		// Init database FIRST!
-		mDatabaseManager = DatabaseManager.getInstance(this);
+        // Init database FIRST!
+        mDatabaseManager = DatabaseManager.getInstance(this);
 
         mPreferenceManager = PreferenceManager.getInstance(this);
 
-		// GcmManager.getInstance(this).registerAtCloud();
+        // GcmManager.getInstance(this).registerAtCloud();
 
-		// TODO: enable it later
+        // TODO: enable it later
 //		startService();
-	}
+    }
 
-	private void startService() {
-		if (!m_bIsRunning) {
-			m_bIsRunning = true;
-			monitorStart();
-		}
-
-		//ServerPushManager.getInstance(this);
-        // TODO: remove
-		RetroServerPushManager.getInstance(this);
-
-        if(mPreferenceManager.getShowNotification()) {
-            showIcon();
+    private void startService() {
+        if (!m_bIsRunning) {
+            m_bIsRunning = true;
+            monitorStart();
         }
-        else {
+
+        //ServerPushManager.getInstance(this);
+        // TODO: remove
+        RetroServerPushManager.getInstance(this);
+
+        if (mPreferenceManager.getShowNotification()) {
+            showIcon();
+        } else {
             hideIcon();
         }
-	}
+    }
 
-	@TargetApi(Build.VERSION_CODES.JELLY_BEAN)
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     private void showIcon() {
-		//TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
-		//stackBuilder.addParentStack(MainActivity.class);
-		//Intent resultIntent = new Intent(this, MainActivity.class);
+        //TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
+        //stackBuilder.addParentStack(MainActivity.class);
+        //Intent resultIntent = new Intent(this, MainActivity.class);
 
-		// Adds the Intent that starts the Activity to the top of the stack
-		//stackBuilder.addNextIntent(resultIntent);
-		//PendingIntent resultPendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
+        // Adds the Intent that starts the Activity to the top of the stack
+        //stackBuilder.addNextIntent(resultIntent);
+        //PendingIntent resultPendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
 
-		Notification.Builder builder = new Notification.Builder(this);
+        Notification.Builder builder = new Notification.Builder(this);
 
-		//builder.setSmallIcon(R.drawable.ic_kraken_service).setContentIntent(resultPendingIntent);
+        //builder.setSmallIcon(R.drawable.ic_kraken_service).setContentIntent(resultPendingIntent);
 
         // FIXME This is disabled for a short time, due to ongoing brainstorming on design
 
@@ -121,109 +120,108 @@ public class KrakenService extends Service implements Callback {
         Bitmap kraki = BitmapFactory.decodeResource(res, R.drawable.kraki_big);
         builder.setLargeIcon(Bitmap.createScaledBitmap(kraki, width, height, false));
 
-		builder.setContentTitle(getString(R.string.app_name));
+        builder.setContentTitle(getString(R.string.app_name));
         builder.setContentText(getString(R.string.service_notfication_text));
 
-		builder.setOngoing(true);
-		// startForeground(7331, builder.build());
+        builder.setOngoing(true);
+        // startForeground(7331, builder.build());
 
-		NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
 
-		notificationManager.notify("kraken", 7331, (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN ? builder.build() : builder.getNotification()));
-	}
+        notificationManager.notify("kraken", 7331, (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN ? builder.build() : builder.getNotification()));
+    }
 
-	private void hideIcon() {
-		NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-		notificationManager.cancel("kraken", 7331);
-	}
+    private void hideIcon() {
+        NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        notificationManager.cancel("kraken", 7331);
+    }
 
-	@Override
-	public int onStartCommand(Intent intent, int flags, int startId) {
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
 
         Log.d("kraken", "Service onStartCommand");
 
-        if(intent != null && intent.hasExtra("showIcon")) {
+        if (intent != null && intent.hasExtra("showIcon")) {
             boolean showIcon = intent.getBooleanExtra("showIcon", PreferenceManager.DEFAULT_KRAKEN_SHOW_NOTIFICATION);
-            if(showIcon) {
+            if (showIcon) {
                 showIcon();
-            }
-            else {
+            } else {
                 hideIcon();
             }
         }
 
-		return Service.START_STICKY;
-	}
+        return Service.START_STICKY;
+    }
 
-	@Override
-	public void onDestroy() {
+    @Override
+    public void onDestroy() {
 
         Log.d("kraken", "Service onDestroy");
 
-		stopService();
-		super.onDestroy();
-	}
+        stopService();
+        super.onDestroy();
+    }
 
-	private void stopService() {
-		if (m_bIsRunning) {
-			monitorStop();
-			m_bIsRunning = false;
-		}
+    private void stopService() {
+        if (m_bIsRunning) {
+            monitorStop();
+            m_bIsRunning = false;
+        }
 
-		//ServerPushManager.stopPeriodicPush();
-		RetroServerPushManager.stopPeriodicPush();
-		setActivityHandler(null);
-		hideIcon();
-		stopSelf();
-	}
+        //ServerPushManager.stopPeriodicPush();
+        RetroServerPushManager.stopPeriodicPush();
+        setActivityHandler(null);
+        hideIcon();
+        stopSelf();
+    }
 
-	public boolean isRunning() {
-		return m_bIsRunning;
-	}
+    public boolean isRunning() {
+        return m_bIsRunning;
+    }
 
-	private void monitorStart() {
+    private void monitorStart() {
 
-		System.out.println("start service");
+        System.out.println("start service");
 
 //		Handler handler = ActivityCommunicator.getHandler();
 
-		m_sensorManager = SensorManager.getInstance(this);
-		for (ISensor sensor : m_sensorManager.getEnabledSensors()) {
-			sensor.startSensor();
+        m_sensorManager = SensorManager.getInstance(this);
+        for (ISensor sensor : m_sensorManager.getEnabledSensors()) {
+            sensor.startSensor();
 //			sensor.setCallbackHandler(handler);
-		}
+        }
 
-		startAccessibilityService();
-	}
+        startAccessibilityService();
+    }
 
-	private void monitorStop() {
-		System.out.println("stop service");
-		for (ISensor sensor : m_sensorManager.getEnabledSensors()) {
-			sensor.stopSensor();
-		}
-	}
+    private void monitorStop() {
+        System.out.println("stop service");
+        for (ISensor sensor : m_sensorManager.getEnabledSensors()) {
+            sensor.stopSensor();
+        }
+    }
 
-	@Override
-	public boolean onUnbind(Intent intent) {
+    @Override
+    public boolean onUnbind(Intent intent) {
 
         Log.d("kraken", "Service onUnbind");
 
-		setActivityHandler(null);
-		return super.onUnbind(intent);
-	}
+        setActivityHandler(null);
+        return super.onUnbind(intent);
+    }
 
-	@Override
-	public IBinder onBind(Intent intent) {
+    @Override
+    public IBinder onBind(Intent intent) {
 
         Log.d("kraken", "Service onBind");
 
-		// Object obj = intent.getExtras().get("messenger");
-		// if (obj != null && obj instanceof Messenger)
-		// setActivityHandler((Messenger) obj);
+        // Object obj = intent.getExtras().get("messenger");
+        // if (obj != null && obj instanceof Messenger)
+        // setActivityHandler((Messenger) obj);
 
-		return m_Messenger.getBinder();
-		// return m_serviceBinder;
-	}
+        return m_Messenger.getBinder();
+        // return m_serviceBinder;
+    }
 
 //	public static ObjectMapper getJacksonObjectMapper() {
 //		if (m_mapper == null)
@@ -234,71 +232,71 @@ public class KrakenService extends Service implements Callback {
 //		return m_mapper;
 //	}
 
-	private void setActivityHandler(Messenger messenger) {
-		ActivityCommunicator.setMessenger(messenger, this);
-	}
+    private void setActivityHandler(Messenger messenger) {
+        ActivityCommunicator.setMessenger(messenger, this);
+    }
 
-	@Override
-	public boolean handleMessage(Message msg) {
+    @Override
+    public boolean handleMessage(Message msg) {
 
-		Bundle data = msg.getData();
-		Serializable obj = data.getSerializable("command");
-		if (obj == null || !(obj instanceof ECommandType))
-			return false;
+        Bundle data = msg.getData();
+        Serializable obj = data.getSerializable("command");
+        if (obj == null || !(obj instanceof ECommandType))
+            return false;
 
-		switch ((ECommandType) obj) {
-		case SET_HANDLER:
-			Messenger messenger = (Messenger) data.getParcelable("value");
-			setActivityHandler(messenger);
-			break;
-		case START_SERVICE:
-			startService();
-			break;
-		case STOP_SERVICE:
-			stopService();
-			break;
-		case REMOVE_HANDLER:
-			setActivityHandler(null);
-			break;
-		case HIDE_ICON:
-			hideIcon();
-			break;
-		case SHOW_ICON:
-			showIcon();
-			break;
-		default:
-			return false;
-		}
-		return true;
-	}
+        switch ((ECommandType) obj) {
+            case SET_HANDLER:
+                Messenger messenger = (Messenger) data.getParcelable("value");
+                setActivityHandler(messenger);
+                break;
+            case START_SERVICE:
+                startService();
+                break;
+            case STOP_SERVICE:
+                stopService();
+                break;
+            case REMOVE_HANDLER:
+                setActivityHandler(null);
+                break;
+            case HIDE_ICON:
+                hideIcon();
+                break;
+            case SHOW_ICON:
+                showIcon();
+                break;
+            default:
+                return false;
+        }
+        return true;
+    }
 
-	public static void handleCommand(Messenger messenger, ECommandType command, Object value) {
+    public static void handleCommand(Messenger messenger, ECommandType command, Object value) {
 
-		if (messenger == null || command == null)
-			return;
+        if (messenger == null || command == null)
+            return;
 
-		Message msg = new Message();
-		Bundle bundle = new Bundle();
-		bundle.putSerializable("command", command);
+        Message msg = new Message();
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("command", command);
 
-		if (value != null) {
-			if (value instanceof String)
-				bundle.putString("value", (String) value);
-			else if (value instanceof Parcelable)
-				bundle.putParcelable("value", (Parcelable) value);
-		}
+        if (value != null) {
+            if (value instanceof String)
+                bundle.putString("value", (String) value);
+            else if (value instanceof Parcelable)
+                bundle.putParcelable("value", (Parcelable) value);
+        }
 
-		msg.setData(bundle);
-		try {
-			messenger.send(msg);
-		} catch (RemoteException e) {
-			e.printStackTrace();
-		}
-	}
+        msg.setData(bundle);
+        try {
+            messenger.send(msg);
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+    }
 
-	private void startAccessibilityService() {
-		Intent intent = new Intent(this, KrakenAccessibilityService.class);
-		startService(intent);
-	}
+    private void startAccessibilityService() {
+        Intent intent = new Intent(this, KrakenAccessibilityService.class);
+        startService(intent);
+    }
 
 }

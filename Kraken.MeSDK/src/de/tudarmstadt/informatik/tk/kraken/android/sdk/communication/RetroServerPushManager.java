@@ -21,7 +21,7 @@ import de.tudarmstadt.informatik.tk.kraken.android.sdk.api.entities.ApiMessage;
 import de.tudarmstadt.informatik.tk.kraken.android.sdk.api.entities.ApiResponse;
 import de.tudarmstadt.informatik.tk.kraken.android.sdk.interfaces.IDbSensor;
 import de.tudarmstadt.informatik.tk.kraken.android.sdk.interfaces.IDbUpdatableSensor;
-import de.tudarmstadt.informatik.tk.kraken.android.sdk.sensors.interfaces.ISensor;
+import de.tudarmstadt.informatik.tk.kraken.android.sdk.models.db.sensors.interfaces.ISensor;
 import de.tudarmstadt.informatik.tk.kraken.android.sdk.services.KrakenService;
 import retrofit.Callback;
 import retrofit.RetrofitError;

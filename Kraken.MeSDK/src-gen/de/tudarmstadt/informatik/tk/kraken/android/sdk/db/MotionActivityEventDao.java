@@ -19,7 +19,7 @@ public class MotionActivityEventDao extends AbstractDao<MotionActivityEvent, Lon
     public static final String TABLENAME = "motion_activity_event";
 
     /**
-     * Properties of entity MotionActivityEvent.<br/>
+     * Properties of entity MotionActivityEventRequest.<br/>
      * Can be used for QueryBuilder and for referencing column names.
     */
     public static class Properties {
