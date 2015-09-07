@@ -57,6 +57,11 @@ public class LightSensor extends AbstractTriggeredSensor implements SensorEventL
     }
 
     @Override
+    public void reset() {
+
+    }
+
+    @Override
     public void onSensorChanged(SensorEvent event) {
 //		float floatValue = event.values[0];
 //		if (floatValue < m_floatLastValue - MIN_DIFFERENCE || floatValue > m_floatLastValue + MIN_DIFFERENCE) {
@@ -64,7 +69,7 @@ public class LightSensor extends AbstractTriggeredSensor implements SensorEventL
 //			SensorLight sensorLight = new SensorLight();
 //			sensorLight.setAccuracy(event.accuracy);
 //			sensorLight.setValue(floatValue);
-//			handleDatabaseObject(sensorLight);
+//			handleDBEntry(sensorLight);
 //		}
     }
 }

@@ -24,6 +24,11 @@ public class AccountsReader extends AbstractPeriodicSensor implements ISensor {
     }
 
     @Override
+    public void reset() {
+
+    }
+
+    @Override
     protected void getData() {
         Account[] accounts = m_accountManager.getAccounts();
         String[] strAccountTypes = new String[accounts.length];
@@ -49,7 +54,7 @@ public class AccountsReader extends AbstractPeriodicSensor implements ISensor {
 
 //			SensorAccountsReader sensor = new SensorAccountsReader();
 //			sensor.setAccountTypes(sb.toString());
-//			handleDatabaseObject(sensor);
+//			handleDBEntry(sensor);
         }
     }
 

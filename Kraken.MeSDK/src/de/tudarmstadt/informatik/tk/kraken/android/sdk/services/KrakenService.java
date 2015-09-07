@@ -31,9 +31,10 @@ import de.tudarmstadt.informatik.tk.kraken.android.sdk.preference.PreferenceMana
 import de.tudarmstadt.informatik.tk.kraken.android.sdk.utils.DatabaseManager;
 import de.tudarmstadt.informatik.tk.kraken.sdk.R;
 
-//import de.tudarmstadt.informatik.tk.kraken.android.ui.activities.MainActivity;
 
 public class KrakenService extends Service implements Callback {
+
+    private static final String TAG = KrakenService.class.getSimpleName();
 
     // public static ScheduledExecutorService m_scheduleTaskExecutor;
 
@@ -43,7 +44,6 @@ public class KrakenService extends Service implements Callback {
     final private Messenger m_Messenger = new Messenger(new Handler(this));
 
     private SensorManager m_sensorManager;
-    //	private static ObjectMapper m_mapper;
     private PreferenceManager mPreferenceManager;
     private DatabaseManager mDatabaseManager;
 
@@ -66,14 +66,14 @@ public class KrakenService extends Service implements Callback {
     public void onCreate() {
         super.onCreate();
 
-        Log.d("kraken", "Service onCreate");
+        Log.d(TAG, "Service onCreate");
 
         m_service = this;
 
         // Init database FIRST!
-        mDatabaseManager = DatabaseManager.getInstance(this);
-
-        mPreferenceManager = PreferenceManager.getInstance(this);
+//        mDatabaseManager = DatabaseManager.getInstance(this);
+//
+//        mPreferenceManager = PreferenceManager.getInstance(this);
 
         // GcmManager.getInstance(this).registerAtCloud();
 
@@ -82,6 +82,7 @@ public class KrakenService extends Service implements Callback {
     }
 
     private void startService() {
+
         if (!m_bIsRunning) {
             m_bIsRunning = true;
             monitorStart();
@@ -98,7 +99,6 @@ public class KrakenService extends Service implements Callback {
         }
     }
 
-    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     private void showIcon() {
         //TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
         //stackBuilder.addParentStack(MainActivity.class);
@@ -139,7 +139,7 @@ public class KrakenService extends Service implements Callback {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
 
-        Log.d("kraken", "Service onStartCommand");
+        Log.d(TAG, "Service onStartCommand");
 
         if (intent != null && intent.hasExtra("showIcon")) {
             boolean showIcon = intent.getBooleanExtra("showIcon", PreferenceManager.DEFAULT_KRAKEN_SHOW_NOTIFICATION);
@@ -156,7 +156,7 @@ public class KrakenService extends Service implements Callback {
     @Override
     public void onDestroy() {
 
-        Log.d("kraken", "Service onDestroy");
+        Log.d(TAG, "Service onDestroy");
 
         stopService();
         super.onDestroy();
@@ -204,7 +204,7 @@ public class KrakenService extends Service implements Callback {
     @Override
     public boolean onUnbind(Intent intent) {
 
-        Log.d("kraken", "Service onUnbind");
+        Log.d(TAG, "Service onUnbind");
 
         setActivityHandler(null);
         return super.onUnbind(intent);
@@ -213,7 +213,7 @@ public class KrakenService extends Service implements Callback {
     @Override
     public IBinder onBind(Intent intent) {
 
-        Log.d("kraken", "Service onBind");
+        Log.d(TAG, "Service onBind");
 
         // Object obj = intent.getExtras().get("messenger");
         // if (obj != null && obj instanceof Messenger)

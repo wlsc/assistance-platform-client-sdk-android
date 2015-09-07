@@ -120,7 +120,6 @@ public enum ESensorType {
         return "de.tudarmstadt.informatik.tk.kraken.android.sdk.db.Sensor" + getSensorName().replaceAll(" ", "");
     }
 
-    @SuppressWarnings("unchecked")
     public String getServerClassName() {
         try {
             Class<? extends IDbSensor> sensor = (Class<? extends IDbSensor>) Class.forName(getFullqualifiedDatabaseClassName());

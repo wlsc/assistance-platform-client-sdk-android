@@ -131,7 +131,7 @@ public abstract class AbstractContentObserverSensor extends AbstractSensor {
 			entry.setIsDeleted(true);
 			entry.setIsNew(false);
 			entry.setIsUpdated(false);
-			handleDatabaseObject(entry, true);
+			handleDBEntry(entry, true);
 			if (!bSomethingDeleted)
 			 bSomethingDeleted = true;
 		}

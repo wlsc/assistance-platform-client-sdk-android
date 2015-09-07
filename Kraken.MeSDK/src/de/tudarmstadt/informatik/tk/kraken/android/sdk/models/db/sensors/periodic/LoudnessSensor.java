@@ -148,6 +148,11 @@ public class LoudnessSensor extends AbstractPeriodicSensor implements Callback {
     }
 
     @Override
+    public void reset() {
+
+    }
+
+    @Override
     public void startSensor() {
         m_isPaused = true;
         m_audioRecorder = new AudioRecorder(this);
@@ -286,7 +291,7 @@ public class LoudnessSensor extends AbstractPeriodicSensor implements Callback {
 //				SensorLoudness sensorLoudness = new SensorLoudness();
 //				sensorLoudness.setStartTimestamp(startTimestamp);
 //				sensorLoudness.setLoudness(calcDB(leq.value));
-//				handleDatabaseObject(sensorLoudness);
+//				handleDBEntry(sensorLoudness);
             }
         }
     }

@@ -130,7 +130,7 @@ public class LocationSensor extends AbstractTriggeredSensor implements GoogleApi
 //        sensorLocation.setLatitude(location.getLatitude());
 //        sensorLocation.setSpeed(location.getSpeed());
 //        sensorLocation.setProvider(location.getProvider());
-//        handleDatabaseObject(sensorLocation);
+//        handleDBEntry(sensorLocation);
 //        TrafficLocation.getInstance().setLatitude(location.getLatitude());
 //        TrafficLocation.getInstance().setLongitude(location.getLongitude());
     }
@@ -138,5 +138,10 @@ public class LocationSensor extends AbstractTriggeredSensor implements GoogleApi
     @Override
     public ESensorType getSensorType() {
         return ESensorType.SENSOR_LOCATION;
+    }
+
+    @Override
+    public void reset() {
+
     }
 }

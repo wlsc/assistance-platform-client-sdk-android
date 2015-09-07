@@ -42,6 +42,11 @@ public class ForegroundTrafficSensor extends AbstractTriggeredSensor {
         return null;
     }
 
+    @Override
+    public void reset() {
+
+    }
+
     /**
      * Receiver of an intent send by sendBroadcast().
      */
@@ -64,7 +69,7 @@ public class ForegroundTrafficSensor extends AbstractTriggeredSensor {
 //            sensorNetworkTraffic.setLatitude(TrafficLocation.getInstance().getLatitude());
 //            sensorNetworkTraffic.setLongitude(TrafficLocation.getInstance().getLongitude());
 //            sensorNetworkTraffic.setBackground(false);
-//            handleDatabaseObject(sensorNetworkTraffic);
+//            handleDBEntry(sensorNetworkTraffic);
 //        }
 
         }
@@ -180,7 +185,7 @@ public class ForegroundTrafficSensor extends AbstractTriggeredSensor {
 //                sensorNetworkTrafficTraffic.setLongitude(TrafficLocation.getInstance().getLongitude());
 //                sensorNetworkTrafficTraffic.setBackground(false);
 //
-//                handleDatabaseObject(sensorNetworkTrafficTraffic);
+//                handleDBEntry(sensorNetworkTrafficTraffic);
 //                break; //found a match, don't need to search anymore
 //            }
 //        }

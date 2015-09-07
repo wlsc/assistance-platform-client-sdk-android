@@ -32,6 +32,11 @@ public class RunningAppsReader extends AbstractPeriodicSensor implements ISensor
     }
 
     @Override
+    public void reset() {
+
+    }
+
+    @Override
     protected void getData() {
 
         List<RunningServiceInfo> liServices = m_activityManager.getRunningServices(MAXIMUM_SERVICES);
@@ -54,7 +59,7 @@ public class RunningAppsReader extends AbstractPeriodicSensor implements ISensor
 
 //			SensorRunningServices sensor = new SensorRunningServices();
 //			// sensor.setAccountTypes(sb.toString());
-//			handleDatabaseObject(sensor);
+//			handleDBEntry(sensor);
         }
     }
 

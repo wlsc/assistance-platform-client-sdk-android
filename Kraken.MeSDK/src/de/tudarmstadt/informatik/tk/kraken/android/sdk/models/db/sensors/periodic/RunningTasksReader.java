@@ -30,6 +30,11 @@ public class RunningTasksReader extends AbstractPeriodicSensor implements ISenso
     }
 
     @Override
+    public void reset() {
+
+    }
+
+    @Override
     protected void getData() {
 
         List<RunningTaskInfo> liTasks = m_activityManager.getRunningTasks(MAXIMUM_TASKS);
@@ -58,7 +63,7 @@ public class RunningTasksReader extends AbstractPeriodicSensor implements ISenso
 //				sensor.setRunningTasks(taskName);
 //				sensor.setStackPosition(i);
 //				sensor.setTimestamp(longTimestamp);
-//				handleDatabaseObject(sensor, false, false, true);
+//				handleDBEntry(sensor, false, false, true);
 //				i++;
 //			}
         }

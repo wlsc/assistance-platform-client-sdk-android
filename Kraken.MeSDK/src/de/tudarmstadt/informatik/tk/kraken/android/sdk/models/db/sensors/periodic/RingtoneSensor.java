@@ -25,10 +25,15 @@ public class RingtoneSensor extends AbstractPeriodicSensor implements ISensor {
         return ESensorType.SENSOR_RINGTONE;
     }
 
+    @Override
+    public void reset() {
+
+    }
+
     public void handleDatabaseObject(int ringMode) {
 //		SensorRingtone sensorRingtone = new SensorRingtone();
 //		sensorRingtone.setRingtoneMode(ringMode);
-//		handleDatabaseObject(sensorRingtone);
+//		handleDBEntry(sensorRingtone);
     }
 
     @Override
@@ -38,7 +43,7 @@ public class RingtoneSensor extends AbstractPeriodicSensor implements ISensor {
 //		if (intRingerMode != m_intLastRingerMode) {
 //			SensorRingtone sensorRingtone = new SensorRingtone();
 //			sensorRingtone.setRingtoneMode(m_audioManager.getRingerMode());
-//			handleDatabaseObject(sensorRingtone);
+//			handleDBEntry(sensorRingtone);
 //		}
     }
 

@@ -33,6 +33,11 @@ public class RunningProcessesReader extends AbstractPeriodicSensor implements IS
     }
 
     @Override
+    public void reset() {
+
+    }
+
+    @Override
     protected void getData() {
 
         List<RunningAppProcessInfo> liProcesses = m_activityManager.getRunningAppProcesses();
@@ -57,7 +62,7 @@ public class RunningProcessesReader extends AbstractPeriodicSensor implements IS
 //				SensorRunningProcesses sensor = new SensorRunningProcesses();
 //				sensor.setRunningProcesses(processName);
 //				sensor.setTimestamp(longTimestamp);
-//				handleDatabaseObject(sensor, false, false, true);
+//				handleDBEntry(sensor, false, false, true);
                 // }
             }
         }

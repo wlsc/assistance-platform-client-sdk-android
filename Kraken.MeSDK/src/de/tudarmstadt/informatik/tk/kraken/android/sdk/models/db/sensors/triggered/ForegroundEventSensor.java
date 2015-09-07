@@ -160,7 +160,7 @@ public class ForegroundEventSensor extends AbstractTriggeredSensor {
     }
 
 //    private void insertEvent(SensorForegroundEvent foregroundEvent) {
-//        handleDatabaseObject(foregroundEvent);
+//        handleDBEntry(foregroundEvent);
 //    }
 
     @Override
@@ -189,5 +189,10 @@ public class ForegroundEventSensor extends AbstractTriggeredSensor {
     @Override
     public EPushType getPushType() {
         return EPushType.PERIODIC;
+    }
+
+    @Override
+    public void reset() {
+
     }
 }

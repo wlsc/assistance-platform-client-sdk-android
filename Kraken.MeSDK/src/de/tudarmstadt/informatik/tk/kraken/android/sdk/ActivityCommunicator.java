@@ -5,11 +5,15 @@ import android.os.Bundle;
 import android.os.Message;
 import android.os.Messenger;
 import android.os.RemoteException;
+import android.util.Log;
 
+import de.tudarmstadt.informatik.tk.kraken.android.sdk.db.AccelerometerSensor;
 import de.tudarmstadt.informatik.tk.kraken.android.sdk.interfaces.IDbSensor;
 import de.tudarmstadt.informatik.tk.kraken.android.sdk.models.db.sensors.ESensorType;
 
 public class ActivityCommunicator {
+
+    private static final String TAG = ActivityCommunicator.class.getSimpleName();
 
     private static ActivityCommunicator m_instance;
     private static Messenger m_messenger;
@@ -47,10 +51,11 @@ public class ActivityCommunicator {
         IDbSensor sensor = (IDbSensor) data.getSerializable("sensorData");
         switch ((ESensorType) data.getSerializable("sensorType")) {
             case SENSOR_ACCELEROMETER:
-//			SensorAccelerometer sensorAccelerometer = (SensorAccelerometer) sensor;
-//			float f = sensorAccelerometer.getAccelerationX() * sensorAccelerometer.getAccelerationY() * sensorAccelerometer.getAccelerationZ();
-//			f = ((float) (int) (f * 100)) / 100;
-//			dataOut.putString("msg", "Accelerometer: " + f);
+                Log.d(TAG, "Processing Accelerometer sensor data...");
+                AccelerometerSensor accelerometerSensor = (AccelerometerSensor) sensor;
+                double result = accelerometerSensor.getX() * accelerometerSensor.getY() * accelerometerSensor.getZ();
+                result = ((double) (int) (result * 100)) / 100;
+                dataOut.putString("msg", "Accelerometer: " + result);
                 break;
             case SENSOR_ACTIVITY:
                 dataOut.putString("msg", "Activity");
@@ -105,6 +110,7 @@ public class ActivityCommunicator {
 //                dataOut.putString("msg","Background Network Traffic: " + strValue);
                 break;
             default:
+                Log.e(TAG, "Unknown sensor data found!");
                 dataOut.putString("msg", "Value from unknown sensor.");
                 return false;
         }
@@ -120,7 +126,7 @@ public class ActivityCommunicator {
                 m_messenger.send(msg);
             } catch (RemoteException e) {
                 m_messenger = null;
-                e.printStackTrace();
+                Log.e(TAG, "Cannot send sensor data their handler. Error", e);
             }
         }
     }

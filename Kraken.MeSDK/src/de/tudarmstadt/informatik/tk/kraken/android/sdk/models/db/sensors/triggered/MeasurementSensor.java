@@ -15,19 +15,24 @@ public class MeasurementSensor extends AbstractTriggeredSensor {
     public void startSensor() {
 //		SensorMeasurementLog measurementLog = new SensorMeasurementLog();
 //		measurementLog.setStarted(true);
-//		handleDatabaseObject(measurementLog);
+//		handleDBEntry(measurementLog);
 //		m_bIsRunning = true;
     }
 
     public void stopSensor() {
 //		SensorMeasurementLog measurementLog = new SensorMeasurementLog();
 //		measurementLog.setStarted(false);
-//		handleDatabaseObject(measurementLog);
+//		handleDBEntry(measurementLog);
 //		m_bIsRunning = false;
     }
 
     @Override
     public ESensorType getSensorType() {
         return ESensorType.MEASUREMENT_LOG;
+    }
+
+    @Override
+    public void reset() {
+
     }
 }

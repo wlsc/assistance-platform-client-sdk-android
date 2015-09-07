@@ -40,7 +40,7 @@ public class ConnectionSensor extends AbstractTriggeredSensor {
 //				RetroServerPushManager.getInstance(context).setWlanConnected(mobWifiInfo.getState() == NetworkInfo.State.CONNECTED);
 //			}
 //
-//			handleDatabaseObject(sensorConnection);
+//			handleDBEntry(sensorConnection);
         }
 
     }
@@ -77,5 +77,10 @@ public class ConnectionSensor extends AbstractTriggeredSensor {
     @Override
     public ESensorType getSensorType() {
         return ESensorType.SENSOR_CONNECTION;
+    }
+
+    @Override
+    public void reset() {
+
     }
 }

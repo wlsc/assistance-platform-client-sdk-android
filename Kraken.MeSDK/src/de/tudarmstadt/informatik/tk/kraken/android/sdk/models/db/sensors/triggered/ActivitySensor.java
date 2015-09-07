@@ -124,6 +124,11 @@ public class ActivitySensor extends AbstractTriggeredSensor implements GoogleApi
         return ESensorType.SENSOR_ACTIVITY;
     }
 
+    @Override
+    public void reset() {
+
+    }
+
     public void sendData(List<DetectedActivity> liActivities) {
 //        for (int i = 0; i < liActivities.size(); i++) {
 //            DetectedActivity act = liActivities.get(i);
@@ -132,7 +137,7 @@ public class ActivitySensor extends AbstractTriggeredSensor implements GoogleApi
 //            sensorAct.setType(act.getType());
 //            sensorAct.setConfidence(act.getConfidence());
 //            sensorAct.setRanking(i);
-//            handleDatabaseObject(sensorAct);
+//            handleDBEntry(sensorAct);
 //        }
     }
 
@@ -140,6 +145,6 @@ public class ActivitySensor extends AbstractTriggeredSensor implements GoogleApi
 //        SensorActivity sensorAct = new SensorActivity();
 //        sensorAct.setType(act.getType());
 //        sensorAct.setConfidence(act.getConfidence());
-//        handleDatabaseObject(sensorAct);
+//        handleDBEntry(sensorAct);
     }
 }

@@ -35,7 +35,7 @@ public class BackgroundTrafficSensor extends AbstractPeriodicSensor implements I
         //initial Data
 //        SensorNetworkTraffic sensorNetworkTraffic = new SensorNetworkTraffic();
 //        sensorNetworkTraffic.setAppName(ForegroundTrafficSensor.EVENT_START_KRAKEN);
-//        handleDatabaseObject(sensorNetworkTraffic);
+//        handleDBEntry(sensorNetworkTraffic);
         getData();
     }
 
@@ -65,7 +65,7 @@ public class BackgroundTrafficSensor extends AbstractPeriodicSensor implements I
 //            sensorNetworkTraffic.setBackground(true);
 //            sensorNetworkTraffic.setLatitude(TrafficLocation.getInstance().getLatitude());
 //            sensorNetworkTraffic.setLongitude(TrafficLocation.getInstance().getLongitude());
-//            handleDatabaseObject(sensorNetworkTraffic);
+//            handleDBEntry(sensorNetworkTraffic);
 //        }
     }
 
@@ -87,5 +87,10 @@ public class BackgroundTrafficSensor extends AbstractPeriodicSensor implements I
     @Override
     public EPushType getPushType() {
         return EPushType.WLAN_ONLY;
+    }
+
+    @Override
+    public void reset() {
+
     }
 }

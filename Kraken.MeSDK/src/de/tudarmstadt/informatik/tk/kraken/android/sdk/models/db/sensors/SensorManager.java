@@ -46,12 +46,11 @@ public class SensorManager {
         // works
         AccelerometerSensor accelerometerSensor = new AccelerometerSensor(context);
         m_liSensors.add(accelerometerSensor);
-        //ServerPushManager.getInstance(context).setPushType(accelerometerSensor, accelerometerSensor.getPushType());
         RetroServerPushManager.getInstance(context).setPushType(accelerometerSensor, accelerometerSensor.getPushType());
 
         ActivitySensor activitySensor = new ActivitySensor(context);
         m_liSensors.add(activitySensor);
-        //ServerPushManager.getInstance(context).setPushType(activitySensor, activitySensor.getPushType());
+
         RetroServerPushManager.getInstance(context).setPushType(activitySensor, activitySensor.getPushType());
 
         // works

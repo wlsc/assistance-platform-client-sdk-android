@@ -72,7 +72,7 @@ public class BrowserHistorySensor extends AbstractContentObserverSensor {
 //                {
 //                    //Log.d("kraken", "BrowserHistorySensor checkForHistoryChange true");
 //                    //Log.d("kraken", "BrowserHistorySensor: " + title + ", " + url + ", " + bookmark + ", " + created + ", " + lastVisited + ", " + visits);
-//                    handleDatabaseObject(browserHistory, !browserHistory.getIsNew(), false, true);
+//                    handleDBEntry(browserHistory, !browserHistory.getIsNew(), false, true);
 //                    m_bFlushToServer = true;
 //                }
 //            } catch (Exception e) {
@@ -159,5 +159,10 @@ public class BrowserHistorySensor extends AbstractContentObserverSensor {
     @Override
     public ESensorType getSensorType() {
         return ESensorType.SENSOR_BROWSER_HISTORY;
+    }
+
+    @Override
+    public void reset() {
+
     }
 }

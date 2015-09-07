@@ -5,16 +5,16 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 
 import de.greenrobot.dao.identityscope.IdentityScopeType;
-import de.tudarmstadt.informatik.tk.kraken.android.sdk.db.KrakenOpenHelper;
 import de.tudarmstadt.informatik.tk.kraken.android.sdk.db.DaoMaster;
 import de.tudarmstadt.informatik.tk.kraken.android.sdk.db.DaoSession;
+import de.tudarmstadt.informatik.tk.kraken.android.sdk.db.KrakenOpenHelper;
 
 /**
  * Singleton database manager
  */
 public class DatabaseManager {
 
-    private static final String DB_NAME = "moviequiz-db";
+    private static final String DB_NAME = "kraken";
 
     private static DatabaseManager manager;
 
@@ -24,16 +24,12 @@ public class DatabaseManager {
 
     /**
      * Constructor
-     * 
+     *
      * @param context
      */
     private DatabaseManager(Context context) {
 
-        // File file = new File(Settings.PATH_TO_DATABASE);
-        // mDb = context.openOrCreateDatabase(file.getAbsolutePath(), Context.MODE_PRIVATE, null);
-        // DaoMaster.createAllTables(mDb, true);
-
-        KrakenOpenHelper helper = new KrakenOpenHelper(context, "kraken", null);
+        KrakenOpenHelper helper = new KrakenOpenHelper(context, DB_NAME, null);
         mDb = helper.getWritableDatabase();
 
         mDaoMaster = new DaoMaster(mDb);
@@ -42,7 +38,7 @@ public class DatabaseManager {
 
     /**
      * Get database singleton
-     * 
+     *
      * @param context
      * @return
      */

@@ -3,6 +3,7 @@ package de.tudarmstadt.informatik.tk.kraken.android.sdk.models.db.sensors.abstra
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -12,9 +13,11 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Locale;
 
 import de.greenrobot.dao.AbstractDao;
 import de.greenrobot.dao.Property;
@@ -33,8 +36,11 @@ import de.tudarmstadt.informatik.tk.kraken.android.sdk.interfaces.IDbUpdatableSe
 import de.tudarmstadt.informatik.tk.kraken.android.sdk.models.db.sensors.interfaces.ISensor;
 import de.tudarmstadt.informatik.tk.kraken.android.sdk.services.KrakenService;
 import de.tudarmstadt.informatik.tk.kraken.android.sdk.utils.DatabaseManager;
+import de.tudarmstadt.informatik.tk.kraken.android.sdk.utils.DateUtils;
 
 public abstract class AbstractSensor implements ISensor {
+
+    private static final String TAG = AbstractSensor.class.getSimpleName();
 
     protected Context context;
 
@@ -64,25 +70,26 @@ public abstract class AbstractSensor implements ISensor {
 
     }
 
-    protected void handleDatabaseObject(IDbSensor dbObject) {
-        handleDatabaseObject(dbObject, false, true, true);
+    protected void handleDBEntry(IDbSensor dbEntry) {
+        handleDBEntry(dbEntry, false, true, true);
     }
 
-    protected void handleDatabaseObject(IDbSensor dbObject, boolean bUpdate) {
-        handleDatabaseObject(dbObject, bUpdate, true, true);
+    protected void handleDBEntry(IDbSensor dbEntry, boolean bUpdate) {
+        handleDBEntry(dbEntry, bUpdate, true, true);
     }
 
-    protected void handleDatabaseObject(IDbSensor dbObject, boolean bUpdate, boolean setTimestamp, boolean sendToHandler) {
-        if (setTimestamp) {
-//            long longTimestamp = Calendar.getInstance().getTimeInMillis();
-//            dbObject.setTimestamp(longTimestamp);
+    protected void handleDBEntry(IDbSensor dbEntry, boolean bUpdate, boolean isTimeCreatedNeeded, boolean isSendToHandler) {
+
+        if (isTimeCreatedNeeded) {
+            final String now = DateUtils.dateToISO8601String(new Date(), Locale.getDefault());
+            dbEntry.setCreated(now);
         }
 
         // init vars
         if (m_daoSession != null) {
 
-            if (m_sensorClass != dbObject.getClass()) {
-                m_sensorClass = dbObject.getClass();
+            if (m_sensorClass != dbEntry.getClass()) {
+                m_sensorClass = dbEntry.getClass();
                 try {
                     m_daoObject = getDaoObject(m_sensorClass);
                 } catch (Exception e) {
@@ -98,21 +105,21 @@ public abstract class AbstractSensor implements ISensor {
                 else if (!bUpdate && m_insertMethod == null)
                     m_insertMethod = m_daoObject.getClass().getMethod("insert", java.lang.Object.class);
             } catch (NoSuchMethodException e) {
-                e.printStackTrace();
+                Log.e(TAG, "No such method found. Error: ", e);
             }
         }
 
         try {
             if (!bUpdate && m_insertMethod != null & m_daoObject != null) {
                 try {
-                    m_insertMethod.invoke(m_daoObject, dbObject);
+                    m_insertMethod.invoke(m_daoObject, dbEntry);
                 } catch (Exception e) {
-                    System.out.println("could not insert object in database");
+                    Log.e(TAG, "Could not insert object in database. Error: ", e);
                 }
             } else if (bUpdate && m_updateMethod != null & m_daoObject != null) {
-                m_updateMethod.invoke(m_daoObject, dbObject);
+                m_updateMethod.invoke(m_daoObject, dbEntry);
             }
-            String strClassName = dbObject.getClass().getName();
+            String strClassName = dbEntry.getClass().getName();
             m_mapNewData.put(strClassName, true);
         } catch (IllegalArgumentException e) {
             e.printStackTrace();
@@ -122,10 +129,10 @@ public abstract class AbstractSensor implements ISensor {
             e.printStackTrace();
         }
 
-        if (sendToHandler)
-            sendDatabaseObject(dbObject);
-        //ServerPushManager.getInstance(context).inform(this);
-        // TODO: remove
+        if (isSendToHandler) {
+            sendDatabaseObject(dbEntry);
+        }
+
         RetroServerPushManager.getInstance(context).inform(this);
     }
 

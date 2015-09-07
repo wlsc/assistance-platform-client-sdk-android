@@ -99,7 +99,7 @@ public class ContactsSensor extends AbstractContentObserverSensor {
 //            try {
 //				if (checkForContactChange(allExistingContacts, sensorContact))
 //				{
-//					handleDatabaseObject(sensorContact, !sensorContact.getIsNew());
+//					handleDBEntry(sensorContact, !sensorContact.getIsNew());
 //					m_bFlushToServer = true;
 //				}
 //			} catch (Exception e) {
@@ -153,7 +153,7 @@ public class ContactsSensor extends AbstractContentObserverSensor {
 //			try {
 //				if (checkForContactMailChange(mapExistingMails, sensorContactMail))
 //				{
-//					handleDatabaseObject(sensorContactMail, !sensorContactMail.getIsNew(), true, false);
+//					handleDBEntry(sensorContactMail, !sensorContactMail.getIsNew(), true, false);
 //					m_bFlushToServer = true;
 //				}
 //			} catch (Exception e) {
@@ -207,7 +207,7 @@ public class ContactsSensor extends AbstractContentObserverSensor {
 //
 //			try {
 //				if (checkForContactNumberChange(mapExistingNumbers, sensorContactNumber)) {
-//					handleDatabaseObject(sensorContactNumber, !sensorContactNumber.getIsNew(), true, false);
+//					handleDBEntry(sensorContactNumber, !sensorContactNumber.getIsNew(), true, false);
 //					m_bFlushToServer = true;
 //				}
 //			} catch (Exception e) {
@@ -348,5 +348,10 @@ public class ContactsSensor extends AbstractContentObserverSensor {
     @Override
     public EPushType getPushType() {
         return EPushType.MANUALLY_WLAN_ONLY;
+    }
+
+    @Override
+    public void reset() {
+
     }
 }

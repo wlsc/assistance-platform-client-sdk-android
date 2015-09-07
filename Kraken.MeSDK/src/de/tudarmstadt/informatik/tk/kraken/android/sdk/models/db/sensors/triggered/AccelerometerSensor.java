@@ -27,6 +27,11 @@ public class AccelerometerSensor extends AbstractTriggeredSensor implements Sens
     private float m_floatSumAccelerationX = 0;
     private float m_floatSumAccelerationY = 0;
     private float m_floatSumAccelerationZ = 0;
+
+    private double x;
+    private double y;
+    private double z;
+
     private int m_intAccuracy = 0;
     private int m_intNumValues = 0;
 
@@ -39,7 +44,7 @@ public class AccelerometerSensor extends AbstractTriggeredSensor implements Sens
 
     @Override
     public void startSensor() {
-        resetSeries();
+        reset();
         m_sensorManager.registerListener(this, m_accelerometerSensor, SENSOR_DELAY_BETWEEN_TWO_EVENTS);
         m_bIsRunning = true;
     }
@@ -53,13 +58,18 @@ public class AccelerometerSensor extends AbstractTriggeredSensor implements Sens
     @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
         sendCurrentSeries();
-        resetSeries();
+        reset();
         m_intAccuracy = accuracy;
     }
 
     @Override
     public void onSensorChanged(SensorEvent event) {
         boolean bValueAdded = addNewValueToAverage(event, false);
+
+        x = event.values[0];
+        y = event.values[1];
+        z = event.values[2];
+
         if (!bValueAdded) {
             sendCurrentSeries();
             addNewValueToAverage(event, true);
@@ -84,7 +94,9 @@ public class AccelerometerSensor extends AbstractTriggeredSensor implements Sens
         return false;
     }
 
-    private void resetSeries() {
+    @Override
+    public void reset() {
+
         m_longStartTimestamp = 0;
         m_floatSumAccelerationX = 0;
         m_floatSumAccelerationY = 0;
@@ -100,7 +112,7 @@ public class AccelerometerSensor extends AbstractTriggeredSensor implements Sens
 //			sensorAcc.setAccelerationX(m_floatSumAccelerationX / m_intNumValues);
 //			sensorAcc.setAccelerationY(m_floatSumAccelerationY / m_intNumValues);
 //			sensorAcc.setAccelerationZ(m_floatSumAccelerationZ / m_intNumValues);
-//			handleDatabaseObject(sensorAcc);
+//			handleDBEntry(sensorAcc);
         }
 
     }

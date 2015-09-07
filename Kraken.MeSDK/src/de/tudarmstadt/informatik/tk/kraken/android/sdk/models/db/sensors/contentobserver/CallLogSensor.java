@@ -23,6 +23,11 @@ public class CallLogSensor extends AbstractContentObserverSensor {
     }
 
     @Override
+    public void reset() {
+
+    }
+
+    @Override
     public void startSensor() {
         m_bIsRunning = true;
         Thread thread = new Thread(new Runnable() {
@@ -71,7 +76,7 @@ public class CallLogSensor extends AbstractContentObserverSensor {
 //			callLog.setIsNew(true);
 //			callLog.setIsDeleted(false);
 //			callLog.setIsUpdated(false);
-//			handleDatabaseObject(callLog, false, true, false);
+//			handleDBEntry(callLog, false, true, false);
 //		}
 //		cur.close();
 

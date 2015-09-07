@@ -22,6 +22,11 @@ public class AlarmClockReader extends AbstractPeriodicSensor implements ISensor 
     }
 
     @Override
+    public void reset() {
+
+    }
+
+    @Override
     protected void getData() {
         // TODO Auto-generated method stub
 

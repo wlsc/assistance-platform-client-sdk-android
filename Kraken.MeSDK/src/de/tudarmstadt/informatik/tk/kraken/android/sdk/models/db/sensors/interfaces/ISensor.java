@@ -56,4 +56,5 @@ public interface ISensor {
 
     void setDaoSession(DaoSession daoSession);
 
+    void reset();
 }

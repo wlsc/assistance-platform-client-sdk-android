@@ -30,6 +30,11 @@ public class RunningServicesReader extends AbstractPeriodicSensor implements ISe
         return ESensorType.ONE_TIME_SENSOR_RUNNING_SERVICES;
     }
 
+    @Override
+    public void reset() {
+
+    }
+
     @SuppressWarnings("unused")
     @Override
     protected void getData() {
@@ -54,7 +59,7 @@ public class RunningServicesReader extends AbstractPeriodicSensor implements ISe
 
 //			SensorRunningServices sensor = new SensorRunningServices();
 //			// sensor.setAccountTypes(sb.toString());
-//			handleDatabaseObject(sensor);
+//			handleDBEntry(sensor);
         }
     }
 

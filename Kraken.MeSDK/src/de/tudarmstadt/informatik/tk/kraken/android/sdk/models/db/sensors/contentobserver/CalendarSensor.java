@@ -46,6 +46,11 @@ public class CalendarSensor extends AbstractContentObserverSensor {
         return ESensorType.SENSOR_CALENDAR;
     }
 
+    @Override
+    public void reset() {
+
+    }
+
     protected void syncData() {
         // optional selection
         // String selection = null;
@@ -101,7 +106,7 @@ public class CalendarSensor extends AbstractContentObserverSensor {
 //			try {
 //				if (checkForEventChange(allExistingEvents, event)) {
 //                    //Log.d("kraken", "checkForEventChange: TRUE " + event.getTitle());
-//					handleDatabaseObject(event, !event.getIsNew(), true, false);
+//					handleDBEntry(event, !event.getIsNew(), true, false);
 //					m_bFlushToServer = true;
 //				}
 //			} catch (Exception e) {
@@ -161,7 +166,7 @@ public class CalendarSensor extends AbstractContentObserverSensor {
 //				try {
 //					if (checkForReminderChange(mapExistingReminders, reminder)) {
 //						// TODO: Check Set To Handler (looper...)
-//						handleDatabaseObject(reminder, !reminder.getIsNew(), true, false);
+//						handleDBEntry(reminder, !reminder.getIsNew(), true, false);
 //						m_bFlushToServer = true;
 //					}
 //				} catch (Exception e) {
