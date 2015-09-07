@@ -43,7 +43,7 @@ public class KrakenDatabaseGenerator {
 		user.addStringProperty("primaryEmail").notNull();
 		user.addStringProperty("lastLogin");
 		user.addStringProperty("joinedSince");
-		user.addStringProperty("created");
+		user.addStringProperty("created").notNull();
 		
 		// ----- Social user profile scheme -----
 		Entity socialProfile = schema.addEntity("UserSocialProfile");
@@ -54,13 +54,35 @@ public class KrakenDatabaseGenerator {
 		socialProfile.addStringProperty("lastname");
 		socialProfile.addStringProperty("email");
 		socialProfile.addStringProperty("updated");
-		socialProfile.addStringProperty("created");
+		socialProfile.addStringProperty("created").notNull();
 		
 		Property socialProfileFKUserProperty = socialProfile.addLongProperty("user_id").notNull().index().getProperty();
 		socialProfile.addToOne(user, socialProfileFKUserProperty);
 		user.addToMany(socialProfile, socialProfileFKUserProperty);
 		
+		// ----- Login information scheme -----
+		Entity login = schema.addEntity("Login");
+		login.setTableName("login");
+		login.addIdProperty().notNull().primaryKey().autoincrement().index();
+		login.addStringProperty("token").notNull().index();
+		login.addStringProperty("server_device_id");
+		login.addStringProperty("last_email").notNull();
+		login.addStringProperty("created").notNull();
 		
+		// ----- Device scheme -----
+		Entity device = schema.addEntity("Device");
+		device.setTableName("device");
+		device.addIdProperty().notNull().primaryKey().autoincrement().index();
+		device.addStringProperty("device_identifier");
+		device.addStringProperty("os");
+		device.addStringProperty("os_version");
+		device.addStringProperty("brand");
+		device.addStringProperty("model");
+		device.addStringProperty("created").notNull();
+		
+		Property deviceFKLoginProperty = device.addLongProperty("device_id").notNull().index().getProperty();
+		device.addToOne(login, deviceFKLoginProperty);
+		login.addToMany(device, deviceFKLoginProperty);
 		
 		// ****************************************
 		// ------------ COMMON SENSORS ------------

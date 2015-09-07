@@ -54,7 +54,7 @@ public class UserDao extends AbstractDao<User, Long> {
                 "\"PRIMARY_EMAIL\" TEXT NOT NULL ," + // 3: primaryEmail
                 "\"LAST_LOGIN\" TEXT," + // 4: lastLogin
                 "\"JOINED_SINCE\" TEXT," + // 5: joinedSince
-                "\"CREATED\" TEXT);"); // 6: created
+                "\"CREATED\" TEXT NOT NULL );"); // 6: created
         // Add Indexes
         db.execSQL("CREATE INDEX " + constraint + "IDX_user__id ON user" +
                 " (\"_id\");");
@@ -92,11 +92,7 @@ public class UserDao extends AbstractDao<User, Long> {
         if (joinedSince != null) {
             stmt.bindString(6, joinedSince);
         }
- 
-        String created = entity.getCreated();
-        if (created != null) {
-            stmt.bindString(7, created);
-        }
+        stmt.bindString(7, entity.getCreated());
     }
 
     @Override
@@ -121,7 +117,7 @@ public class UserDao extends AbstractDao<User, Long> {
             cursor.getString(offset + 3), // primaryEmail
             cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4), // lastLogin
             cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5), // joinedSince
-            cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6) // created
+            cursor.getString(offset + 6) // created
         );
         return entity;
     }
@@ -135,7 +131,7 @@ public class UserDao extends AbstractDao<User, Long> {
         entity.setPrimaryEmail(cursor.getString(offset + 3));
         entity.setLastLogin(cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4));
         entity.setJoinedSince(cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5));
-        entity.setCreated(cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6));
+        entity.setCreated(cursor.getString(offset + 6));
      }
     
     /** @inheritdoc */

@@ -61,11 +61,13 @@ public class UserSocialProfileDao extends AbstractDao<UserSocialProfile, Long> {
                 "\"LASTNAME\" TEXT," + // 3: lastname
                 "\"EMAIL\" TEXT," + // 4: email
                 "\"UPDATED\" TEXT," + // 5: updated
-                "\"CREATED\" TEXT," + // 6: created
+                "\"CREATED\" TEXT NOT NULL ," + // 6: created
                 "\"USER_ID\" INTEGER NOT NULL );"); // 7: user_id
         // Add Indexes
         db.execSQL("CREATE INDEX " + constraint + "IDX_user_social_profile__id ON user_social_profile" +
                 " (\"_id\");");
+        db.execSQL("CREATE INDEX " + constraint + "IDX_user_social_profile_USER_ID ON user_social_profile" +
+                " (\"USER_ID\");");
     }
 
     /** Drops the underlying database table. */
@@ -104,11 +106,7 @@ public class UserSocialProfileDao extends AbstractDao<UserSocialProfile, Long> {
         if (updated != null) {
             stmt.bindString(6, updated);
         }
- 
-        String created = entity.getCreated();
-        if (created != null) {
-            stmt.bindString(7, created);
-        }
+        stmt.bindString(7, entity.getCreated());
         stmt.bindLong(8, entity.getUser_id());
     }
 
@@ -134,7 +132,7 @@ public class UserSocialProfileDao extends AbstractDao<UserSocialProfile, Long> {
             cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // lastname
             cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4), // email
             cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5), // updated
-            cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6), // created
+            cursor.getString(offset + 6), // created
             cursor.getLong(offset + 7) // user_id
         );
         return entity;
@@ -149,7 +147,7 @@ public class UserSocialProfileDao extends AbstractDao<UserSocialProfile, Long> {
         entity.setLastname(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
         entity.setEmail(cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4));
         entity.setUpdated(cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5));
-        entity.setCreated(cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6));
+        entity.setCreated(cursor.getString(offset + 6));
         entity.setUser_id(cursor.getLong(offset + 7));
      }
     

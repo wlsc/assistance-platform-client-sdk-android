@@ -19,6 +19,13 @@ public class DBKrakenOpenHelper extends DaoMaster.OpenHelper {
     }
 
     @Override
+    public void onCreate(SQLiteDatabase db) {
+        super.onCreate(db);
+
+        DaoMaster.createAllTables(db, true);
+    }
+
+    @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 
         Log.d(TAG, "onUpgrade from version " + oldVersion + " to" + newVersion);
