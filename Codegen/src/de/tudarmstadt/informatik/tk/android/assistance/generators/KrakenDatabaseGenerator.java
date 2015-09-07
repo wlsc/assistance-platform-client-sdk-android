@@ -1,4 +1,4 @@
-package de.tu_darmstadt.tk.android.assistance.generators;
+package de.tudarmstadt.informatik.tk.android.assistance.generators;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -12,7 +12,7 @@ import de.greenrobot.daogenerator.DaoGenerator;
 import de.greenrobot.daogenerator.Entity;
 import de.greenrobot.daogenerator.Property;
 import de.greenrobot.daogenerator.Schema;
-import de.tu_darmstadt.tk.android.assistance.Config;
+import de.tudarmstadt.informatik.tk.android.assistance.Config;
 
 /**
  * @author unknown, Wladimir Schmidt (wlsc.dev@gmail.com)
@@ -83,6 +83,14 @@ public class KrakenDatabaseGenerator {
 		Property deviceFKLoginProperty = device.addLongProperty("login_id").notNull().index().getProperty();
 		device.addToOne(login, deviceFKLoginProperty);
 		login.addToMany(device, deviceFKLoginProperty);
+		
+		// ----- Module installation scheme -----
+//		Entity module = schema.addEntity("Module");
+//		module.setTableName("module");
+//		module.addIdProperty().notNull().primaryKey().autoincrement().index();
+//		module.addStringProperty("token").notNull().index();
+		
+		
 		
 		// ****************************************
 		// ------------ COMMON SENSORS ------------

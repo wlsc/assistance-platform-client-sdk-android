@@ -1,4 +1,4 @@
-package de.tu_darmstadt.tk.android.assistance.generators;
+package de.tudarmstadt.informatik.tk.android.assistance.generators;
 /**
  * 
  */
@@ -10,7 +10,7 @@ import de.greenrobot.daogenerator.DaoGenerator;
 import de.greenrobot.daogenerator.Entity;
 import de.greenrobot.daogenerator.Property;
 import de.greenrobot.daogenerator.Schema;
-import de.tu_darmstadt.tk.android.assistance.Config;
+import de.tudarmstadt.informatik.tk.android.assistance.Config;
 
 /**
  * @author Wladimir Schmidt (wlsc.dev@gmail.com)
