@@ -7,14 +7,14 @@ import android.database.sqlite.SQLiteDatabase;
 import de.greenrobot.dao.identityscope.IdentityScopeType;
 import de.tudarmstadt.informatik.tk.kraken.android.sdk.db.DaoMaster;
 import de.tudarmstadt.informatik.tk.kraken.android.sdk.db.DaoSession;
-import de.tudarmstadt.informatik.tk.kraken.android.sdk.db.KrakenOpenHelper;
+import de.tudarmstadt.informatik.tk.kraken.android.sdk.db.DBKrakenOpenHelper;
 
 /**
  * Singleton database manager
  */
 public class DatabaseManager {
 
-    private static final String DB_NAME = "kraken";
+    private static final String DB_NAME = "assistance.sqlite";
 
     private static DatabaseManager manager;
 
@@ -29,7 +29,7 @@ public class DatabaseManager {
      */
     private DatabaseManager(Context context) {
 
-        KrakenOpenHelper helper = new KrakenOpenHelper(context, DB_NAME, null);
+        DBKrakenOpenHelper helper = new DBKrakenOpenHelper(context, DB_NAME, null);
         mDb = helper.getWritableDatabase();
 
         mDaoMaster = new DaoMaster(mDb);

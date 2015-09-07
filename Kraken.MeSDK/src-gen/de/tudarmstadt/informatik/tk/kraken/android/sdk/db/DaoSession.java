@@ -9,6 +9,8 @@ import de.greenrobot.dao.AbstractDaoSession;
 import de.greenrobot.dao.identityscope.IdentityScopeType;
 import de.greenrobot.dao.internal.DaoConfig;
 
+import de.tudarmstadt.informatik.tk.kraken.android.sdk.db.User;
+import de.tudarmstadt.informatik.tk.kraken.android.sdk.db.UserSocialProfile;
 import de.tudarmstadt.informatik.tk.kraken.android.sdk.db.PositionSensor;
 import de.tudarmstadt.informatik.tk.kraken.android.sdk.db.GyroscopeSensor;
 import de.tudarmstadt.informatik.tk.kraken.android.sdk.db.AccelerometerSensor;
@@ -21,6 +23,8 @@ import de.tudarmstadt.informatik.tk.kraken.android.sdk.db.LoudnessEvent;
 import de.tudarmstadt.informatik.tk.kraken.android.sdk.db.MagneticFieldUncalibratedSensor;
 import de.tudarmstadt.informatik.tk.kraken.android.sdk.db.GyroscopeUncalibratedSensor;
 
+import de.tudarmstadt.informatik.tk.kraken.android.sdk.db.UserDao;
+import de.tudarmstadt.informatik.tk.kraken.android.sdk.db.UserSocialProfileDao;
 import de.tudarmstadt.informatik.tk.kraken.android.sdk.db.PositionSensorDao;
 import de.tudarmstadt.informatik.tk.kraken.android.sdk.db.GyroscopeSensorDao;
 import de.tudarmstadt.informatik.tk.kraken.android.sdk.db.AccelerometerSensorDao;
@@ -42,6 +46,8 @@ import de.tudarmstadt.informatik.tk.kraken.android.sdk.db.GyroscopeUncalibratedS
  */
 public class DaoSession extends AbstractDaoSession {
 
+    private final DaoConfig userDaoConfig;
+    private final DaoConfig userSocialProfileDaoConfig;
     private final DaoConfig positionSensorDaoConfig;
     private final DaoConfig gyroscopeSensorDaoConfig;
     private final DaoConfig accelerometerSensorDaoConfig;
@@ -54,6 +60,8 @@ public class DaoSession extends AbstractDaoSession {
     private final DaoConfig magneticFieldUncalibratedSensorDaoConfig;
     private final DaoConfig gyroscopeUncalibratedSensorDaoConfig;
 
+    private final UserDao userDao;
+    private final UserSocialProfileDao userSocialProfileDao;
     private final PositionSensorDao positionSensorDao;
     private final GyroscopeSensorDao gyroscopeSensorDao;
     private final AccelerometerSensorDao accelerometerSensorDao;
@@ -69,6 +77,12 @@ public class DaoSession extends AbstractDaoSession {
     public DaoSession(SQLiteDatabase db, IdentityScopeType type, Map<Class<? extends AbstractDao<?, ?>>, DaoConfig>
             daoConfigMap) {
         super(db);
+
+        userDaoConfig = daoConfigMap.get(UserDao.class).clone();
+        userDaoConfig.initIdentityScope(type);
+
+        userSocialProfileDaoConfig = daoConfigMap.get(UserSocialProfileDao.class).clone();
+        userSocialProfileDaoConfig.initIdentityScope(type);
 
         positionSensorDaoConfig = daoConfigMap.get(PositionSensorDao.class).clone();
         positionSensorDaoConfig.initIdentityScope(type);
@@ -103,6 +117,8 @@ public class DaoSession extends AbstractDaoSession {
         gyroscopeUncalibratedSensorDaoConfig = daoConfigMap.get(GyroscopeUncalibratedSensorDao.class).clone();
         gyroscopeUncalibratedSensorDaoConfig.initIdentityScope(type);
 
+        userDao = new UserDao(userDaoConfig, this);
+        userSocialProfileDao = new UserSocialProfileDao(userSocialProfileDaoConfig, this);
         positionSensorDao = new PositionSensorDao(positionSensorDaoConfig, this);
         gyroscopeSensorDao = new GyroscopeSensorDao(gyroscopeSensorDaoConfig, this);
         accelerometerSensorDao = new AccelerometerSensorDao(accelerometerSensorDaoConfig, this);
@@ -115,6 +131,8 @@ public class DaoSession extends AbstractDaoSession {
         magneticFieldUncalibratedSensorDao = new MagneticFieldUncalibratedSensorDao(magneticFieldUncalibratedSensorDaoConfig, this);
         gyroscopeUncalibratedSensorDao = new GyroscopeUncalibratedSensorDao(gyroscopeUncalibratedSensorDaoConfig, this);
 
+        registerDao(User.class, userDao);
+        registerDao(UserSocialProfile.class, userSocialProfileDao);
         registerDao(PositionSensor.class, positionSensorDao);
         registerDao(GyroscopeSensor.class, gyroscopeSensorDao);
         registerDao(AccelerometerSensor.class, accelerometerSensorDao);
@@ -129,6 +147,8 @@ public class DaoSession extends AbstractDaoSession {
     }
     
     public void clear() {
+        userDaoConfig.getIdentityScope().clear();
+        userSocialProfileDaoConfig.getIdentityScope().clear();
         positionSensorDaoConfig.getIdentityScope().clear();
         gyroscopeSensorDaoConfig.getIdentityScope().clear();
         accelerometerSensorDaoConfig.getIdentityScope().clear();
@@ -140,6 +160,14 @@ public class DaoSession extends AbstractDaoSession {
         loudnessEventDaoConfig.getIdentityScope().clear();
         magneticFieldUncalibratedSensorDaoConfig.getIdentityScope().clear();
         gyroscopeUncalibratedSensorDaoConfig.getIdentityScope().clear();
+    }
+
+    public UserDao getUserDao() {
+        return userDao;
+    }
+
+    public UserSocialProfileDao getUserSocialProfileDao() {
+        return userSocialProfileDao;
     }
 
     public PositionSensorDao getPositionSensorDao() {

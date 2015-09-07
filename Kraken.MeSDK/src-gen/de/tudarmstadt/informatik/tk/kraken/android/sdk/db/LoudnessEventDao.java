@@ -19,7 +19,7 @@ public class LoudnessEventDao extends AbstractDao<LoudnessEvent, Long> {
     public static final String TABLENAME = "loudness_event";
 
     /**
-     * Properties of entity LoudnessEventRequest.<br/>
+     * Properties of entity LoudnessEvent.<br/>
      * Can be used for QueryBuilder and for referencing column names.
     */
     public static class Properties {

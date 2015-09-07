@@ -71,9 +71,9 @@ public class KrakenService extends Service implements Callback {
         m_service = this;
 
         // Init database FIRST!
-//        mDatabaseManager = DatabaseManager.getInstance(this);
-//
-//        mPreferenceManager = PreferenceManager.getInstance(this);
+        mDatabaseManager = DatabaseManager.getInstance(this);
+
+        mPreferenceManager = PreferenceManager.getInstance(this);
 
         // GcmManager.getInstance(this).registerAtCloud();
 

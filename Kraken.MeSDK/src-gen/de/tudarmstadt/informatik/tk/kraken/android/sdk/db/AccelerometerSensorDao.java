@@ -19,7 +19,7 @@ public class AccelerometerSensorDao extends AbstractDao<AccelerometerSensor, Lon
     public static final String TABLENAME = "accelerometer_sensor";
 
     /**
-     * Properties of entity AccelerometerSensorRequest.<br/>
+     * Properties of entity AccelerometerSensor.<br/>
      * Can be used for QueryBuilder and for referencing column names.
     */
     public static class Properties {

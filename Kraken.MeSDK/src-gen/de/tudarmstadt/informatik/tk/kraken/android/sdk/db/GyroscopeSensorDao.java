@@ -19,7 +19,7 @@ public class GyroscopeSensorDao extends AbstractDao<GyroscopeSensor, Long> {
     public static final String TABLENAME = "gyroscope_sensor";
 
     /**
-     * Properties of entity GyroscopeSensorRequest.<br/>
+     * Properties of entity GyroscopeSensor.<br/>
      * Can be used for QueryBuilder and for referencing column names.
     */
     public static class Properties {

@@ -10,18 +10,18 @@ import de.greenrobot.dao.Property;
  * @author Karsten Planz
  * @edited on 07.09.2015 by Wladimir Schmidt (wlsc.dev@gmail.com)
  */
-public class KrakenOpenHelper extends DaoMaster.OpenHelper {
+public class DBKrakenOpenHelper extends DaoMaster.OpenHelper {
 
-    private static final String TAG = KrakenOpenHelper.class.getSimpleName();
+    private static final String TAG = DBKrakenOpenHelper.class.getSimpleName();
 
-    public KrakenOpenHelper(Context context, String name, SQLiteDatabase.CursorFactory factory) {
+    public DBKrakenOpenHelper(Context context, String name, SQLiteDatabase.CursorFactory factory) {
         super(context, name, factory);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 
-        Log.d(TAG, "onUpgrade: " + oldVersion + ", " + newVersion);
+        Log.d(TAG, "onUpgrade from version " + oldVersion + " to" + newVersion);
 
         DaoMaster.createAllTables(db, true);
 

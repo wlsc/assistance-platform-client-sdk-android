@@ -1,14 +1,11 @@
+package de.tu_darmstadt.tk.android.assistance.generators;
 import de.greenrobot.daogenerator.DaoGenerator;
 import de.greenrobot.daogenerator.Entity;
 import de.greenrobot.daogenerator.Property;
 import de.greenrobot.daogenerator.Schema;
+import de.tu_darmstadt.tk.android.assistance.Config;
 
 public class DndDatabaseGenerator {
-
-    private static final String OUTPUT_PATH = "../DND2/src-gen";
-    private static final String PACKAGE = "de.tudarmstadt.informatik.tk.kraken.dnd2.db";
-
-    private static final int SCHEMA_VERSION = 8;
 
     public static void main(String[] args) throws Exception {
         generateSchema();
@@ -16,7 +13,7 @@ public class DndDatabaseGenerator {
 
     private static void generateSchema() throws Exception {
 
-        Schema schema = new Schema(SCHEMA_VERSION, PACKAGE);
+        Schema schema = new Schema(Config.DND_SCHEMA_VERSION, Config.DND_PACKAGE);
 
         // ------------ DND ------------
         Entity dnd = schema.addEntity("Dnd");
@@ -59,6 +56,6 @@ public class DndDatabaseGenerator {
         Property dndId = notification.addLongProperty("dndId").getProperty();
         dnd.addToMany(notification, dndId);
 
-        new DaoGenerator().generateAll(schema, OUTPUT_PATH);
+        new DaoGenerator().generateAll(schema, Config.DND_OUTPUT);
     }
 }

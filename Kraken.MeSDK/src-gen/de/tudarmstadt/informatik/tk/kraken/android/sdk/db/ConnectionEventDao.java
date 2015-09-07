@@ -19,7 +19,7 @@ public class ConnectionEventDao extends AbstractDao<ConnectionEvent, Long> {
     public static final String TABLENAME = "connection_event";
 
     /**
-     * Properties of entity ConnectionEventRequest.<br/>
+     * Properties of entity ConnectionEvent.<br/>
      * Can be used for QueryBuilder and for referencing column names.
     */
     public static class Properties {

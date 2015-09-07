@@ -19,7 +19,7 @@ public class MagneticFieldSensorDao extends AbstractDao<MagneticFieldSensor, Lon
     public static final String TABLENAME = "magnetic_field_sensor";
 
     /**
-     * Properties of entity MagneticFieldSensorRequest.<br/>
+     * Properties of entity MagneticFieldSensor.<br/>
      * Can be used for QueryBuilder and for referencing column names.
     */
     public static class Properties {

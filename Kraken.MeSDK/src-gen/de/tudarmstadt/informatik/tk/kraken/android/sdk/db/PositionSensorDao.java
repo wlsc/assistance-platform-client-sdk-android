@@ -19,7 +19,7 @@ public class PositionSensorDao extends AbstractDao<PositionSensor, Long> {
     public static final String TABLENAME = "position_sensor";
 
     /**
-     * Properties of entity PositionSensorRequest.<br/>
+     * Properties of entity PositionSensor.<br/>
      * Can be used for QueryBuilder and for referencing column names.
     */
     public static class Properties {

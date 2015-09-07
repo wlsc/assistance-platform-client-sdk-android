@@ -1,3 +1,4 @@
+package de.tu_darmstadt.tk.android.assistance.generators;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -11,24 +12,55 @@ import de.greenrobot.daogenerator.DaoGenerator;
 import de.greenrobot.daogenerator.Entity;
 import de.greenrobot.daogenerator.Property;
 import de.greenrobot.daogenerator.Schema;
+import de.tu_darmstadt.tk.android.assistance.Config;
 
+/**
+ * @author unknown, Wladimir Schmidt (wlsc.dev@gmail.com)
+ * @date 07.09.2015
+ *
+ */
 public class KrakenDatabaseGenerator {
 
-	private static final String PACKAGE_UPDATABLE_SENSOR = "de.tudarmstadt.informatik.tk.kraken.android.sdk.interfaces.IDbUpdatableSensor";
-	private static final String PACKAGE_SENSOR = "de.tudarmstadt.informatik.tk.kraken.android.sdk.interfaces.IDbSensor";
-	private static final String OUTPUT_PATH = "../Kraken.MeSDK/src-gen";
-	private static final String MAIN_PACKAGE = "de.tudarmstadt.informatik.tk.kraken.android.sdk.db";
-
-    private static final int SCHEMA_VERSION = 6;
-
-    public static void main(String[] args) throws Exception {
-    	new File(OUTPUT_PATH).mkdirs();
-		generateSchema();
+	public static void main(String[] args) throws Exception {
+    	new File(Config.KRAKEN_OUTPUT).mkdirs();
+		generateSchemas();
 		supressWarningsFiles();
 	}
 
-	private static void generateSchema() throws Exception, IOException {
-		Schema schema = new Schema(SCHEMA_VERSION, MAIN_PACKAGE);
+	private static void generateSchemas() throws Exception, IOException {
+		Schema schema = new Schema(Config.KRAKEN_SCHEMA_VERSION, Config.KRAKEN_PACKAGE);
+		
+		// ****************************************
+		// ------------ ASSISTANCE STUFF ----------
+		// ****************************************
+		
+		// ----- User scheme -----
+		Entity user = schema.addEntity("User");
+		user.setTableName("user");
+		user.addIdProperty().notNull().primaryKey().autoincrement().index();
+		user.addStringProperty("firstname");
+		user.addStringProperty("lastname");
+		user.addStringProperty("primaryEmail").notNull();
+		user.addStringProperty("lastLogin");
+		user.addStringProperty("joinedSince");
+		user.addStringProperty("created");
+		
+		// ----- Social user profile scheme -----
+		Entity socialProfile = schema.addEntity("UserSocialProfile");
+		socialProfile.setTableName("user_social_profile");
+		socialProfile.addIdProperty().notNull().primaryKey().autoincrement().index();
+		socialProfile.addStringProperty("name");
+		socialProfile.addStringProperty("firstname");
+		socialProfile.addStringProperty("lastname");
+		socialProfile.addStringProperty("email");
+		socialProfile.addStringProperty("updated");
+		socialProfile.addStringProperty("created");
+		
+		Property socialProfileFKUserProperty = socialProfile.addLongProperty("user_id").notNull().index().getProperty();
+		socialProfile.addToOne(user, socialProfileFKUserProperty);
+		user.addToMany(socialProfile, socialProfileFKUserProperty);
+		
+		
 		
 		// ****************************************
 		// ------------ COMMON SENSORS ------------
@@ -39,7 +71,7 @@ public class KrakenDatabaseGenerator {
 		Entity positionSensor = schema.addEntity("PositionSensor");
 		positionSensor.setTableName("position_sensor");
 		positionSensor.addIdProperty().notNull().primaryKey().autoincrement().index();
-		positionSensor.implementsInterface(PACKAGE_SENSOR);
+		positionSensor.implementsInterface(Config.KRAKEN_PACKAGE_SENSOR);
 		positionSensor.addDoubleProperty("latitude");
 		positionSensor.addDoubleProperty("longitude");
 		positionSensor.addDoubleProperty("accuracyHorizontal");
@@ -56,7 +88,7 @@ public class KrakenDatabaseGenerator {
 		Entity gyroscopeSensor = schema.addEntity("GyroscopeSensor");
 		gyroscopeSensor.setTableName("gyroscope_sensor");
 		gyroscopeSensor.addIdProperty().notNull().primaryKey().autoincrement().index();
-		gyroscopeSensor.implementsInterface(PACKAGE_SENSOR);
+		gyroscopeSensor.implementsInterface(Config.KRAKEN_PACKAGE_SENSOR);
 		gyroscopeSensor.addDoubleProperty("x");
 		gyroscopeSensor.addDoubleProperty("y");
 		gyroscopeSensor.addDoubleProperty("z");
@@ -69,7 +101,7 @@ public class KrakenDatabaseGenerator {
 		Entity accelerometerSensor = schema.addEntity("AccelerometerSensor");
 		accelerometerSensor.setTableName("accelerometer_sensor");
 		accelerometerSensor.addIdProperty().notNull().primaryKey().autoincrement().index();
-		accelerometerSensor.implementsInterface(PACKAGE_SENSOR);
+		accelerometerSensor.implementsInterface(Config.KRAKEN_PACKAGE_SENSOR);
 		accelerometerSensor.addDoubleProperty("x");
 		accelerometerSensor.addDoubleProperty("y");
 		accelerometerSensor.addDoubleProperty("z");
@@ -82,7 +114,7 @@ public class KrakenDatabaseGenerator {
 		Entity magneticFieldSensor = schema.addEntity("MagneticFieldSensor");
 		magneticFieldSensor.setTableName("magnetic_field_sensor");
 		magneticFieldSensor.addIdProperty().notNull().primaryKey().autoincrement().index();
-		magneticFieldSensor.implementsInterface(PACKAGE_SENSOR);
+		magneticFieldSensor.implementsInterface(Config.KRAKEN_PACKAGE_SENSOR);
 		magneticFieldSensor.addDoubleProperty("x");
 		magneticFieldSensor.addDoubleProperty("y");
 		magneticFieldSensor.addDoubleProperty("z");
@@ -99,7 +131,7 @@ public class KrakenDatabaseGenerator {
 		Entity motionActivitySensor = schema.addEntity("MotionActivityEvent");
 		motionActivitySensor.setTableName("motion_activity_event");
 		motionActivitySensor.addIdProperty().notNull().primaryKey().autoincrement().index();
-		motionActivitySensor.implementsInterface(PACKAGE_SENSOR);
+		motionActivitySensor.implementsInterface(Config.KRAKEN_PACKAGE_SENSOR);
 		motionActivitySensor.addBooleanProperty("walking");
 		motionActivitySensor.addBooleanProperty("running");
 		motionActivitySensor.addBooleanProperty("cycling");
@@ -117,7 +149,7 @@ public class KrakenDatabaseGenerator {
 		Entity connectionEvent = schema.addEntity("ConnectionEvent");
 		connectionEvent.setTableName("connection_event");
 		connectionEvent.addIdProperty().notNull().primaryKey().autoincrement().index();
-		connectionEvent.implementsInterface(PACKAGE_SENSOR);
+		connectionEvent.implementsInterface(Config.KRAKEN_PACKAGE_SENSOR);
 		connectionEvent.addBooleanProperty("isWifi");
 		connectionEvent.addBooleanProperty("isMobile");
 		connectionEvent.addStringProperty("created").notNull();
@@ -129,7 +161,7 @@ public class KrakenDatabaseGenerator {
 		Entity wifiConnectionEvent = schema.addEntity("WifiConnectionEvent");
 		wifiConnectionEvent.setTableName("wifi_connection_event");
 		wifiConnectionEvent.addIdProperty().notNull().primaryKey().autoincrement().index();
-		wifiConnectionEvent.implementsInterface(PACKAGE_SENSOR);
+		wifiConnectionEvent.implementsInterface(Config.KRAKEN_PACKAGE_SENSOR);
 		wifiConnectionEvent.addStringProperty("ssid");
 		wifiConnectionEvent.addStringProperty("bssid");
 		wifiConnectionEvent.addStringProperty("created").notNull();
@@ -145,7 +177,7 @@ public class KrakenDatabaseGenerator {
 		Entity mobileConnectionEvent = schema.addEntity("MobileConnectionEvent");
 		mobileConnectionEvent.setTableName("mobile_connection_event");
 		mobileConnectionEvent.addIdProperty().notNull().primaryKey().autoincrement().index();
-		mobileConnectionEvent.implementsInterface(PACKAGE_SENSOR);
+		mobileConnectionEvent.implementsInterface(Config.KRAKEN_PACKAGE_SENSOR);
 		mobileConnectionEvent.addStringProperty("carrierName");
 		mobileConnectionEvent.addStringProperty("mobileCarrierCode");
 		mobileConnectionEvent.addStringProperty("mobileNetworkCode");
@@ -158,7 +190,7 @@ public class KrakenDatabaseGenerator {
 		Entity loudnessEvent = schema.addEntity("LoudnessEvent");
 		loudnessEvent.setTableName("loudness_event");
 		loudnessEvent.addIdProperty().notNull().primaryKey().autoincrement().index();
-		loudnessEvent.implementsInterface(PACKAGE_SENSOR);
+		loudnessEvent.implementsInterface(Config.KRAKEN_PACKAGE_SENSOR);
 		loudnessEvent.addFloatProperty("loudness").notNull();
 		loudnessEvent.addStringProperty("created").notNull();
 		// OPTIONAL
@@ -177,7 +209,7 @@ public class KrakenDatabaseGenerator {
 		Entity magneticFieldUncalibrated = schema.addEntity("MagneticFieldUncalibratedSensor");
 		magneticFieldUncalibrated.setTableName("magnetic_field_uncalibrated_sensor");
 		magneticFieldUncalibrated.addIdProperty().notNull().primaryKey().autoincrement().index();
-		magneticFieldUncalibrated.implementsInterface(PACKAGE_SENSOR);
+		magneticFieldUncalibrated.implementsInterface(Config.KRAKEN_PACKAGE_SENSOR);
 		magneticFieldUncalibrated.addFloatProperty("xNoHardIron").notNull();
 		magneticFieldUncalibrated.addFloatProperty("yNoHardIron").notNull();
 		magneticFieldUncalibrated.addFloatProperty("zNoHardIron").notNull();
@@ -193,7 +225,7 @@ public class KrakenDatabaseGenerator {
 		Entity gyroscopeUncalibrated = schema.addEntity("GyroscopeUncalibratedSensor");
 		gyroscopeUncalibrated.setTableName("gyroscope_uncalibrated_sensor");
 		gyroscopeUncalibrated.addIdProperty().notNull().primaryKey().autoincrement().index();
-		gyroscopeUncalibrated.implementsInterface(PACKAGE_SENSOR);
+		gyroscopeUncalibrated.implementsInterface(Config.KRAKEN_PACKAGE_SENSOR);
 		gyroscopeUncalibrated.addFloatProperty("xNoDrift").notNull();
 		gyroscopeUncalibrated.addFloatProperty("yNoDrift").notNull();
 		gyroscopeUncalibrated.addFloatProperty("zNoDrift").notNull();
@@ -204,23 +236,25 @@ public class KrakenDatabaseGenerator {
 		// OPTIONAL
 		// none
 
-		new DaoGenerator().generateAll(schema, OUTPUT_PATH);
+		
+		// GENERATE CLASSES
+		new DaoGenerator().generateAll(schema, Config.KRAKEN_OUTPUT);
 	}
 	
 	private static void generateOLDSchema() throws Exception, IOException {
-		Schema schema = new Schema(SCHEMA_VERSION, MAIN_PACKAGE);
+		Schema schema = new Schema(Config.KRAKEN_SCHEMA_VERSION, Config.KRAKEN_PACKAGE);
 
 		// ------------ SENSORS ------------
 		Entity measurementLogger = schema.addEntity("SensorMeasurementLog");
 		measurementLogger.addIdProperty();
-		measurementLogger.implementsInterface(PACKAGE_SENSOR);
+		measurementLogger.implementsInterface(Config.KRAKEN_PACKAGE_SENSOR);
 		measurementLogger.addBooleanProperty("started");
 		measurementLogger.addLongProperty("timestamp");
 
 		// ----- Accelerometer -----
 		Entity sensorAccelerometer = schema.addEntity("SensorAccelerometer");
 		sensorAccelerometer.addIdProperty();
-		sensorAccelerometer.implementsInterface(PACKAGE_SENSOR);
+		sensorAccelerometer.implementsInterface(Config.KRAKEN_PACKAGE_SENSOR);
 		sensorAccelerometer.addIntProperty("accuracy");
 		sensorAccelerometer.addFloatProperty("accelerationX");
 		sensorAccelerometer.addFloatProperty("accelerationY");
@@ -230,7 +264,7 @@ public class KrakenDatabaseGenerator {
 		// ----- Activity -----
 		Entity sensorActivity = schema.addEntity("SensorActivity");
 		sensorActivity.addIdProperty();
-		sensorActivity.implementsInterface(PACKAGE_SENSOR);
+		sensorActivity.implementsInterface(Config.KRAKEN_PACKAGE_SENSOR);
 		sensorActivity.addIntProperty("type");
 		sensorActivity.addIntProperty("confidence");
 		sensorActivity.addIntProperty("ranking");
@@ -239,7 +273,7 @@ public class KrakenDatabaseGenerator {
 		// ----- Network -----
 		Entity sensorNetwork = schema.addEntity("SensorConnection");
 		sensorNetwork.addIdProperty();
-		sensorNetwork.implementsInterface(PACKAGE_SENSOR);
+		sensorNetwork.implementsInterface(Config.KRAKEN_PACKAGE_SENSOR);
 		sensorNetwork.addIntProperty("activeNetwork");
 		sensorNetwork.addBooleanProperty("mobileIsAvailable");
 		sensorNetwork.addIntProperty("mobileState");
@@ -250,7 +284,7 @@ public class KrakenDatabaseGenerator {
         // ----- Network Traffic-----
         Entity sensorNetworkTraffic = schema.addEntity("SensorNetworkTraffic");
         sensorNetworkTraffic.addIdProperty();
-        sensorNetworkTraffic.implementsInterface(PACKAGE_SENSOR);
+        sensorNetworkTraffic.implementsInterface(Config.KRAKEN_PACKAGE_SENSOR);
         sensorNetworkTraffic.addStringProperty("appName");
         sensorNetworkTraffic.addLongProperty("rxBytes");
         sensorNetworkTraffic.addLongProperty("txBytes");
@@ -262,7 +296,7 @@ public class KrakenDatabaseGenerator {
 		// ----- Light -----
 		Entity sensorLight = schema.addEntity("SensorLight");
 		sensorLight.addIdProperty();
-		sensorLight.implementsInterface(PACKAGE_SENSOR);
+		sensorLight.implementsInterface(Config.KRAKEN_PACKAGE_SENSOR);
 		sensorLight.addIntProperty("accuracy");
 		sensorLight.addFloatProperty("value");
 		sensorLight.addLongProperty("timestamp");
@@ -270,7 +304,7 @@ public class KrakenDatabaseGenerator {
 		// ----- Location -----
 		Entity sensorLocation = schema.addEntity("SensorLocation");
 		sensorLocation.addIdProperty();
-		sensorLocation.implementsInterface(PACKAGE_SENSOR);
+		sensorLocation.implementsInterface(Config.KRAKEN_PACKAGE_SENSOR);
 		sensorLocation.addFloatProperty("accuracy");
 		sensorLocation.addDoubleProperty("longitude");
 		sensorLocation.addDoubleProperty("latitude");
@@ -281,14 +315,14 @@ public class KrakenDatabaseGenerator {
 		// ----- Ringtone -----
 		Entity sensorRingtone = schema.addEntity("SensorRingtone");
 		sensorRingtone.addIdProperty();
-		sensorRingtone.implementsInterface(PACKAGE_SENSOR);
+		sensorRingtone.implementsInterface(Config.KRAKEN_PACKAGE_SENSOR);
 		sensorRingtone.addIntProperty("ringtoneMode");
 		sensorRingtone.addLongProperty("timestamp");
 
 		// ----- Loudness -----
 		Entity sensorLoudness = schema.addEntity("SensorLoudness");
 		sensorLoudness.addIdProperty();
-		sensorLoudness.implementsInterface(PACKAGE_SENSOR);
+		sensorLoudness.implementsInterface(Config.KRAKEN_PACKAGE_SENSOR);
 		sensorLoudness.addFloatProperty("loudness");
 		sensorLoudness.addLongProperty("startTimestamp");
 		sensorLoudness.addLongProperty("timestamp");
@@ -296,28 +330,28 @@ public class KrakenDatabaseGenerator {
 		// ----- Accounts -----
 		Entity sensorAccountsReader = schema.addEntity("SensorAccountsReader");
 		sensorAccountsReader.addIdProperty();
-		sensorAccountsReader.implementsInterface(PACKAGE_SENSOR);
+		sensorAccountsReader.implementsInterface(Config.KRAKEN_PACKAGE_SENSOR);
 		sensorAccountsReader.addStringProperty("accountTypes");
 		sensorAccountsReader.addLongProperty("timestamp");
 
 		// ----- Running Processes -----
 		Entity sensorRunningProcesses = schema.addEntity("SensorRunningProcesses");
 		sensorRunningProcesses.addIdProperty();
-		sensorRunningProcesses.implementsInterface(PACKAGE_SENSOR);
+		sensorRunningProcesses.implementsInterface(Config.KRAKEN_PACKAGE_SENSOR);
 		sensorRunningProcesses.addStringProperty("runningProcesses");
 		sensorRunningProcesses.addLongProperty("timestamp");
 
 		// ----- Running Services -----
 		Entity sensorRunningServices = schema.addEntity("SensorRunningServices");
 		sensorRunningServices.addIdProperty();
-		sensorRunningServices.implementsInterface(PACKAGE_SENSOR);
+		sensorRunningServices.implementsInterface(Config.KRAKEN_PACKAGE_SENSOR);
 		sensorRunningServices.addStringProperty("runningServices");
 		sensorRunningServices.addLongProperty("timestamp");
 
 		// ----- Running Tasks -----
 		Entity sensorRunningTasks = schema.addEntity("SensorRunningTasks");
 		sensorRunningTasks.addIdProperty();
-		sensorRunningTasks.implementsInterface(PACKAGE_SENSOR);
+		sensorRunningTasks.implementsInterface(Config.KRAKEN_PACKAGE_SENSOR);
 		sensorRunningTasks.addStringProperty("runningTasks");
 		sensorRunningTasks.addIntProperty("stackPosition");
 		sensorRunningTasks.addLongProperty("timestamp");
@@ -325,7 +359,7 @@ public class KrakenDatabaseGenerator {
 		// ----- Contacts -----
 		Entity sensorContact = schema.addEntity("SensorContact");
 		sensorContact.addIdProperty();
-		sensorContact.implementsInterface(PACKAGE_UPDATABLE_SENSOR);
+		sensorContact.implementsInterface(Config.KRAKEN_PACKAGE_UPDATABLE_SENSOR);
 		sensorContact.addLongProperty("contactId");
 		sensorContact.addLongProperty("globalContactId");
 		sensorContact.addStringProperty("displayName");
@@ -343,7 +377,7 @@ public class KrakenDatabaseGenerator {
 		// ----- Contact Numbers -----
 		Entity contactNumbers = schema.addEntity("SensorContactNumber");
 		contactNumbers.addIdProperty();
-		contactNumbers.implementsInterface(PACKAGE_UPDATABLE_SENSOR);
+		contactNumbers.implementsInterface(Config.KRAKEN_PACKAGE_UPDATABLE_SENSOR);
 		Property fkContact = contactNumbers.addLongProperty("fkContact").notNull().getProperty();
 		sensorContact.addToMany(contactNumbers, fkContact);
 		contactNumbers.addLongProperty("numberId");
@@ -358,7 +392,7 @@ public class KrakenDatabaseGenerator {
 		// ----- Contact Mail Addresses -----
 		Entity contactMails = schema.addEntity("SensorContactMail");
 		contactMails.addIdProperty();
-		contactMails.implementsInterface(PACKAGE_UPDATABLE_SENSOR);
+		contactMails.implementsInterface(Config.KRAKEN_PACKAGE_UPDATABLE_SENSOR);
 		fkContact = contactMails.addLongProperty("fkContact").notNull().getProperty();
 		sensorContact.addToMany(contactMails, fkContact);
 		contactMails.addLongProperty("mailId");
@@ -373,7 +407,7 @@ public class KrakenDatabaseGenerator {
 		// ----- Calendar Events -----
 		Entity calendarEvent = schema.addEntity("SensorCalendarEvent");
 		calendarEvent.addIdProperty();
-		calendarEvent.implementsInterface(PACKAGE_UPDATABLE_SENSOR);
+		calendarEvent.implementsInterface(Config.KRAKEN_PACKAGE_UPDATABLE_SENSOR);
 		calendarEvent.addLongProperty("eventId");
 		calendarEvent.addLongProperty("calendarId");
 		calendarEvent.addBooleanProperty("allDay");
@@ -404,7 +438,7 @@ public class KrakenDatabaseGenerator {
 		// ----- Calendar Reminders -----
 		Entity calendarEventReminder = schema.addEntity("SensorCalendarEventReminder");
 		calendarEventReminder.addIdProperty();
-		calendarEventReminder.implementsInterface(PACKAGE_UPDATABLE_SENSOR);
+		calendarEventReminder.implementsInterface(Config.KRAKEN_PACKAGE_UPDATABLE_SENSOR);
 		calendarEventReminder.addLongProperty("reminderId");
 		calendarEventReminder.addLongProperty("eventId");
 		calendarEventReminder.addIntProperty("method");
@@ -417,7 +451,7 @@ public class KrakenDatabaseGenerator {
 		// ----- Contacts -----
 		Entity sensorCallLog = schema.addEntity("SensorCallLog");
 		sensorCallLog.addIdProperty();
-		sensorCallLog.implementsInterface(PACKAGE_UPDATABLE_SENSOR);
+		sensorCallLog.implementsInterface(Config.KRAKEN_PACKAGE_UPDATABLE_SENSOR);
 		sensorCallLog.addLongProperty("callId");
 		sensorCallLog.addIntProperty("type");
 		sensorCallLog.addStringProperty("name");
@@ -432,7 +466,7 @@ public class KrakenDatabaseGenerator {
         // ----- Browser History -----
         Entity sensorBrowserHistory = schema.addEntity("SensorBrowserHistory");
         sensorBrowserHistory.addIdProperty();
-        sensorBrowserHistory.implementsInterface(PACKAGE_UPDATABLE_SENSOR);
+        sensorBrowserHistory.implementsInterface(Config.KRAKEN_PACKAGE_UPDATABLE_SENSOR);
         sensorBrowserHistory.addLongProperty("historyId");
         sensorBrowserHistory.addStringProperty("url");
         sensorBrowserHistory.addStringProperty("title");
@@ -447,7 +481,7 @@ public class KrakenDatabaseGenerator {
         // ----- Foreground Events -----
         Entity sensorForegroundEvent = schema.addEntity("SensorForegroundEvent");
         sensorForegroundEvent.addIdProperty();
-        sensorForegroundEvent.implementsInterface(PACKAGE_SENSOR);
+        sensorForegroundEvent.implementsInterface(Config.KRAKEN_PACKAGE_SENSOR);
         sensorForegroundEvent.addStringProperty("packageName");
         sensorForegroundEvent.addStringProperty("appName");
         sensorForegroundEvent.addStringProperty("className");
@@ -458,7 +492,7 @@ public class KrakenDatabaseGenerator {
         sensorForegroundEvent.addIntProperty("keystrokes");
         sensorForegroundEvent.addLongProperty("timestamp");
 
-		new DaoGenerator().generateAll(schema, OUTPUT_PATH);
+		new DaoGenerator().generateAll(schema, Config.KRAKEN_OUTPUT);
 	}
 	
 	private static void supressWarningsFiles() {
@@ -466,8 +500,8 @@ public class KrakenDatabaseGenerator {
 		System.out.println("Processing every generated file to add needed '@SupressWarning(\"serial\")' to avoid compile warnings.");
 		long longStart = System.currentTimeMillis();
 
-		String strPackagePath = MAIN_PACKAGE.replaceAll("\\.", "/");
-		File directory = new File(OUTPUT_PATH + "/" + strPackagePath);
+		String strPackagePath = Config.KRAKEN_PACKAGE.replaceAll("\\.", "/");
+		File directory = new File(Config.KRAKEN_OUTPUT + "/" + strPackagePath);
 		System.out.println(directory.getAbsolutePath());
 		directory.getAbsolutePath();
 
