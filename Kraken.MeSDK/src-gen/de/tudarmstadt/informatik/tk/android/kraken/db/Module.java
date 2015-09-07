@@ -12,7 +12,7 @@ public class Module {
 
     private long id;
     /** Not-null value. */
-    private String package;
+    private String packageName;
     /** Not-null value. */
     private String title;
     /** Not-null value. */
@@ -43,9 +43,9 @@ public class Module {
         this.id = id;
     }
 
-    public Module(long id, String package, String title, String logoUrl, String descriptionShort, String descriptionFull, String copyright, String supportEmail, String created) {
+    public Module(long id, String packageName, String title, String logoUrl, String descriptionShort, String descriptionFull, String copyright, String supportEmail, String created) {
         this.id = id;
-        this.package = package;
+        this.packageName = packageName;
         this.title = title;
         this.logoUrl = logoUrl;
         this.descriptionShort = descriptionShort;
@@ -70,13 +70,13 @@ public class Module {
     }
 
     /** Not-null value. */
-    public String getPackage() {
-        return package;
+    public String getPackageName() {
+        return packageName;
     }
 
     /** Not-null value; ensure this value is available before it is saved to the database. */
-    public void setPackage(String package) {
-        this.package = package;
+    public void setPackageName(String packageName) {
+        this.packageName = packageName;
     }
 
     /** Not-null value. */

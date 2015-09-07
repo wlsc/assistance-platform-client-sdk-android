@@ -88,7 +88,7 @@ public class KrakenDatabaseGenerator {
 		Entity module = schema.addEntity("Module");
 		module.setTableName("module");
 		module.addIdProperty().notNull().primaryKey().autoincrement().index();
-		module.addStringProperty("package").notNull().index();
+		module.addStringProperty("packageName").notNull().index();
 		module.addStringProperty("title").notNull();
 		module.addStringProperty("logoUrl").notNull();
 		module.addStringProperty("descriptionShort").notNull();

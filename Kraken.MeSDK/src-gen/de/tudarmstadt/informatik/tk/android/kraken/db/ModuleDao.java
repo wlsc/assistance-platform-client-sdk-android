@@ -24,7 +24,7 @@ public class ModuleDao extends AbstractDao<Module, Long> {
     */
     public static class Properties {
         public final static Property Id = new Property(0, long.class, "id", true, "_id");
-        public final static Property Package = new Property(1, String.class, "package", false, "PACKAGE");
+        public final static Property PackageName = new Property(1, String.class, "packageName", false, "PACKAGE_NAME");
         public final static Property Title = new Property(2, String.class, "title", false, "TITLE");
         public final static Property LogoUrl = new Property(3, String.class, "logoUrl", false, "LOGO_URL");
         public final static Property DescriptionShort = new Property(4, String.class, "descriptionShort", false, "DESCRIPTION_SHORT");
@@ -51,7 +51,7 @@ public class ModuleDao extends AbstractDao<Module, Long> {
         String constraint = ifNotExists? "IF NOT EXISTS ": "";
         db.execSQL("CREATE TABLE " + constraint + "\"module\" (" + //
                 "\"_id\" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL ," + // 0: id
-                "\"PACKAGE\" TEXT NOT NULL ," + // 1: package
+                "\"PACKAGE_NAME\" TEXT NOT NULL ," + // 1: packageName
                 "\"TITLE\" TEXT NOT NULL ," + // 2: title
                 "\"LOGO_URL\" TEXT NOT NULL ," + // 3: logoUrl
                 "\"DESCRIPTION_SHORT\" TEXT NOT NULL ," + // 4: descriptionShort
@@ -62,8 +62,8 @@ public class ModuleDao extends AbstractDao<Module, Long> {
         // Add Indexes
         db.execSQL("CREATE INDEX " + constraint + "IDX_module__id ON module" +
                 " (\"_id\");");
-        db.execSQL("CREATE INDEX " + constraint + "IDX_module_PACKAGE ON module" +
-                " (\"PACKAGE\");");
+        db.execSQL("CREATE INDEX " + constraint + "IDX_module_PACKAGE_NAME ON module" +
+                " (\"PACKAGE_NAME\");");
     }
 
     /** Drops the underlying database table. */
@@ -77,7 +77,7 @@ public class ModuleDao extends AbstractDao<Module, Long> {
     protected void bindValues(SQLiteStatement stmt, Module entity) {
         stmt.clearBindings();
         stmt.bindLong(1, entity.getId());
-        stmt.bindString(2, entity.getPackage());
+        stmt.bindString(2, entity.getPackageName());
         stmt.bindString(3, entity.getTitle());
         stmt.bindString(4, entity.getLogoUrl());
         stmt.bindString(5, entity.getDescriptionShort());
@@ -104,7 +104,7 @@ public class ModuleDao extends AbstractDao<Module, Long> {
     public Module readEntity(Cursor cursor, int offset) {
         Module entity = new Module( //
             cursor.getLong(offset + 0), // id
-            cursor.getString(offset + 1), // package
+            cursor.getString(offset + 1), // packageName
             cursor.getString(offset + 2), // title
             cursor.getString(offset + 3), // logoUrl
             cursor.getString(offset + 4), // descriptionShort
@@ -120,7 +120,7 @@ public class ModuleDao extends AbstractDao<Module, Long> {
     @Override
     public void readEntity(Cursor cursor, Module entity, int offset) {
         entity.setId(cursor.getLong(offset + 0));
-        entity.setPackage(cursor.getString(offset + 1));
+        entity.setPackageName(cursor.getString(offset + 1));
         entity.setTitle(cursor.getString(offset + 2));
         entity.setLogoUrl(cursor.getString(offset + 3));
         entity.setDescriptionShort(cursor.getString(offset + 4));
