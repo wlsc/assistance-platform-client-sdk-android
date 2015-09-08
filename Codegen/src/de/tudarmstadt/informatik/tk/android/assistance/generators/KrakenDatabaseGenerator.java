@@ -41,6 +41,7 @@ public class KrakenDatabaseGenerator {
 		user.addStringProperty("firstname");
 		user.addStringProperty("lastname");
 		user.addStringProperty("primaryEmail").notNull();
+		user.addStringProperty("user_pic_filename");
 		user.addStringProperty("lastLogin");
 		user.addStringProperty("joinedSince");
 		user.addStringProperty("created").notNull();

@@ -15,6 +15,7 @@ public class User {
     private String lastname;
     /** Not-null value. */
     private String primaryEmail;
+    private String user_pic_filename;
     private String lastLogin;
     private String joinedSince;
     /** Not-null value. */
@@ -36,11 +37,12 @@ public class User {
         this.id = id;
     }
 
-    public User(long id, String firstname, String lastname, String primaryEmail, String lastLogin, String joinedSince, String created) {
+    public User(long id, String firstname, String lastname, String primaryEmail, String user_pic_filename, String lastLogin, String joinedSince, String created) {
         this.id = id;
         this.firstname = firstname;
         this.lastname = lastname;
         this.primaryEmail = primaryEmail;
+        this.user_pic_filename = user_pic_filename;
         this.lastLogin = lastLogin;
         this.joinedSince = joinedSince;
         this.created = created;
@@ -84,6 +86,14 @@ public class User {
     /** Not-null value; ensure this value is available before it is saved to the database. */
     public void setPrimaryEmail(String primaryEmail) {
         this.primaryEmail = primaryEmail;
+    }
+
+    public String getUser_pic_filename() {
+        return user_pic_filename;
+    }
+
+    public void setUser_pic_filename(String user_pic_filename) {
+        this.user_pic_filename = user_pic_filename;
     }
 
     public String getLastLogin() {
