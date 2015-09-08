@@ -23,7 +23,7 @@ public class GyroscopeUncalibratedSensorDao extends AbstractDao<GyroscopeUncalib
      * Can be used for QueryBuilder and for referencing column names.
     */
     public static class Properties {
-        public final static Property Id = new Property(0, long.class, "id", true, "_id");
+        public final static Property Id = new Property(0, Long.class, "id", true, "_id");
         public final static Property XNoDrift = new Property(1, float.class, "xNoDrift", false, "X_NO_DRIFT");
         public final static Property YNoDrift = new Property(2, float.class, "yNoDrift", false, "Y_NO_DRIFT");
         public final static Property ZNoDrift = new Property(3, float.class, "zNoDrift", false, "Z_NO_DRIFT");
@@ -46,7 +46,7 @@ public class GyroscopeUncalibratedSensorDao extends AbstractDao<GyroscopeUncalib
     public static void createTable(SQLiteDatabase db, boolean ifNotExists) {
         String constraint = ifNotExists? "IF NOT EXISTS ": "";
         db.execSQL("CREATE TABLE " + constraint + "\"gyroscope_uncalibrated_sensor\" (" + //
-                "\"_id\" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL ," + // 0: id
+                "\"_id\" INTEGER PRIMARY KEY AUTOINCREMENT ," + // 0: id
                 "\"X_NO_DRIFT\" REAL NOT NULL ," + // 1: xNoDrift
                 "\"Y_NO_DRIFT\" REAL NOT NULL ," + // 2: yNoDrift
                 "\"Z_NO_DRIFT\" REAL NOT NULL ," + // 3: zNoDrift
@@ -69,7 +69,11 @@ public class GyroscopeUncalibratedSensorDao extends AbstractDao<GyroscopeUncalib
     @Override
     protected void bindValues(SQLiteStatement stmt, GyroscopeUncalibratedSensor entity) {
         stmt.clearBindings();
-        stmt.bindLong(1, entity.getId());
+ 
+        Long id = entity.getId();
+        if (id != null) {
+            stmt.bindLong(1, id);
+        }
         stmt.bindDouble(2, entity.getXNoDrift());
         stmt.bindDouble(3, entity.getYNoDrift());
         stmt.bindDouble(4, entity.getZNoDrift());
@@ -82,14 +86,14 @@ public class GyroscopeUncalibratedSensorDao extends AbstractDao<GyroscopeUncalib
     /** @inheritdoc */
     @Override
     public Long readKey(Cursor cursor, int offset) {
-        return cursor.getLong(offset + 0);
+        return cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0);
     }    
 
     /** @inheritdoc */
     @Override
     public GyroscopeUncalibratedSensor readEntity(Cursor cursor, int offset) {
         GyroscopeUncalibratedSensor entity = new GyroscopeUncalibratedSensor( //
-            cursor.getLong(offset + 0), // id
+            cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0), // id
             cursor.getFloat(offset + 1), // xNoDrift
             cursor.getFloat(offset + 2), // yNoDrift
             cursor.getFloat(offset + 3), // zNoDrift
@@ -104,7 +108,7 @@ public class GyroscopeUncalibratedSensorDao extends AbstractDao<GyroscopeUncalib
     /** @inheritdoc */
     @Override
     public void readEntity(Cursor cursor, GyroscopeUncalibratedSensor entity, int offset) {
-        entity.setId(cursor.getLong(offset + 0));
+        entity.setId(cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0));
         entity.setXNoDrift(cursor.getFloat(offset + 1));
         entity.setYNoDrift(cursor.getFloat(offset + 2));
         entity.setZNoDrift(cursor.getFloat(offset + 3));

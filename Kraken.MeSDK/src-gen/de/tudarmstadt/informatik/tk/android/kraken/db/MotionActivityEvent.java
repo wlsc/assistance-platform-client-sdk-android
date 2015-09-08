@@ -6,7 +6,7 @@ package de.tudarmstadt.informatik.tk.android.kraken.db;
  */
 public class MotionActivityEvent implements de.tudarmstadt.informatik.tk.android.kraken.interfaces.IDbSensor {
 
-    private long id;
+    private Long id;
     private Boolean walking;
     private Boolean running;
     private Boolean cycling;
@@ -22,11 +22,11 @@ public class MotionActivityEvent implements de.tudarmstadt.informatik.tk.android
     public MotionActivityEvent() {
     }
 
-    public MotionActivityEvent(long id) {
+    public MotionActivityEvent(Long id) {
         this.id = id;
     }
 
-    public MotionActivityEvent(long id, Boolean walking, Boolean running, Boolean cycling, Boolean driving, Boolean stationary, Boolean unknown, Integer accuracy, String created, Boolean onFoot, Boolean tilting) {
+    public MotionActivityEvent(Long id, Boolean walking, Boolean running, Boolean cycling, Boolean driving, Boolean stationary, Boolean unknown, Integer accuracy, String created, Boolean onFoot, Boolean tilting) {
         this.id = id;
         this.walking = walking;
         this.running = running;
@@ -40,11 +40,11 @@ public class MotionActivityEvent implements de.tudarmstadt.informatik.tk.android
         this.tilting = tilting;
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

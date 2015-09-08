@@ -6,7 +6,7 @@ package de.tudarmstadt.informatik.tk.android.kraken.db;
  */
 public class MagneticFieldUncalibratedSensor implements de.tudarmstadt.informatik.tk.android.kraken.interfaces.IDbSensor {
 
-    private long id;
+    private Long id;
     private float xNoHardIron;
     private float yNoHardIron;
     private float zNoHardIron;
@@ -19,11 +19,11 @@ public class MagneticFieldUncalibratedSensor implements de.tudarmstadt.informati
     public MagneticFieldUncalibratedSensor() {
     }
 
-    public MagneticFieldUncalibratedSensor(long id) {
+    public MagneticFieldUncalibratedSensor(Long id) {
         this.id = id;
     }
 
-    public MagneticFieldUncalibratedSensor(long id, float xNoHardIron, float yNoHardIron, float zNoHardIron, float xEstimatedIronBias, float yEstimatedIronBias, float zEstimatedIronBias, String created) {
+    public MagneticFieldUncalibratedSensor(Long id, float xNoHardIron, float yNoHardIron, float zNoHardIron, float xEstimatedIronBias, float yEstimatedIronBias, float zEstimatedIronBias, String created) {
         this.id = id;
         this.xNoHardIron = xNoHardIron;
         this.yNoHardIron = yNoHardIron;
@@ -34,11 +34,11 @@ public class MagneticFieldUncalibratedSensor implements de.tudarmstadt.informati
         this.created = created;
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

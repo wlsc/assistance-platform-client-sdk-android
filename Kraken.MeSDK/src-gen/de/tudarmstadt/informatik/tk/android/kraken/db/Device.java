@@ -9,7 +9,7 @@ import de.greenrobot.dao.DaoException;
  */
 public class Device {
 
-    private long id;
+    private Long id;
     private String device_identifier;
     private String os;
     private String os_version;
@@ -17,8 +17,8 @@ public class Device {
     private String model;
     /** Not-null value. */
     private String created;
-    private long login_id;
-    private long user_id;
+    private Long login_id;
+    private Long user_id;
 
     /** Used to resolve relations */
     private transient DaoSession daoSession;
@@ -36,11 +36,11 @@ public class Device {
     public Device() {
     }
 
-    public Device(long id) {
+    public Device(Long id) {
         this.id = id;
     }
 
-    public Device(long id, String device_identifier, String os, String os_version, String brand, String model, String created, long login_id, long user_id) {
+    public Device(Long id, String device_identifier, String os, String os_version, String brand, String model, String created, Long login_id, Long user_id) {
         this.id = id;
         this.device_identifier = device_identifier;
         this.os = os;
@@ -58,11 +58,11 @@ public class Device {
         myDao = daoSession != null ? daoSession.getDeviceDao() : null;
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -116,25 +116,25 @@ public class Device {
         this.created = created;
     }
 
-    public long getLogin_id() {
+    public Long getLogin_id() {
         return login_id;
     }
 
-    public void setLogin_id(long login_id) {
+    public void setLogin_id(Long login_id) {
         this.login_id = login_id;
     }
 
-    public long getUser_id() {
+    public Long getUser_id() {
         return user_id;
     }
 
-    public void setUser_id(long user_id) {
+    public void setUser_id(Long user_id) {
         this.user_id = user_id;
     }
 
     /** To-one relationship, resolved on first access. */
     public Login getLogin() {
-        long __key = this.login_id;
+        Long __key = this.login_id;
         if (login__resolvedKey == null || !login__resolvedKey.equals(__key)) {
             if (daoSession == null) {
                 throw new DaoException("Entity is detached from DAO context");
@@ -150,19 +150,16 @@ public class Device {
     }
 
     public void setLogin(Login login) {
-        if (login == null) {
-            throw new DaoException("To-one property 'login_id' has not-null constraint; cannot set to-one to null");
-        }
         synchronized (this) {
             this.login = login;
-            login_id = login.getId();
+            login_id = login == null ? null : login.getId();
             login__resolvedKey = login_id;
         }
     }
 
     /** To-one relationship, resolved on first access. */
     public User getUser() {
-        long __key = this.user_id;
+        Long __key = this.user_id;
         if (user__resolvedKey == null || !user__resolvedKey.equals(__key)) {
             if (daoSession == null) {
                 throw new DaoException("Entity is detached from DAO context");
@@ -178,12 +175,9 @@ public class Device {
     }
 
     public void setUser(User user) {
-        if (user == null) {
-            throw new DaoException("To-one property 'user_id' has not-null constraint; cannot set to-one to null");
-        }
         synchronized (this) {
             this.user = user;
-            user_id = user.getId();
+            user_id = user == null ? null : user.getId();
             user__resolvedKey = user_id;
         }
     }

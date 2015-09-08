@@ -28,7 +28,7 @@ public class ModuleDao extends AbstractDao<Module, Long> {
      * Can be used for QueryBuilder and for referencing column names.
     */
     public static class Properties {
-        public final static Property Id = new Property(0, long.class, "id", true, "_id");
+        public final static Property Id = new Property(0, Long.class, "id", true, "_id");
         public final static Property Package_name = new Property(1, String.class, "package_name", false, "PACKAGE_NAME");
         public final static Property Title = new Property(2, String.class, "title", false, "TITLE");
         public final static Property Logo_url = new Property(3, String.class, "logo_url", false, "LOGO_URL");
@@ -37,7 +37,7 @@ public class ModuleDao extends AbstractDao<Module, Long> {
         public final static Property Copyright = new Property(6, String.class, "copyright", false, "COPYRIGHT");
         public final static Property Support_email = new Property(7, String.class, "support_email", false, "SUPPORT_EMAIL");
         public final static Property Created = new Property(8, String.class, "created", false, "CREATED");
-        public final static Property User_id = new Property(9, long.class, "user_id", false, "USER_ID");
+        public final static Property User_id = new Property(9, Long.class, "user_id", false, "USER_ID");
     };
 
     private DaoSession daoSession;
@@ -57,7 +57,7 @@ public class ModuleDao extends AbstractDao<Module, Long> {
     public static void createTable(SQLiteDatabase db, boolean ifNotExists) {
         String constraint = ifNotExists? "IF NOT EXISTS ": "";
         db.execSQL("CREATE TABLE " + constraint + "\"module\" (" + //
-                "\"_id\" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL ," + // 0: id
+                "\"_id\" INTEGER PRIMARY KEY AUTOINCREMENT ," + // 0: id
                 "\"PACKAGE_NAME\" TEXT NOT NULL ," + // 1: package_name
                 "\"TITLE\" TEXT," + // 2: title
                 "\"LOGO_URL\" TEXT," + // 3: logo_url
@@ -66,7 +66,7 @@ public class ModuleDao extends AbstractDao<Module, Long> {
                 "\"COPYRIGHT\" TEXT," + // 6: copyright
                 "\"SUPPORT_EMAIL\" TEXT," + // 7: support_email
                 "\"CREATED\" TEXT NOT NULL ," + // 8: created
-                "\"USER_ID\" INTEGER NOT NULL );"); // 9: user_id
+                "\"USER_ID\" INTEGER);"); // 9: user_id
         // Add Indexes
         db.execSQL("CREATE INDEX " + constraint + "IDX_module__id ON module" +
                 " (\"_id\");");
@@ -86,7 +86,11 @@ public class ModuleDao extends AbstractDao<Module, Long> {
     @Override
     protected void bindValues(SQLiteStatement stmt, Module entity) {
         stmt.clearBindings();
-        stmt.bindLong(1, entity.getId());
+ 
+        Long id = entity.getId();
+        if (id != null) {
+            stmt.bindLong(1, id);
+        }
         stmt.bindString(2, entity.getPackage_name());
  
         String title = entity.getTitle();
@@ -119,7 +123,11 @@ public class ModuleDao extends AbstractDao<Module, Long> {
             stmt.bindString(8, support_email);
         }
         stmt.bindString(9, entity.getCreated());
-        stmt.bindLong(10, entity.getUser_id());
+ 
+        Long user_id = entity.getUser_id();
+        if (user_id != null) {
+            stmt.bindLong(10, user_id);
+        }
     }
 
     @Override
@@ -131,14 +139,14 @@ public class ModuleDao extends AbstractDao<Module, Long> {
     /** @inheritdoc */
     @Override
     public Long readKey(Cursor cursor, int offset) {
-        return cursor.getLong(offset + 0);
+        return cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0);
     }    
 
     /** @inheritdoc */
     @Override
     public Module readEntity(Cursor cursor, int offset) {
         Module entity = new Module( //
-            cursor.getLong(offset + 0), // id
+            cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0), // id
             cursor.getString(offset + 1), // package_name
             cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // title
             cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // logo_url
@@ -147,7 +155,7 @@ public class ModuleDao extends AbstractDao<Module, Long> {
             cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6), // copyright
             cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7), // support_email
             cursor.getString(offset + 8), // created
-            cursor.getLong(offset + 9) // user_id
+            cursor.isNull(offset + 9) ? null : cursor.getLong(offset + 9) // user_id
         );
         return entity;
     }
@@ -155,7 +163,7 @@ public class ModuleDao extends AbstractDao<Module, Long> {
     /** @inheritdoc */
     @Override
     public void readEntity(Cursor cursor, Module entity, int offset) {
-        entity.setId(cursor.getLong(offset + 0));
+        entity.setId(cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0));
         entity.setPackage_name(cursor.getString(offset + 1));
         entity.setTitle(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
         entity.setLogo_url(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
@@ -164,7 +172,7 @@ public class ModuleDao extends AbstractDao<Module, Long> {
         entity.setCopyright(cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6));
         entity.setSupport_email(cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7));
         entity.setCreated(cursor.getString(offset + 8));
-        entity.setUser_id(cursor.getLong(offset + 9));
+        entity.setUser_id(cursor.isNull(offset + 9) ? null : cursor.getLong(offset + 9));
      }
     
     /** @inheritdoc */
@@ -191,7 +199,7 @@ public class ModuleDao extends AbstractDao<Module, Long> {
     }
     
     /** Internal query to resolve the "moduleList" to-many relationship of User. */
-    public List<Module> _queryUser_ModuleList(long user_id) {
+    public List<Module> _queryUser_ModuleList(Long user_id) {
         synchronized (this) {
             if (user_ModuleListQuery == null) {
                 QueryBuilder<Module> queryBuilder = queryBuilder();
@@ -225,9 +233,7 @@ public class ModuleDao extends AbstractDao<Module, Long> {
         int offset = getAllColumns().length;
 
         User user = loadCurrentOther(daoSession.getUserDao(), cursor, offset);
-         if(user != null) {
-            entity.setUser(user);
-        }
+        entity.setUser(user);
 
         return entity;    
     }

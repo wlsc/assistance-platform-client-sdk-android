@@ -6,7 +6,7 @@ package de.tudarmstadt.informatik.tk.android.kraken.db;
  */
 public class MagneticFieldSensor implements de.tudarmstadt.informatik.tk.android.kraken.interfaces.IDbSensor {
 
-    private long id;
+    private Long id;
     private Double x;
     private Double y;
     private Double z;
@@ -17,11 +17,11 @@ public class MagneticFieldSensor implements de.tudarmstadt.informatik.tk.android
     public MagneticFieldSensor() {
     }
 
-    public MagneticFieldSensor(long id) {
+    public MagneticFieldSensor(Long id) {
         this.id = id;
     }
 
-    public MagneticFieldSensor(long id, Double x, Double y, Double z, String created, Integer accuracy) {
+    public MagneticFieldSensor(Long id, Double x, Double y, Double z, String created, Integer accuracy) {
         this.id = id;
         this.x = x;
         this.y = y;
@@ -30,11 +30,11 @@ public class MagneticFieldSensor implements de.tudarmstadt.informatik.tk.android
         this.accuracy = accuracy;
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

@@ -23,7 +23,7 @@ public class LoginDao extends AbstractDao<Login, Long> {
      * Can be used for QueryBuilder and for referencing column names.
     */
     public static class Properties {
-        public final static Property Id = new Property(0, long.class, "id", true, "_id");
+        public final static Property Id = new Property(0, Long.class, "id", true, "_id");
         public final static Property Token = new Property(1, String.class, "token", false, "TOKEN");
         public final static Property Server_device_id = new Property(2, Long.class, "server_device_id", false, "SERVER_DEVICE_ID");
         public final static Property Last_email = new Property(3, String.class, "last_email", false, "LAST_EMAIL");
@@ -46,7 +46,7 @@ public class LoginDao extends AbstractDao<Login, Long> {
     public static void createTable(SQLiteDatabase db, boolean ifNotExists) {
         String constraint = ifNotExists? "IF NOT EXISTS ": "";
         db.execSQL("CREATE TABLE " + constraint + "\"login\" (" + //
-                "\"_id\" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL ," + // 0: id
+                "\"_id\" INTEGER PRIMARY KEY AUTOINCREMENT ," + // 0: id
                 "\"TOKEN\" TEXT NOT NULL ," + // 1: token
                 "\"SERVER_DEVICE_ID\" INTEGER," + // 2: server_device_id
                 "\"LAST_EMAIL\" TEXT NOT NULL ," + // 3: last_email
@@ -68,7 +68,11 @@ public class LoginDao extends AbstractDao<Login, Long> {
     @Override
     protected void bindValues(SQLiteStatement stmt, Login entity) {
         stmt.clearBindings();
-        stmt.bindLong(1, entity.getId());
+ 
+        Long id = entity.getId();
+        if (id != null) {
+            stmt.bindLong(1, id);
+        }
         stmt.bindString(2, entity.getToken());
  
         Long server_device_id = entity.getServer_device_id();
@@ -88,14 +92,14 @@ public class LoginDao extends AbstractDao<Login, Long> {
     /** @inheritdoc */
     @Override
     public Long readKey(Cursor cursor, int offset) {
-        return cursor.getLong(offset + 0);
+        return cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0);
     }    
 
     /** @inheritdoc */
     @Override
     public Login readEntity(Cursor cursor, int offset) {
         Login entity = new Login( //
-            cursor.getLong(offset + 0), // id
+            cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0), // id
             cursor.getString(offset + 1), // token
             cursor.isNull(offset + 2) ? null : cursor.getLong(offset + 2), // server_device_id
             cursor.getString(offset + 3), // last_email
@@ -107,7 +111,7 @@ public class LoginDao extends AbstractDao<Login, Long> {
     /** @inheritdoc */
     @Override
     public void readEntity(Cursor cursor, Login entity, int offset) {
-        entity.setId(cursor.getLong(offset + 0));
+        entity.setId(cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0));
         entity.setToken(cursor.getString(offset + 1));
         entity.setServer_device_id(cursor.isNull(offset + 2) ? null : cursor.getLong(offset + 2));
         entity.setLast_email(cursor.getString(offset + 3));

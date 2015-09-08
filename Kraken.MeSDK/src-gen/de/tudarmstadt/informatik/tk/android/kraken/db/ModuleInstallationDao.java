@@ -28,10 +28,10 @@ public class ModuleInstallationDao extends AbstractDao<ModuleInstallation, Long>
      * Can be used for QueryBuilder and for referencing column names.
     */
     public static class Properties {
-        public final static Property Id = new Property(0, long.class, "id", true, "_id");
+        public final static Property Id = new Property(0, Long.class, "id", true, "_id");
         public final static Property Created = new Property(1, String.class, "created", false, "CREATED");
-        public final static Property Module_id = new Property(2, long.class, "module_id", false, "MODULE_ID");
-        public final static Property User_id = new Property(3, long.class, "user_id", false, "USER_ID");
+        public final static Property Module_id = new Property(2, Long.class, "module_id", false, "MODULE_ID");
+        public final static Property User_id = new Property(3, Long.class, "user_id", false, "USER_ID");
     };
 
     private DaoSession daoSession;
@@ -52,10 +52,10 @@ public class ModuleInstallationDao extends AbstractDao<ModuleInstallation, Long>
     public static void createTable(SQLiteDatabase db, boolean ifNotExists) {
         String constraint = ifNotExists? "IF NOT EXISTS ": "";
         db.execSQL("CREATE TABLE " + constraint + "\"module_installation\" (" + //
-                "\"_id\" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL ," + // 0: id
+                "\"_id\" INTEGER PRIMARY KEY AUTOINCREMENT ," + // 0: id
                 "\"CREATED\" TEXT NOT NULL ," + // 1: created
-                "\"MODULE_ID\" INTEGER NOT NULL ," + // 2: module_id
-                "\"USER_ID\" INTEGER NOT NULL );"); // 3: user_id
+                "\"MODULE_ID\" INTEGER," + // 2: module_id
+                "\"USER_ID\" INTEGER);"); // 3: user_id
         // Add Indexes
         db.execSQL("CREATE INDEX " + constraint + "IDX_module_installation__id ON module_installation" +
                 " (\"_id\");");
@@ -75,10 +75,22 @@ public class ModuleInstallationDao extends AbstractDao<ModuleInstallation, Long>
     @Override
     protected void bindValues(SQLiteStatement stmt, ModuleInstallation entity) {
         stmt.clearBindings();
-        stmt.bindLong(1, entity.getId());
+ 
+        Long id = entity.getId();
+        if (id != null) {
+            stmt.bindLong(1, id);
+        }
         stmt.bindString(2, entity.getCreated());
-        stmt.bindLong(3, entity.getModule_id());
-        stmt.bindLong(4, entity.getUser_id());
+ 
+        Long module_id = entity.getModule_id();
+        if (module_id != null) {
+            stmt.bindLong(3, module_id);
+        }
+ 
+        Long user_id = entity.getUser_id();
+        if (user_id != null) {
+            stmt.bindLong(4, user_id);
+        }
     }
 
     @Override
@@ -90,17 +102,17 @@ public class ModuleInstallationDao extends AbstractDao<ModuleInstallation, Long>
     /** @inheritdoc */
     @Override
     public Long readKey(Cursor cursor, int offset) {
-        return cursor.getLong(offset + 0);
+        return cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0);
     }    
 
     /** @inheritdoc */
     @Override
     public ModuleInstallation readEntity(Cursor cursor, int offset) {
         ModuleInstallation entity = new ModuleInstallation( //
-            cursor.getLong(offset + 0), // id
+            cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0), // id
             cursor.getString(offset + 1), // created
-            cursor.getLong(offset + 2), // module_id
-            cursor.getLong(offset + 3) // user_id
+            cursor.isNull(offset + 2) ? null : cursor.getLong(offset + 2), // module_id
+            cursor.isNull(offset + 3) ? null : cursor.getLong(offset + 3) // user_id
         );
         return entity;
     }
@@ -108,10 +120,10 @@ public class ModuleInstallationDao extends AbstractDao<ModuleInstallation, Long>
     /** @inheritdoc */
     @Override
     public void readEntity(Cursor cursor, ModuleInstallation entity, int offset) {
-        entity.setId(cursor.getLong(offset + 0));
+        entity.setId(cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0));
         entity.setCreated(cursor.getString(offset + 1));
-        entity.setModule_id(cursor.getLong(offset + 2));
-        entity.setUser_id(cursor.getLong(offset + 3));
+        entity.setModule_id(cursor.isNull(offset + 2) ? null : cursor.getLong(offset + 2));
+        entity.setUser_id(cursor.isNull(offset + 3) ? null : cursor.getLong(offset + 3));
      }
     
     /** @inheritdoc */
@@ -138,7 +150,7 @@ public class ModuleInstallationDao extends AbstractDao<ModuleInstallation, Long>
     }
     
     /** Internal query to resolve the "moduleInstallationList" to-many relationship of Module. */
-    public List<ModuleInstallation> _queryModule_ModuleInstallationList(long module_id) {
+    public List<ModuleInstallation> _queryModule_ModuleInstallationList(Long module_id) {
         synchronized (this) {
             if (module_ModuleInstallationListQuery == null) {
                 QueryBuilder<ModuleInstallation> queryBuilder = queryBuilder();
@@ -152,7 +164,7 @@ public class ModuleInstallationDao extends AbstractDao<ModuleInstallation, Long>
     }
 
     /** Internal query to resolve the "moduleInstallationList" to-many relationship of User. */
-    public List<ModuleInstallation> _queryUser_ModuleInstallationList(long user_id) {
+    public List<ModuleInstallation> _queryUser_ModuleInstallationList(Long user_id) {
         synchronized (this) {
             if (user_ModuleInstallationListQuery == null) {
                 QueryBuilder<ModuleInstallation> queryBuilder = queryBuilder();
@@ -189,15 +201,11 @@ public class ModuleInstallationDao extends AbstractDao<ModuleInstallation, Long>
         int offset = getAllColumns().length;
 
         Module module = loadCurrentOther(daoSession.getModuleDao(), cursor, offset);
-         if(module != null) {
-            entity.setModule(module);
-        }
+        entity.setModule(module);
         offset += daoSession.getModuleDao().getAllColumns().length;
 
         User user = loadCurrentOther(daoSession.getUserDao(), cursor, offset);
-         if(user != null) {
-            entity.setUser(user);
-        }
+        entity.setUser(user);
 
         return entity;    
     }

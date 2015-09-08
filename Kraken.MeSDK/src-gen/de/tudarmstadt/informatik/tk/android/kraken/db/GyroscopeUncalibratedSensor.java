@@ -6,7 +6,7 @@ package de.tudarmstadt.informatik.tk.android.kraken.db;
  */
 public class GyroscopeUncalibratedSensor implements de.tudarmstadt.informatik.tk.android.kraken.interfaces.IDbSensor {
 
-    private long id;
+    private Long id;
     private float xNoDrift;
     private float yNoDrift;
     private float zNoDrift;
@@ -19,11 +19,11 @@ public class GyroscopeUncalibratedSensor implements de.tudarmstadt.informatik.tk
     public GyroscopeUncalibratedSensor() {
     }
 
-    public GyroscopeUncalibratedSensor(long id) {
+    public GyroscopeUncalibratedSensor(Long id) {
         this.id = id;
     }
 
-    public GyroscopeUncalibratedSensor(long id, float xNoDrift, float yNoDrift, float zNoDrift, float xEstimatedDrift, float yEstimatedDrift, float zEstimatedDrift, String created) {
+    public GyroscopeUncalibratedSensor(Long id, float xNoDrift, float yNoDrift, float zNoDrift, float xEstimatedDrift, float yEstimatedDrift, float zEstimatedDrift, String created) {
         this.id = id;
         this.xNoDrift = xNoDrift;
         this.yNoDrift = yNoDrift;
@@ -34,11 +34,11 @@ public class GyroscopeUncalibratedSensor implements de.tudarmstadt.informatik.tk
         this.created = created;
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

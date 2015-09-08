@@ -6,7 +6,7 @@ package de.tudarmstadt.informatik.tk.android.kraken.db;
  */
 public class LoudnessEvent implements de.tudarmstadt.informatik.tk.android.kraken.interfaces.IDbSensor {
 
-    private long id;
+    private Long id;
     private float loudness;
     /** Not-null value. */
     private String created;
@@ -14,21 +14,21 @@ public class LoudnessEvent implements de.tudarmstadt.informatik.tk.android.krake
     public LoudnessEvent() {
     }
 
-    public LoudnessEvent(long id) {
+    public LoudnessEvent(Long id) {
         this.id = id;
     }
 
-    public LoudnessEvent(long id, float loudness, String created) {
+    public LoudnessEvent(Long id, float loudness, String created) {
         this.id = id;
         this.loudness = loudness;
         this.created = created;
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

@@ -6,7 +6,7 @@ package de.tudarmstadt.informatik.tk.android.kraken.db;
  */
 public class GyroscopeSensor implements de.tudarmstadt.informatik.tk.android.kraken.interfaces.IDbSensor {
 
-    private long id;
+    private Long id;
     private Double x;
     private Double y;
     private Double z;
@@ -16,11 +16,11 @@ public class GyroscopeSensor implements de.tudarmstadt.informatik.tk.android.kra
     public GyroscopeSensor() {
     }
 
-    public GyroscopeSensor(long id) {
+    public GyroscopeSensor(Long id) {
         this.id = id;
     }
 
-    public GyroscopeSensor(long id, Double x, Double y, Double z, String created) {
+    public GyroscopeSensor(Long id, Double x, Double y, Double z, String created) {
         this.id = id;
         this.x = x;
         this.y = y;
@@ -28,11 +28,11 @@ public class GyroscopeSensor implements de.tudarmstadt.informatik.tk.android.kra
         this.created = created;
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

@@ -23,7 +23,7 @@ public class ConnectionEventDao extends AbstractDao<ConnectionEvent, Long> {
      * Can be used for QueryBuilder and for referencing column names.
     */
     public static class Properties {
-        public final static Property Id = new Property(0, long.class, "id", true, "_id");
+        public final static Property Id = new Property(0, Long.class, "id", true, "_id");
         public final static Property IsWifi = new Property(1, Boolean.class, "isWifi", false, "IS_WIFI");
         public final static Property IsMobile = new Property(2, Boolean.class, "isMobile", false, "IS_MOBILE");
         public final static Property Created = new Property(3, String.class, "created", false, "CREATED");
@@ -42,7 +42,7 @@ public class ConnectionEventDao extends AbstractDao<ConnectionEvent, Long> {
     public static void createTable(SQLiteDatabase db, boolean ifNotExists) {
         String constraint = ifNotExists? "IF NOT EXISTS ": "";
         db.execSQL("CREATE TABLE " + constraint + "\"connection_event\" (" + //
-                "\"_id\" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL ," + // 0: id
+                "\"_id\" INTEGER PRIMARY KEY AUTOINCREMENT ," + // 0: id
                 "\"IS_WIFI\" INTEGER," + // 1: isWifi
                 "\"IS_MOBILE\" INTEGER," + // 2: isMobile
                 "\"CREATED\" TEXT NOT NULL );"); // 3: created
@@ -61,7 +61,11 @@ public class ConnectionEventDao extends AbstractDao<ConnectionEvent, Long> {
     @Override
     protected void bindValues(SQLiteStatement stmt, ConnectionEvent entity) {
         stmt.clearBindings();
-        stmt.bindLong(1, entity.getId());
+ 
+        Long id = entity.getId();
+        if (id != null) {
+            stmt.bindLong(1, id);
+        }
  
         Boolean isWifi = entity.getIsWifi();
         if (isWifi != null) {
@@ -78,14 +82,14 @@ public class ConnectionEventDao extends AbstractDao<ConnectionEvent, Long> {
     /** @inheritdoc */
     @Override
     public Long readKey(Cursor cursor, int offset) {
-        return cursor.getLong(offset + 0);
+        return cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0);
     }    
 
     /** @inheritdoc */
     @Override
     public ConnectionEvent readEntity(Cursor cursor, int offset) {
         ConnectionEvent entity = new ConnectionEvent( //
-            cursor.getLong(offset + 0), // id
+            cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0), // id
             cursor.isNull(offset + 1) ? null : cursor.getShort(offset + 1) != 0, // isWifi
             cursor.isNull(offset + 2) ? null : cursor.getShort(offset + 2) != 0, // isMobile
             cursor.getString(offset + 3) // created
@@ -96,7 +100,7 @@ public class ConnectionEventDao extends AbstractDao<ConnectionEvent, Long> {
     /** @inheritdoc */
     @Override
     public void readEntity(Cursor cursor, ConnectionEvent entity, int offset) {
-        entity.setId(cursor.getLong(offset + 0));
+        entity.setId(cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0));
         entity.setIsWifi(cursor.isNull(offset + 1) ? null : cursor.getShort(offset + 1) != 0);
         entity.setIsMobile(cursor.isNull(offset + 2) ? null : cursor.getShort(offset + 2) != 0);
         entity.setCreated(cursor.getString(offset + 3));

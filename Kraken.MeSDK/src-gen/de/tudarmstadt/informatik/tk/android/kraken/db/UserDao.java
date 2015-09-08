@@ -23,7 +23,7 @@ public class UserDao extends AbstractDao<User, Long> {
      * Can be used for QueryBuilder and for referencing column names.
     */
     public static class Properties {
-        public final static Property Id = new Property(0, long.class, "id", true, "_id");
+        public final static Property Id = new Property(0, Long.class, "id", true, "_id");
         public final static Property Firstname = new Property(1, String.class, "firstname", false, "FIRSTNAME");
         public final static Property Lastname = new Property(2, String.class, "lastname", false, "LASTNAME");
         public final static Property PrimaryEmail = new Property(3, String.class, "primaryEmail", false, "PRIMARY_EMAIL");
@@ -49,7 +49,7 @@ public class UserDao extends AbstractDao<User, Long> {
     public static void createTable(SQLiteDatabase db, boolean ifNotExists) {
         String constraint = ifNotExists? "IF NOT EXISTS ": "";
         db.execSQL("CREATE TABLE " + constraint + "\"user\" (" + //
-                "\"_id\" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL ," + // 0: id
+                "\"_id\" INTEGER PRIMARY KEY AUTOINCREMENT ," + // 0: id
                 "\"FIRSTNAME\" TEXT," + // 1: firstname
                 "\"LASTNAME\" TEXT," + // 2: lastname
                 "\"PRIMARY_EMAIL\" TEXT NOT NULL ," + // 3: primaryEmail
@@ -72,7 +72,11 @@ public class UserDao extends AbstractDao<User, Long> {
     @Override
     protected void bindValues(SQLiteStatement stmt, User entity) {
         stmt.clearBindings();
-        stmt.bindLong(1, entity.getId());
+ 
+        Long id = entity.getId();
+        if (id != null) {
+            stmt.bindLong(1, id);
+        }
  
         String firstname = entity.getFirstname();
         if (firstname != null) {
@@ -111,14 +115,14 @@ public class UserDao extends AbstractDao<User, Long> {
     /** @inheritdoc */
     @Override
     public Long readKey(Cursor cursor, int offset) {
-        return cursor.getLong(offset + 0);
+        return cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0);
     }    
 
     /** @inheritdoc */
     @Override
     public User readEntity(Cursor cursor, int offset) {
         User entity = new User( //
-            cursor.getLong(offset + 0), // id
+            cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0), // id
             cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1), // firstname
             cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // lastname
             cursor.getString(offset + 3), // primaryEmail
@@ -133,7 +137,7 @@ public class UserDao extends AbstractDao<User, Long> {
     /** @inheritdoc */
     @Override
     public void readEntity(Cursor cursor, User entity, int offset) {
-        entity.setId(cursor.getLong(offset + 0));
+        entity.setId(cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0));
         entity.setFirstname(cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1));
         entity.setLastname(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
         entity.setPrimaryEmail(cursor.getString(offset + 3));

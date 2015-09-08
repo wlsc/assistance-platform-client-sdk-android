@@ -28,14 +28,14 @@ public class UserSocialProfileDao extends AbstractDao<UserSocialProfile, Long> {
      * Can be used for QueryBuilder and for referencing column names.
     */
     public static class Properties {
-        public final static Property Id = new Property(0, long.class, "id", true, "_id");
+        public final static Property Id = new Property(0, Long.class, "id", true, "_id");
         public final static Property Name = new Property(1, String.class, "name", false, "NAME");
         public final static Property Firstname = new Property(2, String.class, "firstname", false, "FIRSTNAME");
         public final static Property Lastname = new Property(3, String.class, "lastname", false, "LASTNAME");
         public final static Property Email = new Property(4, String.class, "email", false, "EMAIL");
         public final static Property Updated = new Property(5, String.class, "updated", false, "UPDATED");
         public final static Property Created = new Property(6, String.class, "created", false, "CREATED");
-        public final static Property User_id = new Property(7, long.class, "user_id", false, "USER_ID");
+        public final static Property User_id = new Property(7, Long.class, "user_id", false, "USER_ID");
     };
 
     private DaoSession daoSession;
@@ -55,14 +55,14 @@ public class UserSocialProfileDao extends AbstractDao<UserSocialProfile, Long> {
     public static void createTable(SQLiteDatabase db, boolean ifNotExists) {
         String constraint = ifNotExists? "IF NOT EXISTS ": "";
         db.execSQL("CREATE TABLE " + constraint + "\"user_social_profile\" (" + //
-                "\"_id\" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL ," + // 0: id
+                "\"_id\" INTEGER PRIMARY KEY AUTOINCREMENT ," + // 0: id
                 "\"NAME\" TEXT," + // 1: name
                 "\"FIRSTNAME\" TEXT," + // 2: firstname
                 "\"LASTNAME\" TEXT," + // 3: lastname
                 "\"EMAIL\" TEXT," + // 4: email
                 "\"UPDATED\" TEXT," + // 5: updated
                 "\"CREATED\" TEXT NOT NULL ," + // 6: created
-                "\"USER_ID\" INTEGER NOT NULL );"); // 7: user_id
+                "\"USER_ID\" INTEGER);"); // 7: user_id
         // Add Indexes
         db.execSQL("CREATE INDEX " + constraint + "IDX_user_social_profile__id ON user_social_profile" +
                 " (\"_id\");");
@@ -80,7 +80,11 @@ public class UserSocialProfileDao extends AbstractDao<UserSocialProfile, Long> {
     @Override
     protected void bindValues(SQLiteStatement stmt, UserSocialProfile entity) {
         stmt.clearBindings();
-        stmt.bindLong(1, entity.getId());
+ 
+        Long id = entity.getId();
+        if (id != null) {
+            stmt.bindLong(1, id);
+        }
  
         String name = entity.getName();
         if (name != null) {
@@ -107,7 +111,11 @@ public class UserSocialProfileDao extends AbstractDao<UserSocialProfile, Long> {
             stmt.bindString(6, updated);
         }
         stmt.bindString(7, entity.getCreated());
-        stmt.bindLong(8, entity.getUser_id());
+ 
+        Long user_id = entity.getUser_id();
+        if (user_id != null) {
+            stmt.bindLong(8, user_id);
+        }
     }
 
     @Override
@@ -119,21 +127,21 @@ public class UserSocialProfileDao extends AbstractDao<UserSocialProfile, Long> {
     /** @inheritdoc */
     @Override
     public Long readKey(Cursor cursor, int offset) {
-        return cursor.getLong(offset + 0);
+        return cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0);
     }    
 
     /** @inheritdoc */
     @Override
     public UserSocialProfile readEntity(Cursor cursor, int offset) {
         UserSocialProfile entity = new UserSocialProfile( //
-            cursor.getLong(offset + 0), // id
+            cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0), // id
             cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1), // name
             cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // firstname
             cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // lastname
             cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4), // email
             cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5), // updated
             cursor.getString(offset + 6), // created
-            cursor.getLong(offset + 7) // user_id
+            cursor.isNull(offset + 7) ? null : cursor.getLong(offset + 7) // user_id
         );
         return entity;
     }
@@ -141,14 +149,14 @@ public class UserSocialProfileDao extends AbstractDao<UserSocialProfile, Long> {
     /** @inheritdoc */
     @Override
     public void readEntity(Cursor cursor, UserSocialProfile entity, int offset) {
-        entity.setId(cursor.getLong(offset + 0));
+        entity.setId(cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0));
         entity.setName(cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1));
         entity.setFirstname(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
         entity.setLastname(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
         entity.setEmail(cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4));
         entity.setUpdated(cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5));
         entity.setCreated(cursor.getString(offset + 6));
-        entity.setUser_id(cursor.getLong(offset + 7));
+        entity.setUser_id(cursor.isNull(offset + 7) ? null : cursor.getLong(offset + 7));
      }
     
     /** @inheritdoc */
@@ -175,7 +183,7 @@ public class UserSocialProfileDao extends AbstractDao<UserSocialProfile, Long> {
     }
     
     /** Internal query to resolve the "userSocialProfileList" to-many relationship of User. */
-    public List<UserSocialProfile> _queryUser_UserSocialProfileList(long user_id) {
+    public List<UserSocialProfile> _queryUser_UserSocialProfileList(Long user_id) {
         synchronized (this) {
             if (user_UserSocialProfileListQuery == null) {
                 QueryBuilder<UserSocialProfile> queryBuilder = queryBuilder();
@@ -209,9 +217,7 @@ public class UserSocialProfileDao extends AbstractDao<UserSocialProfile, Long> {
         int offset = getAllColumns().length;
 
         User user = loadCurrentOther(daoSession.getUserDao(), cursor, offset);
-         if(user != null) {
-            entity.setUser(user);
-        }
+        entity.setUser(user);
 
         return entity;    
     }

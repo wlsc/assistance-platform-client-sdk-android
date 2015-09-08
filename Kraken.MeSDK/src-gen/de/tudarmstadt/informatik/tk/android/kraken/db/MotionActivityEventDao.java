@@ -23,7 +23,7 @@ public class MotionActivityEventDao extends AbstractDao<MotionActivityEvent, Lon
      * Can be used for QueryBuilder and for referencing column names.
     */
     public static class Properties {
-        public final static Property Id = new Property(0, long.class, "id", true, "_id");
+        public final static Property Id = new Property(0, Long.class, "id", true, "_id");
         public final static Property Walking = new Property(1, Boolean.class, "walking", false, "WALKING");
         public final static Property Running = new Property(2, Boolean.class, "running", false, "RUNNING");
         public final static Property Cycling = new Property(3, Boolean.class, "cycling", false, "CYCLING");
@@ -49,7 +49,7 @@ public class MotionActivityEventDao extends AbstractDao<MotionActivityEvent, Lon
     public static void createTable(SQLiteDatabase db, boolean ifNotExists) {
         String constraint = ifNotExists? "IF NOT EXISTS ": "";
         db.execSQL("CREATE TABLE " + constraint + "\"motion_activity_event\" (" + //
-                "\"_id\" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL ," + // 0: id
+                "\"_id\" INTEGER PRIMARY KEY AUTOINCREMENT ," + // 0: id
                 "\"WALKING\" INTEGER," + // 1: walking
                 "\"RUNNING\" INTEGER," + // 2: running
                 "\"CYCLING\" INTEGER," + // 3: cycling
@@ -75,7 +75,11 @@ public class MotionActivityEventDao extends AbstractDao<MotionActivityEvent, Lon
     @Override
     protected void bindValues(SQLiteStatement stmt, MotionActivityEvent entity) {
         stmt.clearBindings();
-        stmt.bindLong(1, entity.getId());
+ 
+        Long id = entity.getId();
+        if (id != null) {
+            stmt.bindLong(1, id);
+        }
  
         Boolean walking = entity.getWalking();
         if (walking != null) {
@@ -127,14 +131,14 @@ public class MotionActivityEventDao extends AbstractDao<MotionActivityEvent, Lon
     /** @inheritdoc */
     @Override
     public Long readKey(Cursor cursor, int offset) {
-        return cursor.getLong(offset + 0);
+        return cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0);
     }    
 
     /** @inheritdoc */
     @Override
     public MotionActivityEvent readEntity(Cursor cursor, int offset) {
         MotionActivityEvent entity = new MotionActivityEvent( //
-            cursor.getLong(offset + 0), // id
+            cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0), // id
             cursor.isNull(offset + 1) ? null : cursor.getShort(offset + 1) != 0, // walking
             cursor.isNull(offset + 2) ? null : cursor.getShort(offset + 2) != 0, // running
             cursor.isNull(offset + 3) ? null : cursor.getShort(offset + 3) != 0, // cycling
@@ -152,7 +156,7 @@ public class MotionActivityEventDao extends AbstractDao<MotionActivityEvent, Lon
     /** @inheritdoc */
     @Override
     public void readEntity(Cursor cursor, MotionActivityEvent entity, int offset) {
-        entity.setId(cursor.getLong(offset + 0));
+        entity.setId(cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0));
         entity.setWalking(cursor.isNull(offset + 1) ? null : cursor.getShort(offset + 1) != 0);
         entity.setRunning(cursor.isNull(offset + 2) ? null : cursor.getShort(offset + 2) != 0);
         entity.setCycling(cursor.isNull(offset + 3) ? null : cursor.getShort(offset + 3) != 0);

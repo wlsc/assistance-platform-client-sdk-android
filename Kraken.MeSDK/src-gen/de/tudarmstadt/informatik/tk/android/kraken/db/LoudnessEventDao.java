@@ -23,7 +23,7 @@ public class LoudnessEventDao extends AbstractDao<LoudnessEvent, Long> {
      * Can be used for QueryBuilder and for referencing column names.
     */
     public static class Properties {
-        public final static Property Id = new Property(0, long.class, "id", true, "_id");
+        public final static Property Id = new Property(0, Long.class, "id", true, "_id");
         public final static Property Loudness = new Property(1, float.class, "loudness", false, "LOUDNESS");
         public final static Property Created = new Property(2, String.class, "created", false, "CREATED");
     };
@@ -41,7 +41,7 @@ public class LoudnessEventDao extends AbstractDao<LoudnessEvent, Long> {
     public static void createTable(SQLiteDatabase db, boolean ifNotExists) {
         String constraint = ifNotExists? "IF NOT EXISTS ": "";
         db.execSQL("CREATE TABLE " + constraint + "\"loudness_event\" (" + //
-                "\"_id\" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL ," + // 0: id
+                "\"_id\" INTEGER PRIMARY KEY AUTOINCREMENT ," + // 0: id
                 "\"LOUDNESS\" REAL NOT NULL ," + // 1: loudness
                 "\"CREATED\" TEXT NOT NULL );"); // 2: created
         // Add Indexes
@@ -59,7 +59,11 @@ public class LoudnessEventDao extends AbstractDao<LoudnessEvent, Long> {
     @Override
     protected void bindValues(SQLiteStatement stmt, LoudnessEvent entity) {
         stmt.clearBindings();
-        stmt.bindLong(1, entity.getId());
+ 
+        Long id = entity.getId();
+        if (id != null) {
+            stmt.bindLong(1, id);
+        }
         stmt.bindDouble(2, entity.getLoudness());
         stmt.bindString(3, entity.getCreated());
     }
@@ -67,14 +71,14 @@ public class LoudnessEventDao extends AbstractDao<LoudnessEvent, Long> {
     /** @inheritdoc */
     @Override
     public Long readKey(Cursor cursor, int offset) {
-        return cursor.getLong(offset + 0);
+        return cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0);
     }    
 
     /** @inheritdoc */
     @Override
     public LoudnessEvent readEntity(Cursor cursor, int offset) {
         LoudnessEvent entity = new LoudnessEvent( //
-            cursor.getLong(offset + 0), // id
+            cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0), // id
             cursor.getFloat(offset + 1), // loudness
             cursor.getString(offset + 2) // created
         );
@@ -84,7 +88,7 @@ public class LoudnessEventDao extends AbstractDao<LoudnessEvent, Long> {
     /** @inheritdoc */
     @Override
     public void readEntity(Cursor cursor, LoudnessEvent entity, int offset) {
-        entity.setId(cursor.getLong(offset + 0));
+        entity.setId(cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0));
         entity.setLoudness(cursor.getFloat(offset + 1));
         entity.setCreated(cursor.getString(offset + 2));
      }

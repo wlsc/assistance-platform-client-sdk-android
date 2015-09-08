@@ -9,7 +9,7 @@ import de.greenrobot.dao.DaoException;
  */
 public class UserSocialProfile {
 
-    private long id;
+    private Long id;
     private String name;
     private String firstname;
     private String lastname;
@@ -17,7 +17,7 @@ public class UserSocialProfile {
     private String updated;
     /** Not-null value. */
     private String created;
-    private long user_id;
+    private Long user_id;
 
     /** Used to resolve relations */
     private transient DaoSession daoSession;
@@ -32,11 +32,11 @@ public class UserSocialProfile {
     public UserSocialProfile() {
     }
 
-    public UserSocialProfile(long id) {
+    public UserSocialProfile(Long id) {
         this.id = id;
     }
 
-    public UserSocialProfile(long id, String name, String firstname, String lastname, String email, String updated, String created, long user_id) {
+    public UserSocialProfile(Long id, String name, String firstname, String lastname, String email, String updated, String created, Long user_id) {
         this.id = id;
         this.name = name;
         this.firstname = firstname;
@@ -53,11 +53,11 @@ public class UserSocialProfile {
         myDao = daoSession != null ? daoSession.getUserSocialProfileDao() : null;
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -111,17 +111,17 @@ public class UserSocialProfile {
         this.created = created;
     }
 
-    public long getUser_id() {
+    public Long getUser_id() {
         return user_id;
     }
 
-    public void setUser_id(long user_id) {
+    public void setUser_id(Long user_id) {
         this.user_id = user_id;
     }
 
     /** To-one relationship, resolved on first access. */
     public User getUser() {
-        long __key = this.user_id;
+        Long __key = this.user_id;
         if (user__resolvedKey == null || !user__resolvedKey.equals(__key)) {
             if (daoSession == null) {
                 throw new DaoException("Entity is detached from DAO context");
@@ -137,12 +137,9 @@ public class UserSocialProfile {
     }
 
     public void setUser(User user) {
-        if (user == null) {
-            throw new DaoException("To-one property 'user_id' has not-null constraint; cannot set to-one to null");
-        }
         synchronized (this) {
             this.user = user;
-            user_id = user.getId();
+            user_id = user == null ? null : user.getId();
             user__resolvedKey = user_id;
         }
     }

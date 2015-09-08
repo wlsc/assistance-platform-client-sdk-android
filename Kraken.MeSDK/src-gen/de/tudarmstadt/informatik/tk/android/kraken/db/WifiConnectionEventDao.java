@@ -23,7 +23,7 @@ public class WifiConnectionEventDao extends AbstractDao<WifiConnectionEvent, Lon
      * Can be used for QueryBuilder and for referencing column names.
     */
     public static class Properties {
-        public final static Property Id = new Property(0, long.class, "id", true, "_id");
+        public final static Property Id = new Property(0, Long.class, "id", true, "_id");
         public final static Property Ssid = new Property(1, String.class, "ssid", false, "SSID");
         public final static Property Bssid = new Property(2, String.class, "bssid", false, "BSSID");
         public final static Property Created = new Property(3, String.class, "created", false, "CREATED");
@@ -47,7 +47,7 @@ public class WifiConnectionEventDao extends AbstractDao<WifiConnectionEvent, Lon
     public static void createTable(SQLiteDatabase db, boolean ifNotExists) {
         String constraint = ifNotExists? "IF NOT EXISTS ": "";
         db.execSQL("CREATE TABLE " + constraint + "\"wifi_connection_event\" (" + //
-                "\"_id\" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL ," + // 0: id
+                "\"_id\" INTEGER PRIMARY KEY AUTOINCREMENT ," + // 0: id
                 "\"SSID\" TEXT," + // 1: ssid
                 "\"BSSID\" TEXT," + // 2: bssid
                 "\"CREATED\" TEXT NOT NULL ," + // 3: created
@@ -71,7 +71,11 @@ public class WifiConnectionEventDao extends AbstractDao<WifiConnectionEvent, Lon
     @Override
     protected void bindValues(SQLiteStatement stmt, WifiConnectionEvent entity) {
         stmt.clearBindings();
-        stmt.bindLong(1, entity.getId());
+ 
+        Long id = entity.getId();
+        if (id != null) {
+            stmt.bindLong(1, id);
+        }
  
         String ssid = entity.getSsid();
         if (ssid != null) {
@@ -113,14 +117,14 @@ public class WifiConnectionEventDao extends AbstractDao<WifiConnectionEvent, Lon
     /** @inheritdoc */
     @Override
     public Long readKey(Cursor cursor, int offset) {
-        return cursor.getLong(offset + 0);
+        return cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0);
     }    
 
     /** @inheritdoc */
     @Override
     public WifiConnectionEvent readEntity(Cursor cursor, int offset) {
         WifiConnectionEvent entity = new WifiConnectionEvent( //
-            cursor.getLong(offset + 0), // id
+            cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0), // id
             cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1), // ssid
             cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // bssid
             cursor.getString(offset + 3), // created
@@ -136,7 +140,7 @@ public class WifiConnectionEventDao extends AbstractDao<WifiConnectionEvent, Lon
     /** @inheritdoc */
     @Override
     public void readEntity(Cursor cursor, WifiConnectionEvent entity, int offset) {
-        entity.setId(cursor.getLong(offset + 0));
+        entity.setId(cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0));
         entity.setSsid(cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1));
         entity.setBssid(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
         entity.setCreated(cursor.getString(offset + 3));

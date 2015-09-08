@@ -28,15 +28,15 @@ public class DeviceDao extends AbstractDao<Device, Long> {
      * Can be used for QueryBuilder and for referencing column names.
     */
     public static class Properties {
-        public final static Property Id = new Property(0, long.class, "id", true, "_id");
+        public final static Property Id = new Property(0, Long.class, "id", true, "_id");
         public final static Property Device_identifier = new Property(1, String.class, "device_identifier", false, "DEVICE_IDENTIFIER");
         public final static Property Os = new Property(2, String.class, "os", false, "OS");
         public final static Property Os_version = new Property(3, String.class, "os_version", false, "OS_VERSION");
         public final static Property Brand = new Property(4, String.class, "brand", false, "BRAND");
         public final static Property Model = new Property(5, String.class, "model", false, "MODEL");
         public final static Property Created = new Property(6, String.class, "created", false, "CREATED");
-        public final static Property Login_id = new Property(7, long.class, "login_id", false, "LOGIN_ID");
-        public final static Property User_id = new Property(8, long.class, "user_id", false, "USER_ID");
+        public final static Property Login_id = new Property(7, Long.class, "login_id", false, "LOGIN_ID");
+        public final static Property User_id = new Property(8, Long.class, "user_id", false, "USER_ID");
     };
 
     private DaoSession daoSession;
@@ -57,15 +57,15 @@ public class DeviceDao extends AbstractDao<Device, Long> {
     public static void createTable(SQLiteDatabase db, boolean ifNotExists) {
         String constraint = ifNotExists? "IF NOT EXISTS ": "";
         db.execSQL("CREATE TABLE " + constraint + "\"device\" (" + //
-                "\"_id\" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL ," + // 0: id
+                "\"_id\" INTEGER PRIMARY KEY AUTOINCREMENT ," + // 0: id
                 "\"DEVICE_IDENTIFIER\" TEXT," + // 1: device_identifier
                 "\"OS\" TEXT," + // 2: os
                 "\"OS_VERSION\" TEXT," + // 3: os_version
                 "\"BRAND\" TEXT," + // 4: brand
                 "\"MODEL\" TEXT," + // 5: model
                 "\"CREATED\" TEXT NOT NULL ," + // 6: created
-                "\"LOGIN_ID\" INTEGER NOT NULL ," + // 7: login_id
-                "\"USER_ID\" INTEGER NOT NULL );"); // 8: user_id
+                "\"LOGIN_ID\" INTEGER," + // 7: login_id
+                "\"USER_ID\" INTEGER);"); // 8: user_id
         // Add Indexes
         db.execSQL("CREATE INDEX " + constraint + "IDX_device__id ON device" +
                 " (\"_id\");");
@@ -85,7 +85,11 @@ public class DeviceDao extends AbstractDao<Device, Long> {
     @Override
     protected void bindValues(SQLiteStatement stmt, Device entity) {
         stmt.clearBindings();
-        stmt.bindLong(1, entity.getId());
+ 
+        Long id = entity.getId();
+        if (id != null) {
+            stmt.bindLong(1, id);
+        }
  
         String device_identifier = entity.getDevice_identifier();
         if (device_identifier != null) {
@@ -112,8 +116,16 @@ public class DeviceDao extends AbstractDao<Device, Long> {
             stmt.bindString(6, model);
         }
         stmt.bindString(7, entity.getCreated());
-        stmt.bindLong(8, entity.getLogin_id());
-        stmt.bindLong(9, entity.getUser_id());
+ 
+        Long login_id = entity.getLogin_id();
+        if (login_id != null) {
+            stmt.bindLong(8, login_id);
+        }
+ 
+        Long user_id = entity.getUser_id();
+        if (user_id != null) {
+            stmt.bindLong(9, user_id);
+        }
     }
 
     @Override
@@ -125,22 +137,22 @@ public class DeviceDao extends AbstractDao<Device, Long> {
     /** @inheritdoc */
     @Override
     public Long readKey(Cursor cursor, int offset) {
-        return cursor.getLong(offset + 0);
+        return cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0);
     }    
 
     /** @inheritdoc */
     @Override
     public Device readEntity(Cursor cursor, int offset) {
         Device entity = new Device( //
-            cursor.getLong(offset + 0), // id
+            cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0), // id
             cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1), // device_identifier
             cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // os
             cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // os_version
             cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4), // brand
             cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5), // model
             cursor.getString(offset + 6), // created
-            cursor.getLong(offset + 7), // login_id
-            cursor.getLong(offset + 8) // user_id
+            cursor.isNull(offset + 7) ? null : cursor.getLong(offset + 7), // login_id
+            cursor.isNull(offset + 8) ? null : cursor.getLong(offset + 8) // user_id
         );
         return entity;
     }
@@ -148,15 +160,15 @@ public class DeviceDao extends AbstractDao<Device, Long> {
     /** @inheritdoc */
     @Override
     public void readEntity(Cursor cursor, Device entity, int offset) {
-        entity.setId(cursor.getLong(offset + 0));
+        entity.setId(cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0));
         entity.setDevice_identifier(cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1));
         entity.setOs(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
         entity.setOs_version(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
         entity.setBrand(cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4));
         entity.setModel(cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5));
         entity.setCreated(cursor.getString(offset + 6));
-        entity.setLogin_id(cursor.getLong(offset + 7));
-        entity.setUser_id(cursor.getLong(offset + 8));
+        entity.setLogin_id(cursor.isNull(offset + 7) ? null : cursor.getLong(offset + 7));
+        entity.setUser_id(cursor.isNull(offset + 8) ? null : cursor.getLong(offset + 8));
      }
     
     /** @inheritdoc */
@@ -183,7 +195,7 @@ public class DeviceDao extends AbstractDao<Device, Long> {
     }
     
     /** Internal query to resolve the "deviceList" to-many relationship of Login. */
-    public List<Device> _queryLogin_DeviceList(long login_id) {
+    public List<Device> _queryLogin_DeviceList(Long login_id) {
         synchronized (this) {
             if (login_DeviceListQuery == null) {
                 QueryBuilder<Device> queryBuilder = queryBuilder();
@@ -197,7 +209,7 @@ public class DeviceDao extends AbstractDao<Device, Long> {
     }
 
     /** Internal query to resolve the "deviceList" to-many relationship of User. */
-    public List<Device> _queryUser_DeviceList(long user_id) {
+    public List<Device> _queryUser_DeviceList(Long user_id) {
         synchronized (this) {
             if (user_DeviceListQuery == null) {
                 QueryBuilder<Device> queryBuilder = queryBuilder();
@@ -234,15 +246,11 @@ public class DeviceDao extends AbstractDao<Device, Long> {
         int offset = getAllColumns().length;
 
         Login login = loadCurrentOther(daoSession.getLoginDao(), cursor, offset);
-         if(login != null) {
-            entity.setLogin(login);
-        }
+        entity.setLogin(login);
         offset += daoSession.getLoginDao().getAllColumns().length;
 
         User user = loadCurrentOther(daoSession.getUserDao(), cursor, offset);
-         if(user != null) {
-            entity.setUser(user);
-        }
+        entity.setUser(user);
 
         return entity;    
     }

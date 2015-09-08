@@ -23,7 +23,7 @@ public class MobileConnectionEventDao extends AbstractDao<MobileConnectionEvent,
      * Can be used for QueryBuilder and for referencing column names.
     */
     public static class Properties {
-        public final static Property Id = new Property(0, long.class, "id", true, "_id");
+        public final static Property Id = new Property(0, Long.class, "id", true, "_id");
         public final static Property CarrierName = new Property(1, String.class, "carrierName", false, "CARRIER_NAME");
         public final static Property MobileCarrierCode = new Property(2, String.class, "mobileCarrierCode", false, "MOBILE_CARRIER_CODE");
         public final static Property MobileNetworkCode = new Property(3, String.class, "mobileNetworkCode", false, "MOBILE_NETWORK_CODE");
@@ -44,7 +44,7 @@ public class MobileConnectionEventDao extends AbstractDao<MobileConnectionEvent,
     public static void createTable(SQLiteDatabase db, boolean ifNotExists) {
         String constraint = ifNotExists? "IF NOT EXISTS ": "";
         db.execSQL("CREATE TABLE " + constraint + "\"mobile_connection_event\" (" + //
-                "\"_id\" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL ," + // 0: id
+                "\"_id\" INTEGER PRIMARY KEY AUTOINCREMENT ," + // 0: id
                 "\"CARRIER_NAME\" TEXT," + // 1: carrierName
                 "\"MOBILE_CARRIER_CODE\" TEXT," + // 2: mobileCarrierCode
                 "\"MOBILE_NETWORK_CODE\" TEXT," + // 3: mobileNetworkCode
@@ -65,7 +65,11 @@ public class MobileConnectionEventDao extends AbstractDao<MobileConnectionEvent,
     @Override
     protected void bindValues(SQLiteStatement stmt, MobileConnectionEvent entity) {
         stmt.clearBindings();
-        stmt.bindLong(1, entity.getId());
+ 
+        Long id = entity.getId();
+        if (id != null) {
+            stmt.bindLong(1, id);
+        }
  
         String carrierName = entity.getCarrierName();
         if (carrierName != null) {
@@ -92,14 +96,14 @@ public class MobileConnectionEventDao extends AbstractDao<MobileConnectionEvent,
     /** @inheritdoc */
     @Override
     public Long readKey(Cursor cursor, int offset) {
-        return cursor.getLong(offset + 0);
+        return cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0);
     }    
 
     /** @inheritdoc */
     @Override
     public MobileConnectionEvent readEntity(Cursor cursor, int offset) {
         MobileConnectionEvent entity = new MobileConnectionEvent( //
-            cursor.getLong(offset + 0), // id
+            cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0), // id
             cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1), // carrierName
             cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // mobileCarrierCode
             cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // mobileNetworkCode
@@ -112,7 +116,7 @@ public class MobileConnectionEventDao extends AbstractDao<MobileConnectionEvent,
     /** @inheritdoc */
     @Override
     public void readEntity(Cursor cursor, MobileConnectionEvent entity, int offset) {
-        entity.setId(cursor.getLong(offset + 0));
+        entity.setId(cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0));
         entity.setCarrierName(cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1));
         entity.setMobileCarrierCode(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
         entity.setMobileNetworkCode(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));

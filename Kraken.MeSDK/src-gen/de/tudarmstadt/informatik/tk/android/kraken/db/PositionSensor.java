@@ -6,7 +6,7 @@ package de.tudarmstadt.informatik.tk.android.kraken.db;
  */
 public class PositionSensor implements de.tudarmstadt.informatik.tk.android.kraken.interfaces.IDbSensor {
 
-    private long id;
+    private Long id;
     private Double latitude;
     private Double longitude;
     private Double accuracyHorizontal;
@@ -21,11 +21,11 @@ public class PositionSensor implements de.tudarmstadt.informatik.tk.android.krak
     public PositionSensor() {
     }
 
-    public PositionSensor(long id) {
+    public PositionSensor(Long id) {
         this.id = id;
     }
 
-    public PositionSensor(long id, Double latitude, Double longitude, Double accuracyHorizontal, Float speed, String created, Double altitude, Double accuracyVertical, Integer course, Integer floor) {
+    public PositionSensor(Long id, Double latitude, Double longitude, Double accuracyHorizontal, Float speed, String created, Double altitude, Double accuracyVertical, Integer course, Integer floor) {
         this.id = id;
         this.latitude = latitude;
         this.longitude = longitude;
@@ -38,11 +38,11 @@ public class PositionSensor implements de.tudarmstadt.informatik.tk.android.krak
         this.floor = floor;
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

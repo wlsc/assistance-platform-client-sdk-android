@@ -6,7 +6,7 @@ package de.tudarmstadt.informatik.tk.android.kraken.db;
  */
 public class ConnectionEvent implements de.tudarmstadt.informatik.tk.android.kraken.interfaces.IDbSensor {
 
-    private long id;
+    private Long id;
     private Boolean isWifi;
     private Boolean isMobile;
     /** Not-null value. */
@@ -15,22 +15,22 @@ public class ConnectionEvent implements de.tudarmstadt.informatik.tk.android.kra
     public ConnectionEvent() {
     }
 
-    public ConnectionEvent(long id) {
+    public ConnectionEvent(Long id) {
         this.id = id;
     }
 
-    public ConnectionEvent(long id, Boolean isWifi, Boolean isMobile, String created) {
+    public ConnectionEvent(Long id, Boolean isWifi, Boolean isMobile, String created) {
         this.id = id;
         this.isWifi = isWifi;
         this.isMobile = isMobile;
         this.created = created;
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

@@ -23,7 +23,7 @@ public class GyroscopeSensorDao extends AbstractDao<GyroscopeSensor, Long> {
      * Can be used for QueryBuilder and for referencing column names.
     */
     public static class Properties {
-        public final static Property Id = new Property(0, long.class, "id", true, "_id");
+        public final static Property Id = new Property(0, Long.class, "id", true, "_id");
         public final static Property X = new Property(1, Double.class, "x", false, "X");
         public final static Property Y = new Property(2, Double.class, "y", false, "Y");
         public final static Property Z = new Property(3, Double.class, "z", false, "Z");
@@ -43,7 +43,7 @@ public class GyroscopeSensorDao extends AbstractDao<GyroscopeSensor, Long> {
     public static void createTable(SQLiteDatabase db, boolean ifNotExists) {
         String constraint = ifNotExists? "IF NOT EXISTS ": "";
         db.execSQL("CREATE TABLE " + constraint + "\"gyroscope_sensor\" (" + //
-                "\"_id\" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL ," + // 0: id
+                "\"_id\" INTEGER PRIMARY KEY AUTOINCREMENT ," + // 0: id
                 "\"X\" REAL," + // 1: x
                 "\"Y\" REAL," + // 2: y
                 "\"Z\" REAL," + // 3: z
@@ -63,7 +63,11 @@ public class GyroscopeSensorDao extends AbstractDao<GyroscopeSensor, Long> {
     @Override
     protected void bindValues(SQLiteStatement stmt, GyroscopeSensor entity) {
         stmt.clearBindings();
-        stmt.bindLong(1, entity.getId());
+ 
+        Long id = entity.getId();
+        if (id != null) {
+            stmt.bindLong(1, id);
+        }
  
         Double x = entity.getX();
         if (x != null) {
@@ -85,14 +89,14 @@ public class GyroscopeSensorDao extends AbstractDao<GyroscopeSensor, Long> {
     /** @inheritdoc */
     @Override
     public Long readKey(Cursor cursor, int offset) {
-        return cursor.getLong(offset + 0);
+        return cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0);
     }    
 
     /** @inheritdoc */
     @Override
     public GyroscopeSensor readEntity(Cursor cursor, int offset) {
         GyroscopeSensor entity = new GyroscopeSensor( //
-            cursor.getLong(offset + 0), // id
+            cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0), // id
             cursor.isNull(offset + 1) ? null : cursor.getDouble(offset + 1), // x
             cursor.isNull(offset + 2) ? null : cursor.getDouble(offset + 2), // y
             cursor.isNull(offset + 3) ? null : cursor.getDouble(offset + 3), // z
@@ -104,7 +108,7 @@ public class GyroscopeSensorDao extends AbstractDao<GyroscopeSensor, Long> {
     /** @inheritdoc */
     @Override
     public void readEntity(Cursor cursor, GyroscopeSensor entity, int offset) {
-        entity.setId(cursor.getLong(offset + 0));
+        entity.setId(cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0));
         entity.setX(cursor.isNull(offset + 1) ? null : cursor.getDouble(offset + 1));
         entity.setY(cursor.isNull(offset + 2) ? null : cursor.getDouble(offset + 2));
         entity.setZ(cursor.isNull(offset + 3) ? null : cursor.getDouble(offset + 3));

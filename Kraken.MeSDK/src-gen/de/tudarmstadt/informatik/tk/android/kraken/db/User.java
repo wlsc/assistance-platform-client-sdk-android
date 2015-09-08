@@ -10,7 +10,7 @@ import de.greenrobot.dao.DaoException;
  */
 public class User {
 
-    private long id;
+    private Long id;
     private String firstname;
     private String lastname;
     /** Not-null value. */
@@ -35,11 +35,11 @@ public class User {
     public User() {
     }
 
-    public User(long id) {
+    public User(Long id) {
         this.id = id;
     }
 
-    public User(long id, String firstname, String lastname, String primaryEmail, String user_pic_filename, String lastLogin, String joinedSince, String created) {
+    public User(Long id, String firstname, String lastname, String primaryEmail, String user_pic_filename, String lastLogin, String joinedSince, String created) {
         this.id = id;
         this.firstname = firstname;
         this.lastname = lastname;
@@ -56,11 +56,11 @@ public class User {
         myDao = daoSession != null ? daoSession.getUserDao() : null;
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

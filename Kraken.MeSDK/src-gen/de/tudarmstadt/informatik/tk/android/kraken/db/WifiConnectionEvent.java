@@ -6,7 +6,7 @@ package de.tudarmstadt.informatik.tk.android.kraken.db;
  */
 public class WifiConnectionEvent implements de.tudarmstadt.informatik.tk.android.kraken.interfaces.IDbSensor {
 
-    private long id;
+    private Long id;
     private String ssid;
     private String bssid;
     /** Not-null value. */
@@ -20,11 +20,11 @@ public class WifiConnectionEvent implements de.tudarmstadt.informatik.tk.android
     public WifiConnectionEvent() {
     }
 
-    public WifiConnectionEvent(long id) {
+    public WifiConnectionEvent(Long id) {
         this.id = id;
     }
 
-    public WifiConnectionEvent(long id, String ssid, String bssid, String created, Integer channel, Integer frequency, Integer linkSpeed, Integer signalStrength, Integer networkId) {
+    public WifiConnectionEvent(Long id, String ssid, String bssid, String created, Integer channel, Integer frequency, Integer linkSpeed, Integer signalStrength, Integer networkId) {
         this.id = id;
         this.ssid = ssid;
         this.bssid = bssid;
@@ -36,11 +36,11 @@ public class WifiConnectionEvent implements de.tudarmstadt.informatik.tk.android
         this.networkId = networkId;
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

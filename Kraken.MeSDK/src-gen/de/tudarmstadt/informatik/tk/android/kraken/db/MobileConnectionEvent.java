@@ -6,7 +6,7 @@ package de.tudarmstadt.informatik.tk.android.kraken.db;
  */
 public class MobileConnectionEvent implements de.tudarmstadt.informatik.tk.android.kraken.interfaces.IDbSensor {
 
-    private long id;
+    private Long id;
     private String carrierName;
     private String mobileCarrierCode;
     private String mobileNetworkCode;
@@ -17,11 +17,11 @@ public class MobileConnectionEvent implements de.tudarmstadt.informatik.tk.andro
     public MobileConnectionEvent() {
     }
 
-    public MobileConnectionEvent(long id) {
+    public MobileConnectionEvent(Long id) {
         this.id = id;
     }
 
-    public MobileConnectionEvent(long id, String carrierName, String mobileCarrierCode, String mobileNetworkCode, String created, Boolean voipAvailable) {
+    public MobileConnectionEvent(Long id, String carrierName, String mobileCarrierCode, String mobileNetworkCode, String created, Boolean voipAvailable) {
         this.id = id;
         this.carrierName = carrierName;
         this.mobileCarrierCode = mobileCarrierCode;
@@ -30,11 +30,11 @@ public class MobileConnectionEvent implements de.tudarmstadt.informatik.tk.andro
         this.voipAvailable = voipAvailable;
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

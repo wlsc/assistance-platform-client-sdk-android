@@ -23,7 +23,7 @@ public class MagneticFieldUncalibratedSensorDao extends AbstractDao<MagneticFiel
      * Can be used for QueryBuilder and for referencing column names.
     */
     public static class Properties {
-        public final static Property Id = new Property(0, long.class, "id", true, "_id");
+        public final static Property Id = new Property(0, Long.class, "id", true, "_id");
         public final static Property XNoHardIron = new Property(1, float.class, "xNoHardIron", false, "X_NO_HARD_IRON");
         public final static Property YNoHardIron = new Property(2, float.class, "yNoHardIron", false, "Y_NO_HARD_IRON");
         public final static Property ZNoHardIron = new Property(3, float.class, "zNoHardIron", false, "Z_NO_HARD_IRON");
@@ -46,7 +46,7 @@ public class MagneticFieldUncalibratedSensorDao extends AbstractDao<MagneticFiel
     public static void createTable(SQLiteDatabase db, boolean ifNotExists) {
         String constraint = ifNotExists? "IF NOT EXISTS ": "";
         db.execSQL("CREATE TABLE " + constraint + "\"magnetic_field_uncalibrated_sensor\" (" + //
-                "\"_id\" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL ," + // 0: id
+                "\"_id\" INTEGER PRIMARY KEY AUTOINCREMENT ," + // 0: id
                 "\"X_NO_HARD_IRON\" REAL NOT NULL ," + // 1: xNoHardIron
                 "\"Y_NO_HARD_IRON\" REAL NOT NULL ," + // 2: yNoHardIron
                 "\"Z_NO_HARD_IRON\" REAL NOT NULL ," + // 3: zNoHardIron
@@ -69,7 +69,11 @@ public class MagneticFieldUncalibratedSensorDao extends AbstractDao<MagneticFiel
     @Override
     protected void bindValues(SQLiteStatement stmt, MagneticFieldUncalibratedSensor entity) {
         stmt.clearBindings();
-        stmt.bindLong(1, entity.getId());
+ 
+        Long id = entity.getId();
+        if (id != null) {
+            stmt.bindLong(1, id);
+        }
         stmt.bindDouble(2, entity.getXNoHardIron());
         stmt.bindDouble(3, entity.getYNoHardIron());
         stmt.bindDouble(4, entity.getZNoHardIron());
@@ -82,14 +86,14 @@ public class MagneticFieldUncalibratedSensorDao extends AbstractDao<MagneticFiel
     /** @inheritdoc */
     @Override
     public Long readKey(Cursor cursor, int offset) {
-        return cursor.getLong(offset + 0);
+        return cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0);
     }    
 
     /** @inheritdoc */
     @Override
     public MagneticFieldUncalibratedSensor readEntity(Cursor cursor, int offset) {
         MagneticFieldUncalibratedSensor entity = new MagneticFieldUncalibratedSensor( //
-            cursor.getLong(offset + 0), // id
+            cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0), // id
             cursor.getFloat(offset + 1), // xNoHardIron
             cursor.getFloat(offset + 2), // yNoHardIron
             cursor.getFloat(offset + 3), // zNoHardIron
@@ -104,7 +108,7 @@ public class MagneticFieldUncalibratedSensorDao extends AbstractDao<MagneticFiel
     /** @inheritdoc */
     @Override
     public void readEntity(Cursor cursor, MagneticFieldUncalibratedSensor entity, int offset) {
-        entity.setId(cursor.getLong(offset + 0));
+        entity.setId(cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0));
         entity.setXNoHardIron(cursor.getFloat(offset + 1));
         entity.setYNoHardIron(cursor.getFloat(offset + 2));
         entity.setZNoHardIron(cursor.getFloat(offset + 3));

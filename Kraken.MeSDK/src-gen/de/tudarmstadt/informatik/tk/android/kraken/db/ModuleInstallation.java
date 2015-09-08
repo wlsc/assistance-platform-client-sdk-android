@@ -9,11 +9,11 @@ import de.greenrobot.dao.DaoException;
  */
 public class ModuleInstallation {
 
-    private long id;
+    private Long id;
     /** Not-null value. */
     private String created;
-    private long module_id;
-    private long user_id;
+    private Long module_id;
+    private Long user_id;
 
     /** Used to resolve relations */
     private transient DaoSession daoSession;
@@ -31,11 +31,11 @@ public class ModuleInstallation {
     public ModuleInstallation() {
     }
 
-    public ModuleInstallation(long id) {
+    public ModuleInstallation(Long id) {
         this.id = id;
     }
 
-    public ModuleInstallation(long id, String created, long module_id, long user_id) {
+    public ModuleInstallation(Long id, String created, Long module_id, Long user_id) {
         this.id = id;
         this.created = created;
         this.module_id = module_id;
@@ -48,11 +48,11 @@ public class ModuleInstallation {
         myDao = daoSession != null ? daoSession.getModuleInstallationDao() : null;
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -66,25 +66,25 @@ public class ModuleInstallation {
         this.created = created;
     }
 
-    public long getModule_id() {
+    public Long getModule_id() {
         return module_id;
     }
 
-    public void setModule_id(long module_id) {
+    public void setModule_id(Long module_id) {
         this.module_id = module_id;
     }
 
-    public long getUser_id() {
+    public Long getUser_id() {
         return user_id;
     }
 
-    public void setUser_id(long user_id) {
+    public void setUser_id(Long user_id) {
         this.user_id = user_id;
     }
 
     /** To-one relationship, resolved on first access. */
     public Module getModule() {
-        long __key = this.module_id;
+        Long __key = this.module_id;
         if (module__resolvedKey == null || !module__resolvedKey.equals(__key)) {
             if (daoSession == null) {
                 throw new DaoException("Entity is detached from DAO context");
@@ -100,19 +100,16 @@ public class ModuleInstallation {
     }
 
     public void setModule(Module module) {
-        if (module == null) {
-            throw new DaoException("To-one property 'module_id' has not-null constraint; cannot set to-one to null");
-        }
         synchronized (this) {
             this.module = module;
-            module_id = module.getId();
+            module_id = module == null ? null : module.getId();
             module__resolvedKey = module_id;
         }
     }
 
     /** To-one relationship, resolved on first access. */
     public User getUser() {
-        long __key = this.user_id;
+        Long __key = this.user_id;
         if (user__resolvedKey == null || !user__resolvedKey.equals(__key)) {
             if (daoSession == null) {
                 throw new DaoException("Entity is detached from DAO context");
@@ -128,12 +125,9 @@ public class ModuleInstallation {
     }
 
     public void setUser(User user) {
-        if (user == null) {
-            throw new DaoException("To-one property 'user_id' has not-null constraint; cannot set to-one to null");
-        }
         synchronized (this) {
             this.user = user;
-            user_id = user.getId();
+            user_id = user == null ? null : user.getId();
             user__resolvedKey = user_id;
         }
     }
