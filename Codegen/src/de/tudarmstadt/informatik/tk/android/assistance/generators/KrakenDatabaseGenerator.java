@@ -82,8 +82,11 @@ public class KrakenDatabaseGenerator {
 		device.addStringProperty("created").notNull();
 		
 		Property deviceFKLoginProperty = device.addLongProperty("login_id").notNull().index().getProperty();
+		Property deviceFKUserProperty = device.addLongProperty("user_id").notNull().index().getProperty();
 		device.addToOne(login, deviceFKLoginProperty);
 		login.addToMany(device, deviceFKLoginProperty);
+		device.addToOne(user, deviceFKUserProperty);
+		user.addToMany(device, deviceFKUserProperty);
 		
 		// ----- Module availability scheme -----
 		Entity module = schema.addEntity("Module");

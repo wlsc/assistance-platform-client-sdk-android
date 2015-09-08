@@ -28,6 +28,7 @@ public class User {
     private transient UserDao myDao;
 
     private List<UserSocialProfile> userSocialProfileList;
+    private List<Device> deviceList;
     private List<Module> moduleList;
     private List<ModuleInstallation> moduleInstallationList;
 
@@ -143,6 +144,28 @@ public class User {
     /** Resets a to-many relationship, making the next get call to query for a fresh result. */
     public synchronized void resetUserSocialProfileList() {
         userSocialProfileList = null;
+    }
+
+    /** To-many relationship, resolved on first access (and after reset). Changes to to-many relations are not persisted, make changes to the target entity. */
+    public List<Device> getDeviceList() {
+        if (deviceList == null) {
+            if (daoSession == null) {
+                throw new DaoException("Entity is detached from DAO context");
+            }
+            DeviceDao targetDao = daoSession.getDeviceDao();
+            List<Device> deviceListNew = targetDao._queryUser_DeviceList(id);
+            synchronized (this) {
+                if(deviceList == null) {
+                    deviceList = deviceListNew;
+                }
+            }
+        }
+        return deviceList;
+    }
+
+    /** Resets a to-many relationship, making the next get call to query for a fresh result. */
+    public synchronized void resetDeviceList() {
+        deviceList = null;
     }
 
     /** To-many relationship, resolved on first access (and after reset). Changes to to-many relations are not persisted, make changes to the target entity. */

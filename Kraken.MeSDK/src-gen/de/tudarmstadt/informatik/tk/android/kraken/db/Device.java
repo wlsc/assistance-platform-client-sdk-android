@@ -18,6 +18,7 @@ public class Device {
     /** Not-null value. */
     private String created;
     private long login_id;
+    private long user_id;
 
     /** Used to resolve relations */
     private transient DaoSession daoSession;
@@ -28,6 +29,9 @@ public class Device {
     private Login login;
     private Long login__resolvedKey;
 
+    private User user;
+    private Long user__resolvedKey;
+
 
     public Device() {
     }
@@ -36,7 +40,7 @@ public class Device {
         this.id = id;
     }
 
-    public Device(long id, String device_identifier, String os, String os_version, String brand, String model, String created, long login_id) {
+    public Device(long id, String device_identifier, String os, String os_version, String brand, String model, String created, long login_id, long user_id) {
         this.id = id;
         this.device_identifier = device_identifier;
         this.os = os;
@@ -45,6 +49,7 @@ public class Device {
         this.model = model;
         this.created = created;
         this.login_id = login_id;
+        this.user_id = user_id;
     }
 
     /** called by internal mechanisms, do not call yourself. */
@@ -119,6 +124,14 @@ public class Device {
         this.login_id = login_id;
     }
 
+    public long getUser_id() {
+        return user_id;
+    }
+
+    public void setUser_id(long user_id) {
+        this.user_id = user_id;
+    }
+
     /** To-one relationship, resolved on first access. */
     public Login getLogin() {
         long __key = this.login_id;
@@ -144,6 +157,34 @@ public class Device {
             this.login = login;
             login_id = login.getId();
             login__resolvedKey = login_id;
+        }
+    }
+
+    /** To-one relationship, resolved on first access. */
+    public User getUser() {
+        long __key = this.user_id;
+        if (user__resolvedKey == null || !user__resolvedKey.equals(__key)) {
+            if (daoSession == null) {
+                throw new DaoException("Entity is detached from DAO context");
+            }
+            UserDao targetDao = daoSession.getUserDao();
+            User userNew = targetDao.load(__key);
+            synchronized (this) {
+                user = userNew;
+            	user__resolvedKey = __key;
+            }
+        }
+        return user;
+    }
+
+    public void setUser(User user) {
+        if (user == null) {
+            throw new DaoException("To-one property 'user_id' has not-null constraint; cannot set to-one to null");
+        }
+        synchronized (this) {
+            this.user = user;
+            user_id = user.getId();
+            user__resolvedKey = user_id;
         }
     }
 

@@ -36,11 +36,13 @@ public class DeviceDao extends AbstractDao<Device, Long> {
         public final static Property Model = new Property(5, String.class, "model", false, "MODEL");
         public final static Property Created = new Property(6, String.class, "created", false, "CREATED");
         public final static Property Login_id = new Property(7, long.class, "login_id", false, "LOGIN_ID");
+        public final static Property User_id = new Property(8, long.class, "user_id", false, "USER_ID");
     };
 
     private DaoSession daoSession;
 
     private Query<Device> login_DeviceListQuery;
+    private Query<Device> user_DeviceListQuery;
 
     public DeviceDao(DaoConfig config) {
         super(config);
@@ -62,12 +64,15 @@ public class DeviceDao extends AbstractDao<Device, Long> {
                 "\"BRAND\" TEXT," + // 4: brand
                 "\"MODEL\" TEXT," + // 5: model
                 "\"CREATED\" TEXT NOT NULL ," + // 6: created
-                "\"LOGIN_ID\" INTEGER NOT NULL );"); // 7: login_id
+                "\"LOGIN_ID\" INTEGER NOT NULL ," + // 7: login_id
+                "\"USER_ID\" INTEGER NOT NULL );"); // 8: user_id
         // Add Indexes
         db.execSQL("CREATE INDEX " + constraint + "IDX_device__id ON device" +
                 " (\"_id\");");
         db.execSQL("CREATE INDEX " + constraint + "IDX_device_LOGIN_ID ON device" +
                 " (\"LOGIN_ID\");");
+        db.execSQL("CREATE INDEX " + constraint + "IDX_device_USER_ID ON device" +
+                " (\"USER_ID\");");
     }
 
     /** Drops the underlying database table. */
@@ -108,6 +113,7 @@ public class DeviceDao extends AbstractDao<Device, Long> {
         }
         stmt.bindString(7, entity.getCreated());
         stmt.bindLong(8, entity.getLogin_id());
+        stmt.bindLong(9, entity.getUser_id());
     }
 
     @Override
@@ -133,7 +139,8 @@ public class DeviceDao extends AbstractDao<Device, Long> {
             cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4), // brand
             cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5), // model
             cursor.getString(offset + 6), // created
-            cursor.getLong(offset + 7) // login_id
+            cursor.getLong(offset + 7), // login_id
+            cursor.getLong(offset + 8) // user_id
         );
         return entity;
     }
@@ -149,6 +156,7 @@ public class DeviceDao extends AbstractDao<Device, Long> {
         entity.setModel(cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5));
         entity.setCreated(cursor.getString(offset + 6));
         entity.setLogin_id(cursor.getLong(offset + 7));
+        entity.setUser_id(cursor.getLong(offset + 8));
      }
     
     /** @inheritdoc */
@@ -188,6 +196,20 @@ public class DeviceDao extends AbstractDao<Device, Long> {
         return query.list();
     }
 
+    /** Internal query to resolve the "deviceList" to-many relationship of User. */
+    public List<Device> _queryUser_DeviceList(long user_id) {
+        synchronized (this) {
+            if (user_DeviceListQuery == null) {
+                QueryBuilder<Device> queryBuilder = queryBuilder();
+                queryBuilder.where(Properties.User_id.eq(null));
+                user_DeviceListQuery = queryBuilder.build();
+            }
+        }
+        Query<Device> query = user_DeviceListQuery.forCurrentThread();
+        query.setParameter(0, user_id);
+        return query.list();
+    }
+
     private String selectDeep;
 
     protected String getSelectDeep() {
@@ -196,8 +218,11 @@ public class DeviceDao extends AbstractDao<Device, Long> {
             SqlUtils.appendColumns(builder, "T", getAllColumns());
             builder.append(',');
             SqlUtils.appendColumns(builder, "T0", daoSession.getLoginDao().getAllColumns());
+            builder.append(',');
+            SqlUtils.appendColumns(builder, "T1", daoSession.getUserDao().getAllColumns());
             builder.append(" FROM device T");
             builder.append(" LEFT JOIN login T0 ON T.\"LOGIN_ID\"=T0.\"_id\"");
+            builder.append(" LEFT JOIN user T1 ON T.\"USER_ID\"=T1.\"_id\"");
             builder.append(' ');
             selectDeep = builder.toString();
         }
@@ -211,6 +236,12 @@ public class DeviceDao extends AbstractDao<Device, Long> {
         Login login = loadCurrentOther(daoSession.getLoginDao(), cursor, offset);
          if(login != null) {
             entity.setLogin(login);
+        }
+        offset += daoSession.getLoginDao().getAllColumns().length;
+
+        User user = loadCurrentOther(daoSession.getUserDao(), cursor, offset);
+         if(user != null) {
+            entity.setUser(user);
         }
 
         return entity;    
