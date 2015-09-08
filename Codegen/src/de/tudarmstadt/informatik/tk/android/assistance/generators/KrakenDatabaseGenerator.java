@@ -85,7 +85,7 @@ public class KrakenDatabaseGenerator {
 		device.addToOne(login, deviceFKLoginProperty);
 		login.addToMany(device, deviceFKLoginProperty);
 		
-		// ----- Module installation scheme -----
+		// ----- Module availability scheme -----
 		Entity module = schema.addEntity("Module");
 		module.setTableName("module");
 		module.addIdProperty().notNull().primaryKey().autoincrement().index();
@@ -113,6 +113,19 @@ public class KrakenDatabaseGenerator {
 		Property moduleCapabilityFKModuleProperty = moduleCapability.addLongProperty("module_id").notNull().index().getProperty();
 		moduleCapability.addToOne(module, moduleCapabilityFKModuleProperty);
 		module.addToMany(moduleCapability, moduleCapabilityFKModuleProperty);
+		
+		// ----- Module installation scheme -----
+		Entity moduleInstallation = schema.addEntity("ModuleInstallation");
+		moduleInstallation.setTableName("module_installation");
+		moduleInstallation.addIdProperty().notNull().primaryKey().autoincrement().index();
+		moduleInstallation.addStringProperty("created").notNull();
+		
+		Property moduleInstallationFKModuleProperty = moduleInstallation.addLongProperty("module_id").notNull().index().getProperty();
+		Property moduleInstallationFKUserProperty = moduleInstallation.addLongProperty("user_id").notNull().index().getProperty();
+		moduleInstallation.addToOne(module, moduleInstallationFKModuleProperty);
+		module.addToMany(moduleInstallation, moduleInstallationFKModuleProperty);
+		moduleInstallation.addToOne(user, moduleInstallationFKUserProperty);
+		user.addToMany(moduleInstallation, moduleInstallationFKUserProperty);
 		
 		
 		// ****************************************

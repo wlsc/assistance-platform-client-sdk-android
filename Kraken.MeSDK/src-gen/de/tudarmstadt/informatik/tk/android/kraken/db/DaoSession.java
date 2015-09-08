@@ -15,6 +15,7 @@ import de.tudarmstadt.informatik.tk.android.kraken.db.Login;
 import de.tudarmstadt.informatik.tk.android.kraken.db.Device;
 import de.tudarmstadt.informatik.tk.android.kraken.db.Module;
 import de.tudarmstadt.informatik.tk.android.kraken.db.ModuleCapability;
+import de.tudarmstadt.informatik.tk.android.kraken.db.ModuleInstallation;
 import de.tudarmstadt.informatik.tk.android.kraken.db.PositionSensor;
 import de.tudarmstadt.informatik.tk.android.kraken.db.GyroscopeSensor;
 import de.tudarmstadt.informatik.tk.android.kraken.db.AccelerometerSensor;
@@ -33,6 +34,7 @@ import de.tudarmstadt.informatik.tk.android.kraken.db.LoginDao;
 import de.tudarmstadt.informatik.tk.android.kraken.db.DeviceDao;
 import de.tudarmstadt.informatik.tk.android.kraken.db.ModuleDao;
 import de.tudarmstadt.informatik.tk.android.kraken.db.ModuleCapabilityDao;
+import de.tudarmstadt.informatik.tk.android.kraken.db.ModuleInstallationDao;
 import de.tudarmstadt.informatik.tk.android.kraken.db.PositionSensorDao;
 import de.tudarmstadt.informatik.tk.android.kraken.db.GyroscopeSensorDao;
 import de.tudarmstadt.informatik.tk.android.kraken.db.AccelerometerSensorDao;
@@ -60,6 +62,7 @@ public class DaoSession extends AbstractDaoSession {
     private final DaoConfig deviceDaoConfig;
     private final DaoConfig moduleDaoConfig;
     private final DaoConfig moduleCapabilityDaoConfig;
+    private final DaoConfig moduleInstallationDaoConfig;
     private final DaoConfig positionSensorDaoConfig;
     private final DaoConfig gyroscopeSensorDaoConfig;
     private final DaoConfig accelerometerSensorDaoConfig;
@@ -78,6 +81,7 @@ public class DaoSession extends AbstractDaoSession {
     private final DeviceDao deviceDao;
     private final ModuleDao moduleDao;
     private final ModuleCapabilityDao moduleCapabilityDao;
+    private final ModuleInstallationDao moduleInstallationDao;
     private final PositionSensorDao positionSensorDao;
     private final GyroscopeSensorDao gyroscopeSensorDao;
     private final AccelerometerSensorDao accelerometerSensorDao;
@@ -111,6 +115,9 @@ public class DaoSession extends AbstractDaoSession {
 
         moduleCapabilityDaoConfig = daoConfigMap.get(ModuleCapabilityDao.class).clone();
         moduleCapabilityDaoConfig.initIdentityScope(type);
+
+        moduleInstallationDaoConfig = daoConfigMap.get(ModuleInstallationDao.class).clone();
+        moduleInstallationDaoConfig.initIdentityScope(type);
 
         positionSensorDaoConfig = daoConfigMap.get(PositionSensorDao.class).clone();
         positionSensorDaoConfig.initIdentityScope(type);
@@ -151,6 +158,7 @@ public class DaoSession extends AbstractDaoSession {
         deviceDao = new DeviceDao(deviceDaoConfig, this);
         moduleDao = new ModuleDao(moduleDaoConfig, this);
         moduleCapabilityDao = new ModuleCapabilityDao(moduleCapabilityDaoConfig, this);
+        moduleInstallationDao = new ModuleInstallationDao(moduleInstallationDaoConfig, this);
         positionSensorDao = new PositionSensorDao(positionSensorDaoConfig, this);
         gyroscopeSensorDao = new GyroscopeSensorDao(gyroscopeSensorDaoConfig, this);
         accelerometerSensorDao = new AccelerometerSensorDao(accelerometerSensorDaoConfig, this);
@@ -169,6 +177,7 @@ public class DaoSession extends AbstractDaoSession {
         registerDao(Device.class, deviceDao);
         registerDao(Module.class, moduleDao);
         registerDao(ModuleCapability.class, moduleCapabilityDao);
+        registerDao(ModuleInstallation.class, moduleInstallationDao);
         registerDao(PositionSensor.class, positionSensorDao);
         registerDao(GyroscopeSensor.class, gyroscopeSensorDao);
         registerDao(AccelerometerSensor.class, accelerometerSensorDao);
@@ -189,6 +198,7 @@ public class DaoSession extends AbstractDaoSession {
         deviceDaoConfig.getIdentityScope().clear();
         moduleDaoConfig.getIdentityScope().clear();
         moduleCapabilityDaoConfig.getIdentityScope().clear();
+        moduleInstallationDaoConfig.getIdentityScope().clear();
         positionSensorDaoConfig.getIdentityScope().clear();
         gyroscopeSensorDaoConfig.getIdentityScope().clear();
         accelerometerSensorDaoConfig.getIdentityScope().clear();
@@ -224,6 +234,10 @@ public class DaoSession extends AbstractDaoSession {
 
     public ModuleCapabilityDao getModuleCapabilityDao() {
         return moduleCapabilityDao;
+    }
+
+    public ModuleInstallationDao getModuleInstallationDao() {
+        return moduleInstallationDao;
     }
 
     public PositionSensorDao getPositionSensorDao() {
