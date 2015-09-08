@@ -59,12 +59,12 @@ public class ModuleDao extends AbstractDao<Module, Long> {
         db.execSQL("CREATE TABLE " + constraint + "\"module\" (" + //
                 "\"_id\" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL ," + // 0: id
                 "\"PACKAGE_NAME\" TEXT NOT NULL ," + // 1: package_name
-                "\"TITLE\" TEXT NOT NULL ," + // 2: title
-                "\"LOGO_URL\" TEXT NOT NULL ," + // 3: logo_url
-                "\"DESCRIPTION_SHORT\" TEXT NOT NULL ," + // 4: description_short
-                "\"DESCRIPTION_FULL\" TEXT NOT NULL ," + // 5: description_full
-                "\"COPYRIGHT\" TEXT NOT NULL ," + // 6: copyright
-                "\"SUPPORT_EMAIL\" TEXT NOT NULL ," + // 7: support_email
+                "\"TITLE\" TEXT," + // 2: title
+                "\"LOGO_URL\" TEXT," + // 3: logo_url
+                "\"DESCRIPTION_SHORT\" TEXT," + // 4: description_short
+                "\"DESCRIPTION_FULL\" TEXT," + // 5: description_full
+                "\"COPYRIGHT\" TEXT," + // 6: copyright
+                "\"SUPPORT_EMAIL\" TEXT," + // 7: support_email
                 "\"CREATED\" TEXT NOT NULL ," + // 8: created
                 "\"USER_ID\" INTEGER NOT NULL );"); // 9: user_id
         // Add Indexes
@@ -88,12 +88,36 @@ public class ModuleDao extends AbstractDao<Module, Long> {
         stmt.clearBindings();
         stmt.bindLong(1, entity.getId());
         stmt.bindString(2, entity.getPackage_name());
-        stmt.bindString(3, entity.getTitle());
-        stmt.bindString(4, entity.getLogo_url());
-        stmt.bindString(5, entity.getDescription_short());
-        stmt.bindString(6, entity.getDescription_full());
-        stmt.bindString(7, entity.getCopyright());
-        stmt.bindString(8, entity.getSupport_email());
+ 
+        String title = entity.getTitle();
+        if (title != null) {
+            stmt.bindString(3, title);
+        }
+ 
+        String logo_url = entity.getLogo_url();
+        if (logo_url != null) {
+            stmt.bindString(4, logo_url);
+        }
+ 
+        String description_short = entity.getDescription_short();
+        if (description_short != null) {
+            stmt.bindString(5, description_short);
+        }
+ 
+        String description_full = entity.getDescription_full();
+        if (description_full != null) {
+            stmt.bindString(6, description_full);
+        }
+ 
+        String copyright = entity.getCopyright();
+        if (copyright != null) {
+            stmt.bindString(7, copyright);
+        }
+ 
+        String support_email = entity.getSupport_email();
+        if (support_email != null) {
+            stmt.bindString(8, support_email);
+        }
         stmt.bindString(9, entity.getCreated());
         stmt.bindLong(10, entity.getUser_id());
     }
@@ -116,12 +140,12 @@ public class ModuleDao extends AbstractDao<Module, Long> {
         Module entity = new Module( //
             cursor.getLong(offset + 0), // id
             cursor.getString(offset + 1), // package_name
-            cursor.getString(offset + 2), // title
-            cursor.getString(offset + 3), // logo_url
-            cursor.getString(offset + 4), // description_short
-            cursor.getString(offset + 5), // description_full
-            cursor.getString(offset + 6), // copyright
-            cursor.getString(offset + 7), // support_email
+            cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // title
+            cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // logo_url
+            cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4), // description_short
+            cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5), // description_full
+            cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6), // copyright
+            cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7), // support_email
             cursor.getString(offset + 8), // created
             cursor.getLong(offset + 9) // user_id
         );
@@ -133,12 +157,12 @@ public class ModuleDao extends AbstractDao<Module, Long> {
     public void readEntity(Cursor cursor, Module entity, int offset) {
         entity.setId(cursor.getLong(offset + 0));
         entity.setPackage_name(cursor.getString(offset + 1));
-        entity.setTitle(cursor.getString(offset + 2));
-        entity.setLogo_url(cursor.getString(offset + 3));
-        entity.setDescription_short(cursor.getString(offset + 4));
-        entity.setDescription_full(cursor.getString(offset + 5));
-        entity.setCopyright(cursor.getString(offset + 6));
-        entity.setSupport_email(cursor.getString(offset + 7));
+        entity.setTitle(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
+        entity.setLogo_url(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
+        entity.setDescription_short(cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4));
+        entity.setDescription_full(cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5));
+        entity.setCopyright(cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6));
+        entity.setSupport_email(cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7));
         entity.setCreated(cursor.getString(offset + 8));
         entity.setUser_id(cursor.getLong(offset + 9));
      }

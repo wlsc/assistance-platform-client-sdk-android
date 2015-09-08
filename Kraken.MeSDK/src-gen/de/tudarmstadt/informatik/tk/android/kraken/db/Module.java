@@ -13,17 +13,11 @@ public class Module {
     private long id;
     /** Not-null value. */
     private String package_name;
-    /** Not-null value. */
     private String title;
-    /** Not-null value. */
     private String logo_url;
-    /** Not-null value. */
     private String description_short;
-    /** Not-null value. */
     private String description_full;
-    /** Not-null value. */
     private String copyright;
-    /** Not-null value. */
     private String support_email;
     /** Not-null value. */
     private String created;
@@ -85,62 +79,50 @@ public class Module {
         this.package_name = package_name;
     }
 
-    /** Not-null value. */
     public String getTitle() {
         return title;
     }
 
-    /** Not-null value; ensure this value is available before it is saved to the database. */
     public void setTitle(String title) {
         this.title = title;
     }
 
-    /** Not-null value. */
     public String getLogo_url() {
         return logo_url;
     }
 
-    /** Not-null value; ensure this value is available before it is saved to the database. */
     public void setLogo_url(String logo_url) {
         this.logo_url = logo_url;
     }
 
-    /** Not-null value. */
     public String getDescription_short() {
         return description_short;
     }
 
-    /** Not-null value; ensure this value is available before it is saved to the database. */
     public void setDescription_short(String description_short) {
         this.description_short = description_short;
     }
 
-    /** Not-null value. */
     public String getDescription_full() {
         return description_full;
     }
 
-    /** Not-null value; ensure this value is available before it is saved to the database. */
     public void setDescription_full(String description_full) {
         this.description_full = description_full;
     }
 
-    /** Not-null value. */
     public String getCopyright() {
         return copyright;
     }
 
-    /** Not-null value; ensure this value is available before it is saved to the database. */
     public void setCopyright(String copyright) {
         this.copyright = copyright;
     }
 
-    /** Not-null value. */
     public String getSupport_email() {
         return support_email;
     }
 
-    /** Not-null value; ensure this value is available before it is saved to the database. */
     public void setSupport_email(String support_email) {
         this.support_email = support_email;
     }

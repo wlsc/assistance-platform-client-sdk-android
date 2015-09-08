@@ -90,12 +90,12 @@ public class KrakenDatabaseGenerator {
 		module.setTableName("module");
 		module.addIdProperty().notNull().primaryKey().autoincrement().index();
 		module.addStringProperty("package_name").notNull().index();
-		module.addStringProperty("title").notNull();
-		module.addStringProperty("logo_url").notNull();
-		module.addStringProperty("description_short").notNull();
-		module.addStringProperty("description_full").notNull();
-		module.addStringProperty("copyright").notNull();
-		module.addStringProperty("support_email").notNull();
+		module.addStringProperty("title");
+		module.addStringProperty("logo_url");
+		module.addStringProperty("description_short");
+		module.addStringProperty("description_full");
+		module.addStringProperty("copyright");
+		module.addStringProperty("support_email");
 		module.addStringProperty("created").notNull();
 		
 		Property moduleFKUserProperty = module.addLongProperty("user_id").notNull().index().getProperty();
