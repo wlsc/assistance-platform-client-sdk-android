@@ -12,7 +12,8 @@ public class ModuleCapability {
     private long id;
     /** Not-null value. */
     private String type;
-    private double frequency;
+    private Double frequency;
+    private boolean required;
     /** Not-null value. */
     private String created;
     private long module_id;
@@ -34,10 +35,11 @@ public class ModuleCapability {
         this.id = id;
     }
 
-    public ModuleCapability(long id, String type, double frequency, String created, long module_id) {
+    public ModuleCapability(long id, String type, Double frequency, boolean required, String created, long module_id) {
         this.id = id;
         this.type = type;
         this.frequency = frequency;
+        this.required = required;
         this.created = created;
         this.module_id = module_id;
     }
@@ -66,12 +68,20 @@ public class ModuleCapability {
         this.type = type;
     }
 
-    public double getFrequency() {
+    public Double getFrequency() {
         return frequency;
     }
 
-    public void setFrequency(double frequency) {
+    public void setFrequency(Double frequency) {
         this.frequency = frequency;
+    }
+
+    public boolean getRequired() {
+        return required;
+    }
+
+    public void setRequired(boolean required) {
+        this.required = required;
     }
 
     /** Not-null value. */

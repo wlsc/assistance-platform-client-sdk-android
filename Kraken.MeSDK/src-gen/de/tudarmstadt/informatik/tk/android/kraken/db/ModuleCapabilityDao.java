@@ -30,9 +30,10 @@ public class ModuleCapabilityDao extends AbstractDao<ModuleCapability, Long> {
     public static class Properties {
         public final static Property Id = new Property(0, long.class, "id", true, "_id");
         public final static Property Type = new Property(1, String.class, "type", false, "TYPE");
-        public final static Property Frequency = new Property(2, double.class, "frequency", false, "FREQUENCY");
-        public final static Property Created = new Property(3, String.class, "created", false, "CREATED");
-        public final static Property Module_id = new Property(4, long.class, "module_id", false, "MODULE_ID");
+        public final static Property Frequency = new Property(2, Double.class, "frequency", false, "FREQUENCY");
+        public final static Property Required = new Property(3, boolean.class, "required", false, "REQUIRED");
+        public final static Property Created = new Property(4, String.class, "created", false, "CREATED");
+        public final static Property Module_id = new Property(5, long.class, "module_id", false, "MODULE_ID");
     };
 
     private DaoSession daoSession;
@@ -54,9 +55,10 @@ public class ModuleCapabilityDao extends AbstractDao<ModuleCapability, Long> {
         db.execSQL("CREATE TABLE " + constraint + "\"module_capability\" (" + //
                 "\"_id\" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL ," + // 0: id
                 "\"TYPE\" TEXT NOT NULL ," + // 1: type
-                "\"FREQUENCY\" REAL NOT NULL ," + // 2: frequency
-                "\"CREATED\" TEXT NOT NULL ," + // 3: created
-                "\"MODULE_ID\" INTEGER NOT NULL );"); // 4: module_id
+                "\"FREQUENCY\" REAL," + // 2: frequency
+                "\"REQUIRED\" INTEGER NOT NULL ," + // 3: required
+                "\"CREATED\" TEXT NOT NULL ," + // 4: created
+                "\"MODULE_ID\" INTEGER NOT NULL );"); // 5: module_id
         // Add Indexes
         db.execSQL("CREATE INDEX " + constraint + "IDX_module_capability__id ON module_capability" +
                 " (\"_id\");");
@@ -78,9 +80,14 @@ public class ModuleCapabilityDao extends AbstractDao<ModuleCapability, Long> {
         stmt.clearBindings();
         stmt.bindLong(1, entity.getId());
         stmt.bindString(2, entity.getType());
-        stmt.bindDouble(3, entity.getFrequency());
-        stmt.bindString(4, entity.getCreated());
-        stmt.bindLong(5, entity.getModule_id());
+ 
+        Double frequency = entity.getFrequency();
+        if (frequency != null) {
+            stmt.bindDouble(3, frequency);
+        }
+        stmt.bindLong(4, entity.getRequired() ? 1L: 0L);
+        stmt.bindString(5, entity.getCreated());
+        stmt.bindLong(6, entity.getModule_id());
     }
 
     @Override
@@ -101,9 +108,10 @@ public class ModuleCapabilityDao extends AbstractDao<ModuleCapability, Long> {
         ModuleCapability entity = new ModuleCapability( //
             cursor.getLong(offset + 0), // id
             cursor.getString(offset + 1), // type
-            cursor.getDouble(offset + 2), // frequency
-            cursor.getString(offset + 3), // created
-            cursor.getLong(offset + 4) // module_id
+            cursor.isNull(offset + 2) ? null : cursor.getDouble(offset + 2), // frequency
+            cursor.getShort(offset + 3) != 0, // required
+            cursor.getString(offset + 4), // created
+            cursor.getLong(offset + 5) // module_id
         );
         return entity;
     }
@@ -113,9 +121,10 @@ public class ModuleCapabilityDao extends AbstractDao<ModuleCapability, Long> {
     public void readEntity(Cursor cursor, ModuleCapability entity, int offset) {
         entity.setId(cursor.getLong(offset + 0));
         entity.setType(cursor.getString(offset + 1));
-        entity.setFrequency(cursor.getDouble(offset + 2));
-        entity.setCreated(cursor.getString(offset + 3));
-        entity.setModule_id(cursor.getLong(offset + 4));
+        entity.setFrequency(cursor.isNull(offset + 2) ? null : cursor.getDouble(offset + 2));
+        entity.setRequired(cursor.getShort(offset + 3) != 0);
+        entity.setCreated(cursor.getString(offset + 4));
+        entity.setModule_id(cursor.getLong(offset + 5));
      }
     
     /** @inheritdoc */

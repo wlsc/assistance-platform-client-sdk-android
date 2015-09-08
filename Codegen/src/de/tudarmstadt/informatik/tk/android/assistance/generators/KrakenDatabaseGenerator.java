@@ -107,7 +107,8 @@ public class KrakenDatabaseGenerator {
 		moduleCapability.setTableName("module_capability");
 		moduleCapability.addIdProperty().notNull().primaryKey().autoincrement().index();
 		moduleCapability.addStringProperty("type").notNull().index();
-		moduleCapability.addDoubleProperty("frequency").notNull();
+		moduleCapability.addDoubleProperty("frequency");
+		moduleCapability.addBooleanProperty("required").notNull();
 		moduleCapability.addStringProperty("created").notNull();
 		
 		Property moduleCapabilityFKModuleProperty = moduleCapability.addLongProperty("module_id").notNull().index().getProperty();
