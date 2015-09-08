@@ -36,9 +36,8 @@ public class ModuleDao extends AbstractDao<Module, Long> {
         public final static Property Description_full = new Property(5, String.class, "description_full", false, "DESCRIPTION_FULL");
         public final static Property Copyright = new Property(6, String.class, "copyright", false, "COPYRIGHT");
         public final static Property Support_email = new Property(7, String.class, "support_email", false, "SUPPORT_EMAIL");
-        public final static Property Enabled = new Property(8, boolean.class, "enabled", false, "ENABLED");
-        public final static Property Created = new Property(9, String.class, "created", false, "CREATED");
-        public final static Property User_id = new Property(10, long.class, "user_id", false, "USER_ID");
+        public final static Property Created = new Property(8, String.class, "created", false, "CREATED");
+        public final static Property User_id = new Property(9, long.class, "user_id", false, "USER_ID");
     };
 
     private DaoSession daoSession;
@@ -66,9 +65,8 @@ public class ModuleDao extends AbstractDao<Module, Long> {
                 "\"DESCRIPTION_FULL\" TEXT NOT NULL ," + // 5: description_full
                 "\"COPYRIGHT\" TEXT NOT NULL ," + // 6: copyright
                 "\"SUPPORT_EMAIL\" TEXT NOT NULL ," + // 7: support_email
-                "\"ENABLED\" INTEGER NOT NULL ," + // 8: enabled
-                "\"CREATED\" TEXT NOT NULL ," + // 9: created
-                "\"USER_ID\" INTEGER NOT NULL );"); // 10: user_id
+                "\"CREATED\" TEXT NOT NULL ," + // 8: created
+                "\"USER_ID\" INTEGER NOT NULL );"); // 9: user_id
         // Add Indexes
         db.execSQL("CREATE INDEX " + constraint + "IDX_module__id ON module" +
                 " (\"_id\");");
@@ -96,9 +94,8 @@ public class ModuleDao extends AbstractDao<Module, Long> {
         stmt.bindString(6, entity.getDescription_full());
         stmt.bindString(7, entity.getCopyright());
         stmt.bindString(8, entity.getSupport_email());
-        stmt.bindLong(9, entity.getEnabled() ? 1L: 0L);
-        stmt.bindString(10, entity.getCreated());
-        stmt.bindLong(11, entity.getUser_id());
+        stmt.bindString(9, entity.getCreated());
+        stmt.bindLong(10, entity.getUser_id());
     }
 
     @Override
@@ -125,9 +122,8 @@ public class ModuleDao extends AbstractDao<Module, Long> {
             cursor.getString(offset + 5), // description_full
             cursor.getString(offset + 6), // copyright
             cursor.getString(offset + 7), // support_email
-            cursor.getShort(offset + 8) != 0, // enabled
-            cursor.getString(offset + 9), // created
-            cursor.getLong(offset + 10) // user_id
+            cursor.getString(offset + 8), // created
+            cursor.getLong(offset + 9) // user_id
         );
         return entity;
     }
@@ -143,9 +139,8 @@ public class ModuleDao extends AbstractDao<Module, Long> {
         entity.setDescription_full(cursor.getString(offset + 5));
         entity.setCopyright(cursor.getString(offset + 6));
         entity.setSupport_email(cursor.getString(offset + 7));
-        entity.setEnabled(cursor.getShort(offset + 8) != 0);
-        entity.setCreated(cursor.getString(offset + 9));
-        entity.setUser_id(cursor.getLong(offset + 10));
+        entity.setCreated(cursor.getString(offset + 8));
+        entity.setUser_id(cursor.getLong(offset + 9));
      }
     
     /** @inheritdoc */

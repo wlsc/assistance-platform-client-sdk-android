@@ -25,7 +25,6 @@ public class Module {
     private String copyright;
     /** Not-null value. */
     private String support_email;
-    private boolean enabled;
     /** Not-null value. */
     private String created;
     private long user_id;
@@ -48,7 +47,7 @@ public class Module {
         this.id = id;
     }
 
-    public Module(long id, String package_name, String title, String logo_url, String description_short, String description_full, String copyright, String support_email, boolean enabled, String created, long user_id) {
+    public Module(long id, String package_name, String title, String logo_url, String description_short, String description_full, String copyright, String support_email, String created, long user_id) {
         this.id = id;
         this.package_name = package_name;
         this.title = title;
@@ -57,7 +56,6 @@ public class Module {
         this.description_full = description_full;
         this.copyright = copyright;
         this.support_email = support_email;
-        this.enabled = enabled;
         this.created = created;
         this.user_id = user_id;
     }
@@ -144,14 +142,6 @@ public class Module {
     /** Not-null value; ensure this value is available before it is saved to the database. */
     public void setSupport_email(String support_email) {
         this.support_email = support_email;
-    }
-
-    public boolean getEnabled() {
-        return enabled;
-    }
-
-    public void setEnabled(boolean enabled) {
-        this.enabled = enabled;
     }
 
     /** Not-null value. */

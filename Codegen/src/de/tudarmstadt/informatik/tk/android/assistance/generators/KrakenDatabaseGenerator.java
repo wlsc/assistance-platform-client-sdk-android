@@ -96,7 +96,6 @@ public class KrakenDatabaseGenerator {
 		module.addStringProperty("description_full").notNull();
 		module.addStringProperty("copyright").notNull();
 		module.addStringProperty("support_email").notNull();
-		module.addBooleanProperty("enabled").notNull();
 		module.addStringProperty("created").notNull();
 		
 		Property moduleFKUserProperty = module.addLongProperty("user_id").notNull().index().getProperty();
