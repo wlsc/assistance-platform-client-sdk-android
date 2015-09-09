@@ -10,6 +10,7 @@ import de.greenrobot.dao.DaoException;
 public class ModuleInstallation {
 
     private Long id;
+    private boolean active;
     /** Not-null value. */
     private String created;
     private Long module_id;
@@ -35,8 +36,9 @@ public class ModuleInstallation {
         this.id = id;
     }
 
-    public ModuleInstallation(Long id, String created, Long module_id, Long user_id) {
+    public ModuleInstallation(Long id, boolean active, String created, Long module_id, Long user_id) {
         this.id = id;
+        this.active = active;
         this.created = created;
         this.module_id = module_id;
         this.user_id = user_id;
@@ -54,6 +56,14 @@ public class ModuleInstallation {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public boolean getActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
     }
 
     /** Not-null value. */

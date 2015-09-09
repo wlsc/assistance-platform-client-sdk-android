@@ -29,9 +29,10 @@ public class ModuleInstallationDao extends AbstractDao<ModuleInstallation, Long>
     */
     public static class Properties {
         public final static Property Id = new Property(0, Long.class, "id", true, "_id");
-        public final static Property Created = new Property(1, String.class, "created", false, "CREATED");
-        public final static Property Module_id = new Property(2, Long.class, "module_id", false, "MODULE_ID");
-        public final static Property User_id = new Property(3, Long.class, "user_id", false, "USER_ID");
+        public final static Property Active = new Property(1, boolean.class, "active", false, "ACTIVE");
+        public final static Property Created = new Property(2, String.class, "created", false, "CREATED");
+        public final static Property Module_id = new Property(3, Long.class, "module_id", false, "MODULE_ID");
+        public final static Property User_id = new Property(4, Long.class, "user_id", false, "USER_ID");
     };
 
     private DaoSession daoSession;
@@ -53,9 +54,10 @@ public class ModuleInstallationDao extends AbstractDao<ModuleInstallation, Long>
         String constraint = ifNotExists? "IF NOT EXISTS ": "";
         db.execSQL("CREATE TABLE " + constraint + "\"module_installation\" (" + //
                 "\"_id\" INTEGER PRIMARY KEY AUTOINCREMENT ," + // 0: id
-                "\"CREATED\" TEXT NOT NULL ," + // 1: created
-                "\"MODULE_ID\" INTEGER," + // 2: module_id
-                "\"USER_ID\" INTEGER);"); // 3: user_id
+                "\"ACTIVE\" INTEGER NOT NULL ," + // 1: active
+                "\"CREATED\" TEXT NOT NULL ," + // 2: created
+                "\"MODULE_ID\" INTEGER," + // 3: module_id
+                "\"USER_ID\" INTEGER);"); // 4: user_id
         // Add Indexes
         db.execSQL("CREATE INDEX " + constraint + "IDX_module_installation__id ON module_installation" +
                 " (\"_id\");");
@@ -80,16 +82,17 @@ public class ModuleInstallationDao extends AbstractDao<ModuleInstallation, Long>
         if (id != null) {
             stmt.bindLong(1, id);
         }
-        stmt.bindString(2, entity.getCreated());
+        stmt.bindLong(2, entity.getActive() ? 1L: 0L);
+        stmt.bindString(3, entity.getCreated());
  
         Long module_id = entity.getModule_id();
         if (module_id != null) {
-            stmt.bindLong(3, module_id);
+            stmt.bindLong(4, module_id);
         }
  
         Long user_id = entity.getUser_id();
         if (user_id != null) {
-            stmt.bindLong(4, user_id);
+            stmt.bindLong(5, user_id);
         }
     }
 
@@ -110,9 +113,10 @@ public class ModuleInstallationDao extends AbstractDao<ModuleInstallation, Long>
     public ModuleInstallation readEntity(Cursor cursor, int offset) {
         ModuleInstallation entity = new ModuleInstallation( //
             cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0), // id
-            cursor.getString(offset + 1), // created
-            cursor.isNull(offset + 2) ? null : cursor.getLong(offset + 2), // module_id
-            cursor.isNull(offset + 3) ? null : cursor.getLong(offset + 3) // user_id
+            cursor.getShort(offset + 1) != 0, // active
+            cursor.getString(offset + 2), // created
+            cursor.isNull(offset + 3) ? null : cursor.getLong(offset + 3), // module_id
+            cursor.isNull(offset + 4) ? null : cursor.getLong(offset + 4) // user_id
         );
         return entity;
     }
@@ -121,9 +125,10 @@ public class ModuleInstallationDao extends AbstractDao<ModuleInstallation, Long>
     @Override
     public void readEntity(Cursor cursor, ModuleInstallation entity, int offset) {
         entity.setId(cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0));
-        entity.setCreated(cursor.getString(offset + 1));
-        entity.setModule_id(cursor.isNull(offset + 2) ? null : cursor.getLong(offset + 2));
-        entity.setUser_id(cursor.isNull(offset + 3) ? null : cursor.getLong(offset + 3));
+        entity.setActive(cursor.getShort(offset + 1) != 0);
+        entity.setCreated(cursor.getString(offset + 2));
+        entity.setModule_id(cursor.isNull(offset + 3) ? null : cursor.getLong(offset + 3));
+        entity.setUser_id(cursor.isNull(offset + 4) ? null : cursor.getLong(offset + 4));
      }
     
     /** @inheritdoc */

@@ -122,6 +122,7 @@ public class KrakenDatabaseGenerator {
 		Entity moduleInstallation = schema.addEntity("ModuleInstallation");
 		moduleInstallation.setTableName("module_installation");
 		moduleInstallation.addIdProperty().autoincrement().index();
+		moduleInstallation.addBooleanProperty("active").notNull();
 		moduleInstallation.addStringProperty("created").notNull();
 		
 		Property moduleInstallationFKModuleProperty = moduleInstallation.addLongProperty("module_id").index().getProperty();
