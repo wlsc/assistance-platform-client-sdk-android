@@ -7,7 +7,7 @@ import de.tudarmstadt.informatik.tk.android.kraken.api.entities.ApiMessage;
 import de.tudarmstadt.informatik.tk.android.kraken.communication.RetroServerPushManager;
 import de.tudarmstadt.informatik.tk.android.kraken.models.db.sensors.ESensorType;
 import de.tudarmstadt.informatik.tk.android.kraken.models.db.sensors.abstract_sensors.AbstractContentObserverSensor;
-import de.tudarmstadt.informatik.tk.android.kraken.utils.DatabaseManager;
+import de.tudarmstadt.informatik.tk.android.kraken.db.DatabaseManager;
 
 public class CallLogSensor extends AbstractContentObserverSensor {
 

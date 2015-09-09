@@ -27,7 +27,7 @@ import de.tudarmstadt.informatik.tk.android.kraken.models.db.sensors.ECommandTyp
 import de.tudarmstadt.informatik.tk.android.kraken.models.db.sensors.SensorManager;
 import de.tudarmstadt.informatik.tk.android.kraken.models.db.sensors.interfaces.ISensor;
 import de.tudarmstadt.informatik.tk.android.kraken.preference.PreferenceManager;
-import de.tudarmstadt.informatik.tk.android.kraken.utils.DatabaseManager;
+import de.tudarmstadt.informatik.tk.android.kraken.db.DatabaseManager;
 import de.tudarmstadt.informatik.tk.kraken.sdk.R;
 
 

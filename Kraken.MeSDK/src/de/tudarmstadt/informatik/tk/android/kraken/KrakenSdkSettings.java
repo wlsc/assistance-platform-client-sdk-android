@@ -6,8 +6,9 @@ import de.tudarmstadt.informatik.tk.android.kraken.models.db.sensors.ESensorType
 public class KrakenSdkSettings {
 
     public static final String SERVER_URL = "https://kraken.me";
-    //public static final String SERVER_URL = "http://192.168.0.118";
     public static final String PREFERENCES_NAME = "KrakenSDKPreferences";
+
+    public static final String DATABASE_NAME = "assistance.sqlite";
 
     public static final String PREFERENCES_SENSOR_DISABLED_BY_USER_POSTFIX = "_disabledByUser";
     public static final String PREFERENCES_SENSOR_LAST_PUSHED_TIMESTAMP_POSTFIX = "_lastPushedTimestamp";
