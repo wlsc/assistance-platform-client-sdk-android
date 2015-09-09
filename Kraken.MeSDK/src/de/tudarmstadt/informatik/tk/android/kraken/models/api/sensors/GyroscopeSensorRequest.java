@@ -12,7 +12,7 @@ import de.tudarmstadt.informatik.tk.android.kraken.interfaces.Sensor;
  */
 public class GyroscopeSensorRequest implements Sensor {
 
-    private long id;
+    private Long id;
 
     @SerializedName("x")
     @Expose
@@ -50,11 +50,11 @@ public class GyroscopeSensorRequest implements Sensor {
         this.type = SensorType.GYROSCOPE;
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

@@ -11,7 +11,7 @@ import de.tudarmstadt.informatik.tk.android.kraken.interfaces.Sensor;
  */
 public class MagneticFieldUncalibratedSensorRequest implements Sensor {
 
-    private long id;
+    private Long id;
 
     @SerializedName("xNoHardIron")
     @Expose
@@ -63,11 +63,11 @@ public class MagneticFieldUncalibratedSensorRequest implements Sensor {
         this.type = SensorType.MAGNETIC_FIELD_UNCALIBRATED;
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

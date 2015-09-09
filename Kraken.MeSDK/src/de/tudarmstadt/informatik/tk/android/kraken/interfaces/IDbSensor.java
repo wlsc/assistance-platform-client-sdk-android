@@ -4,9 +4,9 @@ import java.io.Serializable;
 
 public interface IDbSensor extends Serializable {
 
-    long getId();
+    Long getId();
 
-    void setId(long id);
+    void setId(Long id);
 
     /**
      * @param date in ISO 8601 format

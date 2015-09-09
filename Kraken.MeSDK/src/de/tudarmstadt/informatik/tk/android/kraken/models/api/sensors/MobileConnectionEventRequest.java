@@ -12,7 +12,7 @@ import de.tudarmstadt.informatik.tk.android.kraken.interfaces.Sensor;
  */
 public class MobileConnectionEventRequest implements Sensor {
 
-    private long id;
+    private Long id;
 
     @SerializedName("carrierName")
     @Expose
@@ -55,11 +55,11 @@ public class MobileConnectionEventRequest implements Sensor {
         this.type = SensorType.MOBILE_DATA_CONNECTION_EVENT;
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

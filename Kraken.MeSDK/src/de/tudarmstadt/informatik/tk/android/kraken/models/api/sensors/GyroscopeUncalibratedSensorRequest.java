@@ -11,7 +11,7 @@ import de.tudarmstadt.informatik.tk.android.kraken.interfaces.Sensor;
  */
 public class GyroscopeUncalibratedSensorRequest implements Sensor {
 
-    private long id;
+    private Long id;
 
     @SerializedName("xNoDrift")
     @Expose
@@ -65,11 +65,11 @@ public class GyroscopeUncalibratedSensorRequest implements Sensor {
         this.type = SensorType.GYROSCOPE_UNCALIBRATED;
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
