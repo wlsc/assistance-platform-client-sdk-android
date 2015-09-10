@@ -15,7 +15,7 @@ public class User {
     private String lastname;
     /** Not-null value. */
     private String primaryEmail;
-    private String user_pic_filename;
+    private String userpicFilename;
     private String lastLogin;
     private String joinedSince;
     /** Not-null value. */
@@ -39,12 +39,12 @@ public class User {
         this.id = id;
     }
 
-    public User(Long id, String firstname, String lastname, String primaryEmail, String user_pic_filename, String lastLogin, String joinedSince, String created) {
+    public User(Long id, String firstname, String lastname, String primaryEmail, String userpicFilename, String lastLogin, String joinedSince, String created) {
         this.id = id;
         this.firstname = firstname;
         this.lastname = lastname;
         this.primaryEmail = primaryEmail;
-        this.user_pic_filename = user_pic_filename;
+        this.userpicFilename = userpicFilename;
         this.lastLogin = lastLogin;
         this.joinedSince = joinedSince;
         this.created = created;
@@ -90,12 +90,12 @@ public class User {
         this.primaryEmail = primaryEmail;
     }
 
-    public String getUser_pic_filename() {
-        return user_pic_filename;
+    public String getUserpicFilename() {
+        return userpicFilename;
     }
 
-    public void setUser_pic_filename(String user_pic_filename) {
-        this.user_pic_filename = user_pic_filename;
+    public void setUserpicFilename(String userpicFilename) {
+        this.userpicFilename = userpicFilename;
     }
 
     public String getLastLogin() {

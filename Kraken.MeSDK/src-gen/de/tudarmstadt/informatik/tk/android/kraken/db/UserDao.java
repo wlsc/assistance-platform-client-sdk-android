@@ -27,7 +27,7 @@ public class UserDao extends AbstractDao<User, Long> {
         public final static Property Firstname = new Property(1, String.class, "firstname", false, "FIRSTNAME");
         public final static Property Lastname = new Property(2, String.class, "lastname", false, "LASTNAME");
         public final static Property PrimaryEmail = new Property(3, String.class, "primaryEmail", false, "PRIMARY_EMAIL");
-        public final static Property User_pic_filename = new Property(4, String.class, "user_pic_filename", false, "USER_PIC_FILENAME");
+        public final static Property UserpicFilename = new Property(4, String.class, "userpicFilename", false, "USERPIC_FILENAME");
         public final static Property LastLogin = new Property(5, String.class, "lastLogin", false, "LAST_LOGIN");
         public final static Property JoinedSince = new Property(6, String.class, "joinedSince", false, "JOINED_SINCE");
         public final static Property Created = new Property(7, String.class, "created", false, "CREATED");
@@ -53,7 +53,7 @@ public class UserDao extends AbstractDao<User, Long> {
                 "\"FIRSTNAME\" TEXT," + // 1: firstname
                 "\"LASTNAME\" TEXT," + // 2: lastname
                 "\"PRIMARY_EMAIL\" TEXT NOT NULL ," + // 3: primaryEmail
-                "\"USER_PIC_FILENAME\" TEXT," + // 4: user_pic_filename
+                "\"USERPIC_FILENAME\" TEXT," + // 4: userpicFilename
                 "\"LAST_LOGIN\" TEXT," + // 5: lastLogin
                 "\"JOINED_SINCE\" TEXT," + // 6: joinedSince
                 "\"CREATED\" TEXT NOT NULL );"); // 7: created
@@ -89,9 +89,9 @@ public class UserDao extends AbstractDao<User, Long> {
         }
         stmt.bindString(4, entity.getPrimaryEmail());
  
-        String user_pic_filename = entity.getUser_pic_filename();
-        if (user_pic_filename != null) {
-            stmt.bindString(5, user_pic_filename);
+        String userpicFilename = entity.getUserpicFilename();
+        if (userpicFilename != null) {
+            stmt.bindString(5, userpicFilename);
         }
  
         String lastLogin = entity.getLastLogin();
@@ -126,7 +126,7 @@ public class UserDao extends AbstractDao<User, Long> {
             cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1), // firstname
             cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // lastname
             cursor.getString(offset + 3), // primaryEmail
-            cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4), // user_pic_filename
+            cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4), // userpicFilename
             cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5), // lastLogin
             cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6), // joinedSince
             cursor.getString(offset + 7) // created
@@ -141,7 +141,7 @@ public class UserDao extends AbstractDao<User, Long> {
         entity.setFirstname(cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1));
         entity.setLastname(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
         entity.setPrimaryEmail(cursor.getString(offset + 3));
-        entity.setUser_pic_filename(cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4));
+        entity.setUserpicFilename(cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4));
         entity.setLastLogin(cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5));
         entity.setJoinedSince(cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6));
         entity.setCreated(cursor.getString(offset + 7));

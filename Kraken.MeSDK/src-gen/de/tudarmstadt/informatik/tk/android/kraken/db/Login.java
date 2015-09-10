@@ -13,9 +13,9 @@ public class Login {
     private Long id;
     /** Not-null value. */
     private String token;
-    private Long server_device_id;
+    private Long serverDeviceId;
     /** Not-null value. */
-    private String last_email;
+    private String lastEmail;
     /** Not-null value. */
     private String created;
 
@@ -34,11 +34,11 @@ public class Login {
         this.id = id;
     }
 
-    public Login(Long id, String token, Long server_device_id, String last_email, String created) {
+    public Login(Long id, String token, Long serverDeviceId, String lastEmail, String created) {
         this.id = id;
         this.token = token;
-        this.server_device_id = server_device_id;
-        this.last_email = last_email;
+        this.serverDeviceId = serverDeviceId;
+        this.lastEmail = lastEmail;
         this.created = created;
     }
 
@@ -66,22 +66,22 @@ public class Login {
         this.token = token;
     }
 
-    public Long getServer_device_id() {
-        return server_device_id;
+    public Long getServerDeviceId() {
+        return serverDeviceId;
     }
 
-    public void setServer_device_id(Long server_device_id) {
-        this.server_device_id = server_device_id;
+    public void setServerDeviceId(Long serverDeviceId) {
+        this.serverDeviceId = serverDeviceId;
     }
 
     /** Not-null value. */
-    public String getLast_email() {
-        return last_email;
+    public String getLastEmail() {
+        return lastEmail;
     }
 
     /** Not-null value; ensure this value is available before it is saved to the database. */
-    public void setLast_email(String last_email) {
-        this.last_email = last_email;
+    public void setLastEmail(String lastEmail) {
+        this.lastEmail = lastEmail;
     }
 
     /** Not-null value. */

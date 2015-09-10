@@ -17,7 +17,7 @@ public class UserSocialProfile {
     private String updated;
     /** Not-null value. */
     private String created;
-    private Long user_id;
+    private Long userId;
 
     /** Used to resolve relations */
     private transient DaoSession daoSession;
@@ -36,7 +36,7 @@ public class UserSocialProfile {
         this.id = id;
     }
 
-    public UserSocialProfile(Long id, String name, String firstname, String lastname, String email, String updated, String created, Long user_id) {
+    public UserSocialProfile(Long id, String name, String firstname, String lastname, String email, String updated, String created, Long userId) {
         this.id = id;
         this.name = name;
         this.firstname = firstname;
@@ -44,7 +44,7 @@ public class UserSocialProfile {
         this.email = email;
         this.updated = updated;
         this.created = created;
-        this.user_id = user_id;
+        this.userId = userId;
     }
 
     /** called by internal mechanisms, do not call yourself. */
@@ -111,17 +111,17 @@ public class UserSocialProfile {
         this.created = created;
     }
 
-    public Long getUser_id() {
-        return user_id;
+    public Long getUserId() {
+        return userId;
     }
 
-    public void setUser_id(Long user_id) {
-        this.user_id = user_id;
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 
     /** To-one relationship, resolved on first access. */
     public User getUser() {
-        Long __key = this.user_id;
+        Long __key = this.userId;
         if (user__resolvedKey == null || !user__resolvedKey.equals(__key)) {
             if (daoSession == null) {
                 throw new DaoException("Entity is detached from DAO context");
@@ -139,8 +139,8 @@ public class UserSocialProfile {
     public void setUser(User user) {
         synchronized (this) {
             this.user = user;
-            user_id = user == null ? null : user.getId();
-            user__resolvedKey = user_id;
+            userId = user == null ? null : user.getId();
+            user__resolvedKey = userId;
         }
     }
 

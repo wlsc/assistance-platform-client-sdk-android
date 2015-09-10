@@ -31,8 +31,8 @@ public class ModuleInstallationDao extends AbstractDao<ModuleInstallation, Long>
         public final static Property Id = new Property(0, Long.class, "id", true, "_id");
         public final static Property Active = new Property(1, boolean.class, "active", false, "ACTIVE");
         public final static Property Created = new Property(2, String.class, "created", false, "CREATED");
-        public final static Property Module_id = new Property(3, Long.class, "module_id", false, "MODULE_ID");
-        public final static Property User_id = new Property(4, Long.class, "user_id", false, "USER_ID");
+        public final static Property ModuleId = new Property(3, Long.class, "moduleId", false, "MODULE_ID");
+        public final static Property UserId = new Property(4, Long.class, "userId", false, "USER_ID");
     };
 
     private DaoSession daoSession;
@@ -56,8 +56,8 @@ public class ModuleInstallationDao extends AbstractDao<ModuleInstallation, Long>
                 "\"_id\" INTEGER PRIMARY KEY AUTOINCREMENT ," + // 0: id
                 "\"ACTIVE\" INTEGER NOT NULL ," + // 1: active
                 "\"CREATED\" TEXT NOT NULL ," + // 2: created
-                "\"MODULE_ID\" INTEGER," + // 3: module_id
-                "\"USER_ID\" INTEGER);"); // 4: user_id
+                "\"MODULE_ID\" INTEGER," + // 3: moduleId
+                "\"USER_ID\" INTEGER);"); // 4: userId
         // Add Indexes
         db.execSQL("CREATE INDEX " + constraint + "IDX_module_installation__id ON module_installation" +
                 " (\"_id\");");
@@ -85,14 +85,14 @@ public class ModuleInstallationDao extends AbstractDao<ModuleInstallation, Long>
         stmt.bindLong(2, entity.getActive() ? 1L: 0L);
         stmt.bindString(3, entity.getCreated());
  
-        Long module_id = entity.getModule_id();
-        if (module_id != null) {
-            stmt.bindLong(4, module_id);
+        Long moduleId = entity.getModuleId();
+        if (moduleId != null) {
+            stmt.bindLong(4, moduleId);
         }
  
-        Long user_id = entity.getUser_id();
-        if (user_id != null) {
-            stmt.bindLong(5, user_id);
+        Long userId = entity.getUserId();
+        if (userId != null) {
+            stmt.bindLong(5, userId);
         }
     }
 
@@ -115,8 +115,8 @@ public class ModuleInstallationDao extends AbstractDao<ModuleInstallation, Long>
             cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0), // id
             cursor.getShort(offset + 1) != 0, // active
             cursor.getString(offset + 2), // created
-            cursor.isNull(offset + 3) ? null : cursor.getLong(offset + 3), // module_id
-            cursor.isNull(offset + 4) ? null : cursor.getLong(offset + 4) // user_id
+            cursor.isNull(offset + 3) ? null : cursor.getLong(offset + 3), // moduleId
+            cursor.isNull(offset + 4) ? null : cursor.getLong(offset + 4) // userId
         );
         return entity;
     }
@@ -127,8 +127,8 @@ public class ModuleInstallationDao extends AbstractDao<ModuleInstallation, Long>
         entity.setId(cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0));
         entity.setActive(cursor.getShort(offset + 1) != 0);
         entity.setCreated(cursor.getString(offset + 2));
-        entity.setModule_id(cursor.isNull(offset + 3) ? null : cursor.getLong(offset + 3));
-        entity.setUser_id(cursor.isNull(offset + 4) ? null : cursor.getLong(offset + 4));
+        entity.setModuleId(cursor.isNull(offset + 3) ? null : cursor.getLong(offset + 3));
+        entity.setUserId(cursor.isNull(offset + 4) ? null : cursor.getLong(offset + 4));
      }
     
     /** @inheritdoc */
@@ -155,30 +155,30 @@ public class ModuleInstallationDao extends AbstractDao<ModuleInstallation, Long>
     }
     
     /** Internal query to resolve the "moduleInstallationList" to-many relationship of Module. */
-    public List<ModuleInstallation> _queryModule_ModuleInstallationList(Long module_id) {
+    public List<ModuleInstallation> _queryModule_ModuleInstallationList(Long moduleId) {
         synchronized (this) {
             if (module_ModuleInstallationListQuery == null) {
                 QueryBuilder<ModuleInstallation> queryBuilder = queryBuilder();
-                queryBuilder.where(Properties.Module_id.eq(null));
+                queryBuilder.where(Properties.ModuleId.eq(null));
                 module_ModuleInstallationListQuery = queryBuilder.build();
             }
         }
         Query<ModuleInstallation> query = module_ModuleInstallationListQuery.forCurrentThread();
-        query.setParameter(0, module_id);
+        query.setParameter(0, moduleId);
         return query.list();
     }
 
     /** Internal query to resolve the "moduleInstallationList" to-many relationship of User. */
-    public List<ModuleInstallation> _queryUser_ModuleInstallationList(Long user_id) {
+    public List<ModuleInstallation> _queryUser_ModuleInstallationList(Long userId) {
         synchronized (this) {
             if (user_ModuleInstallationListQuery == null) {
                 QueryBuilder<ModuleInstallation> queryBuilder = queryBuilder();
-                queryBuilder.where(Properties.User_id.eq(null));
+                queryBuilder.where(Properties.UserId.eq(null));
                 user_ModuleInstallationListQuery = queryBuilder.build();
             }
         }
         Query<ModuleInstallation> query = user_ModuleInstallationListQuery.forCurrentThread();
-        query.setParameter(0, user_id);
+        query.setParameter(0, userId);
         return query.list();
     }
 

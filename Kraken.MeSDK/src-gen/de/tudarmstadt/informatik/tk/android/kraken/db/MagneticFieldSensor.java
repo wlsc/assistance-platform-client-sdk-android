@@ -13,6 +13,12 @@ public class MagneticFieldSensor implements de.tudarmstadt.informatik.tk.android
     /** Not-null value. */
     private String created;
     private Integer accuracy;
+    private Float xUncalibratedNoHardIron;
+    private Float yUncalibratedNoHardIron;
+    private Float zUncalibratedNoHardIron;
+    private Float xUncalibratedEstimatedIronBias;
+    private Float yUncalibratedEstimatedIronBias;
+    private Float zUncalibratedEstimatedIronBias;
 
     public MagneticFieldSensor() {
     }
@@ -21,13 +27,19 @@ public class MagneticFieldSensor implements de.tudarmstadt.informatik.tk.android
         this.id = id;
     }
 
-    public MagneticFieldSensor(Long id, Double x, Double y, Double z, String created, Integer accuracy) {
+    public MagneticFieldSensor(Long id, Double x, Double y, Double z, String created, Integer accuracy, Float xUncalibratedNoHardIron, Float yUncalibratedNoHardIron, Float zUncalibratedNoHardIron, Float xUncalibratedEstimatedIronBias, Float yUncalibratedEstimatedIronBias, Float zUncalibratedEstimatedIronBias) {
         this.id = id;
         this.x = x;
         this.y = y;
         this.z = z;
         this.created = created;
         this.accuracy = accuracy;
+        this.xUncalibratedNoHardIron = xUncalibratedNoHardIron;
+        this.yUncalibratedNoHardIron = yUncalibratedNoHardIron;
+        this.zUncalibratedNoHardIron = zUncalibratedNoHardIron;
+        this.xUncalibratedEstimatedIronBias = xUncalibratedEstimatedIronBias;
+        this.yUncalibratedEstimatedIronBias = yUncalibratedEstimatedIronBias;
+        this.zUncalibratedEstimatedIronBias = zUncalibratedEstimatedIronBias;
     }
 
     public Long getId() {
@@ -78,6 +90,54 @@ public class MagneticFieldSensor implements de.tudarmstadt.informatik.tk.android
 
     public void setAccuracy(Integer accuracy) {
         this.accuracy = accuracy;
+    }
+
+    public Float getXUncalibratedNoHardIron() {
+        return xUncalibratedNoHardIron;
+    }
+
+    public void setXUncalibratedNoHardIron(Float xUncalibratedNoHardIron) {
+        this.xUncalibratedNoHardIron = xUncalibratedNoHardIron;
+    }
+
+    public Float getYUncalibratedNoHardIron() {
+        return yUncalibratedNoHardIron;
+    }
+
+    public void setYUncalibratedNoHardIron(Float yUncalibratedNoHardIron) {
+        this.yUncalibratedNoHardIron = yUncalibratedNoHardIron;
+    }
+
+    public Float getZUncalibratedNoHardIron() {
+        return zUncalibratedNoHardIron;
+    }
+
+    public void setZUncalibratedNoHardIron(Float zUncalibratedNoHardIron) {
+        this.zUncalibratedNoHardIron = zUncalibratedNoHardIron;
+    }
+
+    public Float getXUncalibratedEstimatedIronBias() {
+        return xUncalibratedEstimatedIronBias;
+    }
+
+    public void setXUncalibratedEstimatedIronBias(Float xUncalibratedEstimatedIronBias) {
+        this.xUncalibratedEstimatedIronBias = xUncalibratedEstimatedIronBias;
+    }
+
+    public Float getYUncalibratedEstimatedIronBias() {
+        return yUncalibratedEstimatedIronBias;
+    }
+
+    public void setYUncalibratedEstimatedIronBias(Float yUncalibratedEstimatedIronBias) {
+        this.yUncalibratedEstimatedIronBias = yUncalibratedEstimatedIronBias;
+    }
+
+    public Float getZUncalibratedEstimatedIronBias() {
+        return zUncalibratedEstimatedIronBias;
+    }
+
+    public void setZUncalibratedEstimatedIronBias(Float zUncalibratedEstimatedIronBias) {
+        this.zUncalibratedEstimatedIronBias = zUncalibratedEstimatedIronBias;
     }
 
 }

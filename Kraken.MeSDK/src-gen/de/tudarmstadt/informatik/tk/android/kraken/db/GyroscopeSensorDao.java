@@ -28,6 +28,12 @@ public class GyroscopeSensorDao extends AbstractDao<GyroscopeSensor, Long> {
         public final static Property Y = new Property(2, Double.class, "y", false, "Y");
         public final static Property Z = new Property(3, Double.class, "z", false, "Z");
         public final static Property Created = new Property(4, String.class, "created", false, "CREATED");
+        public final static Property XUncalibratedNoDrift = new Property(5, Float.class, "xUncalibratedNoDrift", false, "X_UNCALIBRATED_NO_DRIFT");
+        public final static Property YUncalibratedNoDrift = new Property(6, Float.class, "yUncalibratedNoDrift", false, "Y_UNCALIBRATED_NO_DRIFT");
+        public final static Property ZUncalibratedNoDrift = new Property(7, Float.class, "zUncalibratedNoDrift", false, "Z_UNCALIBRATED_NO_DRIFT");
+        public final static Property XUncalibratedEstimatedDrift = new Property(8, Float.class, "xUncalibratedEstimatedDrift", false, "X_UNCALIBRATED_ESTIMATED_DRIFT");
+        public final static Property YUncalibratedEstimatedDrift = new Property(9, Float.class, "yUncalibratedEstimatedDrift", false, "Y_UNCALIBRATED_ESTIMATED_DRIFT");
+        public final static Property ZUncalibratedEstimatedDrift = new Property(10, Float.class, "zUncalibratedEstimatedDrift", false, "Z_UNCALIBRATED_ESTIMATED_DRIFT");
     };
 
 
@@ -47,7 +53,13 @@ public class GyroscopeSensorDao extends AbstractDao<GyroscopeSensor, Long> {
                 "\"X\" REAL," + // 1: x
                 "\"Y\" REAL," + // 2: y
                 "\"Z\" REAL," + // 3: z
-                "\"CREATED\" TEXT NOT NULL );"); // 4: created
+                "\"CREATED\" TEXT NOT NULL ," + // 4: created
+                "\"X_UNCALIBRATED_NO_DRIFT\" REAL," + // 5: xUncalibratedNoDrift
+                "\"Y_UNCALIBRATED_NO_DRIFT\" REAL," + // 6: yUncalibratedNoDrift
+                "\"Z_UNCALIBRATED_NO_DRIFT\" REAL," + // 7: zUncalibratedNoDrift
+                "\"X_UNCALIBRATED_ESTIMATED_DRIFT\" REAL," + // 8: xUncalibratedEstimatedDrift
+                "\"Y_UNCALIBRATED_ESTIMATED_DRIFT\" REAL," + // 9: yUncalibratedEstimatedDrift
+                "\"Z_UNCALIBRATED_ESTIMATED_DRIFT\" REAL);"); // 10: zUncalibratedEstimatedDrift
         // Add Indexes
         db.execSQL("CREATE INDEX " + constraint + "IDX_gyroscope_sensor__id ON gyroscope_sensor" +
                 " (\"_id\");");
@@ -84,6 +96,36 @@ public class GyroscopeSensorDao extends AbstractDao<GyroscopeSensor, Long> {
             stmt.bindDouble(4, z);
         }
         stmt.bindString(5, entity.getCreated());
+ 
+        Float xUncalibratedNoDrift = entity.getXUncalibratedNoDrift();
+        if (xUncalibratedNoDrift != null) {
+            stmt.bindDouble(6, xUncalibratedNoDrift);
+        }
+ 
+        Float yUncalibratedNoDrift = entity.getYUncalibratedNoDrift();
+        if (yUncalibratedNoDrift != null) {
+            stmt.bindDouble(7, yUncalibratedNoDrift);
+        }
+ 
+        Float zUncalibratedNoDrift = entity.getZUncalibratedNoDrift();
+        if (zUncalibratedNoDrift != null) {
+            stmt.bindDouble(8, zUncalibratedNoDrift);
+        }
+ 
+        Float xUncalibratedEstimatedDrift = entity.getXUncalibratedEstimatedDrift();
+        if (xUncalibratedEstimatedDrift != null) {
+            stmt.bindDouble(9, xUncalibratedEstimatedDrift);
+        }
+ 
+        Float yUncalibratedEstimatedDrift = entity.getYUncalibratedEstimatedDrift();
+        if (yUncalibratedEstimatedDrift != null) {
+            stmt.bindDouble(10, yUncalibratedEstimatedDrift);
+        }
+ 
+        Float zUncalibratedEstimatedDrift = entity.getZUncalibratedEstimatedDrift();
+        if (zUncalibratedEstimatedDrift != null) {
+            stmt.bindDouble(11, zUncalibratedEstimatedDrift);
+        }
     }
 
     /** @inheritdoc */
@@ -100,7 +142,13 @@ public class GyroscopeSensorDao extends AbstractDao<GyroscopeSensor, Long> {
             cursor.isNull(offset + 1) ? null : cursor.getDouble(offset + 1), // x
             cursor.isNull(offset + 2) ? null : cursor.getDouble(offset + 2), // y
             cursor.isNull(offset + 3) ? null : cursor.getDouble(offset + 3), // z
-            cursor.getString(offset + 4) // created
+            cursor.getString(offset + 4), // created
+            cursor.isNull(offset + 5) ? null : cursor.getFloat(offset + 5), // xUncalibratedNoDrift
+            cursor.isNull(offset + 6) ? null : cursor.getFloat(offset + 6), // yUncalibratedNoDrift
+            cursor.isNull(offset + 7) ? null : cursor.getFloat(offset + 7), // zUncalibratedNoDrift
+            cursor.isNull(offset + 8) ? null : cursor.getFloat(offset + 8), // xUncalibratedEstimatedDrift
+            cursor.isNull(offset + 9) ? null : cursor.getFloat(offset + 9), // yUncalibratedEstimatedDrift
+            cursor.isNull(offset + 10) ? null : cursor.getFloat(offset + 10) // zUncalibratedEstimatedDrift
         );
         return entity;
     }
@@ -113,6 +161,12 @@ public class GyroscopeSensorDao extends AbstractDao<GyroscopeSensor, Long> {
         entity.setY(cursor.isNull(offset + 2) ? null : cursor.getDouble(offset + 2));
         entity.setZ(cursor.isNull(offset + 3) ? null : cursor.getDouble(offset + 3));
         entity.setCreated(cursor.getString(offset + 4));
+        entity.setXUncalibratedNoDrift(cursor.isNull(offset + 5) ? null : cursor.getFloat(offset + 5));
+        entity.setYUncalibratedNoDrift(cursor.isNull(offset + 6) ? null : cursor.getFloat(offset + 6));
+        entity.setZUncalibratedNoDrift(cursor.isNull(offset + 7) ? null : cursor.getFloat(offset + 7));
+        entity.setXUncalibratedEstimatedDrift(cursor.isNull(offset + 8) ? null : cursor.getFloat(offset + 8));
+        entity.setYUncalibratedEstimatedDrift(cursor.isNull(offset + 9) ? null : cursor.getFloat(offset + 9));
+        entity.setZUncalibratedEstimatedDrift(cursor.isNull(offset + 10) ? null : cursor.getFloat(offset + 10));
      }
     
     /** @inheritdoc */

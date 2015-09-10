@@ -10,15 +10,15 @@ import de.greenrobot.dao.DaoException;
 public class Device {
 
     private Long id;
-    private String device_identifier;
+    private String deviceIdentifier;
     private String os;
-    private String os_version;
+    private String osVersion;
     private String brand;
     private String model;
     /** Not-null value. */
     private String created;
-    private Long login_id;
-    private Long user_id;
+    private Long loginId;
+    private Long userId;
 
     /** Used to resolve relations */
     private transient DaoSession daoSession;
@@ -40,16 +40,16 @@ public class Device {
         this.id = id;
     }
 
-    public Device(Long id, String device_identifier, String os, String os_version, String brand, String model, String created, Long login_id, Long user_id) {
+    public Device(Long id, String deviceIdentifier, String os, String osVersion, String brand, String model, String created, Long loginId, Long userId) {
         this.id = id;
-        this.device_identifier = device_identifier;
+        this.deviceIdentifier = deviceIdentifier;
         this.os = os;
-        this.os_version = os_version;
+        this.osVersion = osVersion;
         this.brand = brand;
         this.model = model;
         this.created = created;
-        this.login_id = login_id;
-        this.user_id = user_id;
+        this.loginId = loginId;
+        this.userId = userId;
     }
 
     /** called by internal mechanisms, do not call yourself. */
@@ -66,12 +66,12 @@ public class Device {
         this.id = id;
     }
 
-    public String getDevice_identifier() {
-        return device_identifier;
+    public String getDeviceIdentifier() {
+        return deviceIdentifier;
     }
 
-    public void setDevice_identifier(String device_identifier) {
-        this.device_identifier = device_identifier;
+    public void setDeviceIdentifier(String deviceIdentifier) {
+        this.deviceIdentifier = deviceIdentifier;
     }
 
     public String getOs() {
@@ -82,12 +82,12 @@ public class Device {
         this.os = os;
     }
 
-    public String getOs_version() {
-        return os_version;
+    public String getOsVersion() {
+        return osVersion;
     }
 
-    public void setOs_version(String os_version) {
-        this.os_version = os_version;
+    public void setOsVersion(String osVersion) {
+        this.osVersion = osVersion;
     }
 
     public String getBrand() {
@@ -116,25 +116,25 @@ public class Device {
         this.created = created;
     }
 
-    public Long getLogin_id() {
-        return login_id;
+    public Long getLoginId() {
+        return loginId;
     }
 
-    public void setLogin_id(Long login_id) {
-        this.login_id = login_id;
+    public void setLoginId(Long loginId) {
+        this.loginId = loginId;
     }
 
-    public Long getUser_id() {
-        return user_id;
+    public Long getUserId() {
+        return userId;
     }
 
-    public void setUser_id(Long user_id) {
-        this.user_id = user_id;
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 
     /** To-one relationship, resolved on first access. */
     public Login getLogin() {
-        Long __key = this.login_id;
+        Long __key = this.loginId;
         if (login__resolvedKey == null || !login__resolvedKey.equals(__key)) {
             if (daoSession == null) {
                 throw new DaoException("Entity is detached from DAO context");
@@ -152,14 +152,14 @@ public class Device {
     public void setLogin(Login login) {
         synchronized (this) {
             this.login = login;
-            login_id = login == null ? null : login.getId();
-            login__resolvedKey = login_id;
+            loginId = login == null ? null : login.getId();
+            login__resolvedKey = loginId;
         }
     }
 
     /** To-one relationship, resolved on first access. */
     public User getUser() {
-        Long __key = this.user_id;
+        Long __key = this.userId;
         if (user__resolvedKey == null || !user__resolvedKey.equals(__key)) {
             if (daoSession == null) {
                 throw new DaoException("Entity is detached from DAO context");
@@ -177,8 +177,8 @@ public class Device {
     public void setUser(User user) {
         synchronized (this) {
             this.user = user;
-            user_id = user == null ? null : user.getId();
-            user__resolvedKey = user_id;
+            userId = user == null ? null : user.getId();
+            user__resolvedKey = userId;
         }
     }
 

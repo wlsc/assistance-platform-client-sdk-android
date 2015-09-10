@@ -29,6 +29,12 @@ public class MagneticFieldSensorDao extends AbstractDao<MagneticFieldSensor, Lon
         public final static Property Z = new Property(3, Double.class, "z", false, "Z");
         public final static Property Created = new Property(4, String.class, "created", false, "CREATED");
         public final static Property Accuracy = new Property(5, Integer.class, "accuracy", false, "ACCURACY");
+        public final static Property XUncalibratedNoHardIron = new Property(6, Float.class, "xUncalibratedNoHardIron", false, "X_UNCALIBRATED_NO_HARD_IRON");
+        public final static Property YUncalibratedNoHardIron = new Property(7, Float.class, "yUncalibratedNoHardIron", false, "Y_UNCALIBRATED_NO_HARD_IRON");
+        public final static Property ZUncalibratedNoHardIron = new Property(8, Float.class, "zUncalibratedNoHardIron", false, "Z_UNCALIBRATED_NO_HARD_IRON");
+        public final static Property XUncalibratedEstimatedIronBias = new Property(9, Float.class, "xUncalibratedEstimatedIronBias", false, "X_UNCALIBRATED_ESTIMATED_IRON_BIAS");
+        public final static Property YUncalibratedEstimatedIronBias = new Property(10, Float.class, "yUncalibratedEstimatedIronBias", false, "Y_UNCALIBRATED_ESTIMATED_IRON_BIAS");
+        public final static Property ZUncalibratedEstimatedIronBias = new Property(11, Float.class, "zUncalibratedEstimatedIronBias", false, "Z_UNCALIBRATED_ESTIMATED_IRON_BIAS");
     };
 
 
@@ -49,7 +55,13 @@ public class MagneticFieldSensorDao extends AbstractDao<MagneticFieldSensor, Lon
                 "\"Y\" REAL," + // 2: y
                 "\"Z\" REAL," + // 3: z
                 "\"CREATED\" TEXT NOT NULL ," + // 4: created
-                "\"ACCURACY\" INTEGER);"); // 5: accuracy
+                "\"ACCURACY\" INTEGER," + // 5: accuracy
+                "\"X_UNCALIBRATED_NO_HARD_IRON\" REAL," + // 6: xUncalibratedNoHardIron
+                "\"Y_UNCALIBRATED_NO_HARD_IRON\" REAL," + // 7: yUncalibratedNoHardIron
+                "\"Z_UNCALIBRATED_NO_HARD_IRON\" REAL," + // 8: zUncalibratedNoHardIron
+                "\"X_UNCALIBRATED_ESTIMATED_IRON_BIAS\" REAL," + // 9: xUncalibratedEstimatedIronBias
+                "\"Y_UNCALIBRATED_ESTIMATED_IRON_BIAS\" REAL," + // 10: yUncalibratedEstimatedIronBias
+                "\"Z_UNCALIBRATED_ESTIMATED_IRON_BIAS\" REAL);"); // 11: zUncalibratedEstimatedIronBias
         // Add Indexes
         db.execSQL("CREATE INDEX " + constraint + "IDX_magnetic_field_sensor__id ON magnetic_field_sensor" +
                 " (\"_id\");");
@@ -91,6 +103,36 @@ public class MagneticFieldSensorDao extends AbstractDao<MagneticFieldSensor, Lon
         if (accuracy != null) {
             stmt.bindLong(6, accuracy);
         }
+ 
+        Float xUncalibratedNoHardIron = entity.getXUncalibratedNoHardIron();
+        if (xUncalibratedNoHardIron != null) {
+            stmt.bindDouble(7, xUncalibratedNoHardIron);
+        }
+ 
+        Float yUncalibratedNoHardIron = entity.getYUncalibratedNoHardIron();
+        if (yUncalibratedNoHardIron != null) {
+            stmt.bindDouble(8, yUncalibratedNoHardIron);
+        }
+ 
+        Float zUncalibratedNoHardIron = entity.getZUncalibratedNoHardIron();
+        if (zUncalibratedNoHardIron != null) {
+            stmt.bindDouble(9, zUncalibratedNoHardIron);
+        }
+ 
+        Float xUncalibratedEstimatedIronBias = entity.getXUncalibratedEstimatedIronBias();
+        if (xUncalibratedEstimatedIronBias != null) {
+            stmt.bindDouble(10, xUncalibratedEstimatedIronBias);
+        }
+ 
+        Float yUncalibratedEstimatedIronBias = entity.getYUncalibratedEstimatedIronBias();
+        if (yUncalibratedEstimatedIronBias != null) {
+            stmt.bindDouble(11, yUncalibratedEstimatedIronBias);
+        }
+ 
+        Float zUncalibratedEstimatedIronBias = entity.getZUncalibratedEstimatedIronBias();
+        if (zUncalibratedEstimatedIronBias != null) {
+            stmt.bindDouble(12, zUncalibratedEstimatedIronBias);
+        }
     }
 
     /** @inheritdoc */
@@ -108,7 +150,13 @@ public class MagneticFieldSensorDao extends AbstractDao<MagneticFieldSensor, Lon
             cursor.isNull(offset + 2) ? null : cursor.getDouble(offset + 2), // y
             cursor.isNull(offset + 3) ? null : cursor.getDouble(offset + 3), // z
             cursor.getString(offset + 4), // created
-            cursor.isNull(offset + 5) ? null : cursor.getInt(offset + 5) // accuracy
+            cursor.isNull(offset + 5) ? null : cursor.getInt(offset + 5), // accuracy
+            cursor.isNull(offset + 6) ? null : cursor.getFloat(offset + 6), // xUncalibratedNoHardIron
+            cursor.isNull(offset + 7) ? null : cursor.getFloat(offset + 7), // yUncalibratedNoHardIron
+            cursor.isNull(offset + 8) ? null : cursor.getFloat(offset + 8), // zUncalibratedNoHardIron
+            cursor.isNull(offset + 9) ? null : cursor.getFloat(offset + 9), // xUncalibratedEstimatedIronBias
+            cursor.isNull(offset + 10) ? null : cursor.getFloat(offset + 10), // yUncalibratedEstimatedIronBias
+            cursor.isNull(offset + 11) ? null : cursor.getFloat(offset + 11) // zUncalibratedEstimatedIronBias
         );
         return entity;
     }
@@ -122,6 +170,12 @@ public class MagneticFieldSensorDao extends AbstractDao<MagneticFieldSensor, Lon
         entity.setZ(cursor.isNull(offset + 3) ? null : cursor.getDouble(offset + 3));
         entity.setCreated(cursor.getString(offset + 4));
         entity.setAccuracy(cursor.isNull(offset + 5) ? null : cursor.getInt(offset + 5));
+        entity.setXUncalibratedNoHardIron(cursor.isNull(offset + 6) ? null : cursor.getFloat(offset + 6));
+        entity.setYUncalibratedNoHardIron(cursor.isNull(offset + 7) ? null : cursor.getFloat(offset + 7));
+        entity.setZUncalibratedNoHardIron(cursor.isNull(offset + 8) ? null : cursor.getFloat(offset + 8));
+        entity.setXUncalibratedEstimatedIronBias(cursor.isNull(offset + 9) ? null : cursor.getFloat(offset + 9));
+        entity.setYUncalibratedEstimatedIronBias(cursor.isNull(offset + 10) ? null : cursor.getFloat(offset + 10));
+        entity.setZUncalibratedEstimatedIronBias(cursor.isNull(offset + 11) ? null : cursor.getFloat(offset + 11));
      }
     
     /** @inheritdoc */

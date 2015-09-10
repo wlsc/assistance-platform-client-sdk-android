@@ -12,6 +12,12 @@ public class GyroscopeSensor implements de.tudarmstadt.informatik.tk.android.kra
     private Double z;
     /** Not-null value. */
     private String created;
+    private Float xUncalibratedNoDrift;
+    private Float yUncalibratedNoDrift;
+    private Float zUncalibratedNoDrift;
+    private Float xUncalibratedEstimatedDrift;
+    private Float yUncalibratedEstimatedDrift;
+    private Float zUncalibratedEstimatedDrift;
 
     public GyroscopeSensor() {
     }
@@ -20,12 +26,18 @@ public class GyroscopeSensor implements de.tudarmstadt.informatik.tk.android.kra
         this.id = id;
     }
 
-    public GyroscopeSensor(Long id, Double x, Double y, Double z, String created) {
+    public GyroscopeSensor(Long id, Double x, Double y, Double z, String created, Float xUncalibratedNoDrift, Float yUncalibratedNoDrift, Float zUncalibratedNoDrift, Float xUncalibratedEstimatedDrift, Float yUncalibratedEstimatedDrift, Float zUncalibratedEstimatedDrift) {
         this.id = id;
         this.x = x;
         this.y = y;
         this.z = z;
         this.created = created;
+        this.xUncalibratedNoDrift = xUncalibratedNoDrift;
+        this.yUncalibratedNoDrift = yUncalibratedNoDrift;
+        this.zUncalibratedNoDrift = zUncalibratedNoDrift;
+        this.xUncalibratedEstimatedDrift = xUncalibratedEstimatedDrift;
+        this.yUncalibratedEstimatedDrift = yUncalibratedEstimatedDrift;
+        this.zUncalibratedEstimatedDrift = zUncalibratedEstimatedDrift;
     }
 
     public Long getId() {
@@ -68,6 +80,54 @@ public class GyroscopeSensor implements de.tudarmstadt.informatik.tk.android.kra
     /** Not-null value; ensure this value is available before it is saved to the database. */
     public void setCreated(String created) {
         this.created = created;
+    }
+
+    public Float getXUncalibratedNoDrift() {
+        return xUncalibratedNoDrift;
+    }
+
+    public void setXUncalibratedNoDrift(Float xUncalibratedNoDrift) {
+        this.xUncalibratedNoDrift = xUncalibratedNoDrift;
+    }
+
+    public Float getYUncalibratedNoDrift() {
+        return yUncalibratedNoDrift;
+    }
+
+    public void setYUncalibratedNoDrift(Float yUncalibratedNoDrift) {
+        this.yUncalibratedNoDrift = yUncalibratedNoDrift;
+    }
+
+    public Float getZUncalibratedNoDrift() {
+        return zUncalibratedNoDrift;
+    }
+
+    public void setZUncalibratedNoDrift(Float zUncalibratedNoDrift) {
+        this.zUncalibratedNoDrift = zUncalibratedNoDrift;
+    }
+
+    public Float getXUncalibratedEstimatedDrift() {
+        return xUncalibratedEstimatedDrift;
+    }
+
+    public void setXUncalibratedEstimatedDrift(Float xUncalibratedEstimatedDrift) {
+        this.xUncalibratedEstimatedDrift = xUncalibratedEstimatedDrift;
+    }
+
+    public Float getYUncalibratedEstimatedDrift() {
+        return yUncalibratedEstimatedDrift;
+    }
+
+    public void setYUncalibratedEstimatedDrift(Float yUncalibratedEstimatedDrift) {
+        this.yUncalibratedEstimatedDrift = yUncalibratedEstimatedDrift;
+    }
+
+    public Float getZUncalibratedEstimatedDrift() {
+        return zUncalibratedEstimatedDrift;
+    }
+
+    public void setZUncalibratedEstimatedDrift(Float zUncalibratedEstimatedDrift) {
+        this.zUncalibratedEstimatedDrift = zUncalibratedEstimatedDrift;
     }
 
 }

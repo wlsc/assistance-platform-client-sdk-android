@@ -35,7 +35,7 @@ public class UserSocialProfileDao extends AbstractDao<UserSocialProfile, Long> {
         public final static Property Email = new Property(4, String.class, "email", false, "EMAIL");
         public final static Property Updated = new Property(5, String.class, "updated", false, "UPDATED");
         public final static Property Created = new Property(6, String.class, "created", false, "CREATED");
-        public final static Property User_id = new Property(7, Long.class, "user_id", false, "USER_ID");
+        public final static Property UserId = new Property(7, Long.class, "userId", false, "USER_ID");
     };
 
     private DaoSession daoSession;
@@ -62,7 +62,7 @@ public class UserSocialProfileDao extends AbstractDao<UserSocialProfile, Long> {
                 "\"EMAIL\" TEXT," + // 4: email
                 "\"UPDATED\" TEXT," + // 5: updated
                 "\"CREATED\" TEXT NOT NULL ," + // 6: created
-                "\"USER_ID\" INTEGER);"); // 7: user_id
+                "\"USER_ID\" INTEGER);"); // 7: userId
         // Add Indexes
         db.execSQL("CREATE INDEX " + constraint + "IDX_user_social_profile__id ON user_social_profile" +
                 " (\"_id\");");
@@ -112,9 +112,9 @@ public class UserSocialProfileDao extends AbstractDao<UserSocialProfile, Long> {
         }
         stmt.bindString(7, entity.getCreated());
  
-        Long user_id = entity.getUser_id();
-        if (user_id != null) {
-            stmt.bindLong(8, user_id);
+        Long userId = entity.getUserId();
+        if (userId != null) {
+            stmt.bindLong(8, userId);
         }
     }
 
@@ -141,7 +141,7 @@ public class UserSocialProfileDao extends AbstractDao<UserSocialProfile, Long> {
             cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4), // email
             cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5), // updated
             cursor.getString(offset + 6), // created
-            cursor.isNull(offset + 7) ? null : cursor.getLong(offset + 7) // user_id
+            cursor.isNull(offset + 7) ? null : cursor.getLong(offset + 7) // userId
         );
         return entity;
     }
@@ -156,7 +156,7 @@ public class UserSocialProfileDao extends AbstractDao<UserSocialProfile, Long> {
         entity.setEmail(cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4));
         entity.setUpdated(cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5));
         entity.setCreated(cursor.getString(offset + 6));
-        entity.setUser_id(cursor.isNull(offset + 7) ? null : cursor.getLong(offset + 7));
+        entity.setUserId(cursor.isNull(offset + 7) ? null : cursor.getLong(offset + 7));
      }
     
     /** @inheritdoc */
@@ -183,16 +183,16 @@ public class UserSocialProfileDao extends AbstractDao<UserSocialProfile, Long> {
     }
     
     /** Internal query to resolve the "userSocialProfileList" to-many relationship of User. */
-    public List<UserSocialProfile> _queryUser_UserSocialProfileList(Long user_id) {
+    public List<UserSocialProfile> _queryUser_UserSocialProfileList(Long userId) {
         synchronized (this) {
             if (user_UserSocialProfileListQuery == null) {
                 QueryBuilder<UserSocialProfile> queryBuilder = queryBuilder();
-                queryBuilder.where(Properties.User_id.eq(null));
+                queryBuilder.where(Properties.UserId.eq(null));
                 user_UserSocialProfileListQuery = queryBuilder.build();
             }
         }
         Query<UserSocialProfile> query = user_UserSocialProfileListQuery.forCurrentThread();
-        query.setParameter(0, user_id);
+        query.setParameter(0, userId);
         return query.list();
     }
 

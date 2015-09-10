@@ -12,16 +12,16 @@ public class Module {
 
     private Long id;
     /** Not-null value. */
-    private String package_name;
+    private String packageName;
     private String title;
-    private String logo_url;
-    private String description_short;
-    private String description_full;
+    private String logoUrl;
+    private String descriptionShort;
+    private String descriptionFull;
     private String copyright;
-    private String support_email;
+    private String supportEmail;
     /** Not-null value. */
     private String created;
-    private Long user_id;
+    private Long userId;
 
     /** Used to resolve relations */
     private transient DaoSession daoSession;
@@ -42,17 +42,17 @@ public class Module {
         this.id = id;
     }
 
-    public Module(Long id, String package_name, String title, String logo_url, String description_short, String description_full, String copyright, String support_email, String created, Long user_id) {
+    public Module(Long id, String packageName, String title, String logoUrl, String descriptionShort, String descriptionFull, String copyright, String supportEmail, String created, Long userId) {
         this.id = id;
-        this.package_name = package_name;
+        this.packageName = packageName;
         this.title = title;
-        this.logo_url = logo_url;
-        this.description_short = description_short;
-        this.description_full = description_full;
+        this.logoUrl = logoUrl;
+        this.descriptionShort = descriptionShort;
+        this.descriptionFull = descriptionFull;
         this.copyright = copyright;
-        this.support_email = support_email;
+        this.supportEmail = supportEmail;
         this.created = created;
-        this.user_id = user_id;
+        this.userId = userId;
     }
 
     /** called by internal mechanisms, do not call yourself. */
@@ -70,13 +70,13 @@ public class Module {
     }
 
     /** Not-null value. */
-    public String getPackage_name() {
-        return package_name;
+    public String getPackageName() {
+        return packageName;
     }
 
     /** Not-null value; ensure this value is available before it is saved to the database. */
-    public void setPackage_name(String package_name) {
-        this.package_name = package_name;
+    public void setPackageName(String packageName) {
+        this.packageName = packageName;
     }
 
     public String getTitle() {
@@ -87,28 +87,28 @@ public class Module {
         this.title = title;
     }
 
-    public String getLogo_url() {
-        return logo_url;
+    public String getLogoUrl() {
+        return logoUrl;
     }
 
-    public void setLogo_url(String logo_url) {
-        this.logo_url = logo_url;
+    public void setLogoUrl(String logoUrl) {
+        this.logoUrl = logoUrl;
     }
 
-    public String getDescription_short() {
-        return description_short;
+    public String getDescriptionShort() {
+        return descriptionShort;
     }
 
-    public void setDescription_short(String description_short) {
-        this.description_short = description_short;
+    public void setDescriptionShort(String descriptionShort) {
+        this.descriptionShort = descriptionShort;
     }
 
-    public String getDescription_full() {
-        return description_full;
+    public String getDescriptionFull() {
+        return descriptionFull;
     }
 
-    public void setDescription_full(String description_full) {
-        this.description_full = description_full;
+    public void setDescriptionFull(String descriptionFull) {
+        this.descriptionFull = descriptionFull;
     }
 
     public String getCopyright() {
@@ -119,12 +119,12 @@ public class Module {
         this.copyright = copyright;
     }
 
-    public String getSupport_email() {
-        return support_email;
+    public String getSupportEmail() {
+        return supportEmail;
     }
 
-    public void setSupport_email(String support_email) {
-        this.support_email = support_email;
+    public void setSupportEmail(String supportEmail) {
+        this.supportEmail = supportEmail;
     }
 
     /** Not-null value. */
@@ -137,17 +137,17 @@ public class Module {
         this.created = created;
     }
 
-    public Long getUser_id() {
-        return user_id;
+    public Long getUserId() {
+        return userId;
     }
 
-    public void setUser_id(Long user_id) {
-        this.user_id = user_id;
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 
     /** To-one relationship, resolved on first access. */
     public User getUser() {
-        Long __key = this.user_id;
+        Long __key = this.userId;
         if (user__resolvedKey == null || !user__resolvedKey.equals(__key)) {
             if (daoSession == null) {
                 throw new DaoException("Entity is detached from DAO context");
@@ -165,8 +165,8 @@ public class Module {
     public void setUser(User user) {
         synchronized (this) {
             this.user = user;
-            user_id = user == null ? null : user.getId();
-            user__resolvedKey = user_id;
+            userId = user == null ? null : user.getId();
+            user__resolvedKey = userId;
         }
     }
 

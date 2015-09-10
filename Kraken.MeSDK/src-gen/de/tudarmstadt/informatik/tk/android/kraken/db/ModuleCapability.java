@@ -16,7 +16,7 @@ public class ModuleCapability {
     private boolean required;
     /** Not-null value. */
     private String created;
-    private Long module_id;
+    private Long moduleId;
 
     /** Used to resolve relations */
     private transient DaoSession daoSession;
@@ -35,13 +35,13 @@ public class ModuleCapability {
         this.id = id;
     }
 
-    public ModuleCapability(Long id, String type, Double frequency, boolean required, String created, Long module_id) {
+    public ModuleCapability(Long id, String type, Double frequency, boolean required, String created, Long moduleId) {
         this.id = id;
         this.type = type;
         this.frequency = frequency;
         this.required = required;
         this.created = created;
-        this.module_id = module_id;
+        this.moduleId = moduleId;
     }
 
     /** called by internal mechanisms, do not call yourself. */
@@ -94,17 +94,17 @@ public class ModuleCapability {
         this.created = created;
     }
 
-    public Long getModule_id() {
-        return module_id;
+    public Long getModuleId() {
+        return moduleId;
     }
 
-    public void setModule_id(Long module_id) {
-        this.module_id = module_id;
+    public void setModuleId(Long moduleId) {
+        this.moduleId = moduleId;
     }
 
     /** To-one relationship, resolved on first access. */
     public Module getModule() {
-        Long __key = this.module_id;
+        Long __key = this.moduleId;
         if (module__resolvedKey == null || !module__resolvedKey.equals(__key)) {
             if (daoSession == null) {
                 throw new DaoException("Entity is detached from DAO context");
@@ -122,8 +122,8 @@ public class ModuleCapability {
     public void setModule(Module module) {
         synchronized (this) {
             this.module = module;
-            module_id = module == null ? null : module.getId();
-            module__resolvedKey = module_id;
+            moduleId = module == null ? null : module.getId();
+            module__resolvedKey = moduleId;
         }
     }
 

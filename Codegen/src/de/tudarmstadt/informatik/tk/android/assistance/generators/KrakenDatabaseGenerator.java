@@ -41,7 +41,7 @@ public class KrakenDatabaseGenerator {
 		user.addStringProperty("firstname");
 		user.addStringProperty("lastname");
 		user.addStringProperty("primaryEmail").notNull();
-		user.addStringProperty("user_pic_filename");
+		user.addStringProperty("userpicFilename");
 		user.addStringProperty("lastLogin");
 		user.addStringProperty("joinedSince");
 		user.addStringProperty("created").notNull();
@@ -57,7 +57,7 @@ public class KrakenDatabaseGenerator {
 		socialProfile.addStringProperty("updated");
 		socialProfile.addStringProperty("created").notNull();
 		
-		Property socialProfileFKUserProperty = socialProfile.addLongProperty("user_id").index().getProperty();
+		Property socialProfileFKUserProperty = socialProfile.addLongProperty("userId").index().getProperty();
 		socialProfile.addToOne(user, socialProfileFKUserProperty);
 		user.addToMany(socialProfile, socialProfileFKUserProperty);
 		
@@ -66,23 +66,23 @@ public class KrakenDatabaseGenerator {
 		login.setTableName("login");
 		login.addIdProperty().autoincrement().index();
 		login.addStringProperty("token").notNull().index();
-		login.addLongProperty("server_device_id");
-		login.addStringProperty("last_email").notNull();
+		login.addLongProperty("serverDeviceId");
+		login.addStringProperty("lastEmail").notNull();
 		login.addStringProperty("created").notNull();
 		
 		// ----- Device scheme -----
 		Entity device = schema.addEntity("Device");
 		device.setTableName("device");
 		device.addIdProperty().autoincrement().index();
-		device.addStringProperty("device_identifier");
+		device.addStringProperty("deviceIdentifier");
 		device.addStringProperty("os");
-		device.addStringProperty("os_version");
+		device.addStringProperty("osVersion");
 		device.addStringProperty("brand");
 		device.addStringProperty("model");
 		device.addStringProperty("created").notNull();
 		
-		Property deviceFKLoginProperty = device.addLongProperty("login_id").index().getProperty();
-		Property deviceFKUserProperty = device.addLongProperty("user_id").index().getProperty();
+		Property deviceFKLoginProperty = device.addLongProperty("loginId").index().getProperty();
+		Property deviceFKUserProperty = device.addLongProperty("userId").index().getProperty();
 		device.addToOne(login, deviceFKLoginProperty);
 		login.addToMany(device, deviceFKLoginProperty);
 		device.addToOne(user, deviceFKUserProperty);
@@ -92,16 +92,16 @@ public class KrakenDatabaseGenerator {
 		Entity module = schema.addEntity("Module");
 		module.setTableName("module");
 		module.addIdProperty().autoincrement().index();
-		module.addStringProperty("package_name").notNull().index();
+		module.addStringProperty("packageName").notNull().index();
 		module.addStringProperty("title");
-		module.addStringProperty("logo_url");
-		module.addStringProperty("description_short");
-		module.addStringProperty("description_full");
+		module.addStringProperty("logoUrl");
+		module.addStringProperty("descriptionShort");
+		module.addStringProperty("descriptionFull");
 		module.addStringProperty("copyright");
-		module.addStringProperty("support_email");
+		module.addStringProperty("supportEmail");
 		module.addStringProperty("created").notNull();
 		
-		Property moduleFKUserProperty = module.addLongProperty("user_id").index().getProperty();
+		Property moduleFKUserProperty = module.addLongProperty("userId").index().getProperty();
 		module.addToOne(user, moduleFKUserProperty);
 		user.addToMany(module, moduleFKUserProperty);
 		
@@ -114,7 +114,7 @@ public class KrakenDatabaseGenerator {
 		moduleCapability.addBooleanProperty("required").notNull();
 		moduleCapability.addStringProperty("created").notNull();
 		
-		Property moduleCapabilityFKModuleProperty = moduleCapability.addLongProperty("module_id").index().getProperty();
+		Property moduleCapabilityFKModuleProperty = moduleCapability.addLongProperty("moduleId").index().getProperty();
 		moduleCapability.addToOne(module, moduleCapabilityFKModuleProperty);
 		module.addToMany(moduleCapability, moduleCapabilityFKModuleProperty);
 		
@@ -125,8 +125,8 @@ public class KrakenDatabaseGenerator {
 		moduleInstallation.addBooleanProperty("active").notNull();
 		moduleInstallation.addStringProperty("created").notNull();
 		
-		Property moduleInstallationFKModuleProperty = moduleInstallation.addLongProperty("module_id").index().getProperty();
-		Property moduleInstallationFKUserProperty = moduleInstallation.addLongProperty("user_id").index().getProperty();
+		Property moduleInstallationFKModuleProperty = moduleInstallation.addLongProperty("moduleId").index().getProperty();
+		Property moduleInstallationFKUserProperty = moduleInstallation.addLongProperty("userId").index().getProperty();
 		moduleInstallation.addToOne(module, moduleInstallationFKModuleProperty);
 		module.addToMany(moduleInstallation, moduleInstallationFKModuleProperty);
 		moduleInstallation.addToOne(user, moduleInstallationFKUserProperty);
@@ -165,7 +165,12 @@ public class KrakenDatabaseGenerator {
 		gyroscopeSensor.addDoubleProperty("z");
 		gyroscopeSensor.addStringProperty("created").notNull();
 		// OPTIONAL
-		// none
+		gyroscopeSensor.addFloatProperty("xUncalibratedNoDrift");
+		gyroscopeSensor.addFloatProperty("yUncalibratedNoDrift");
+		gyroscopeSensor.addFloatProperty("zUncalibratedNoDrift");
+		gyroscopeSensor.addFloatProperty("xUncalibratedEstimatedDrift");
+		gyroscopeSensor.addFloatProperty("yUncalibratedEstimatedDrift");
+		gyroscopeSensor.addFloatProperty("zUncalibratedEstimatedDrift");
 		
 		// ----- Accelerometer -----
 		// REQUIRED
@@ -192,6 +197,12 @@ public class KrakenDatabaseGenerator {
 		magneticFieldSensor.addStringProperty("created").notNull();
 		// OPTIONAL
 		magneticFieldSensor.addIntProperty("accuracy");
+		magneticFieldSensor.addFloatProperty("xUncalibratedNoHardIron");
+		magneticFieldSensor.addFloatProperty("yUncalibratedNoHardIron");
+		magneticFieldSensor.addFloatProperty("zUncalibratedNoHardIron");
+		magneticFieldSensor.addFloatProperty("xUncalibratedEstimatedIronBias");
+		magneticFieldSensor.addFloatProperty("yUncalibratedEstimatedIronBias");
+		magneticFieldSensor.addFloatProperty("zUncalibratedEstimatedIronBias");
 		
 		// ********************************
 		// ------------ EVENTS ------------
@@ -275,38 +286,6 @@ public class KrakenDatabaseGenerator {
 		// ** ANDROID SENSORS **
 		// *********************
 		
-		// ----- MAGNETIC FIELD (UNCALIBRATED) -----
-		// REQUIRED
-		Entity magneticFieldUncalibrated = schema.addEntity("MagneticFieldUncalibratedSensor");
-		magneticFieldUncalibrated.setTableName("magnetic_field_uncalibrated_sensor");
-		magneticFieldUncalibrated.addIdProperty().autoincrement().index();
-		magneticFieldUncalibrated.implementsInterface(Config.KRAKEN_PACKAGE_SENSOR);
-		magneticFieldUncalibrated.addFloatProperty("xNoHardIron").notNull();
-		magneticFieldUncalibrated.addFloatProperty("yNoHardIron").notNull();
-		magneticFieldUncalibrated.addFloatProperty("zNoHardIron").notNull();
-		magneticFieldUncalibrated.addFloatProperty("xEstimatedIronBias").notNull();
-		magneticFieldUncalibrated.addFloatProperty("yEstimatedIronBias").notNull();
-		magneticFieldUncalibrated.addFloatProperty("zEstimatedIronBias").notNull();
-		magneticFieldUncalibrated.addStringProperty("created").notNull();
-		// OPTIONAL
-		// none
-		
-		// ----- GYROSCOPE (UNCALIBRATED) -----
-		// REQUIRED
-		Entity gyroscopeUncalibrated = schema.addEntity("GyroscopeUncalibratedSensor");
-		gyroscopeUncalibrated.setTableName("gyroscope_uncalibrated_sensor");
-		gyroscopeUncalibrated.addIdProperty().autoincrement().index();
-		gyroscopeUncalibrated.implementsInterface(Config.KRAKEN_PACKAGE_SENSOR);
-		gyroscopeUncalibrated.addFloatProperty("xNoDrift").notNull();
-		gyroscopeUncalibrated.addFloatProperty("yNoDrift").notNull();
-		gyroscopeUncalibrated.addFloatProperty("zNoDrift").notNull();
-		gyroscopeUncalibrated.addFloatProperty("xEstimatedDrift").notNull();
-		gyroscopeUncalibrated.addFloatProperty("yEstimatedDrift").notNull();
-		gyroscopeUncalibrated.addFloatProperty("zEstimatedDrift").notNull();
-		gyroscopeUncalibrated.addStringProperty("created").notNull();
-		// OPTIONAL
-		// none
-
 		
 		// GENERATE CLASSES
 		new DaoGenerator().generateAll(schema, Config.KRAKEN_OUTPUT);

@@ -13,8 +13,8 @@ public class ModuleInstallation {
     private boolean active;
     /** Not-null value. */
     private String created;
-    private Long module_id;
-    private Long user_id;
+    private Long moduleId;
+    private Long userId;
 
     /** Used to resolve relations */
     private transient DaoSession daoSession;
@@ -36,12 +36,12 @@ public class ModuleInstallation {
         this.id = id;
     }
 
-    public ModuleInstallation(Long id, boolean active, String created, Long module_id, Long user_id) {
+    public ModuleInstallation(Long id, boolean active, String created, Long moduleId, Long userId) {
         this.id = id;
         this.active = active;
         this.created = created;
-        this.module_id = module_id;
-        this.user_id = user_id;
+        this.moduleId = moduleId;
+        this.userId = userId;
     }
 
     /** called by internal mechanisms, do not call yourself. */
@@ -76,25 +76,25 @@ public class ModuleInstallation {
         this.created = created;
     }
 
-    public Long getModule_id() {
-        return module_id;
+    public Long getModuleId() {
+        return moduleId;
     }
 
-    public void setModule_id(Long module_id) {
-        this.module_id = module_id;
+    public void setModuleId(Long moduleId) {
+        this.moduleId = moduleId;
     }
 
-    public Long getUser_id() {
-        return user_id;
+    public Long getUserId() {
+        return userId;
     }
 
-    public void setUser_id(Long user_id) {
-        this.user_id = user_id;
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 
     /** To-one relationship, resolved on first access. */
     public Module getModule() {
-        Long __key = this.module_id;
+        Long __key = this.moduleId;
         if (module__resolvedKey == null || !module__resolvedKey.equals(__key)) {
             if (daoSession == null) {
                 throw new DaoException("Entity is detached from DAO context");
@@ -112,14 +112,14 @@ public class ModuleInstallation {
     public void setModule(Module module) {
         synchronized (this) {
             this.module = module;
-            module_id = module == null ? null : module.getId();
-            module__resolvedKey = module_id;
+            moduleId = module == null ? null : module.getId();
+            module__resolvedKey = moduleId;
         }
     }
 
     /** To-one relationship, resolved on first access. */
     public User getUser() {
-        Long __key = this.user_id;
+        Long __key = this.userId;
         if (user__resolvedKey == null || !user__resolvedKey.equals(__key)) {
             if (daoSession == null) {
                 throw new DaoException("Entity is detached from DAO context");
@@ -137,8 +137,8 @@ public class ModuleInstallation {
     public void setUser(User user) {
         synchronized (this) {
             this.user = user;
-            user_id = user == null ? null : user.getId();
-            user__resolvedKey = user_id;
+            userId = user == null ? null : user.getId();
+            user__resolvedKey = userId;
         }
     }
 

@@ -33,7 +33,7 @@ public class ModuleCapabilityDao extends AbstractDao<ModuleCapability, Long> {
         public final static Property Frequency = new Property(2, Double.class, "frequency", false, "FREQUENCY");
         public final static Property Required = new Property(3, boolean.class, "required", false, "REQUIRED");
         public final static Property Created = new Property(4, String.class, "created", false, "CREATED");
-        public final static Property Module_id = new Property(5, Long.class, "module_id", false, "MODULE_ID");
+        public final static Property ModuleId = new Property(5, Long.class, "moduleId", false, "MODULE_ID");
     };
 
     private DaoSession daoSession;
@@ -58,7 +58,7 @@ public class ModuleCapabilityDao extends AbstractDao<ModuleCapability, Long> {
                 "\"FREQUENCY\" REAL," + // 2: frequency
                 "\"REQUIRED\" INTEGER NOT NULL ," + // 3: required
                 "\"CREATED\" TEXT NOT NULL ," + // 4: created
-                "\"MODULE_ID\" INTEGER);"); // 5: module_id
+                "\"MODULE_ID\" INTEGER);"); // 5: moduleId
         // Add Indexes
         db.execSQL("CREATE INDEX " + constraint + "IDX_module_capability__id ON module_capability" +
                 " (\"_id\");");
@@ -92,9 +92,9 @@ public class ModuleCapabilityDao extends AbstractDao<ModuleCapability, Long> {
         stmt.bindLong(4, entity.getRequired() ? 1L: 0L);
         stmt.bindString(5, entity.getCreated());
  
-        Long module_id = entity.getModule_id();
-        if (module_id != null) {
-            stmt.bindLong(6, module_id);
+        Long moduleId = entity.getModuleId();
+        if (moduleId != null) {
+            stmt.bindLong(6, moduleId);
         }
     }
 
@@ -119,7 +119,7 @@ public class ModuleCapabilityDao extends AbstractDao<ModuleCapability, Long> {
             cursor.isNull(offset + 2) ? null : cursor.getDouble(offset + 2), // frequency
             cursor.getShort(offset + 3) != 0, // required
             cursor.getString(offset + 4), // created
-            cursor.isNull(offset + 5) ? null : cursor.getLong(offset + 5) // module_id
+            cursor.isNull(offset + 5) ? null : cursor.getLong(offset + 5) // moduleId
         );
         return entity;
     }
@@ -132,7 +132,7 @@ public class ModuleCapabilityDao extends AbstractDao<ModuleCapability, Long> {
         entity.setFrequency(cursor.isNull(offset + 2) ? null : cursor.getDouble(offset + 2));
         entity.setRequired(cursor.getShort(offset + 3) != 0);
         entity.setCreated(cursor.getString(offset + 4));
-        entity.setModule_id(cursor.isNull(offset + 5) ? null : cursor.getLong(offset + 5));
+        entity.setModuleId(cursor.isNull(offset + 5) ? null : cursor.getLong(offset + 5));
      }
     
     /** @inheritdoc */
@@ -159,16 +159,16 @@ public class ModuleCapabilityDao extends AbstractDao<ModuleCapability, Long> {
     }
     
     /** Internal query to resolve the "moduleCapabilityList" to-many relationship of Module. */
-    public List<ModuleCapability> _queryModule_ModuleCapabilityList(Long module_id) {
+    public List<ModuleCapability> _queryModule_ModuleCapabilityList(Long moduleId) {
         synchronized (this) {
             if (module_ModuleCapabilityListQuery == null) {
                 QueryBuilder<ModuleCapability> queryBuilder = queryBuilder();
-                queryBuilder.where(Properties.Module_id.eq(null));
+                queryBuilder.where(Properties.ModuleId.eq(null));
                 module_ModuleCapabilityListQuery = queryBuilder.build();
             }
         }
         Query<ModuleCapability> query = module_ModuleCapabilityListQuery.forCurrentThread();
-        query.setParameter(0, module_id);
+        query.setParameter(0, moduleId);
         return query.list();
     }
 
