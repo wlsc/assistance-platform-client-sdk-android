@@ -12,9 +12,9 @@ public class ModuleCapability {
     private Long id;
     /** Not-null value. */
     private String type;
-    private Double collection_frequency;
-    private Double required_update_frequency;
-    private Integer min_required_readings_on_update;
+    private Double collectionFrequency;
+    private Double requiredUpdateFrequency;
+    private Integer minRequiredReadingsOnUpdate;
     private boolean required;
     /** Not-null value. */
     private String created;
@@ -37,12 +37,12 @@ public class ModuleCapability {
         this.id = id;
     }
 
-    public ModuleCapability(Long id, String type, Double collection_frequency, Double required_update_frequency, Integer min_required_readings_on_update, boolean required, String created, Long moduleId) {
+    public ModuleCapability(Long id, String type, Double collectionFrequency, Double requiredUpdateFrequency, Integer minRequiredReadingsOnUpdate, boolean required, String created, Long moduleId) {
         this.id = id;
         this.type = type;
-        this.collection_frequency = collection_frequency;
-        this.required_update_frequency = required_update_frequency;
-        this.min_required_readings_on_update = min_required_readings_on_update;
+        this.collectionFrequency = collectionFrequency;
+        this.requiredUpdateFrequency = requiredUpdateFrequency;
+        this.minRequiredReadingsOnUpdate = minRequiredReadingsOnUpdate;
         this.required = required;
         this.created = created;
         this.moduleId = moduleId;
@@ -72,28 +72,28 @@ public class ModuleCapability {
         this.type = type;
     }
 
-    public Double getCollection_frequency() {
-        return collection_frequency;
+    public Double getCollectionFrequency() {
+        return collectionFrequency;
     }
 
-    public void setCollection_frequency(Double collection_frequency) {
-        this.collection_frequency = collection_frequency;
+    public void setCollectionFrequency(Double collectionFrequency) {
+        this.collectionFrequency = collectionFrequency;
     }
 
-    public Double getRequired_update_frequency() {
-        return required_update_frequency;
+    public Double getRequiredUpdateFrequency() {
+        return requiredUpdateFrequency;
     }
 
-    public void setRequired_update_frequency(Double required_update_frequency) {
-        this.required_update_frequency = required_update_frequency;
+    public void setRequiredUpdateFrequency(Double requiredUpdateFrequency) {
+        this.requiredUpdateFrequency = requiredUpdateFrequency;
     }
 
-    public Integer getMin_required_readings_on_update() {
-        return min_required_readings_on_update;
+    public Integer getMinRequiredReadingsOnUpdate() {
+        return minRequiredReadingsOnUpdate;
     }
 
-    public void setMin_required_readings_on_update(Integer min_required_readings_on_update) {
-        this.min_required_readings_on_update = min_required_readings_on_update;
+    public void setMinRequiredReadingsOnUpdate(Integer minRequiredReadingsOnUpdate) {
+        this.minRequiredReadingsOnUpdate = minRequiredReadingsOnUpdate;
     }
 
     public boolean getRequired() {

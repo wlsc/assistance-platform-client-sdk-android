@@ -30,9 +30,9 @@ public class ModuleCapabilityDao extends AbstractDao<ModuleCapability, Long> {
     public static class Properties {
         public final static Property Id = new Property(0, Long.class, "id", true, "_id");
         public final static Property Type = new Property(1, String.class, "type", false, "TYPE");
-        public final static Property Collection_frequency = new Property(2, Double.class, "collection_frequency", false, "COLLECTION_FREQUENCY");
-        public final static Property Required_update_frequency = new Property(3, Double.class, "required_update_frequency", false, "REQUIRED_UPDATE_FREQUENCY");
-        public final static Property Min_required_readings_on_update = new Property(4, Integer.class, "min_required_readings_on_update", false, "MIN_REQUIRED_READINGS_ON_UPDATE");
+        public final static Property CollectionFrequency = new Property(2, Double.class, "collectionFrequency", false, "COLLECTION_FREQUENCY");
+        public final static Property RequiredUpdateFrequency = new Property(3, Double.class, "requiredUpdateFrequency", false, "REQUIRED_UPDATE_FREQUENCY");
+        public final static Property MinRequiredReadingsOnUpdate = new Property(4, Integer.class, "minRequiredReadingsOnUpdate", false, "MIN_REQUIRED_READINGS_ON_UPDATE");
         public final static Property Required = new Property(5, boolean.class, "required", false, "REQUIRED");
         public final static Property Created = new Property(6, String.class, "created", false, "CREATED");
         public final static Property ModuleId = new Property(7, Long.class, "moduleId", false, "MODULE_ID");
@@ -57,9 +57,9 @@ public class ModuleCapabilityDao extends AbstractDao<ModuleCapability, Long> {
         db.execSQL("CREATE TABLE " + constraint + "\"module_capability\" (" + //
                 "\"_id\" INTEGER PRIMARY KEY AUTOINCREMENT ," + // 0: id
                 "\"TYPE\" TEXT NOT NULL ," + // 1: type
-                "\"COLLECTION_FREQUENCY\" REAL," + // 2: collection_frequency
-                "\"REQUIRED_UPDATE_FREQUENCY\" REAL," + // 3: required_update_frequency
-                "\"MIN_REQUIRED_READINGS_ON_UPDATE\" INTEGER," + // 4: min_required_readings_on_update
+                "\"COLLECTION_FREQUENCY\" REAL," + // 2: collectionFrequency
+                "\"REQUIRED_UPDATE_FREQUENCY\" REAL," + // 3: requiredUpdateFrequency
+                "\"MIN_REQUIRED_READINGS_ON_UPDATE\" INTEGER," + // 4: minRequiredReadingsOnUpdate
                 "\"REQUIRED\" INTEGER NOT NULL ," + // 5: required
                 "\"CREATED\" TEXT NOT NULL ," + // 6: created
                 "\"MODULE_ID\" INTEGER);"); // 7: moduleId
@@ -89,19 +89,19 @@ public class ModuleCapabilityDao extends AbstractDao<ModuleCapability, Long> {
         }
         stmt.bindString(2, entity.getType());
  
-        Double collection_frequency = entity.getCollection_frequency();
-        if (collection_frequency != null) {
-            stmt.bindDouble(3, collection_frequency);
+        Double collectionFrequency = entity.getCollectionFrequency();
+        if (collectionFrequency != null) {
+            stmt.bindDouble(3, collectionFrequency);
         }
  
-        Double required_update_frequency = entity.getRequired_update_frequency();
-        if (required_update_frequency != null) {
-            stmt.bindDouble(4, required_update_frequency);
+        Double requiredUpdateFrequency = entity.getRequiredUpdateFrequency();
+        if (requiredUpdateFrequency != null) {
+            stmt.bindDouble(4, requiredUpdateFrequency);
         }
  
-        Integer min_required_readings_on_update = entity.getMin_required_readings_on_update();
-        if (min_required_readings_on_update != null) {
-            stmt.bindLong(5, min_required_readings_on_update);
+        Integer minRequiredReadingsOnUpdate = entity.getMinRequiredReadingsOnUpdate();
+        if (minRequiredReadingsOnUpdate != null) {
+            stmt.bindLong(5, minRequiredReadingsOnUpdate);
         }
         stmt.bindLong(6, entity.getRequired() ? 1L: 0L);
         stmt.bindString(7, entity.getCreated());
@@ -130,9 +130,9 @@ public class ModuleCapabilityDao extends AbstractDao<ModuleCapability, Long> {
         ModuleCapability entity = new ModuleCapability( //
             cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0), // id
             cursor.getString(offset + 1), // type
-            cursor.isNull(offset + 2) ? null : cursor.getDouble(offset + 2), // collection_frequency
-            cursor.isNull(offset + 3) ? null : cursor.getDouble(offset + 3), // required_update_frequency
-            cursor.isNull(offset + 4) ? null : cursor.getInt(offset + 4), // min_required_readings_on_update
+            cursor.isNull(offset + 2) ? null : cursor.getDouble(offset + 2), // collectionFrequency
+            cursor.isNull(offset + 3) ? null : cursor.getDouble(offset + 3), // requiredUpdateFrequency
+            cursor.isNull(offset + 4) ? null : cursor.getInt(offset + 4), // minRequiredReadingsOnUpdate
             cursor.getShort(offset + 5) != 0, // required
             cursor.getString(offset + 6), // created
             cursor.isNull(offset + 7) ? null : cursor.getLong(offset + 7) // moduleId
@@ -145,9 +145,9 @@ public class ModuleCapabilityDao extends AbstractDao<ModuleCapability, Long> {
     public void readEntity(Cursor cursor, ModuleCapability entity, int offset) {
         entity.setId(cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0));
         entity.setType(cursor.getString(offset + 1));
-        entity.setCollection_frequency(cursor.isNull(offset + 2) ? null : cursor.getDouble(offset + 2));
-        entity.setRequired_update_frequency(cursor.isNull(offset + 3) ? null : cursor.getDouble(offset + 3));
-        entity.setMin_required_readings_on_update(cursor.isNull(offset + 4) ? null : cursor.getInt(offset + 4));
+        entity.setCollectionFrequency(cursor.isNull(offset + 2) ? null : cursor.getDouble(offset + 2));
+        entity.setRequiredUpdateFrequency(cursor.isNull(offset + 3) ? null : cursor.getDouble(offset + 3));
+        entity.setMinRequiredReadingsOnUpdate(cursor.isNull(offset + 4) ? null : cursor.getInt(offset + 4));
         entity.setRequired(cursor.getShort(offset + 5) != 0);
         entity.setCreated(cursor.getString(offset + 6));
         entity.setModuleId(cursor.isNull(offset + 7) ? null : cursor.getLong(offset + 7));

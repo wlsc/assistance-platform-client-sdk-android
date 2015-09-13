@@ -112,9 +112,9 @@ public class KrakenDatabaseGenerator {
 		moduleCapability.setTableName("module_capability");
 		moduleCapability.addIdProperty().autoincrement().index();
 		moduleCapability.addStringProperty("type").notNull().index();
-		moduleCapability.addDoubleProperty("collection_frequency");
-		moduleCapability.addDoubleProperty("required_update_frequency");
-		moduleCapability.addIntProperty("min_required_readings_on_update");
+		moduleCapability.addDoubleProperty("collectionFrequency");
+		moduleCapability.addDoubleProperty("requiredUpdateFrequency");
+		moduleCapability.addIntProperty("minRequiredReadingsOnUpdate");
 		moduleCapability.addBooleanProperty("required").notNull();
 		moduleCapability.addStringProperty("created").notNull();
 		
