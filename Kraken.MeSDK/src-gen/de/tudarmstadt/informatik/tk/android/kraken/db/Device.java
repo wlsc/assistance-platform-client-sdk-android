@@ -15,6 +15,8 @@ public class Device {
     private String osVersion;
     private String brand;
     private String model;
+    private String messagingRegistrationId;
+    private String userDefinedName;
     /** Not-null value. */
     private String created;
     private Long loginId;
@@ -40,13 +42,15 @@ public class Device {
         this.id = id;
     }
 
-    public Device(Long id, String deviceIdentifier, String os, String osVersion, String brand, String model, String created, Long loginId, Long userId) {
+    public Device(Long id, String deviceIdentifier, String os, String osVersion, String brand, String model, String messagingRegistrationId, String userDefinedName, String created, Long loginId, Long userId) {
         this.id = id;
         this.deviceIdentifier = deviceIdentifier;
         this.os = os;
         this.osVersion = osVersion;
         this.brand = brand;
         this.model = model;
+        this.messagingRegistrationId = messagingRegistrationId;
+        this.userDefinedName = userDefinedName;
         this.created = created;
         this.loginId = loginId;
         this.userId = userId;
@@ -104,6 +108,22 @@ public class Device {
 
     public void setModel(String model) {
         this.model = model;
+    }
+
+    public String getMessagingRegistrationId() {
+        return messagingRegistrationId;
+    }
+
+    public void setMessagingRegistrationId(String messagingRegistrationId) {
+        this.messagingRegistrationId = messagingRegistrationId;
+    }
+
+    public String getUserDefinedName() {
+        return userDefinedName;
+    }
+
+    public void setUserDefinedName(String userDefinedName) {
+        this.userDefinedName = userDefinedName;
     }
 
     /** Not-null value. */

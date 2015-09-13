@@ -34,9 +34,11 @@ public class DeviceDao extends AbstractDao<Device, Long> {
         public final static Property OsVersion = new Property(3, String.class, "osVersion", false, "OS_VERSION");
         public final static Property Brand = new Property(4, String.class, "brand", false, "BRAND");
         public final static Property Model = new Property(5, String.class, "model", false, "MODEL");
-        public final static Property Created = new Property(6, String.class, "created", false, "CREATED");
-        public final static Property LoginId = new Property(7, Long.class, "loginId", false, "LOGIN_ID");
-        public final static Property UserId = new Property(8, Long.class, "userId", false, "USER_ID");
+        public final static Property MessagingRegistrationId = new Property(6, String.class, "messagingRegistrationId", false, "MESSAGING_REGISTRATION_ID");
+        public final static Property UserDefinedName = new Property(7, String.class, "userDefinedName", false, "USER_DEFINED_NAME");
+        public final static Property Created = new Property(8, String.class, "created", false, "CREATED");
+        public final static Property LoginId = new Property(9, Long.class, "loginId", false, "LOGIN_ID");
+        public final static Property UserId = new Property(10, Long.class, "userId", false, "USER_ID");
     };
 
     private DaoSession daoSession;
@@ -63,9 +65,11 @@ public class DeviceDao extends AbstractDao<Device, Long> {
                 "\"OS_VERSION\" TEXT," + // 3: osVersion
                 "\"BRAND\" TEXT," + // 4: brand
                 "\"MODEL\" TEXT," + // 5: model
-                "\"CREATED\" TEXT NOT NULL ," + // 6: created
-                "\"LOGIN_ID\" INTEGER," + // 7: loginId
-                "\"USER_ID\" INTEGER);"); // 8: userId
+                "\"MESSAGING_REGISTRATION_ID\" TEXT," + // 6: messagingRegistrationId
+                "\"USER_DEFINED_NAME\" TEXT," + // 7: userDefinedName
+                "\"CREATED\" TEXT NOT NULL ," + // 8: created
+                "\"LOGIN_ID\" INTEGER," + // 9: loginId
+                "\"USER_ID\" INTEGER);"); // 10: userId
         // Add Indexes
         db.execSQL("CREATE INDEX " + constraint + "IDX_device__id ON device" +
                 " (\"_id\");");
@@ -115,16 +119,26 @@ public class DeviceDao extends AbstractDao<Device, Long> {
         if (model != null) {
             stmt.bindString(6, model);
         }
-        stmt.bindString(7, entity.getCreated());
+ 
+        String messagingRegistrationId = entity.getMessagingRegistrationId();
+        if (messagingRegistrationId != null) {
+            stmt.bindString(7, messagingRegistrationId);
+        }
+ 
+        String userDefinedName = entity.getUserDefinedName();
+        if (userDefinedName != null) {
+            stmt.bindString(8, userDefinedName);
+        }
+        stmt.bindString(9, entity.getCreated());
  
         Long loginId = entity.getLoginId();
         if (loginId != null) {
-            stmt.bindLong(8, loginId);
+            stmt.bindLong(10, loginId);
         }
  
         Long userId = entity.getUserId();
         if (userId != null) {
-            stmt.bindLong(9, userId);
+            stmt.bindLong(11, userId);
         }
     }
 
@@ -150,9 +164,11 @@ public class DeviceDao extends AbstractDao<Device, Long> {
             cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // osVersion
             cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4), // brand
             cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5), // model
-            cursor.getString(offset + 6), // created
-            cursor.isNull(offset + 7) ? null : cursor.getLong(offset + 7), // loginId
-            cursor.isNull(offset + 8) ? null : cursor.getLong(offset + 8) // userId
+            cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6), // messagingRegistrationId
+            cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7), // userDefinedName
+            cursor.getString(offset + 8), // created
+            cursor.isNull(offset + 9) ? null : cursor.getLong(offset + 9), // loginId
+            cursor.isNull(offset + 10) ? null : cursor.getLong(offset + 10) // userId
         );
         return entity;
     }
@@ -166,9 +182,11 @@ public class DeviceDao extends AbstractDao<Device, Long> {
         entity.setOsVersion(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
         entity.setBrand(cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4));
         entity.setModel(cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5));
-        entity.setCreated(cursor.getString(offset + 6));
-        entity.setLoginId(cursor.isNull(offset + 7) ? null : cursor.getLong(offset + 7));
-        entity.setUserId(cursor.isNull(offset + 8) ? null : cursor.getLong(offset + 8));
+        entity.setMessagingRegistrationId(cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6));
+        entity.setUserDefinedName(cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7));
+        entity.setCreated(cursor.getString(offset + 8));
+        entity.setLoginId(cursor.isNull(offset + 9) ? null : cursor.getLong(offset + 9));
+        entity.setUserId(cursor.isNull(offset + 10) ? null : cursor.getLong(offset + 10));
      }
     
     /** @inheritdoc */

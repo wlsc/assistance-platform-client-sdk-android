@@ -79,6 +79,8 @@ public class KrakenDatabaseGenerator {
 		device.addStringProperty("osVersion");
 		device.addStringProperty("brand");
 		device.addStringProperty("model");
+		device.addStringProperty("messagingRegistrationId");
+		device.addStringProperty("userDefinedName");
 		device.addStringProperty("created").notNull();
 		
 		Property deviceFKLoginProperty = device.addLongProperty("loginId").index().getProperty();
@@ -110,7 +112,9 @@ public class KrakenDatabaseGenerator {
 		moduleCapability.setTableName("module_capability");
 		moduleCapability.addIdProperty().autoincrement().index();
 		moduleCapability.addStringProperty("type").notNull().index();
-		moduleCapability.addDoubleProperty("frequency");
+		moduleCapability.addDoubleProperty("collection_frequency");
+		moduleCapability.addDoubleProperty("required_update_frequency");
+		moduleCapability.addIntProperty("min_required_readings_on_update");
 		moduleCapability.addBooleanProperty("required").notNull();
 		moduleCapability.addStringProperty("created").notNull();
 		
