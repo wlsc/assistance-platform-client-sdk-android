@@ -5,6 +5,7 @@ import java.util.List;
 import de.tudarmstadt.informatik.tk.android.kraken.KrakenSdkSettings;
 import de.tudarmstadt.informatik.tk.android.kraken.models.api.device.DeviceListResponse;
 import de.tudarmstadt.informatik.tk.android.kraken.models.api.device.DeviceRegistrationRequest;
+import de.tudarmstadt.informatik.tk.android.kraken.models.api.device.DeviceUserDefinedNameRequest;
 import retrofit.Callback;
 import retrofit.http.Body;
 import retrofit.http.GET;
@@ -27,5 +28,10 @@ public interface DeviceService {
     @GET(KrakenSdkSettings.DEVICE_LIST_ENDPOINT)
     void getDeviceList(@Header("X-AUTH-TOKEN") String userToken,
                        Callback<List<DeviceListResponse>> callback);
+
+    @POST(KrakenSdkSettings.DEVICE_SET_USER_DEFINED_NAME_ENDPOINT)
+    void setUserDefinedName(@Header("X-AUTH-TOKEN") String userToken,
+                            @Body DeviceUserDefinedNameRequest body,
+                            Callback<Void> callback);
 
 }

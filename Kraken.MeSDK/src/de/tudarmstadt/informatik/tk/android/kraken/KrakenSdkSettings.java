@@ -11,6 +11,8 @@ public class KrakenSdkSettings {
 
     public static final String DEVICE_LIST_ENDPOINT = "/devices/list";
 
+    public static final String DEVICE_SET_USER_DEFINED_NAME_ENDPOINT = "/devices/set_user_defined_name";
+
     public static final String PREFERENCES_NAME = "KrakenSDKPreferences";
 
     public static final String DATABASE_NAME = "assistance.sqlite";
