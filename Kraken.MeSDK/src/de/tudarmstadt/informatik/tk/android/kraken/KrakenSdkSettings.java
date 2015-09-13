@@ -6,6 +6,9 @@ import de.tudarmstadt.informatik.tk.android.kraken.models.db.sensors.ESensorType
 public class KrakenSdkSettings {
 
     public static final String SERVER_URL = "https://kraken.me";
+
+    public static final String DEVICE_REGISTRATION_ENDPOINT = "/devices/register_for_messaging";
+
     public static final String PREFERENCES_NAME = "KrakenSDKPreferences";
 
     public static final String DATABASE_NAME = "assistance.sqlite";
