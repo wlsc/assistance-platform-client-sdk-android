@@ -1,4 +1,4 @@
-package de.tudarmstadt.informatik.tk.android.kraken.models.api.http.device;
+package de.tudarmstadt.informatik.tk.android.kraken.models.api.device;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;

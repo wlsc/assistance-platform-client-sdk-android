@@ -9,6 +9,8 @@ public class KrakenSdkSettings {
 
     public static final String DEVICE_REGISTRATION_ENDPOINT = "/devices/register_for_messaging";
 
+    public static final String DEVICE_LIST_ENDPOINT = "/devices/list";
+
     public static final String PREFERENCES_NAME = "KrakenSDKPreferences";
 
     public static final String DATABASE_NAME = "assistance.sqlite";
