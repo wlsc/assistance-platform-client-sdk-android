@@ -11,6 +11,7 @@ import de.greenrobot.dao.DaoException;
 public class User {
 
     private Long id;
+    private String token;
     private String firstname;
     private String lastname;
     /** Not-null value. */
@@ -39,8 +40,9 @@ public class User {
         this.id = id;
     }
 
-    public User(Long id, String firstname, String lastname, String primaryEmail, String userpicFilename, String lastLogin, String joinedSince, String created) {
+    public User(Long id, String token, String firstname, String lastname, String primaryEmail, String userpicFilename, String lastLogin, String joinedSince, String created) {
         this.id = id;
+        this.token = token;
         this.firstname = firstname;
         this.lastname = lastname;
         this.primaryEmail = primaryEmail;
@@ -62,6 +64,14 @@ public class User {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
     }
 
     public String getFirstname() {

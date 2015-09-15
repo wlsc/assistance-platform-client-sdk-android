@@ -38,6 +38,7 @@ public class KrakenDatabaseGenerator {
 		Entity user = schema.addEntity("User");
 		user.setTableName("user");
 		user.addIdProperty().autoincrement().index();
+		user.addStringProperty("token").index();
 		user.addStringProperty("firstname");
 		user.addStringProperty("lastname");
 		user.addStringProperty("primaryEmail").notNull();
@@ -61,15 +62,6 @@ public class KrakenDatabaseGenerator {
 		socialProfile.addToOne(user, socialProfileFKUserProperty);
 		user.addToMany(socialProfile, socialProfileFKUserProperty);
 		
-		// ----- Login information scheme -----
-		Entity login = schema.addEntity("Login");
-		login.setTableName("login");
-		login.addIdProperty().autoincrement().index();
-		login.addStringProperty("token").notNull().index();
-		login.addLongProperty("serverDeviceId");
-		login.addStringProperty("lastEmail").notNull();
-		login.addStringProperty("created").notNull();
-		
 		// ----- Device scheme -----
 		Entity device = schema.addEntity("Device");
 		device.setTableName("device");
@@ -79,14 +71,12 @@ public class KrakenDatabaseGenerator {
 		device.addStringProperty("osVersion");
 		device.addStringProperty("brand");
 		device.addStringProperty("model");
+		device.addLongProperty("serverDeviceId");
 		device.addStringProperty("messagingRegistrationId");
 		device.addStringProperty("userDefinedName");
 		device.addStringProperty("created").notNull();
 		
-		Property deviceFKLoginProperty = device.addLongProperty("loginId").index().getProperty();
 		Property deviceFKUserProperty = device.addLongProperty("userId").index().getProperty();
-		device.addToOne(login, deviceFKLoginProperty);
-		login.addToMany(device, deviceFKLoginProperty);
 		device.addToOne(user, deviceFKUserProperty);
 		user.addToMany(device, deviceFKUserProperty);
 		

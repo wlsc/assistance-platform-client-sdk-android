@@ -15,11 +15,11 @@ public class Device {
     private String osVersion;
     private String brand;
     private String model;
+    private Long serverDeviceId;
     private String messagingRegistrationId;
     private String userDefinedName;
     /** Not-null value. */
     private String created;
-    private Long loginId;
     private Long userId;
 
     /** Used to resolve relations */
@@ -27,9 +27,6 @@ public class Device {
 
     /** Used for active entity operations. */
     private transient DeviceDao myDao;
-
-    private Login login;
-    private Long login__resolvedKey;
 
     private User user;
     private Long user__resolvedKey;
@@ -42,17 +39,17 @@ public class Device {
         this.id = id;
     }
 
-    public Device(Long id, String deviceIdentifier, String os, String osVersion, String brand, String model, String messagingRegistrationId, String userDefinedName, String created, Long loginId, Long userId) {
+    public Device(Long id, String deviceIdentifier, String os, String osVersion, String brand, String model, Long serverDeviceId, String messagingRegistrationId, String userDefinedName, String created, Long userId) {
         this.id = id;
         this.deviceIdentifier = deviceIdentifier;
         this.os = os;
         this.osVersion = osVersion;
         this.brand = brand;
         this.model = model;
+        this.serverDeviceId = serverDeviceId;
         this.messagingRegistrationId = messagingRegistrationId;
         this.userDefinedName = userDefinedName;
         this.created = created;
-        this.loginId = loginId;
         this.userId = userId;
     }
 
@@ -110,6 +107,14 @@ public class Device {
         this.model = model;
     }
 
+    public Long getServerDeviceId() {
+        return serverDeviceId;
+    }
+
+    public void setServerDeviceId(Long serverDeviceId) {
+        this.serverDeviceId = serverDeviceId;
+    }
+
     public String getMessagingRegistrationId() {
         return messagingRegistrationId;
     }
@@ -136,45 +141,12 @@ public class Device {
         this.created = created;
     }
 
-    public Long getLoginId() {
-        return loginId;
-    }
-
-    public void setLoginId(Long loginId) {
-        this.loginId = loginId;
-    }
-
     public Long getUserId() {
         return userId;
     }
 
     public void setUserId(Long userId) {
         this.userId = userId;
-    }
-
-    /** To-one relationship, resolved on first access. */
-    public Login getLogin() {
-        Long __key = this.loginId;
-        if (login__resolvedKey == null || !login__resolvedKey.equals(__key)) {
-            if (daoSession == null) {
-                throw new DaoException("Entity is detached from DAO context");
-            }
-            LoginDao targetDao = daoSession.getLoginDao();
-            Login loginNew = targetDao.load(__key);
-            synchronized (this) {
-                login = loginNew;
-            	login__resolvedKey = __key;
-            }
-        }
-        return login;
-    }
-
-    public void setLogin(Login login) {
-        synchronized (this) {
-            this.login = login;
-            loginId = login == null ? null : login.getId();
-            login__resolvedKey = loginId;
-        }
     }
 
     /** To-one relationship, resolved on first access. */

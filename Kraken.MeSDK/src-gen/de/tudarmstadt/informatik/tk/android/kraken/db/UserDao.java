@@ -24,13 +24,14 @@ public class UserDao extends AbstractDao<User, Long> {
     */
     public static class Properties {
         public final static Property Id = new Property(0, Long.class, "id", true, "_id");
-        public final static Property Firstname = new Property(1, String.class, "firstname", false, "FIRSTNAME");
-        public final static Property Lastname = new Property(2, String.class, "lastname", false, "LASTNAME");
-        public final static Property PrimaryEmail = new Property(3, String.class, "primaryEmail", false, "PRIMARY_EMAIL");
-        public final static Property UserpicFilename = new Property(4, String.class, "userpicFilename", false, "USERPIC_FILENAME");
-        public final static Property LastLogin = new Property(5, String.class, "lastLogin", false, "LAST_LOGIN");
-        public final static Property JoinedSince = new Property(6, String.class, "joinedSince", false, "JOINED_SINCE");
-        public final static Property Created = new Property(7, String.class, "created", false, "CREATED");
+        public final static Property Token = new Property(1, String.class, "token", false, "TOKEN");
+        public final static Property Firstname = new Property(2, String.class, "firstname", false, "FIRSTNAME");
+        public final static Property Lastname = new Property(3, String.class, "lastname", false, "LASTNAME");
+        public final static Property PrimaryEmail = new Property(4, String.class, "primaryEmail", false, "PRIMARY_EMAIL");
+        public final static Property UserpicFilename = new Property(5, String.class, "userpicFilename", false, "USERPIC_FILENAME");
+        public final static Property LastLogin = new Property(6, String.class, "lastLogin", false, "LAST_LOGIN");
+        public final static Property JoinedSince = new Property(7, String.class, "joinedSince", false, "JOINED_SINCE");
+        public final static Property Created = new Property(8, String.class, "created", false, "CREATED");
     };
 
     private DaoSession daoSession;
@@ -50,16 +51,19 @@ public class UserDao extends AbstractDao<User, Long> {
         String constraint = ifNotExists? "IF NOT EXISTS ": "";
         db.execSQL("CREATE TABLE " + constraint + "\"user\" (" + //
                 "\"_id\" INTEGER PRIMARY KEY AUTOINCREMENT ," + // 0: id
-                "\"FIRSTNAME\" TEXT," + // 1: firstname
-                "\"LASTNAME\" TEXT," + // 2: lastname
-                "\"PRIMARY_EMAIL\" TEXT NOT NULL ," + // 3: primaryEmail
-                "\"USERPIC_FILENAME\" TEXT," + // 4: userpicFilename
-                "\"LAST_LOGIN\" TEXT," + // 5: lastLogin
-                "\"JOINED_SINCE\" TEXT," + // 6: joinedSince
-                "\"CREATED\" TEXT NOT NULL );"); // 7: created
+                "\"TOKEN\" TEXT," + // 1: token
+                "\"FIRSTNAME\" TEXT," + // 2: firstname
+                "\"LASTNAME\" TEXT," + // 3: lastname
+                "\"PRIMARY_EMAIL\" TEXT NOT NULL ," + // 4: primaryEmail
+                "\"USERPIC_FILENAME\" TEXT," + // 5: userpicFilename
+                "\"LAST_LOGIN\" TEXT," + // 6: lastLogin
+                "\"JOINED_SINCE\" TEXT," + // 7: joinedSince
+                "\"CREATED\" TEXT NOT NULL );"); // 8: created
         // Add Indexes
         db.execSQL("CREATE INDEX " + constraint + "IDX_user__id ON user" +
                 " (\"_id\");");
+        db.execSQL("CREATE INDEX " + constraint + "IDX_user_TOKEN ON user" +
+                " (\"TOKEN\");");
     }
 
     /** Drops the underlying database table. */
@@ -78,32 +82,37 @@ public class UserDao extends AbstractDao<User, Long> {
             stmt.bindLong(1, id);
         }
  
+        String token = entity.getToken();
+        if (token != null) {
+            stmt.bindString(2, token);
+        }
+ 
         String firstname = entity.getFirstname();
         if (firstname != null) {
-            stmt.bindString(2, firstname);
+            stmt.bindString(3, firstname);
         }
  
         String lastname = entity.getLastname();
         if (lastname != null) {
-            stmt.bindString(3, lastname);
+            stmt.bindString(4, lastname);
         }
-        stmt.bindString(4, entity.getPrimaryEmail());
+        stmt.bindString(5, entity.getPrimaryEmail());
  
         String userpicFilename = entity.getUserpicFilename();
         if (userpicFilename != null) {
-            stmt.bindString(5, userpicFilename);
+            stmt.bindString(6, userpicFilename);
         }
  
         String lastLogin = entity.getLastLogin();
         if (lastLogin != null) {
-            stmt.bindString(6, lastLogin);
+            stmt.bindString(7, lastLogin);
         }
  
         String joinedSince = entity.getJoinedSince();
         if (joinedSince != null) {
-            stmt.bindString(7, joinedSince);
+            stmt.bindString(8, joinedSince);
         }
-        stmt.bindString(8, entity.getCreated());
+        stmt.bindString(9, entity.getCreated());
     }
 
     @Override
@@ -123,13 +132,14 @@ public class UserDao extends AbstractDao<User, Long> {
     public User readEntity(Cursor cursor, int offset) {
         User entity = new User( //
             cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0), // id
-            cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1), // firstname
-            cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // lastname
-            cursor.getString(offset + 3), // primaryEmail
-            cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4), // userpicFilename
-            cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5), // lastLogin
-            cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6), // joinedSince
-            cursor.getString(offset + 7) // created
+            cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1), // token
+            cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // firstname
+            cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // lastname
+            cursor.getString(offset + 4), // primaryEmail
+            cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5), // userpicFilename
+            cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6), // lastLogin
+            cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7), // joinedSince
+            cursor.getString(offset + 8) // created
         );
         return entity;
     }
@@ -138,13 +148,14 @@ public class UserDao extends AbstractDao<User, Long> {
     @Override
     public void readEntity(Cursor cursor, User entity, int offset) {
         entity.setId(cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0));
-        entity.setFirstname(cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1));
-        entity.setLastname(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
-        entity.setPrimaryEmail(cursor.getString(offset + 3));
-        entity.setUserpicFilename(cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4));
-        entity.setLastLogin(cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5));
-        entity.setJoinedSince(cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6));
-        entity.setCreated(cursor.getString(offset + 7));
+        entity.setToken(cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1));
+        entity.setFirstname(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
+        entity.setLastname(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
+        entity.setPrimaryEmail(cursor.getString(offset + 4));
+        entity.setUserpicFilename(cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5));
+        entity.setLastLogin(cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6));
+        entity.setJoinedSince(cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7));
+        entity.setCreated(cursor.getString(offset + 8));
      }
     
     /** @inheritdoc */
