@@ -7,7 +7,7 @@ import de.greenrobot.dao.DaoException;
 /**
  * Entity mapped to table "device".
  */
-public class Device {
+public class DbDevice {
 
     private Long id;
     private String deviceIdentifier;
@@ -26,20 +26,20 @@ public class Device {
     private transient DaoSession daoSession;
 
     /** Used for active entity operations. */
-    private transient DeviceDao myDao;
+    private transient DbDeviceDao myDao;
 
-    private User user;
-    private Long user__resolvedKey;
+    private DbUser dbUser;
+    private Long dbUser__resolvedKey;
 
 
-    public Device() {
+    public DbDevice() {
     }
 
-    public Device(Long id) {
+    public DbDevice(Long id) {
         this.id = id;
     }
 
-    public Device(Long id, String deviceIdentifier, String os, String osVersion, String brand, String model, Long serverDeviceId, String messagingRegistrationId, String userDefinedName, String created, Long userId) {
+    public DbDevice(Long id, String deviceIdentifier, String os, String osVersion, String brand, String model, Long serverDeviceId, String messagingRegistrationId, String userDefinedName, String created, Long userId) {
         this.id = id;
         this.deviceIdentifier = deviceIdentifier;
         this.os = os;
@@ -56,7 +56,7 @@ public class Device {
     /** called by internal mechanisms, do not call yourself. */
     public void __setDaoSession(DaoSession daoSession) {
         this.daoSession = daoSession;
-        myDao = daoSession != null ? daoSession.getDeviceDao() : null;
+        myDao = daoSession != null ? daoSession.getDbDeviceDao() : null;
     }
 
     public Long getId() {
@@ -150,27 +150,27 @@ public class Device {
     }
 
     /** To-one relationship, resolved on first access. */
-    public User getUser() {
+    public DbUser getDbUser() {
         Long __key = this.userId;
-        if (user__resolvedKey == null || !user__resolvedKey.equals(__key)) {
+        if (dbUser__resolvedKey == null || !dbUser__resolvedKey.equals(__key)) {
             if (daoSession == null) {
                 throw new DaoException("Entity is detached from DAO context");
             }
-            UserDao targetDao = daoSession.getUserDao();
-            User userNew = targetDao.load(__key);
+            DbUserDao targetDao = daoSession.getDbUserDao();
+            DbUser dbUserNew = targetDao.load(__key);
             synchronized (this) {
-                user = userNew;
-            	user__resolvedKey = __key;
+                dbUser = dbUserNew;
+            	dbUser__resolvedKey = __key;
             }
         }
-        return user;
+        return dbUser;
     }
 
-    public void setUser(User user) {
+    public void setDbUser(DbUser dbUser) {
         synchronized (this) {
-            this.user = user;
-            userId = user == null ? null : user.getId();
-            user__resolvedKey = userId;
+            this.dbUser = dbUser;
+            userId = dbUser == null ? null : dbUser.getId();
+            dbUser__resolvedKey = userId;
         }
     }
 

@@ -18,6 +18,11 @@ public class CallLogSensor extends AbstractContentObserverSensor {
     }
 
     @Override
+    protected void dumpData() {
+
+    }
+
+    @Override
     public ESensorType getSensorType() {
         return ESensorType.SENSOR_CALLLOG;
     }

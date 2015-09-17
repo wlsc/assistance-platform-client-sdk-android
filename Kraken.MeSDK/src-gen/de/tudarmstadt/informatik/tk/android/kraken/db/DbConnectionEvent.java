@@ -4,7 +4,7 @@ package de.tudarmstadt.informatik.tk.android.kraken.db;
 /**
  * Entity mapped to table "connection_event".
  */
-public class ConnectionEvent implements de.tudarmstadt.informatik.tk.android.kraken.interfaces.IDbSensor {
+public class DbConnectionEvent implements de.tudarmstadt.informatik.tk.android.kraken.interfaces.IDbSensor {
 
     private Long id;
     private Boolean isWifi;
@@ -12,14 +12,14 @@ public class ConnectionEvent implements de.tudarmstadt.informatik.tk.android.kra
     /** Not-null value. */
     private String created;
 
-    public ConnectionEvent() {
+    public DbConnectionEvent() {
     }
 
-    public ConnectionEvent(Long id) {
+    public DbConnectionEvent(Long id) {
         this.id = id;
     }
 
-    public ConnectionEvent(Long id, Boolean isWifi, Boolean isMobile, String created) {
+    public DbConnectionEvent(Long id, Boolean isWifi, Boolean isMobile, String created) {
         this.id = id;
         this.isWifi = isWifi;
         this.isMobile = isMobile;

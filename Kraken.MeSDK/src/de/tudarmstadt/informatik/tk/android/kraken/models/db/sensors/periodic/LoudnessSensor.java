@@ -101,6 +101,11 @@ public class LoudnessSensor extends AbstractPeriodicSensor implements Callback {
     }
 
     @Override
+    protected void dumpData() {
+
+    }
+
+    @Override
     public boolean handleMessage(Message msg) {
         Bundle data = msg.getData();
         if (data.containsKey("type")) {

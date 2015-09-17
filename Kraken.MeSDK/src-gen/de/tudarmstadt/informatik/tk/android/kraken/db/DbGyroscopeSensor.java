@@ -4,7 +4,7 @@ package de.tudarmstadt.informatik.tk.android.kraken.db;
 /**
  * Entity mapped to table "gyroscope_sensor".
  */
-public class GyroscopeSensor implements de.tudarmstadt.informatik.tk.android.kraken.interfaces.IDbSensor {
+public class DbGyroscopeSensor implements de.tudarmstadt.informatik.tk.android.kraken.interfaces.IDbSensor {
 
     private Long id;
     private Double x;
@@ -19,14 +19,14 @@ public class GyroscopeSensor implements de.tudarmstadt.informatik.tk.android.kra
     private Float yUncalibratedEstimatedDrift;
     private Float zUncalibratedEstimatedDrift;
 
-    public GyroscopeSensor() {
+    public DbGyroscopeSensor() {
     }
 
-    public GyroscopeSensor(Long id) {
+    public DbGyroscopeSensor(Long id) {
         this.id = id;
     }
 
-    public GyroscopeSensor(Long id, Double x, Double y, Double z, String created, Float xUncalibratedNoDrift, Float yUncalibratedNoDrift, Float zUncalibratedNoDrift, Float xUncalibratedEstimatedDrift, Float yUncalibratedEstimatedDrift, Float zUncalibratedEstimatedDrift) {
+    public DbGyroscopeSensor(Long id, Double x, Double y, Double z, String created, Float xUncalibratedNoDrift, Float yUncalibratedNoDrift, Float zUncalibratedNoDrift, Float xUncalibratedEstimatedDrift, Float yUncalibratedEstimatedDrift, Float zUncalibratedEstimatedDrift) {
         this.id = id;
         this.x = x;
         this.y = y;

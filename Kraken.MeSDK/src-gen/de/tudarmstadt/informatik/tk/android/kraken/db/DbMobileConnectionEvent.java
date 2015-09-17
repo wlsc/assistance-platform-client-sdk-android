@@ -4,7 +4,7 @@ package de.tudarmstadt.informatik.tk.android.kraken.db;
 /**
  * Entity mapped to table "mobile_connection_event".
  */
-public class MobileConnectionEvent implements de.tudarmstadt.informatik.tk.android.kraken.interfaces.IDbSensor {
+public class DbMobileConnectionEvent implements de.tudarmstadt.informatik.tk.android.kraken.interfaces.IDbSensor {
 
     private Long id;
     private String carrierName;
@@ -14,14 +14,14 @@ public class MobileConnectionEvent implements de.tudarmstadt.informatik.tk.andro
     private String created;
     private Boolean voipAvailable;
 
-    public MobileConnectionEvent() {
+    public DbMobileConnectionEvent() {
     }
 
-    public MobileConnectionEvent(Long id) {
+    public DbMobileConnectionEvent(Long id) {
         this.id = id;
     }
 
-    public MobileConnectionEvent(Long id, String carrierName, String mobileCarrierCode, String mobileNetworkCode, String created, Boolean voipAvailable) {
+    public DbMobileConnectionEvent(Long id, String carrierName, String mobileCarrierCode, String mobileNetworkCode, String created, Boolean voipAvailable) {
         this.id = id;
         this.carrierName = carrierName;
         this.mobileCarrierCode = mobileCarrierCode;

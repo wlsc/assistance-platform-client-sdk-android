@@ -28,6 +28,11 @@ public class RunningProcessesReader extends AbstractPeriodicSensor implements IS
     }
 
     @Override
+    protected void dumpData() {
+
+    }
+
+    @Override
     public ESensorType getSensorType() {
         return ESensorType.ONE_TIME_SENSOR_RUNNING_PROCESSES;
     }

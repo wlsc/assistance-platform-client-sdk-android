@@ -6,6 +6,7 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 
+import de.tudarmstadt.informatik.tk.android.kraken.db.DbAccelerometerSensorDao;
 import de.tudarmstadt.informatik.tk.android.kraken.models.db.sensors.ESensorType;
 import de.tudarmstadt.informatik.tk.android.kraken.models.db.sensors.abstract_sensors.AbstractTriggeredSensor;
 
@@ -35,11 +36,24 @@ public class AccelerometerSensor extends AbstractTriggeredSensor implements Sens
     private int m_intAccuracy = 0;
     private int m_intNumValues = 0;
 
+    private static DbAccelerometerSensorDao accelerometerSensorDao;
+
     public AccelerometerSensor(Context context) {
         super(context);
 
         m_sensorManager = (SensorManager) this.context.getSystemService(Context.SENSOR_SERVICE);
         m_accelerometerSensor = m_sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+
+        if (accelerometerSensorDao == null) {
+            accelerometerSensorDao = m_daoSession.getDbAccelerometerSensorDao();
+        }
+    }
+
+    @Override
+    protected void dumpData() {
+
+
+//        accelerometerSensorDao.inse
     }
 
     @Override
@@ -103,6 +117,38 @@ public class AccelerometerSensor extends AbstractTriggeredSensor implements Sens
         m_floatSumAccelerationZ = 0;
         m_intAccuracy = 0;
         m_intNumValues = 0;
+    }
+
+    public double getX() {
+        return this.x;
+    }
+
+    public void setX(double x) {
+        this.x = x;
+    }
+
+    public double getY() {
+        return this.y;
+    }
+
+    public void setY(double y) {
+        this.y = y;
+    }
+
+    public double getZ() {
+        return this.z;
+    }
+
+    public void setZ(double z) {
+        this.z = z;
+    }
+
+    public int getM_intAccuracy() {
+        return this.m_intAccuracy;
+    }
+
+    public void setM_intAccuracy(int m_intAccuracy) {
+        this.m_intAccuracy = m_intAccuracy;
     }
 
     private void sendCurrentSeries() {

@@ -12,6 +12,11 @@ public class MeasurementSensor extends AbstractTriggeredSensor {
         super(context);
     }
 
+    @Override
+    protected void dumpData() {
+
+    }
+
     public void startSensor() {
 //		SensorMeasurementLog measurementLog = new SensorMeasurementLog();
 //		measurementLog.setStarted(true);

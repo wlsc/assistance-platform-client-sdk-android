@@ -28,6 +28,11 @@ public class ForegroundTrafficSensor extends AbstractTriggeredSensor {
     }
 
     @Override
+    protected void dumpData() {
+
+    }
+
+    @Override
     public void startSensor() {
 
     }

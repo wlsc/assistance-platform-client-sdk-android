@@ -4,7 +4,7 @@ package de.tudarmstadt.informatik.tk.android.kraken.db;
 /**
  * Entity mapped to table "accelerometer_sensor".
  */
-public class AccelerometerSensor implements de.tudarmstadt.informatik.tk.android.kraken.interfaces.IDbSensor {
+public class DbAccelerometerSensor implements de.tudarmstadt.informatik.tk.android.kraken.interfaces.IDbSensor {
 
     private Long id;
     private Double x;
@@ -14,14 +14,14 @@ public class AccelerometerSensor implements de.tudarmstadt.informatik.tk.android
     private String created;
     private Integer accuracy;
 
-    public AccelerometerSensor() {
+    public DbAccelerometerSensor() {
     }
 
-    public AccelerometerSensor(Long id) {
+    public DbAccelerometerSensor(Long id) {
         this.id = id;
     }
 
-    public AccelerometerSensor(Long id, Double x, Double y, Double z, String created, Integer accuracy) {
+    public DbAccelerometerSensor(Long id, Double x, Double y, Double z, String created, Integer accuracy) {
         this.id = id;
         this.x = x;
         this.y = y;

@@ -21,6 +21,11 @@ public class RingtoneSensor extends AbstractPeriodicSensor implements ISensor {
     }
 
     @Override
+    protected void dumpData() {
+
+    }
+
+    @Override
     public ESensorType getSensorType() {
         return ESensorType.SENSOR_RINGTONE;
     }

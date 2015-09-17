@@ -313,4 +313,9 @@ public class CalendarSensor extends AbstractContentObserverSensor {
         return query;
     }
 
+    @Override
+    protected void dumpData() {
+
+    }
+
 }

@@ -90,6 +90,11 @@ public class BackgroundTrafficSensor extends AbstractPeriodicSensor implements I
     }
 
     @Override
+    protected void dumpData() {
+
+    }
+
+    @Override
     public void reset() {
 
     }

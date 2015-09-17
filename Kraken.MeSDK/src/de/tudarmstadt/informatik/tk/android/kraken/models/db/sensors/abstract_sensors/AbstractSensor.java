@@ -31,11 +31,11 @@ import de.tudarmstadt.informatik.tk.android.kraken.communication.EPushType;
 import de.tudarmstadt.informatik.tk.android.kraken.communication.RetroServerPushManager;
 import de.tudarmstadt.informatik.tk.android.kraken.communication.SensorData;
 import de.tudarmstadt.informatik.tk.android.kraken.db.DaoSession;
+import de.tudarmstadt.informatik.tk.android.kraken.db.DatabaseManager;
 import de.tudarmstadt.informatik.tk.android.kraken.interfaces.IDbSensor;
 import de.tudarmstadt.informatik.tk.android.kraken.interfaces.IDbUpdatableSensor;
 import de.tudarmstadt.informatik.tk.android.kraken.models.db.sensors.interfaces.ISensor;
 import de.tudarmstadt.informatik.tk.android.kraken.services.KrakenService;
-import de.tudarmstadt.informatik.tk.android.kraken.db.DatabaseManager;
 import de.tudarmstadt.informatik.tk.android.kraken.utils.DateUtils;
 
 public abstract class AbstractSensor implements ISensor {
@@ -93,7 +93,7 @@ public abstract class AbstractSensor implements ISensor {
                 try {
                     m_daoObject = getDaoEntry(m_sensorClass);
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    Log.e(TAG, "Cant get DAO entry! Error: ", e);
                 }
                 m_insertMethod = null;
                 m_updateMethod = null;
@@ -543,4 +543,6 @@ public abstract class AbstractSensor implements ISensor {
     public void setDaoSession(DaoSession daoSession) {
         this.m_daoSession = daoSession;
     }
+
+    protected abstract void dumpData();
 }

@@ -4,7 +4,7 @@ package de.tudarmstadt.informatik.tk.android.kraken.db;
 /**
  * Entity mapped to table "magnetic_field_sensor".
  */
-public class MagneticFieldSensor implements de.tudarmstadt.informatik.tk.android.kraken.interfaces.IDbSensor {
+public class DbMagneticFieldSensor implements de.tudarmstadt.informatik.tk.android.kraken.interfaces.IDbSensor {
 
     private Long id;
     private Double x;
@@ -20,14 +20,14 @@ public class MagneticFieldSensor implements de.tudarmstadt.informatik.tk.android
     private Float yUncalibratedEstimatedIronBias;
     private Float zUncalibratedEstimatedIronBias;
 
-    public MagneticFieldSensor() {
+    public DbMagneticFieldSensor() {
     }
 
-    public MagneticFieldSensor(Long id) {
+    public DbMagneticFieldSensor(Long id) {
         this.id = id;
     }
 
-    public MagneticFieldSensor(Long id, Double x, Double y, Double z, String created, Integer accuracy, Float xUncalibratedNoHardIron, Float yUncalibratedNoHardIron, Float zUncalibratedNoHardIron, Float xUncalibratedEstimatedIronBias, Float yUncalibratedEstimatedIronBias, Float zUncalibratedEstimatedIronBias) {
+    public DbMagneticFieldSensor(Long id, Double x, Double y, Double z, String created, Integer accuracy, Float xUncalibratedNoHardIron, Float yUncalibratedNoHardIron, Float zUncalibratedNoHardIron, Float xUncalibratedEstimatedIronBias, Float yUncalibratedEstimatedIronBias, Float zUncalibratedEstimatedIronBias) {
         this.id = id;
         this.x = x;
         this.y = y;

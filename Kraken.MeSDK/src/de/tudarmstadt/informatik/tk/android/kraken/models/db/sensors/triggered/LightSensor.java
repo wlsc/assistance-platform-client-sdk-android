@@ -35,6 +35,11 @@ public class LightSensor extends AbstractTriggeredSensor implements SensorEventL
     }
 
     @Override
+    protected void dumpData() {
+
+    }
+
+    @Override
     public void startSensor() {
         m_sensorManager.registerListener(this, m_accelerometerSensor, SENSOR_DELAY_BETWEEN_TWO_EVENTS);
         m_bIsRunning = true;

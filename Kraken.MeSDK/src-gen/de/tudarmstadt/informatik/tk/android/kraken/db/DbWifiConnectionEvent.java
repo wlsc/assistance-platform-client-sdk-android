@@ -4,7 +4,7 @@ package de.tudarmstadt.informatik.tk.android.kraken.db;
 /**
  * Entity mapped to table "wifi_connection_event".
  */
-public class WifiConnectionEvent implements de.tudarmstadt.informatik.tk.android.kraken.interfaces.IDbSensor {
+public class DbWifiConnectionEvent implements de.tudarmstadt.informatik.tk.android.kraken.interfaces.IDbSensor {
 
     private Long id;
     private String ssid;
@@ -17,14 +17,14 @@ public class WifiConnectionEvent implements de.tudarmstadt.informatik.tk.android
     private Integer signalStrength;
     private Integer networkId;
 
-    public WifiConnectionEvent() {
+    public DbWifiConnectionEvent() {
     }
 
-    public WifiConnectionEvent(Long id) {
+    public DbWifiConnectionEvent(Long id) {
         this.id = id;
     }
 
-    public WifiConnectionEvent(Long id, String ssid, String bssid, String created, Integer channel, Integer frequency, Integer linkSpeed, Integer signalStrength, Integer networkId) {
+    public DbWifiConnectionEvent(Long id, String ssid, String bssid, String created, Integer channel, Integer frequency, Integer linkSpeed, Integer signalStrength, Integer networkId) {
         this.id = id;
         this.ssid = ssid;
         this.bssid = bssid;

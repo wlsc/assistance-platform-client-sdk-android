@@ -47,6 +47,11 @@ public class ActivitySensor extends AbstractTriggeredSensor implements GoogleApi
                 .build();
     }
 
+    @Override
+    protected void dumpData() {
+
+    }
+
     public static ActivitySensor getInstance() {
         return m_instance;
     }

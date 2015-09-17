@@ -23,11 +23,11 @@ import java.io.Serializable;
 import de.tudarmstadt.informatik.tk.android.kraken.ActivityCommunicator;
 import de.tudarmstadt.informatik.tk.android.kraken.communication.RetroServerPushManager;
 import de.tudarmstadt.informatik.tk.android.kraken.db.DaoSession;
+import de.tudarmstadt.informatik.tk.android.kraken.db.DatabaseManager;
 import de.tudarmstadt.informatik.tk.android.kraken.models.db.sensors.ECommandType;
 import de.tudarmstadt.informatik.tk.android.kraken.models.db.sensors.SensorManager;
 import de.tudarmstadt.informatik.tk.android.kraken.models.db.sensors.interfaces.ISensor;
 import de.tudarmstadt.informatik.tk.android.kraken.preference.PreferenceManager;
-import de.tudarmstadt.informatik.tk.android.kraken.db.DatabaseManager;
 import de.tudarmstadt.informatik.tk.kraken.sdk.R;
 
 
@@ -46,13 +46,6 @@ public class KrakenService extends Service implements Callback {
     private PreferenceManager mPreferenceManager;
     private DatabaseManager mDatabaseManager;
 
-//	public class ServiceBinder extends Binder {
-//
-//		public KrakenService getService() {
-//			return KrakenService.this;
-//		}
-//	}
-
     public static KrakenService getInstance() {
         return m_service;
     }
@@ -70,14 +63,13 @@ public class KrakenService extends Service implements Callback {
         m_service = this;
 
         // Init database FIRST!
-        mDatabaseManager = DatabaseManager.getInstance(this);
+        mDatabaseManager = DatabaseManager.getInstance(getApplicationContext());
 
-        mPreferenceManager = PreferenceManager.getInstance(this);
+        mPreferenceManager = PreferenceManager.getInstance(getApplicationContext());
 
         // GcmManager.getInstance(this).registerAtCloud();
 
-        // TODO: enable it later
-//		startService();
+        startService();
     }
 
     private void startService() {
@@ -87,9 +79,7 @@ public class KrakenService extends Service implements Callback {
             monitorStart();
         }
 
-        //ServerPushManager.getInstance(this);
-        // TODO: remove
-        RetroServerPushManager.getInstance(this);
+        RetroServerPushManager.getInstance(getApplicationContext());
 
         if (mPreferenceManager.getShowNotification()) {
             showIcon();
@@ -180,7 +170,7 @@ public class KrakenService extends Service implements Callback {
 
     private void monitorStart() {
 
-        System.out.println("start service");
+        Log.d(TAG, "Starting monitoring service...");
 
 //		Handler handler = ActivityCommunicator.getHandler();
 

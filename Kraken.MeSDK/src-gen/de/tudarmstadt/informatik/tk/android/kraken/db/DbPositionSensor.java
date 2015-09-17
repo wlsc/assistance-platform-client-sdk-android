@@ -4,7 +4,7 @@ package de.tudarmstadt.informatik.tk.android.kraken.db;
 /**
  * Entity mapped to table "position_sensor".
  */
-public class PositionSensor implements de.tudarmstadt.informatik.tk.android.kraken.interfaces.IDbSensor {
+public class DbPositionSensor implements de.tudarmstadt.informatik.tk.android.kraken.interfaces.IDbSensor {
 
     private Long id;
     private Double latitude;
@@ -18,14 +18,14 @@ public class PositionSensor implements de.tudarmstadt.informatik.tk.android.krak
     private Integer course;
     private Integer floor;
 
-    public PositionSensor() {
+    public DbPositionSensor() {
     }
 
-    public PositionSensor(Long id) {
+    public DbPositionSensor(Long id) {
         this.id = id;
     }
 
-    public PositionSensor(Long id, Double latitude, Double longitude, Double accuracyHorizontal, Float speed, String created, Double altitude, Double accuracyVertical, Integer course, Integer floor) {
+    public DbPositionSensor(Long id, Double latitude, Double longitude, Double accuracyHorizontal, Float speed, String created, Double altitude, Double accuracyVertical, Integer course, Integer floor) {
         this.id = id;
         this.latitude = latitude;
         this.longitude = longitude;

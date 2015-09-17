@@ -351,6 +351,11 @@ public class ContactsSensor extends AbstractContentObserverSensor {
     }
 
     @Override
+    protected void dumpData() {
+
+    }
+
+    @Override
     public void reset() {
 
     }

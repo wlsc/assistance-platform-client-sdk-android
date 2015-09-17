@@ -42,6 +42,11 @@ public class LocationSensor extends AbstractTriggeredSensor implements GoogleApi
         super(context);
     }
 
+    @Override
+    protected void dumpData() {
+
+    }
+
     /**
      * Starts sensing
      */

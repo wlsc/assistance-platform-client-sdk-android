@@ -192,6 +192,11 @@ public class ForegroundEventSensor extends AbstractTriggeredSensor {
     }
 
     @Override
+    protected void dumpData() {
+
+    }
+
+    @Override
     public void reset() {
 
     }

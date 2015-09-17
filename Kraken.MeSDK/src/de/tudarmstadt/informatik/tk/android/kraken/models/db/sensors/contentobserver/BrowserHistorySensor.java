@@ -28,6 +28,11 @@ public class BrowserHistorySensor extends AbstractContentObserverSensor {
     }
 
     @Override
+    protected void dumpData() {
+
+    }
+
+    @Override
     protected void syncData() {
 //        ContentResolver cr = context.getContentResolver();
 //        Cursor cur = cr

@@ -7,7 +7,7 @@ import android.os.Messenger;
 import android.os.RemoteException;
 import android.util.Log;
 
-import de.tudarmstadt.informatik.tk.android.kraken.db.AccelerometerSensor;
+import de.tudarmstadt.informatik.tk.android.kraken.db.DbAccelerometerSensor;
 import de.tudarmstadt.informatik.tk.android.kraken.interfaces.IDbSensor;
 import de.tudarmstadt.informatik.tk.android.kraken.models.db.sensors.ESensorType;
 
@@ -52,7 +52,7 @@ public class ActivityCommunicator {
         switch ((ESensorType) data.getSerializable("sensorType")) {
             case SENSOR_ACCELEROMETER:
                 Log.d(TAG, "Processing Accelerometer sensor data...");
-                AccelerometerSensor accelerometerSensor = (AccelerometerSensor) sensor;
+                DbAccelerometerSensor accelerometerSensor = (DbAccelerometerSensor) sensor;
                 double result = accelerometerSensor.getX() * accelerometerSensor.getY() * accelerometerSensor.getZ();
                 result = ((double) (int) (result * 100)) / 100;
                 dataOut.putString("msg", "Accelerometer: " + result);

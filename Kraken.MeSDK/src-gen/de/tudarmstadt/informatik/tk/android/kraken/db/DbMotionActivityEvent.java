@@ -4,7 +4,7 @@ package de.tudarmstadt.informatik.tk.android.kraken.db;
 /**
  * Entity mapped to table "motion_activity_event".
  */
-public class MotionActivityEvent implements de.tudarmstadt.informatik.tk.android.kraken.interfaces.IDbSensor {
+public class DbMotionActivityEvent implements de.tudarmstadt.informatik.tk.android.kraken.interfaces.IDbSensor {
 
     private Long id;
     private Boolean walking;
@@ -19,14 +19,14 @@ public class MotionActivityEvent implements de.tudarmstadt.informatik.tk.android
     private Boolean onFoot;
     private Boolean tilting;
 
-    public MotionActivityEvent() {
+    public DbMotionActivityEvent() {
     }
 
-    public MotionActivityEvent(Long id) {
+    public DbMotionActivityEvent(Long id) {
         this.id = id;
     }
 
-    public MotionActivityEvent(Long id, Boolean walking, Boolean running, Boolean cycling, Boolean driving, Boolean stationary, Boolean unknown, Integer accuracy, String created, Boolean onFoot, Boolean tilting) {
+    public DbMotionActivityEvent(Long id, Boolean walking, Boolean running, Boolean cycling, Boolean driving, Boolean stationary, Boolean unknown, Integer accuracy, String created, Boolean onFoot, Boolean tilting) {
         this.id = id;
         this.walking = walking;
         this.running = running;

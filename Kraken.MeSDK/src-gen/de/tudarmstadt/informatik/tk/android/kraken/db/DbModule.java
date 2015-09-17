@@ -8,7 +8,7 @@ import de.greenrobot.dao.DaoException;
 /**
  * Entity mapped to table "module".
  */
-public class Module {
+public class DbModule {
 
     private Long id;
     /** Not-null value. */
@@ -27,22 +27,22 @@ public class Module {
     private transient DaoSession daoSession;
 
     /** Used for active entity operations. */
-    private transient ModuleDao myDao;
+    private transient DbModuleDao myDao;
 
-    private User user;
-    private Long user__resolvedKey;
+    private DbUser dbUser;
+    private Long dbUser__resolvedKey;
 
-    private List<ModuleCapability> moduleCapabilityList;
-    private List<ModuleInstallation> moduleInstallationList;
+    private List<DbModuleCapability> dbModuleCapabilityList;
+    private List<DbModuleInstallation> dbModuleInstallationList;
 
-    public Module() {
+    public DbModule() {
     }
 
-    public Module(Long id) {
+    public DbModule(Long id) {
         this.id = id;
     }
 
-    public Module(Long id, String packageName, String title, String logoUrl, String descriptionShort, String descriptionFull, String copyright, String supportEmail, String created, Long userId) {
+    public DbModule(Long id, String packageName, String title, String logoUrl, String descriptionShort, String descriptionFull, String copyright, String supportEmail, String created, Long userId) {
         this.id = id;
         this.packageName = packageName;
         this.title = title;
@@ -58,7 +58,7 @@ public class Module {
     /** called by internal mechanisms, do not call yourself. */
     public void __setDaoSession(DaoSession daoSession) {
         this.daoSession = daoSession;
-        myDao = daoSession != null ? daoSession.getModuleDao() : null;
+        myDao = daoSession != null ? daoSession.getDbModuleDao() : null;
     }
 
     public Long getId() {
@@ -146,72 +146,72 @@ public class Module {
     }
 
     /** To-one relationship, resolved on first access. */
-    public User getUser() {
+    public DbUser getDbUser() {
         Long __key = this.userId;
-        if (user__resolvedKey == null || !user__resolvedKey.equals(__key)) {
+        if (dbUser__resolvedKey == null || !dbUser__resolvedKey.equals(__key)) {
             if (daoSession == null) {
                 throw new DaoException("Entity is detached from DAO context");
             }
-            UserDao targetDao = daoSession.getUserDao();
-            User userNew = targetDao.load(__key);
+            DbUserDao targetDao = daoSession.getDbUserDao();
+            DbUser dbUserNew = targetDao.load(__key);
             synchronized (this) {
-                user = userNew;
-            	user__resolvedKey = __key;
+                dbUser = dbUserNew;
+            	dbUser__resolvedKey = __key;
             }
         }
-        return user;
+        return dbUser;
     }
 
-    public void setUser(User user) {
+    public void setDbUser(DbUser dbUser) {
         synchronized (this) {
-            this.user = user;
-            userId = user == null ? null : user.getId();
-            user__resolvedKey = userId;
+            this.dbUser = dbUser;
+            userId = dbUser == null ? null : dbUser.getId();
+            dbUser__resolvedKey = userId;
         }
     }
 
     /** To-many relationship, resolved on first access (and after reset). Changes to to-many relations are not persisted, make changes to the target entity. */
-    public List<ModuleCapability> getModuleCapabilityList() {
-        if (moduleCapabilityList == null) {
+    public List<DbModuleCapability> getDbModuleCapabilityList() {
+        if (dbModuleCapabilityList == null) {
             if (daoSession == null) {
                 throw new DaoException("Entity is detached from DAO context");
             }
-            ModuleCapabilityDao targetDao = daoSession.getModuleCapabilityDao();
-            List<ModuleCapability> moduleCapabilityListNew = targetDao._queryModule_ModuleCapabilityList(id);
+            DbModuleCapabilityDao targetDao = daoSession.getDbModuleCapabilityDao();
+            List<DbModuleCapability> dbModuleCapabilityListNew = targetDao._queryDbModule_DbModuleCapabilityList(id);
             synchronized (this) {
-                if(moduleCapabilityList == null) {
-                    moduleCapabilityList = moduleCapabilityListNew;
+                if(dbModuleCapabilityList == null) {
+                    dbModuleCapabilityList = dbModuleCapabilityListNew;
                 }
             }
         }
-        return moduleCapabilityList;
+        return dbModuleCapabilityList;
     }
 
     /** Resets a to-many relationship, making the next get call to query for a fresh result. */
-    public synchronized void resetModuleCapabilityList() {
-        moduleCapabilityList = null;
+    public synchronized void resetDbModuleCapabilityList() {
+        dbModuleCapabilityList = null;
     }
 
     /** To-many relationship, resolved on first access (and after reset). Changes to to-many relations are not persisted, make changes to the target entity. */
-    public List<ModuleInstallation> getModuleInstallationList() {
-        if (moduleInstallationList == null) {
+    public List<DbModuleInstallation> getDbModuleInstallationList() {
+        if (dbModuleInstallationList == null) {
             if (daoSession == null) {
                 throw new DaoException("Entity is detached from DAO context");
             }
-            ModuleInstallationDao targetDao = daoSession.getModuleInstallationDao();
-            List<ModuleInstallation> moduleInstallationListNew = targetDao._queryModule_ModuleInstallationList(id);
+            DbModuleInstallationDao targetDao = daoSession.getDbModuleInstallationDao();
+            List<DbModuleInstallation> dbModuleInstallationListNew = targetDao._queryDbModule_DbModuleInstallationList(id);
             synchronized (this) {
-                if(moduleInstallationList == null) {
-                    moduleInstallationList = moduleInstallationListNew;
+                if(dbModuleInstallationList == null) {
+                    dbModuleInstallationList = dbModuleInstallationListNew;
                 }
             }
         }
-        return moduleInstallationList;
+        return dbModuleInstallationList;
     }
 
     /** Resets a to-many relationship, making the next get call to query for a fresh result. */
-    public synchronized void resetModuleInstallationList() {
-        moduleInstallationList = null;
+    public synchronized void resetDbModuleInstallationList() {
+        dbModuleInstallationList = null;
     }
 
     /** Convenient call for {@link AbstractDao#delete(Object)}. Entity must attached to an entity context. */

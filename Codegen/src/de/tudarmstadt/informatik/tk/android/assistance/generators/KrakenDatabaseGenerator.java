@@ -35,7 +35,7 @@ public class KrakenDatabaseGenerator {
 		// ****************************************
 		
 		// ----- User scheme -----
-		Entity user = schema.addEntity("User");
+		Entity user = schema.addEntity("DbUser");
 		user.setTableName("user");
 		user.addIdProperty().autoincrement().index();
 		user.addStringProperty("token").index();
@@ -48,7 +48,7 @@ public class KrakenDatabaseGenerator {
 		user.addStringProperty("created").notNull();
 		
 		// ----- Social user profile scheme -----
-		Entity socialProfile = schema.addEntity("UserSocialProfile");
+		Entity socialProfile = schema.addEntity("DbUserSocialProfile");
 		socialProfile.setTableName("user_social_profile");
 		socialProfile.addIdProperty().autoincrement().index();
 		socialProfile.addStringProperty("name");
@@ -63,7 +63,7 @@ public class KrakenDatabaseGenerator {
 		user.addToMany(socialProfile, socialProfileFKUserProperty);
 		
 		// ----- Device scheme -----
-		Entity device = schema.addEntity("Device");
+		Entity device = schema.addEntity("DbDevice");
 		device.setTableName("device");
 		device.addIdProperty().autoincrement().index();
 		device.addStringProperty("deviceIdentifier");
@@ -81,7 +81,7 @@ public class KrakenDatabaseGenerator {
 		user.addToMany(device, deviceFKUserProperty);
 		
 		// ----- Module availability scheme -----
-		Entity module = schema.addEntity("Module");
+		Entity module = schema.addEntity("DbModule");
 		module.setTableName("module");
 		module.addIdProperty().autoincrement().index();
 		module.addStringProperty("packageName").notNull().index();
@@ -98,7 +98,7 @@ public class KrakenDatabaseGenerator {
 		user.addToMany(module, moduleFKUserProperty);
 		
 		// ----- Module capability scheme -----
-		Entity moduleCapability = schema.addEntity("ModuleCapability");
+		Entity moduleCapability = schema.addEntity("DbModuleCapability");
 		moduleCapability.setTableName("module_capability");
 		moduleCapability.addIdProperty().autoincrement().index();
 		moduleCapability.addStringProperty("type").notNull().index();
@@ -113,7 +113,7 @@ public class KrakenDatabaseGenerator {
 		module.addToMany(moduleCapability, moduleCapabilityFKModuleProperty);
 		
 		// ----- Module installation scheme -----
-		Entity moduleInstallation = schema.addEntity("ModuleInstallation");
+		Entity moduleInstallation = schema.addEntity("DbModuleInstallation");
 		moduleInstallation.setTableName("module_installation");
 		moduleInstallation.addIdProperty().autoincrement().index();
 		moduleInstallation.addBooleanProperty("active").notNull();
@@ -133,7 +133,7 @@ public class KrakenDatabaseGenerator {
 		
 		// ----- GPS Position -----
 		// REQUIRED
-		Entity positionSensor = schema.addEntity("PositionSensor");
+		Entity positionSensor = schema.addEntity("DbPositionSensor");
 		positionSensor.setTableName("position_sensor");
 		positionSensor.addIdProperty().autoincrement().index();
 		positionSensor.implementsInterface(Config.KRAKEN_PACKAGE_SENSOR);
@@ -150,7 +150,7 @@ public class KrakenDatabaseGenerator {
 		
 		// ----- Gyroscope -----
 		// REQUIRED
-		Entity gyroscopeSensor = schema.addEntity("GyroscopeSensor");
+		Entity gyroscopeSensor = schema.addEntity("DbGyroscopeSensor");
 		gyroscopeSensor.setTableName("gyroscope_sensor");
 		gyroscopeSensor.addIdProperty().autoincrement().index();
 		gyroscopeSensor.implementsInterface(Config.KRAKEN_PACKAGE_SENSOR);
@@ -168,7 +168,7 @@ public class KrakenDatabaseGenerator {
 		
 		// ----- Accelerometer -----
 		// REQUIRED
-		Entity accelerometerSensor = schema.addEntity("AccelerometerSensor");
+		Entity accelerometerSensor = schema.addEntity("DbAccelerometerSensor");
 		accelerometerSensor.setTableName("accelerometer_sensor");
 		accelerometerSensor.addIdProperty().autoincrement().index();
 		accelerometerSensor.implementsInterface(Config.KRAKEN_PACKAGE_SENSOR);
@@ -181,7 +181,7 @@ public class KrakenDatabaseGenerator {
 		
 		// ----- Magnetic Field -----
 		// REQUIRED
-		Entity magneticFieldSensor = schema.addEntity("MagneticFieldSensor");
+		Entity magneticFieldSensor = schema.addEntity("DbMagneticFieldSensor");
 		magneticFieldSensor.setTableName("magnetic_field_sensor");
 		magneticFieldSensor.addIdProperty().autoincrement().index();
 		magneticFieldSensor.implementsInterface(Config.KRAKEN_PACKAGE_SENSOR);
@@ -204,7 +204,7 @@ public class KrakenDatabaseGenerator {
 		
 		// ----- Motion Activity -----
 		// REQUIRED
-		Entity motionActivitySensor = schema.addEntity("MotionActivityEvent");
+		Entity motionActivitySensor = schema.addEntity("DbMotionActivityEvent");
 		motionActivitySensor.setTableName("motion_activity_event");
 		motionActivitySensor.addIdProperty().autoincrement().index();
 		motionActivitySensor.implementsInterface(Config.KRAKEN_PACKAGE_SENSOR);
@@ -222,7 +222,7 @@ public class KrakenDatabaseGenerator {
 
 		// ----- Connection -----
 		// REQUIRED
-		Entity connectionEvent = schema.addEntity("ConnectionEvent");
+		Entity connectionEvent = schema.addEntity("DbConnectionEvent");
 		connectionEvent.setTableName("connection_event");
 		connectionEvent.addIdProperty().autoincrement().index();
 		connectionEvent.implementsInterface(Config.KRAKEN_PACKAGE_SENSOR);
@@ -234,7 +234,7 @@ public class KrakenDatabaseGenerator {
 
 		// ----- Connection -----
 		// REQUIRED
-		Entity wifiConnectionEvent = schema.addEntity("WifiConnectionEvent");
+		Entity wifiConnectionEvent = schema.addEntity("DbWifiConnectionEvent");
 		wifiConnectionEvent.setTableName("wifi_connection_event");
 		wifiConnectionEvent.addIdProperty().autoincrement().index();
 		wifiConnectionEvent.implementsInterface(Config.KRAKEN_PACKAGE_SENSOR);
@@ -250,7 +250,7 @@ public class KrakenDatabaseGenerator {
 		
 		// ----- Mobile Connection -----
 		// REQUIRED
-		Entity mobileConnectionEvent = schema.addEntity("MobileConnectionEvent");
+		Entity mobileConnectionEvent = schema.addEntity("DbMobileConnectionEvent");
 		mobileConnectionEvent.setTableName("mobile_connection_event");
 		mobileConnectionEvent.addIdProperty().autoincrement().index();
 		mobileConnectionEvent.implementsInterface(Config.KRAKEN_PACKAGE_SENSOR);
@@ -263,7 +263,7 @@ public class KrakenDatabaseGenerator {
 		
 		// ----- Loudness -----
 		// REQUIRED
-		Entity loudnessEvent = schema.addEntity("LoudnessEvent");
+		Entity loudnessEvent = schema.addEntity("DbLoudnessEvent");
 		loudnessEvent.setTableName("loudness_event");
 		loudnessEvent.addIdProperty().autoincrement().index();
 		loudnessEvent.implementsInterface(Config.KRAKEN_PACKAGE_SENSOR);

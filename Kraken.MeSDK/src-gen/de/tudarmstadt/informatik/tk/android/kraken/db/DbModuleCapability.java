@@ -7,7 +7,7 @@ import de.greenrobot.dao.DaoException;
 /**
  * Entity mapped to table "module_capability".
  */
-public class ModuleCapability {
+public class DbModuleCapability {
 
     private Long id;
     /** Not-null value. */
@@ -24,20 +24,20 @@ public class ModuleCapability {
     private transient DaoSession daoSession;
 
     /** Used for active entity operations. */
-    private transient ModuleCapabilityDao myDao;
+    private transient DbModuleCapabilityDao myDao;
 
-    private Module module;
-    private Long module__resolvedKey;
+    private DbModule dbModule;
+    private Long dbModule__resolvedKey;
 
 
-    public ModuleCapability() {
+    public DbModuleCapability() {
     }
 
-    public ModuleCapability(Long id) {
+    public DbModuleCapability(Long id) {
         this.id = id;
     }
 
-    public ModuleCapability(Long id, String type, Double collectionFrequency, Double requiredUpdateFrequency, Integer minRequiredReadingsOnUpdate, boolean required, String created, Long moduleId) {
+    public DbModuleCapability(Long id, String type, Double collectionFrequency, Double requiredUpdateFrequency, Integer minRequiredReadingsOnUpdate, boolean required, String created, Long moduleId) {
         this.id = id;
         this.type = type;
         this.collectionFrequency = collectionFrequency;
@@ -51,7 +51,7 @@ public class ModuleCapability {
     /** called by internal mechanisms, do not call yourself. */
     public void __setDaoSession(DaoSession daoSession) {
         this.daoSession = daoSession;
-        myDao = daoSession != null ? daoSession.getModuleCapabilityDao() : null;
+        myDao = daoSession != null ? daoSession.getDbModuleCapabilityDao() : null;
     }
 
     public Long getId() {
@@ -123,27 +123,27 @@ public class ModuleCapability {
     }
 
     /** To-one relationship, resolved on first access. */
-    public Module getModule() {
+    public DbModule getDbModule() {
         Long __key = this.moduleId;
-        if (module__resolvedKey == null || !module__resolvedKey.equals(__key)) {
+        if (dbModule__resolvedKey == null || !dbModule__resolvedKey.equals(__key)) {
             if (daoSession == null) {
                 throw new DaoException("Entity is detached from DAO context");
             }
-            ModuleDao targetDao = daoSession.getModuleDao();
-            Module moduleNew = targetDao.load(__key);
+            DbModuleDao targetDao = daoSession.getDbModuleDao();
+            DbModule dbModuleNew = targetDao.load(__key);
             synchronized (this) {
-                module = moduleNew;
-            	module__resolvedKey = __key;
+                dbModule = dbModuleNew;
+            	dbModule__resolvedKey = __key;
             }
         }
-        return module;
+        return dbModule;
     }
 
-    public void setModule(Module module) {
+    public void setDbModule(DbModule dbModule) {
         synchronized (this) {
-            this.module = module;
-            moduleId = module == null ? null : module.getId();
-            module__resolvedKey = moduleId;
+            this.dbModule = dbModule;
+            moduleId = dbModule == null ? null : dbModule.getId();
+            dbModule__resolvedKey = moduleId;
         }
     }
 

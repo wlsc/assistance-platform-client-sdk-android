@@ -4,21 +4,21 @@ package de.tudarmstadt.informatik.tk.android.kraken.db;
 /**
  * Entity mapped to table "loudness_event".
  */
-public class LoudnessEvent implements de.tudarmstadt.informatik.tk.android.kraken.interfaces.IDbSensor {
+public class DbLoudnessEvent implements de.tudarmstadt.informatik.tk.android.kraken.interfaces.IDbSensor {
 
     private Long id;
     private float loudness;
     /** Not-null value. */
     private String created;
 
-    public LoudnessEvent() {
+    public DbLoudnessEvent() {
     }
 
-    public LoudnessEvent(Long id) {
+    public DbLoudnessEvent(Long id) {
         this.id = id;
     }
 
-    public LoudnessEvent(Long id, float loudness, String created) {
+    public DbLoudnessEvent(Long id, float loudness, String created) {
         this.id = id;
         this.loudness = loudness;
         this.created = created;

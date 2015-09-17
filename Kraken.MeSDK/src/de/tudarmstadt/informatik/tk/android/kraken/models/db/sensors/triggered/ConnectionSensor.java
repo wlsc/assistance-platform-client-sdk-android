@@ -53,6 +53,11 @@ public class ConnectionSensor extends AbstractTriggeredSensor {
         m_receiver = new Receiver();
     }
 
+    @Override
+    protected void dumpData() {
+
+    }
+
     public void startSensor() {
         IntentFilter filter = new IntentFilter();
         filter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);

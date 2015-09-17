@@ -19,6 +19,11 @@ public class AccountsReader extends AbstractPeriodicSensor implements ISensor {
     }
 
     @Override
+    protected void dumpData() {
+
+    }
+
+    @Override
     public ESensorType getSensorType() {
         return ESensorType.ONE_TIME_SENSOR_ACCOUNT_READER;
     }
