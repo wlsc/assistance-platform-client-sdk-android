@@ -30,6 +30,10 @@ public class DateUtils {
      */
     public static String dateToISO8601String(Date date, Locale locale) {
 
+        if (date == null) {
+            return null;
+        }
+
         DateFormat dateFormat = null;
 
         if (locale == null) {
