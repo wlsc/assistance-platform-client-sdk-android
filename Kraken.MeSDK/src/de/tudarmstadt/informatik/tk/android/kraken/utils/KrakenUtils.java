@@ -3,9 +3,8 @@ package de.tudarmstadt.informatik.tk.android.kraken.utils;
 import android.content.Context;
 
 import de.tudarmstadt.informatik.tk.android.kraken.KrakenSdkSettings;
-import de.tudarmstadt.informatik.tk.android.kraken.communication.SdkAuthentication;
-import de.tudarmstadt.informatik.tk.android.kraken.models.db.sensors.ESensorType;
-import de.tudarmstadt.informatik.tk.android.kraken.models.db.sensors.SensorManager;
+import de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.ESensorType;
+import de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.SensorManager;
 import de.tudarmstadt.informatik.tk.android.kraken.preference.PreferenceManager;
 
 import static android.provider.Settings.Secure;
@@ -49,17 +48,6 @@ public class KrakenUtils {
 
     public static String getDeviceId(Context context) {
         return Secure.getString(context.getContentResolver(), Secure.ANDROID_ID);
-    }
-
-    public static Long getGlobalId(Context context, Long localId) {
-
-        String kroken = SdkAuthentication.getInstance(context).getKroken();
-        String deviceId = getDeviceId(context);
-        String globalId = kroken + deviceId + localId;
-
-        Integer hashCode = globalId.hashCode();
-
-        return Long.valueOf(hashCode);
     }
 
 //    public static ObjectMapper getJacksonObjectMapper() {

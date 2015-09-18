@@ -13,9 +13,9 @@ import android.widget.ListView;
 import java.util.LinkedList;
 import java.util.List;
 
-import de.tudarmstadt.informatik.tk.android.kraken.models.db.sensors.ESensorType;
-import de.tudarmstadt.informatik.tk.android.kraken.models.db.sensors.SensorManager;
-import de.tudarmstadt.informatik.tk.android.kraken.models.db.sensors.interfaces.ISensor;
+import de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.ESensorType;
+import de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.SensorManager;
+import de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.interfaces.ISensor;
 import de.tudarmstadt.informatik.tk.kraken.sdk.R;
 
 @Deprecated

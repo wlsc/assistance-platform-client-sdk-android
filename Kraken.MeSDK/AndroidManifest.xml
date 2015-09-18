@@ -57,7 +57,7 @@
         </service>
 
         <service
-            android:name="de.tudarmstadt.informatik.tk.android.kraken.models.db.sensors.triggered.ActivitySensorService"
+            android:name="de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.triggered.ActivitySensorService"
             android:exported="false"
             android:label="ActivitySensorService" />
 
@@ -75,15 +75,6 @@
             <intent-filter>
                 <action android:name="android.intent.action.PACKAGE_REPLACED" />
                 <data android:scheme="package" />
-            </intent-filter>
-        </receiver>
-
-        <receiver
-            android:name="de.tudarmstadt.informatik.tk.android.kraken.KrakenLoginReceiver"
-            android:enabled="true"
-            android:permission="de.tudarmstadt.informatik.tk.kraken.dnd2.permission.KRAKEN_LOGIN">
-            <intent-filter>
-                <action android:name="de.tudarmstadt.informatik.tk.kraken.android.sdk.action.LOGIN" />
             </intent-filter>
         </receiver>
 

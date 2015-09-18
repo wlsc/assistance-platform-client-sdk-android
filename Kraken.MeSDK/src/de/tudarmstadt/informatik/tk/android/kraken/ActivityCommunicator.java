@@ -9,47 +9,56 @@ import android.util.Log;
 
 import de.tudarmstadt.informatik.tk.android.kraken.db.DbAccelerometerSensor;
 import de.tudarmstadt.informatik.tk.android.kraken.interfaces.IDbSensor;
-import de.tudarmstadt.informatik.tk.android.kraken.models.db.sensors.ESensorType;
+import de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.ESensorType;
 
 public class ActivityCommunicator {
 
     private static final String TAG = ActivityCommunicator.class.getSimpleName();
 
-    private static ActivityCommunicator m_instance;
-    private static Messenger m_messenger;
-    private static Context m_context;
+    private static ActivityCommunicator instance;
+    private static Messenger mMessenger;
+    private static Context mContext;
 
     private ActivityCommunicator() {
-        m_instance = this;
     }
 
     public static ActivityCommunicator getInstance() {
-        if (m_instance == null)
-            new ActivityCommunicator();
-        return m_instance;
+
+        if (instance == null) {
+            Log.d(TAG, TAG + " was created");
+            instance = new ActivityCommunicator();
+        }
+
+        return instance;
     }
 
     public static void setMessenger(Messenger messenger, Context context) {
-        if (m_instance == null)
-            new ActivityCommunicator();
-        m_messenger = messenger;
-        m_context = context;
+
+        if (instance == null) {
+            instance = new ActivityCommunicator();
+        }
+
+        mMessenger = messenger;
+        mContext = context;
     }
 
     public boolean handleData(Bundle data) {
-        if (m_messenger == null) {
+
+        if (mMessenger == null) {
             // System.out.println("would send, but there's no activity messenger registered");
             return false;
         }
 
-        if (m_context == null) {
+        if (mContext == null) {
             // System.out.println("would send, but there's no context registered");
             return false;
         }
 
         Bundle dataOut = new Bundle();
         IDbSensor sensor = (IDbSensor) data.getSerializable("sensorData");
+
         switch ((ESensorType) data.getSerializable("sensorType")) {
+
             case SENSOR_ACCELEROMETER:
                 Log.d(TAG, "Processing Accelerometer sensor data...");
                 DbAccelerometerSensor accelerometerSensor = (DbAccelerometerSensor) sensor;
@@ -64,7 +73,7 @@ public class ActivityCommunicator {
 //			Integer intNetwork = ((SensorConnection) sensor).getActiveNetwork();
 //			if (intNetwork == null)
 //				return true;
-//			String strValue = ((ConnectivityManager) m_context.getSystemService(Context.CONNECTIVITY_SERVICE)).getNetworkInfo(intNetwork).getTypeName();
+//			String strValue = ((ConnectivityManager) mContext.getSystemService(Context.CONNECTIVITY_SERVICE)).getNetworkInfo(intNetwork).getTypeName();
 //			dataOut.putString("msg", "Connection: " + strValue);
                 break;
             case SENSOR_LIGHT:
@@ -119,13 +128,16 @@ public class ActivityCommunicator {
     }
 
     private void sendToHandler(Bundle data) {
-        if (m_messenger != null) {
+
+        if (mMessenger != null) {
+
             Message msg = new Message();
             msg.setData(data);
+
             try {
-                m_messenger.send(msg);
+                mMessenger.send(msg);
             } catch (RemoteException e) {
-                m_messenger = null;
+                mMessenger = null;
                 Log.e(TAG, "Cannot send sensor data their handler. Error", e);
             }
         }

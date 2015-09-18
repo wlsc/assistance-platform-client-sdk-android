@@ -1,15 +1,16 @@
 package de.tudarmstadt.informatik.tk.android.kraken;
 
 
-import de.tudarmstadt.informatik.tk.android.kraken.models.db.sensors.ESensorType;
+import de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.ESensorType;
 
 public class KrakenSdkSettings {
 
     /*
     *   Assistance login server. CAUTION: Please write this address without "/" at the end!
     */
-//    public static final String ASSISTANCE_ENDPOINT = "https://130.83.163.115";
-    public static final String ASSISTANCE_ENDPOINT = "http://192.168.56.1";
+//    public static final String ASSISTANCE_ENDPOINT = "https://130.83.163.115";  // production
+    public static final String ASSISTANCE_ENDPOINT = "http://192.168.56.1";   // development: genymotion emulator
+//    public static final String ASSISTANCE_ENDPOINT = "http://192.168.1.102";  // development: localhost
 
     public static final String SERVER_URL = "https://kraken.me";
 
@@ -40,7 +41,7 @@ public class KrakenSdkSettings {
     public static final ESensorType[] SENSORS_PROFILE_FULL = {
             ESensorType.SENSOR_CALENDAR,
             ESensorType.SENSOR_LOCATION,
-            ESensorType.SENSOR_CALLLOG,
+            ESensorType.SENSOR_CALL_LOG,
             ESensorType.SENSOR_CONTACTS,
             ESensorType.SENSOR_NETWORK_TRAFFIC,
             ESensorType.SENSOR_BACKGROUND_TRAFFIC

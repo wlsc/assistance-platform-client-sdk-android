@@ -10,7 +10,7 @@ import android.os.IBinder;
 import android.os.Message;
 import android.os.Messenger;
 
-import de.tudarmstadt.informatik.tk.android.kraken.models.db.sensors.ECommandType;
+import de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.ECommandType;
 import de.tudarmstadt.informatik.tk.android.kraken.services.KrakenService;
 
 /**

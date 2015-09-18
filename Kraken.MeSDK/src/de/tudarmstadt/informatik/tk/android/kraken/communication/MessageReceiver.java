@@ -8,9 +8,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import de.tudarmstadt.informatik.tk.android.kraken.models.db.sensors.ESensorType;
-import de.tudarmstadt.informatik.tk.android.kraken.models.db.sensors.SensorManager;
-import de.tudarmstadt.informatik.tk.android.kraken.models.db.sensors.interfaces.ISensor;
+import de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.ESensorType;
+import de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.SensorManager;
+import de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.interfaces.ISensor;
 
 
 public class MessageReceiver extends BroadcastReceiver {

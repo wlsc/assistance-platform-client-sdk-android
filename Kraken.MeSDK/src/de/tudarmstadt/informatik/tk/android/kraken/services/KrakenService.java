@@ -24,9 +24,9 @@ import de.tudarmstadt.informatik.tk.android.kraken.ActivityCommunicator;
 import de.tudarmstadt.informatik.tk.android.kraken.communication.RetroServerPushManager;
 import de.tudarmstadt.informatik.tk.android.kraken.db.DaoSession;
 import de.tudarmstadt.informatik.tk.android.kraken.db.DatabaseManager;
-import de.tudarmstadt.informatik.tk.android.kraken.models.db.sensors.ECommandType;
-import de.tudarmstadt.informatik.tk.android.kraken.models.db.sensors.SensorManager;
-import de.tudarmstadt.informatik.tk.android.kraken.models.db.sensors.interfaces.ISensor;
+import de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.ECommandType;
+import de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.SensorManager;
+import de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.interfaces.ISensor;
 import de.tudarmstadt.informatik.tk.android.kraken.preference.PreferenceManager;
 import de.tudarmstadt.informatik.tk.kraken.sdk.R;
 
@@ -42,7 +42,7 @@ public class KrakenService extends Service implements Callback {
 
     final private Messenger m_Messenger = new Messenger(new Handler(this));
 
-    private SensorManager m_sensorManager;
+    private SensorManager mSensorManager;
     private PreferenceManager mPreferenceManager;
     private DatabaseManager mDatabaseManager;
 
@@ -117,10 +117,11 @@ public class KrakenService extends Service implements Callback {
 
         NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
 
-        notificationManager.notify("kraken", 7331, (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN ? builder.build() : builder.getNotification()));
+        notificationManager.notify("kraken", 7331, (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN ? builder.build() : builder.build()));
     }
 
     private void hideIcon() {
+
         NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         notificationManager.cancel("kraken", 7331);
     }
@@ -174,8 +175,8 @@ public class KrakenService extends Service implements Callback {
 
 //		Handler handler = ActivityCommunicator.getHandler();
 
-        m_sensorManager = SensorManager.getInstance(this);
-        for (ISensor sensor : m_sensorManager.getEnabledSensors()) {
+        mSensorManager = SensorManager.getInstance(this);
+        for (ISensor sensor : mSensorManager.getEnabledSensors()) {
             sensor.startSensor();
 //			sensor.setCallbackHandler(handler);
         }
@@ -184,10 +185,14 @@ public class KrakenService extends Service implements Callback {
     }
 
     private void monitorStop() {
-        System.out.println("stop service");
-        for (ISensor sensor : m_sensorManager.getEnabledSensors()) {
+
+        Log.d(TAG, "Stopping service...");
+
+        for (ISensor sensor : mSensorManager.getEnabledSensors()) {
             sensor.stopSensor();
         }
+
+        Log.d(TAG, "Service stopped.");
     }
 
     @Override

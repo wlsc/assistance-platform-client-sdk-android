@@ -16,12 +16,9 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 import de.greenrobot.dao.AbstractDao;
-import de.tudarmstadt.informatik.tk.android.kraken.api.RetroApiManager;
-import de.tudarmstadt.informatik.tk.android.kraken.api.entities.ApiMessage;
-import de.tudarmstadt.informatik.tk.android.kraken.api.entities.ApiResponse;
 import de.tudarmstadt.informatik.tk.android.kraken.interfaces.IDbSensor;
 import de.tudarmstadt.informatik.tk.android.kraken.interfaces.IDbUpdatableSensor;
-import de.tudarmstadt.informatik.tk.android.kraken.models.db.sensors.interfaces.ISensor;
+import de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.interfaces.ISensor;
 import de.tudarmstadt.informatik.tk.android.kraken.services.KrakenService;
 import retrofit.Callback;
 import retrofit.RetrofitError;
@@ -39,8 +36,6 @@ public class RetroServerPushManager {
     private HashSet<ISensor> mSensorsImmediate = new HashSet<ISensor>();
     private HashMap<ISensor, Long> mSensorsPeriodic = new HashMap<ISensor, Long>();
     private HashSet<ISensor> mSensorsWlan = new HashSet<ISensor>();
-    private List<ApiMessage.DataWrapper> mCache = new LinkedList<>();
-    private List<ApiMessage.DataWrapper> mCacheWlan = new LinkedList<>();
     private boolean mIsWlanConnected = false;
 
     private static Future<?> mFuture;
@@ -131,11 +126,12 @@ public class RetroServerPushManager {
     }
 
     private void flushData(ISensor sensor) {
+
         Log.d(TAG, "flushData: " + sensor.getSensorType().getSensorName());
 
-        String kroken = SdkAuthentication.getInstance(mContext).getKroken();
-        if (kroken == null)
-            return;
+//        String kroken = SdkAuthentication.getInstance(mContext).getKroken();
+//        if (kroken == null)
+//            return;
 
         List<ApiMessage.DataWrapper> dataWrappers = new LinkedList<>();
         ApiMessage.DataWrapper dataWrapper = sensor.flushDataRetro();
@@ -150,10 +146,12 @@ public class RetroServerPushManager {
     }
 
     private void flushData(EPushType type) {
+
         Log.d(TAG, "flushData: " + type.name());
-        String kroken = SdkAuthentication.getInstance(mContext).getKroken();
-        if (kroken == null)
-            return;
+
+//        String kroken = SdkAuthentication.getInstance(mContext).getKroken();
+//        if (kroken == null)
+//            return;
 
         List<ApiMessage.DataWrapper> dataWrappers = new LinkedList<>();
         buildSensorsDataArray(type, dataWrappers);
@@ -172,7 +170,7 @@ public class RetroServerPushManager {
             return;
         }
 
-        RetroApiManager.getInstance(mContext).postData(dataWrappers, new Callback<ApiResponse.BundleApiResponse>() {
+        ApiServiceManager.getInstance(mContext).postData(dataWrappers, new Callback<ApiResponse.BundleApiResponse>() {
             @Override
             public void success(ApiResponse.BundleApiResponse apiResponse, Response response) {
                 if (apiResponse.succ) {

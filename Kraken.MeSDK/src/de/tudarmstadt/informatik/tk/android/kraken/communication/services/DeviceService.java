@@ -3,9 +3,9 @@ package de.tudarmstadt.informatik.tk.android.kraken.communication.services;
 import java.util.List;
 
 import de.tudarmstadt.informatik.tk.android.kraken.KrakenSdkSettings;
-import de.tudarmstadt.informatik.tk.android.kraken.models.api.device.DeviceListResponse;
-import de.tudarmstadt.informatik.tk.android.kraken.models.api.device.DeviceRegistrationRequest;
-import de.tudarmstadt.informatik.tk.android.kraken.models.api.device.DeviceUserDefinedNameRequest;
+import de.tudarmstadt.informatik.tk.android.kraken.model.api.device.DeviceListResponse;
+import de.tudarmstadt.informatik.tk.android.kraken.model.api.device.DeviceRegistrationRequest;
+import de.tudarmstadt.informatik.tk.android.kraken.model.api.device.DeviceUserDefinedNameRequest;
 import retrofit.Callback;
 import retrofit.http.Body;
 import retrofit.http.GET;

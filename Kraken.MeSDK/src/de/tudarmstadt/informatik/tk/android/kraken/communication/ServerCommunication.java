@@ -28,7 +28,6 @@ import java.util.List;
 
 import de.tudarmstadt.informatik.tk.android.kraken.KrakenSdkSettings;
 import de.tudarmstadt.informatik.tk.android.kraken.utils.KrakenUtils;
-import de.tudarmstadt.informatik.tk.android.kraken.common.MessageType;
 
 
 public class ServerCommunication {
@@ -39,14 +38,14 @@ public class ServerCommunication {
     private Context m_context;
     private int m_method;
     private String m_endpoint;
-	private JSONObject m_jsonObject;
-	private IServerCommunicationResponseHandler m_handler;
+    private JSONObject m_jsonObject;
+    private IServerCommunicationResponseHandler m_handler;
     private List<NameValuePair> m_getParams;
 
     public ServerCommunication(Context ctx, IServerCommunicationResponseHandler handler) {
-		this.m_context = ctx;
-		this.m_handler = handler;
-	}
+        this.m_context = ctx;
+        this.m_handler = handler;
+    }
 
     public void getRequest(List<NameValuePair> params, String endpoint) {
         m_method = METHOD_GET;
@@ -78,17 +77,16 @@ public class ServerCommunication {
             try {
 
                 HttpUriRequest request;
-                if(m_method == METHOD_GET) {
+                if (m_method == METHOD_GET) {
                     String url = KrakenSdkSettings.SERVER_URL + "/" + m_endpoint;
                     List<NameValuePair> params = m_getParams;
-                    params.add(new BasicNameValuePair("kroken", SdkAuthentication.getInstance(m_context).getKroken()));
+//                    params.add(new BasicNameValuePair("kroken", SdkAuthentication.getInstance(m_context).getKroken()));
                     params.add(new BasicNameValuePair("deviceId", KrakenUtils.getDeviceId(m_context)));
                     String paramString = URLEncodedUtils.format(params, "utf-8");
                     request = new HttpGet(url + "?" + paramString);
                     Log.d("kraken", url + "?" + paramString);
 
-                }
-                else if(m_method == METHOD_POST) {
+                } else if (m_method == METHOD_POST) {
                     HttpPost requestPost = new HttpPost(KrakenSdkSettings.SERVER_URL + "/api");
                     authenticate(m_jsonObject);
                     addDeviceId(m_jsonObject);
@@ -130,8 +128,7 @@ public class ServerCommunication {
                     entity.setContentEncoding(new BasicHeader(HTTP.CONTENT_TYPE, "application/json;charset=UTF-8"));
                     requestPost.setEntity(entity);
                     request = requestPost;
-                }
-                else {
+                } else {
                     throw new InvalidParameterException("No valid method specified.");
                 }
 
@@ -177,13 +174,13 @@ public class ServerCommunication {
 
     }
 
-	private void authenticate(JSONObject json) {
-		try {
-			json.put(MessageType.KEY_KRAKEN_TOKEN, SdkAuthentication.getInstance(m_context).getKroken());
-		} catch (JSONException e) {
-			e.printStackTrace();
-		}
-	}
+    private void authenticate(JSONObject json) {
+//        try {
+//            json.put(MessageType.KEY_KRAKEN_TOKEN, SdkAuthentication.getInstance(m_context).getKroken());
+//        } catch (JSONException e) {
+//            e.printStackTrace();
+//        }
+    }
 
     private void addDeviceId(JSONObject json) {
         String uid = KrakenUtils.getDeviceId(m_context);

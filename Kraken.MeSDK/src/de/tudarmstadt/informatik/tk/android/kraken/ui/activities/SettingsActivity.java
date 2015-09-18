@@ -8,8 +8,8 @@ import android.preference.SwitchPreference;
 import android.view.MenuItem;
 
 import de.tudarmstadt.informatik.tk.android.kraken.KrakenSdkSettings;
-import de.tudarmstadt.informatik.tk.android.kraken.models.db.sensors.ESensorType;
-import de.tudarmstadt.informatik.tk.android.kraken.models.db.sensors.SensorManager;
+import de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.ESensorType;
+import de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.SensorManager;
 import de.tudarmstadt.informatik.tk.android.kraken.preference.PreferenceManager;
 import de.tudarmstadt.informatik.tk.android.kraken.utils.KrakenServiceManager;
 import de.tudarmstadt.informatik.tk.android.kraken.utils.KrakenUtils;
