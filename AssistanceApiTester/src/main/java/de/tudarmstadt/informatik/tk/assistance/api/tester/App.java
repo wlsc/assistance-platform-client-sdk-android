@@ -6,6 +6,7 @@ import org.restlet.data.Protocol;
 import de.tudarmstadt.informatik.tk.assistance.api.tester.service.AssistanceService;
 import de.tudarmstadt.informatik.tk.assistance.api.tester.service.DeviceService;
 import de.tudarmstadt.informatik.tk.assistance.api.tester.service.SensorDataService;
+import de.tudarmstadt.informatik.tk.assistance.api.tester.service.UserProfileService;
 import de.tudarmstadt.informatik.tk.assistance.api.tester.service.UserService;
 
 /**
@@ -25,6 +26,7 @@ public class App {
         component.getDefaultHost().attach("/assistance", new AssistanceService());
         component.getDefaultHost().attach("/devices", new DeviceService());
         component.getDefaultHost().attach("/users", new UserService());
+        component.getDefaultHost().attach("/users/profile", new UserProfileService());
         component.getDefaultHost().attach("/sensordata", new SensorDataService());
         
         component.start();  

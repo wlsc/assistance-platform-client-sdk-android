@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import org.restlet.resource.Post;
+import org.restlet.resource.Get;
 import org.restlet.resource.ServerResource;
 
 import com.google.gson.GsonBuilder;
@@ -23,7 +23,7 @@ import de.tudarmstadt.informatik.tk.assistance.api.tester.model.UserSocialServic
  */
 public class UserProfileFullServerResource extends ServerResource {
 	
-	@Post("json")
+	@Get("json")
     public String represent(String json){
 		
 		System.out.println("Input:");

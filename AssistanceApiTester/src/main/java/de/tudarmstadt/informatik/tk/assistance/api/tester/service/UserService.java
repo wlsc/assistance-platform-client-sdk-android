@@ -6,8 +6,6 @@ import org.restlet.routing.Router;
 
 import de.tudarmstadt.informatik.tk.assistance.api.tester.service.resource.EmptyServerResource;
 import de.tudarmstadt.informatik.tk.assistance.api.tester.service.resource.LoginServerResource;
-import de.tudarmstadt.informatik.tk.assistance.api.tester.service.resource.UserProfileFullServerResource;
-import de.tudarmstadt.informatik.tk.assistance.api.tester.service.resource.UserProfileShortServerResource;
 
 /**
  * Users API routing
@@ -24,8 +22,6 @@ public class UserService extends Application {
         
         router.attach("/login", LoginServerResource.class);
         router.attach("/password", EmptyServerResource.class);
-        router.attach("/profile/short", UserProfileShortServerResource.class);
-        router.attach("/profile/long", UserProfileFullServerResource.class);
         
         return router;
 	}
