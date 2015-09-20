@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="de.tudarmstadt.informatik.tk.kraken.sdk"
+    package="de.tudarmstadt.informatik.tk.android.kraken"
     android:versionCode="1"
     android:versionName="1.0">
 
@@ -43,7 +43,15 @@
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/app_id" />
 
-        <service android:name="de.tudarmstadt.informatik.tk.android.kraken.services.KrakenService" />
+        <service
+            android:name=".HarvesterService"
+            android:process=":remote">
+            <intent-filter>
+                <action android:name="com.mindtherobot.samples.tweetservice.TweetCollectorService" />
+            </intent-filter>
+        </service>
+
+        <!--<service android:name="de.tudarmstadt.informatik.tk.android.kraken.services.KrakenService" />
 
         <service
             android:name="de.tudarmstadt.informatik.tk.android.kraken.services.KrakenAccessibilityService"
@@ -57,13 +65,13 @@
         </service>
 
         <service
-            android:name="de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.triggered.ActivitySensorService"
+            android:name="de.tudarmstadt.informatik.tk.android.kraken.services.ActivitySensorService"
             android:exported="false"
-            android:label="ActivitySensorService" />
+            android:label="ActivitySensorService" />-->
 
         <service android:name="de.tudarmstadt.informatik.tk.android.kraken.services.GcmIntentService" />
 
-        <!-- Declaring broadcast receiver for BOOT_COMPLETED event -->
+        <!-- This will be fired on device start/boot -->
         <receiver
             android:name="de.tudarmstadt.informatik.tk.android.kraken.receivers.BootReceiver"
             android:enabled="true"

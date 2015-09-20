@@ -20,7 +20,7 @@ import de.tudarmstadt.informatik.tk.android.kraken.ui.views.NonSwipeableViewPage
 import de.tudarmstadt.informatik.tk.android.kraken.utils.AccessibilityUtils;
 import de.tudarmstadt.informatik.tk.android.kraken.utils.KrakenServiceManager;
 import de.tudarmstadt.informatik.tk.android.kraken.utils.KrakenUtils;
-import de.tudarmstadt.informatik.tk.kraken.sdk.R;
+import de.tudarmstadt.informatik.tk.android.kraken.R;
 
 /**
  * @author Karsten Planz

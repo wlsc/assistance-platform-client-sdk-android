@@ -18,7 +18,7 @@ import de.tudarmstadt.informatik.tk.android.kraken.services.KrakenService;
  */
 public class KrakenServiceManager implements Handler.Callback {
 
-    private static KrakenServiceManager mInstance;
+    private static KrakenServiceManager instance;
 
     private final Context mContext;
     private final Intent mIntent;
@@ -44,16 +44,18 @@ public class KrakenServiceManager implements Handler.Callback {
         }
     };
 
-    public KrakenServiceManager(Context context) {
+    private KrakenServiceManager(Context context) {
+
         mContext = context;
         mIntent = new Intent(context, KrakenService.class);
     }
 
     public static KrakenServiceManager getInstance(Context context) {
-        if (mInstance == null) {
-            mInstance = new KrakenServiceManager(context);
+
+        if (instance == null) {
+            instance = new KrakenServiceManager(context);
         }
-        return mInstance;
+        return instance;
     }
 
     public boolean isServiceRunning() {

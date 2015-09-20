@@ -28,9 +28,8 @@ public class PreferenceManager {
     public static final String DEFAULT_KRAKEN_DATA_PROFILE = KRAKEN_DATA_PROFILE_BASIC;
 
 
-
     private SharedPreferences prefs;
-    private  SharedPreferences defaultPrefs;
+    private SharedPreferences defaultPrefs;
     private static PreferenceManager manager;
 
     public PreferenceManager(Context context) {
@@ -39,7 +38,7 @@ public class PreferenceManager {
     }
 
     public static PreferenceManager getInstance(Context context) {
-        if(manager == null) {
+        if (manager == null) {
             manager = new PreferenceManager(context);
         }
         return manager;
@@ -52,7 +51,7 @@ public class PreferenceManager {
     }
 
     public void setFirstStart(boolean firstStart) {
-        this.prefs.edit().putBoolean(KRAKEN_FIRST_START, firstStart).commit();
+        this.prefs.edit().putBoolean(KRAKEN_FIRST_START, firstStart).apply();
     }
 
     public boolean getAcceptDisclaimer() {
@@ -60,9 +59,8 @@ public class PreferenceManager {
     }
 
     public void setAcceptDisclaimer(boolean acceptDisclaimer) {
-        this.prefs.edit().putBoolean(KRAKEN_ACCEPT_DISCLAIMER, acceptDisclaimer).commit();
+        this.prefs.edit().putBoolean(KRAKEN_ACCEPT_DISCLAIMER, acceptDisclaimer).apply();
     }
-
 
     // Default prefs
 
@@ -71,7 +69,7 @@ public class PreferenceManager {
     }
 
     public void setDataProfile(String dataProfile) {
-        this.defaultPrefs.edit().putString(KRAKEN_DATA_PROFILE, dataProfile).commit();
+        this.defaultPrefs.edit().putString(KRAKEN_DATA_PROFILE, dataProfile).apply();
     }
 
     public boolean getActivated() {
@@ -79,7 +77,7 @@ public class PreferenceManager {
     }
 
     public void setActivated(boolean activated) {
-        this.defaultPrefs.edit().putBoolean(KRAKEN_ACTIVATED, activated).commit();
+        this.defaultPrefs.edit().putBoolean(KRAKEN_ACTIVATED, activated).apply();
     }
 
     public boolean getShowNotification() {
@@ -87,7 +85,7 @@ public class PreferenceManager {
     }
 
     public void setShowNotification(boolean showNotification) {
-        this.defaultPrefs.edit().putBoolean(KRAKEN_SHOW_NOTIFICATION, showNotification).commit();
+        this.defaultPrefs.edit().putBoolean(KRAKEN_SHOW_NOTIFICATION, showNotification).apply();
     }
 
 

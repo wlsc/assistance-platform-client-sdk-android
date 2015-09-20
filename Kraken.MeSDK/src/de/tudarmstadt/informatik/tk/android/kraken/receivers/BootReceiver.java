@@ -10,15 +10,23 @@ import de.tudarmstadt.informatik.tk.android.kraken.utils.KrakenServiceManager;
 
 /**
  * @author Karsten Planz
+ * @edited on 19.09.2015 by  Wladimir Schmidt (wlsc.dev@gmail.com)
  */
 public class BootReceiver extends BroadcastReceiver {
 
+    private static final String TAG = BroadcastReceiver.class.getSimpleName();
+
     @Override
     public void onReceive(Context context, Intent intent) {
+
         boolean activated = PreferenceManager.getInstance(context).getActivated();
-        Log.d("kraken", "BootReceiver onReceive " + activated);
-        if(activated) {
-            KrakenServiceManager.getInstance(context).startService();
+
+        Log.d(TAG, "BootReceiver onReceive " + activated);
+
+        if (activated) {
+
+            final KrakenServiceManager service = KrakenServiceManager.getInstance(context);
+            service.startService();
         }
     }
 }

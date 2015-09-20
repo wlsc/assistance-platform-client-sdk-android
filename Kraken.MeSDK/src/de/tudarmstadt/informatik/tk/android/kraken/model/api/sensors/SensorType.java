@@ -2,7 +2,7 @@ package de.tudarmstadt.informatik.tk.android.kraken.model.api.sensors;
 
 import android.content.res.Resources;
 
-import de.tudarmstadt.informatik.tk.kraken.sdk.R;
+import de.tudarmstadt.informatik.tk.android.kraken.R;
 
 /**
  * @author Wladimir Schmidt (wlsc.dev@gmail.com)

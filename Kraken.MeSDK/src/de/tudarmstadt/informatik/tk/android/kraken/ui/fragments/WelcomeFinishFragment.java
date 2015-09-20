@@ -6,7 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import de.tudarmstadt.informatik.tk.kraken.sdk.R;
+import de.tudarmstadt.informatik.tk.android.kraken.R;
 
 /**
  * @author Karsten Planz

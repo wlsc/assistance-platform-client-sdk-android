@@ -14,7 +14,7 @@ import com.google.android.gms.common.AccountPicker;
 
 import java.io.IOException;
 
-import de.tudarmstadt.informatik.tk.kraken.sdk.R;
+import de.tudarmstadt.informatik.tk.android.kraken.R;
 import de.tudarmstadt.informatik.tk.android.kraken.ui.activities.accounts.AccountsAdapter;
 import de.tudarmstadt.informatik.tk.android.kraken.common.SocialNetworkProvider;
 

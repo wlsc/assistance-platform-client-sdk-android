@@ -50,12 +50,4 @@ public class KrakenUtils {
         return Secure.getString(context.getContentResolver(), Secure.ANDROID_ID);
     }
 
-//    public static ObjectMapper getJacksonObjectMapper() {
-//        if (mMapper == null) {
-//            mMapper = new ObjectMapper();
-//            mMapper.registerModule(new JsonOrgModule());
-//        }
-//        return mMapper;
-//    }
-
 }

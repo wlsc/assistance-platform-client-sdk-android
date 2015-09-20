@@ -15,10 +15,9 @@ import java.util.Set;
 
 import de.tudarmstadt.informatik.tk.android.kraken.api.entities.CalendarEvent;
 import de.tudarmstadt.informatik.tk.android.kraken.api.entities.ForegroundEvent;
-import de.tudarmstadt.informatik.tk.android.kraken.communication.ESensorType;
 import de.tudarmstadt.informatik.tk.android.kraken.communication.IServerCommunicationResponseHandler;
 import de.tudarmstadt.informatik.tk.android.kraken.communication.ServerCommunication;
-
+import de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.ESensorType;
 
 
 /**
@@ -34,19 +33,19 @@ public class ApiManager {
     }
 
     public static ApiManager getInstance(Context context) {
-        if(mInstance == null) {
+        if (mInstance == null) {
             mInstance = new ApiManager(context);
         }
         return mInstance;
     }
 
     public void getSensordata(ESensorType type, long startDate, long endDate, IServerCommunicationResponseHandler handler) {
-        String className = type.getServerClassName();
+//        String className = type.getServerClassName();
         List<NameValuePair> params = new LinkedList<>();
         params.add(new BasicNameValuePair("startDate", String.valueOf(startDate)));
         params.add(new BasicNameValuePair("endDate", String.valueOf(endDate)));
         // params.add(new BasicNameValuePair("sensorClass", className));
-        new ServerCommunication(mContext, handler).getRequest(params, "rest/sensordata/" + className);
+//        new ServerCommunication(mContext, handler).getRequest(params, "rest/sensordata/" + className);
     }
 
     public void getNextCalendarEvents(int limit, Set<String> calendars, IServerCommunicationResponseHandler handler) {
@@ -71,6 +70,7 @@ public class ApiManager {
 
         public interface Callback<T> {
             void onData(List<T> data);
+
             void onError();
         }
 
@@ -89,7 +89,7 @@ public class ApiManager {
                     String type = jsonResponse.optString("type");
                     //Class<? extends IDbSensor> androidClass = ESensorType.getAndroidClass(type);
                     JSONArray jsonData = jsonResponse.getJSONArray("data");
-                    Class<T> classType = (Class<T>) ESensorType.getAndroidClass(type);
+//                    Class<T> classType = (Class<T>) ESensorType.getAndroidClass(type);
                     List<T> sensorData = new LinkedList<>();
                     for (int i = 0; i < jsonData.length(); i++) {
                         JSONObject item = jsonData.getJSONObject(i);
@@ -100,8 +100,7 @@ public class ApiManager {
                 } catch (JSONException | ClassCastException e) {
                     e.printStackTrace();
                 }
-            }
-            else {
+            } else {
                 mCallback.onError();
             }
         }
@@ -113,6 +112,7 @@ public class ApiManager {
 
         public interface Callback {
             void onData(List<CalendarEvent> data);
+
             void onError();
         }
 
@@ -139,8 +139,7 @@ public class ApiManager {
                 } catch (JSONException | ClassCastException e) {
                     e.printStackTrace();
                 }
-            }
-            else {
+            } else {
                 mCallback.onError();
             }
         }
@@ -152,6 +151,7 @@ public class ApiManager {
 
         public interface Callback {
             void onData(List<ForegroundEvent> data);
+
             void onError(String message);
         }
 
@@ -169,7 +169,7 @@ public class ApiManager {
                     JSONObject jsonResponse = new JSONObject(strResponse);
                     boolean bSucc = jsonResponse.getBoolean("succ");
                     if (bSucc) {
-                         try {
+                        try {
 
                             JSONArray jsonData = jsonResponse.getJSONArray("data");
                             List<ForegroundEvent> calendarEvents = new LinkedList<>();
@@ -182,8 +182,7 @@ public class ApiManager {
                         } catch (JSONException | ClassCastException e) {
                             e.printStackTrace();
                         }
-                    }
-                    else {
+                    } else {
                         JSONObject jsonError = jsonResponse.getJSONObject("error");
                         String strMsg = jsonError.getString("msg");
                         String strCause = jsonError.getString("cause");
@@ -193,8 +192,7 @@ public class ApiManager {
                     e.printStackTrace();
                     mCallback.onError(e.getMessage());
                 }
-            }
-            else {
+            } else {
                 mCallback.onError(null);
             }
         }

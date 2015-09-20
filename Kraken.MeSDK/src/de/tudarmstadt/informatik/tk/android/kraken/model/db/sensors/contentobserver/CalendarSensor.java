@@ -19,6 +19,8 @@ import de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.abstract_sen
 
 public class CalendarSensor extends AbstractContentObserverSensor {
 
+    private static final String TAG = CalendarSensor.class.getSimpleName();
+
     private static Uri URI_CALENDAR = android.provider.CalendarContract.Events.CONTENT_URI;
     private static Uri URI_REMINDER = android.provider.CalendarContract.Reminders.CONTENT_URI;
 
@@ -56,7 +58,7 @@ public class CalendarSensor extends AbstractContentObserverSensor {
         // String selection = null;
         // String[] selectionArgs = new String[] {};
 
-        Log.d("kraken", "CalendarSensor syncData");
+        Log.d(TAG, "Syncing data...");
 
         m_bFlushToServer = false;
 

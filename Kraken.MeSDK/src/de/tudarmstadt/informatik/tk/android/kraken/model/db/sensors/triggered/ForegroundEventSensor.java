@@ -27,6 +27,8 @@ import de.tudarmstadt.informatik.tk.android.kraken.utils.sensors.AccessibilityEv
  */
 public class ForegroundEventSensor extends AbstractTriggeredSensor {
 
+    private static final String TAG = ForegroundEventSensor.class.getSimpleName();
+
     public static final int EVENT_APP = 0;
     public static final int EVENT_ACTIVITY = 1;
     public static final int EVENT_SCREEN_ON = 2;
@@ -174,7 +176,7 @@ public class ForegroundEventSensor extends AbstractTriggeredSensor {
         @Override
         public void onReceive(Context context, Intent intent) {
 
-            Log.d("kraken", "action = " + intent.getAction());
+            Log.d(TAG, "action: " + intent.getAction());
 
 //            SensorForegroundEvent foregroundEvent = new SensorForegroundEvent();
 //            if (intent.getAction().equals(Intent.ACTION_SCREEN_OFF)) {

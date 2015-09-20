@@ -9,15 +9,17 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 import de.greenrobot.dao.AbstractDao;
+import de.tudarmstadt.informatik.tk.android.kraken.communication.services.EventUploadService;
 import de.tudarmstadt.informatik.tk.android.kraken.interfaces.IDbSensor;
 import de.tudarmstadt.informatik.tk.android.kraken.interfaces.IDbUpdatableSensor;
+import de.tudarmstadt.informatik.tk.android.kraken.interfaces.Sensor;
+import de.tudarmstadt.informatik.tk.android.kraken.model.api.EventUploadRequest;
 import de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.interfaces.ISensor;
 import de.tudarmstadt.informatik.tk.android.kraken.services.KrakenService;
 import retrofit.Callback;
@@ -31,7 +33,7 @@ public class RetroServerPushManager {
     private static final int PERIODIC_PUSH_DELAY_IN_MIN = 0;
     private static final int PERIODIC_PUSH_PERIOD_IN_MIN = 1;
 
-    private static RetroServerPushManager mInstance;
+    private static RetroServerPushManager instance;
 
     private HashSet<ISensor> mSensorsImmediate = new HashSet<ISensor>();
     private HashMap<ISensor, Long> mSensorsPeriodic = new HashMap<ISensor, Long>();
@@ -43,15 +45,19 @@ public class RetroServerPushManager {
     private static Context mContext;
 
     public static RetroServerPushManager getInstance(Context ctx) {
-        if (mInstance == null) {
-            mInstance = new RetroServerPushManager();
+
+        if (instance == null) {
+            instance = new RetroServerPushManager();
         }
 
-        if (mFuture == null)
-            mInstance.startPeriodicPush();
+        if (mFuture == null) {
+            // TODO: enabled it to push data periodically
+//            instance.startPeriodicPush();
+        }
 
-        mInstance.mContext = ctx.getApplicationContext();
-        return mInstance;
+        instance.mContext = ctx.getApplicationContext();
+
+        return instance;
     }
 
     private RetroServerPushManager() {
@@ -70,7 +76,9 @@ public class RetroServerPushManager {
     }
 
     private void startPeriodicPush() {
-        Log.d(TAG, "startPeriodicPush");
+
+        Log.d(TAG, "Starting periodic push of data...");
+
         if (mFuture == null) {
             mFuture = mScheduledTaskExecutor.scheduleAtFixedRate(new Runnable() {
                 @Override
@@ -83,7 +91,9 @@ public class RetroServerPushManager {
     }
 
     public static void stopPeriodicPush() {
-        Log.d(TAG, "startPeriodicPush");
+
+        Log.d(TAG, "Stopped periodic push of data!");
+
         if (mFuture != null) {
             mFuture.cancel(true);
             mFuture = null;
@@ -133,11 +143,14 @@ public class RetroServerPushManager {
 //        if (kroken == null)
 //            return;
 
-        List<ApiMessage.DataWrapper> dataWrappers = new LinkedList<>();
-        ApiMessage.DataWrapper dataWrapper = sensor.flushDataRetro();
-        if (dataWrapper != null) {
-            dataWrappers.add(dataWrapper);
-            sendSensorData(dataWrappers);
+        EventUploadRequest eventUploadRequest = new EventUploadRequest();
+        List<Sensor> sensorDataEvents = sensor.flushDataRetro();
+
+        if (sensorDataEvents != null) {
+
+            eventUploadRequest.setDataEvents(sensorDataEvents);
+
+            sendSensorData(eventUploadRequest);
         }
     }
 
@@ -153,88 +166,84 @@ public class RetroServerPushManager {
 //        if (kroken == null)
 //            return;
 
-        List<ApiMessage.DataWrapper> dataWrappers = new LinkedList<>();
-        buildSensorsDataArray(type, dataWrappers);
-        sendSensorData(dataWrappers);
+        EventUploadRequest eventUploadRequest = new EventUploadRequest();
+        buildSensorsDataArray(type, eventUploadRequest);
+        sendSensorData(eventUploadRequest);
     }
 
-    private void sendSensorData(final List<ApiMessage.DataWrapper> dataWrappers) {
-        if (dataWrappers == null) {
+    private void sendSensorData(final EventUploadRequest eventUploadRequest) {
+
+        if (eventUploadRequest == null) {
             return;
         }
 
         // add cached data!
-        addCachedDataToArray(dataWrappers);
+//        addCachedDataToArray(dataWrappers);
 
-        if (dataWrappers.size() == 0) {
+        if (eventUploadRequest.getDataEvents().size() == 0) {
             return;
         }
 
-        ApiServiceManager.getInstance(mContext).postData(dataWrappers, new Callback<ApiResponse.BundleApiResponse>() {
+        // send to upload data service
+        EventUploadService eventUploadService = ServiceGenerator.createService(EventUploadService.class);
+
+        // TODO: get user token
+        String userToken = "";
+
+        eventUploadService.uploadData(userToken, eventUploadRequest, new Callback<Void>() {
+
             @Override
-            public void success(ApiResponse.BundleApiResponse apiResponse, Response response) {
-                if (apiResponse.succ) {
-                    int i = 0;
-                    for (ApiResponse.SingleApiResponse singleApiResponse : apiResponse.data.data) {
-                        if (singleApiResponse.succ) {
-                            // remove from DB
-                            ApiMessage.DataWrapper wrapper = dataWrappers.get(i);
-                            if (wrapper != null && wrapper.objs != null && !wrapper.objs.isEmpty()) {
-                                removeDataFromDb(wrapper.objs, wrapper.databaseClassName);
-                            }
-                        } else {
-                            if (singleApiResponse.error != null) {
-                                Log.d("RetroServerPushManager", singleApiResponse.error.cause + " " + singleApiResponse.error.msg);
-                            }
-                            //addToCache();
-                        }
-                        i++;
-                    }
+            public void success(Void aVoid, Response response) {
+
+                if (response != null && (response.getStatus() == 200 || response.getStatus() == 204)) {
+
+                    // successful transmission of event data -> remove that data from db
+                    // TODO: remove event data from db after successful transmission
+
                 } else {
-                    if (apiResponse.error != null) {
-                        Log.d("RetroServerPushManager", apiResponse.error.cause + " " + apiResponse.error.msg);
-                    }
+                    // TODO: show error
                 }
             }
 
             @Override
             public void failure(RetrofitError error) {
-                Log.d(TAG, error.toString());
+                // TODO process error
             }
         });
-
     }
 
-    private void buildSensorsDataArray(EPushType type, List<ApiMessage.DataWrapper> dataWrappers) {
+    private void buildSensorsDataArray(EPushType type, EventUploadRequest eventUploadRequest) {
+
         switch (type) {
             case IMMEDIATE:
-                addSensorsToArray(mSensorsImmediate, dataWrappers);
+//                addSensorsToArray(mSensorsImmediate, dataWrappers);
                 break;
             case PERIODIC:
-                addPeriodicPushingSensorsToArray(mSensorsPeriodic, dataWrappers);
+                addPeriodicPushingSensorsToArray(mSensorsPeriodic, eventUploadRequest);
                 break;
             case WLAN_ONLY:
-                addSensorsToArray(mSensorsWlan, dataWrappers);
+//                addSensorsToArray(mSensorsWlan, dataWrappers);
                 break;
             case ALL: {
-                addSensorsToArray(mSensorsImmediate, dataWrappers);
-                addSensorsToArray(mSensorsPeriodic.keySet(), dataWrappers);
-                addSensorsToArray(mSensorsWlan, dataWrappers);
+//                addSensorsToArray(mSensorsImmediate, dataWrappers);
+//                addSensorsToArray(mSensorsPeriodic.keySet(), dataWrappers);
+//                addSensorsToArray(mSensorsWlan, dataWrappers);
                 break;
             }
         }
     }
 
-    private void addSensorsToArray(Set<ISensor> set, List<ApiMessage.DataWrapper> dataWrappers) {
-        for (ISensor sensor : set) {
-            ApiMessage.DataWrapper data = sensor.flushDataRetro();
-            if (data != null) {
-                dataWrappers.add(data);
-            }
-        }
-    }
+//    private void addSensorsToArray(Set<ISensor> set, EventUploadRequest eventUploadRequest) {
+//
+//        for (ISensor sensor : set) {
+//            ApiMessage.DataWrapper data = sensor.flushDataRetro();
+//            if (data != null) {
+//                eventUploadRequest.setDataEvents(data);
+//            }
+//        }
+//    }
 
-    private void addPeriodicPushingSensorsToArray(HashMap<ISensor, Long> map, List<ApiMessage.DataWrapper> dataWrappers) {
+    private void addPeriodicPushingSensorsToArray(HashMap<ISensor, Long> map, EventUploadRequest eventUploadRequest) {
 
         long longCurrentTimestamp = Calendar.getInstance().getTimeInMillis();
 
@@ -250,69 +259,77 @@ public class RetroServerPushManager {
             long longPushIntervall = intPushIntervall * 60 * 1000;
 
             if (lastSensorPush + longPushIntervall < longCurrentTimestamp) {
-                ApiMessage.DataWrapper data = sensor.flushDataRetro();
+                List<Sensor> data = sensor.flushDataRetro();
                 if (data != null) {
-                    dataWrappers.add(data);
+                    eventUploadRequest.setDataEvents(data);
                 }
                 entry.setValue(longCurrentTimestamp);
             }
         }
-        Log.d(TAG, "addPeriodicPushingSensorsToArray: " + dataWrappers.size());
+        Log.d(TAG, "addPeriodicPushingSensorsToArray: " + eventUploadRequest.getDataEvents().size());
     }
 
-    private void addCachedDataToArray(List<ApiMessage.DataWrapper> dataWrappers) {
-        Log.d(TAG, "addCachedDataToArray before: " + dataWrappers.size());
-        for (ApiMessage.DataWrapper data : mCache) {
-            dataWrappers.add(data);
-        }
-        mCache.clear();
+    private void addCachedDataToArray(EventUploadRequest eventUploadRequest) {
 
-        if (mIsWlanConnected) {
-            for (ApiMessage.DataWrapper data : mCacheWlan) {
-                dataWrappers.add(data);
-            }
-            mCacheWlan.clear();
-        }
-        Log.d(TAG, "addCachedDataToArray after:  " + dataWrappers.size());
+        Log.d(TAG, "addCachedDataToArray before: " + eventUploadRequest.getDataEvents().size());
+//        for (ApiMessage.DataWrapper data : mCache) {
+//            dataWrappers.add(data);
+//        }
+//        mCache.clear();
+//
+//        if (mIsWlanConnected) {
+//            for (ApiMessage.DataWrapper data : mCacheWlan) {
+//                dataWrappers.add(data);
+//            }
+//            mCacheWlan.clear();
+//        }
+//        Log.d(TAG, "addCachedDataToArray after:  " + dataWrappers.size());
     }
 
     /**
      * This method is invoked by Sensors which handle the sending of items by their own.
      * These are sensors with more than one database table. (e.g. calendar or contacts sensor)
-     *
-     * @param dataWrappers
      */
-    public void flushManually(EPushType pushType, ApiMessage.DataWrapper... dataWrappers) {
-        Log.d(TAG, "flushManually: " + dataWrappers.length);
-        List<ApiMessage.DataWrapper> listDataWrappers = new LinkedList<>();
-        if (dataWrappers.length == 0)
+    public void flushManually(EPushType pushType, List<Sensor> sensors) {
+
+        Log.d(TAG, "flushManually: " + sensors.size());
+
+        EventUploadRequest eventUploadRequest = new EventUploadRequest();
+
+        if (sensors.size() == 0)
             return;
-        for (ApiMessage.DataWrapper data : dataWrappers) {
-            if (data == null)
+
+        for (Sensor sensor : sensors) {
+
+            if (sensor == null) {
                 continue;
+            }
+
             if (!mIsWlanConnected && (EPushType.MANUALLY_WLAN_ONLY.equals(pushType) || EPushType.WLAN_ONLY.equals(pushType))) {
-                addToCache(pushType, dataWrappers);
+//                addToCache(pushType, sensors);
                 return;
             }
-            listDataWrappers.add(data);
+
+            eventUploadRequest.setDataEvents(sensors);
         }
-        //sendSensorData(Arrays.asList(dataWrappers));
-        sendSensorData(listDataWrappers);
+
+        sendSensorData(eventUploadRequest);
     }
 
-    public void addToCache(EPushType pushType, ApiMessage.DataWrapper... dataWrappers) {
-        Log.d(TAG, "addToCache: " + dataWrappers.length);
-        for (ApiMessage.DataWrapper data : dataWrappers) {
-            if (pushType.equals(EPushType.MANUALLY_IMMEDIATE) || pushType.equals(EPushType.IMMEDIATE) || pushType.equals(EPushType.PERIODIC)) {
-                mCache.add(data);
-            } else if (pushType.equals(EPushType.MANUALLY_WLAN_ONLY) || pushType.equals(EPushType.WLAN_ONLY)) {
-                mCacheWlan.add(data);
-            }
-        }
-    }
+//    public void addToCache(EPushType pushType, ApiMessage.DataWrapper... dataWrappers) {
+//
+//        Log.d(TAG, "addToCache: " + dataWrappers.length);
+//        for (ApiMessage.DataWrapper data : dataWrappers) {
+//            if (pushType.equals(EPushType.MANUALLY_IMMEDIATE) || pushType.equals(EPushType.IMMEDIATE) || pushType.equals(EPushType.PERIODIC)) {
+//                mCache.add(data);
+//            } else if (pushType.equals(EPushType.MANUALLY_WLAN_ONLY) || pushType.equals(EPushType.WLAN_ONLY)) {
+//                mCacheWlan.add(data);
+//            }
+//        }
+//    }
 
-    @SuppressWarnings({"unchecked", "rawtypes"})
     public void removeDataFromDb(List<? extends IDbSensor> liSensorData, String strFullqualifiedSensorClassName) {
+
         Log.d(TAG, "removeDataFromDb: " + liSensorData.size() + ", " + strFullqualifiedSensorClassName);
 
         try {

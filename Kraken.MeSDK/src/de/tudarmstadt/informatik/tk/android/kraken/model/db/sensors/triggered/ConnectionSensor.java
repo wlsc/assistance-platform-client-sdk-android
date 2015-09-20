@@ -81,7 +81,7 @@ public class ConnectionSensor extends AbstractTriggeredSensor {
 
     @Override
     public ESensorType getSensorType() {
-        return ESensorType.SENSOR_CONNECTION;
+        return ESensorType.CONNECTION_EVENT;
     }
 
     @Override

@@ -17,7 +17,6 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicHeader;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.protocol.HTTP;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
@@ -88,8 +87,8 @@ public class ServerCommunication {
 
                 } else if (m_method == METHOD_POST) {
                     HttpPost requestPost = new HttpPost(KrakenSdkSettings.SERVER_URL + "/api");
-                    authenticate(m_jsonObject);
-                    addDeviceId(m_jsonObject);
+//                    authenticate(m_jsonObject);
+//                    addDeviceId(m_jsonObject);
 
                     String json = m_jsonObject.toString();
 
@@ -172,36 +171,6 @@ public class ServerCommunication {
             }
         }
 
-    }
-
-    private void authenticate(JSONObject json) {
-//        try {
-//            json.put(MessageType.KEY_KRAKEN_TOKEN, SdkAuthentication.getInstance(m_context).getKroken());
-//        } catch (JSONException e) {
-//            e.printStackTrace();
-//        }
-    }
-
-    private void addDeviceId(JSONObject json) {
-        String uid = KrakenUtils.getDeviceId(m_context);
-        try {
-            json.put("deviceID", uid);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public static boolean checkSucc(Bundle data) {
-        if (data.containsKey("response")) {
-            String strResponse = data.getString("response");
-            try {
-                JSONObject jsonResponse = new JSONObject(strResponse);
-                return jsonResponse.getBoolean("succ");
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
-        return false;
     }
 
 }

@@ -28,11 +28,11 @@ public class KrakenSdkSettings {
     public static final String PREFERENCES_SENSOR_LAST_PUSHED_TIMESTAMP_POSTFIX = "_lastPushedTimestamp";
 
     public static final ESensorType[] SENSORS_PROFILE_BASIC = {
-            ESensorType.SENSOR_ACCELEROMETER,
-            ESensorType.SENSOR_CONNECTION,
+            ESensorType.ACCELEROMETER_SENSOR,
+            ESensorType.CONNECTION_EVENT,
             ESensorType.SENSOR_LIGHT,
             // ESensorType.SENSOR_LOUDNESS,
-            ESensorType.SENSOR_ACTIVITY,
+            ESensorType.MOTION_ACTIVITY_EVENT,
             ESensorType.SENSOR_RINGTONE,
             ESensorType.SENSOR_FOREGROUND_EVENT,
             ESensorType.SENSOR_BROWSER_HISTORY
@@ -46,4 +46,8 @@ public class KrakenSdkSettings {
             ESensorType.SENSOR_NETWORK_TRAFFIC,
             ESensorType.SENSOR_BACKGROUND_TRAFFIC
     };
+
+    public static final int KRAKEN_NOTIFICATION_ID = 7331;
+
+    public static final String INTENT_EXTRA_SHOW_ICON = "showIcon";
 }

@@ -1,6 +1,7 @@
 package de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.abstract_sensors;
 
 import android.content.Context;
+import android.util.Log;
 
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
@@ -8,6 +9,8 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 public abstract class AbstractPeriodicSensor extends AbstractSensor {
+
+    private static final String TAG = AbstractPeriodicSensor.class.getSimpleName();
 
     private ScheduledExecutorService m_scheduledTaskExecutor;
     private Future<?> m_future;
@@ -29,6 +32,7 @@ public abstract class AbstractPeriodicSensor extends AbstractSensor {
 
     @Override
     public void startSensor() {
+
         if (m_future == null) {
             m_future = m_scheduledTaskExecutor.scheduleAtFixedRate(new Runnable() {
 
@@ -37,7 +41,7 @@ public abstract class AbstractPeriodicSensor extends AbstractSensor {
                     try {
                         getData();
                     } catch (Exception e) {
-                        e.printStackTrace();
+                        Log.e(TAG, "Cannot get data for sensor! Error: ", e);
                     }
                 }
             }, 0, getDataIntervallInSec(), TimeUnit.SECONDS);

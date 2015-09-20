@@ -4,13 +4,13 @@ package de.tudarmstadt.informatik.tk.android.kraken.model.api.sensors;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-import de.tudarmstadt.informatik.tk.android.kraken.interfaces.SensorRequest;
+import de.tudarmstadt.informatik.tk.android.kraken.interfaces.Sensor;
 
 /**
  * @author Wladimir Schmidt (wlsc.dev@gmail.com)
  * @date 30.08.2015
  */
-public class MobileConnectionEventRequest implements SensorRequest {
+public class MobileConnectionEventRequest implements Sensor {
 
     private Long id;
 

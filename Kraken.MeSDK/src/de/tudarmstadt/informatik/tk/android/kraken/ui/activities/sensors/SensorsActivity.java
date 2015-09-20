@@ -3,7 +3,7 @@ package de.tudarmstadt.informatik.tk.android.kraken.ui.activities.sensors;
 import android.app.Activity;
 import android.os.Bundle;
 import android.widget.ListView;
-import de.tudarmstadt.informatik.tk.kraken.sdk.R;
+import de.tudarmstadt.informatik.tk.android.kraken.R;
 
 @Deprecated
 public class SensorsActivity extends Activity {

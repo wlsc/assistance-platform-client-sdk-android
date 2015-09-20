@@ -13,7 +13,7 @@ import android.widget.TextView;
 
 import java.util.LinkedList;
 
-import de.tudarmstadt.informatik.tk.kraken.sdk.R;
+import de.tudarmstadt.informatik.tk.android.kraken.R;
 import de.tudarmstadt.informatik.tk.android.kraken.login.ILoginData;
 import de.tudarmstadt.informatik.tk.android.kraken.login.LoginFacebook;
 import de.tudarmstadt.informatik.tk.android.kraken.login.LoginGoogle;

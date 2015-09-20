@@ -5,7 +5,6 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -25,14 +24,13 @@ import de.greenrobot.dao.query.Query;
 import de.greenrobot.dao.query.QueryBuilder;
 import de.tudarmstadt.informatik.tk.android.kraken.ActivityCommunicator;
 import de.tudarmstadt.informatik.tk.android.kraken.KrakenSdkSettings;
-import de.tudarmstadt.informatik.tk.android.kraken.common.MessageType;
 import de.tudarmstadt.informatik.tk.android.kraken.communication.EPushType;
 import de.tudarmstadt.informatik.tk.android.kraken.communication.RetroServerPushManager;
-import de.tudarmstadt.informatik.tk.android.kraken.communication.SensorData;
 import de.tudarmstadt.informatik.tk.android.kraken.db.DaoSession;
 import de.tudarmstadt.informatik.tk.android.kraken.db.DatabaseManager;
 import de.tudarmstadt.informatik.tk.android.kraken.interfaces.IDbSensor;
 import de.tudarmstadt.informatik.tk.android.kraken.interfaces.IDbUpdatableSensor;
+import de.tudarmstadt.informatik.tk.android.kraken.interfaces.Sensor;
 import de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.interfaces.ISensor;
 import de.tudarmstadt.informatik.tk.android.kraken.services.KrakenService;
 import de.tudarmstadt.informatik.tk.android.kraken.utils.DateUtils;
@@ -62,7 +60,7 @@ public abstract class AbstractSensor implements ISensor {
 
     public AbstractSensor(Context context) {
         setContext(context);
-        SharedPreferences sharedPreferences = this.context.getApplicationContext().getSharedPreferences(KrakenSdkSettings.PREFERENCES_NAME, Context.MODE_PRIVATE);
+        SharedPreferences sharedPreferences = context.getApplicationContext().getSharedPreferences(KrakenSdkSettings.PREFERENCES_NAME, Context.MODE_PRIVATE);
 //        isDisabledByUser = sharedPreferences.getBoolean(getSensorType().toString() + KrakenSdkSettings.PREFERENCES_SENSOR_DISABLED_BY_USER_POSTFIX, false);
 //
 //        lastDataFlushTimestamp = sharedPreferences.getLong(getSensorType().toString() + KrakenSdkSettings.PREFERENCES_SENSOR_LAST_PUSHED_TIMESTAMP_POSTFIX, -1);
@@ -172,8 +170,9 @@ public abstract class AbstractSensor implements ISensor {
     @Override
     public void setContext(Context context) {
         this.context = context;
-        if (context instanceof KrakenService)
+        if (context instanceof KrakenService) {
             setDaoSession(((KrakenService) context).getDaoSession());
+        }
     }
 
     @Override
@@ -190,7 +189,7 @@ public abstract class AbstractSensor implements ISensor {
     public void setDisabledByUser(boolean bDisabled) {
         isDisabledByUser = bDisabled;
         SharedPreferences sharedPreferences = context.getApplicationContext().getSharedPreferences(KrakenSdkSettings.PREFERENCES_NAME, Context.MODE_PRIVATE);
-        sharedPreferences.edit().putBoolean(getSensorType().toString() + KrakenSdkSettings.PREFERENCES_SENSOR_DISABLED_BY_USER_POSTFIX, bDisabled).commit();
+        sharedPreferences.edit().putBoolean(getSensorType().toString() + KrakenSdkSettings.PREFERENCES_SENSOR_DISABLED_BY_USER_POSTFIX, bDisabled).apply();
     }
 
     @Override
@@ -199,103 +198,57 @@ public abstract class AbstractSensor implements ISensor {
     }
 
     @Override
-    public SensorData flushData(DaoSession daoSession) throws JSONException {
-        String strClassName = getSensorType().getFullqualifiedDatabaseClassName();
-        return flushData(daoSession, strClassName);
+    public boolean flushData(DaoSession daoSession) throws JSONException, IllegalAccessException, NoSuchFieldException, ClassNotFoundException {
+
+        String strClassName = getSensorType().getSensorName();
+        boolean result = flushData(daoSession, strClassName);
+
+        return result;
     }
 
-    @Override
-    public SensorData flushData(DaoSession daoSession, String strFullQualifiedBeanClassName) throws JSONException {
+    public boolean flushData(final DaoSession daoSession, String strFullQualifiedBeanClassName) throws JSONException, ClassNotFoundException, NoSuchFieldException, IllegalAccessException {
 
         long longTimestamp = Calendar.getInstance().getTimeInMillis();
 
-        try {
-
-            // caching is important, because reflections are not really
-            // performant
-            if (mSensorClass == null || !mSensorClass.getName().equals(strFullQualifiedBeanClassName)) {
-                // getting database bean
-                mSensorClass = (Class<? extends IDbSensor>) Class.forName(strFullQualifiedBeanClassName);
-                // get the *Dao object for doing a query
-                mDaoObject = getDaoEntry(mSensorClass);
-                m_propTimestamp = null;
-            }
-
-            QueryBuilder<? extends IDbSensor> qb = (QueryBuilder<? extends IDbSensor>) mDaoObject.queryBuilder();
-
-            Query<? extends IDbSensor> query;
-            try {
-                query = getDbQuery(mSensorClass, longTimestamp, qb);
-            } catch (Exception e) {
-                m_propTimestamp = null;
-                query = getDbQuery(mSensorClass, longTimestamp, qb);
-            }
-
-            // set timestamp of last query
-            lastDataFlushTimestamp = longTimestamp;
-
-            // handle every entry and convert it to Json
-            List<? extends IDbSensor> list = query.list();
-            if (list.size() > 0) {
-                // sensor data
-                SensorData sensorData = new SensorData();
-                sensorData.setSensor(this);
-                sensorData.setFullQualifiedBeanClassName(strFullQualifiedBeanClassName);
-
-                List<IDbSensor> liSensorEntities = new LinkedList<IDbSensor>();
-                JSONArray jsonArray = new JSONArray();
-//				ObjectMapper mapper = KrakenService.getJacksonObjectMapper();
-//				for (IDbSensor sensor : list) {
-//					liSensorEntities.add(sensor);
-//					JSONObject jsonObj = mapper.convertValue(sensor, JSONObject.class);
-//					jsonObj.remove("id");
-//					jsonArray.put(jsonObj);
-//				}
-                sensorData.setSensorEntities(list);
-
-                // prepare sensor name: replace "SensorName" to "AndroidName":
-                // "SensorLight" becomes "AndroidLight";
-                // this is needed for generic implementation on server side.
-                String strClassNameForServer = getSensorType().getServerClassName();
-                // TODO: remove ugly workaround
-                if (strFullQualifiedBeanClassName.equals("de.tudarmstadt.informatik.tk.android.kraken.db.SensorCalendarEventReminder")) {
-                    strClassNameForServer = "AndroidCalendarEventReminder";
-                }
-
-                JSONObject jsonPayload = new JSONObject();
-                jsonPayload.put("class", strClassNameForServer);
-                jsonPayload.put("objs", jsonArray);
-
-                // header
-                JSONObject jsonObject = new JSONObject();
-                jsonObject.put(MessageType.KEY_MESSAGE_TYPE, MessageType.PERSONAL_DATA);
-                jsonObject.put("payload", jsonPayload);
-
-                sensorData.setJsonData(jsonObject);
-
-                return sensorData;
-            }
-
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        } catch (NoSuchFieldException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (IllegalArgumentException e) {
-            e.printStackTrace();
+        // caching is important, because reflections are not really
+        // performant
+        if (mSensorClass == null || !mSensorClass.getName().equals(strFullQualifiedBeanClassName)) {
+            // getting database bean
+            mSensorClass = (Class<? extends IDbSensor>) Class.forName(strFullQualifiedBeanClassName);
+            // get the *Dao object for doing a query
+            mDaoObject = getDaoEntry(mSensorClass);
+            m_propTimestamp = null;
         }
-        return null;
+
+        QueryBuilder<? extends IDbSensor> qb = (QueryBuilder<? extends IDbSensor>) mDaoObject.queryBuilder();
+
+        Query<? extends IDbSensor> query;
+        try {
+            query = getDbQuery(mSensorClass, longTimestamp, qb);
+        } catch (Exception e) {
+            m_propTimestamp = null;
+            query = getDbQuery(mSensorClass, longTimestamp, qb);
+        }
+
+        // set timestamp of last query
+        lastDataFlushTimestamp = longTimestamp;
+
+        List<? extends IDbSensor> list = query.list();
+        if (list.size() > 0) {
+            return true;
+        }
+
+        return false;
     }
 
     @Override
-    public ApiMessage.DataWrapper flushDataRetro() {
-        String strClassName = getSensorType().getFullqualifiedDatabaseClassName();
+    public List<Sensor> flushDataRetro() {
+        String strClassName = getSensorType().getSensorName();
         return flushDataRetro(strClassName);
     }
 
     @Override
-    public ApiMessage.DataWrapper flushDataRetro(String strFullQualifiedBeanClassName) {
+    public List<Sensor> flushDataRetro(String strFullQualifiedBeanClassName) {
 
         KrakenService service = KrakenService.getInstance();
         Boolean bDataAvailable = m_mapNewData.get(strFullQualifiedBeanClassName);
@@ -329,7 +282,7 @@ public abstract class AbstractSensor implements ISensor {
             lastDataFlushTimestamp = longTimestamp;
             SharedPreferences sharedPreferences = context.getApplicationContext().getSharedPreferences(KrakenSdkSettings.PREFERENCES_NAME, Context.MODE_PRIVATE);
             sharedPreferences.edit()
-                    .putLong(strFullQualifiedBeanClassName + KrakenSdkSettings.PREFERENCES_SENSOR_LAST_PUSHED_TIMESTAMP_POSTFIX, lastDataFlushTimestamp).commit();
+                    .putLong(strFullQualifiedBeanClassName + KrakenSdkSettings.PREFERENCES_SENSOR_LAST_PUSHED_TIMESTAMP_POSTFIX, lastDataFlushTimestamp).apply();
 
             // handle every entry and convert it to Json
             List<? extends IDbSensor> list = query.list();
@@ -340,22 +293,10 @@ public abstract class AbstractSensor implements ISensor {
                     sensorData.add(sensor);
                     //TODO: remove id? why?
                 }
-                ApiMessage.DataWrapper wrapper = new ApiMessage.DataWrapper();
-                wrapper.objs = sensorData;
-                wrapper.databaseClassName = strFullQualifiedBeanClassName;
-
-                // prepare sensor name: replace "SensorName" to "AndroidName":
-                // "SensorLight" becomes "AndroidLight";
-                // this is needed for generic implementation on server side.
-                String strClassNameForServer = getSensorType().getServerClassName();
-                // TODO: remove ugly workaround
-                if (strFullQualifiedBeanClassName.equals("de.tudarmstadt.informatik.tk.android.kraken.db.SensorCalendarEventReminder")) {
-                    strClassNameForServer = "AndroidCalendarEventReminder";
-                }
-                wrapper.className = strClassNameForServer;
+                List<Sensor> events = new LinkedList<>();
 
                 m_mapNewData.put(strFullQualifiedBeanClassName, false);
-                return wrapper;
+                return events;
             }
         } catch (ClassNotFoundException | NoSuchFieldException | IllegalAccessException | IllegalArgumentException e) {
             e.printStackTrace();
@@ -365,8 +306,10 @@ public abstract class AbstractSensor implements ISensor {
 
     protected Query<? extends IDbSensor> getDbQuery(Class<? extends IDbSensor> sensorClass, long longTimestamp, QueryBuilder<? extends IDbSensor> qb)
             throws ClassNotFoundException, NoSuchFieldException, IllegalAccessException, IllegalArgumentException {
-        if (m_propTimestamp == null)
+        if (m_propTimestamp == null) {
             m_propTimestamp = getPropertiesArgument(sensorClass, "Timestamp");
+        }
+
         Query<? extends IDbSensor> query = qb.where(m_propTimestamp.gt(lastDataFlushTimestamp), m_propTimestamp.le(longTimestamp)).build();
         return query;
     }
@@ -390,13 +333,12 @@ public abstract class AbstractSensor implements ISensor {
         return (Property) field.get(null);
     }
 
-    @SuppressWarnings({"unchecked", "rawtypes"})
     @Override
     public void removeDataFromDb(List<? extends IDbSensor> liSensorData, String strFullqualifiedSensorClassName) {
 
         try {
-            if (strFullqualifiedSensorClassName == null)
-                strFullqualifiedSensorClassName = getSensorType().getFullqualifiedDatabaseClassName();
+//            if (strFullqualifiedSensorClassName == null)
+//                strFullqualifiedSensorClassName = getSensorType().getFullqualifiedDatabaseClassName();
 
             // caching is important, because reflections are not really
             // performant

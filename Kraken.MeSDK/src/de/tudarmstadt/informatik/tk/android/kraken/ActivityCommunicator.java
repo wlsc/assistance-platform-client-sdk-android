@@ -59,17 +59,17 @@ public class ActivityCommunicator {
 
         switch ((ESensorType) data.getSerializable("sensorType")) {
 
-            case SENSOR_ACCELEROMETER:
+            case ACCELEROMETER_SENSOR:
                 Log.d(TAG, "Processing Accelerometer sensor data...");
                 DbAccelerometerSensor accelerometerSensor = (DbAccelerometerSensor) sensor;
                 double result = accelerometerSensor.getX() * accelerometerSensor.getY() * accelerometerSensor.getZ();
                 result = ((double) (int) (result * 100)) / 100;
                 dataOut.putString("msg", "Accelerometer: " + result);
                 break;
-            case SENSOR_ACTIVITY:
+            case MOTION_ACTIVITY_EVENT:
                 dataOut.putString("msg", "Activity");
                 break;
-            case SENSOR_CONNECTION:
+            case CONNECTION_EVENT:
 //			Integer intNetwork = ((SensorConnection) sensor).getActiveNetwork();
 //			if (intNetwork == null)
 //				return true;

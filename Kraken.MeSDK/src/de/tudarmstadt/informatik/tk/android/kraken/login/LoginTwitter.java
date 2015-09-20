@@ -11,7 +11,7 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.util.Log;
-import de.tudarmstadt.informatik.tk.kraken.sdk.R;
+import de.tudarmstadt.informatik.tk.android.kraken.R;
 import de.tudarmstadt.informatik.tk.android.kraken.ui.activities.accounts.AccountsAdapter;
 import de.tudarmstadt.informatik.tk.android.kraken.communication.Authentication;
 import de.tudarmstadt.informatik.tk.android.kraken.common.SocialNetworkProvider;

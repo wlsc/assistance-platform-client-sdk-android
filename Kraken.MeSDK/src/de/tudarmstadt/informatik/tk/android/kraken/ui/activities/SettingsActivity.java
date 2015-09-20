@@ -13,7 +13,7 @@ import de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.SensorManage
 import de.tudarmstadt.informatik.tk.android.kraken.preference.PreferenceManager;
 import de.tudarmstadt.informatik.tk.android.kraken.utils.KrakenServiceManager;
 import de.tudarmstadt.informatik.tk.android.kraken.utils.KrakenUtils;
-import de.tudarmstadt.informatik.tk.kraken.sdk.R;
+import de.tudarmstadt.informatik.tk.android.kraken.R;
 
 
 @Deprecated

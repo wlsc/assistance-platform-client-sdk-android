@@ -8,9 +8,9 @@ import org.json.JSONObject;
 import java.util.List;
 
 import de.tudarmstadt.informatik.tk.android.kraken.communication.EPushType;
-import de.tudarmstadt.informatik.tk.android.kraken.communication.SensorData;
 import de.tudarmstadt.informatik.tk.android.kraken.db.DaoSession;
 import de.tudarmstadt.informatik.tk.android.kraken.interfaces.IDbSensor;
+import de.tudarmstadt.informatik.tk.android.kraken.interfaces.Sensor;
 import de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.ESensorType;
 
 
@@ -32,13 +32,11 @@ public interface ISensor {
 
     void setDisabledBySystem(boolean bDisabled);
 
-    SensorData flushData(DaoSession daoSession) throws JSONException;
+    boolean flushData(DaoSession daoSession) throws JSONException, IllegalAccessException, NoSuchFieldException, ClassNotFoundException;
 
-//    ApiMessage.DataWrapper flushDataRetro();
+    List<Sensor> flushDataRetro();
 
-    SensorData flushData(DaoSession daoSession, String strFullqualifiedSensorClassName) throws JSONException;
-
-//    ApiMessage.DataWrapper flushDataRetro(String strFullqualifiedSensorClassName);
+    List<Sensor> flushDataRetro(String strFullqualifiedSensorClassName);
 
     EPushType getPushType();
 

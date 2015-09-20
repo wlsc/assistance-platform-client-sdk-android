@@ -12,7 +12,7 @@ import android.view.accessibility.AccessibilityManager;
 
 import java.util.List;
 
-import de.tudarmstadt.informatik.tk.kraken.sdk.R;
+import de.tudarmstadt.informatik.tk.android.kraken.R;
 
 /**
  * ServiceUtils

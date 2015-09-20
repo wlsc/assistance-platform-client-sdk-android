@@ -177,7 +177,7 @@ public class AccelerometerSensor extends AbstractTriggeredSensor implements Sens
 
     @Override
     public ESensorType getSensorType() {
-        return ESensorType.SENSOR_ACCELEROMETER;
+        return ESensorType.ACCELEROMETER_SENSOR;
     }
 
 }

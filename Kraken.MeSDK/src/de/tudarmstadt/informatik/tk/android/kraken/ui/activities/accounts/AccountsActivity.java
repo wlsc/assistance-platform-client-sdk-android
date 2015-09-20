@@ -10,7 +10,7 @@ import com.facebook.Session;
 import com.facebook.SessionState;
 import com.facebook.UiLifecycleHelper;
 
-import de.tudarmstadt.informatik.tk.kraken.sdk.R;
+import de.tudarmstadt.informatik.tk.android.kraken.R;
 import de.tudarmstadt.informatik.tk.android.kraken.login.LoginFacebook;
 import de.tudarmstadt.informatik.tk.android.kraken.login.LoginGoogle;
 

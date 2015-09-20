@@ -1,17 +1,19 @@
 package de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors;
 
 import android.content.Context;
-import android.util.Log;
 
 import de.tudarmstadt.informatik.tk.android.kraken.db.DbAccelerometerSensor;
-import de.tudarmstadt.informatik.tk.android.kraken.interfaces.IDbSensor;
-import de.tudarmstadt.informatik.tk.kraken.sdk.R;
+import de.tudarmstadt.informatik.tk.android.kraken.db.DbConnectionEvent;
+import de.tudarmstadt.informatik.tk.android.kraken.db.DbLoudnessEvent;
+import de.tudarmstadt.informatik.tk.android.kraken.db.DbMotionActivityEvent;
+import de.tudarmstadt.informatik.tk.android.kraken.db.DbPositionSensor;
+import de.tudarmstadt.informatik.tk.android.kraken.R;
 
 public enum ESensorType {
     MEASUREMENT_LOG,
-    SENSOR_ACCELEROMETER,
-    SENSOR_ACTIVITY,
-    SENSOR_CONNECTION,
+    ACCELEROMETER_SENSOR,
+    MOTION_ACTIVITY_EVENT,
+    CONNECTION_EVENT,
     SENSOR_LIGHT,
     SENSOR_LOCATION,
     SENSOR_RINGTONE,
@@ -32,44 +34,44 @@ public enum ESensorType {
 
     public String getSensorName() {
         switch (this) {
-            case MEASUREMENT_LOG:
-                return "Measurement Log";
-            case ONE_TIME_SENSOR_ACCOUNT_READER:
-                return "Account Reader";
-            case ONE_TIME_SENSOR_RUNNING_PROCESSES:
-                return "Running Processes";
-            case ONE_TIME_SENSOR_RUNNING_SERVICES:
-                return "Running Services";
-            case ONE_TIME_SENSOR_RUNNING_TASKS:
-                return "Running Tasks";
-            case SENSOR_ACCELEROMETER:
+//            case MEASUREMENT_LOG:
+//                return "Measurement Log";
+//            case ONE_TIME_SENSOR_ACCOUNT_READER:
+//                return "Account Reader";
+//            case ONE_TIME_SENSOR_RUNNING_PROCESSES:
+//                return "Running Processes";
+//            case ONE_TIME_SENSOR_RUNNING_SERVICES:
+//                return "Running Services";
+//            case ONE_TIME_SENSOR_RUNNING_TASKS:
+//                return "Running Tasks";
+            case ACCELEROMETER_SENSOR:
                 return DbAccelerometerSensor.class.getSimpleName();
-            case SENSOR_ACTIVITY:
-                return "Activity";
-            case SENSOR_CALENDAR:
-                return "Calendar Event";
-            case SENSOR_CONNECTION:
-                return "Connection";
-            case SENSOR_CONTACTS:
-                return "Contact";
-            case SENSOR_LIGHT:
-                return "Light";
+            case MOTION_ACTIVITY_EVENT:
+                return DbMotionActivityEvent.class.getSimpleName();
+//            case SENSOR_CALENDAR:
+//                return "Calendar Event";
+            case CONNECTION_EVENT:
+                return DbConnectionEvent.class.getSimpleName();
+//            case SENSOR_CONTACTS:
+//                return "Contact";
+//            case SENSOR_LIGHT:
+//                return "Light";
             case SENSOR_LOCATION:
-                return "Location";
-            case SENSOR_RINGTONE:
-                return "Ringtone";
+                return DbPositionSensor.class.getSimpleName();
+//            case SENSOR_RINGTONE:
+//                return "Ringtone";
             case SENSOR_LOUDNESS:
-                return "Loudness";
-            case SENSOR_CALL_LOG:
-                return "Call Log";
-            case SENSOR_BROWSER_HISTORY:
-                return "Browser History";
-            case SENSOR_FOREGROUND_EVENT:
-                return "Foreground Event";
-            case SENSOR_NETWORK_TRAFFIC:
-                return "Network Traffic";
-            case SENSOR_BACKGROUND_TRAFFIC:
-                return "Network Traffic";
+                return DbLoudnessEvent.class.getSimpleName();
+//            case SENSOR_CALL_LOG:
+//                return "Call Log";
+//            case SENSOR_BROWSER_HISTORY:
+//                return "Browser History";
+//            case SENSOR_FOREGROUND_EVENT:
+//                return "Foreground Event";
+//            case SENSOR_NETWORK_TRAFFIC:
+//                return "Network Traffic";
+//            case SENSOR_BACKGROUND_TRAFFIC:
+//                return "Network Traffic";
             default:
                 return "";
         }
@@ -87,13 +89,13 @@ public enum ESensorType {
                 return context.getString(R.string.one_time_sensor_running_services);
             case ONE_TIME_SENSOR_RUNNING_TASKS:
                 return context.getString(R.string.one_time_sensor_running_tasks);
-            case SENSOR_ACCELEROMETER:
+            case ACCELEROMETER_SENSOR:
                 return context.getString(R.string.sensor_accelerometer);
-            case SENSOR_ACTIVITY:
+            case MOTION_ACTIVITY_EVENT:
                 return context.getString(R.string.sensor_activity);
             case SENSOR_CALENDAR:
                 return context.getString(R.string.sensor_calendar);
-            case SENSOR_CONNECTION:
+            case CONNECTION_EVENT:
                 return context.getString(R.string.sensor_connection);
             case SENSOR_CONTACTS:
                 return context.getString(R.string.sensor_contacts);
@@ -117,44 +119,6 @@ public enum ESensorType {
                 return "Traffic usage by each app";
             default:
                 return "";
-        }
-    }
-
-    public String getFullqualifiedDatabaseClassName() {
-        return "de.tudarmstadt.informatik.tk.android.kraken.db." + getSensorName().replaceAll(" ", "");
-    }
-
-    public String getServerClassName() {
-        try {
-            Class<? extends IDbSensor> sensor = (Class<? extends IDbSensor>) Class.forName(getFullqualifiedDatabaseClassName());
-            String strClassNameForServer = sensor.getSimpleName();
-            // handle special case Location
-            if (strClassNameForServer.equals("SensorLocation")) {
-                return "Location";
-            }
-            if (strClassNameForServer.startsWith("Sensor")) {
-                strClassNameForServer = strClassNameForServer.substring("Sensor".length());
-            }
-            strClassNameForServer = "Android" + strClassNameForServer;
-            return strClassNameForServer;
-
-        } catch (ClassNotFoundException e) {
-            Log.e(TAG, "Cannot find that class");
-        }
-        return null;
-    }
-
-    @SuppressWarnings("unchecked")
-    public static Class<? extends IDbSensor> getAndroidClass(String serverClassName) {
-        String androidClassName = null;
-        if (serverClassName.startsWith("Android")) {
-            androidClassName = serverClassName.substring("Android".length());
-        }
-        androidClassName = androidClassName + "Sensor";
-        try {
-            return (Class<? extends IDbSensor>) Class.forName(androidClassName);
-        } catch (ClassNotFoundException e) {
-            return null;
         }
     }
 }

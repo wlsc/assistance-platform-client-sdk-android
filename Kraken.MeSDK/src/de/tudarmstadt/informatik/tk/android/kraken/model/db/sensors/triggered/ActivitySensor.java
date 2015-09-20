@@ -16,6 +16,7 @@ import java.util.List;
 
 import de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.ESensorType;
 import de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.abstract_sensors.AbstractTriggeredSensor;
+import de.tudarmstadt.informatik.tk.android.kraken.services.ActivitySensorService;
 
 
 public class ActivitySensor extends AbstractTriggeredSensor implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
@@ -126,7 +127,7 @@ public class ActivitySensor extends AbstractTriggeredSensor implements GoogleApi
 
     @Override
     public ESensorType getSensorType() {
-        return ESensorType.SENSOR_ACTIVITY;
+        return ESensorType.MOTION_ACTIVITY_EVENT;
     }
 
     @Override

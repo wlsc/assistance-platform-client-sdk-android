@@ -11,7 +11,7 @@ import com.microsoft.live.LiveStatus;
 import java.util.LinkedList;
 import java.util.List;
 
-import de.tudarmstadt.informatik.tk.kraken.sdk.R;
+import de.tudarmstadt.informatik.tk.android.kraken.R;
 import de.tudarmstadt.informatik.tk.android.kraken.ui.activities.accounts.AccountsAdapter;
 import de.tudarmstadt.informatik.tk.android.kraken.common.SocialNetworkProvider;
 

@@ -3,19 +3,13 @@ package de.tudarmstadt.informatik.tk.android.kraken.communication;
 import android.content.Context;
 
 import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
-import java.util.Calendar;
 import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-import de.tudarmstadt.informatik.tk.android.kraken.db.DaoSession;
 import de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.interfaces.ISensor;
 import de.tudarmstadt.informatik.tk.android.kraken.services.KrakenService;
 
@@ -28,8 +22,6 @@ public class ServerPushManager {
     private HashSet<ISensor> m_setImmediate = new HashSet<ISensor>();
     private HashSet<ISensor> m_setPeriodic = new HashSet<ISensor>();
     private HashSet<ISensor> m_setWlan = new HashSet<ISensor>();
-    private List<SensorData> m_liCachedFlushManuallyData = new LinkedList<SensorData>();
-    private List<SensorData> m_liCachedFlushManuallyOnlyWlanData = new LinkedList<SensorData>();
     private long m_longLastPeriodicPushTimestamp = -1;
     private boolean m_bIsWlanConnected = false;
 
@@ -112,24 +104,35 @@ public class ServerPushManager {
     }
 
     private void flushData(ISensor sensor) {
+
         KrakenService service = KrakenService.getInstance();
-        if (service == null)
+
+        if (service == null) {
             return;
+        }
 
         Authentication auth = Authentication.getInstance(m_context);
+
         if (auth == null)
             return;
 
         JSONArray jsonArray = new JSONArray();
-        try {
-            List<SensorData> liSensorData = new LinkedList<SensorData>();
-            SensorData sensorData = sensor.flushData(service.getDaoSession());
-            liSensorData.add(sensorData);
-            jsonArray.put(sensorData.getJsonData());
-            sendSensorData(jsonArray, liSensorData);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+
+//        try {
+//            List<SensorData> liSensorData = new LinkedList<SensorData>();
+//            SensorData sensorData = sensor.flushData(service.getDaoSession());
+//            liSensorData.add(sensorData);
+//            jsonArray.put(sensorData.getJsonData());
+//            sendSensorData(jsonArray, liSensorData);
+//        } catch (JSONException e) {
+//            e.printStackTrace();
+//        } catch (ClassNotFoundException e) {
+//            e.printStackTrace();
+//        } catch (NoSuchFieldException e) {
+//            e.printStackTrace();
+//        } catch (IllegalAccessException e) {
+//            e.printStackTrace();
+//        }
     }
 
     public void flushAll() {
@@ -146,19 +149,19 @@ public class ServerPushManager {
             return;
 
         JSONArray jsonArray = new JSONArray();
-        List<SensorData> liSensorData = new LinkedList<SensorData>();
-        buildSensorsDataArray(service.getDaoSession(), type, jsonArray, liSensorData);
-        sendSensorData(jsonArray, liSensorData);
+//        List<SensorData> liSensorData = new LinkedList<SensorData>();
+//        buildSensorsDataArray(service.getDaoSession(), type, jsonArray, liSensorData);
+//        sendSensorData(jsonArray, liSensorData);
     }
 
-    private void sendSensorData(JSONArray jsonArray, List<SensorData> liSensorData) {
-        if (jsonArray == null || jsonArray.length() == 0)
-            return;
+//    private void sendSensorData(JSONArray jsonArray, List<SensorData> liSensorData) {
+//        if (jsonArray == null || jsonArray.length() == 0)
+//            return;
 
-        // add cached data!
-        addCachedDataToArray(jsonArray, liSensorData);
+    // add cached data!
+//        addCachedDataToArray(jsonArray, liSensorData);
 
-        //splitAndSend(liSensorData);
+    //splitAndSend(liSensorData);
 
 //        postJsonArray(jsonArray, liSensorData);
 
@@ -205,8 +208,8 @@ public class ServerPushManager {
         }
         */
 
-        // new ServerCommunication(context).execute(jsonObject);
-    }
+    // new ServerCommunication(context).execute(jsonObject);
+//    }
 
 //    private void splitAndSend(List<SensorData> liSensorData) {
 //        int maxElems = 50;
@@ -241,7 +244,7 @@ public class ServerPushManager {
 //            jsonObj.remove("id");
 //            jsonArray.put(jsonObj);
 //        }
-//        String strClassNameForServer = sensorType.getServerClassName();
+//        String strClassNameForServer = sensorType.getGeneratedDbClassName();
 //
 //        JSONObject jsonPayload = new JSONObject();
 //        jsonPayload.put("class", strClassNameForServer);
@@ -268,103 +271,115 @@ public class ServerPushManager {
 //        com.postRequest(jsonObject);
 //    }
 
-    private void buildSensorsDataArray(DaoSession daoSession, EPushType type, JSONArray returnArray, List<SensorData> liSensorData) {
-        switch (type) {
-            case IMMEDIATE:
-                addSensorsToArray(daoSession, m_setImmediate, returnArray, liSensorData);
-            case PERIODIC:
-                addPeriodicPushingSensorsToArray(daoSession, m_setPeriodic, returnArray, liSensorData);
-            case WLAN_ONLY:
-                addSensorsToArray(daoSession, m_setWlan, returnArray, liSensorData);
-            case ALL: {
-                addSensorsToArray(daoSession, m_setImmediate, returnArray, liSensorData);
-                addSensorsToArray(daoSession, m_setPeriodic, returnArray, liSensorData);
-                addSensorsToArray(daoSession, m_setWlan, returnArray, liSensorData);
-            }
-        }
-    }
+//    private void buildSensorsDataArray(DaoSession daoSession, EPushType type, JSONArray returnArray, List<SensorData> liSensorData) {
+//        switch (type) {
+//            case IMMEDIATE:
+//                addSensorsToArray(daoSession, m_setImmediate, returnArray, liSensorData);
+//            case PERIODIC:
+//                addPeriodicPushingSensorsToArray(daoSession, m_setPeriodic, returnArray, liSensorData);
+//            case WLAN_ONLY:
+//                addSensorsToArray(daoSession, m_setWlan, returnArray, liSensorData);
+//            case ALL: {
+//                addSensorsToArray(daoSession, m_setImmediate, returnArray, liSensorData);
+//                addSensorsToArray(daoSession, m_setPeriodic, returnArray, liSensorData);
+//                addSensorsToArray(daoSession, m_setWlan, returnArray, liSensorData);
+//            }
+//        }
+//    }
 
-    private void addSensorsToArray(DaoSession daoSession, HashSet<ISensor> set, JSONArray jsonArray, List<SensorData> liSensorData) {
-        for (ISensor sensor : set) {
-            try {
-                SensorData data = sensor.flushData(daoSession);
-                if (data != null) {
-                    liSensorData.add(data);
-                    JSONObject insert = data.getJsonData();
-                    jsonArray.put(insert);
-                }
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
+//    private void addSensorsToArray(DaoSession daoSession, HashSet<ISensor> set, JSONArray jsonArray, List<SensorData> liSensorData) {
+//        for (ISensor sensor : set) {
+//            try {
+//                SensorData data = sensor.flushData(daoSession);
+//                if (data != null) {
+//                    liSensorData.add(data);
+//                    JSONObject insert = data.getJsonData();
+//                    jsonArray.put(insert);
+//                }
+//            } catch (JSONException e) {
+//                e.printStackTrace();
+//            } catch (ClassNotFoundException e) {
+//                e.printStackTrace();
+//            } catch (NoSuchFieldException e) {
+//                e.printStackTrace();
+//            } catch (IllegalAccessException e) {
+//                e.printStackTrace();
+//            }
+//        }
+//
+//    }
 
-    }
+//    private void addPeriodicPushingSensorsToArray(DaoSession daoSession, HashSet<ISensor> set, JSONArray jsonArray, List<SensorData> liSensorData) {
+//        long longCurrentTimestamp = Calendar.getInstance().getTimeInMillis();
+//
+//        for (ISensor sensor : set) {
+//            try {
+//                int intPushIntervall = sensor.getPushIntervalInMin();
+//                long longPushIntervall = intPushIntervall * 60 * 1000;
+//
+//                if (m_longLastPeriodicPushTimestamp + longPushIntervall < longCurrentTimestamp) {
+//                    SensorData data = sensor.flushData(daoSession);
+//                    if (data != null) {
+//                        liSensorData.add(data);
+//                        JSONObject insert = data.getJsonData();
+//                        jsonArray.put(insert);
+//                    }
+//                }
+//            } catch (JSONException e) {
+//                e.printStackTrace();
+//            } catch (ClassNotFoundException e) {
+//                e.printStackTrace();
+//            } catch (NoSuchFieldException e) {
+//                e.printStackTrace();
+//            } catch (IllegalAccessException e) {
+//                e.printStackTrace();
+//            }
+//        }
+//        m_longLastPeriodicPushTimestamp = longCurrentTimestamp;
+//    }
 
-    private void addPeriodicPushingSensorsToArray(DaoSession daoSession, HashSet<ISensor> set, JSONArray jsonArray, List<SensorData> liSensorData) {
-        long longCurrentTimestamp = Calendar.getInstance().getTimeInMillis();
+//    private void addCachedDataToArray(JSONArray jsonArray, List<SensorData> liSensorData) {
+//
+//        for (SensorData data : m_liCachedFlushManuallyData) {
+//            jsonArray.put(data.getJsonData());
+//            liSensorData.add(data);
+//        }
+//        m_liCachedFlushManuallyData.clear();
+//
+//        if (m_bIsWlanConnected) {
+//            for (SensorData data : m_liCachedFlushManuallyOnlyWlanData) {
+//                jsonArray.put(data.getJsonData());
+//                liSensorData.add(data);
+//            }
+//            m_liCachedFlushManuallyOnlyWlanData.clear();
+//        }
+//    }
 
-        for (ISensor sensor : set) {
-            try {
-                int intPushIntervall = sensor.getPushIntervalInMin();
-                long longPushIntervall = intPushIntervall * 60 * 1000;
+//    public void flushManually(SensorData... sensorData) {
+//        if (sensorData == null)
+//            return;
+//
+//        JSONArray jsonArray = new JSONArray();
+//        List<SensorData> liSensorData = new LinkedList<SensorData>();
+//
+//        for (SensorData data : sensorData) {
+//            if (data == null)
+//                continue;
+//            liSensorData.add(data);
+//            JSONObject insert = data.getJsonData();
+//            jsonArray.put(insert);
+//        }
+//        sendSensorData(jsonArray, liSensorData);
+//    }
 
-                if (m_longLastPeriodicPushTimestamp + longPushIntervall < longCurrentTimestamp) {
-                    SensorData data = sensor.flushData(daoSession);
-                    if (data != null) {
-                        liSensorData.add(data);
-                        JSONObject insert = data.getJsonData();
-                        jsonArray.put(insert);
-                    }
-                }
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
-        m_longLastPeriodicPushTimestamp = longCurrentTimestamp;
-    }
-
-    private void addCachedDataToArray(JSONArray jsonArray, List<SensorData> liSensorData) {
-
-        for (SensorData data : m_liCachedFlushManuallyData) {
-            jsonArray.put(data.getJsonData());
-            liSensorData.add(data);
-        }
-        m_liCachedFlushManuallyData.clear();
-
-        if (m_bIsWlanConnected) {
-            for (SensorData data : m_liCachedFlushManuallyOnlyWlanData) {
-                jsonArray.put(data.getJsonData());
-                liSensorData.add(data);
-            }
-            m_liCachedFlushManuallyOnlyWlanData.clear();
-        }
-    }
-
-    public void flushManually(SensorData... sensorData) {
-        if (sensorData == null)
-            return;
-
-        JSONArray jsonArray = new JSONArray();
-        List<SensorData> liSensorData = new LinkedList<SensorData>();
-
-        for (SensorData data : sensorData) {
-            if (data == null)
-                continue;
-            liSensorData.add(data);
-            JSONObject insert = data.getJsonData();
-            jsonArray.put(insert);
-        }
-        sendSensorData(jsonArray, liSensorData);
-    }
-
-    public void addToCache(List<SensorData> liSensorData) {
-        for (SensorData data : liSensorData) {
-            EPushType type = data.getSensor().getPushType();
-            if (type.equals(EPushType.MANUALLY_IMMEDIATE)) {
-                m_liCachedFlushManuallyData.add(data);
-            } else if (type.equals(EPushType.MANUALLY_WLAN_ONLY)) {
-                m_liCachedFlushManuallyOnlyWlanData.add(data);
-            }
-        }
-    }
+//    public void addToCache(List<SensorData> liSensorData) {
+//        for (SensorData data : liSensorData) {
+//            EPushType type = data.getSensor().getPushType();
+//            if (type.equals(EPushType.MANUALLY_IMMEDIATE)) {
+//                m_liCachedFlushManuallyData.add(data);
+//            } else if (type.equals(EPushType.MANUALLY_WLAN_ONLY)) {
+//                m_liCachedFlushManuallyOnlyWlanData.add(data);
+//            }
+//        }
+//    }
 }

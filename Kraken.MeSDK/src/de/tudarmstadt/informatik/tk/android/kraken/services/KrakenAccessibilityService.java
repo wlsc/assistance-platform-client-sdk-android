@@ -30,6 +30,8 @@ public class KrakenAccessibilityService extends AccessibilityService {
         mForegroundTrafficSensor = (ForegroundTrafficSensor) SensorManager
                 .getInstance(getApplicationContext())
                 .getSensor(ESensorType.SENSOR_NETWORK_TRAFFIC);
+
+        Log.d(TAG, "Accessibility service was started!");
     }
 
     @Override
