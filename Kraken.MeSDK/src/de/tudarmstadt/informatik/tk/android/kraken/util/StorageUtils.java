@@ -4,9 +4,13 @@ import android.content.Context;
 import android.os.Environment;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+
+import de.tudarmstadt.informatik.tk.android.kraken.KrakenSdkSettings;
 
 /**
  * @author Wladimir Schmidt (wlsc.dev@gmail.com)
@@ -173,5 +177,29 @@ public class StorageUtils {
         File folder = Environment.getExternalStoragePublicDirectory(folderName);
         File file = new File(folder, filename);
         FileUtils.writeData(file, data);
+    }
+
+    /**
+     * Exports sqlite database to some destination folder
+     *
+     * @param context
+     * @param dbPath
+     * @return
+     * @throws IOException
+     */
+    public static boolean exportDatabase(Context context, String dbPath) throws IOException {
+
+        File newDb = new File(dbPath);
+        File oldDb = new File(context.getDatabasePath(KrakenSdkSettings.DATABASE_NAME).getPath());
+
+        // check if it exists
+        if (oldDb.exists()) {
+
+            FileUtils.copyFile(new FileInputStream(oldDb), new FileOutputStream(newDb));
+
+            return true;
+        }
+
+        return false;
     }
 }

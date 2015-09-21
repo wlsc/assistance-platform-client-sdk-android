@@ -22,7 +22,7 @@ public class AccelerometerSensor extends AbstractTriggeredSensor implements Sens
 
     // ------------------- Configuration -------------------
     private int SENSOR_DELAY_BETWEEN_TWO_EVENTS = SensorManager.SENSOR_DELAY_NORMAL;
-    private int sensingFrequency = 10;
+    private int updateInterval = 10;    // in seconds
     // -----------------------------------------------------
 
     private static DbAccelerometerSensorDao accelerometerSensorDao;
@@ -30,7 +30,6 @@ public class AccelerometerSensor extends AbstractTriggeredSensor implements Sens
     private Sensor mAccelerometerSensor;
 
     private long mLastEventDumpingTimestamp = 0;    // in nanoseconds
-
 
     private double x;
     private double y;
@@ -87,7 +86,13 @@ public class AccelerometerSensor extends AbstractTriggeredSensor implements Sens
 
         this.accuracy = accuracy;
 
-//        dumpData();
+        // checks for saving new data
+        if (isTimeToSaveData(System.nanoTime())) {
+
+            mLastEventDumpingTimestamp = System.nanoTime();
+
+            dumpData();
+        }
     }
 
     @Override
@@ -129,7 +134,7 @@ public class AccelerometerSensor extends AbstractTriggeredSensor implements Sens
         } else {
 
             // the time has come -> save data into db
-            if ((timestamp - mLastEventDumpingTimestamp) / 1000000000 > sensingFrequency) {
+            if ((timestamp - mLastEventDumpingTimestamp) / 1000000000 > updateInterval) {
                 return true;
             }
         }
@@ -145,7 +150,7 @@ public class AccelerometerSensor extends AbstractTriggeredSensor implements Sens
 //            m_floatSumAccelerationZ = Math.abs(event.values[2]);
 //            m_intNumValues = 1;
 //            return true;
-//        } else if (event.timestamp < mCurrentEventTimestamp + sensingFrequency * 1000000000L) {
+//        } else if (event.timestamp < mCurrentEventTimestamp + updateInterval * 1000000000L) {
 //            m_floatSumAccelerationX += Math.abs(event.values[0]);
 //            m_floatSumAccelerationY += Math.abs(event.values[1]);
 //            m_floatSumAccelerationZ += Math.abs(event.values[2]);
@@ -195,6 +200,14 @@ public class AccelerometerSensor extends AbstractTriggeredSensor implements Sens
 
     public void setAccuracy(int accuracy) {
         this.accuracy = accuracy;
+    }
+
+    public int getUpdateInterval() {
+        return this.updateInterval;
+    }
+
+    public void setUpdateInterval(int updateInterval) {
+        this.updateInterval = updateInterval;
     }
 
     @Override

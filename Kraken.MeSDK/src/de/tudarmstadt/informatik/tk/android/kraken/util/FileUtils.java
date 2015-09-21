@@ -14,6 +14,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
+import java.nio.channels.FileChannel;
 
 
 public class FileUtils {
@@ -133,6 +134,35 @@ public class FileUtils {
         } finally {
             if (fileOutputStream != null) {
                 fileOutputStream.close();
+            }
+        }
+    }
+
+    /**
+     * Copies sqlite database file from source to destination folder
+     *
+     * @param fromFile
+     * @param toFile
+     * @throws IOException
+     */
+    public static void copyFile(FileInputStream fromFile, FileOutputStream toFile) throws IOException {
+
+        FileChannel fromChannel = null;
+        FileChannel toChannel = null;
+
+        try {
+            fromChannel = fromFile.getChannel();
+            toChannel = toFile.getChannel();
+            fromChannel.transferTo(0, fromChannel.size(), toChannel);
+        } finally {
+            try {
+                if (fromChannel != null) {
+                    fromChannel.close();
+                }
+            } finally {
+                if (toChannel != null) {
+                    toChannel.close();
+                }
             }
         }
     }

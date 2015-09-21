@@ -245,7 +245,7 @@ public class KrakenService extends Service implements Callback {
     @Override
     public boolean onUnbind(Intent intent) {
 
-        Log.d(TAG, "Service onUnbind");
+        Log.d(TAG, "Unbinding...");
 
         setActivityHandler(null);
         return super.onUnbind(intent);
@@ -254,7 +254,7 @@ public class KrakenService extends Service implements Callback {
     @Override
     public IBinder onBind(Intent intent) {
 
-        Log.d(TAG, "Service onBind");
+        Log.d(TAG, "Binding...");
 
         return messenger.getBinder();
     }
