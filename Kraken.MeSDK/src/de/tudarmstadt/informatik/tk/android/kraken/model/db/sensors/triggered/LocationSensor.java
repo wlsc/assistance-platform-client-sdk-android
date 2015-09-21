@@ -199,7 +199,6 @@ public class LocationSensor extends AbstractTriggeredSensor implements GoogleApi
         if (mLastEventDumpingTimestamp == 0) {
             return true;
         } else {
-
             // the time has come -> save data into db
             if ((timestamp - mLastEventDumpingTimestamp) / 1000000000 > updateInterval) {
                 return true;

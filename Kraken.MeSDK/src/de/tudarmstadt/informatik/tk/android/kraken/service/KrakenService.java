@@ -90,12 +90,10 @@ public class KrakenService extends Service implements Callback {
 
             SharedPreferences sharedPreferences = android.preference.PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
             long userId = sharedPreferences.getLong("current_user_id", -1);
-            long moduleId = sharedPreferences.getLong("current_module_id", -1);
 
             List<DbModuleInstallation> dbModuleInstallations = dbModuleInstallationDao
                     .queryBuilder()
                     .where(DbModuleInstallationDao.Properties.UserId.eq(userId))
-                    .where(DbModuleInstallationDao.Properties.ModuleId.eq(moduleId))
                     .build()
                     .list();
 
@@ -103,6 +101,7 @@ public class KrakenService extends Service implements Callback {
                 Log.d(TAG, "Found active modules -> starting monitoring activities...");
 
                 monitorStart();
+
             } else {
                 Log.d(TAG, "No active module were found!");
             }

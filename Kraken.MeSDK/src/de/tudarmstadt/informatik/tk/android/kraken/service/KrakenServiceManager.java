@@ -51,7 +51,6 @@ public class KrakenServiceManager implements Handler.Callback {
 
         mContext = context;
         mKrakenIntent = new Intent(context, KrakenService.class);
-//        mKrakenIntent = new Intent(context, HarvesterService.class);
     }
 
     public static KrakenServiceManager getInstance(Context context) {
