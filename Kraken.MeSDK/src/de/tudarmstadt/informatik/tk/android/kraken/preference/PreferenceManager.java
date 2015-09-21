@@ -19,6 +19,8 @@ public class PreferenceManager {
     public static final String KRAKEN_ACTIVATED = "KrakenActivated";
     public static final String KRAKEN_SHOW_NOTIFICATION = "KrakenShowNotification";
     public static final String KRAKEN_DATA_PROFILE = "KrakenDataProfile";
+    public static final String KRAKEN_CURRENT_DEVICE_SERVER_ID = "current_device_id";
+    public static final String KRAKEN_USER_TOKEN = "user_token";
 
     public static final String KRAKEN_DATA_PROFILE_BASIC = "KrakenDataProfileBasic";
     public static final String KRAKEN_DATA_PROFILE_FULL = "KrakenDataProfileFull";
@@ -72,12 +74,28 @@ public class PreferenceManager {
         this.defaultPrefs.edit().putString(KRAKEN_DATA_PROFILE, dataProfile).apply();
     }
 
+    public long getCurrentDeviceServerId() {
+        return this.defaultPrefs.getLong(KRAKEN_CURRENT_DEVICE_SERVER_ID, -1);
+    }
+
+    public void setCurrentDeviceServiceId(long deviceId) {
+        this.defaultPrefs.edit().putLong(KRAKEN_CURRENT_DEVICE_SERVER_ID, deviceId).apply();
+    }
+
     public boolean getActivated() {
         return this.defaultPrefs.getBoolean(KRAKEN_ACTIVATED, DEFAULT_KRAKEN_ACTIVATED);
     }
 
     public void setActivated(boolean activated) {
         this.defaultPrefs.edit().putBoolean(KRAKEN_ACTIVATED, activated).apply();
+    }
+
+    public String getUserToken() {
+        return this.defaultPrefs.getString(KRAKEN_USER_TOKEN, "");
+    }
+
+    public void setUserToken(String value) {
+        this.defaultPrefs.edit().putString(KRAKEN_USER_TOKEN, value).apply();
     }
 
     public boolean getShowNotification() {

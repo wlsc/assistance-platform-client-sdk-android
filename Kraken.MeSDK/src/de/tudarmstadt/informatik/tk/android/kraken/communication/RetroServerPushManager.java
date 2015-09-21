@@ -16,22 +16,35 @@ import java.util.concurrent.TimeUnit;
 
 import de.greenrobot.dao.AbstractDao;
 import de.tudarmstadt.informatik.tk.android.kraken.communication.endpoint.EventUploadEndpoint;
+import de.tudarmstadt.informatik.tk.android.kraken.db.DatabaseManager;
+import de.tudarmstadt.informatik.tk.android.kraken.db.DbAccelerometerSensor;
+import de.tudarmstadt.informatik.tk.android.kraken.db.DbAccelerometerSensorDao;
+import de.tudarmstadt.informatik.tk.android.kraken.db.DbPositionSensor;
+import de.tudarmstadt.informatik.tk.android.kraken.db.DbPositionSensorDao;
 import de.tudarmstadt.informatik.tk.android.kraken.interfaces.IDbSensor;
 import de.tudarmstadt.informatik.tk.android.kraken.interfaces.IDbUpdatableSensor;
 import de.tudarmstadt.informatik.tk.android.kraken.interfaces.Sensor;
 import de.tudarmstadt.informatik.tk.android.kraken.model.api.EventUploadRequest;
+import de.tudarmstadt.informatik.tk.android.kraken.model.api.sensors.AccelerometerSensorRequest;
+import de.tudarmstadt.informatik.tk.android.kraken.model.api.sensors.PositionSensorRequest;
+import de.tudarmstadt.informatik.tk.android.kraken.model.api.sensors.SensorType;
 import de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.interfaces.ISensor;
+import de.tudarmstadt.informatik.tk.android.kraken.preference.PreferenceManager;
 import de.tudarmstadt.informatik.tk.android.kraken.service.KrakenService;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 
+/**
+ * Service to push data saved on the device to a server
+ */
 public class RetroServerPushManager {
 
     private static final String TAG = RetroServerPushManager.class.getSimpleName();
 
     private static final int PERIODIC_PUSH_DELAY_IN_MIN = 0;
     private static final int PERIODIC_PUSH_PERIOD_IN_MIN = 1;
+    private static final int PUSH_NUMBER_OF_EACH_ELEMENTS = 50;
 
     private static RetroServerPushManager instance;
 
@@ -44,27 +57,39 @@ public class RetroServerPushManager {
     protected ScheduledExecutorService mScheduledTaskExecutor;
     private static Context mContext;
 
+    private static PreferenceManager mPreferenceManager;
+
+    private static DbAccelerometerSensorDao dbAccelerometerSensorDao;
+    private static DbPositionSensorDao dbPositionSensorDao;
+
+    private List<DbAccelerometerSensor> dbAccelerometerSensors;
+    private List<DbPositionSensor> dbPositionSensors;
+
+    private RetroServerPushManager(Context ctx) {
+
+        mContext = ctx;
+        mScheduledTaskExecutor = Executors.newSingleThreadScheduledExecutor();
+    }
+
     public static RetroServerPushManager getInstance(Context ctx) {
 
         if (instance == null) {
-            instance = new RetroServerPushManager();
+            instance = new RetroServerPushManager(ctx);
         }
 
         if (mFuture == null) {
-            // TODO: enabled it to push data periodically
-//            instance.startPeriodicPush();
+            instance.startPeriodicPush();
         }
 
-        instance.mContext = ctx.getApplicationContext();
+        if (mPreferenceManager == null) {
+            mPreferenceManager = PreferenceManager.getInstance(ctx);
+        }
 
         return instance;
     }
 
-    private RetroServerPushManager() {
-        mScheduledTaskExecutor = Executors.newSingleThreadScheduledExecutor();
-    }
+    public void setWLANConnected(boolean bConnected) {
 
-    public void setWlanConnected(boolean bConnected) {
         if (bConnected) {
             mIsWlanConnected = true;
             stopPeriodicPush();
@@ -80,13 +105,25 @@ public class RetroServerPushManager {
         Log.d(TAG, "Starting periodic push of data...");
 
         if (mFuture == null) {
+
             mFuture = mScheduledTaskExecutor.scheduleAtFixedRate(new Runnable() {
+
                 @Override
                 public void run() {
-                    Log.d(TAG, "periodic flush");
+
+                    Log.d(TAG, "Invoking periodic push data to server...");
+
                     flushData(EPushType.PERIODIC);
                 }
             }, PERIODIC_PUSH_DELAY_IN_MIN, PERIODIC_PUSH_PERIOD_IN_MIN, TimeUnit.MINUTES);
+        }
+
+        if (dbAccelerometerSensorDao == null) {
+            dbAccelerometerSensorDao = DatabaseManager.getInstance(mContext).getDaoSession().getDbAccelerometerSensorDao();
+        }
+
+        if (dbPositionSensorDao == null) {
+            dbPositionSensorDao = DatabaseManager.getInstance(mContext).getDaoSession().getDbPositionSensorDao();
         }
     }
 
@@ -98,12 +135,11 @@ public class RetroServerPushManager {
             mFuture.cancel(true);
             mFuture = null;
         }
+
+        dbAccelerometerSensorDao = null;
+        dbPositionSensorDao = null;
     }
 
-    // TODO Wäre ein if (m_setImmediate.contains(sensor) || m_bIsWlanConnected) hier sinnvoller?
-    // Es müsste dann nicht bei jedem inform jeder Sensor abgefragt werden. (Einige Queries werden gespart)
-
-    // TODO: Was passiert, wenn ein MANUAL PushSensor hier informt?
     public void inform(ISensor sensor) {
 
         Log.d(TAG, "inform: " + sensor.getSensorType().getSensorName());
@@ -135,45 +171,143 @@ public class RetroServerPushManager {
         }
     }
 
+    /**
+     * Flushing data of sensors
+     *
+     * @param sensor
+     */
     private void flushData(ISensor sensor) {
 
         Log.d(TAG, "flushData: " + sensor.getSensorType().getSensorName());
 
-//        String kroken = SdkAuthentication.getInstance(mContext).getKroken();
-//        if (kroken == null)
-//            return;
-
-        EventUploadRequest eventUploadRequest = new EventUploadRequest();
-        List<Sensor> sensorDataEvents = sensor.flushDataRetro();
-
-        if (sensorDataEvents != null) {
-
-            eventUploadRequest.setDataEvents(sensorDataEvents);
-
-            sendSensorData(eventUploadRequest);
-        }
+//        EventUploadRequest eventUploadRequest = new EventUploadRequest();
+//        List<Sensor> sensorDataEvents = sensor.flushDataRetro();
+//
+//        if (sensorDataEvents != null) {
+//
+//            eventUploadRequest.setDataEvents(sensorDataEvents);
+//
+//            sendSensorData(eventUploadRequest);
+//        }
     }
 
     public void flushAll() {
         flushData(EPushType.ALL);
     }
 
+    /**
+     * Flush data and send it to server
+     *
+     * @param type
+     */
     private void flushData(EPushType type) {
 
         Log.d(TAG, "flushData: " + type.name());
 
-//        String kroken = SdkAuthentication.getInstance(mContext).getKroken();
-//        if (kroken == null)
-//            return;
-
         EventUploadRequest eventUploadRequest = new EventUploadRequest();
-        buildSensorsDataArray(type, eventUploadRequest);
+
+        long deviceServerId = mPreferenceManager.getCurrentDeviceServerId();
+
+        Log.d(TAG, "Current server device id: " + deviceServerId);
+
+        List<Sensor> events = new LinkedList<>();
+
+        events.addAll(getAccelerometerEntries());
+        events.addAll(getPositionEntries());
+
+        eventUploadRequest.setDataEvents(events);
+        eventUploadRequest.setServerDeviceId(deviceServerId);
+
+//        buildSensorsDataArray(type, eventUploadRequest);
         sendSensorData(eventUploadRequest);
     }
 
+    /**
+     * Harvest particular number of accelerometer sensor entries from database
+     *
+     * @return
+     */
+    private List<Sensor> getAccelerometerEntries() {
+
+        List<Sensor> result = new LinkedList<>();
+
+        dbAccelerometerSensors = dbAccelerometerSensorDao
+                .queryBuilder()
+                .limit(PUSH_NUMBER_OF_EACH_ELEMENTS)
+                .build()
+                .list();
+
+        if (dbAccelerometerSensors != null) {
+
+            for (int i = 0; i < dbAccelerometerSensors.size(); i++) {
+
+                DbAccelerometerSensor sensor = dbAccelerometerSensors.get(i);
+
+                AccelerometerSensorRequest accelerometerSensorRequest = new AccelerometerSensorRequest();
+
+                accelerometerSensorRequest.setType(SensorType.ACCELEROMETER);
+                accelerometerSensorRequest.setTypeStr(SensorType.getApiName(SensorType.ACCELEROMETER));
+                accelerometerSensorRequest.setX(sensor.getX());
+                accelerometerSensorRequest.setY(sensor.getY());
+                accelerometerSensorRequest.setZ(sensor.getZ());
+                accelerometerSensorRequest.setAccuracy(sensor.getAccuracy());
+                accelerometerSensorRequest.setCreated(sensor.getCreated());
+
+                result.add(accelerometerSensorRequest);
+            }
+        }
+
+        return result;
+    }
+
+    /**
+     * Returns number of first entries of position events from database
+     *
+     * @return
+     */
+    private List<Sensor> getPositionEntries() {
+
+        List<Sensor> result = new LinkedList<>();
+
+        dbPositionSensors = dbPositionSensorDao
+                .queryBuilder()
+                .limit(PUSH_NUMBER_OF_EACH_ELEMENTS)
+                .build()
+                .list();
+
+        if (dbPositionSensors != null) {
+
+            for (int i = 0; i < dbPositionSensors.size(); i++) {
+
+                DbPositionSensor sensor = dbPositionSensors.get(i);
+
+                PositionSensorRequest positionSensorRequest = new PositionSensorRequest();
+
+                positionSensorRequest.setType(SensorType.POSITION);
+                positionSensorRequest.setTypeStr(SensorType.getApiName(SensorType.POSITION));
+                positionSensorRequest.setLatitude(sensor.getLatitude());
+                positionSensorRequest.setLongitude(sensor.getLongitude());
+                positionSensorRequest.setAccuracyHorizontal(sensor.getAccuracyHorizontal());
+                positionSensorRequest.setAccuracyVertical(sensor.getAccuracyVertical());
+                positionSensorRequest.setAltitude(sensor.getAltitude());
+                positionSensorRequest.setSpeed(sensor.getSpeed());
+                positionSensorRequest.setCreated(sensor.getCreated());
+
+                result.add(positionSensorRequest);
+            }
+        }
+
+        return result;
+    }
+
+    /**
+     * Pushes events data to server
+     *
+     * @param eventUploadRequest
+     */
     private void sendSensorData(final EventUploadRequest eventUploadRequest) {
 
-        if (eventUploadRequest == null) {
+        if (eventUploadRequest == null || eventUploadRequest.getDataEvents() == null) {
             return;
         }
 
@@ -187,8 +321,7 @@ public class RetroServerPushManager {
         // send to upload data service
         EventUploadEndpoint eventUploadEndpoint = ServiceGenerator.createService(EventUploadEndpoint.class);
 
-        // TODO: get user token
-        String userToken = "";
+        String userToken = mPreferenceManager.getUserToken();
 
         eventUploadEndpoint.uploadData(userToken, eventUploadRequest, new Callback<Void>() {
 
@@ -198,8 +331,7 @@ public class RetroServerPushManager {
                 if (response != null && (response.getStatus() == 200 || response.getStatus() == 204)) {
 
                     // successful transmission of event data -> remove that data from db
-                    // TODO: remove event data from db after successful transmission
-
+                    removeDbEventsSent();
                 } else {
                     // TODO: show error
                 }
@@ -210,6 +342,24 @@ public class RetroServerPushManager {
                 // TODO process error
             }
         });
+    }
+
+    /**
+     * Removes successful transmitted entries from database
+     */
+    private void removeDbEventsSent() {
+
+        Log.d(TAG, "Removing sent event data from db...");
+
+        if (dbAccelerometerSensors != null) {
+            dbAccelerometerSensorDao.deleteInTx(dbAccelerometerSensors);
+        }
+
+        if (dbPositionSensors != null) {
+            dbPositionSensorDao.deleteInTx(dbPositionSensors);
+        }
+
+        Log.d(TAG, "Finished removing data from db");
     }
 
     private void buildSensorsDataArray(EPushType type, EventUploadRequest eventUploadRequest) {

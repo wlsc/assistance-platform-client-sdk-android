@@ -107,8 +107,7 @@ public class KrakenService extends Service implements Callback {
             }
         }
 
-        // TODO: enable it if ready with sending info
-//        RetroServerPushManager.getInstance(getApplicationContext());
+        RetroServerPushManager.getInstance(getApplicationContext());
 
         if (mPreferenceManager.getShowNotification()) {
             showIcon();
@@ -234,6 +233,9 @@ public class KrakenService extends Service implements Callback {
         Log.d(TAG, "Service onDestroy");
 
         stopKrakenService();
+
+        dbModuleInstallationDao = null;
+
         super.onDestroy();
     }
 

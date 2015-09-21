@@ -36,8 +36,8 @@ public class ConnectionSensor extends AbstractTriggeredSensor {
 //			{
 //				sensorConnection.setWlanState(mobWifiInfo.getState().ordinal());
 //				sensorConnection.setWlanIsAvailable(mobWifiInfo.isAvailable());
-//				//ServerPushManager.getInstance(context).setWlanConnected(mobWifiInfo.getState() == NetworkInfo.State.CONNECTED);
-//				RetroServerPushManager.getInstance(context).setWlanConnected(mobWifiInfo.getState() == NetworkInfo.State.CONNECTED);
+//				//ServerPushManager.getInstance(context).setWLANConnected(mobWifiInfo.getState() == NetworkInfo.State.CONNECTED);
+//				RetroServerPushManager.getInstance(context).setWLANConnected(mobWifiInfo.getState() == NetworkInfo.State.CONNECTED);
 //			}
 //
 //			handleDBEntry(sensorConnection);
@@ -67,8 +67,8 @@ public class ConnectionSensor extends AbstractTriggeredSensor {
 
     public void stopSensor() {
         if (m_bSensorStarted) {
-            //ServerPushManager.getInstance(context).setWlanConnected(false);
-            RetroServerPushManager.getInstance(context).setWlanConnected(false);
+            //ServerPushManager.getInstance(context).setWLANConnected(false);
+            RetroServerPushManager.getInstance(context).setWLANConnected(false);
             // TODO: find out why this exception is thrown
             try {
                 context.unregisterReceiver(m_receiver);
