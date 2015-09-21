@@ -26,7 +26,7 @@ import java.security.InvalidParameterException;
 import java.util.List;
 
 import de.tudarmstadt.informatik.tk.android.kraken.KrakenSdkSettings;
-import de.tudarmstadt.informatik.tk.android.kraken.utils.KrakenUtils;
+import de.tudarmstadt.informatik.tk.android.kraken.util.KrakenUtils;
 
 
 public class ServerCommunication {

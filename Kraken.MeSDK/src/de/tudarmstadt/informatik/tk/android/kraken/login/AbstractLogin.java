@@ -14,7 +14,7 @@ import de.tudarmstadt.informatik.tk.android.kraken.communication.Authentication;
 import de.tudarmstadt.informatik.tk.android.kraken.communication.IServerCommunicationResponseHandler;
 import de.tudarmstadt.informatik.tk.android.kraken.communication.ServerCommunication;
 import de.tudarmstadt.informatik.tk.android.kraken.ui.activities.accounts.AccountsAdapter;
-import de.tudarmstadt.informatik.tk.android.kraken.utils.KrakenUtils;
+import de.tudarmstadt.informatik.tk.android.kraken.util.KrakenUtils;
 
 
 public abstract class AbstractLogin implements ILoginData {

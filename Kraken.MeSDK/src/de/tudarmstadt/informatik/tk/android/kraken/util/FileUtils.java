@@ -1,4 +1,4 @@
-package de.tudarmstadt.informatik.tk.android.kraken.utils;
+package de.tudarmstadt.informatik.tk.android.kraken.util;
 
 import android.content.Context;
 import android.os.Build;

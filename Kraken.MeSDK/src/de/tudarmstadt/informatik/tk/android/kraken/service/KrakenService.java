@@ -1,9 +1,10 @@
-package de.tudarmstadt.informatik.tk.android.kraken.services;
+package de.tudarmstadt.informatik.tk.android.kraken.service;
 
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.Service;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -22,14 +23,16 @@ import java.util.List;
 
 import de.tudarmstadt.informatik.tk.android.kraken.ActivityCommunicator;
 import de.tudarmstadt.informatik.tk.android.kraken.KrakenSdkSettings;
+import de.tudarmstadt.informatik.tk.android.kraken.R;
 import de.tudarmstadt.informatik.tk.android.kraken.communication.RetroServerPushManager;
 import de.tudarmstadt.informatik.tk.android.kraken.db.DaoSession;
 import de.tudarmstadt.informatik.tk.android.kraken.db.DatabaseManager;
+import de.tudarmstadt.informatik.tk.android.kraken.db.DbModuleInstallation;
+import de.tudarmstadt.informatik.tk.android.kraken.db.DbModuleInstallationDao;
 import de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.ECommandType;
 import de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.SensorManager;
 import de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.interfaces.ISensor;
 import de.tudarmstadt.informatik.tk.android.kraken.preference.PreferenceManager;
-import de.tudarmstadt.informatik.tk.android.kraken.R;
 
 
 public class KrakenService extends Service implements Callback {
@@ -47,6 +50,8 @@ public class KrakenService extends Service implements Callback {
     private SensorManager mSensorManager;
     private PreferenceManager mPreferenceManager;
     private DatabaseManager mDatabaseManager;
+
+    private static DbModuleInstallationDao dbModuleInstallationDao;
 
     public static KrakenService getInstance() {
         return instance;
@@ -71,14 +76,36 @@ public class KrakenService extends Service implements Callback {
 
         // GcmManager.getInstance(this).registerAtCloud();
 
-        startService();
+        startKrakenService();
     }
 
-    private void startService() {
+    private void startKrakenService() {
 
         if (!m_bIsRunning) {
             m_bIsRunning = true;
-            monitorStart();
+
+            if (dbModuleInstallationDao == null) {
+                dbModuleInstallationDao = mDatabaseManager.getDaoSession().getDbModuleInstallationDao();
+            }
+
+            SharedPreferences sharedPreferences = android.preference.PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+            long userId = sharedPreferences.getLong("current_user_id", -1);
+            long moduleId = sharedPreferences.getLong("current_module_id", -1);
+
+            List<DbModuleInstallation> dbModuleInstallations = dbModuleInstallationDao
+                    .queryBuilder()
+                    .where(DbModuleInstallationDao.Properties.UserId.eq(userId))
+                    .where(DbModuleInstallationDao.Properties.ModuleId.eq(moduleId))
+                    .build()
+                    .list();
+
+            if (dbModuleInstallations != null && !dbModuleInstallations.isEmpty()) {
+                Log.d(TAG, "Found active modules -> starting monitoring activities...");
+
+                monitorStart();
+            } else {
+                Log.d(TAG, "No active module were found!");
+            }
         }
 
         // TODO: enable it if ready with sending info
@@ -89,6 +116,56 @@ public class KrakenService extends Service implements Callback {
         } else {
             hideIcon();
         }
+    }
+
+    private void stopKrakenService() {
+
+        if (m_bIsRunning) {
+            monitorStop();
+            m_bIsRunning = false;
+        }
+
+        RetroServerPushManager.stopPeriodicPush();
+
+        setActivityHandler(null);
+        hideIcon();
+        stopSelf();
+    }
+
+    private void monitorStart() {
+
+        Log.d(TAG, "Starting monitoring service...");
+
+//		Handler handler = ActivityCommunicator.getHandler();
+
+        mSensorManager = SensorManager.getInstance(this);
+
+        List<ISensor> enabledSensors = mSensorManager.getEnabledSensors();
+
+        Log.d(TAG, "Active sensors: " + enabledSensors.size());
+
+        for (ISensor sensor : enabledSensors) {
+            sensor.startSensor();
+        }
+
+        Log.d(TAG, "All sensors are enabled!");
+
+        // TODO: enable that later
+//        startAccessibilityService();
+    }
+
+    private void monitorStop() {
+
+        Log.d(TAG, "Stopping service...");
+
+        Log.d(TAG, "Active sensors: " + mSensorManager.getEnabledSensors());
+
+        for (ISensor sensor : mSensorManager.getEnabledSensors()) {
+            sensor.stopSensor();
+        }
+
+        Log.d(TAG, "All sensors were stopped.");
+        Log.d(TAG, "Service was stopped.");
     }
 
     private void showIcon() {
@@ -141,6 +218,7 @@ public class KrakenService extends Service implements Callback {
         if (intent != null && intent.hasExtra(KrakenSdkSettings.INTENT_EXTRA_SHOW_ICON)) {
 
             boolean showIcon = intent.getBooleanExtra(KrakenSdkSettings.INTENT_EXTRA_SHOW_ICON, PreferenceManager.DEFAULT_KRAKEN_SHOW_NOTIFICATION);
+
             if (showIcon) {
                 showIcon();
             } else {
@@ -156,62 +234,12 @@ public class KrakenService extends Service implements Callback {
 
         Log.d(TAG, "Service onDestroy");
 
-        stopService();
+        stopKrakenService();
         super.onDestroy();
-    }
-
-    private void stopService() {
-        if (m_bIsRunning) {
-            monitorStop();
-            m_bIsRunning = false;
-        }
-
-        //ServerPushManager.stopPeriodicPush();
-        RetroServerPushManager.stopPeriodicPush();
-        setActivityHandler(null);
-        hideIcon();
-        stopSelf();
     }
 
     public boolean isRunning() {
         return m_bIsRunning;
-    }
-
-    private void monitorStart() {
-
-        Log.d(TAG, "Starting monitoring service...");
-
-//		Handler handler = ActivityCommunicator.getHandler();
-
-        mSensorManager = SensorManager.getInstance(this);
-
-        List<ISensor> enabledSensors = mSensorManager.getEnabledSensors();
-
-        Log.d(TAG, "Active sensors: " + enabledSensors.size());
-
-        for (ISensor sensor : enabledSensors) {
-            sensor.startSensor();
-//			sensor.setCallbackHandler(handler);
-        }
-
-        Log.d(TAG, "All sensors are enabled.");
-
-        // TODO: enable that later
-//        startAccessibilityService();
-    }
-
-    private void monitorStop() {
-
-        Log.d(TAG, "Stopping service...");
-
-        Log.d(TAG, "Active sensors: " + mSensorManager.getEnabledSensors());
-
-        for (ISensor sensor : mSensorManager.getEnabledSensors()) {
-            sensor.stopSensor();
-        }
-
-        Log.d(TAG, "All sensors were stopped.");
-        Log.d(TAG, "Service was stopped.");
     }
 
     @Override
@@ -240,19 +268,22 @@ public class KrakenService extends Service implements Callback {
 
         Bundle data = msg.getData();
         Serializable obj = data.getSerializable("command");
-        if (obj == null || !(obj instanceof ECommandType))
+        if (obj == null || !(obj instanceof ECommandType)) {
             return false;
+        }
 
-        switch ((ECommandType) obj) {
+        ECommandType command = (ECommandType) obj;
+
+        switch (command) {
             case SET_HANDLER:
                 Messenger messenger = (Messenger) data.getParcelable("value");
                 setActivityHandler(messenger);
                 break;
             case START_SERVICE:
-                startService();
+                startKrakenService();
                 break;
             case STOP_SERVICE:
-                stopService();
+                stopKrakenService();
                 break;
             case REMOVE_HANDLER:
                 setActivityHandler(null);
@@ -269,7 +300,7 @@ public class KrakenService extends Service implements Callback {
         return true;
     }
 
-    public static void handleCommand(Messenger messenger, ECommandType command, Object value) {
+    public static void sendCommand(Messenger messenger, ECommandType command, Object value) {
 
         if (messenger == null || command == null) {
             return;
@@ -280,10 +311,13 @@ public class KrakenService extends Service implements Callback {
         bundle.putSerializable("command", command);
 
         if (value != null) {
-            if (value instanceof String)
+            if (value instanceof String) {
                 bundle.putString("value", (String) value);
-            else if (value instanceof Parcelable)
-                bundle.putParcelable("value", (Parcelable) value);
+            } else {
+                if (value instanceof Parcelable) {
+                    bundle.putParcelable("value", (Parcelable) value);
+                }
+            }
         }
 
         msg.setData(bundle);

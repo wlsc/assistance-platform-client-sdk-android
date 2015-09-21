@@ -1,4 +1,4 @@
-package de.tudarmstadt.informatik.tk.android.kraken.communication.services;
+package de.tudarmstadt.informatik.tk.android.kraken.communication.endpoint;
 
 import java.util.List;
 
@@ -18,7 +18,7 @@ import retrofit.http.POST;
  * @author Wladimir Schmidt (wlsc.dev@gmail.com)
  * @date 13.09.2015
  */
-public interface DeviceService {
+public interface DeviceEndpoint {
 
     @POST(KrakenSdkSettings.DEVICE_REGISTRATION_ENDPOINT)
     void registerDevice(@Header("X-AUTH-TOKEN") String userToken,

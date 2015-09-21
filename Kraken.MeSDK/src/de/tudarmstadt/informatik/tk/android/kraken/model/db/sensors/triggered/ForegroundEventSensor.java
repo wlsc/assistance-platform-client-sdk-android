@@ -19,8 +19,8 @@ import java.util.Map;
 import de.tudarmstadt.informatik.tk.android.kraken.communication.EPushType;
 import de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.ESensorType;
 import de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.abstract_sensors.AbstractTriggeredSensor;
-import de.tudarmstadt.informatik.tk.android.kraken.utils.ImageUtils;
-import de.tudarmstadt.informatik.tk.android.kraken.utils.sensors.AccessibilityEventFilter;
+import de.tudarmstadt.informatik.tk.android.kraken.util.ImageUtils;
+import de.tudarmstadt.informatik.tk.android.kraken.util.sensors.AccessibilityEventFilter;
 
 /**
  * @author Karsten Planz

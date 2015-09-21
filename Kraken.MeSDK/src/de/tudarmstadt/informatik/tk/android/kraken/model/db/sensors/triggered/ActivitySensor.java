@@ -16,7 +16,7 @@ import java.util.List;
 
 import de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.ESensorType;
 import de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.abstract_sensors.AbstractTriggeredSensor;
-import de.tudarmstadt.informatik.tk.android.kraken.services.ActivitySensorService;
+import de.tudarmstadt.informatik.tk.android.kraken.service.ActivitySensorService;
 
 
 public class ActivitySensor extends AbstractTriggeredSensor implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {

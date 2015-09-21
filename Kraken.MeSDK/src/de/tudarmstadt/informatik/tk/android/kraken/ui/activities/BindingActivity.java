@@ -4,7 +4,7 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.os.Handler.Callback;
 
-import de.tudarmstadt.informatik.tk.android.kraken.utils.KrakenServiceManager;
+import de.tudarmstadt.informatik.tk.android.kraken.service.KrakenServiceManager;
 
 @Deprecated
 public abstract class BindingActivity extends Activity implements Callback {
@@ -26,21 +26,21 @@ public abstract class BindingActivity extends Activity implements Callback {
 	protected void onStart() {
 		super.onStart();
 
-        mServiceManager.startService();
+        mServiceManager.startKrakenService();
 	}
 
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
 
-        mServiceManager.unbindService();
+        mServiceManager.unbindKrakenService();
 	}
 
 	@Override
 	protected void onStop() {
 		super.onStop();
 
-        mServiceManager.unbindService();
+        mServiceManager.unbindKrakenService();
 	}
 
 }

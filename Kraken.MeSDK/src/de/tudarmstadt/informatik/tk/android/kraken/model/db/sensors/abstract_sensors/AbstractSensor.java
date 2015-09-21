@@ -32,8 +32,8 @@ import de.tudarmstadt.informatik.tk.android.kraken.interfaces.IDbSensor;
 import de.tudarmstadt.informatik.tk.android.kraken.interfaces.IDbUpdatableSensor;
 import de.tudarmstadt.informatik.tk.android.kraken.interfaces.Sensor;
 import de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.interfaces.ISensor;
-import de.tudarmstadt.informatik.tk.android.kraken.services.KrakenService;
-import de.tudarmstadt.informatik.tk.android.kraken.utils.DateUtils;
+import de.tudarmstadt.informatik.tk.android.kraken.service.KrakenService;
+import de.tudarmstadt.informatik.tk.android.kraken.util.DateUtils;
 
 public abstract class AbstractSensor implements ISensor {
 

@@ -1,4 +1,4 @@
-package de.tudarmstadt.informatik.tk.android.kraken.utils.sensors;
+package de.tudarmstadt.informatik.tk.android.kraken.util.sensors;
 
 /**
  * Singleton to get actual location in ForegroundTrafficSensor

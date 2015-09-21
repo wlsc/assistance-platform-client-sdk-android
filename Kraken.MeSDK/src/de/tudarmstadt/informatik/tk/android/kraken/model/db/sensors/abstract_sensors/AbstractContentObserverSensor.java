@@ -65,14 +65,19 @@ public abstract class AbstractContentObserverSensor extends AbstractSensor {
 
         @Override
         public void onChange(boolean selfChange, Uri uri) {
-            System.out.println("change arrived");
-            if (m_timerTask != null)
+
+            Log.d(TAG, "change arrived!");
+
+            if (m_timerTask != null) {
                 m_timerTask.cancel();
+            }
 
             m_timerTask = new SyncTimer();
 
-            if (m_timer == null)
+            if (m_timer == null) {
                 m_timer = new Timer(true);
+            }
+
             m_timer.schedule(m_timerTask, TIME_TO_WAIT_BEFORE_SYNCING_IN_SEC * 1000);
         }
 

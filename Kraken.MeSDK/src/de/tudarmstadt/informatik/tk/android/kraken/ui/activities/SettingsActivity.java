@@ -11,8 +11,8 @@ import de.tudarmstadt.informatik.tk.android.kraken.KrakenSdkSettings;
 import de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.ESensorType;
 import de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.SensorManager;
 import de.tudarmstadt.informatik.tk.android.kraken.preference.PreferenceManager;
-import de.tudarmstadt.informatik.tk.android.kraken.utils.KrakenServiceManager;
-import de.tudarmstadt.informatik.tk.android.kraken.utils.KrakenUtils;
+import de.tudarmstadt.informatik.tk.android.kraken.service.KrakenServiceManager;
+import de.tudarmstadt.informatik.tk.android.kraken.util.KrakenUtils;
 import de.tudarmstadt.informatik.tk.android.kraken.R;
 
 
@@ -78,7 +78,7 @@ public class SettingsActivity extends PreferenceActivity implements Preference.O
         if (key.equals(PreferenceManager.KRAKEN_ACTIVATED)) {
             boolean activated = (boolean) newValue;
             if (activated) {
-                mServiceManager.startService();
+                mServiceManager.startKrakenService();
             } else {
                 mServiceManager.stopService();
             }

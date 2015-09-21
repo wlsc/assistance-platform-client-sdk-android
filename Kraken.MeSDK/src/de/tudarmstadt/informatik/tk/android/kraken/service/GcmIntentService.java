@@ -1,4 +1,4 @@
-package de.tudarmstadt.informatik.tk.android.kraken.services;
+package de.tudarmstadt.informatik.tk.android.kraken.service;
 
 import android.app.IntentService;
 import android.content.Intent;
@@ -7,7 +7,7 @@ import android.util.Log;
 
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 
-import de.tudarmstadt.informatik.tk.android.kraken.receivers.GcmBroadcastReceiver;
+import de.tudarmstadt.informatik.tk.android.kraken.receiver.GcmBroadcastReceiver;
 
 public class GcmIntentService extends IntentService {
 

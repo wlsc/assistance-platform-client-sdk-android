@@ -11,8 +11,8 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Calendar;
 
-import de.tudarmstadt.informatik.tk.android.kraken.utils.DateUtils;
-import de.tudarmstadt.informatik.tk.android.kraken.utils.FileUtils;
+import de.tudarmstadt.informatik.tk.android.kraken.util.DateUtils;
+import de.tudarmstadt.informatik.tk.android.kraken.util.FileUtils;
 
 public class ApiCache {
 

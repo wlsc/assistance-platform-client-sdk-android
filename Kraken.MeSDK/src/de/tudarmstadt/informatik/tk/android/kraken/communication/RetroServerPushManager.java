@@ -15,13 +15,13 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 import de.greenrobot.dao.AbstractDao;
-import de.tudarmstadt.informatik.tk.android.kraken.communication.services.EventUploadService;
+import de.tudarmstadt.informatik.tk.android.kraken.communication.endpoint.EventUploadEndpoint;
 import de.tudarmstadt.informatik.tk.android.kraken.interfaces.IDbSensor;
 import de.tudarmstadt.informatik.tk.android.kraken.interfaces.IDbUpdatableSensor;
 import de.tudarmstadt.informatik.tk.android.kraken.interfaces.Sensor;
 import de.tudarmstadt.informatik.tk.android.kraken.model.api.EventUploadRequest;
 import de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.interfaces.ISensor;
-import de.tudarmstadt.informatik.tk.android.kraken.services.KrakenService;
+import de.tudarmstadt.informatik.tk.android.kraken.service.KrakenService;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
@@ -185,12 +185,12 @@ public class RetroServerPushManager {
         }
 
         // send to upload data service
-        EventUploadService eventUploadService = ServiceGenerator.createService(EventUploadService.class);
+        EventUploadEndpoint eventUploadEndpoint = ServiceGenerator.createService(EventUploadEndpoint.class);
 
         // TODO: get user token
         String userToken = "";
 
-        eventUploadService.uploadData(userToken, eventUploadRequest, new Callback<Void>() {
+        eventUploadEndpoint.uploadData(userToken, eventUploadRequest, new Callback<Void>() {
 
             @Override
             public void success(Void aVoid, Response response) {

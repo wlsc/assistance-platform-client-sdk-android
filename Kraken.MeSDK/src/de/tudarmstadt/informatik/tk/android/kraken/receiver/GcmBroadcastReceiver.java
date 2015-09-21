@@ -1,4 +1,4 @@
-package de.tudarmstadt.informatik.tk.android.kraken.receivers;
+package de.tudarmstadt.informatik.tk.android.kraken.receiver;
 
 import android.app.Activity;
 import android.content.ComponentName;
@@ -6,7 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v4.content.WakefulBroadcastReceiver;
 
-import de.tudarmstadt.informatik.tk.android.kraken.services.GcmIntentService;
+import de.tudarmstadt.informatik.tk.android.kraken.service.GcmIntentService;
 
 public class GcmBroadcastReceiver extends WakefulBroadcastReceiver {
     @Override

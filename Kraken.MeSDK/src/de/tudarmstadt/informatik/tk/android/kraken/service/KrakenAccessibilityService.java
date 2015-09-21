@@ -1,4 +1,4 @@
-package de.tudarmstadt.informatik.tk.android.kraken.services;
+package de.tudarmstadt.informatik.tk.android.kraken.service;
 
 import android.accessibilityservice.AccessibilityService;
 import android.content.Intent;

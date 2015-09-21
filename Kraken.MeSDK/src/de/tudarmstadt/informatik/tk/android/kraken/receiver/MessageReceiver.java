@@ -1,4 +1,4 @@
-package de.tudarmstadt.informatik.tk.android.kraken.receivers;
+package de.tudarmstadt.informatik.tk.android.kraken.receiver;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;

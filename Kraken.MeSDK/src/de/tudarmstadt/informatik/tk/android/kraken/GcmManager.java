@@ -21,7 +21,7 @@ import java.security.NoSuchAlgorithmException;
 
 import de.tudarmstadt.informatik.tk.android.kraken.communication.IServerCommunicationResponseHandler;
 import de.tudarmstadt.informatik.tk.android.kraken.communication.ServerCommunication;
-import de.tudarmstadt.informatik.tk.android.kraken.utils.KrakenUtils;
+import de.tudarmstadt.informatik.tk.android.kraken.util.KrakenUtils;
 import de.tudarmstadt.informatik.tk.android.kraken.common.MessageType;
 
 public class GcmManager {

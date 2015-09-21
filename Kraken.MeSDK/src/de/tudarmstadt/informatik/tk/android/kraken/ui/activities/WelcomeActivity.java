@@ -17,9 +17,9 @@ import de.tudarmstadt.informatik.tk.android.kraken.ui.fragments.WelcomeFinishFra
 import de.tudarmstadt.informatik.tk.android.kraken.ui.fragments.WelcomeFragment;
 import de.tudarmstadt.informatik.tk.android.kraken.ui.fragments.WelcomeSettingsFragment;
 import de.tudarmstadt.informatik.tk.android.kraken.ui.views.NonSwipeableViewPager;
-import de.tudarmstadt.informatik.tk.android.kraken.utils.AccessibilityUtils;
-import de.tudarmstadt.informatik.tk.android.kraken.utils.KrakenServiceManager;
-import de.tudarmstadt.informatik.tk.android.kraken.utils.KrakenUtils;
+import de.tudarmstadt.informatik.tk.android.kraken.util.AccessibilityUtils;
+import de.tudarmstadt.informatik.tk.android.kraken.service.KrakenServiceManager;
+import de.tudarmstadt.informatik.tk.android.kraken.util.KrakenUtils;
 import de.tudarmstadt.informatik.tk.android.kraken.R;
 
 /**
@@ -112,7 +112,7 @@ public class WelcomeActivity extends FragmentActivity {
         mPrefs.setActivated(true);
         KrakenUtils.initDataProfile(this, mPrefs.getDataProfile());
         KrakenServiceManager.getInstance(this.getApplicationContext())
-                .startService();
+                .startKrakenService();
     }
 
     /**

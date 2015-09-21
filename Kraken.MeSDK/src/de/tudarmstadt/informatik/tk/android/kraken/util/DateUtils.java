@@ -1,4 +1,4 @@
-package de.tudarmstadt.informatik.tk.android.kraken.utils;
+package de.tudarmstadt.informatik.tk.android.kraken.util;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;

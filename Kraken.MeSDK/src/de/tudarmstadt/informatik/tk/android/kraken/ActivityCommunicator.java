@@ -34,6 +34,8 @@ public class ActivityCommunicator {
 
     public static void setMessenger(Messenger messenger, Context context) {
 
+        Log.d(TAG, "New messenger was set");
+
         if (instance == null) {
             instance = new ActivityCommunicator();
         }

@@ -1,4 +1,4 @@
-package de.tudarmstadt.informatik.tk.android.kraken.utils;
+package de.tudarmstadt.informatik.tk.android.kraken.service;
 
 import android.app.ActivityManager;
 import android.content.ComponentName;
@@ -11,7 +11,6 @@ import android.os.Message;
 import android.os.Messenger;
 
 import de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.ECommandType;
-import de.tudarmstadt.informatik.tk.android.kraken.services.KrakenService;
 
 /**
  * @author Karsten Planz
@@ -21,33 +20,38 @@ public class KrakenServiceManager implements Handler.Callback {
     private static KrakenServiceManager instance;
 
     private final Context mContext;
-    private final Intent mIntent;
-    private Messenger mServiceMessenger;
+    private final Intent mKrakenIntent;
+    private Messenger mMessenger;
 
-    private boolean mBound = false;
+    private boolean isServiceBound = false;
 
     protected ServiceConnection mServiceConnection = new ServiceConnection() {
 
         @Override
         public void onServiceDisconnected(ComponentName name) {
-            mBound = false;
+            isServiceBound = false;
         }
 
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
-            mServiceMessenger = new Messenger(service);
-            KrakenService.handleCommand(
-                    mServiceMessenger,
+
+            mMessenger = new Messenger(service);
+
+            KrakenService.sendCommand(
+                    mMessenger,
                     ECommandType.SET_HANDLER,
                     new Messenger(new Handler(KrakenServiceManager.this)));
-            mBound = true;
+
+            isServiceBound = true;
+
         }
     };
 
     private KrakenServiceManager(Context context) {
 
         mContext = context;
-        mIntent = new Intent(context, KrakenService.class);
+        mKrakenIntent = new Intent(context, KrakenService.class);
+//        mKrakenIntent = new Intent(context, HarvesterService.class);
     }
 
     public static KrakenServiceManager getInstance(Context context) {
@@ -55,11 +59,14 @@ public class KrakenServiceManager implements Handler.Callback {
         if (instance == null) {
             instance = new KrakenServiceManager(context);
         }
+
         return instance;
     }
 
     public boolean isServiceRunning() {
+
         ActivityManager manager = (ActivityManager) mContext.getSystemService(Context.ACTIVITY_SERVICE);
+
         for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
             if (KrakenService.class.getName().equals(service.service.getClassName())) {
                 return true;
@@ -68,42 +75,44 @@ public class KrakenServiceManager implements Handler.Callback {
         return false;
     }
 
-    public void startService() {
-        mContext.startService(mIntent);
-        //mContext.bindService(mIntent, mServiceConnection, Context.BIND_AUTO_CREATE);
+    public void startKrakenService() {
+
+        mContext.startService(mKrakenIntent);
+        //mContext.bindService(mKrakenIntent, mServiceConnection, Context.BIND_AUTO_CREATE);
     }
 
-    public void unbindService() {
-        if (mBound) {
+    public void unbindKrakenService() {
+
+        if (isServiceBound) {
             mContext.unbindService(mServiceConnection);
-            mBound = false;
+            isServiceBound = false;
         }
     }
 
     public void stopService() {
-        //KrakenService.handleCommand(mServiceMessenger, ECommandType.STOP_SERVICE, null);
-        mContext.stopService(mIntent);
-        //unbindService();
+        //KrakenService.sendCommand(mMessenger, ECommandType.STOP_SERVICE, null);
+        mContext.stopService(mKrakenIntent);
+        //unbindKrakenService();
     }
 
     public void showIcon(boolean show) {
 
-        Intent intent = mIntent;
+        Intent intent = mKrakenIntent;
         intent.putExtra("showIcon", show);
         mContext.startService(intent);
 
         /*
         if(show) {
-            KrakenService.handleCommand(mServiceMessenger, ECommandType.SHOW_ICON, null);
+            KrakenService.sendCommand(mMessenger, ECommandType.SHOW_ICON, null);
         }
         else {
-            KrakenService.handleCommand(mServiceMessenger, ECommandType.HIDE_ICON, null);
+            KrakenService.sendCommand(mMessenger, ECommandType.HIDE_ICON, null);
         }
         */
     }
 
-    public boolean isBound() {
-        return mBound;
+    public boolean isServiceBound() {
+        return isServiceBound;
     }
 
     @Override

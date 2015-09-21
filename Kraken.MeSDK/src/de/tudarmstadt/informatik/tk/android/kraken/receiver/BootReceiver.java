@@ -1,4 +1,4 @@
-package de.tudarmstadt.informatik.tk.android.kraken.receivers;
+package de.tudarmstadt.informatik.tk.android.kraken.receiver;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -6,7 +6,7 @@ import android.content.Intent;
 import android.util.Log;
 
 import de.tudarmstadt.informatik.tk.android.kraken.preference.PreferenceManager;
-import de.tudarmstadt.informatik.tk.android.kraken.utils.KrakenServiceManager;
+import de.tudarmstadt.informatik.tk.android.kraken.service.KrakenServiceManager;
 
 /**
  * @author Karsten Planz
@@ -26,7 +26,7 @@ public class BootReceiver extends BroadcastReceiver {
         if (activated) {
 
             final KrakenServiceManager service = KrakenServiceManager.getInstance(context);
-            service.startService();
+            service.startKrakenService();
         }
     }
 }
