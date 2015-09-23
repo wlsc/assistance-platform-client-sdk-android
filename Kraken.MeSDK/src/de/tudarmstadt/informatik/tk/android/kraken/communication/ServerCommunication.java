@@ -70,7 +70,7 @@ public class ServerCommunication {
         try {
             final String userToken = PreferenceManager.getInstance(mContext).getUserToken();
             final long deviceId = PreferenceManager.getInstance(mContext).getCurrentDeviceServerId();
-            final String registrationToken = jsonObject.getString("registrationToken");
+            final String registrationToken = jsonObject.getJSONObject("gcm").getString("registrationToken");
 
             DeviceRegistrationRequest deviceRegistrationRequest = new DeviceRegistrationRequest();
 
