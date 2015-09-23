@@ -19,7 +19,7 @@ import de.tudarmstadt.informatik.tk.android.assistance.Config;
  * @date 07.09.2015
  *
  */
-public class KrakenDatabaseGenerator {
+public class AssistanceDatabaseGenerator {
 
 	public static void main(String[] args) throws Exception {
     	new File(Config.KRAKEN_OUTPUT).mkdirs();
@@ -607,7 +607,7 @@ public class KrakenDatabaseGenerator {
 		System.out.println("Processed " + i + " files in " + longDuration + "ms. " + u + " files were manipulated.");
 	}
 	
-	public KrakenDatabaseGenerator() throws Exception {
+	public AssistanceDatabaseGenerator() throws Exception {
 
 	}
 }
