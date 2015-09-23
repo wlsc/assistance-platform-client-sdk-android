@@ -17,6 +17,7 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicHeader;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.protocol.HTTP;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
@@ -26,15 +27,23 @@ import java.security.InvalidParameterException;
 import java.util.List;
 
 import de.tudarmstadt.informatik.tk.android.kraken.KrakenSdkSettings;
+import de.tudarmstadt.informatik.tk.android.kraken.communication.endpoint.DeviceEndpoint;
+import de.tudarmstadt.informatik.tk.android.kraken.model.api.device.DeviceRegistrationRequest;
+import de.tudarmstadt.informatik.tk.android.kraken.preference.PreferenceManager;
 import de.tudarmstadt.informatik.tk.android.kraken.util.KrakenUtils;
+import retrofit.Callback;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
 
 
 public class ServerCommunication {
 
+    private static final String TAG = ServerCommunication.class.getSimpleName();
+
     public static final int METHOD_GET = 0;
     public static final int METHOD_POST = 1;
 
-    private Context m_context;
+    private Context mContext;
     private int m_method;
     private String m_endpoint;
     private JSONObject m_jsonObject;
@@ -42,7 +51,7 @@ public class ServerCommunication {
     private List<NameValuePair> m_getParams;
 
     public ServerCommunication(Context ctx, IServerCommunicationResponseHandler handler) {
-        this.m_context = ctx;
+        this.mContext = ctx;
         this.m_handler = handler;
     }
 
@@ -54,9 +63,55 @@ public class ServerCommunication {
     }
 
     public void postRequest(JSONObject jsonObject) {
-        m_method = METHOD_POST;
-        m_jsonObject = jsonObject;
-        runThread();
+//        m_method = METHOD_POST;
+//        m_jsonObject = jsonObject;
+//        runThread();
+
+        try {
+            final String userToken = PreferenceManager.getInstance(mContext).getUserToken();
+            final long deviceId = PreferenceManager.getInstance(mContext).getCurrentDeviceServerId();
+            final String registrationToken = jsonObject.getString("registrationToken");
+
+            DeviceRegistrationRequest deviceRegistrationRequest = new DeviceRegistrationRequest();
+
+            deviceRegistrationRequest.setDeviceId(deviceId);
+            deviceRegistrationRequest.setRegistrationToken(registrationToken);
+
+            DeviceEndpoint deviceEndpoint = ServiceGenerator.createService(DeviceEndpoint.class);
+            deviceEndpoint.registerDevice(userToken, deviceRegistrationRequest, new Callback<Void>() {
+
+                @Override
+                public void success(Void aVoid, Response response) {
+
+                    if (response != null && (response.getStatus() == 200 || response.getStatus() == 204)) {
+
+                        saveRegistrationTokenToDb(deviceId, registrationToken);
+
+                    } else {
+                        // TODO: handle response null
+                    }
+                }
+
+                @Override
+                public void failure(RetrofitError error) {
+                    // TODO: handle error case
+                }
+            });
+
+        } catch (JSONException e) {
+            Log.e(TAG, "Cannot parse registration id. Error: ", e);
+        }
+    }
+
+    /**
+     * Saves device GCM registration id to db
+     *
+     * @param deviceId
+     * @param registrationToken
+     */
+    private void saveRegistrationTokenToDb(long deviceId, String registrationToken) {
+
+
     }
 
     private void runThread() {
@@ -79,8 +134,8 @@ public class ServerCommunication {
                 if (m_method == METHOD_GET) {
                     String url = KrakenSdkSettings.SERVER_URL + "/" + m_endpoint;
                     List<NameValuePair> params = m_getParams;
-//                    params.add(new BasicNameValuePair("kroken", SdkAuthentication.getInstance(m_context).getKroken()));
-                    params.add(new BasicNameValuePair("deviceId", KrakenUtils.getDeviceId(m_context)));
+//                    params.add(new BasicNameValuePair("kroken", SdkAuthentication.getInstance(mContext).getKroken()));
+                    params.add(new BasicNameValuePair("deviceId", KrakenUtils.getDeviceId(mContext)));
                     String paramString = URLEncodedUtils.format(params, "utf-8");
                     request = new HttpGet(url + "?" + paramString);
                     Log.d("kraken", url + "?" + paramString);

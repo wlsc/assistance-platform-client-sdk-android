@@ -22,6 +22,7 @@ import java.io.Serializable;
 import java.util.List;
 
 import de.tudarmstadt.informatik.tk.android.kraken.ActivityCommunicator;
+import de.tudarmstadt.informatik.tk.android.kraken.KrakenGcmManager;
 import de.tudarmstadt.informatik.tk.android.kraken.KrakenSdkSettings;
 import de.tudarmstadt.informatik.tk.android.kraken.R;
 import de.tudarmstadt.informatik.tk.android.kraken.communication.RetroServerPushManager;
@@ -65,7 +66,7 @@ public class KrakenService extends Service implements Callback {
     public void onCreate() {
         super.onCreate();
 
-        Log.d(TAG, "OnCreate. Service starting...");
+        Log.d(TAG, "Service starting...");
 
         instance = this;
 
@@ -74,7 +75,7 @@ public class KrakenService extends Service implements Callback {
 
         mPreferenceManager = PreferenceManager.getInstance(getApplicationContext());
 
-        // GcmManager.getInstance(this).registerAtCloud();
+        KrakenGcmManager.getInstance(getApplicationContext()).registerAtCloud();
 
         startKrakenService();
     }
@@ -114,6 +115,8 @@ public class KrakenService extends Service implements Callback {
         } else {
             hideIcon();
         }
+
+        Log.d(TAG, "Service has started.");
     }
 
     private void stopKrakenService() {

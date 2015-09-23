@@ -25,9 +25,9 @@
     <!-- for GCM, only for devices lower that 4.0.4 -->
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <permission
-        android:name="de.tudarmstadt.informatik.tk.android.permission.C2D_MESSAGE"
+        android:name="de.tudarmstadt.informatik.tk.android.kraken.permission.C2D_MESSAGE"
         android:protectionLevel="signature" />
-    <uses-permission android:name="de.tudarmstadt.informatik.tk.kraken.android.permission.C2D_MESSAGE" />
+    <uses-permission android:name="de.tudarmstadt.informatik.tk.android.kraken.permission.C2D_MESSAGE" />
 
     <permission
         android:name="de.tudarmstadt.informatik.tk.kraken.dnd2.permission.KRAKEN_LOGIN"
@@ -61,7 +61,17 @@
             android:exported="false"
             android:label="ActivitySensorService" />
 
-        <service android:name=".service.GcmIntentService" />
+        <service
+            android:name=".service.KrakenGcmListenerService"
+            android:exported="false" />
+
+        <service
+            android:name=".service.KrakenInstanceIDListenerService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.android.gms.iid.InstanceID" />
+            </intent-filter>
+        </service>
 
         <!-- This will be fired on device start/boot -->
         <receiver
@@ -79,7 +89,7 @@
         </receiver>
 
         <receiver
-            android:name=".receiver.GcmBroadcastReceiver"
+            android:name="com.google.android.gms.gcm.GcmReceiver"
             android:permission="com.google.android.c2dm.permission.SEND">
             <intent-filter>
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />

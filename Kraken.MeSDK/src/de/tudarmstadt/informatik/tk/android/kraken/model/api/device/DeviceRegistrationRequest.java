@@ -15,14 +15,14 @@ public class DeviceRegistrationRequest {
 
     @SerializedName("messaging_registration_id")
     @Expose
-    private String registrationId;
+    private String registrationToken;
 
     public DeviceRegistrationRequest() {
     }
 
-    public DeviceRegistrationRequest(Long deviceId, String registrationId) {
+    public DeviceRegistrationRequest(Long deviceId, String registrationToken) {
         this.deviceId = deviceId;
-        this.registrationId = registrationId;
+        this.registrationToken = registrationToken;
     }
 
     public Long getDeviceId() {
@@ -33,19 +33,19 @@ public class DeviceRegistrationRequest {
         this.deviceId = deviceId;
     }
 
-    public String getRegistrationId() {
-        return this.registrationId;
+    public String getRegistrationToken() {
+        return this.registrationToken;
     }
 
-    public void setRegistrationId(String registrationId) {
-        this.registrationId = registrationId;
+    public void setRegistrationToken(String registrationToken) {
+        this.registrationToken = registrationToken;
     }
 
     @Override
     public String toString() {
         return "DeviceRegistrationRequest{" +
                 "deviceId=" + deviceId +
-                ", registrationId='" + registrationId + '\'' +
+                ", registrationToken='" + registrationToken + '\'' +
                 '}';
     }
 }
