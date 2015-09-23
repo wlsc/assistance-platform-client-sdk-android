@@ -159,6 +159,10 @@ public class KrakenService extends Service implements Callback {
 
         Log.d(TAG, "Stopping service...");
 
+        if (mSensorManager == null) {
+            mSensorManager = SensorManager.getInstance(this);
+        }
+
         Log.d(TAG, "Active sensors: " + mSensorManager.getEnabledSensors());
 
         for (ISensor sensor : mSensorManager.getEnabledSensors()) {
