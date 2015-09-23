@@ -56,6 +56,8 @@ dependencies {
     compile 'com.google.android.gms:play-services-base:7.8.0'
     compile 'com.google.android.gms:play-services-gcm:7.8.0'
     compile 'com.google.android.gms:play-services-location:7.8.0'
+    compile 'com.google.android.gms:play-services-analytics:7.8.0'
+
     // a type-safe HTTP client
     compile 'com.squareup.retrofit:retrofit:1.9.0'
     compile 'com.squareup.retrofit:retrofit-mock:1.9.0'
