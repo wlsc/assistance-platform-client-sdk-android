@@ -80,18 +80,18 @@ public class KrakenServiceManager implements Handler.Callback {
         //mContext.bindService(mKrakenIntent, mServiceConnection, Context.BIND_AUTO_CREATE);
     }
 
+    public void stopKrakenService() {
+        //KrakenService.sendCommand(mMessenger, ECommandType.STOP_SERVICE, null);
+        mContext.stopService(mKrakenIntent);
+        //unbindKrakenService();
+    }
+
     public void unbindKrakenService() {
 
         if (isServiceBound) {
             mContext.unbindService(mServiceConnection);
             isServiceBound = false;
         }
-    }
-
-    public void stopService() {
-        //KrakenService.sendCommand(mMessenger, ECommandType.STOP_SERVICE, null);
-        mContext.stopService(mKrakenIntent);
-        //unbindKrakenService();
     }
 
     public void showIcon(boolean show) {

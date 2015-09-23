@@ -80,7 +80,7 @@ public class SettingsActivity extends PreferenceActivity implements Preference.O
             if (activated) {
                 mServiceManager.startKrakenService();
             } else {
-                mServiceManager.stopService();
+                mServiceManager.stopKrakenService();
             }
         } else if (key.equals(PreferenceManager.KRAKEN_SHOW_NOTIFICATION)) {
             mServiceManager.showIcon((boolean) newValue);
