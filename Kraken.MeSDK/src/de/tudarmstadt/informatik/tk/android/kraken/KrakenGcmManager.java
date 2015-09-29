@@ -31,7 +31,6 @@ public class KrakenGcmManager {
 
     private static final String PROPERTY_REG_ID = "GcmRegId";
     private static final String APP_VERSION = "AppVersion";
-    protected static final String SENDER_ID = "930932669428";
 
     private static KrakenGcmManager instance;
 
@@ -107,7 +106,7 @@ public class KrakenGcmManager {
 
     /**
      * Registers the application with GCM servers asynchronously.
-     * <p/>
+     * <p>
      * Stores the registration ID and app versionCode in the application's
      * shared preferences.
      */
@@ -122,7 +121,7 @@ public class KrakenGcmManager {
                     if (mGCM == null) {
                         mGCM = GoogleCloudMessaging.getInstance(mContext);
                     }
-                    registrationToken = mGCM.register(SENDER_ID);
+                    registrationToken = mGCM.register(KrakenConfig.GCM_SENDER_ID);
                     msg = "Device registered, registration ID=" + registrationToken;
 
                     // You should send the registration ID to your server over
@@ -135,7 +134,7 @@ public class KrakenGcmManager {
                     try {
                         sendRegistrationIdToBackend();
                     } catch (JSONException e) {
-                        Log.e(TAG, "Cannot send registration id to server! Error: ",e);
+                        Log.e(TAG, "Cannot send registration id to server! Error: ", e);
                     }
 
                     // Persist the regID - no need to register again.

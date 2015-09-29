@@ -21,4 +21,9 @@ public class KrakenConfig {
      */
     public static final String ASSISTANCE_EVENT_UPLOAD_ENDPOINT = "/sensordata/upload";
 
+    /**
+     * GCM data configuration
+     */
+    public static final String GCM_SENDER_ID = "583610876023";
+
 }
