@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name" translatable="false">Kraken.Me SDK</string>
-
     <string name="alert_accessibility">For Kraken to work properly you need to activate the accessibility option. Therefore just open the Accessibility Settings and enable the Kraken.Me service.</string>
     <string name="alert_accessibility_button">Open Accessibility Settings</string>
 

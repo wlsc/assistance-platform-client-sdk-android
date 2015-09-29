@@ -197,7 +197,7 @@ public class KrakenService extends Service implements Callback {
         Bitmap kraki = BitmapFactory.decodeResource(res, R.drawable.kraki_big);
         builder.setLargeIcon(Bitmap.createScaledBitmap(kraki, width, height, false));
 
-        builder.setContentTitle(getString(R.string.app_name));
+        builder.setContentTitle("Kraken service");
         builder.setContentText(getString(R.string.service_notfication_text));
 
         builder.setOngoing(true);
