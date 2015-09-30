@@ -51,6 +51,8 @@ public class RegistrationIntentService extends IntentService {
 
         try {
 
+            Log.d(TAG, "Trying to get GCM registration token...");
+
             InstanceID instanceID = InstanceID.getInstance(this);
             String token = instanceID.getToken(KrakenConfig.GCM_SENDER_ID, GoogleCloudMessaging.INSTANCE_ID_SCOPE, null);
 
