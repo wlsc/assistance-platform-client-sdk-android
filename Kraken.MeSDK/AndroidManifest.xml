@@ -26,10 +26,10 @@
     <uses-permission android:name="android.permission.WAKE_LOCK" />
 
     <permission
-        android:name="de.tudarmstadt.informatik.tk.android.assistance.permission.C2D_MESSAGE"
+        android:name="${applicationId}.permission.C2D_MESSAGE"
         android:protectionLevel="signature" />
 
-    <uses-permission android:name="de.tudarmstadt.informatik.tk.android.assistance.permission.C2D_MESSAGE" />
+    <uses-permission android:name="${applicationId}.permission.C2D_MESSAGE" />
 
     <permission
         android:name="de.tudarmstadt.informatik.tk.kraken.dnd2.permission.KRAKEN_LOGIN"

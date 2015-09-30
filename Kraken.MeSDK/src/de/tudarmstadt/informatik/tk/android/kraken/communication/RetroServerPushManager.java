@@ -15,6 +15,7 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 import de.greenrobot.dao.AbstractDao;
+import de.tudarmstadt.informatik.tk.android.kraken.PreferenceManager;
 import de.tudarmstadt.informatik.tk.android.kraken.communication.endpoint.EventUploadEndpoint;
 import de.tudarmstadt.informatik.tk.android.kraken.db.DatabaseManager;
 import de.tudarmstadt.informatik.tk.android.kraken.db.DbAccelerometerSensor;
@@ -29,7 +30,6 @@ import de.tudarmstadt.informatik.tk.android.kraken.model.api.sensors.Acceleromet
 import de.tudarmstadt.informatik.tk.android.kraken.model.api.sensors.PositionSensorRequest;
 import de.tudarmstadt.informatik.tk.android.kraken.model.api.sensors.SensorType;
 import de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.interfaces.ISensor;
-import de.tudarmstadt.informatik.tk.android.kraken.PreferenceManager;
 import de.tudarmstadt.informatik.tk.android.kraken.service.KrakenService;
 import retrofit.Callback;
 import retrofit.RetrofitError;
@@ -352,10 +352,20 @@ public class RetroServerPushManager {
         Log.d(TAG, "Removing sent event data from db...");
 
         if (dbAccelerometerSensors != null) {
+
+            if (dbAccelerometerSensorDao == null) {
+                dbAccelerometerSensorDao = DatabaseManager.getInstance(mContext).getDaoSession().getDbAccelerometerSensorDao();
+            }
+
             dbAccelerometerSensorDao.deleteInTx(dbAccelerometerSensors);
         }
 
         if (dbPositionSensors != null) {
+
+            if (dbPositionSensorDao == null) {
+                dbPositionSensorDao = DatabaseManager.getInstance(mContext).getDaoSession().getDbPositionSensorDao();
+            }
+
             dbPositionSensorDao.deleteInTx(dbPositionSensors);
         }
 
