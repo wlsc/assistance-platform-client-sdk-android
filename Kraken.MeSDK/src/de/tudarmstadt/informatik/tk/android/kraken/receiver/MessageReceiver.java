@@ -13,6 +13,7 @@ import de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.SensorManage
 import de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.interfaces.ISensor;
 
 
+@Deprecated
 public class MessageReceiver extends BroadcastReceiver {
 
     public static void forwardToSensor(Context context, JSONArray json) {

@@ -1,4 +1,4 @@
-package de.tudarmstadt.informatik.tk.android.kraken.preference;
+package de.tudarmstadt.informatik.tk.android.kraken;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -14,6 +14,9 @@ public class PreferenceManager {
     public static final boolean DEFAULT_KRAKEN_FIRST_START = true;
     public static final boolean DEFAULT_KRAKEN_ACCEPT_DISCLAIMER = false;
 
+    // GCM related
+    private static final String SENT_TOKEN_TO_SERVER = "sentTokenToServer";
+    public static final String REGISTRATION_COMPLETE = "registrationComplete";
 
     // Default prefs
     public static final String KRAKEN_ACTIVATED = "KrakenActivated";
@@ -62,6 +65,14 @@ public class PreferenceManager {
 
     public void setAcceptDisclaimer(boolean acceptDisclaimer) {
         this.prefs.edit().putBoolean(KRAKEN_ACCEPT_DISCLAIMER, acceptDisclaimer).apply();
+    }
+
+    public boolean getSentGCMTokenToServer() {
+        return this.prefs.getBoolean(SENT_TOKEN_TO_SERVER, false);
+    }
+
+    public void setSentTokenToServer(boolean value) {
+        this.prefs.edit().putBoolean(SENT_TOKEN_TO_SERVER, value).apply();
     }
 
     // Default prefs

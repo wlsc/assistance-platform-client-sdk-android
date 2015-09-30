@@ -7,23 +7,16 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.telephony.TelephonyManager;
-import android.util.Log;
 
 import com.google.android.gms.gcm.GoogleCloudMessaging;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
-import de.tudarmstadt.informatik.tk.android.kraken.common.MessageType;
 import de.tudarmstadt.informatik.tk.android.kraken.communication.IServerCommunicationResponseHandler;
 import de.tudarmstadt.informatik.tk.android.kraken.communication.ServerCommunication;
-import de.tudarmstadt.informatik.tk.android.kraken.util.KrakenUtils;
 
 public class KrakenGcmManager {
 
@@ -106,7 +99,7 @@ public class KrakenGcmManager {
 
     /**
      * Registers the application with GCM servers asynchronously.
-     * <p>
+     * <p/>
      * Stores the registration ID and app versionCode in the application's
      * shared preferences.
      */
@@ -131,11 +124,9 @@ public class KrakenGcmManager {
                     // The request to your server should be authenticated if
                     // your app
                     // is using accounts.
-                    try {
-                        sendRegistrationIdToBackend();
-                    } catch (JSONException e) {
-                        Log.e(TAG, "Cannot send registration id to server! Error: ", e);
-                    }
+
+                    sendRegistrationIdToBackend(registrationToken);
+
 
                     // Persist the regID - no need to register again.
                 } catch (IOException ex) {
@@ -151,22 +142,10 @@ public class KrakenGcmManager {
 
     }
 
-    private void sendRegistrationIdToBackend() throws JSONException {
-
-        JSONObject jsonObject = new JSONObject();
-        jsonObject.put(MessageType.KEY_MESSAGE_TYPE, MessageType.GCM_REGISTRATION);
-        JSONObject jsonGcm = new JSONObject();
-        TelephonyManager systemService = (TelephonyManager) mContext.getSystemService(Context.TELEPHONY_SERVICE);
-        String strDeviceId = systemService.getDeviceId();
-        if (strDeviceId == null) {
-            strDeviceId = KrakenUtils.getDeviceId(mContext);
-        }
-        jsonGcm.put("deviceID", hash(strDeviceId));
-        jsonGcm.put("registrationToken", registrationToken);
-        jsonObject.put("gcm", jsonGcm);
+    public void sendRegistrationIdToBackend(String registrationToken) {
 
         ServerCommunication serverCommunication = new ServerCommunication(mContext, new GcmRegIdSentHandler());
-        serverCommunication.postRequest(jsonObject);
+        serverCommunication.postRequest(registrationToken);
     }
 
     /**

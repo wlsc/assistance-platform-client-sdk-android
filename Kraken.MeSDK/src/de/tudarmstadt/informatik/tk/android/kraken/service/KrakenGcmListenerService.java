@@ -1,18 +1,9 @@
 package de.tudarmstadt.informatik.tk.android.kraken.service;
 
-import android.app.NotificationManager;
-import android.app.PendingIntent;
-import android.content.Context;
-import android.content.Intent;
-import android.media.RingtoneManager;
-import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
 import com.google.android.gms.gcm.GcmListenerService;
-
-import de.tudarmstadt.informatik.tk.android.kraken.R;
 
 /**
  * Google Cloud Messaging receiver
@@ -37,7 +28,7 @@ public class KrakenGcmListenerService extends GcmListenerService {
         Log.d(TAG, "From: " + from);
         Log.d(TAG, "Message: " + message);
 
-        sendNotification(message);
+        showNotification(message);
     }
 
     /**
@@ -45,7 +36,7 @@ public class KrakenGcmListenerService extends GcmListenerService {
      *
      * @param message GCM message received.
      */
-    private void sendNotification(String message) {
+    private void showNotification(String message) {
 
 //        Intent intent = new Intent(this, MainActivity.class);
 //        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);

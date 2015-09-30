@@ -25,5 +25,6 @@ public class KrakenConfig {
      * GCM data configuration
      */
     public static final String GCM_SENDER_ID = "583610876023";
+    public static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
 
 }

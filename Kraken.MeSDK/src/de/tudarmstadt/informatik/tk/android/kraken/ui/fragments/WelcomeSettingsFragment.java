@@ -16,7 +16,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.ESensorType;
-import de.tudarmstadt.informatik.tk.android.kraken.preference.PreferenceManager;
+import de.tudarmstadt.informatik.tk.android.kraken.PreferenceManager;
 import de.tudarmstadt.informatik.tk.android.kraken.R;
 
 /**

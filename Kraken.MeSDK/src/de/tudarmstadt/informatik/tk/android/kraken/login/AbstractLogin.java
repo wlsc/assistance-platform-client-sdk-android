@@ -72,9 +72,8 @@ public abstract class AbstractLogin implements ILoginData {
                 public void run() {
                     MyHandler handler = new MyHandler();
                     ServerCommunication com = new ServerCommunication(context, handler);
-                    com.postRequest(jsonObject);
+//                    com.postRequest(jsonObject);
 
-//					new ServerCommunication(context, handler).execute(jsonObject);
                 }
             });
         } catch (Exception e) {

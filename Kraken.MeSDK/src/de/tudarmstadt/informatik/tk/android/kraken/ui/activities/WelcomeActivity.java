@@ -10,7 +10,7 @@ import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.View;
 
-import de.tudarmstadt.informatik.tk.android.kraken.preference.PreferenceManager;
+import de.tudarmstadt.informatik.tk.android.kraken.PreferenceManager;
 import de.tudarmstadt.informatik.tk.android.kraken.ui.activities.accounts.AccountsActivity;
 import de.tudarmstadt.informatik.tk.android.kraken.ui.fragments.WelcomeDisclaimerFragment;
 import de.tudarmstadt.informatik.tk.android.kraken.ui.fragments.WelcomeFinishFragment;
@@ -18,7 +18,7 @@ import de.tudarmstadt.informatik.tk.android.kraken.ui.fragments.WelcomeFragment;
 import de.tudarmstadt.informatik.tk.android.kraken.ui.fragments.WelcomeSettingsFragment;
 import de.tudarmstadt.informatik.tk.android.kraken.ui.views.NonSwipeableViewPager;
 import de.tudarmstadt.informatik.tk.android.kraken.util.AccessibilityUtils;
-import de.tudarmstadt.informatik.tk.android.kraken.service.KrakenServiceManager;
+import de.tudarmstadt.informatik.tk.android.kraken.KrakenServiceManager;
 import de.tudarmstadt.informatik.tk.android.kraken.util.KrakenUtils;
 import de.tudarmstadt.informatik.tk.android.kraken.R;
 

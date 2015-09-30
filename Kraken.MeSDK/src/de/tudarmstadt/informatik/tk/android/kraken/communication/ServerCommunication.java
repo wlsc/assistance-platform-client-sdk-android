@@ -17,7 +17,6 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicHeader;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.protocol.HTTP;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
@@ -27,9 +26,9 @@ import java.security.InvalidParameterException;
 import java.util.List;
 
 import de.tudarmstadt.informatik.tk.android.kraken.KrakenSdkSettings;
+import de.tudarmstadt.informatik.tk.android.kraken.PreferenceManager;
 import de.tudarmstadt.informatik.tk.android.kraken.communication.endpoint.DeviceEndpoint;
 import de.tudarmstadt.informatik.tk.android.kraken.model.api.device.DeviceRegistrationRequest;
-import de.tudarmstadt.informatik.tk.android.kraken.preference.PreferenceManager;
 import de.tudarmstadt.informatik.tk.android.kraken.util.KrakenUtils;
 import retrofit.Callback;
 import retrofit.RetrofitError;
@@ -62,45 +61,39 @@ public class ServerCommunication {
         runThread();
     }
 
-    public void postRequest(JSONObject jsonObject) {
-//        m_method = METHOD_POST;
-//        m_jsonObject = jsonObject;
-//        runThread();
+    public void postRequest(final String registrationToken) {
 
-        try {
-            final String userToken = PreferenceManager.getInstance(mContext).getUserToken();
-            final long deviceId = PreferenceManager.getInstance(mContext).getCurrentDeviceServerId();
-            final String registrationToken = jsonObject.getJSONObject("gcm").getString("registrationToken");
 
-            DeviceRegistrationRequest deviceRegistrationRequest = new DeviceRegistrationRequest();
+        final String userToken = PreferenceManager.getInstance(mContext).getUserToken();
+        final long deviceId = PreferenceManager.getInstance(mContext).getCurrentDeviceServerId();
 
-            deviceRegistrationRequest.setDeviceId(deviceId);
-            deviceRegistrationRequest.setRegistrationToken(registrationToken);
+        DeviceRegistrationRequest deviceRegistrationRequest = new DeviceRegistrationRequest();
 
-            DeviceEndpoint deviceEndpoint = ServiceGenerator.createService(DeviceEndpoint.class);
-            deviceEndpoint.registerDevice(userToken, deviceRegistrationRequest, new Callback<Void>() {
+        deviceRegistrationRequest.setDeviceId(deviceId);
+        deviceRegistrationRequest.setRegistrationToken(registrationToken);
 
-                @Override
-                public void success(Void aVoid, Response response) {
+        DeviceEndpoint deviceEndpoint = ServiceGenerator.createService(DeviceEndpoint.class);
+        deviceEndpoint.registerDevice(userToken, deviceRegistrationRequest, new Callback<Void>() {
 
-                    if (response != null && (response.getStatus() == 200 || response.getStatus() == 204)) {
+            @Override
+            public void success(Void aVoid, Response response) {
 
-                        saveRegistrationTokenToDb(deviceId, registrationToken);
+                if (response != null && (response.getStatus() == 200 || response.getStatus() == 204)) {
 
-                    } else {
-                        // TODO: handle response null
-                    }
+                    saveRegistrationTokenToDb(deviceId, registrationToken);
+
+                } else {
+                    // TODO: handle response null
                 }
+            }
 
-                @Override
-                public void failure(RetrofitError error) {
-                    // TODO: handle error case
-                }
-            });
+            @Override
+            public void failure(RetrofitError error) {
+                // TODO: handle error case
+            }
+        });
 
-        } catch (JSONException e) {
-            Log.e(TAG, "Cannot parse registration id. Error: ", e);
-        }
+
     }
 
     /**

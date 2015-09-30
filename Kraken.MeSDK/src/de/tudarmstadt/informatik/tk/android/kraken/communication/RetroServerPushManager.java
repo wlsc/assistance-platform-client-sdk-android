@@ -29,7 +29,7 @@ import de.tudarmstadt.informatik.tk.android.kraken.model.api.sensors.Acceleromet
 import de.tudarmstadt.informatik.tk.android.kraken.model.api.sensors.PositionSensorRequest;
 import de.tudarmstadt.informatik.tk.android.kraken.model.api.sensors.SensorType;
 import de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.interfaces.ISensor;
-import de.tudarmstadt.informatik.tk.android.kraken.preference.PreferenceManager;
+import de.tudarmstadt.informatik.tk.android.kraken.PreferenceManager;
 import de.tudarmstadt.informatik.tk.android.kraken.service.KrakenService;
 import retrofit.Callback;
 import retrofit.RetrofitError;

@@ -1,4 +1,4 @@
-package de.tudarmstadt.informatik.tk.android.kraken.service;
+package de.tudarmstadt.informatik.tk.android.kraken;
 
 import android.app.ActivityManager;
 import android.content.ComponentName;
@@ -11,6 +11,7 @@ import android.os.Message;
 import android.os.Messenger;
 
 import de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.ECommandType;
+import de.tudarmstadt.informatik.tk.android.kraken.service.KrakenService;
 
 /**
  * @author Karsten Planz

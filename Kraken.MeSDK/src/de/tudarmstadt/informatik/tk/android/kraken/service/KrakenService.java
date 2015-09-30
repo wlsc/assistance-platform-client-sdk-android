@@ -24,6 +24,7 @@ import java.util.List;
 import de.tudarmstadt.informatik.tk.android.kraken.ActivityCommunicator;
 import de.tudarmstadt.informatik.tk.android.kraken.KrakenGcmManager;
 import de.tudarmstadt.informatik.tk.android.kraken.KrakenSdkSettings;
+import de.tudarmstadt.informatik.tk.android.kraken.PreferenceManager;
 import de.tudarmstadt.informatik.tk.android.kraken.R;
 import de.tudarmstadt.informatik.tk.android.kraken.communication.RetroServerPushManager;
 import de.tudarmstadt.informatik.tk.android.kraken.db.DaoSession;
@@ -33,7 +34,6 @@ import de.tudarmstadt.informatik.tk.android.kraken.db.DbModuleInstallationDao;
 import de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.ECommandType;
 import de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.SensorManager;
 import de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.interfaces.ISensor;
-import de.tudarmstadt.informatik.tk.android.kraken.preference.PreferenceManager;
 
 
 public class KrakenService extends Service implements Callback {
@@ -74,8 +74,6 @@ public class KrakenService extends Service implements Callback {
         mDatabaseManager = DatabaseManager.getInstance(getApplicationContext());
 
         mPreferenceManager = PreferenceManager.getInstance(getApplicationContext());
-
-        KrakenGcmManager.getInstance(getApplicationContext()).registerAtCloud();
 
         startKrakenService();
     }

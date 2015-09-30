@@ -1,5 +1,6 @@
 package de.tudarmstadt.informatik.tk.android.kraken.service;
 
+import android.content.Intent;
 import android.util.Log;
 
 import com.google.android.gms.iid.InstanceIDListenerService;
@@ -24,6 +25,9 @@ public class KrakenInstanceIDListenerService extends InstanceIDListenerService {
 
         Log.d(TAG, "onTokenRefresh was invoked! Refreshing token...");
 
-        // TODO: implement refresh token
+        // Fetch updated Instance ID token and notify our app's server of any changes (if applicable).
+        Intent intent = new Intent(this, RegistrationIntentService.class);
+        startService(intent);
+
     }
 }

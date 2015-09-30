@@ -4,7 +4,7 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.os.Handler.Callback;
 
-import de.tudarmstadt.informatik.tk.android.kraken.service.KrakenServiceManager;
+import de.tudarmstadt.informatik.tk.android.kraken.KrakenServiceManager;
 
 @Deprecated
 public abstract class BindingActivity extends Activity implements Callback {

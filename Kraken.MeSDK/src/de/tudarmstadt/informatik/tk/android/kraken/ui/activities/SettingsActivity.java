@@ -10,8 +10,8 @@ import android.view.MenuItem;
 import de.tudarmstadt.informatik.tk.android.kraken.KrakenSdkSettings;
 import de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.ESensorType;
 import de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.SensorManager;
-import de.tudarmstadt.informatik.tk.android.kraken.preference.PreferenceManager;
-import de.tudarmstadt.informatik.tk.android.kraken.service.KrakenServiceManager;
+import de.tudarmstadt.informatik.tk.android.kraken.PreferenceManager;
+import de.tudarmstadt.informatik.tk.android.kraken.KrakenServiceManager;
 import de.tudarmstadt.informatik.tk.android.kraken.util.KrakenUtils;
 import de.tudarmstadt.informatik.tk.android.kraken.R;
 

@@ -5,8 +5,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
-import de.tudarmstadt.informatik.tk.android.kraken.preference.PreferenceManager;
-import de.tudarmstadt.informatik.tk.android.kraken.service.KrakenServiceManager;
+import de.tudarmstadt.informatik.tk.android.kraken.PreferenceManager;
+import de.tudarmstadt.informatik.tk.android.kraken.KrakenServiceManager;
 
 /**
  * @author Karsten Planz
