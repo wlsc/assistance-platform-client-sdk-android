@@ -280,10 +280,11 @@ public class AssistanceDatabaseGenerator {
     // -------------------------------------------------------------------------------------------
     // -------------------------------------------------------------------------------------------
 
-    // *********************
-    // ** ANDROID SENSORS **
-    // *********************
+    // ******************************
+    // ** ANDROID EVENTS / SENSORS **
+    // ******************************
 
+    // ----- Foreground Event -----
     Entity foregroundEvent = schema.addEntity("DbForegroundEvent");
     foregroundEvent.setTableName("foreground_event");
     foregroundEvent.addIdProperty().autoincrement().index();
@@ -298,7 +299,199 @@ public class AssistanceDatabaseGenerator {
     foregroundEvent.addIntProperty("keystrokes");
     foregroundEvent.addStringProperty("created").notNull();
 
-    // GENERATE CLASSES
+    // ----- Light Sensor -----
+    Entity lightSensor = schema.addEntity("DbLightSensor");
+    lightSensor.setTableName("light_sensor");
+    lightSensor.addIdProperty().autoincrement().index();
+    lightSensor.implementsInterface(Config.KRAKEN_PACKAGE_SENSOR);
+    lightSensor.addIntProperty("accuracy");
+    lightSensor.addFloatProperty("value");
+    lightSensor.addStringProperty("created").notNull();
+
+    // ----- Ringtone Event -----
+    Entity ringtoneEvent = schema.addEntity("DbRingtoneEvent");
+    ringtoneEvent.setTableName("ringtone_event");
+    ringtoneEvent.addIdProperty().autoincrement().index();
+    ringtoneEvent.implementsInterface(Config.KRAKEN_PACKAGE_SENSOR);
+    ringtoneEvent.addIntProperty("mode");
+    ringtoneEvent.addStringProperty("created").notNull();
+
+    // ----- Running Processes Event -----
+    Entity runningProcessesEvent = schema.addEntity("DbRunningProcessesEvent");
+    runningProcessesEvent.setTableName("running_processes_event");
+    runningProcessesEvent.addIdProperty().autoincrement().index();
+    runningProcessesEvent.implementsInterface(Config.KRAKEN_PACKAGE_SENSOR);
+    runningProcessesEvent.addStringProperty("runningProcesses");
+    runningProcessesEvent.addStringProperty("created").notNull();
+
+    // ----- Running Services Event -----
+    Entity runningServicesEvent = schema.addEntity("DbRunningServicesEvent");
+    runningServicesEvent.setTableName("running_services_event");
+    runningServicesEvent.addIdProperty().autoincrement().index();
+    runningServicesEvent.implementsInterface(Config.KRAKEN_PACKAGE_SENSOR);
+    runningServicesEvent.addStringProperty("runningServices");
+    runningServicesEvent.addStringProperty("created").notNull();
+
+    // ----- Running Tasks Event -----
+    Entity runningTasksEvent = schema.addEntity("DbRunningTasksEvent");
+    runningTasksEvent.setTableName("running_tasks_event");
+    runningTasksEvent.addIdProperty().autoincrement().index();
+    runningTasksEvent.implementsInterface(Config.KRAKEN_PACKAGE_SENSOR);
+    runningTasksEvent.addStringProperty("runningTasks");
+    runningTasksEvent.addIntProperty("stackPosition");
+    runningTasksEvent.addStringProperty("created").notNull();
+
+    // ----- Account Reader Event -----
+    Entity accountReaderEvent = schema.addEntity("DbAccountReaderEvent");
+    accountReaderEvent.setTableName("account_reader_event");
+    accountReaderEvent.addIdProperty().autoincrement().index();
+    accountReaderEvent.implementsInterface(Config.KRAKEN_PACKAGE_SENSOR);
+    accountReaderEvent.addStringProperty("types");
+    accountReaderEvent.addStringProperty("created").notNull();
+
+    // ----- Network Traffic Event -----
+    Entity networkTrafficEvent = schema.addEntity("DbNetworkTrafficEvent");
+    networkTrafficEvent.setTableName("network_traffic_event");
+    networkTrafficEvent.addIdProperty().autoincrement().index();
+    networkTrafficEvent.implementsInterface(Config.KRAKEN_PACKAGE_SENSOR);
+    networkTrafficEvent.addStringProperty("appName");
+    networkTrafficEvent.addLongProperty("rxBytes");
+    networkTrafficEvent.addLongProperty("txBytes");
+    networkTrafficEvent.addBooleanProperty("background");
+    networkTrafficEvent.addDoubleProperty("longitude");
+    networkTrafficEvent.addDoubleProperty("latitude");
+    networkTrafficEvent.addStringProperty("created").notNull();
+
+    // ----- Browser History Event -----
+    Entity browserHistoryEvent = schema.addEntity("DbBrowserHistoryEvent");
+    browserHistoryEvent.setTableName("browser_history_event");
+    browserHistoryEvent.addIdProperty().autoincrement().index();
+    browserHistoryEvent.implementsInterface(Config.KRAKEN_PACKAGE_UPDATABLE_SENSOR);
+    browserHistoryEvent.addStringProperty("url");
+    browserHistoryEvent.addStringProperty("title");
+    browserHistoryEvent.addLongProperty("lastVisited");
+    browserHistoryEvent.addIntProperty("visits");
+    browserHistoryEvent.addBooleanProperty("bookmark");
+    browserHistoryEvent.addBooleanProperty("isNew");
+    browserHistoryEvent.addBooleanProperty("isUpdated");
+    browserHistoryEvent.addBooleanProperty("isDeleted");
+    browserHistoryEvent.addStringProperty("created").notNull();
+
+    // ----- Call Log Event -----
+    Entity callLogEvent = schema.addEntity("DbCallLogEvent");
+    callLogEvent.setTableName("call_log_event");
+    callLogEvent.addIdProperty().autoincrement().index();
+    callLogEvent.implementsInterface(Config.KRAKEN_PACKAGE_UPDATABLE_SENSOR);
+    callLogEvent.addIntProperty("type");
+    callLogEvent.addStringProperty("name");
+    callLogEvent.addStringProperty("number");
+    callLogEvent.addLongProperty("date");
+    callLogEvent.addLongProperty("duration");
+    callLogEvent.addBooleanProperty("isNew");
+    callLogEvent.addBooleanProperty("isUpdated");
+    callLogEvent.addBooleanProperty("isDeleted");
+    callLogEvent.addStringProperty("created").notNull();
+
+    // ----- Calendar Event -----
+    Entity calendarEvent = schema.addEntity("DbCalendarEvent");
+    calendarEvent.setTableName("calendar_event");
+    calendarEvent.addIdProperty().autoincrement().index();
+    calendarEvent.implementsInterface(Config.KRAKEN_PACKAGE_UPDATABLE_SENSOR);
+    calendarEvent.addLongProperty("calendarId");
+    calendarEvent.addBooleanProperty("allDay");
+    calendarEvent.addIntProperty("availability");
+    calendarEvent.addStringProperty("description");
+    calendarEvent.addLongProperty("timestampStart");
+    calendarEvent.addLongProperty("timestampEnd");
+    calendarEvent.addStringProperty("duration");
+    calendarEvent.addStringProperty("location");
+    calendarEvent.addStringProperty("timezoneStart");
+    calendarEvent.addStringProperty("timezoneEnd");
+    calendarEvent.addStringProperty("recurrenceExceptionDate");
+    calendarEvent.addStringProperty("recurrenceExceptionRule");
+    calendarEvent.addBooleanProperty("hasAlarm");
+    calendarEvent.addLongProperty("lastDate");
+    calendarEvent.addBooleanProperty("originalAllDay");
+    calendarEvent.addStringProperty("originalId");
+    calendarEvent.addLongProperty("originalInstanceTime");
+    calendarEvent.addStringProperty("recurrenceDate");
+    calendarEvent.addStringProperty("recurrenceRule");
+    calendarEvent.addIntProperty("status");
+    calendarEvent.addStringProperty("title");
+    calendarEvent.addBooleanProperty("isNew");
+    calendarEvent.addBooleanProperty("isUpdated");
+    calendarEvent.addBooleanProperty("isDeleted");
+    calendarEvent.addStringProperty("created").notNull();
+
+    // ----- Calendar Reminder Event -----
+    Entity calendarReminderEvent = schema.addEntity("DbCalendarReminderEvent");
+    calendarReminderEvent.setTableName("calendar_reminder_event");
+    calendarReminderEvent.addIdProperty().autoincrement().index();
+    calendarReminderEvent.implementsInterface(Config.KRAKEN_PACKAGE_UPDATABLE_SENSOR);
+    calendarReminderEvent.addLongProperty("eventId");
+    calendarReminderEvent.addIntProperty("method");
+    calendarReminderEvent.addIntProperty("minutes");
+    calendarReminderEvent.addBooleanProperty("isNew");
+    calendarReminderEvent.addBooleanProperty("isUpdated");
+    calendarReminderEvent.addBooleanProperty("isDeleted");
+    calendarReminderEvent.addStringProperty("created").notNull();
+
+    // ----- Contact Event -----
+    Entity contactEvent = schema.addEntity("DbContactEvent");
+    contactEvent.setTableName("contact_event");
+    contactEvent.addIdProperty().autoincrement().index();
+    contactEvent.implementsInterface(Config.KRAKEN_PACKAGE_UPDATABLE_SENSOR);
+    contactEvent.addLongProperty("globalContactId");
+    contactEvent.addStringProperty("displayName");
+    contactEvent.addStringProperty("givenName");
+    contactEvent.addStringProperty("familyName");
+    contactEvent.addIntProperty("starred");
+    contactEvent.addIntProperty("lastTimeContacted");
+    contactEvent.addIntProperty("timesContacted");
+    contactEvent.addStringProperty("note");
+    contactEvent.addBooleanProperty("isNew");
+    contactEvent.addBooleanProperty("isUpdated");
+    contactEvent.addBooleanProperty("isDeleted");
+    contactEvent.addStringProperty("created").notNull();
+
+    // ----- Contact Numbers Event -----
+    Entity contactNumbersEvent = schema.addEntity("DbContactNumberEvent");
+    contactNumbersEvent.setTableName("contact_number_event");
+    contactNumbersEvent.addIdProperty().autoincrement().index();
+    contactNumbersEvent.implementsInterface(Config.KRAKEN_PACKAGE_UPDATABLE_SENSOR);
+    contactNumbersEvent.addStringProperty("type");
+    contactNumbersEvent.addStringProperty("number");
+    contactNumbersEvent.addBooleanProperty("isNew");
+    contactNumbersEvent.addBooleanProperty("isUpdated");
+    contactNumbersEvent.addBooleanProperty("isDeleted");
+    contactNumbersEvent.addStringProperty("created").notNull();
+
+    Property contactNumberfkContactEvent =
+        contactNumbersEvent.addLongProperty("contactId").index().getProperty();
+    contactNumbersEvent.addToOne(contactEvent, contactNumberfkContactEvent);
+    contactEvent.addToMany(contactNumbersEvent, contactNumberfkContactEvent);
+
+    // ----- Contact Mail Addresses Event -----
+    Entity contactMailEvent = schema.addEntity("DbContactEmailEvent");
+    contactMailEvent.setTableName("contact_email_event");
+    contactMailEvent.addIdProperty().autoincrement().index();
+    contactMailEvent.implementsInterface(Config.KRAKEN_PACKAGE_UPDATABLE_SENSOR);
+    contactMailEvent.addStringProperty("address");
+    contactMailEvent.addStringProperty("type");
+    contactMailEvent.addBooleanProperty("isNew");
+    contactMailEvent.addBooleanProperty("isUpdated");
+    contactMailEvent.addBooleanProperty("isDeleted");
+    contactMailEvent.addStringProperty("created").notNull();
+
+    contactNumberfkContactEvent =
+        contactMailEvent.addLongProperty("contactId").index().getProperty();
+    contactMailEvent.addToOne(contactEvent, contactNumberfkContactEvent);
+    contactEvent.addToMany(contactMailEvent, contactNumberfkContactEvent);
+
+
+    // **************************
+    // **** GENERATE CLASSES ****
+    // **************************
     new DaoGenerator().generateAll(schema, Config.KRAKEN_OUTPUT);
   }
 
