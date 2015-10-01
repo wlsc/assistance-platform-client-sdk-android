@@ -17,12 +17,12 @@ import de.tudarmstadt.informatik.tk.assistance.api.tester.service.resource.Empty
  */
 public class SensorDataService extends Application {
 
-	@Override
-	public synchronized Restlet createInboundRoot() {
-		
-		Router router = new Router(getContext());
-        router.attach("/upload", EmptyServerResource.class);
-        return router;
-	}
-	
+  @Override
+  public synchronized Restlet createInboundRoot() {
+
+    Router router = new Router(getContext());
+    router.attach("/upload", EmptyServerResource.class);
+    return router;
+  }
+
 }

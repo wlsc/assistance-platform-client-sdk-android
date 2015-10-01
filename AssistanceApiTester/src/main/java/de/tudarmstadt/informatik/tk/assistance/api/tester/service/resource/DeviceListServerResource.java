@@ -15,24 +15,24 @@ import com.google.gson.GsonBuilder;
  *
  */
 public class DeviceListServerResource extends ServerResource {
-	
-	@Post("json")
-    public String represent(String json){
-		
-		System.out.println("Input:");
-		System.out.println(json);
-		
-		// TODO
-		
-		GsonBuilder builder = new GsonBuilder();
-		builder.excludeFieldsWithoutExposeAnnotation();
-		
-		String output = builder.create().toJson("");
-		
-		System.out.println("Output:");
-		System.out.println(output);
-		
-        return output;
-    }
-	
+
+  @Post("json")
+  public String represent(String json) {
+
+    System.out.println("Input:");
+    System.out.println(json);
+
+    // TODO
+
+    GsonBuilder builder = new GsonBuilder();
+    builder.excludeFieldsWithoutExposeAnnotation();
+
+    String output = builder.create().toJson("");
+
+    System.out.println("Output:");
+    System.out.println(output);
+
+    return output;
+  }
+
 }

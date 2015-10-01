@@ -8,105 +8,100 @@ import com.google.gson.annotations.SerializedName;
  */
 public class UserSocialService {
 
-    public static final String TYPE_GOOGLE = "Google";
-    public static final String TYPE_FACEBOOK = "Facebook";
-    public static final String TYPE_LIVE = "Live";
-    public static final String TYPE_TWITTER = "Twitter";
-    public static final String TYPE_GITHUB = "Github";
+  public static final String TYPE_GOOGLE = "Google";
+  public static final String TYPE_FACEBOOK = "Facebook";
+  public static final String TYPE_LIVE = "Live";
+  public static final String TYPE_TWITTER = "Twitter";
+  public static final String TYPE_GITHUB = "Github";
 
-    @SerializedName("name")
-    @Expose
-    private String name;
+  @SerializedName("name")
+  @Expose
+  private String name;
 
-    @SerializedName("firstname")
-    @Expose
-    private String firstname;
+  @SerializedName("firstname")
+  @Expose
+  private String firstname;
 
-    @SerializedName("lastname")
-    @Expose
-    private String lastname;
+  @SerializedName("lastname")
+  @Expose
+  private String lastname;
 
-    @SerializedName("email")
-    @Expose
-    private String email;
+  @SerializedName("email")
+  @Expose
+  private String email;
 
-    @SerializedName("updated")
-    @Expose
-    private Long updated;
+  @SerializedName("updated")
+  @Expose
+  private Long updated;
 
-    @SerializedName("created")
-    @Expose
-    private Long created;
+  @SerializedName("created")
+  @Expose
+  private Long created;
 
-    public UserSocialService() {
-    }
+  public UserSocialService() {}
 
-    public UserSocialService(String name, String firstname, String lastname, String email, Long updated, Long created) {
-        this.name = name;
-        this.firstname = firstname;
-        this.lastname = lastname;
-        this.email = email;
-        this.updated = updated;
-        this.created = created;
-    }
+  public UserSocialService(String name, String firstname, String lastname, String email,
+      Long updated, Long created) {
+    this.name = name;
+    this.firstname = firstname;
+    this.lastname = lastname;
+    this.email = email;
+    this.updated = updated;
+    this.created = created;
+  }
 
-    public Long getCreated() {
-        return created;
-    }
+  public Long getCreated() {
+    return created;
+  }
 
-    public void setCreated(Long created) {
-        this.created = created;
-    }
+  public void setCreated(Long created) {
+    this.created = created;
+  }
 
-    public String getName() {
-        return name;
-    }
+  public String getName() {
+    return name;
+  }
 
-    public void setName(String name) {
-        this.name = name;
-    }
+  public void setName(String name) {
+    this.name = name;
+  }
 
-    public String getFirstname() {
-        return firstname;
-    }
+  public String getFirstname() {
+    return firstname;
+  }
 
-    public void setFirstname(String firstname) {
-        this.firstname = firstname;
-    }
+  public void setFirstname(String firstname) {
+    this.firstname = firstname;
+  }
 
-    public String getLastname() {
-        return lastname;
-    }
+  public String getLastname() {
+    return lastname;
+  }
 
-    public void setLastname(String lastname) {
-        this.lastname = lastname;
-    }
+  public void setLastname(String lastname) {
+    this.lastname = lastname;
+  }
 
-    public String getEmail() {
-        return email;
-    }
+  public String getEmail() {
+    return email;
+  }
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
+  public void setEmail(String email) {
+    this.email = email;
+  }
 
-    public Long getUpdated() {
-        return updated;
-    }
+  public Long getUpdated() {
+    return updated;
+  }
 
-    public void setUpdated(Long updated) {
-        this.updated = updated;
-    }
+  public void setUpdated(Long updated) {
+    this.updated = updated;
+  }
 
-    @Override
-    public String toString() {
-        return "UserSocialService{" +
-                "name='" + name + '\'' +
-                ", firstname='" + firstname + '\'' +
-                ", lastname='" + lastname + '\'' +
-                ", email='" + email + '\'' +
-                ", updated=" + updated +
-                ", created=" + created +
-                '}';
-    }
+  @Override
+  public String toString() {
+    return "UserSocialService{" + "name='" + name + '\'' + ", firstname='" + firstname + '\''
+        + ", lastname='" + lastname + '\'' + ", email='" + email + '\'' + ", updated=" + updated
+        + ", created=" + created + '}';
+  }
 }

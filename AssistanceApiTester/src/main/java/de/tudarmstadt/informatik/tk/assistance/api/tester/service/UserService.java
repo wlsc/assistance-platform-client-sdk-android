@@ -14,16 +14,16 @@ import de.tudarmstadt.informatik.tk.assistance.api.tester.service.resource.Login
  *
  */
 public class UserService extends Application {
-		
-	@Override
-	public synchronized Restlet createInboundRoot() {
-		
-        Router router = new Router(getContext());
-        
-        router.attach("/login", LoginServerResource.class);
-        router.attach("/password", EmptyServerResource.class);
-        
-        return router;
-	}
-	
+
+  @Override
+  public synchronized Restlet createInboundRoot() {
+
+    Router router = new Router(getContext());
+
+    router.attach("/login", LoginServerResource.class);
+    router.attach("/password", EmptyServerResource.class);
+
+    return router;
+  }
+
 }

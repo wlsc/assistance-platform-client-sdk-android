@@ -13,18 +13,18 @@ import org.restlet.resource.ServerResource;
  *
  */
 public class EmptyServerResource extends ServerResource {
-	
-	@Post("json")
-    public String represent(String json){
-		
-		System.out.println("Input:");
-		System.out.println(json);
-		
-		String output = "";
-		
-		System.out.println("Output:");
-		System.out.println(output);
-		
-        return output;
-    }
+
+  @Post("json")
+  public String represent(String json) {
+
+    System.out.println("Input:");
+    System.out.println(json);
+
+    String output = "";
+
+    System.out.println("Output:");
+    System.out.println(output);
+
+    return output;
+  }
 }

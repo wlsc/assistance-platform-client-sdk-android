@@ -16,16 +16,16 @@ import de.tudarmstadt.informatik.tk.assistance.api.tester.service.resource.UserP
  *
  */
 public class UserProfileService extends Application {
-	
-	@Override
-	public Restlet createInboundRoot() {
-		
-		Router router = new Router(getContext());
-        
-        router.attach("/short", UserProfileFullServerResource.class);
-        router.attach("/long", UserProfileFullServerResource.class);
-        
-        return router;
-	}
-	
+
+  @Override
+  public Restlet createInboundRoot() {
+
+    Router router = new Router(getContext());
+
+    router.attach("/short", UserProfileFullServerResource.class);
+    router.attach("/long", UserProfileFullServerResource.class);
+
+    return router;
+  }
+
 }

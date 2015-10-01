@@ -18,25 +18,25 @@ import com.google.gson.GsonBuilder;
  *
  */
 public class ActivatedModulesServerResource extends ServerResource {
-	
-	@Get("json")
-    public String represent(String json){
-		
-		System.out.println("Input:");
-		System.out.println(json);
-		
-		List<String> activatedModules = new ArrayList<>();
-		activatedModules.add("de.tudarmstadt.tk.assistance.hotzones2");
-		
-		GsonBuilder builder = new GsonBuilder();
-		builder.excludeFieldsWithoutExposeAnnotation();
-		
-		String output = builder.create().toJson(activatedModules);
-		
-		System.out.println("Output:");
-		System.out.println(output);
-		
-        return output;
-    }
-	
+
+  @Get("json")
+  public String represent(String json) {
+
+    System.out.println("Input:");
+    System.out.println(json);
+
+    List<String> activatedModules = new ArrayList<>();
+    activatedModules.add("de.tudarmstadt.tk.assistance.hotzones2");
+
+    GsonBuilder builder = new GsonBuilder();
+    builder.excludeFieldsWithoutExposeAnnotation();
+
+    String output = builder.create().toJson(activatedModules);
+
+    System.out.println("Output:");
+    System.out.println(output);
+
+    return output;
+  }
+
 }

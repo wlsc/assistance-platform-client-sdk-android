@@ -16,19 +16,19 @@ import de.tudarmstadt.informatik.tk.assistance.api.tester.service.UserService;
  *
  */
 public class App {
-	
-    public static void main( String[] args ) throws Exception{
-        
-        Component component = new Component();  
-  
-        component.getServers().add(Protocol.HTTP, 80);  
-        
-        component.getDefaultHost().attach("/assistance", new AssistanceService());
-        component.getDefaultHost().attach("/devices", new DeviceService());
-        component.getDefaultHost().attach("/users", new UserService());
-        component.getDefaultHost().attach("/users/profile", new UserProfileService());
-        component.getDefaultHost().attach("/sensordata", new SensorDataService());
-        
-        component.start();  
-    }
+
+  public static void main(String[] args) throws Exception {
+
+    Component component = new Component();
+
+    component.getServers().add(Protocol.HTTP, 80);
+
+    component.getDefaultHost().attach("/assistance", new AssistanceService());
+    component.getDefaultHost().attach("/devices", new DeviceService());
+    component.getDefaultHost().attach("/users", new UserService());
+    component.getDefaultHost().attach("/users/profile", new UserProfileService());
+    component.getDefaultHost().attach("/sensordata", new SensorDataService());
+
+    component.start();
+  }
 }

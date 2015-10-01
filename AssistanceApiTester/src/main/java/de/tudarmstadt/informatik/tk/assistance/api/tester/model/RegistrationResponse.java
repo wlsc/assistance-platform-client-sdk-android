@@ -8,29 +8,26 @@ import com.google.gson.annotations.SerializedName;
  */
 public class RegistrationResponse {
 
-    @SerializedName("user_id")
-    @Expose
-    private Long userId;
+  @SerializedName("user_id")
+  @Expose
+  private Long userId;
 
-    public RegistrationResponse() {
-    }
+  public RegistrationResponse() {}
 
-    public RegistrationResponse(Long userId) {
-        this.userId = userId;
-    }
+  public RegistrationResponse(Long userId) {
+    this.userId = userId;
+  }
 
-    public Long getUserId() {
-        return userId;
-    }
+  public Long getUserId() {
+    return userId;
+  }
 
-    public void setUserId(Long userId) {
-        this.userId = userId;
-    }
+  public void setUserId(Long userId) {
+    this.userId = userId;
+  }
 
-    @Override
-    public String toString() {
-        return "RegistrationResponse{" +
-                "userId=" + userId +
-                '}';
-    }
+  @Override
+  public String toString() {
+    return "RegistrationResponse{" + "userId=" + userId + '}';
+  }
 }

@@ -22,32 +22,32 @@ import de.tudarmstadt.informatik.tk.assistance.api.tester.model.UserSocialServic
  *
  */
 public class UserProfileShortServerResource extends ServerResource {
-	
-	@Post("json")
-    public String represent(String json){
-		
-		System.out.println("Input:");
-		System.out.println(json);
-		
-		List<UserSocialService> socialServices = new ArrayList<>();
-		
-		ProfileResponse profileResponse = new ProfileResponse();
-		
-		profileResponse.setFirstname("Max");
-		profileResponse.setLastname("Mustermann");
-		profileResponse.setPrimaryEmail("test@test.com");
-		profileResponse.setJoinedSince(new Date().getTime()-12342343);
-		profileResponse.setSocialServices(socialServices);
-		
-		GsonBuilder builder = new GsonBuilder();
-		builder.excludeFieldsWithoutExposeAnnotation();
-		
-		String output = builder.create().toJson(profileResponse);
-		
-		System.out.println("Output:");
-		System.out.println(output);
-		
-        return output;
-    }
-	
+
+  @Post("json")
+  public String represent(String json) {
+
+    System.out.println("Input:");
+    System.out.println(json);
+
+    List<UserSocialService> socialServices = new ArrayList<>();
+
+    ProfileResponse profileResponse = new ProfileResponse();
+
+    profileResponse.setFirstname("Max");
+    profileResponse.setLastname("Mustermann");
+    profileResponse.setPrimaryEmail("test@test.com");
+    profileResponse.setJoinedSince(new Date().getTime() - 12342343);
+    profileResponse.setSocialServices(socialServices);
+
+    GsonBuilder builder = new GsonBuilder();
+    builder.excludeFieldsWithoutExposeAnnotation();
+
+    String output = builder.create().toJson(profileResponse);
+
+    System.out.println("Output:");
+    System.out.println(output);
+
+    return output;
+  }
+
 }

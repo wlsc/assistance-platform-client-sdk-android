@@ -18,18 +18,18 @@ import de.tudarmstadt.informatik.tk.assistance.api.tester.service.resource.Modul
  *
  */
 public class AssistanceService extends Application {
-	
-	@Override
-	public synchronized Restlet createInboundRoot() {
-		
-		Router router = new Router(getContext());
-		
-        router.attach("/list", ModuleListServerResource.class);
-        router.attach("/activate", EmptyServerResource.class);
-        router.attach("/deactivate", EmptyServerResource.class);
-        router.attach("/activations", ActivatedModulesServerResource.class);
 
-        return router;
-	}
-	
+  @Override
+  public synchronized Restlet createInboundRoot() {
+
+    Router router = new Router(getContext());
+
+    router.attach("/list", ModuleListServerResource.class);
+    router.attach("/activate", EmptyServerResource.class);
+    router.attach("/deactivate", EmptyServerResource.class);
+    router.attach("/activations", ActivatedModulesServerResource.class);
+
+    return router;
+  }
+
 }

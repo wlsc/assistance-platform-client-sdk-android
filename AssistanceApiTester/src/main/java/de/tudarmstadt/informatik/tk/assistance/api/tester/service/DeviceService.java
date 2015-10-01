@@ -17,17 +17,17 @@ import de.tudarmstadt.informatik.tk.assistance.api.tester.service.resource.Empty
  *
  */
 public class DeviceService extends Application {
-	
-	@Override
-	public Restlet createInboundRoot() {
-		
-		Router router = new Router(getContext());
-		
-		router.attach("/list", DeviceListServerResource.class);
-        router.attach("/register_for_messaging", EmptyServerResource.class);
-        router.attach("/set_user_defined_name", EmptyServerResource.class);
 
-        return router;
-	}
-	
+  @Override
+  public Restlet createInboundRoot() {
+
+    Router router = new Router(getContext());
+
+    router.attach("/list", DeviceListServerResource.class);
+    router.attach("/register_for_messaging", EmptyServerResource.class);
+    router.attach("/set_user_defined_name", EmptyServerResource.class);
+
+    return router;
+  }
+
 }

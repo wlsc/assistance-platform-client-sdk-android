@@ -8,43 +8,39 @@ import com.google.gson.annotations.SerializedName;
  */
 public class LoginResponse {
 
-    @SerializedName("token")
-    @Expose
-    private String userToken;
+  @SerializedName("token")
+  @Expose
+  private String userToken;
 
-    @SerializedName("device_id")
-    @Expose
-    private Long deviceId;
+  @SerializedName("device_id")
+  @Expose
+  private Long deviceId;
 
-    public LoginResponse() {
-    }
+  public LoginResponse() {}
 
-    public LoginResponse(String userToken, Long deviceId) {
-        this.userToken = userToken;
-        this.deviceId = deviceId;
-    }
+  public LoginResponse(String userToken, Long deviceId) {
+    this.userToken = userToken;
+    this.deviceId = deviceId;
+  }
 
-    public void setUserToken(String userToken) {
-		this.userToken = userToken;
-	}
+  public void setUserToken(String userToken) {
+    this.userToken = userToken;
+  }
 
-	public void setDeviceId(Long deviceId) {
-		this.deviceId = deviceId;
-	}
+  public void setDeviceId(Long deviceId) {
+    this.deviceId = deviceId;
+  }
 
-	public String getUserToken() {
-        return userToken;
-    }
+  public String getUserToken() {
+    return userToken;
+  }
 
-    public Long getDeviceId() {
-        return this.deviceId;
-    }
+  public Long getDeviceId() {
+    return this.deviceId;
+  }
 
-    @Override
-    public String toString() {
-        return "LoginResponse{" +
-                "userToken='" + userToken + '\'' +
-                ", deviceId=" + deviceId +
-                '}';
-    }
+  @Override
+  public String toString() {
+    return "LoginResponse{" + "userToken='" + userToken + '\'' + ", deviceId=" + deviceId + '}';
+  }
 }
