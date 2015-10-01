@@ -279,7 +279,19 @@ public class AssistanceDatabaseGenerator {
 		// *********************
 		// ** ANDROID SENSORS **
 		// *********************
-		
+		Entity foregroundEvent = schema.addEntity("DbForegroundEvent");
+		foregroundEvent.setTableName("foreground_event");
+		foregroundEvent.addIdProperty().autoincrement().index();
+		foregroundEvent.implementsInterface(Config.KRAKEN_PACKAGE_SENSOR);
+        foregroundEvent.addStringProperty("packageName");
+        foregroundEvent.addStringProperty("appName");
+        foregroundEvent.addStringProperty("className");
+        foregroundEvent.addStringProperty("activityLabel");
+        foregroundEvent.addStringProperty("color");
+        foregroundEvent.addStringProperty("url");
+        foregroundEvent.addIntProperty("eventType");
+        foregroundEvent.addIntProperty("keystrokes");
+        foregroundEvent.addStringProperty("created").notNull();
 		
 		// GENERATE CLASSES
 		new DaoGenerator().generateAll(schema, Config.KRAKEN_OUTPUT);
