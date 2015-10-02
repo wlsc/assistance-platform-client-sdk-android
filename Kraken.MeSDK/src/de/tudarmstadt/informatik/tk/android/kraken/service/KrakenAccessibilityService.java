@@ -22,22 +22,23 @@ public class KrakenAccessibilityService extends AccessibilityService {
     public void onCreate() {
         super.onCreate();
 
-        Log.d(TAG, "onCreate");
+        Log.d(TAG, "Starting service...");
 
         mForegroundSensor = (ForegroundEventSensor) SensorManager
                 .getInstance(getApplicationContext())
                 .getSensor(ESensorType.SENSOR_FOREGROUND_EVENT);
+
         mForegroundTrafficSensor = (ForegroundTrafficSensor) SensorManager
                 .getInstance(getApplicationContext())
                 .getSensor(ESensorType.SENSOR_NETWORK_TRAFFIC);
 
-        Log.d(TAG, "Accessibility service was started!");
+        Log.d(TAG, "Successfully started.");
     }
 
     @Override
     public void onAccessibilityEvent(AccessibilityEvent event) {
 
-        //Log.d(TAG, "onAccessibilityEvent");
+        Log.d(TAG, "onAccessibilityEvent");
 
         mForegroundSensor.onEvent(event);
 
@@ -47,7 +48,7 @@ public class KrakenAccessibilityService extends AccessibilityService {
     @Override
     public void onInterrupt() {
 
-        Log.d(TAG, "onInterrupt");
+        Log.d(TAG, "Service interrupted!");
     }
 
     @Override
@@ -61,14 +62,14 @@ public class KrakenAccessibilityService extends AccessibilityService {
     public void onDestroy() {
         super.onDestroy();
 
-        Log.d(TAG, "onDestroy");
+        Log.d(TAG, "Stopping service...");
     }
 
     @Override
     protected void onServiceConnected() {
         super.onServiceConnected();
 
-        Log.d(TAG, "onServiceConnected");
+        Log.d(TAG, "Service connected.");
 
         /*AccessibilityServiceInfo info = new AccessibilityServiceInfo();
         info.flags = AccessibilityServiceInfo.DEFAULT;

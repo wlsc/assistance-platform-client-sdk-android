@@ -60,10 +60,14 @@ public abstract class AbstractSensor implements ISensor {
 
     public AbstractSensor(Context context) {
         setContext(context);
-        SharedPreferences sharedPreferences = context.getApplicationContext().getSharedPreferences(KrakenSdkSettings.PREFERENCES_NAME, Context.MODE_PRIVATE);
+//        SharedPreferences sharedPreferences = context.getApplicationContext().getSharedPreferences(KrakenSdkSettings.PREFERENCES_NAME, Context.MODE_PRIVATE);
 //        isDisabledByUser = sharedPreferences.getBoolean(getSensorType().toString() + KrakenSdkSettings.PREFERENCES_SENSOR_DISABLED_BY_USER_POSTFIX, false);
 //
 //        lastDataFlushTimestamp = sharedPreferences.getLong(getSensorType().toString() + KrakenSdkSettings.PREFERENCES_SENSOR_LAST_PUSHED_TIMESTAMP_POSTFIX, -1);
+
+        if (mDaoSession == null) {
+            mDaoSession = DatabaseManager.getInstance(context).getDaoSession();
+        }
     }
 
     protected void handleDBEntry(IDbSensor dbEntry) {

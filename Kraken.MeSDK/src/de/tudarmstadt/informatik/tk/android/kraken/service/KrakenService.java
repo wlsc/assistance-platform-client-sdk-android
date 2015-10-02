@@ -148,7 +148,7 @@ public class KrakenService extends Service implements Callback {
         Log.d(TAG, "All sensors are enabled!");
 
         // TODO: enable that later
-//        startAccessibilityService();
+        startAccessibilityService();
     }
 
     private void monitorStop() {

@@ -27,17 +27,20 @@ import de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.triggered.Me
 
 public class SensorManager {
 
-    private HashMap<ESensorType, ISensor> m_mapSensors = new HashMap<ESensorType, ISensor>();
-    private List<ISensor> m_liSensors = new LinkedList<ISensor>();
-    private static SensorManager m_sensorManager;
+    private HashMap<ESensorType, ISensor> m_mapSensors = new HashMap<>();
+    private List<ISensor> m_liSensors = new LinkedList<>();
+
+    private static SensorManager INSTANCE;
 
     public static SensorManager getInstance(Context ctx) {
-        if (m_sensorManager == null)
-            m_sensorManager = new SensorManager(ctx);
-        else
-            m_sensorManager.setContext(ctx);
 
-        return m_sensorManager;
+        if (INSTANCE == null) {
+            INSTANCE = new SensorManager(ctx);
+        } else {
+            INSTANCE.setContext(ctx);
+        }
+
+        return INSTANCE;
     }
 
     private SensorManager(Context context) {
@@ -122,8 +125,9 @@ public class SensorManager {
         //ServerPushManager.getInstance(context).setPushType(foregroundEventSensor, foregroundEventSensor.getPushType());
         RetroServerPushManager.getInstance(context).setPushType(foregroundEventSensor, foregroundEventSensor.getPushType());
 
-        for (ISensor sensor : m_liSensors)
+        for (ISensor sensor : m_liSensors) {
             m_mapSensors.put(sensor.getSensorType(), sensor);
+        }
     }
 
     public List<ISensor> getSensors() {
@@ -138,21 +142,25 @@ public class SensorManager {
 
         List<ISensor> liSensors = new LinkedList<ISensor>();
 
-        for (ISensor sensor : m_liSensors)
-            if (!sensor.isDisabledBySystem() && !sensor.isDisabledByUser())
+        for (ISensor sensor : m_liSensors) {
+            if (!sensor.isDisabledBySystem() && !sensor.isDisabledByUser()) {
                 liSensors.add(sensor);
+            }
+        }
 
         return liSensors;
     }
 
     public void setContext(Context ctx) {
-        for (ISensor sensor : m_liSensors)
+        for (ISensor sensor : m_liSensors) {
             sensor.setContext(ctx);
+        }
     }
 
     public void setDaoSession(DaoSession daoSession) {
-        for (ISensor sensor : m_liSensors)
+        for (ISensor sensor : m_liSensors) {
             sensor.setDaoSession(daoSession);
+        }
     }
 
 }

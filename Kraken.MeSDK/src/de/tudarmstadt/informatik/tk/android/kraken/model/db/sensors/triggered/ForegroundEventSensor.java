@@ -84,7 +84,7 @@ public class ForegroundEventSensor extends AbstractTriggeredSensor {
                     mReceiver = null;
                 }
             } catch (IllegalArgumentException e) {
-                e.printStackTrace();
+                Log.e(TAG, "Cannot stop sensor", e);
             }
 
             mStarted = false;
