@@ -1,13 +1,9 @@
 package de.tudarmstadt.informatik.tk.android.kraken.service;
 
-import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.Service;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.res.Resources;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Handler.Callback;
@@ -16,13 +12,13 @@ import android.os.Message;
 import android.os.Messenger;
 import android.os.Parcelable;
 import android.os.RemoteException;
+import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
 import java.io.Serializable;
 import java.util.List;
 
 import de.tudarmstadt.informatik.tk.android.kraken.ActivityCommunicator;
-import de.tudarmstadt.informatik.tk.android.kraken.KrakenGcmManager;
 import de.tudarmstadt.informatik.tk.android.kraken.KrakenSdkSettings;
 import de.tudarmstadt.informatik.tk.android.kraken.PreferenceManager;
 import de.tudarmstadt.informatik.tk.android.kraken.R;
@@ -53,6 +49,8 @@ public class KrakenService extends Service implements Callback {
     private DatabaseManager mDatabaseManager;
 
     private static DbModuleInstallationDao dbModuleInstallationDao;
+
+    private NotificationManager mNotificationManager;
 
     public static KrakenService getInstance() {
         return instance;
@@ -171,46 +169,39 @@ public class KrakenService extends Service implements Callback {
         Log.d(TAG, "Service was stopped.");
     }
 
+    /**
+     * Shows service ongoing notification that service is running
+     */
     private void showIcon() {
 
         Log.d(TAG, "Showing icon...");
 
-        //TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
-        //stackBuilder.addParentStack(MainActivity.class);
-        //Intent resultIntent = new Intent(this, MainActivity.class);
+        if (mNotificationManager == null) {
+            mNotificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        }
 
-        // Adds the Intent that starts the Activity to the top of the stack
-        //stackBuilder.addNextIntent(resultIntent);
-        //PendingIntent resultPendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
+        NotificationCompat.Builder mBuilder =
+                new NotificationCompat.Builder(this)
+                        .setSmallIcon(R.drawable.ic_kraken_service)
+                        .setContentTitle(getString(R.string.service_running_notification_title))
+                        .setContentText(getString(R.string.service_running_notification_text))
+                        .setOngoing(true);
 
-        Notification.Builder builder = new Notification.Builder(this);
-
-        //builder.setSmallIcon(R.drawable.ic_kraken_service).setContentIntent(resultPendingIntent);
-
-        // FIXME This is disabled for a short time, due to ongoing brainstorming on design
-
-        Resources res = getResources();
-        int height = Math.round(res.getDimension(android.R.dimen.notification_large_icon_height) * 0.75f);
-        int width = Math.round(res.getDimension(android.R.dimen.notification_large_icon_width) * 0.75f);
-        Bitmap kraki = BitmapFactory.decodeResource(res, R.drawable.kraki_big);
-        builder.setLargeIcon(Bitmap.createScaledBitmap(kraki, width, height, false));
-
-        builder.setContentTitle("Kraken service");
-        builder.setContentText(getString(R.string.service_notfication_text));
-
-        builder.setOngoing(true);
-//        startForeground(KrakenSdkSettings.KRAKEN_NOTIFICATION_ID, builder.build());
-
-        NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-        notificationManager.notify("kraken", KrakenSdkSettings.KRAKEN_NOTIFICATION_ID, builder.build());
+        mNotificationManager.notify("kraken", KrakenSdkSettings.KRAKEN_NOTIFICATION_ID, mBuilder.build());
     }
 
+    /**
+     * Hides service ongoing notification that service is running
+     */
     private void hideIcon() {
 
         Log.d(TAG, "Hiding icon...");
 
-        NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-        notificationManager.cancel("kraken", KrakenSdkSettings.KRAKEN_NOTIFICATION_ID);
+        if (mNotificationManager == null) {
+            mNotificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        }
+
+        mNotificationManager.cancel("kraken", KrakenSdkSettings.KRAKEN_NOTIFICATION_ID);
     }
 
     @Override

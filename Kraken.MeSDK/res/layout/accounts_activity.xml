@@ -13,7 +13,7 @@
         android:layout_marginTop="20dp"
         android:fontFamily="sans-serif-light"
         android:textSize="20sp"
-        android:text="@string/login_description"/>
+        android:text=""/>
 
     <ListView
         android:id="@+id/accounts_listview"

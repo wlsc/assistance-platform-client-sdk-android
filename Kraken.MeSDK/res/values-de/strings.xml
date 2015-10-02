@@ -58,8 +58,4 @@
     <string name="accept">Akzeptieren</string>
     <string name="decline">Ablehnen</string>
 
-    <!-- Login -->
-    <string name="login_description">Um Kraken.Me zu benutzen musst Du Dich über mindestens ein Soziales Netwerk anmelden.</string>
-    <string name="logout">Logout</string>
-
 </resources>

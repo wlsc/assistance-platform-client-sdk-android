@@ -34,7 +34,8 @@
     <string name="sensor_foreground_event">Last used apps</string>
 
     <!-- Service -->
-    <string name="service_notfication_text">Kraken Service is running</string>
+    <string name="service_running_notification_title">Assistance service is running!</string>
+    <string name="service_running_notification_text">Gathering assistance data…</string>
 
     <string name="finish">Done</string>
     <string name="general">General</string>
@@ -78,10 +79,5 @@
     <string name="tutorial_disclaimer_text">Kraken.me collects activity data and profile information in the context of research at the Technische Universität Darmstadt. Furthermore the data is used to offer services to you. Data is collected by the Kraken.me Android App, the Kraken.me Desktop Monitor and the Social Hub for connections to social networks. Based on the Kraken.me applications you use and your decision for a collection profile you decide which information is collected by the Kraken.me applications. Follow this <a href="http://kraken.me/index.html#/datenschutz">link</a> you find an overview of the data collected, grouped by application and collection profile.\n\nThe data collected by Kraken.me can be used for scientific research and for the visualization of information within Kraken.me applications which apply automated methods of data processing and analysis. We never use your data for commercial purpose. We reserve the right to hand over anonymized and aggregated subsets of the data to third parties.</string>
     <string name="accept">Accept</string>
     <string name="decline">Decline</string>
-
-    <!-- Login -->
-    <string name="login_description">Um Kraken.Me zu benutzen musst Du Dich über mindestens ein Soziales Netwerk anmelden.</string>
-    <string name="logout">Logout</string>
-
 
 </resources>
