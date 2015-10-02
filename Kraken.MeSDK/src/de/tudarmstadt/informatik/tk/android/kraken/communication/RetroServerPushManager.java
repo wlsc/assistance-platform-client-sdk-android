@@ -15,6 +15,7 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 import de.greenrobot.dao.AbstractDao;
+import de.tudarmstadt.informatik.tk.android.kraken.KrakenServiceManager;
 import de.tudarmstadt.informatik.tk.android.kraken.PreferenceManager;
 import de.tudarmstadt.informatik.tk.android.kraken.communication.endpoint.EventUploadEndpoint;
 import de.tudarmstadt.informatik.tk.android.kraken.db.DatabaseManager;
@@ -46,7 +47,9 @@ public class RetroServerPushManager {
     private static final int PERIODIC_PUSH_PERIOD_IN_MIN = 1;
     private static final int PUSH_NUMBER_OF_EACH_ELEMENTS = 50;
 
-    private static RetroServerPushManager instance;
+    private static RetroServerPushManager INSTANCE;
+
+    private static KrakenServiceManager krakenServiceManager;
 
     private HashSet<ISensor> mSensorsImmediate = new HashSet<ISensor>();
     private HashMap<ISensor, Long> mSensorsPeriodic = new HashMap<ISensor, Long>();
@@ -73,19 +76,19 @@ public class RetroServerPushManager {
 
     public static RetroServerPushManager getInstance(Context ctx) {
 
-        if (instance == null) {
-            instance = new RetroServerPushManager(ctx);
+        if (INSTANCE == null) {
+            INSTANCE = new RetroServerPushManager(ctx);
         }
 
         if (mFuture == null) {
-            instance.startPeriodicPush();
+            INSTANCE.startPeriodicPush();
         }
 
         if (mPreferenceManager == null) {
             mPreferenceManager = PreferenceManager.getInstance(ctx);
         }
 
-        return instance;
+        return INSTANCE;
     }
 
     public void setWLANConnected(boolean bConnected) {
@@ -103,6 +106,12 @@ public class RetroServerPushManager {
     private void startPeriodicPush() {
 
         Log.d(TAG, "Starting periodic push of data...");
+
+        if (krakenServiceManager == null) {
+            krakenServiceManager = KrakenServiceManager.getInstance(mContext);
+        }
+
+        krakenServiceManager.showIcon(true);
 
         if (mFuture == null) {
 
@@ -135,6 +144,12 @@ public class RetroServerPushManager {
             mFuture.cancel(true);
             mFuture = null;
         }
+
+        if (krakenServiceManager == null) {
+            krakenServiceManager = KrakenServiceManager.getInstance(mContext);
+        }
+
+        krakenServiceManager.showIcon(false);
 
         dbAccelerometerSensorDao = null;
         dbPositionSensorDao = null;
