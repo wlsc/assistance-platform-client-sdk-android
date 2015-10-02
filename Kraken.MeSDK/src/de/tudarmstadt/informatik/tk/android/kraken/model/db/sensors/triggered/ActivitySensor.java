@@ -11,6 +11,7 @@ import android.util.Log;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.ActivityRecognition;
+import com.google.android.gms.location.ActivityRecognitionResult;
 import com.google.android.gms.location.DetectedActivity;
 
 import java.util.List;
@@ -34,11 +35,11 @@ public class ActivitySensor extends AbstractTriggeredSensor implements GoogleApi
 
     private final static int CONNECTION_FAILURE_RESOLUTION_REQUEST = 9000;
 
-    private static ActivitySensor m_instance;
+    private static ActivitySensor INSTANCE;
 
     public ActivitySensor(Context context) {
         super(context);
-        m_instance = this;
+        INSTANCE = this;
 
         mGoogleApiClient = new GoogleApiClient.Builder(context)
                 .addApi(ActivityRecognition.API)
@@ -53,7 +54,7 @@ public class ActivitySensor extends AbstractTriggeredSensor implements GoogleApi
     }
 
     public static ActivitySensor getInstance() {
-        return m_instance;
+        return INSTANCE;
     }
 
     public void startSensor() {
@@ -150,22 +151,17 @@ public class ActivitySensor extends AbstractTriggeredSensor implements GoogleApi
 
     }
 
-    public void sendData(List<DetectedActivity> liActivities) {
-//        for (int i = 0; i < liActivities.size(); i++) {
-//            DetectedActivity act = liActivities.get(i);
-//
-//            SensorActivity sensorAct = new SensorActivity();
-//            sensorAct.setType(act.getType());
-//            sensorAct.setConfidence(act.getConfidence());
-//            sensorAct.setRanking(i);
-//            handleDBEntry(sensorAct);
-//        }
-    }
+    public void handleData(ActivityRecognitionResult userActivityResult) {
 
-    public void sendData(DetectedActivity act) {
-//        SensorActivity sensorAct = new SensorActivity();
-//        sensorAct.setType(act.getType());
-//        sensorAct.setConfidence(act.getConfidence());
-//        handleDBEntry(sensorAct);
+        List<DetectedActivity> probableActivities = userActivityResult.getProbableActivities();
+        DetectedActivity mostProbableActivity = userActivityResult.getMostProbableActivity();
+
+        Log.d(TAG, "Detected activity: " + mostProbableActivity.toString());
+
+        for (DetectedActivity activity : probableActivities) {
+            Log.d(TAG, "Probable: " + activity.toString());
+        }
+
+
     }
 }
