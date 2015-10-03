@@ -65,11 +65,11 @@ public class ServerCommunication {
 
 
         final String userToken = PreferenceManager.getInstance(mContext).getUserToken();
-        final long deviceId = PreferenceManager.getInstance(mContext).getCurrentDeviceServerId();
+        final long serverDeviceId = PreferenceManager.getInstance(mContext).getServerDeviceId();
 
         DeviceRegistrationRequest deviceRegistrationRequest = new DeviceRegistrationRequest();
 
-        deviceRegistrationRequest.setDeviceId(deviceId);
+        deviceRegistrationRequest.setDeviceId(serverDeviceId);
         deviceRegistrationRequest.setRegistrationToken(registrationToken);
 
         DeviceEndpoint deviceEndpoint = ServiceGenerator.createService(DeviceEndpoint.class);
@@ -80,7 +80,7 @@ public class ServerCommunication {
 
                 if (response != null && (response.getStatus() == 200 || response.getStatus() == 204)) {
 
-                    saveRegistrationTokenToDb(deviceId, registrationToken);
+                    saveRegistrationTokenToDb(serverDeviceId, registrationToken);
 
                 } else {
                     // TODO: handle response null

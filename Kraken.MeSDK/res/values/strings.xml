@@ -35,7 +35,7 @@
 
     <!-- Service -->
     <string name="service_running_notification_title">Assistance service is running!</string>
-    <string name="service_running_notification_text">Gathering assistance data…</string>
+    <string name="service_running_notification_text">Gathering data…</string>
 
     <string name="finish">Done</string>
     <string name="general">General</string>

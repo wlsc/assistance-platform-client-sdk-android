@@ -221,9 +221,9 @@ public class RetroServerPushManager {
 
         EventUploadRequest eventUploadRequest = new EventUploadRequest();
 
-        long deviceServerId = mPreferenceManager.getCurrentDeviceServerId();
+        long serverDeviceId = mPreferenceManager.getServerDeviceId();
 
-        Log.d(TAG, "Current server device id: " + deviceServerId);
+        Log.d(TAG, "Current server device id: " + serverDeviceId);
 
         List<Sensor> events = new LinkedList<>();
 
@@ -231,7 +231,7 @@ public class RetroServerPushManager {
         events.addAll(getPositionEntries());
 
         eventUploadRequest.setDataEvents(events);
-        eventUploadRequest.setServerDeviceId(deviceServerId);
+        eventUploadRequest.setServerDeviceId(serverDeviceId);
 
 //        buildSensorsDataArray(type, eventUploadRequest);
         sendSensorData(eventUploadRequest);

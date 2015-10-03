@@ -45,10 +45,13 @@
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/app_id" />
 
-        <service android:name=".service.KrakenService" />
+        <service
+            android:name=".service.KrakenService"
+            android:exported="false" />
 
         <service
             android:name=".service.KrakenAccessibilityService"
+            android:exported="false"
             android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE">
             <intent-filter>
                 <action android:name="android.accessibilityservice.AccessibilityService" />
@@ -84,7 +87,9 @@
             android:enabled="true"
             android:exported="false" />
 
-        <service android:name="com.google.android.gms.analytics.CampaignTrackingService" />
+        <service
+            android:name="com.google.android.gms.analytics.CampaignTrackingService"
+            android:exported="false" />
 
         <!-- Optionally, register AnalyticsReceiver and AnalyticsService to support background
          dispatching on non-Google Play devices -->

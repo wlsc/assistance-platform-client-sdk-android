@@ -22,7 +22,8 @@ public class PreferenceManager {
     public static final String KRAKEN_ACTIVATED = "KrakenActivated";
     public static final String KRAKEN_SHOW_NOTIFICATION = "KrakenShowNotification";
     public static final String KRAKEN_DATA_PROFILE = "KrakenDataProfile";
-    public static final String KRAKEN_CURRENT_DEVICE_SERVER_ID = "current_device_id";
+    public static final String KRAKEN_CURRENT_DEVICE_ID = "current_device_id";
+    public static final String KRAKEN_SERVER_DEVICE_ID = "server_device_id";
     public static final String KRAKEN_USER_TOKEN = "user_token";
 
     public static final String KRAKEN_DATA_PROFILE_BASIC = "KrakenDataProfileBasic";
@@ -85,12 +86,20 @@ public class PreferenceManager {
         this.defaultPrefs.edit().putString(KRAKEN_DATA_PROFILE, dataProfile).apply();
     }
 
-    public long getCurrentDeviceServerId() {
-        return this.defaultPrefs.getLong(KRAKEN_CURRENT_DEVICE_SERVER_ID, -1);
+    public long getCurrentDeviceId() {
+        return this.defaultPrefs.getLong(KRAKEN_CURRENT_DEVICE_ID, -1);
     }
 
-    public void setCurrentDeviceServiceId(long deviceId) {
-        this.defaultPrefs.edit().putLong(KRAKEN_CURRENT_DEVICE_SERVER_ID, deviceId).apply();
+    public void setCurrentDeviceId(long deviceId) {
+        this.defaultPrefs.edit().putLong(KRAKEN_CURRENT_DEVICE_ID, deviceId).apply();
+    }
+
+    public long getServerDeviceId() {
+        return this.defaultPrefs.getLong(KRAKEN_SERVER_DEVICE_ID, -1);
+    }
+
+    public void setServerDeviceId(long deviceId) {
+        this.defaultPrefs.edit().putLong(KRAKEN_SERVER_DEVICE_ID, deviceId).apply();
     }
 
     public boolean getActivated() {
