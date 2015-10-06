@@ -51,4 +51,10 @@ public class KrakenSdkSettings {
     public static final String DEFAULT_NOTIFICATION_GROUP = "AssistanceNotificationGroup";
 
     public static final String INTENT_EXTRA_SHOW_ICON = "showIcon";
+
+    /**
+     * PERMISSION IDs
+     */
+    public static final int PERMISSIONS_REQUEST_READ_CONTACTS = 100;
+    public static final int PERMISSIONS_REQUEST_ACCESS_COARSE_LOCATION = 101;
 }
