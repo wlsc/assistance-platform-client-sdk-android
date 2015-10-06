@@ -10,12 +10,12 @@ buildscript {
 }
 
 android {
-    compileSdkVersion 22
+    compileSdkVersion 23
     defaultConfig {
-        targetSdkVersion 22
+        targetSdkVersion 23
         minSdkVersion 16
     }
-    buildToolsVersion "22.0.1"
+    buildToolsVersion "23.0.1"
     sourceSets {
         main {
             manifest.srcFile 'AndroidManifest.xml'
@@ -66,6 +66,7 @@ dependencies {
     compile 'com.squareup.okhttp:okhttp:2.5.0'
     // database ORM
     compile 'de.greenrobot:greendao:2.0.0'
+
 }
 
 allprojects {

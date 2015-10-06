@@ -74,6 +74,12 @@ public class RetroServerPushManager {
         mScheduledTaskExecutor = Executors.newSingleThreadScheduledExecutor();
     }
 
+    /**
+     * Returns singleton instance of this class
+     *
+     * @param ctx
+     * @return
+     */
     public static RetroServerPushManager getInstance(Context ctx) {
 
         if (INSTANCE == null) {

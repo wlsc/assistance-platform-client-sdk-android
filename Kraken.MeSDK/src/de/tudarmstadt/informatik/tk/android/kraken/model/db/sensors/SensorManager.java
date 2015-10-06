@@ -45,49 +45,46 @@ public class SensorManager {
 
     private SensorManager(Context context) {
 
+        final RetroServerPushManager retroServerPushManager = RetroServerPushManager.getInstance(context);
+
         // // triggered
         // works
         AccelerometerSensor accelerometerSensor = new AccelerometerSensor(context);
         m_liSensors.add(accelerometerSensor);
-        RetroServerPushManager.getInstance(context).setPushType(accelerometerSensor, accelerometerSensor.getPushType());
+        retroServerPushManager.setPushType(accelerometerSensor, accelerometerSensor.getPushType());
 
         ActivitySensor activitySensor = new ActivitySensor(context);
         m_liSensors.add(activitySensor);
-
-        RetroServerPushManager.getInstance(context).setPushType(activitySensor, activitySensor.getPushType());
+        retroServerPushManager.setPushType(activitySensor, activitySensor.getPushType());
 
         // works
         LightSensor lightSensor = new LightSensor(context);
         m_liSensors.add(lightSensor);
-        //ServerPushManager.getInstance(context).setPushType(lightSensor, lightSensor.getPushType());
-        RetroServerPushManager.getInstance(context).setPushType(lightSensor, lightSensor.getPushType());
+        retroServerPushManager.setPushType(lightSensor, lightSensor.getPushType());
 
         // works
         LocationSensor locationSensor = new LocationSensor(context);
         m_liSensors.add(locationSensor);
-        //ServerPushManager.getInstance(context).setPushType(locationSensor, locationSensor.getPushType());
-        RetroServerPushManager.getInstance(context).setPushType(locationSensor, locationSensor.getPushType());
+        retroServerPushManager.setPushType(locationSensor, locationSensor.getPushType());
 
         MeasurementSensor measurementSensor = new MeasurementSensor(context);
         m_liSensors.add(measurementSensor);
-        //ServerPushManager.getInstance(context).setPushType(measurementSensor, measurementSensor.getPushType());
-        RetroServerPushManager.getInstance(context).setPushType(measurementSensor, measurementSensor.getPushType());
+        retroServerPushManager.setPushType(measurementSensor, measurementSensor.getPushType());
 
         // works
         ConnectionSensor connectionSensor = new ConnectionSensor(context);
         m_liSensors.add(connectionSensor);
-        //ServerPushManager.getInstance(context).setPushType(connectionSensor, connectionSensor.getPushType());
-        RetroServerPushManager.getInstance(context).setPushType(connectionSensor, connectionSensor.getPushType());
+        retroServerPushManager.setPushType(connectionSensor, connectionSensor.getPushType());
 
         //new foreground traffic
         ForegroundTrafficSensor foregroundTrafficSensor = new ForegroundTrafficSensor(context);
         m_liSensors.add(foregroundTrafficSensor);
-        RetroServerPushManager.getInstance(context).setPushType(foregroundTrafficSensor, foregroundTrafficSensor.getPushType());
+        retroServerPushManager.setPushType(foregroundTrafficSensor, foregroundTrafficSensor.getPushType());
 
         //new periodic background traffic
         BackgroundTrafficSensor backgroundTrafficSensor = new BackgroundTrafficSensor(context);
         m_liSensors.add(backgroundTrafficSensor);
-        RetroServerPushManager.getInstance(context).setPushType(backgroundTrafficSensor, backgroundTrafficSensor.getPushType());
+        retroServerPushManager.setPushType(backgroundTrafficSensor, backgroundTrafficSensor.getPushType());
 
         // loudness sensor is blocking microphone and consuming too much battery
         // LoudnessSensor loudnessSensor = new LoudnessSensor(context);
@@ -97,33 +94,27 @@ public class SensorManager {
         // periodic
         RingtoneSensor ringtoneSensor = new RingtoneSensor(context);
         m_liSensors.add(ringtoneSensor);
-        //ServerPushManager.getInstance(context).setPushType(ringtoneSensor, ringtoneSensor.getPushType());
-        RetroServerPushManager.getInstance(context).setPushType(ringtoneSensor, ringtoneSensor.getPushType());
+        retroServerPushManager.setPushType(ringtoneSensor, ringtoneSensor.getPushType());
 
         CalendarSensor calendarSensor = new CalendarSensor(context);
         m_liSensors.add(calendarSensor);
-        //ServerPushManager.getInstance(context).setPushType(calendarSensor, calendarSensor.getPushType());
-        RetroServerPushManager.getInstance(context).setPushType(calendarSensor, calendarSensor.getPushType());
+        retroServerPushManager.setPushType(calendarSensor, calendarSensor.getPushType());
 
         ContactsSensor contactsSensor = new ContactsSensor(context);
         m_liSensors.add(contactsSensor);
-        //ServerPushManager.getInstance(context).setPushType(contactsSensor, contactsSensor.getPushType());
-        RetroServerPushManager.getInstance(context).setPushType(contactsSensor, contactsSensor.getPushType());
+        retroServerPushManager.setPushType(contactsSensor, contactsSensor.getPushType());
 
         CallLogSensor callLogSensor = new CallLogSensor(context);
         m_liSensors.add(callLogSensor);
-        RetroServerPushManager.getInstance(context).setPushType(callLogSensor, callLogSensor.getPushType());
-        //ServerPushManager.getInstance(context).setPushType(callLogSensor, callLogSensor.getPushType());
+        retroServerPushManager.setPushType(callLogSensor, callLogSensor.getPushType());
 
         BrowserHistorySensor browserHistorySensor = new BrowserHistorySensor(context);
         m_liSensors.add(browserHistorySensor);
-        //ServerPushManager.getInstance(context).setPushType(browserHistorySensor, browserHistorySensor.getPushType());
-        RetroServerPushManager.getInstance(context).setPushType(browserHistorySensor, browserHistorySensor.getPushType());
+        retroServerPushManager.setPushType(browserHistorySensor, browserHistorySensor.getPushType());
 
         ForegroundEventSensor foregroundEventSensor = new ForegroundEventSensor(context);
         m_liSensors.add(foregroundEventSensor);
-        //ServerPushManager.getInstance(context).setPushType(foregroundEventSensor, foregroundEventSensor.getPushType());
-        RetroServerPushManager.getInstance(context).setPushType(foregroundEventSensor, foregroundEventSensor.getPushType());
+        retroServerPushManager.setPushType(foregroundEventSensor, foregroundEventSensor.getPushType());
 
         for (ISensor sensor : m_liSensors) {
             m_mapSensors.put(sensor.getSensorType(), sensor);

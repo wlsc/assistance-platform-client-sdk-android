@@ -2,7 +2,6 @@ package de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.contentobse
 
 import android.content.Context;
 import android.net.Uri;
-import android.provider.Browser;
 
 import java.lang.reflect.Method;
 
@@ -15,7 +14,7 @@ import de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.abstract_sen
  */
 public class BrowserHistorySensor extends AbstractContentObserverSensor {
 
-    protected static final Uri URI_BROWSER_HISTORY = Browser.BOOKMARKS_URI;
+//    protected static final Uri URI_BROWSER_HISTORY = Browser.BOOKMARKS_URI;
     protected static final Uri URI_CHROME_HISTORY = Uri.parse("content://com.android.chrome.browser/bookmarks");
 
     private Method m_methodForGetAllExistingHistory;
@@ -149,16 +148,16 @@ public class BrowserHistorySensor extends AbstractContentObserverSensor {
     @Override
     public void startSensor() {
         isRunning = true;
-        Thread thread = new Thread(new Runnable() {
-
-            @Override
-            public void run() {
-                syncData();
-                context.getContentResolver().registerContentObserver(URI_BROWSER_HISTORY, true, m_observer);
-            }
-        });
-        thread.setName("BrowserHistorySensorThread");
-        thread.start();
+//        Thread thread = new Thread(new Runnable() {
+//
+//            @Override
+//            public void run() {
+//                syncData();
+//                context.getContentResolver().registerContentObserver(URI_BROWSER_HISTORY, true, m_observer);
+//            }
+//        });
+//        thread.setName("BrowserHistorySensorThread");
+//        thread.start();
     }
 
     @Override

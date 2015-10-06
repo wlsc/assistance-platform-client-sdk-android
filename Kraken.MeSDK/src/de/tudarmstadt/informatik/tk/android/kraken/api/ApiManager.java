@@ -3,8 +3,6 @@ package de.tudarmstadt.informatik.tk.android.kraken.api;
 import android.content.Context;
 import android.os.Bundle;
 
-import org.apache.http.NameValuePair;
-import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -16,7 +14,6 @@ import java.util.Set;
 import de.tudarmstadt.informatik.tk.android.kraken.api.entities.CalendarEvent;
 import de.tudarmstadt.informatik.tk.android.kraken.api.entities.ForegroundEvent;
 import de.tudarmstadt.informatik.tk.android.kraken.communication.IServerCommunicationResponseHandler;
-import de.tudarmstadt.informatik.tk.android.kraken.communication.ServerCommunication;
 import de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.ESensorType;
 
 
@@ -41,27 +38,27 @@ public class ApiManager {
 
     public void getSensordata(ESensorType type, long startDate, long endDate, IServerCommunicationResponseHandler handler) {
 //        String className = type.getServerClassName();
-        List<NameValuePair> params = new LinkedList<>();
-        params.add(new BasicNameValuePair("startDate", String.valueOf(startDate)));
-        params.add(new BasicNameValuePair("endDate", String.valueOf(endDate)));
+//        List<NameValuePair> params = new LinkedList<>();
+//        params.add(new BasicNameValuePair("startDate", String.valueOf(startDate)));
+//        params.add(new BasicNameValuePair("endDate", String.valueOf(endDate)));
         // params.add(new BasicNameValuePair("sensorClass", className));
 //        new ServerCommunication(mContext, handler).getRequest(params, "rest/sensordata/" + className);
     }
 
     public void getNextCalendarEvents(int limit, Set<String> calendars, IServerCommunicationResponseHandler handler) {
-        List<NameValuePair> params = new LinkedList<>();
-        params.add(new BasicNameValuePair("limit", String.valueOf(limit)));
-        for (String calendar : calendars) {
-            params.add(new BasicNameValuePair("calendars", calendar));
-        }
-        new ServerCommunication(mContext, handler).getRequest(params, "rest/visualization/nextCalendarEvent");
+//        List<NameValuePair> params = new LinkedList<>();
+//        params.add(new BasicNameValuePair("limit", String.valueOf(limit)));
+//        for (String calendar : calendars) {
+//            params.add(new BasicNameValuePair("calendars", calendar));
+//        }
+//        new ServerCommunication(mContext, handler).getRequest(params, "rest/visualization/nextCalendarEvent");
     }
 
     public void getForegroundEvents(long startDate, long endDate, IServerCommunicationResponseHandler handler) {
-        List<NameValuePair> params = new LinkedList<>();
-        params.add(new BasicNameValuePair("startDate", String.valueOf(startDate)));
-        params.add(new BasicNameValuePair("endDate", String.valueOf(endDate)));
-        new ServerCommunication(mContext, handler).getRequest(params, "rest/visualization/foregroundEvents");
+//        List<NameValuePair> params = new LinkedList<>();
+//        params.add(new BasicNameValuePair("startDate", String.valueOf(startDate)));
+//        params.add(new BasicNameValuePair("endDate", String.valueOf(endDate)));
+//        new ServerCommunication(mContext, handler).getRequest(params, "rest/visualization/foregroundEvents");
     }
 
     public static class SensordataHandler<T> implements IServerCommunicationResponseHandler {

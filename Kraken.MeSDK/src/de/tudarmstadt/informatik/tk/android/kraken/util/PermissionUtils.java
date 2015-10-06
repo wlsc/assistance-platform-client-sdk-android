@@ -1,6 +1,9 @@
 package de.tudarmstadt.informatik.tk.android.kraken.util;
 
+import android.annotation.TargetApi;
 import android.content.Context;
+import android.content.pm.PackageManager;
+import android.os.Build;
 
 /**
  * Provides permission checks on runtime
@@ -35,15 +38,21 @@ public class PermissionUtils {
         return INSTANCE;
     }
 
+    /**
+     * Generic check for given permission (Android M version)
+     *
+     * @param permission
+     * @return
+     */
+    @TargetApi(Build.VERSION_CODES.M)
+    public boolean isPermissionGranted(String permission) {
 
-//    public boolean isInternetGranted() {
-//
-//        int permissionCheck = ContextCompat.checkSelfPermission(mContext, Manifest.permission.INTERNET);
-//
-//        if (permissionCheck == PackageManager.PERMISSION_GRANTED) {
-//            return true;
-//        } else {
-//            return false;
-//        }
-//    }
+        int check = mContext.checkSelfPermission(permission);
+
+        if (check == PackageManager.PERMISSION_GRANTED) {
+            return true;
+        }
+
+        return false;
+    }
 }

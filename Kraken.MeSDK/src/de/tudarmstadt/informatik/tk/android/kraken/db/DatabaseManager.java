@@ -12,7 +12,7 @@ import de.tudarmstadt.informatik.tk.android.kraken.KrakenSdkSettings;
  */
 public class DatabaseManager {
 
-    private static DatabaseManager manager;
+    private static DatabaseManager INSTANCE;
 
     private SQLiteDatabase mDb;
     private DaoMaster mDaoMaster;
@@ -39,18 +39,20 @@ public class DatabaseManager {
      * @return
      */
     public static DatabaseManager getInstance(Context context) {
-        if (manager == null)
-            manager = new DatabaseManager(context);
 
-        return manager;
+        if (INSTANCE == null) {
+            INSTANCE = new DatabaseManager(context);
+        }
+
+        return INSTANCE;
     }
 
     /**
-     * Hard reset
+     * Hard reset, really hard!
      */
     public void hardReset() {
         DaoMaster.dropAllTables(mDb, true);
-        manager = null;
+        INSTANCE = null;
     }
 
     public DaoSession getDaoSession() {
@@ -60,5 +62,4 @@ public class DatabaseManager {
     public SQLiteDatabase getDatabase() {
         return mDb;
     }
-
 }

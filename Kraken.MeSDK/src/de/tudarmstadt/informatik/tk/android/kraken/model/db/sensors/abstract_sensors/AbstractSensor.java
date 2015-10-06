@@ -402,8 +402,9 @@ public abstract class AbstractSensor implements ISensor {
         configure(json, this.getClass());
 
         // restart sensor if it was running
-        if (bWasRunning)
+        if (bWasRunning) {
             startSensor();
+        }
     }
 
     private void configure(JSONObject json, Class<?> configurationClass) {

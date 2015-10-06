@@ -5,8 +5,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
-import de.tudarmstadt.informatik.tk.android.kraken.PreferenceManager;
 import de.tudarmstadt.informatik.tk.android.kraken.KrakenServiceManager;
+import de.tudarmstadt.informatik.tk.android.kraken.PreferenceManager;
 
 /**
  * @author Karsten Planz
@@ -19,14 +19,20 @@ public class BootReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
 
-        boolean activated = PreferenceManager.getInstance(context).getActivated();
+        // check for proper action
+        if ("android.intent.action.BOOT_COMPLETED".equals(intent.getAction())) {
 
-        Log.d(TAG, "BootReceiver onReceive " + activated);
+            boolean activated = PreferenceManager.getInstance(context).getActivated();
 
-        if (activated) {
+            Log.d(TAG, "BootReceiver onReceive " + activated);
 
-            final KrakenServiceManager service = KrakenServiceManager.getInstance(context);
-            service.startKrakenService();
+            if (activated) {
+
+                Log.d(TAG, "Start on boot activated -> starting service...");
+
+                final KrakenServiceManager service = KrakenServiceManager.getInstance(context);
+                service.startKrakenService();
+            }
         }
     }
 }
