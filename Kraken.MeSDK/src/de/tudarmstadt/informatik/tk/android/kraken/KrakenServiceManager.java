@@ -9,6 +9,7 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
 import android.os.Messenger;
+import android.util.Log;
 
 import de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.ECommandType;
 import de.tudarmstadt.informatik.tk.android.kraken.service.KrakenService;
@@ -28,6 +29,8 @@ public class KrakenServiceManager implements Handler.Callback {
 
     protected ServiceConnection mServiceConnection = new ServiceConnection() {
 
+        private final String TAG = ServiceConnection.class.getSimpleName();
+
         @Override
         public void onServiceDisconnected(ComponentName name) {
             isServiceBound = false;
@@ -35,6 +38,8 @@ public class KrakenServiceManager implements Handler.Callback {
 
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
+
+            Log.d(TAG, "Service was connected to binder");
 
             mMessenger = new Messenger(service);
 
@@ -89,9 +94,9 @@ public class KrakenServiceManager implements Handler.Callback {
      * Stops sensing service
      */
     public void stopKrakenService() {
-        //KrakenService.sendCommand(mMessenger, ECommandType.STOP_SERVICE, null);
+
         mContext.stopService(mKrakenIntent);
-        //unbindKrakenService();
+
         showIcon(false);
     }
 

@@ -41,7 +41,7 @@ public class KrakenService extends Service implements Callback {
 
     private boolean m_bIsRunning = false;
 
-    private static KrakenService instance;
+    private static KrakenService INSTANCE;
 
     private final Messenger messenger = new Messenger(new Handler(this));
 
@@ -53,8 +53,12 @@ public class KrakenService extends Service implements Callback {
 
     private NotificationManager mNotificationManager;
 
+    public KrakenService() {
+
+    }
+
     public static KrakenService getInstance() {
-        return instance;
+        return INSTANCE;
     }
 
     public DaoSession getDaoSession() {
@@ -65,19 +69,24 @@ public class KrakenService extends Service implements Callback {
     public void onCreate() {
         super.onCreate();
 
-        Log.d(TAG, "Service starting...");
+        INSTANCE = this;
 
-        instance = this;
+        Log.d(TAG, "Service starting...");
 
         // Init database FIRST!
         mDatabaseManager = DatabaseManager.getInstance(getApplicationContext());
 
         mPreferenceManager = PreferenceManager.getInstance(getApplicationContext());
 
-        startKrakenService();
+        initService();
     }
 
-    private void startKrakenService() {
+    /**
+     * Inits service
+     */
+    private void initService() {
+
+        Log.d(TAG, "Initializing service...");
 
         if (!m_bIsRunning) {
             m_bIsRunning = true;
@@ -113,7 +122,7 @@ public class KrakenService extends Service implements Callback {
             hideIcon();
         }
 
-        Log.d(TAG, "Service has started.");
+        Log.d(TAG, "Service was initiated.");
     }
 
     private void stopKrakenService() {
@@ -189,7 +198,7 @@ public class KrakenService extends Service implements Callback {
                         .setPriority(Notification.PRIORITY_MIN)
                         .setOngoing(true);
 
-        mNotificationManager.notify(KrakenSdkSettings.KRAKEN_NOTIFICATION_ID, mBuilder.build());
+        mNotificationManager.notify(KrakenSdkSettings.DEFAULT_NOTIFICATION_ID, mBuilder.build());
     }
 
     /**
@@ -203,7 +212,7 @@ public class KrakenService extends Service implements Callback {
             mNotificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         }
 
-        mNotificationManager.cancel(KrakenSdkSettings.KRAKEN_NOTIFICATION_ID);
+        mNotificationManager.cancel(KrakenSdkSettings.DEFAULT_NOTIFICATION_ID);
     }
 
     @Override
@@ -221,6 +230,8 @@ public class KrakenService extends Service implements Callback {
                 hideIcon();
             }
         }
+
+//        startForeground();
 
         return Service.START_STICKY;
     }
@@ -275,25 +286,32 @@ public class KrakenService extends Service implements Callback {
 
         switch (command) {
             case SET_HANDLER:
+                Log.d(TAG, "Command: SET_HANDLER received");
                 Messenger messenger = (Messenger) data.getParcelable("value");
                 setActivityHandler(messenger);
                 break;
             case START_SERVICE:
-                startKrakenService();
+                Log.d(TAG, "Command: START_SERVICE received");
+                initService();
                 break;
             case STOP_SERVICE:
+                Log.d(TAG, "Command: STOP_SERVICE received");
                 stopKrakenService();
                 break;
             case REMOVE_HANDLER:
+                Log.d(TAG, "Command: REMOVE_HANDLER received");
                 setActivityHandler(null);
                 break;
             case HIDE_ICON:
+                Log.d(TAG, "Command: HIDE_ICON received");
                 hideIcon();
                 break;
             case SHOW_ICON:
+                Log.d(TAG, "Command: SHOW_ICON received");
                 showIcon();
                 break;
             default:
+                Log.e(TAG, "Unknown Command!");
                 return false;
         }
         return true;

@@ -47,7 +47,8 @@ public class KrakenSdkSettings {
             ESensorType.SENSOR_BACKGROUND_TRAFFIC
     };
 
-    public static final int KRAKEN_NOTIFICATION_ID = 7331;
+    public static final int DEFAULT_NOTIFICATION_ID = 7331;
+    public static final String DEFAULT_NOTIFICATION_GROUP = "AssistanceNotificationGroup";
 
     public static final String INTENT_EXTRA_SHOW_ICON = "showIcon";
 }
