@@ -75,7 +75,7 @@ public class PositionSensorRequest implements Sensor {
         this.accuracyVertical = accuracyVertical;
         this.course = course;
         this.floor = floor;
-        this.type = SensorType.POSITION;
+        this.type = SensorType.LOCATION;
         this.typeStr = SensorType.getApiName(this.type);
     }
 

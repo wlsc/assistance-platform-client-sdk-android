@@ -14,8 +14,7 @@ public class SensorType {
      * Types of hard and soft sensors
      */
 
-
-    public static final int POSITION = 1;
+    public static final int LOCATION = 1;
 
     public static final int GYROSCOPE = 2;
 
@@ -23,7 +22,7 @@ public class SensorType {
 
     public static final int MAGNETIC_FIELD = 4;
 
-    public static final int MOTION_ACTIVITY = 5;
+    public static final int MOTION_ACTIVITY_EVENT = 5;
 
     public static final int CONNECTION_EVENT = 6;
 
@@ -37,13 +36,15 @@ public class SensorType {
 
     public static final int GYROSCOPE_UNCALIBRATED = 11;
 
+    public static final int FOREGROUND_EVENT = 12;
+
 
     private SensorType() {
     }
 
     public static final String getName(int type, Resources res) {
         switch (type) {
-            case POSITION:
+            case LOCATION:
                 return res.getString(R.string.sensor_position);
             case GYROSCOPE:
                 return res.getString(R.string.sensor_gyroscope);
@@ -51,7 +52,7 @@ public class SensorType {
                 return res.getString(R.string.sensor_accelerometer);
             case MAGNETIC_FIELD:
                 return res.getString(R.string.sensor_magnetic_field);
-            case MOTION_ACTIVITY:
+            case MOTION_ACTIVITY_EVENT:
                 return res.getString(R.string.sensor_motion_activity);
             case CONNECTION_EVENT:
                 return res.getString(R.string.sensor_connection);
@@ -65,6 +66,8 @@ public class SensorType {
                 return res.getString(R.string.sensor_magnetic_field_uncalibrated);
             case GYROSCOPE_UNCALIBRATED:
                 return res.getString(R.string.sensor_gyroscope_uncalibrated);
+            case FOREGROUND_EVENT:
+                return res.getString(R.string.sensor_foreground_event);
             default:
                 return "";
         }
@@ -79,7 +82,7 @@ public class SensorType {
     public static final String getApiName(int type) {
 
         switch (type) {
-            case POSITION:
+            case LOCATION:
                 return "position";
             case GYROSCOPE:
                 return "gyroscope";
@@ -87,7 +90,7 @@ public class SensorType {
                 return "accelerometer";
             case MAGNETIC_FIELD:
                 return "magneticfield";
-            case MOTION_ACTIVITY:
+            case MOTION_ACTIVITY_EVENT:
                 return "motionactivity";
             case CONNECTION_EVENT:
                 return "connection";
@@ -101,6 +104,8 @@ public class SensorType {
                 return "magnetic_field_uncalibrated";
             case GYROSCOPE_UNCALIBRATED:
                 return "gyroscope_uncalibrated";
+            case FOREGROUND_EVENT:
+                return "foreground_event";
             default:
                 return "";
         }

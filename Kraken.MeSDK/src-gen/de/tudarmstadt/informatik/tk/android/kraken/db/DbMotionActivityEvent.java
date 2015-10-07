@@ -13,7 +13,6 @@ public class DbMotionActivityEvent implements de.tudarmstadt.informatik.tk.andro
     private Integer driving;
     private Integer stationary;
     private Integer unknown;
-    private Integer accuracy;
     /** Not-null value. */
     private String created;
     private Integer onFoot;
@@ -26,7 +25,7 @@ public class DbMotionActivityEvent implements de.tudarmstadt.informatik.tk.andro
         this.id = id;
     }
 
-    public DbMotionActivityEvent(Long id, Integer walking, Integer running, Integer cycling, Integer driving, Integer stationary, Integer unknown, Integer accuracy, String created, Integer onFoot, Integer tilting) {
+    public DbMotionActivityEvent(Long id, Integer walking, Integer running, Integer cycling, Integer driving, Integer stationary, Integer unknown, String created, Integer onFoot, Integer tilting) {
         this.id = id;
         this.walking = walking;
         this.running = running;
@@ -34,7 +33,6 @@ public class DbMotionActivityEvent implements de.tudarmstadt.informatik.tk.andro
         this.driving = driving;
         this.stationary = stationary;
         this.unknown = unknown;
-        this.accuracy = accuracy;
         this.created = created;
         this.onFoot = onFoot;
         this.tilting = tilting;
@@ -94,14 +92,6 @@ public class DbMotionActivityEvent implements de.tudarmstadt.informatik.tk.andro
 
     public void setUnknown(Integer unknown) {
         this.unknown = unknown;
-    }
-
-    public Integer getAccuracy() {
-        return accuracy;
-    }
-
-    public void setAccuracy(Integer accuracy) {
-        this.accuracy = accuracy;
     }
 
     /** Not-null value. */

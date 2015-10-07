@@ -16,32 +16,40 @@ import android.os.RemoteException;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
+import com.google.android.gms.gcm.GcmNetworkManager;
+
 import java.io.Serializable;
 import java.util.List;
 
 import de.tudarmstadt.informatik.tk.android.kraken.ActivityCommunicator;
-import de.tudarmstadt.informatik.tk.android.kraken.Settings;
 import de.tudarmstadt.informatik.tk.android.kraken.PreferenceManager;
 import de.tudarmstadt.informatik.tk.android.kraken.R;
-import de.tudarmstadt.informatik.tk.android.kraken.RetroServerPushManager;
+import de.tudarmstadt.informatik.tk.android.kraken.SensorManager;
+import de.tudarmstadt.informatik.tk.android.kraken.Settings;
 import de.tudarmstadt.informatik.tk.android.kraken.db.DaoSession;
-import de.tudarmstadt.informatik.tk.android.kraken.provider.DbProvider;
 import de.tudarmstadt.informatik.tk.android.kraken.db.DbModuleInstallation;
 import de.tudarmstadt.informatik.tk.android.kraken.db.DbModuleInstallationDao;
 import de.tudarmstadt.informatik.tk.android.kraken.model.enums.ECommandType;
-import de.tudarmstadt.informatik.tk.android.kraken.SensorManager;
 import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.ISensor;
+import de.tudarmstadt.informatik.tk.android.kraken.provider.DbProvider;
 
 
 public class HarvesterService extends Service implements Callback {
 
     private static final String TAG = HarvesterService.class.getSimpleName();
 
-    private boolean m_bIsRunning = false;
-
     private static HarvesterService INSTANCE;
 
     private final Messenger messenger = new Messenger(new Handler(this));
+
+    // task identifier
+    private long taskID = 1;
+    // the task should be executed every 30 seconds
+    private long periodSecs = 5L;
+    // the task can run as early as -15 seconds from the scheduled time
+    private long flexSecs = 1L;
+    // an unique task identifier
+    private String taskTag = "periodic | " + taskID++ + ": " + periodSecs + "s, f:" + flexSecs;
 
     private SensorManager mSensorManager;
     private PreferenceManager mPreferenceManager;
@@ -52,7 +60,6 @@ public class HarvesterService extends Service implements Callback {
     private NotificationManager mNotificationManager;
 
     public HarvesterService() {
-
     }
 
     public static HarvesterService getInstance() {
@@ -86,33 +93,31 @@ public class HarvesterService extends Service implements Callback {
 
         Log.d(TAG, "Initializing service...");
 
-        if (!m_bIsRunning) {
-            m_bIsRunning = true;
-
-            if (dbModuleInstallationDao == null) {
-                dbModuleInstallationDao = mDbProvider.getDaoSession().getDbModuleInstallationDao();
-            }
-
-            SharedPreferences sharedPreferences = android.preference.PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-            long userId = sharedPreferences.getLong("current_user_id", -1);
-
-            List<DbModuleInstallation> dbModuleInstallations = dbModuleInstallationDao
-                    .queryBuilder()
-                    .where(DbModuleInstallationDao.Properties.UserId.eq(userId))
-                    .build()
-                    .list();
-
-            if (dbModuleInstallations != null && !dbModuleInstallations.isEmpty()) {
-                Log.d(TAG, "Found active modules -> starting monitoring activities...");
-
-                monitorStart();
-
-            } else {
-                Log.d(TAG, "No active module were found!");
-            }
+        if (dbModuleInstallationDao == null) {
+            dbModuleInstallationDao = mDbProvider.getDaoSession().getDbModuleInstallationDao();
         }
 
-        RetroServerPushManager.getInstance(getApplicationContext());
+        SharedPreferences sharedPreferences = android.preference.PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        long userId = sharedPreferences.getLong("current_user_id", -1);
+
+        List<DbModuleInstallation> dbModuleInstallations = dbModuleInstallationDao
+                .queryBuilder()
+                .where(DbModuleInstallationDao.Properties.UserId.eq(userId))
+                .build()
+                .list();
+
+        if (dbModuleInstallations != null && !dbModuleInstallations.isEmpty()) {
+            Log.d(TAG, "Found active modules -> starting monitoring activities...");
+
+            monitorStart();
+
+            EventUploaderService.schedulePeriodicTask(getApplicationContext(), 5L, 1L, taskTag);
+
+        } else {
+            Log.d(TAG, "No active module were found!");
+        }
+
+//        RetroServerPushManager.getInstance(getApplicationContext());
 
         if (mPreferenceManager.getShowNotification()) {
             showIcon();
@@ -125,18 +130,19 @@ public class HarvesterService extends Service implements Callback {
 
     private void stopKrakenService() {
 
-        if (m_bIsRunning) {
-            monitorStop();
-            m_bIsRunning = false;
-        }
+        monitorStop();
 
-        RetroServerPushManager.stopPeriodicPush();
+        GcmNetworkManager.getInstance(getApplicationContext()).cancelAllTasks(EventUploaderService.class);
+//        RetroServerPushManager.stopPeriodicPush();
 
         setActivityHandler(null);
         hideIcon();
         stopSelf();
     }
 
+    /**
+     * Starts sensors / events
+     */
     private void monitorStart() {
 
         Log.d(TAG, "Starting monitoring service...");
@@ -146,8 +152,6 @@ public class HarvesterService extends Service implements Callback {
         mSensorManager = SensorManager.getInstance(this);
 
         List<ISensor> enabledSensors = mSensorManager.getEnabledSensors();
-
-        Log.d(TAG, "Active sensors: " + enabledSensors.size());
 
         for (ISensor sensor : enabledSensors) {
 
@@ -164,6 +168,9 @@ public class HarvesterService extends Service implements Callback {
         startAccessibilityService();
     }
 
+    /**
+     * Stops sensors / events
+     */
     private void monitorStop() {
 
         Log.d(TAG, "Stopping service...");
@@ -171,8 +178,6 @@ public class HarvesterService extends Service implements Callback {
         if (mSensorManager == null) {
             mSensorManager = SensorManager.getInstance(this);
         }
-
-        Log.d(TAG, "Active sensors: " + mSensorManager.getEnabledSensors());
 
         for (ISensor sensor : mSensorManager.getEnabledSensors()) {
 
@@ -255,17 +260,13 @@ public class HarvesterService extends Service implements Callback {
     @Override
     public void onDestroy() {
 
-        Log.d(TAG, "Service onDestroy");
+        Log.d(TAG, "Destroying service...");
 
         stopKrakenService();
 
         dbModuleInstallationDao = null;
 
         super.onDestroy();
-    }
-
-    public boolean isRunning() {
-        return m_bIsRunning;
     }
 
     @Override
@@ -362,6 +363,9 @@ public class HarvesterService extends Service implements Callback {
         }
     }
 
+    /**
+     * Starts AccessibilityService
+     */
     private void startAccessibilityService() {
 
         Log.d(TAG, "Starting accessibility service...");

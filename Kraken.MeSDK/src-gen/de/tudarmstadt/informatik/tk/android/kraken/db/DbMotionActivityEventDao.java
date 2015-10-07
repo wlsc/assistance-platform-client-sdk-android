@@ -30,10 +30,9 @@ public class DbMotionActivityEventDao extends AbstractDao<DbMotionActivityEvent,
         public final static Property Driving = new Property(4, Integer.class, "driving", false, "DRIVING");
         public final static Property Stationary = new Property(5, Integer.class, "stationary", false, "STATIONARY");
         public final static Property Unknown = new Property(6, Integer.class, "unknown", false, "UNKNOWN");
-        public final static Property Accuracy = new Property(7, Integer.class, "accuracy", false, "ACCURACY");
-        public final static Property Created = new Property(8, String.class, "created", false, "CREATED");
-        public final static Property OnFoot = new Property(9, Integer.class, "onFoot", false, "ON_FOOT");
-        public final static Property Tilting = new Property(10, Integer.class, "tilting", false, "TILTING");
+        public final static Property Created = new Property(7, String.class, "created", false, "CREATED");
+        public final static Property OnFoot = new Property(8, Integer.class, "onFoot", false, "ON_FOOT");
+        public final static Property Tilting = new Property(9, Integer.class, "tilting", false, "TILTING");
     };
 
 
@@ -56,10 +55,9 @@ public class DbMotionActivityEventDao extends AbstractDao<DbMotionActivityEvent,
                 "\"DRIVING\" INTEGER," + // 4: driving
                 "\"STATIONARY\" INTEGER," + // 5: stationary
                 "\"UNKNOWN\" INTEGER," + // 6: unknown
-                "\"ACCURACY\" INTEGER," + // 7: accuracy
-                "\"CREATED\" TEXT NOT NULL ," + // 8: created
-                "\"ON_FOOT\" INTEGER," + // 9: onFoot
-                "\"TILTING\" INTEGER);"); // 10: tilting
+                "\"CREATED\" TEXT NOT NULL ," + // 7: created
+                "\"ON_FOOT\" INTEGER," + // 8: onFoot
+                "\"TILTING\" INTEGER);"); // 9: tilting
         // Add Indexes
         db.execSQL("CREATE INDEX " + constraint + "IDX_motion_activity_event__id ON motion_activity_event" +
                 " (\"_id\");");
@@ -110,21 +108,16 @@ public class DbMotionActivityEventDao extends AbstractDao<DbMotionActivityEvent,
         if (unknown != null) {
             stmt.bindLong(7, unknown);
         }
- 
-        Integer accuracy = entity.getAccuracy();
-        if (accuracy != null) {
-            stmt.bindLong(8, accuracy);
-        }
-        stmt.bindString(9, entity.getCreated());
+        stmt.bindString(8, entity.getCreated());
  
         Integer onFoot = entity.getOnFoot();
         if (onFoot != null) {
-            stmt.bindLong(10, onFoot);
+            stmt.bindLong(9, onFoot);
         }
  
         Integer tilting = entity.getTilting();
         if (tilting != null) {
-            stmt.bindLong(11, tilting);
+            stmt.bindLong(10, tilting);
         }
     }
 
@@ -145,10 +138,9 @@ public class DbMotionActivityEventDao extends AbstractDao<DbMotionActivityEvent,
             cursor.isNull(offset + 4) ? null : cursor.getInt(offset + 4), // driving
             cursor.isNull(offset + 5) ? null : cursor.getInt(offset + 5), // stationary
             cursor.isNull(offset + 6) ? null : cursor.getInt(offset + 6), // unknown
-            cursor.isNull(offset + 7) ? null : cursor.getInt(offset + 7), // accuracy
-            cursor.getString(offset + 8), // created
-            cursor.isNull(offset + 9) ? null : cursor.getInt(offset + 9), // onFoot
-            cursor.isNull(offset + 10) ? null : cursor.getInt(offset + 10) // tilting
+            cursor.getString(offset + 7), // created
+            cursor.isNull(offset + 8) ? null : cursor.getInt(offset + 8), // onFoot
+            cursor.isNull(offset + 9) ? null : cursor.getInt(offset + 9) // tilting
         );
         return entity;
     }
@@ -163,10 +155,9 @@ public class DbMotionActivityEventDao extends AbstractDao<DbMotionActivityEvent,
         entity.setDriving(cursor.isNull(offset + 4) ? null : cursor.getInt(offset + 4));
         entity.setStationary(cursor.isNull(offset + 5) ? null : cursor.getInt(offset + 5));
         entity.setUnknown(cursor.isNull(offset + 6) ? null : cursor.getInt(offset + 6));
-        entity.setAccuracy(cursor.isNull(offset + 7) ? null : cursor.getInt(offset + 7));
-        entity.setCreated(cursor.getString(offset + 8));
-        entity.setOnFoot(cursor.isNull(offset + 9) ? null : cursor.getInt(offset + 9));
-        entity.setTilting(cursor.isNull(offset + 10) ? null : cursor.getInt(offset + 10));
+        entity.setCreated(cursor.getString(offset + 7));
+        entity.setOnFoot(cursor.isNull(offset + 8) ? null : cursor.getInt(offset + 8));
+        entity.setTilting(cursor.isNull(offset + 9) ? null : cursor.getInt(offset + 9));
      }
     
     /** @inheritdoc */

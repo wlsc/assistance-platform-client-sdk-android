@@ -32,10 +32,6 @@
 
     <uses-permission android:name="${applicationId}.permission.C2D_MESSAGE" />
 
-    <permission
-        android:name="de.tudarmstadt.informatik.tk.kraken.dnd2.permission.KRAKEN_LOGIN"
-        android:protectionLevel="signature" />
-
     <application android:allowBackup="false">
 
         <meta-data
@@ -60,7 +56,7 @@
             android:name=".service.HarvesterService"
             android:exported="false">
             <intent-filter>
-                <action android:name="de.tudarmstadt.informatik.tk.android.kraken.service.KrakenService" />
+                <action android:name="de.tudarmstadt.informatik.tk.android.kraken.service.HarvesterService" />
             </intent-filter>
         </service>
 

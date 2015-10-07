@@ -79,7 +79,7 @@ public class MotionActivityEventRequest implements Sensor {
         this.created = created;
         this.onFoot = onFoot;
         this.tilting = tilting;
-        this.type = SensorType.MOTION_ACTIVITY;
+        this.type = SensorType.MOTION_ACTIVITY_EVENT;
         this.typeStr = SensorType.getApiName(this.type);
     }
 

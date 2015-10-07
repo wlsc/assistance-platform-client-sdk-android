@@ -22,12 +22,11 @@ import de.greenrobot.dao.Property;
 import de.greenrobot.dao.query.Query;
 import de.greenrobot.dao.query.QueryBuilder;
 import de.tudarmstadt.informatik.tk.android.kraken.Settings;
-import de.tudarmstadt.informatik.tk.android.kraken.RetroServerPushManager;
 import de.tudarmstadt.informatik.tk.android.kraken.db.DaoSession;
-import de.tudarmstadt.informatik.tk.android.kraken.provider.DbProvider;
 import de.tudarmstadt.informatik.tk.android.kraken.interfaces.IDbSensor;
 import de.tudarmstadt.informatik.tk.android.kraken.interfaces.IDbUpdatableSensor;
 import de.tudarmstadt.informatik.tk.android.kraken.model.enums.EPushType;
+import de.tudarmstadt.informatik.tk.android.kraken.provider.DbProvider;
 import de.tudarmstadt.informatik.tk.android.kraken.service.HarvesterService;
 import de.tudarmstadt.informatik.tk.android.kraken.util.DateUtils;
 
@@ -64,10 +63,6 @@ public abstract class AbstractSensor implements ISensor {
         if (mDaoSession == null) {
             mDaoSession = DbProvider.getInstance(context).getDaoSession();
         }
-    }
-
-    protected void handleDBEntry(IDbSensor dbEntry) {
-        handleDBEntry(dbEntry, false, true, true);
     }
 
     protected void handleDBEntry(IDbSensor dbEntry, boolean bUpdate) {
@@ -129,7 +124,7 @@ public abstract class AbstractSensor implements ISensor {
 //            saveDbEntry(dbEntry);
 //        }
 
-        RetroServerPushManager.getInstance(context).inform(this);
+//        RetroServerPushManager.getInstance(context).inform(this);
     }
 
 //    protected void saveDbEntry(IDbSensor dbObject) {

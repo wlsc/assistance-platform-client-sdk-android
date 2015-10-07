@@ -1,12 +1,11 @@
 package de.tudarmstadt.informatik.tk.android.kraken.provider;
 
 import android.content.Context;
-import android.util.Log;
 
 import de.tudarmstadt.informatik.tk.android.kraken.PreferenceManager;
-import de.tudarmstadt.informatik.tk.android.kraken.model.api.endpoint.ServiceGenerator;
-import de.tudarmstadt.informatik.tk.android.kraken.model.api.endpoint.DeviceEndpoint;
 import de.tudarmstadt.informatik.tk.android.kraken.model.api.device.DeviceRegistrationRequest;
+import de.tudarmstadt.informatik.tk.android.kraken.model.api.endpoint.DeviceEndpoint;
+import de.tudarmstadt.informatik.tk.android.kraken.model.api.endpoint.ServiceGenerator;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
@@ -25,6 +24,8 @@ public class ServerCommunicationProvider {
 
     private static ServerCommunicationProvider INSTANCE;
 
+    private static DbProvider dbProvider;
+
     private ServerCommunicationProvider() {
     }
 
@@ -41,6 +42,10 @@ public class ServerCommunicationProvider {
         }
 
         mContext = context;
+
+        if (dbProvider == null) {
+            dbProvider = DbProvider.getInstance(context);
+        }
 
         return INSTANCE;
     }
@@ -68,7 +73,8 @@ public class ServerCommunicationProvider {
 
                 if (response != null && (response.getStatus() == 200 || response.getStatus() == 204)) {
 
-                    saveRegistrationTokenToDb(serverDeviceId, registrationToken);
+                    // persist
+                    dbProvider.saveRegistrationTokenToDb(serverDeviceId, registrationToken);
 
                 } else {
                     // TODO: handle response null
@@ -83,16 +89,4 @@ public class ServerCommunicationProvider {
     }
 
 //    public void
-
-    /**
-     * Saves device GCM registration id to db
-     *
-     * @param deviceId
-     * @param registrationToken
-     */
-    private void saveRegistrationTokenToDb(long deviceId, String registrationToken) {
-
-        Log.d(TAG, "Saving GCM registration token to DB...");
-
-    }
 }

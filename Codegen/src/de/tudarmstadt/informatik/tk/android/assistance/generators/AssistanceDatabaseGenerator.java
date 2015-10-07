@@ -208,21 +208,20 @@ public class AssistanceDatabaseGenerator {
 
     // ----- Motion Activity -----
     // REQUIRED
-    Entity motionActivitySensor = schema.addEntity("DbMotionActivityEvent");
-    motionActivitySensor.setTableName("motion_activity_event");
-    motionActivitySensor.addIdProperty().autoincrement().index();
-    motionActivitySensor.implementsInterface(Config.KRAKEN_PACKAGE_SENSOR);
-    motionActivitySensor.addIntProperty("walking");
-    motionActivitySensor.addIntProperty("running");
-    motionActivitySensor.addIntProperty("cycling");
-    motionActivitySensor.addIntProperty("driving");
-    motionActivitySensor.addIntProperty("stationary");
-    motionActivitySensor.addIntProperty("unknown");
-    motionActivitySensor.addIntProperty("accuracy");
-    motionActivitySensor.addStringProperty("created").notNull();
+    Entity motionActivityEvent = schema.addEntity("DbMotionActivityEvent");
+    motionActivityEvent.setTableName("motion_activity_event");
+    motionActivityEvent.addIdProperty().autoincrement().index();
+    motionActivityEvent.implementsInterface(Config.KRAKEN_PACKAGE_SENSOR);
+    motionActivityEvent.addIntProperty("walking");
+    motionActivityEvent.addIntProperty("running");
+    motionActivityEvent.addIntProperty("cycling");
+    motionActivityEvent.addIntProperty("driving");
+    motionActivityEvent.addIntProperty("stationary");
+    motionActivityEvent.addIntProperty("unknown");
+    motionActivityEvent.addStringProperty("created").notNull();
     // OPTIONAL
-    motionActivitySensor.addIntProperty("onFoot");
-    motionActivitySensor.addIntProperty("tilting");
+    motionActivityEvent.addIntProperty("onFoot");
+    motionActivityEvent.addIntProperty("tilting");
 
     // ----- Connection -----
     // REQUIRED
