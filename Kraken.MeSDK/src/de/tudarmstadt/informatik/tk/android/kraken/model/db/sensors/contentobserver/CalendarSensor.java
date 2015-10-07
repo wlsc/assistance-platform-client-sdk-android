@@ -8,8 +8,6 @@ import android.provider.CalendarContract.Events;
 import android.provider.CalendarContract.Reminders;
 import android.util.Log;
 
-import java.lang.reflect.Method;
-
 import de.greenrobot.dao.Property;
 import de.greenrobot.dao.query.Query;
 import de.greenrobot.dao.query.QueryBuilder;
@@ -26,6 +24,7 @@ public class CalendarSensor extends AbstractContentObserverSensor {
 
     public CalendarSensor(Context context) {
         super(context);
+
     }
 
     private static final String[] PROJECTION_EVENTS = new String[]{Events._ID, Events.ALL_DAY, Events.AVAILABILITY, Events.CALENDAR_ID, Events.DESCRIPTION,
@@ -34,14 +33,6 @@ public class CalendarSensor extends AbstractContentObserverSensor {
             Events.RRULE, Events.STATUS, Events.TITLE};
 
     private static final String[] PROJECTION_REMINDERS = new String[]{Reminders._ID, Reminders.METHOD, Reminders.MINUTES};
-
-    // caching
-    private Method m_checkDifferenceMethodForEvent;
-    private Method m_getIdMethodForEvent;
-    private Method m_checkDifferenceMethodForReminder;
-    private Method m_getIdMethodForReminder;
-    private Method m_getEventIdForCalendarEvents;
-    private boolean m_bFlushToServer;
 
     @Override
     public ESensorType getSensorType() {
@@ -60,11 +51,9 @@ public class CalendarSensor extends AbstractContentObserverSensor {
 
         Log.d(TAG, "Syncing data...");
 
-        m_bFlushToServer = false;
-
         // Submit the query
-        ContentResolver cr = context.getContentResolver();
-        Cursor cur = cr.query(URI_CALENDAR, PROJECTION_EVENTS, "deleted=?", new String[]{"0"}, null);
+//        ContentResolver cr = context.getContentResolver();
+//        Cursor cur = cr.query(URI_CALENDAR, PROJECTION_EVENTS, "deleted=?", new String[]{"0"}, null);
 
 //		HashMap<Long, SensorCalendarEvent> allExistingEvents;
 //		try {

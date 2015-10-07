@@ -57,7 +57,6 @@ dependencies {
     compile 'com.google.android.gms:play-services-gcm:8.1.0'
     compile 'com.google.android.gms:play-services-location:8.1.0'
     compile 'com.google.android.gms:play-services-analytics:8.1.0'
-
     // a type-safe HTTP client
     compile 'com.squareup.retrofit:retrofit:1.9.0'
     compile 'com.squareup.retrofit:retrofit-mock:1.9.0'
@@ -66,6 +65,8 @@ dependencies {
     compile 'com.squareup.okhttp:okhttp:2.5.0'
     // database ORM
     compile 'de.greenrobot:greendao:2.0.0'
+    // event bus system
+    compile 'de.greenrobot:eventbus:2.4.0'
 
 }
 

@@ -152,6 +152,11 @@ public class KrakenService extends Service implements Callback {
         Log.d(TAG, "Active sensors: " + enabledSensors.size());
 
         for (ISensor sensor : enabledSensors) {
+
+            if (sensor == null) {
+                continue;
+            }
+
             sensor.startSensor();
         }
 
@@ -172,6 +177,11 @@ public class KrakenService extends Service implements Callback {
         Log.d(TAG, "Active sensors: " + mSensorManager.getEnabledSensors());
 
         for (ISensor sensor : mSensorManager.getEnabledSensors()) {
+
+            if (sensor == null) {
+                continue;
+            }
+
             sensor.stopSensor();
         }
 
@@ -231,7 +241,15 @@ public class KrakenService extends Service implements Callback {
             }
         }
 
-//        startForeground();
+        NotificationCompat.Builder mBuilder =
+                new NotificationCompat.Builder(this)
+                        .setSmallIcon(R.drawable.ic_kraken_service)
+                        .setContentTitle(getString(R.string.service_running_notification_title))
+                        .setContentText(getString(R.string.service_running_notification_text))
+                        .setPriority(Notification.PRIORITY_MIN)
+                        .setOngoing(true);
+
+        startForeground(KrakenSdkSettings.DEFAULT_NOTIFICATION_ID, mBuilder.build());
 
         return Service.START_STICKY;
     }
