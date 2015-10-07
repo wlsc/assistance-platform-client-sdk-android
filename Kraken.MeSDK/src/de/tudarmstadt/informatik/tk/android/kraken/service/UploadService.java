@@ -122,7 +122,7 @@ public class UploadService extends GcmTaskService {
         eventUploadRequest.setDataEvents(events);
         eventUploadRequest.setServerDeviceId(serverDeviceId);
 
-        sendSensorData(eventUploadRequest);
+        doUploadEventData(eventUploadRequest);
 
         return GcmNetworkManager.RESULT_SUCCESS;
     }
@@ -210,14 +210,11 @@ public class UploadService extends GcmTaskService {
      *
      * @param eventUploadRequest
      */
-    private void sendSensorData(final EventUploadRequest eventUploadRequest) {
+    private void doUploadEventData(final EventUploadRequest eventUploadRequest) {
 
         if (eventUploadRequest == null || eventUploadRequest.getDataEvents() == null) {
             return;
         }
-
-        // add cached data!
-//        addCachedDataToArray(dataWrappers);
 
         if (eventUploadRequest.getDataEvents().size() == 0) {
             return;
@@ -237,6 +234,7 @@ public class UploadService extends GcmTaskService {
 
                     // successful transmission of event data -> remove that data from db
                     removeDbEventsSent();
+
                 } else {
                     // TODO: show error
                 }
