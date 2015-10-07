@@ -14,11 +14,17 @@ import com.google.android.gms.location.ActivityRecognition;
 import com.google.android.gms.location.ActivityRecognitionResult;
 import com.google.android.gms.location.DetectedActivity;
 
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
+import de.tudarmstadt.informatik.tk.android.kraken.db.DbManager;
+import de.tudarmstadt.informatik.tk.android.kraken.db.DbMotionActivityEvent;
+import de.tudarmstadt.informatik.tk.android.kraken.db.DbMotionActivityEventDao;
 import de.tudarmstadt.informatik.tk.android.kraken.model.enums.ESensorType;
 import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.AbstractTriggeredEvent;
 import de.tudarmstadt.informatik.tk.android.kraken.service.ActivitySensorService;
+import de.tudarmstadt.informatik.tk.android.kraken.util.DateUtils;
 
 
 public class MotionActivityEvent extends AbstractTriggeredEvent implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
@@ -37,23 +43,102 @@ public class MotionActivityEvent extends AbstractTriggeredEvent implements Googl
 
     private static MotionActivityEvent INSTANCE;
 
-    public MotionActivityEvent(Context context) {
+    private DbMotionActivityEventDao dbMotionActivityEventDao;
+
+    /**
+     * High possibility motion action
+     */
+    private DetectedActivity mostProbableActivity;
+
+    /**
+     * All motion actions and their possibility
+     */
+    private List<DetectedActivity> probableActivities;
+
+    private MotionActivityEvent(Context context) {
         super(context);
-        INSTANCE = this;
 
         mGoogleApiClient = new GoogleApiClient.Builder(context)
                 .addApi(ActivityRecognition.API)
                 .addConnectionCallbacks(this)
                 .addOnConnectionFailedListener(this)
                 .build();
+
+        if (dbMotionActivityEventDao == null) {
+            dbMotionActivityEventDao = DbManager.getInstance(context).getDaoSession().getDbMotionActivityEventDao();
+        }
     }
 
     @Override
     protected void dumpData() {
 
+        Log.d(TAG, "Dumping data to db...");
+
+        DbMotionActivityEvent motionActivityEvent = new DbMotionActivityEvent();
+
+        // set accuracy from most probable activity!
+        motionActivityEvent.setAccuracy(mostProbableActivity == null ? 0 : mostProbableActivity.getConfidence());
+        motionActivityEvent.setCreated(DateUtils.dateToISO8601String(new Date(), Locale.getDefault()));
+
+        for (DetectedActivity activity : probableActivities) {
+
+            if (activity == null) {
+                continue;
+            }
+
+            int confidence = activity.getConfidence();
+            int type = activity.getType();
+
+            switch (type) {
+
+                case 0:
+                    motionActivityEvent.setDriving(confidence);
+                    break;
+                case 1:
+                    motionActivityEvent.setCycling(confidence);
+                    break;
+                case 2:
+                    motionActivityEvent.setOnFoot(confidence);
+                    break;
+                case 3:
+                    motionActivityEvent.setStationary(confidence);
+                    break;
+                case 4:
+                    motionActivityEvent.setUnknown(confidence);
+                    break;
+                case 5:
+                    motionActivityEvent.setTilting(confidence);
+                    break;
+                case 6:
+                    // no such activity type in Google API
+                    break;
+                case 7:
+                    motionActivityEvent.setWalking(confidence);
+                    break;
+                case 8:
+                    motionActivityEvent.setRunning(confidence);
+                    break;
+            }
+        }
+
+        // insert db entry
+        dbMotionActivityEventDao.insertOrReplace(motionActivityEvent);
+
+        Log.d(TAG, "Finished dumping data.");
     }
 
-    public static MotionActivityEvent getInstance() {
+    /**
+     * Gives singleton of this class
+     *
+     * @param context
+     * @return
+     */
+    public static MotionActivityEvent getInstance(Context context) {
+
+        if (INSTANCE == null) {
+            INSTANCE = new MotionActivityEvent(context);
+        }
+
         return INSTANCE;
     }
 
@@ -150,18 +235,16 @@ public class MotionActivityEvent extends AbstractTriggeredEvent implements Googl
 
     }
 
-
+    /**
+     * Handles new motion activity data
+     *
+     * @param userActivityResult
+     */
     public void handleData(ActivityRecognitionResult userActivityResult) {
 
-        List<DetectedActivity> probableActivities = userActivityResult.getProbableActivities();
-        DetectedActivity mostProbableActivity = userActivityResult.getMostProbableActivity();
+        probableActivities = userActivityResult.getProbableActivities();
+        mostProbableActivity = userActivityResult.getMostProbableActivity();
 
-        Log.d(TAG, "Detected activity: " + mostProbableActivity.toString());
-
-        for (DetectedActivity activity : probableActivities) {
-            Log.d(TAG, "Probable: " + activity.toString());
-        }
-
-
+        dumpData();
     }
 }

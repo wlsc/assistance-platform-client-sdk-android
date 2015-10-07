@@ -17,13 +17,13 @@ import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.impl.contentobse
 import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.impl.periodic.BackgroundTrafficEvent;
 import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.impl.periodic.RingtoneEvent;
 import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.impl.triggered.AccelerometerSensor;
-import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.impl.triggered.MotionActivityEvent;
 import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.impl.triggered.ConnectionSensor;
 import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.impl.triggered.ForegroundEvent;
 import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.impl.triggered.ForegroundTrafficEvent;
 import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.impl.triggered.LightSensor;
 import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.impl.triggered.LocationSensor;
 import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.impl.triggered.MeasurementEvent;
+import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.impl.triggered.MotionActivityEvent;
 
 
 public class SensorManager {
@@ -54,7 +54,7 @@ public class SensorManager {
         m_liSensors.add(accelerometerSensor);
         retroServerPushManager.setPushType(accelerometerSensor, accelerometerSensor.getPushType());
 
-        MotionActivityEvent motionActivityEvent = new MotionActivityEvent(context);
+        MotionActivityEvent motionActivityEvent = MotionActivityEvent.getInstance(context);
         m_liSensors.add(motionActivityEvent);
         retroServerPushManager.setPushType(motionActivityEvent, motionActivityEvent.getPushType());
 

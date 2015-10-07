@@ -24,10 +24,13 @@ public class ActivitySensorService extends IntentService {
             Log.d(TAG, "The activity recognition found.");
 
             ActivityRecognitionResult result = ActivityRecognitionResult.extractResult(intent);
-            MotionActivityEvent motionActivityEvent = MotionActivityEvent.getInstance();
+
+            MotionActivityEvent motionActivityEvent = MotionActivityEvent.getInstance(getApplicationContext());
 
             if (result != null && motionActivityEvent != null) {
+
                 motionActivityEvent.handleData(result);
+
             } else {
                 Log.e(TAG, "Cannot extract recognition result!");
             }
