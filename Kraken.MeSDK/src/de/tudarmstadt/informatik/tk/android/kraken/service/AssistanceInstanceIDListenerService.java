@@ -11,9 +11,9 @@ import com.google.android.gms.iid.InstanceIDListenerService;
  * @author Wladimir Schmidt (wlsc.dev@gmail.com)
  * @date 22.09.2015
  */
-public class KrakenInstanceIDListenerService extends InstanceIDListenerService {
+public class AssistanceInstanceIDListenerService extends InstanceIDListenerService {
 
-    private static final String TAG = KrakenInstanceIDListenerService.class.getSimpleName();
+    private static final String TAG = AssistanceInstanceIDListenerService.class.getSimpleName();
 
     /**
      * Called if InstanceID token is updated. This may occur if the security of

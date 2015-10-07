@@ -10,7 +10,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 
-import de.tudarmstadt.informatik.tk.android.kraken.KrakenSdkSettings;
+import de.tudarmstadt.informatik.tk.android.kraken.Settings;
 
 /**
  * @author Wladimir Schmidt (wlsc.dev@gmail.com)
@@ -190,7 +190,7 @@ public class StorageUtils {
     public static boolean exportDatabase(Context context, String dbPath) throws IOException {
 
         File newDb = new File(dbPath);
-        File oldDb = new File(context.getDatabasePath(KrakenSdkSettings.DATABASE_NAME).getPath());
+        File oldDb = new File(context.getDatabasePath(Settings.DATABASE_NAME).getPath());
 
         // check if it exists
         if (oldDb.exists()) {

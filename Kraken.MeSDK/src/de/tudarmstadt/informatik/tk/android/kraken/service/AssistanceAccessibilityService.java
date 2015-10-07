@@ -11,9 +11,9 @@ import de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.impl.trigger
 import de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.impl.triggered.ForegroundTrafficEvent;
 
 
-public class KrakenAccessibilityService extends AccessibilityService {
+public class AssistanceAccessibilityService extends AccessibilityService {
 
-    private static final String TAG = KrakenAccessibilityService.class.getSimpleName();
+    private static final String TAG = AssistanceAccessibilityService.class.getSimpleName();
 
     private ForegroundEvent mForegroundSensor;
     private ForegroundTrafficEvent mForegroundTrafficEvent;

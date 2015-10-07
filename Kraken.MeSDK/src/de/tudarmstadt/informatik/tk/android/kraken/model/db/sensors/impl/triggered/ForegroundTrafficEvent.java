@@ -10,7 +10,7 @@ import android.content.pm.PackageManager;
 import de.tudarmstadt.informatik.tk.android.kraken.communication.EPushType;
 import de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.ESensorType;
 import de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.AbstractTriggeredSensor;
-import de.tudarmstadt.informatik.tk.android.kraken.util.sensors.AccessibilityEventFilter;
+import de.tudarmstadt.informatik.tk.android.kraken.util.sensors.AccessibilityEventFilterUtils;
 
 /**
  * This is a triggered sensor which collect the data of apps which are running in the foreground.
@@ -81,7 +81,7 @@ public class ForegroundTrafficEvent extends AbstractTriggeredSensor {
 
         private boolean m_bSensorStarted = false;
         private Receiver m_receiver;
-        private AccessibilityEventFilter mEventFilter;
+        private AccessibilityEventFilterUtils mEventFilter;
 
         private ActivityManager m_ActivityManager;
         private PackageManager m_PackageManager;

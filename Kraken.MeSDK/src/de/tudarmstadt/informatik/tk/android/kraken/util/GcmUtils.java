@@ -6,7 +6,7 @@ import android.util.Log;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 
-import de.tudarmstadt.informatik.tk.android.kraken.KrakenConfig;
+import de.tudarmstadt.informatik.tk.android.kraken.Config;
 
 /**
  * @author Wladimir Schmidt (wlsc.dev@gmail.com)
@@ -34,7 +34,7 @@ public class GcmUtils {
             if (apiAvailability.isUserResolvableError(resultCode)) {
 
                 apiAvailability
-                        .getErrorDialog(activity, resultCode, KrakenConfig.PLAY_SERVICES_RESOLUTION_REQUEST)
+                        .getErrorDialog(activity, resultCode, Config.PLAY_SERVICES_RESOLUTION_REQUEST)
                         .show();
             } else {
                 Log.d(TAG, "This device is not supported!");

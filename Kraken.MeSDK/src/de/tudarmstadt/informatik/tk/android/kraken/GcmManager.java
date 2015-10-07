@@ -18,33 +18,33 @@ import java.security.NoSuchAlgorithmException;
 import de.tudarmstadt.informatik.tk.android.kraken.handler.IServerCommunicationResponseHandler;
 import de.tudarmstadt.informatik.tk.android.kraken.communication.ServerCommunication;
 
-public class KrakenGcmManager {
+public class GcmManager {
 
-    private static final String TAG = KrakenGcmManager.class.getSimpleName();
+    private static final String TAG = GcmManager.class.getSimpleName();
 
     private static final String PROPERTY_REG_ID = "GcmRegId";
     private static final String APP_VERSION = "AppVersion";
 
-    private static KrakenGcmManager instance;
+    private static GcmManager instance;
 
     private static Context mContext;
     private GoogleCloudMessaging mGCM;
     private String registrationToken;
 
-    private KrakenGcmManager(Context context) {
+    private GcmManager(Context context) {
         this.mContext = context;
     }
 
-    public static KrakenGcmManager getInstance(Context context) {
+    public static GcmManager getInstance(Context context) {
 
         if (instance == null) {
-            instance = new KrakenGcmManager(context);
+            instance = new GcmManager(context);
         }
 
         return instance;
     }
 
-    public static KrakenGcmManager getInstance() {
+    public static GcmManager getInstance() {
         return instance;
     }
 
@@ -81,7 +81,7 @@ public class KrakenGcmManager {
      * @return Application's {@code SharedPreferences}.
      */
     private SharedPreferences getGCMPreferences() {
-        return mContext.getSharedPreferences(KrakenSdkSettings.PREFERENCES_NAME, Context.MODE_PRIVATE);
+        return mContext.getSharedPreferences(Settings.PREFERENCES_NAME, Context.MODE_PRIVATE);
     }
 
     /**
@@ -114,7 +114,7 @@ public class KrakenGcmManager {
                     if (mGCM == null) {
                         mGCM = GoogleCloudMessaging.getInstance(mContext);
                     }
-                    registrationToken = mGCM.register(KrakenConfig.GCM_SENDER_ID);
+                    registrationToken = mGCM.register(Config.GCM_SENDER_ID);
                     msg = "Device registered, registration ID=" + registrationToken;
 
                     // You should send the registration ID to your server over

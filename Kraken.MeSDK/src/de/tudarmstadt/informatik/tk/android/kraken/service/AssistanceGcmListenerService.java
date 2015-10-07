@@ -11,11 +11,11 @@ import com.google.android.gms.gcm.GcmListenerService;
  * @author Wladimir Schmidt (wlsc.dev@gmail.com)
  * @date 22.09.2015
  */
-public class KrakenGcmListenerService extends GcmListenerService {
+public class AssistanceGcmListenerService extends GcmListenerService {
 
-    private static final String TAG = KrakenGcmListenerService.class.getSimpleName();
+    private static final String TAG = AssistanceGcmListenerService.class.getSimpleName();
 
-    public KrakenGcmListenerService() {
+    public AssistanceGcmListenerService() {
     }
 
     @Override

@@ -1,20 +1,17 @@
 package de.tudarmstadt.informatik.tk.android.kraken.login;
 
 import android.app.Activity;
-import android.os.Build;
 import android.os.Bundle;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import de.tudarmstadt.informatik.tk.android.kraken.common.MessageType;
 import de.tudarmstadt.informatik.tk.android.kraken.common.SocialNetworkProvider;
 import de.tudarmstadt.informatik.tk.android.kraken.common.authentication.AccountVO;
 import de.tudarmstadt.informatik.tk.android.kraken.communication.Authentication;
-import de.tudarmstadt.informatik.tk.android.kraken.handler.IServerCommunicationResponseHandler;
 import de.tudarmstadt.informatik.tk.android.kraken.communication.ServerCommunication;
+import de.tudarmstadt.informatik.tk.android.kraken.handler.IServerCommunicationResponseHandler;
 import de.tudarmstadt.informatik.tk.android.kraken.ui.activities.accounts.AccountsAdapter;
-import de.tudarmstadt.informatik.tk.android.kraken.util.KrakenUtils;
 
 
 public abstract class AbstractLogin implements ILoginData {
@@ -80,17 +77,6 @@ public abstract class AbstractLogin implements ILoginData {
             e.printStackTrace();
         }
 
-    }
-
-    private JSONObject buildDeviceInfoJson() throws JSONException {
-        JSONObject device = new JSONObject();
-        device.put("UID", KrakenUtils.getDeviceId(m_ctxActivity));
-        device.put("model", Build.MODEL);
-        device.put("manufacturer", Build.MANUFACTURER);
-        device.put("os", "Android");
-        device.put("osVersion", Build.VERSION.SDK_INT);
-        device.put("type", "SMARTPHONE");
-        return device;
     }
 
     static class MyHandler implements IServerCommunicationResponseHandler {

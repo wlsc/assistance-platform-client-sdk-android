@@ -10,11 +10,11 @@ import com.google.android.gms.gcm.TaskParams;
 import java.util.LinkedList;
 import java.util.List;
 
-import de.tudarmstadt.informatik.tk.android.kraken.KrakenServiceManager;
+import de.tudarmstadt.informatik.tk.android.kraken.ServiceManager;
 import de.tudarmstadt.informatik.tk.android.kraken.PreferenceManager;
 import de.tudarmstadt.informatik.tk.android.kraken.communication.ServiceGenerator;
 import de.tudarmstadt.informatik.tk.android.kraken.communication.endpoint.EventUploadEndpoint;
-import de.tudarmstadt.informatik.tk.android.kraken.db.DatabaseManager;
+import de.tudarmstadt.informatik.tk.android.kraken.db.DbManager;
 import de.tudarmstadt.informatik.tk.android.kraken.db.DbAccelerometerSensor;
 import de.tudarmstadt.informatik.tk.android.kraken.db.DbAccelerometerSensorDao;
 import de.tudarmstadt.informatik.tk.android.kraken.db.DbPositionSensor;
@@ -48,7 +48,7 @@ public class UploadService extends GcmTaskService {
     // a unique task identifier
     private String tag = "periodic  | " + taskID++ + ": " + periodSecs + "s, f:" + flexSecs;
 
-    private KrakenServiceManager krakenServiceManager;
+    private ServiceManager serviceManager;
 
     private static PreferenceManager mPreferenceManager;
 
@@ -66,22 +66,22 @@ public class UploadService extends GcmTaskService {
 
         Log.d(TAG, "Creating...");
 
-        if (krakenServiceManager == null) {
-            krakenServiceManager = KrakenServiceManager.getInstance(getApplicationContext());
+        if (serviceManager == null) {
+            serviceManager = ServiceManager.getInstance(getApplicationContext());
         }
 
-        krakenServiceManager.showIcon(true);
+        serviceManager.showIcon(true);
 
         if (mPreferenceManager == null) {
             mPreferenceManager = PreferenceManager.getInstance(getApplicationContext());
         }
 
         if (dbAccelerometerSensorDao == null) {
-            dbAccelerometerSensorDao = DatabaseManager.getInstance(getApplicationContext()).getDaoSession().getDbAccelerometerSensorDao();
+            dbAccelerometerSensorDao = DbManager.getInstance(getApplicationContext()).getDaoSession().getDbAccelerometerSensorDao();
         }
 
         if (dbPositionSensorDao == null) {
-            dbPositionSensorDao = DatabaseManager.getInstance(getApplicationContext()).getDaoSession().getDbPositionSensorDao();
+            dbPositionSensorDao = DbManager.getInstance(getApplicationContext()).getDaoSession().getDbPositionSensorDao();
         }
 
         if (periodicTask == null) {
@@ -257,7 +257,7 @@ public class UploadService extends GcmTaskService {
         if (dbAccelerometerSensors != null) {
 
             if (dbAccelerometerSensorDao == null) {
-                dbAccelerometerSensorDao = DatabaseManager.getInstance(getApplicationContext()).getDaoSession().getDbAccelerometerSensorDao();
+                dbAccelerometerSensorDao = DbManager.getInstance(getApplicationContext()).getDaoSession().getDbAccelerometerSensorDao();
             }
 
             dbAccelerometerSensorDao.deleteInTx(dbAccelerometerSensors);
@@ -266,7 +266,7 @@ public class UploadService extends GcmTaskService {
         if (dbPositionSensors != null) {
 
             if (dbPositionSensorDao == null) {
-                dbPositionSensorDao = DatabaseManager.getInstance(getApplicationContext()).getDaoSession().getDbPositionSensorDao();
+                dbPositionSensorDao = DbManager.getInstance(getApplicationContext()).getDaoSession().getDbPositionSensorDao();
             }
 
             dbPositionSensorDao.deleteInTx(dbPositionSensors);

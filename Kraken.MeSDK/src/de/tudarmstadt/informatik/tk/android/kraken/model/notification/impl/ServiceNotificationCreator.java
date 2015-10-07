@@ -5,7 +5,7 @@ import android.content.Context;
 import android.graphics.BitmapFactory;
 import android.support.v4.app.NotificationCompat;
 
-import de.tudarmstadt.informatik.tk.android.kraken.KrakenSdkSettings;
+import de.tudarmstadt.informatik.tk.android.kraken.Settings;
 import de.tudarmstadt.informatik.tk.android.kraken.R;
 
 /**
@@ -27,7 +27,7 @@ public class ServiceNotificationCreator extends AbstractNotificationCreator {
      * @param context
      */
     public ServiceNotificationCreator(Context context) {
-        super(context, KrakenSdkSettings.DEFAULT_NOTIFICATION_ID);
+        super(context, Settings.DEFAULT_NOTIFICATION_ID);
     }
 
     /**
@@ -48,7 +48,7 @@ public class ServiceNotificationCreator extends AbstractNotificationCreator {
                 .setSmallIcon(R.drawable.ic_kraken_service)
                 .setContentTitle(context.getText(R.string.service_running_notification_title))
                 .setContentText(context.getText(R.string.service_running_notification_text))
-                .setGroup(KrakenSdkSettings.DEFAULT_NOTIFICATION_GROUP)
+                .setGroup(Settings.DEFAULT_NOTIFICATION_GROUP)
                 .setGroupSummary(isSummaryForGroup);
 
         builder.setLargeIcon(BitmapFactory.decodeResource(context.getResources(), R.drawable.kraki_big));

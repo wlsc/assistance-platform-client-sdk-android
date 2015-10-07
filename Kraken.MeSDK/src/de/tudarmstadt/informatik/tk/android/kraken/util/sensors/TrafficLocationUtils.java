@@ -3,18 +3,18 @@ package de.tudarmstadt.informatik.tk.android.kraken.util.sensors;
 /**
  * Singleton to get actual location in ForegroundTrafficSensor
  */
-public class TrafficLocation {
+public class TrafficLocationUtils {
 
-    private static TrafficLocation instance;
+    private static TrafficLocationUtils instance;
 
     private double longitude = -1;
     private double latitude = -1;
 
-    private TrafficLocation() {}
+    private TrafficLocationUtils() {}
 
-    public static TrafficLocation getInstance(){
+    public static TrafficLocationUtils getInstance(){
         if (instance == null) {
-            instance = new TrafficLocation();
+            instance = new TrafficLocationUtils();
         }
         return instance;
     }

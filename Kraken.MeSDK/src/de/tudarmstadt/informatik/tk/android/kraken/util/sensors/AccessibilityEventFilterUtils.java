@@ -13,7 +13,7 @@ import java.util.regex.Pattern;
 
 import static android.content.pm.PackageManager.NameNotFoundException;
 
-public class AccessibilityEventFilter {
+public class AccessibilityEventFilterUtils {
 
     private static final String TAG = "KrakenAccessibility";
 
@@ -38,7 +38,7 @@ public class AccessibilityEventFilter {
 
     private Pattern mUrlPattern;
 
-    public AccessibilityEventFilter(Context context) {
+    public AccessibilityEventFilterUtils(Context context) {
         this.mContext = context;
     }
 

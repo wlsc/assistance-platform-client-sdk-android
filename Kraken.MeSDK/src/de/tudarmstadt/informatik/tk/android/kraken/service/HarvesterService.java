@@ -20,12 +20,12 @@ import java.io.Serializable;
 import java.util.List;
 
 import de.tudarmstadt.informatik.tk.android.kraken.ActivityCommunicator;
-import de.tudarmstadt.informatik.tk.android.kraken.KrakenSdkSettings;
+import de.tudarmstadt.informatik.tk.android.kraken.Settings;
 import de.tudarmstadt.informatik.tk.android.kraken.PreferenceManager;
 import de.tudarmstadt.informatik.tk.android.kraken.R;
 import de.tudarmstadt.informatik.tk.android.kraken.communication.RetroServerPushManager;
 import de.tudarmstadt.informatik.tk.android.kraken.db.DaoSession;
-import de.tudarmstadt.informatik.tk.android.kraken.db.DatabaseManager;
+import de.tudarmstadt.informatik.tk.android.kraken.db.DbManager;
 import de.tudarmstadt.informatik.tk.android.kraken.db.DbModuleInstallation;
 import de.tudarmstadt.informatik.tk.android.kraken.db.DbModuleInstallationDao;
 import de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.ECommandType;
@@ -33,36 +33,36 @@ import de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.SensorManage
 import de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.ISensor;
 
 
-public class KrakenService extends Service implements Callback {
+public class HarvesterService extends Service implements Callback {
 
-    private static final String TAG = KrakenService.class.getSimpleName();
+    private static final String TAG = HarvesterService.class.getSimpleName();
 
     // public static ScheduledExecutorService m_scheduleTaskExecutor;
 
     private boolean m_bIsRunning = false;
 
-    private static KrakenService INSTANCE;
+    private static HarvesterService INSTANCE;
 
     private final Messenger messenger = new Messenger(new Handler(this));
 
     private SensorManager mSensorManager;
     private PreferenceManager mPreferenceManager;
-    private DatabaseManager mDatabaseManager;
+    private DbManager mDbManager;
 
     private static DbModuleInstallationDao dbModuleInstallationDao;
 
     private NotificationManager mNotificationManager;
 
-    public KrakenService() {
+    public HarvesterService() {
 
     }
 
-    public static KrakenService getInstance() {
+    public static HarvesterService getInstance() {
         return INSTANCE;
     }
 
     public DaoSession getDaoSession() {
-        return mDatabaseManager.getDaoSession();
+        return mDbManager.getDaoSession();
     }
 
     @Override
@@ -74,7 +74,7 @@ public class KrakenService extends Service implements Callback {
         Log.d(TAG, "Service starting...");
 
         // Init database FIRST!
-        mDatabaseManager = DatabaseManager.getInstance(getApplicationContext());
+        mDbManager = DbManager.getInstance(getApplicationContext());
 
         mPreferenceManager = PreferenceManager.getInstance(getApplicationContext());
 
@@ -92,7 +92,7 @@ public class KrakenService extends Service implements Callback {
             m_bIsRunning = true;
 
             if (dbModuleInstallationDao == null) {
-                dbModuleInstallationDao = mDatabaseManager.getDaoSession().getDbModuleInstallationDao();
+                dbModuleInstallationDao = mDbManager.getDaoSession().getDbModuleInstallationDao();
             }
 
             SharedPreferences sharedPreferences = android.preference.PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
@@ -208,7 +208,7 @@ public class KrakenService extends Service implements Callback {
                         .setPriority(Notification.PRIORITY_MIN)
                         .setOngoing(true);
 
-        mNotificationManager.notify(KrakenSdkSettings.DEFAULT_NOTIFICATION_ID, mBuilder.build());
+        mNotificationManager.notify(Settings.DEFAULT_NOTIFICATION_ID, mBuilder.build());
     }
 
     /**
@@ -222,7 +222,7 @@ public class KrakenService extends Service implements Callback {
             mNotificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         }
 
-        mNotificationManager.cancel(KrakenSdkSettings.DEFAULT_NOTIFICATION_ID);
+        mNotificationManager.cancel(Settings.DEFAULT_NOTIFICATION_ID);
     }
 
     @Override
@@ -230,9 +230,9 @@ public class KrakenService extends Service implements Callback {
 
         Log.d(TAG, "onStartCommand");
 
-        if (intent != null && intent.hasExtra(KrakenSdkSettings.INTENT_EXTRA_SHOW_ICON)) {
+        if (intent != null && intent.hasExtra(Settings.INTENT_EXTRA_SHOW_ICON)) {
 
-            boolean showIcon = intent.getBooleanExtra(KrakenSdkSettings.INTENT_EXTRA_SHOW_ICON, PreferenceManager.DEFAULT_KRAKEN_SHOW_NOTIFICATION);
+            boolean showIcon = intent.getBooleanExtra(Settings.INTENT_EXTRA_SHOW_ICON, PreferenceManager.DEFAULT_KRAKEN_SHOW_NOTIFICATION);
 
             if (showIcon) {
                 showIcon();
@@ -249,7 +249,7 @@ public class KrakenService extends Service implements Callback {
                         .setPriority(Notification.PRIORITY_MIN)
                         .setOngoing(true);
 
-        startForeground(KrakenSdkSettings.DEFAULT_NOTIFICATION_ID, mBuilder.build());
+        startForeground(Settings.DEFAULT_NOTIFICATION_ID, mBuilder.build());
 
         return Service.START_STICKY;
     }
@@ -368,7 +368,7 @@ public class KrakenService extends Service implements Callback {
 
         Log.d(TAG, "Starting accessibility service...");
 
-        Intent intent = new Intent(this, KrakenAccessibilityService.class);
+        Intent intent = new Intent(this, AssistanceAccessibilityService.class);
         startService(intent);
     }
 

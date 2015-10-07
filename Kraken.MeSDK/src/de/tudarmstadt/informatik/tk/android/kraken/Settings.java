@@ -3,7 +3,7 @@ package de.tudarmstadt.informatik.tk.android.kraken;
 
 import de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.ESensorType;
 
-public class KrakenSdkSettings {
+public class Settings {
 
     /*
     *   Assistance login server. CAUTION: Please write this address without "/" at the end!

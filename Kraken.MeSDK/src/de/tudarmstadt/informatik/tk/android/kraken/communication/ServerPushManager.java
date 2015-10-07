@@ -11,7 +11,7 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 import de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.ISensor;
-import de.tudarmstadt.informatik.tk.android.kraken.service.KrakenService;
+import de.tudarmstadt.informatik.tk.android.kraken.service.HarvesterService;
 
 public class ServerPushManager {
 
@@ -105,7 +105,7 @@ public class ServerPushManager {
 
     private void flushData(ISensor sensor) {
 
-        KrakenService service = KrakenService.getInstance();
+        HarvesterService service = HarvesterService.getInstance();
 
         if (service == null) {
             return;
@@ -140,7 +140,7 @@ public class ServerPushManager {
     }
 
     private void flushData(EPushType type) {
-        KrakenService service = KrakenService.getInstance();
+        HarvesterService service = HarvesterService.getInstance();
         if (service == null)
             return;
 

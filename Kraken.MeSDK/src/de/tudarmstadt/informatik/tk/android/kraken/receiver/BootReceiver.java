@@ -5,7 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
-import de.tudarmstadt.informatik.tk.android.kraken.KrakenServiceManager;
+import de.tudarmstadt.informatik.tk.android.kraken.ServiceManager;
 import de.tudarmstadt.informatik.tk.android.kraken.PreferenceManager;
 
 /**
@@ -30,7 +30,7 @@ public class BootReceiver extends BroadcastReceiver {
 
                 Log.d(TAG, "Start on boot activated -> starting service...");
 
-                final KrakenServiceManager service = KrakenServiceManager.getInstance(context);
+                final ServiceManager service = ServiceManager.getInstance(context);
                 service.startKrakenService();
             }
         }

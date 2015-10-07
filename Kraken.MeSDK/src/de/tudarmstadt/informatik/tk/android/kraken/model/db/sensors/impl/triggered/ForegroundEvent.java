@@ -20,7 +20,7 @@ import de.tudarmstadt.informatik.tk.android.kraken.communication.EPushType;
 import de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.ESensorType;
 import de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.AbstractTriggeredSensor;
 import de.tudarmstadt.informatik.tk.android.kraken.util.ImageUtils;
-import de.tudarmstadt.informatik.tk.android.kraken.util.sensors.AccessibilityEventFilter;
+import de.tudarmstadt.informatik.tk.android.kraken.util.sensors.AccessibilityEventFilterUtils;
 
 /**
  * @author Karsten Planz
@@ -46,7 +46,7 @@ public class ForegroundEvent extends AbstractTriggeredSensor {
 
     private static Map<String, String> mIconColorCache = new HashMap<>();
 
-    private AccessibilityEventFilter mEventFilter;
+    private AccessibilityEventFilterUtils mEventFilter;
     private ScreenReceiver mReceiver = null;
     private boolean mStarted = false;
 
@@ -60,7 +60,7 @@ public class ForegroundEvent extends AbstractTriggeredSensor {
 
         mStarted = true;
 
-        mEventFilter = new AccessibilityEventFilter(context);
+        mEventFilter = new AccessibilityEventFilterUtils(context);
 
         // register receiver that handles screen on and screen off logic
         IntentFilter filter = new IntentFilter(Intent.ACTION_SCREEN_ON);

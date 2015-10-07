@@ -23,15 +23,15 @@ import de.greenrobot.dao.Property;
 import de.greenrobot.dao.query.Query;
 import de.greenrobot.dao.query.QueryBuilder;
 import de.tudarmstadt.informatik.tk.android.kraken.ActivityCommunicator;
-import de.tudarmstadt.informatik.tk.android.kraken.KrakenSdkSettings;
+import de.tudarmstadt.informatik.tk.android.kraken.Settings;
 import de.tudarmstadt.informatik.tk.android.kraken.communication.EPushType;
 import de.tudarmstadt.informatik.tk.android.kraken.communication.RetroServerPushManager;
 import de.tudarmstadt.informatik.tk.android.kraken.db.DaoSession;
-import de.tudarmstadt.informatik.tk.android.kraken.db.DatabaseManager;
+import de.tudarmstadt.informatik.tk.android.kraken.db.DbManager;
 import de.tudarmstadt.informatik.tk.android.kraken.interfaces.IDbSensor;
 import de.tudarmstadt.informatik.tk.android.kraken.interfaces.IDbUpdatableSensor;
 import de.tudarmstadt.informatik.tk.android.kraken.interfaces.Sensor;
-import de.tudarmstadt.informatik.tk.android.kraken.service.KrakenService;
+import de.tudarmstadt.informatik.tk.android.kraken.service.HarvesterService;
 import de.tudarmstadt.informatik.tk.android.kraken.util.DateUtils;
 
 public abstract class AbstractSensor implements ISensor {
@@ -65,7 +65,7 @@ public abstract class AbstractSensor implements ISensor {
 //        lastDataFlushTimestamp = sharedPreferences.getLong(getSensorType().toString() + KrakenSdkSettings.PREFERENCES_SENSOR_LAST_PUSHED_TIMESTAMP_POSTFIX, -1);
 
         if (mDaoSession == null) {
-            mDaoSession = DatabaseManager.getInstance(context).getDaoSession();
+            mDaoSession = DbManager.getInstance(context).getDaoSession();
         }
     }
 
@@ -156,7 +156,7 @@ public abstract class AbstractSensor implements ISensor {
             IllegalArgumentException {
 
         if (mDaoSession == null) {
-            mDaoSession = DatabaseManager.getInstance(context).getDaoSession();
+            mDaoSession = DbManager.getInstance(context).getDaoSession();
         }
 
         if (mDaoSession == null) {
@@ -173,8 +173,8 @@ public abstract class AbstractSensor implements ISensor {
     @Override
     public void setContext(Context context) {
         this.context = context;
-        if (context instanceof KrakenService) {
-            setDaoSession(((KrakenService) context).getDaoSession());
+        if (context instanceof HarvesterService) {
+            setDaoSession(((HarvesterService) context).getDaoSession());
         }
     }
 
@@ -191,8 +191,8 @@ public abstract class AbstractSensor implements ISensor {
     @Override
     public void setDisabledByUser(boolean bDisabled) {
         isDisabledByUser = bDisabled;
-        SharedPreferences sharedPreferences = context.getApplicationContext().getSharedPreferences(KrakenSdkSettings.PREFERENCES_NAME, Context.MODE_PRIVATE);
-        sharedPreferences.edit().putBoolean(getSensorType().toString() + KrakenSdkSettings.PREFERENCES_SENSOR_DISABLED_BY_USER_POSTFIX, bDisabled).apply();
+        SharedPreferences sharedPreferences = context.getApplicationContext().getSharedPreferences(Settings.PREFERENCES_NAME, Context.MODE_PRIVATE);
+        sharedPreferences.edit().putBoolean(getSensorType().toString() + Settings.PREFERENCES_SENSOR_DISABLED_BY_USER_POSTFIX, bDisabled).apply();
     }
 
     @Override
@@ -253,7 +253,7 @@ public abstract class AbstractSensor implements ISensor {
     @Override
     public List<Sensor> flushDataRetro(String strFullQualifiedBeanClassName) {
 
-        KrakenService service = KrakenService.getInstance();
+        HarvesterService service = HarvesterService.getInstance();
         Boolean bDataAvailable = m_mapNewData.get(strFullQualifiedBeanClassName);
         if (service == null || bDataAvailable == null || !bDataAvailable)
             return null;
@@ -283,9 +283,9 @@ public abstract class AbstractSensor implements ISensor {
 
             // set timestamp of last query
             lastDataFlushTimestamp = longTimestamp;
-            SharedPreferences sharedPreferences = context.getApplicationContext().getSharedPreferences(KrakenSdkSettings.PREFERENCES_NAME, Context.MODE_PRIVATE);
+            SharedPreferences sharedPreferences = context.getApplicationContext().getSharedPreferences(Settings.PREFERENCES_NAME, Context.MODE_PRIVATE);
             sharedPreferences.edit()
-                    .putLong(strFullQualifiedBeanClassName + KrakenSdkSettings.PREFERENCES_SENSOR_LAST_PUSHED_TIMESTAMP_POSTFIX, lastDataFlushTimestamp).apply();
+                    .putLong(strFullQualifiedBeanClassName + Settings.PREFERENCES_SENSOR_LAST_PUSHED_TIMESTAMP_POSTFIX, lastDataFlushTimestamp).apply();
 
             // handle every entry and convert it to Json
             List<? extends IDbSensor> list = query.list();

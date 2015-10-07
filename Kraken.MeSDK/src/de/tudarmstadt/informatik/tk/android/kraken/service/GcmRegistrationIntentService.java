@@ -12,8 +12,8 @@ import com.google.android.gms.iid.InstanceID;
 
 import java.io.IOException;
 
-import de.tudarmstadt.informatik.tk.android.kraken.KrakenConfig;
-import de.tudarmstadt.informatik.tk.android.kraken.KrakenGcmManager;
+import de.tudarmstadt.informatik.tk.android.kraken.Config;
+import de.tudarmstadt.informatik.tk.android.kraken.GcmManager;
 import de.tudarmstadt.informatik.tk.android.kraken.PreferenceManager;
 
 /**
@@ -56,7 +56,7 @@ public class GcmRegistrationIntentService extends IntentService {
             Log.d(TAG, "Trying to get GCM registration token...");
 
             InstanceID instanceID = InstanceID.getInstance(this);
-            String token = instanceID.getToken(KrakenConfig.GCM_SENDER_ID, GoogleCloudMessaging.INSTANCE_ID_SCOPE, null);
+            String token = instanceID.getToken(Config.GCM_SENDER_ID, GoogleCloudMessaging.INSTANCE_ID_SCOPE, null);
 
             Log.d(TAG, "GCM Registration Token: " + token);
 
@@ -90,7 +90,7 @@ public class GcmRegistrationIntentService extends IntentService {
      */
     private void sendRegistrationToServer(String token) {
 
-        KrakenGcmManager.getInstance(getApplicationContext()).sendRegistrationIdToBackend(token);
+        GcmManager.getInstance(getApplicationContext()).sendRegistrationIdToBackend(token);
     }
 
     /**

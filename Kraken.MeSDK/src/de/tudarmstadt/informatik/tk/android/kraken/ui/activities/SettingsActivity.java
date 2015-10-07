@@ -7,13 +7,12 @@ import android.preference.PreferenceCategory;
 import android.preference.SwitchPreference;
 import android.view.MenuItem;
 
-import de.tudarmstadt.informatik.tk.android.kraken.KrakenSdkSettings;
+import de.tudarmstadt.informatik.tk.android.kraken.PreferenceManager;
+import de.tudarmstadt.informatik.tk.android.kraken.R;
+import de.tudarmstadt.informatik.tk.android.kraken.ServiceManager;
+import de.tudarmstadt.informatik.tk.android.kraken.Settings;
 import de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.ESensorType;
 import de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.SensorManager;
-import de.tudarmstadt.informatik.tk.android.kraken.PreferenceManager;
-import de.tudarmstadt.informatik.tk.android.kraken.KrakenServiceManager;
-import de.tudarmstadt.informatik.tk.android.kraken.util.KrakenUtils;
-import de.tudarmstadt.informatik.tk.android.kraken.R;
 
 
 @Deprecated
@@ -22,7 +21,7 @@ public class SettingsActivity extends PreferenceActivity implements Preference.O
 
     private static final String KRAKEN_SENSOR_ENABLED_PREFIX = "KrakenSensorEnabled_";
 
-    private KrakenServiceManager mServiceManager;
+    private ServiceManager mServiceManager;
     private PreferenceManager mPreferenceManager;
     private SensorManager mSensorManager;
 
@@ -33,7 +32,7 @@ public class SettingsActivity extends PreferenceActivity implements Preference.O
         getActionBar().setDisplayHomeAsUpEnabled(true);
 
         mPreferenceManager = PreferenceManager.getInstance(this);
-        mServiceManager = KrakenServiceManager.getInstance(getApplicationContext());
+        mServiceManager = ServiceManager.getInstance(getApplicationContext());
         mSensorManager = SensorManager.getInstance(this);
 
         addPreferencesFromResource(R.xml.preferences);
@@ -54,7 +53,7 @@ public class SettingsActivity extends PreferenceActivity implements Preference.O
         }
         */
 
-        for (ESensorType sensorType : KrakenSdkSettings.SENSORS_PROFILE_FULL) {
+        for (ESensorType sensorType : Settings.SENSORS_PROFILE_FULL) {
             if (sensorType != ESensorType.SENSOR_BACKGROUND_TRAFFIC) {
                 SwitchPreference pref = new SwitchPreference(this);
                 pref.setKey(KRAKEN_SENSOR_ENABLED_PREFIX + sensorType.toString());
@@ -86,7 +85,7 @@ public class SettingsActivity extends PreferenceActivity implements Preference.O
             mServiceManager.showIcon((boolean) newValue);
         } else if (key.equals(PreferenceManager.KRAKEN_DATA_PROFILE)) {
             String profile = (String) newValue;
-            KrakenUtils.initDataProfile(this, profile);
+//            KrakenUtils.initDataProfile(this, profile);
             updateSensorPrefs(profile);
         } else if (key.startsWith(KRAKEN_SENSOR_ENABLED_PREFIX)) {
             boolean disabled = !(boolean) newValue;
@@ -117,7 +116,7 @@ public class SettingsActivity extends PreferenceActivity implements Preference.O
 
     private void updateSensorPrefs(String profile) {
         boolean basic = profile.equals(PreferenceManager.KRAKEN_DATA_PROFILE_BASIC);
-        for (ESensorType sensorType : KrakenSdkSettings.SENSORS_PROFILE_FULL) {
+        for (ESensorType sensorType : Settings.SENSORS_PROFILE_FULL) {
             if (sensorType != ESensorType.SENSOR_BACKGROUND_TRAFFIC) {
                 SwitchPreference preference = (SwitchPreference) findPreference(KRAKEN_SENSOR_ENABLED_PREFIX + sensorType.toString());
                 preference.setEnabled(basic);

@@ -14,10 +14,10 @@ import java.util.concurrent.Future;
 import java.util.concurrent.ScheduledExecutorService;
 
 import de.greenrobot.dao.AbstractDao;
-import de.tudarmstadt.informatik.tk.android.kraken.KrakenServiceManager;
+import de.tudarmstadt.informatik.tk.android.kraken.ServiceManager;
 import de.tudarmstadt.informatik.tk.android.kraken.PreferenceManager;
 import de.tudarmstadt.informatik.tk.android.kraken.communication.endpoint.EventUploadEndpoint;
-import de.tudarmstadt.informatik.tk.android.kraken.db.DatabaseManager;
+import de.tudarmstadt.informatik.tk.android.kraken.db.DbManager;
 import de.tudarmstadt.informatik.tk.android.kraken.db.DbAccelerometerSensor;
 import de.tudarmstadt.informatik.tk.android.kraken.db.DbAccelerometerSensorDao;
 import de.tudarmstadt.informatik.tk.android.kraken.db.DbPositionSensor;
@@ -30,7 +30,7 @@ import de.tudarmstadt.informatik.tk.android.kraken.model.api.sensors.Acceleromet
 import de.tudarmstadt.informatik.tk.android.kraken.model.api.sensors.PositionSensorRequest;
 import de.tudarmstadt.informatik.tk.android.kraken.model.api.sensors.SensorType;
 import de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.ISensor;
-import de.tudarmstadt.informatik.tk.android.kraken.service.KrakenService;
+import de.tudarmstadt.informatik.tk.android.kraken.service.HarvesterService;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
@@ -48,7 +48,7 @@ public class RetroServerPushManager {
 
     private static RetroServerPushManager INSTANCE;
 
-    private static KrakenServiceManager krakenServiceManager;
+    private static ServiceManager serviceManager;
 
     private HashSet<ISensor> mSensorsImmediate = new HashSet<ISensor>();
     private HashMap<ISensor, Long> mSensorsPeriodic = new HashMap<ISensor, Long>();
@@ -112,11 +112,11 @@ public class RetroServerPushManager {
 
         Log.d(TAG, "Starting periodic push of data...");
 
-        if (krakenServiceManager == null) {
-            krakenServiceManager = KrakenServiceManager.getInstance(mContext);
+        if (serviceManager == null) {
+            serviceManager = ServiceManager.getInstance(mContext);
         }
 
-        krakenServiceManager.showIcon(true);
+        serviceManager.showIcon(true);
 
         if (mFuture == null) {
 
@@ -133,11 +133,11 @@ public class RetroServerPushManager {
         }
 
         if (dbAccelerometerSensorDao == null) {
-            dbAccelerometerSensorDao = DatabaseManager.getInstance(mContext).getDaoSession().getDbAccelerometerSensorDao();
+            dbAccelerometerSensorDao = DbManager.getInstance(mContext).getDaoSession().getDbAccelerometerSensorDao();
         }
 
         if (dbPositionSensorDao == null) {
-            dbPositionSensorDao = DatabaseManager.getInstance(mContext).getDaoSession().getDbPositionSensorDao();
+            dbPositionSensorDao = DbManager.getInstance(mContext).getDaoSession().getDbPositionSensorDao();
         }
     }
 
@@ -150,11 +150,11 @@ public class RetroServerPushManager {
             mFuture = null;
         }
 
-        if (krakenServiceManager == null) {
-            krakenServiceManager = KrakenServiceManager.getInstance(mContext);
+        if (serviceManager == null) {
+            serviceManager = ServiceManager.getInstance(mContext);
         }
 
-        krakenServiceManager.showIcon(false);
+        serviceManager.showIcon(false);
 
         dbAccelerometerSensorDao = null;
         dbPositionSensorDao = null;
@@ -374,7 +374,7 @@ public class RetroServerPushManager {
         if (dbAccelerometerSensors != null) {
 
             if (dbAccelerometerSensorDao == null) {
-                dbAccelerometerSensorDao = DatabaseManager.getInstance(mContext).getDaoSession().getDbAccelerometerSensorDao();
+                dbAccelerometerSensorDao = DbManager.getInstance(mContext).getDaoSession().getDbAccelerometerSensorDao();
             }
 
             dbAccelerometerSensorDao.deleteInTx(dbAccelerometerSensors);
@@ -383,7 +383,7 @@ public class RetroServerPushManager {
         if (dbPositionSensors != null) {
 
             if (dbPositionSensorDao == null) {
-                dbPositionSensorDao = DatabaseManager.getInstance(mContext).getDaoSession().getDbPositionSensorDao();
+                dbPositionSensorDao = DbManager.getInstance(mContext).getDaoSession().getDbPositionSensorDao();
             }
 
             dbPositionSensorDao.deleteInTx(dbPositionSensors);
@@ -517,7 +517,7 @@ public class RetroServerPushManager {
             Class<? extends IDbSensor> dbClass = (Class<? extends
                     IDbSensor>) Class.forName(strFullqualifiedSensorClassName);
             AbstractDao<? extends IDbSensor, Long> dao = (AbstractDao<?
-                    extends IDbSensor, Long>) KrakenService.getInstance()
+                    extends IDbSensor, Long>) HarvesterService.getInstance()
                     .getDaoSession().getDao(dbClass);
 
             // We assume that every entry in this list is of the same type!

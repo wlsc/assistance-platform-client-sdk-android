@@ -5,14 +5,14 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 
 import de.greenrobot.dao.identityscope.IdentityScopeType;
-import de.tudarmstadt.informatik.tk.android.kraken.KrakenSdkSettings;
+import de.tudarmstadt.informatik.tk.android.kraken.Settings;
 
 /**
  * Singleton database manager
  */
-public class DatabaseManager {
+public class DbManager {
 
-    private static DatabaseManager INSTANCE;
+    private static DbManager INSTANCE;
 
     private SQLiteDatabase mDb;
     private DaoMaster mDaoMaster;
@@ -23,9 +23,9 @@ public class DatabaseManager {
      *
      * @param context
      */
-    private DatabaseManager(Context context) {
+    private DbManager(Context context) {
 
-        DBKrakenOpenHelper helper = new DBKrakenOpenHelper(context, KrakenSdkSettings.DATABASE_NAME, null);
+        DbAssistanceOpenHelper helper = new DbAssistanceOpenHelper(context, Settings.DATABASE_NAME, null);
         mDb = helper.getWritableDatabase();
 
         mDaoMaster = new DaoMaster(mDb);
@@ -38,10 +38,10 @@ public class DatabaseManager {
      * @param context
      * @return
      */
-    public static DatabaseManager getInstance(Context context) {
+    public static DbManager getInstance(Context context) {
 
         if (INSTANCE == null) {
-            INSTANCE = new DatabaseManager(context);
+            INSTANCE = new DbManager(context);
         }
 
         return INSTANCE;

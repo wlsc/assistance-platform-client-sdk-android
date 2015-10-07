@@ -10,11 +10,11 @@ import de.greenrobot.dao.Property;
  * @author Karsten Planz
  * @edited on 07.09.2015 by Wladimir Schmidt (wlsc.dev@gmail.com)
  */
-public class DBKrakenOpenHelper extends DaoMaster.OpenHelper {
+public class DbAssistanceOpenHelper extends DaoMaster.OpenHelper {
 
-    private static final String TAG = DBKrakenOpenHelper.class.getSimpleName();
+    private static final String TAG = DbAssistanceOpenHelper.class.getSimpleName();
 
-    public DBKrakenOpenHelper(Context context, String name, SQLiteDatabase.CursorFactory factory) {
+    public DbAssistanceOpenHelper(Context context, String name, SQLiteDatabase.CursorFactory factory) {
         super(context, name, factory);
     }
 

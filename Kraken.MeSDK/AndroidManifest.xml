@@ -57,7 +57,7 @@
 
 
         <service
-            android:name=".service.KrakenService"
+            android:name=".service.HarvesterService"
             android:exported="false">
             <intent-filter>
                 <action android:name="de.tudarmstadt.informatik.tk.android.kraken.service.KrakenService" />
@@ -65,12 +65,7 @@
         </service>
 
         <service
-            android:name=".service.HarvesterService"
-            android:exported="false"
-            android:label="HarvesterService" />
-
-        <service
-            android:name=".service.KrakenAccessibilityService"
+            android:name=".service.AssistanceAccessibilityService"
             android:exported="false"
             android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE">
             <intent-filter>
@@ -87,11 +82,11 @@
             android:label="ActivitySensorService" />
 
         <service
-            android:name=".service.KrakenGcmListenerService"
+            android:name=".service.AssistanceGcmListenerService"
             android:exported="false" />
 
         <service
-            android:name=".service.KrakenInstanceIDListenerService"
+            android:name=".service.AssistanceInstanceIDListenerService"
             android:exported="false">
             <intent-filter>
                 <action android:name="com.google.android.gms.iid.InstanceID" />

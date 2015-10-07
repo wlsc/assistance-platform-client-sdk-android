@@ -3,7 +3,7 @@ package de.tudarmstadt.informatik.tk.android.kraken.communication;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import de.tudarmstadt.informatik.tk.android.kraken.KrakenSdkSettings;
+import de.tudarmstadt.informatik.tk.android.kraken.Settings;
 import de.tudarmstadt.informatik.tk.android.kraken.common.SocialNetworkProvider;
 
 public class Authentication {
@@ -16,7 +16,7 @@ public class Authentication {
         if (m_authentication == null) {
             m_context = context;
             m_authentication = new Authentication();
-            m_sharedPreferences = context.getApplicationContext().getSharedPreferences(KrakenSdkSettings.PREFERENCES_NAME, Context.MODE_PRIVATE);
+            m_sharedPreferences = context.getApplicationContext().getSharedPreferences(Settings.PREFERENCES_NAME, Context.MODE_PRIVATE);
         }
         return m_authentication;
     }

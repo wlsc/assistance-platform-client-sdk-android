@@ -1,6 +1,6 @@
 package de.tudarmstadt.informatik.tk.android.kraken.communication.endpoint;
 
-import de.tudarmstadt.informatik.tk.android.kraken.KrakenConfig;
+import de.tudarmstadt.informatik.tk.android.kraken.Config;
 import de.tudarmstadt.informatik.tk.android.kraken.model.api.EventUploadRequest;
 import retrofit.Callback;
 import retrofit.http.Body;
@@ -13,7 +13,7 @@ import retrofit.http.POST;
  */
 public interface EventUploadEndpoint {
 
-    @POST(KrakenConfig.ASSISTANCE_EVENT_UPLOAD_ENDPOINT)
+    @POST(Config.ASSISTANCE_EVENT_UPLOAD_ENDPOINT)
     void uploadData(@Header("X-AUTH-TOKEN") String userToken,
                     @Body EventUploadRequest body,
                     Callback<Void> callback);
