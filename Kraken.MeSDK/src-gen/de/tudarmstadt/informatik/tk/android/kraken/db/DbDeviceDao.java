@@ -35,7 +35,7 @@ public class DbDeviceDao extends AbstractDao<DbDevice, Long> {
         public final static Property Brand = new Property(4, String.class, "brand", false, "BRAND");
         public final static Property Model = new Property(5, String.class, "model", false, "MODEL");
         public final static Property ServerDeviceId = new Property(6, Long.class, "serverDeviceId", false, "SERVER_DEVICE_ID");
-        public final static Property MessagingRegistrationId = new Property(7, String.class, "messagingRegistrationId", false, "MESSAGING_REGISTRATION_ID");
+        public final static Property GcmRegistrationToken = new Property(7, String.class, "gcmRegistrationToken", false, "GCM_REGISTRATION_TOKEN");
         public final static Property UserDefinedName = new Property(8, String.class, "userDefinedName", false, "USER_DEFINED_NAME");
         public final static Property Created = new Property(9, String.class, "created", false, "CREATED");
         public final static Property UserId = new Property(10, Long.class, "userId", false, "USER_ID");
@@ -65,7 +65,7 @@ public class DbDeviceDao extends AbstractDao<DbDevice, Long> {
                 "\"BRAND\" TEXT," + // 4: brand
                 "\"MODEL\" TEXT," + // 5: model
                 "\"SERVER_DEVICE_ID\" INTEGER," + // 6: serverDeviceId
-                "\"MESSAGING_REGISTRATION_ID\" TEXT," + // 7: messagingRegistrationId
+                "\"GCM_REGISTRATION_TOKEN\" TEXT," + // 7: gcmRegistrationToken
                 "\"USER_DEFINED_NAME\" TEXT," + // 8: userDefinedName
                 "\"CREATED\" TEXT NOT NULL ," + // 9: created
                 "\"USER_ID\" INTEGER);"); // 10: userId
@@ -122,9 +122,9 @@ public class DbDeviceDao extends AbstractDao<DbDevice, Long> {
             stmt.bindLong(7, serverDeviceId);
         }
  
-        String messagingRegistrationId = entity.getMessagingRegistrationId();
-        if (messagingRegistrationId != null) {
-            stmt.bindString(8, messagingRegistrationId);
+        String gcmRegistrationToken = entity.getGcmRegistrationToken();
+        if (gcmRegistrationToken != null) {
+            stmt.bindString(8, gcmRegistrationToken);
         }
  
         String userDefinedName = entity.getUserDefinedName();
@@ -162,7 +162,7 @@ public class DbDeviceDao extends AbstractDao<DbDevice, Long> {
             cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4), // brand
             cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5), // model
             cursor.isNull(offset + 6) ? null : cursor.getLong(offset + 6), // serverDeviceId
-            cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7), // messagingRegistrationId
+            cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7), // gcmRegistrationToken
             cursor.isNull(offset + 8) ? null : cursor.getString(offset + 8), // userDefinedName
             cursor.getString(offset + 9), // created
             cursor.isNull(offset + 10) ? null : cursor.getLong(offset + 10) // userId
@@ -180,7 +180,7 @@ public class DbDeviceDao extends AbstractDao<DbDevice, Long> {
         entity.setBrand(cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4));
         entity.setModel(cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5));
         entity.setServerDeviceId(cursor.isNull(offset + 6) ? null : cursor.getLong(offset + 6));
-        entity.setMessagingRegistrationId(cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7));
+        entity.setGcmRegistrationToken(cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7));
         entity.setUserDefinedName(cursor.isNull(offset + 8) ? null : cursor.getString(offset + 8));
         entity.setCreated(cursor.getString(offset + 9));
         entity.setUserId(cursor.isNull(offset + 10) ? null : cursor.getLong(offset + 10));

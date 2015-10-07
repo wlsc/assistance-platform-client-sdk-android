@@ -16,45 +16,43 @@ public class MotionActivityEventRequest implements Sensor {
 
     @SerializedName("walking")
     @Expose
-    private Boolean walking;
+    private Integer walking;
 
     @SerializedName("running")
     @Expose
-    private Boolean running;
+    private Integer running;
 
     @SerializedName("cycling")
     @Expose
-    private Boolean cycling;
+    private Integer cycling;
 
     @SerializedName("driving")
     @Expose
-    private Boolean driving;
+    private Integer driving;
 
     @SerializedName("stationary")
     @Expose
-    private Boolean stationary;
+    private Integer stationary;
 
     @SerializedName("unknown")
     @Expose
-    private Boolean unknown;
+    private Integer unknown;
 
     @SerializedName("accuracy")
     @Expose
     private Integer accuracy;
-    /**
-     * Not-null value.
-     */
+
     @SerializedName("created")
     @Expose
     private String created;
 
     @SerializedName("onFoot")
     @Expose
-    private Boolean onFoot;
+    private Integer onFoot;
 
     @SerializedName("tilting")
     @Expose
-    private Boolean tilting;
+    private Integer tilting;
 
     @SerializedName("type")
     @Expose
@@ -69,7 +67,7 @@ public class MotionActivityEventRequest implements Sensor {
         this.id = id;
     }
 
-    public MotionActivityEventRequest(long id, Boolean walking, Boolean running, Boolean cycling, Boolean driving, Boolean stationary, Boolean unknown, Integer accuracy, String created, Boolean onFoot, Boolean tilting) {
+    public MotionActivityEventRequest(long id, Integer walking, Integer running, Integer cycling, Integer driving, Integer stationary, Integer unknown, Integer accuracy, String created, Integer onFoot, Integer tilting) {
         this.id = id;
         this.walking = walking;
         this.running = running;
@@ -93,51 +91,51 @@ public class MotionActivityEventRequest implements Sensor {
         this.id = id;
     }
 
-    public Boolean getWalking() {
+    public Integer getWalking() {
         return walking;
     }
 
-    public void setWalking(Boolean walking) {
+    public void setWalking(Integer walking) {
         this.walking = walking;
     }
 
-    public Boolean getRunning() {
+    public Integer getRunning() {
         return running;
     }
 
-    public void setRunning(Boolean running) {
+    public void setRunning(Integer running) {
         this.running = running;
     }
 
-    public Boolean getCycling() {
+    public Integer getCycling() {
         return cycling;
     }
 
-    public void setCycling(Boolean cycling) {
+    public void setCycling(Integer cycling) {
         this.cycling = cycling;
     }
 
-    public Boolean getDriving() {
+    public Integer getDriving() {
         return driving;
     }
 
-    public void setDriving(Boolean driving) {
+    public void setDriving(Integer driving) {
         this.driving = driving;
     }
 
-    public Boolean getStationary() {
+    public Integer getStationary() {
         return stationary;
     }
 
-    public void setStationary(Boolean stationary) {
+    public void setStationary(Integer stationary) {
         this.stationary = stationary;
     }
 
-    public Boolean getUnknown() {
+    public Integer getUnknown() {
         return unknown;
     }
 
-    public void setUnknown(Boolean unknown) {
+    public void setUnknown(Integer unknown) {
         this.unknown = unknown;
     }
 
@@ -163,19 +161,19 @@ public class MotionActivityEventRequest implements Sensor {
         this.created = created;
     }
 
-    public Boolean getOnFoot() {
+    public Integer getOnFoot() {
         return onFoot;
     }
 
-    public void setOnFoot(Boolean onFoot) {
+    public void setOnFoot(Integer onFoot) {
         this.onFoot = onFoot;
     }
 
-    public Boolean getTilting() {
+    public Integer getTilting() {
         return tilting;
     }
 
-    public void setTilting(Boolean tilting) {
+    public void setTilting(Integer tilting) {
         this.tilting = tilting;
     }
 

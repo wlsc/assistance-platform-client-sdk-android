@@ -16,7 +16,7 @@ public class DbDevice {
     private String brand;
     private String model;
     private Long serverDeviceId;
-    private String messagingRegistrationId;
+    private String gcmRegistrationToken;
     private String userDefinedName;
     /** Not-null value. */
     private String created;
@@ -39,7 +39,7 @@ public class DbDevice {
         this.id = id;
     }
 
-    public DbDevice(Long id, String deviceIdentifier, String os, String osVersion, String brand, String model, Long serverDeviceId, String messagingRegistrationId, String userDefinedName, String created, Long userId) {
+    public DbDevice(Long id, String deviceIdentifier, String os, String osVersion, String brand, String model, Long serverDeviceId, String gcmRegistrationToken, String userDefinedName, String created, Long userId) {
         this.id = id;
         this.deviceIdentifier = deviceIdentifier;
         this.os = os;
@@ -47,7 +47,7 @@ public class DbDevice {
         this.brand = brand;
         this.model = model;
         this.serverDeviceId = serverDeviceId;
-        this.messagingRegistrationId = messagingRegistrationId;
+        this.gcmRegistrationToken = gcmRegistrationToken;
         this.userDefinedName = userDefinedName;
         this.created = created;
         this.userId = userId;
@@ -115,12 +115,12 @@ public class DbDevice {
         this.serverDeviceId = serverDeviceId;
     }
 
-    public String getMessagingRegistrationId() {
-        return messagingRegistrationId;
+    public String getGcmRegistrationToken() {
+        return gcmRegistrationToken;
     }
 
-    public void setMessagingRegistrationId(String messagingRegistrationId) {
-        this.messagingRegistrationId = messagingRegistrationId;
+    public void setGcmRegistrationToken(String gcmRegistrationToken) {
+        this.gcmRegistrationToken = gcmRegistrationToken;
     }
 
     public String getUserDefinedName() {

@@ -74,7 +74,7 @@ public class AssistanceDatabaseGenerator {
     device.addStringProperty("brand");
     device.addStringProperty("model");
     device.addLongProperty("serverDeviceId");
-    device.addStringProperty("messagingRegistrationId");
+    device.addStringProperty("gcmRegistrationToken");
     device.addStringProperty("userDefinedName");
     device.addStringProperty("created").notNull();
 
