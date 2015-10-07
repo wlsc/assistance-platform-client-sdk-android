@@ -1,17 +1,17 @@
-package de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.contentobserver;
+package de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.impl.contentobserver;
 
 import android.content.Context;
 import android.net.Uri;
 
 import de.tudarmstadt.informatik.tk.android.kraken.db.DatabaseManager;
 import de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.ESensorType;
-import de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.abstract_sensors.AbstractContentObserverSensor;
+import de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.AbstractContentObserverSensor;
 
-public class CallLogSensor extends AbstractContentObserverSensor {
+public class CallLogEvent extends AbstractContentObserverSensor {
 
     protected static final Uri URI_CALL_LOG = android.provider.CallLog.Calls.CONTENT_URI;
 
-    public CallLogSensor(Context context) {
+    public CallLogEvent(Context context) {
         super(context);
     }
 

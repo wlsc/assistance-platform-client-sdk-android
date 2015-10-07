@@ -1,4 +1,4 @@
-package de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.triggered;
+package de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.impl.triggered;
 
 import android.app.Activity;
 import android.app.PendingIntent;
@@ -17,13 +17,13 @@ import com.google.android.gms.location.DetectedActivity;
 import java.util.List;
 
 import de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.ESensorType;
-import de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.abstract_sensors.AbstractTriggeredSensor;
+import de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.AbstractTriggeredSensor;
 import de.tudarmstadt.informatik.tk.android.kraken.service.ActivitySensorService;
 
 
-public class ActivitySensor extends AbstractTriggeredSensor implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
+public class MotionActivityEvent extends AbstractTriggeredSensor implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
-    private static final String TAG = ActivitySensor.class.getSimpleName();
+    private static final String TAG = MotionActivityEvent.class.getSimpleName();
 
     // ------------------- Configuration -------------------
     private int DETECTION_INTERVAL_IN_SEC = 120;
@@ -35,9 +35,9 @@ public class ActivitySensor extends AbstractTriggeredSensor implements GoogleApi
 
     private final static int CONNECTION_FAILURE_RESOLUTION_REQUEST = 9000;
 
-    private static ActivitySensor INSTANCE;
+    private static MotionActivityEvent INSTANCE;
 
-    public ActivitySensor(Context context) {
+    public MotionActivityEvent(Context context) {
         super(context);
         INSTANCE = this;
 
@@ -53,7 +53,7 @@ public class ActivitySensor extends AbstractTriggeredSensor implements GoogleApi
 
     }
 
-    public static ActivitySensor getInstance() {
+    public static MotionActivityEvent getInstance() {
         return INSTANCE;
     }
 
@@ -130,7 +130,6 @@ public class ActivitySensor extends AbstractTriggeredSensor implements GoogleApi
         m_activityRecognitionPendingIntent = PendingIntent.getService(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         ActivityRecognition.ActivityRecognitionApi.requestActivityUpdates(mGoogleApiClient, DETECTION_INTERVAL_IN_SEC * 1000, m_activityRecognitionPendingIntent);
-        //mGoogleApiClient.disconnect();
     }
 
     @Override
@@ -150,6 +149,7 @@ public class ActivitySensor extends AbstractTriggeredSensor implements GoogleApi
     public void reset() {
 
     }
+
 
     public void handleData(ActivityRecognitionResult userActivityResult) {
 

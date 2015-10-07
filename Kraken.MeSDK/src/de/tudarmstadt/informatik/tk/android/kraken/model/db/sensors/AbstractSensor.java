@@ -1,4 +1,4 @@
-package de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.abstract_sensors;
+package de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -31,7 +31,6 @@ import de.tudarmstadt.informatik.tk.android.kraken.db.DatabaseManager;
 import de.tudarmstadt.informatik.tk.android.kraken.interfaces.IDbSensor;
 import de.tudarmstadt.informatik.tk.android.kraken.interfaces.IDbUpdatableSensor;
 import de.tudarmstadt.informatik.tk.android.kraken.interfaces.Sensor;
-import de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.interfaces.ISensor;
 import de.tudarmstadt.informatik.tk.android.kraken.service.KrakenService;
 import de.tudarmstadt.informatik.tk.android.kraken.util.DateUtils;
 

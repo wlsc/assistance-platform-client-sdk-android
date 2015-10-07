@@ -1,8 +1,6 @@
-package de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.contentobserver;
+package de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.impl.contentobserver;
 
-import android.content.ContentResolver;
 import android.content.Context;
-import android.database.Cursor;
 import android.net.Uri;
 import android.provider.CalendarContract.Events;
 import android.provider.CalendarContract.Reminders;
@@ -13,16 +11,16 @@ import de.greenrobot.dao.query.Query;
 import de.greenrobot.dao.query.QueryBuilder;
 import de.tudarmstadt.informatik.tk.android.kraken.interfaces.IDbSensor;
 import de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.ESensorType;
-import de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.abstract_sensors.AbstractContentObserverSensor;
+import de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.AbstractContentObserverSensor;
 
-public class CalendarSensor extends AbstractContentObserverSensor {
+public class CalendarEvent extends AbstractContentObserverSensor {
 
-    private static final String TAG = CalendarSensor.class.getSimpleName();
+    private static final String TAG = CalendarEvent.class.getSimpleName();
 
     private static Uri URI_CALENDAR = android.provider.CalendarContract.Events.CONTENT_URI;
     private static Uri URI_REMINDER = android.provider.CalendarContract.Reminders.CONTENT_URI;
 
-    public CalendarSensor(Context context) {
+    public CalendarEvent(Context context) {
         super(context);
 
     }

@@ -1,4 +1,4 @@
-package de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.triggered;
+package de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.impl.triggered;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -18,16 +18,16 @@ import java.util.Map;
 
 import de.tudarmstadt.informatik.tk.android.kraken.communication.EPushType;
 import de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.ESensorType;
-import de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.abstract_sensors.AbstractTriggeredSensor;
+import de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.AbstractTriggeredSensor;
 import de.tudarmstadt.informatik.tk.android.kraken.util.ImageUtils;
 import de.tudarmstadt.informatik.tk.android.kraken.util.sensors.AccessibilityEventFilter;
 
 /**
  * @author Karsten Planz
  */
-public class ForegroundEventSensor extends AbstractTriggeredSensor {
+public class ForegroundEvent extends AbstractTriggeredSensor {
 
-    private static final String TAG = ForegroundEventSensor.class.getSimpleName();
+    private static final String TAG = ForegroundEvent.class.getSimpleName();
 
     public static final int EVENT_APP = 0;
     public static final int EVENT_ACTIVITY = 1;
@@ -38,8 +38,8 @@ public class ForegroundEventSensor extends AbstractTriggeredSensor {
     public static final int EVENT_KRAKEN_STOP = 6;
 
     public final static Integer[] SYSTEM_EVENTS = new Integer[]{
-            ForegroundEventSensor.EVENT_SCREEN_OFF,
-            ForegroundEventSensor.EVENT_KRAKEN_STOP
+            ForegroundEvent.EVENT_SCREEN_OFF,
+            ForegroundEvent.EVENT_KRAKEN_STOP
     };
 
     public static final String ICONS_DIR = "icons";
@@ -50,7 +50,7 @@ public class ForegroundEventSensor extends AbstractTriggeredSensor {
     private ScreenReceiver mReceiver = null;
     private boolean mStarted = false;
 
-    public ForegroundEventSensor(Context context) {
+    public ForegroundEvent(Context context) {
         super(context);
         mReceiver = new ScreenReceiver();
     }

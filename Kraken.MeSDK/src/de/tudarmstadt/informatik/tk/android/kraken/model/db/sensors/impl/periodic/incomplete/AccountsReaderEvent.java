@@ -1,19 +1,19 @@
-package de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.periodic.incomplete;
+package de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.impl.periodic.incomplete;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.content.Context;
 
 import de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.ESensorType;
-import de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.abstract_sensors.AbstractPeriodicSensor;
-import de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.interfaces.ISensor;
+import de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.AbstractPeriodicSensor;
+import de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.ISensor;
 
 
-public class AccountsReader extends AbstractPeriodicSensor implements ISensor {
+public class AccountsReaderEvent extends AbstractPeriodicSensor implements ISensor {
 
     private AccountManager m_accountManager;
 
-    public AccountsReader(Context context) {
+    public AccountsReaderEvent(Context context) {
         super(context);
         m_accountManager = AccountManager.get(this.context);
     }

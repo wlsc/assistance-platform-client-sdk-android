@@ -10,7 +10,7 @@ import org.json.JSONObject;
 
 import de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.ESensorType;
 import de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.SensorManager;
-import de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.interfaces.ISensor;
+import de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.ISensor;
 
 
 @Deprecated

@@ -1,14 +1,14 @@
-package de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.periodic.incomplete;
+package de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.impl.periodic.incomplete;
 
 import android.content.Context;
 
 import de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.ESensorType;
-import de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.abstract_sensors.AbstractPeriodicSensor;
-import de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.interfaces.ISensor;
+import de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.AbstractPeriodicSensor;
+import de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.ISensor;
 
-public class AlarmClockReader extends AbstractPeriodicSensor implements ISensor {
+public class AlarmClockReaderEvent extends AbstractPeriodicSensor implements ISensor {
 
-    public AlarmClockReader(Context context) {
+    public AlarmClockReaderEvent(Context context) {
         super(context);
 
         // http://stackoverflow.com/questions/11492517/how-can-i-get-the-clock-alarms-in-android

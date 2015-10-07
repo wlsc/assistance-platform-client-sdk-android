@@ -10,7 +10,7 @@ import java.util.concurrent.Future;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-import de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.interfaces.ISensor;
+import de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.ISensor;
 import de.tudarmstadt.informatik.tk.android.kraken.service.KrakenService;
 
 public class ServerPushManager {

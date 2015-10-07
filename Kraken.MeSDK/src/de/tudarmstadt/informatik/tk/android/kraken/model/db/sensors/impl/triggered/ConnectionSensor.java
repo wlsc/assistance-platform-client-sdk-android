@@ -1,4 +1,4 @@
-package de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.triggered;
+package de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.impl.triggered;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -16,7 +16,7 @@ import java.util.Locale;
 
 import de.tudarmstadt.informatik.tk.android.kraken.db.DbConnectionEvent;
 import de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.ESensorType;
-import de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.abstract_sensors.AbstractTriggeredSensor;
+import de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.AbstractTriggeredSensor;
 import de.tudarmstadt.informatik.tk.android.kraken.util.DateUtils;
 
 public class ConnectionSensor extends AbstractTriggeredSensor {

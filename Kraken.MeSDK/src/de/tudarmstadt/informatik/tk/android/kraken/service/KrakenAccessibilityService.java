@@ -7,16 +7,16 @@ import android.view.accessibility.AccessibilityEvent;
 
 import de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.ESensorType;
 import de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.SensorManager;
-import de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.triggered.ForegroundEventSensor;
-import de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.triggered.ForegroundTrafficSensor;
+import de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.impl.triggered.ForegroundEvent;
+import de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.impl.triggered.ForegroundTrafficEvent;
 
 
 public class KrakenAccessibilityService extends AccessibilityService {
 
     private static final String TAG = KrakenAccessibilityService.class.getSimpleName();
 
-    private ForegroundEventSensor mForegroundSensor;
-    private ForegroundTrafficSensor mForegroundTrafficSensor;
+    private ForegroundEvent mForegroundSensor;
+    private ForegroundTrafficEvent mForegroundTrafficEvent;
 
     @Override
     public void onCreate() {
@@ -24,11 +24,11 @@ public class KrakenAccessibilityService extends AccessibilityService {
 
         Log.d(TAG, "Starting service...");
 
-        mForegroundSensor = (ForegroundEventSensor) SensorManager
+        mForegroundSensor = (ForegroundEvent) SensorManager
                 .getInstance(getApplicationContext())
                 .getSensor(ESensorType.SENSOR_FOREGROUND_EVENT);
 
-        mForegroundTrafficSensor = (ForegroundTrafficSensor) SensorManager
+        mForegroundTrafficEvent = (ForegroundTrafficEvent) SensorManager
                 .getInstance(getApplicationContext())
                 .getSensor(ESensorType.SENSOR_NETWORK_TRAFFIC);
 

@@ -24,6 +24,11 @@ public class UntrustedOkHttpClient {
     public UntrustedOkHttpClient() {
     }
 
+    /**
+     * Gives untrusted OkHttp client back: trust ALL certificates!
+     *
+     * @return
+     */
     public OkHttpClient getClient() {
         try {
 

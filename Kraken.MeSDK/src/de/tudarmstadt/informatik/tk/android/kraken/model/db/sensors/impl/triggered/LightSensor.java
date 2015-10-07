@@ -1,4 +1,4 @@
-package de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.triggered;
+package de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.impl.triggered;
 
 import android.content.Context;
 import android.hardware.Sensor;
@@ -7,7 +7,7 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 
 import de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.ESensorType;
-import de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.abstract_sensors.AbstractTriggeredSensor;
+import de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.AbstractTriggeredSensor;
 
 
 public class LightSensor extends AbstractTriggeredSensor implements SensorEventListener {

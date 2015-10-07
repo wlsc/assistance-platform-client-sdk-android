@@ -1,4 +1,4 @@
-package de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.periodic;
+package de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.impl.periodic;
 
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
@@ -8,8 +8,8 @@ import java.util.List;
 
 import de.tudarmstadt.informatik.tk.android.kraken.communication.EPushType;
 import de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.ESensorType;
-import de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.abstract_sensors.AbstractPeriodicSensor;
-import de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.interfaces.ISensor;
+import de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.AbstractPeriodicSensor;
+import de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.ISensor;
 
 /**
  * This is a Periodic Sensor class which collect the mobile traffic data produced by the apps in the
@@ -18,7 +18,7 @@ import de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.interfaces.I
  * <p/>
  * Created by Stefan Hacker on 09.12.14.
  */
-public class BackgroundTrafficSensor extends AbstractPeriodicSensor implements ISensor {
+public class BackgroundTrafficEvent extends AbstractPeriodicSensor implements ISensor {
 
     private static final int INIT_DATA_INTERVAL = 5 * 60;
     private PackageManager m_PackageManager;
@@ -28,7 +28,7 @@ public class BackgroundTrafficSensor extends AbstractPeriodicSensor implements I
      *
      * @param context global information about Kraken.Me app
      */
-    public BackgroundTrafficSensor(Context context) {
+    public BackgroundTrafficEvent(Context context) {
         super(context);
         setDataIntervallInSec(INIT_DATA_INTERVAL);
         m_PackageManager = this.context.getPackageManager();

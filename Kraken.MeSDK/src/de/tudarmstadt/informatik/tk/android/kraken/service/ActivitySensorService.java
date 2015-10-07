@@ -6,7 +6,7 @@ import android.util.Log;
 
 import com.google.android.gms.location.ActivityRecognitionResult;
 
-import de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.triggered.ActivitySensor;
+import de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.impl.triggered.MotionActivityEvent;
 
 public class ActivitySensorService extends IntentService {
 
@@ -24,10 +24,10 @@ public class ActivitySensorService extends IntentService {
             Log.d(TAG, "The activity recognition found.");
 
             ActivityRecognitionResult result = ActivityRecognitionResult.extractResult(intent);
-            ActivitySensor activitySensor = ActivitySensor.getInstance();
+            MotionActivityEvent motionActivityEvent = MotionActivityEvent.getInstance();
 
-            if (result != null && activitySensor != null) {
-                activitySensor.handleData(result);
+            if (result != null && motionActivityEvent != null) {
+                motionActivityEvent.handleData(result);
             } else {
                 Log.e(TAG, "Cannot extract recognition result!");
             }

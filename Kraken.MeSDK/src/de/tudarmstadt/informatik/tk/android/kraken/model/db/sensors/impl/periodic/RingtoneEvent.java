@@ -1,20 +1,20 @@
-package de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.periodic;
+package de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.impl.periodic;
 
 import android.content.Context;
 import android.media.AudioManager;
 
 import de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.ESensorType;
-import de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.abstract_sensors.AbstractPeriodicSensor;
-import de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.interfaces.ISensor;
+import de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.AbstractPeriodicSensor;
+import de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.ISensor;
 
 
-public class RingtoneSensor extends AbstractPeriodicSensor implements ISensor {
+public class RingtoneEvent extends AbstractPeriodicSensor implements ISensor {
 
     private static final int INIT_DATA_INTERVALL = 60;
     private AudioManager m_audioManager;
     private int m_intLastRingerMode = -1;
 
-    public RingtoneSensor(Context context) {
+    public RingtoneEvent(Context context) {
         super(context);
         setDataIntervallInSec(INIT_DATA_INTERVALL);
         m_audioManager = (AudioManager) this.context.getSystemService(Context.AUDIO_SERVICE);

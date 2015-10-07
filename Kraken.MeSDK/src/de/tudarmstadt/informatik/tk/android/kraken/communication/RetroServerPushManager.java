@@ -12,7 +12,6 @@ import java.util.Map;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
 
 import de.greenrobot.dao.AbstractDao;
 import de.tudarmstadt.informatik.tk.android.kraken.KrakenServiceManager;
@@ -30,7 +29,7 @@ import de.tudarmstadt.informatik.tk.android.kraken.model.api.EventUploadRequest;
 import de.tudarmstadt.informatik.tk.android.kraken.model.api.sensors.AccelerometerSensorRequest;
 import de.tudarmstadt.informatik.tk.android.kraken.model.api.sensors.PositionSensorRequest;
 import de.tudarmstadt.informatik.tk.android.kraken.model.api.sensors.SensorType;
-import de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.interfaces.ISensor;
+import de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.ISensor;
 import de.tudarmstadt.informatik.tk.android.kraken.service.KrakenService;
 import retrofit.Callback;
 import retrofit.RetrofitError;

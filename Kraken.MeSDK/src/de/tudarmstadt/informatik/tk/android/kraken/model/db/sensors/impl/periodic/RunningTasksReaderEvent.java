@@ -1,4 +1,4 @@
-package de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.periodic;
+package de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.impl.periodic;
 
 import android.app.ActivityManager;
 import android.app.ActivityManager.RunningTaskInfo;
@@ -8,17 +8,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.ESensorType;
-import de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.abstract_sensors.AbstractPeriodicSensor;
-import de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.interfaces.ISensor;
+import de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.AbstractPeriodicSensor;
+import de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.ISensor;
 
 
-public class RunningTasksReader extends AbstractPeriodicSensor implements ISensor {
+public class RunningTasksReaderEvent extends AbstractPeriodicSensor implements ISensor {
 
     private static final int MAXIMUM_TASKS = 10;
     private ActivityManager m_activityManager;
     private ArrayList<String> m_liLastTasks = new ArrayList<String>();
 
-    public RunningTasksReader(Context context) {
+    public RunningTasksReaderEvent(Context context) {
         super(context);
         setDataIntervallInSec(30);
         m_activityManager = (ActivityManager) this.context.getSystemService(Context.ACTIVITY_SERVICE);

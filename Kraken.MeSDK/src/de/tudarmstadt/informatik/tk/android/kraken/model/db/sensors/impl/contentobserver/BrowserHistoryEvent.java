@@ -1,4 +1,4 @@
-package de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.contentobserver;
+package de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.impl.contentobserver;
 
 import android.content.Context;
 import android.net.Uri;
@@ -6,13 +6,13 @@ import android.net.Uri;
 import java.lang.reflect.Method;
 
 import de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.ESensorType;
-import de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.abstract_sensors.AbstractContentObserverSensor;
+import de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.AbstractContentObserverSensor;
 
 
 /**
  * @author Karsten Planz
  */
-public class BrowserHistorySensor extends AbstractContentObserverSensor {
+public class BrowserHistoryEvent extends AbstractContentObserverSensor {
 
 //    protected static final Uri URI_BROWSER_HISTORY = Browser.BOOKMARKS_URI;
     protected static final Uri URI_CHROME_HISTORY = Uri.parse("content://com.android.chrome.browser/bookmarks");
@@ -22,7 +22,7 @@ public class BrowserHistorySensor extends AbstractContentObserverSensor {
     private Method m_checkDifferenceMethodForHistoryChange;
     private Method m_getKeyMethodForSensorContact;
 
-    public BrowserHistorySensor(Context context) {
+    public BrowserHistoryEvent(Context context) {
         super(context);
     }
 

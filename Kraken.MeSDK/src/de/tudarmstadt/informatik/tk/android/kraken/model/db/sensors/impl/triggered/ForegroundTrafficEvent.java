@@ -1,4 +1,4 @@
-package de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.triggered;
+package de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.impl.triggered;
 
 import android.app.ActivityManager;
 import android.content.BroadcastReceiver;
@@ -9,7 +9,7 @@ import android.content.pm.PackageManager;
 
 import de.tudarmstadt.informatik.tk.android.kraken.communication.EPushType;
 import de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.ESensorType;
-import de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.abstract_sensors.AbstractTriggeredSensor;
+import de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.AbstractTriggeredSensor;
 import de.tudarmstadt.informatik.tk.android.kraken.util.sensors.AccessibilityEventFilter;
 
 /**
@@ -17,13 +17,13 @@ import de.tudarmstadt.informatik.tk.android.kraken.util.sensors.AccessibilityEve
  * The sensor collect data if a AccessibilityEvent is happen.
  * Created by Stefan Hacker on 12.11.14.
  */
-public class ForegroundTrafficSensor extends AbstractTriggeredSensor {
+public class ForegroundTrafficEvent extends AbstractTriggeredSensor {
 
     private static String EVENT_SCREEN_OFF = "0";
     private static String EVENT_SCREEN_ON = "1";
     public static String EVENT_START_KRAKEN = "2";
 
-    public ForegroundTrafficSensor(Context context) {
+    public ForegroundTrafficEvent(Context context) {
         super(context);
     }
 

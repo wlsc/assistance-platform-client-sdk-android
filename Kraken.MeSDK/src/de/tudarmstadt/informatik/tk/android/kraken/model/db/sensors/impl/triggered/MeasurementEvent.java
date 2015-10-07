@@ -1,14 +1,14 @@
-package de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.triggered;
+package de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.impl.triggered;
 
 import android.content.Context;
 
 import de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.ESensorType;
-import de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.abstract_sensors.AbstractTriggeredSensor;
+import de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.AbstractTriggeredSensor;
 
 
-public class MeasurementSensor extends AbstractTriggeredSensor {
+public class MeasurementEvent extends AbstractTriggeredSensor {
 
-    public MeasurementSensor(Context context) {
+    public MeasurementEvent(Context context) {
         super(context);
     }
 

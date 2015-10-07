@@ -1,4 +1,4 @@
-package de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.periodic;
+package de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.impl.periodic;
 
 import android.app.ActivityManager;
 import android.app.ActivityManager.RunningAppProcessInfo;
@@ -9,17 +9,17 @@ import java.util.Calendar;
 import java.util.List;
 
 import de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.ESensorType;
-import de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.abstract_sensors.AbstractPeriodicSensor;
-import de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.interfaces.ISensor;
+import de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.AbstractPeriodicSensor;
+import de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.ISensor;
 
 
-public class RunningProcessesReader extends AbstractPeriodicSensor implements ISensor {
+public class RunningProcessesReaderEvent extends AbstractPeriodicSensor implements ISensor {
 
     private ActivityManager m_activityManager;
     // private Query<SensorRunningProcesses> m_query;
     private ArrayList<String> m_liLastProcesses = new ArrayList<String>();
 
-    public RunningProcessesReader(Context context) {
+    public RunningProcessesReaderEvent(Context context) {
         super(context);
         setDataIntervallInSec(30);
         m_activityManager = (ActivityManager) this.context.getSystemService(Context.ACTIVITY_SERVICE);

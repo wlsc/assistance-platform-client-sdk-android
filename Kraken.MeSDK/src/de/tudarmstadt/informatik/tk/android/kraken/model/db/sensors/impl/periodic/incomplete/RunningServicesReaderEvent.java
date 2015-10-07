@@ -1,7 +1,6 @@
-package de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.periodic.incomplete;
+package de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.impl.periodic.incomplete;
 
 import android.app.ActivityManager;
-import android.app.ActivityManager.RunningAppProcessInfo;
 import android.app.ActivityManager.RunningServiceInfo;
 import android.content.Context;
 
@@ -9,18 +8,18 @@ import java.util.LinkedList;
 import java.util.List;
 
 import de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.ESensorType;
-import de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.abstract_sensors.AbstractPeriodicSensor;
-import de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.interfaces.ISensor;
+import de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.AbstractPeriodicSensor;
+import de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.ISensor;
 
 
-public class RunningAppsReader extends AbstractPeriodicSensor implements ISensor {
+public class RunningServicesReaderEvent extends AbstractPeriodicSensor implements ISensor {
 
     private static final int MAXIMUM_SERVICES = 20;
     private ActivityManager m_activityManager;
     @SuppressWarnings("unused")
     private List<String> m_liLastServices = new LinkedList<String>();
 
-    public RunningAppsReader(Context context) {
+    public RunningServicesReaderEvent(Context context) {
         super(context);
         m_activityManager = (ActivityManager) this.context.getSystemService(Context.ACTIVITY_SERVICE);
 
@@ -41,11 +40,12 @@ public class RunningAppsReader extends AbstractPeriodicSensor implements ISensor
 
     }
 
+    @SuppressWarnings("unused")
     @Override
     protected void getData() {
 
         List<RunningServiceInfo> liServices = m_activityManager.getRunningServices(MAXIMUM_SERVICES);
-        List<RunningAppProcessInfo> runningAppProcesses = m_activityManager.getRunningAppProcesses();
+
         // liTasks.get(0).
 
         // Account[] accounts = m_activityManager.getAccounts();

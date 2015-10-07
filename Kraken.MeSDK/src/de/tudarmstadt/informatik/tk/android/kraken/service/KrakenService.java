@@ -30,7 +30,7 @@ import de.tudarmstadt.informatik.tk.android.kraken.db.DbModuleInstallation;
 import de.tudarmstadt.informatik.tk.android.kraken.db.DbModuleInstallationDao;
 import de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.ECommandType;
 import de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.SensorManager;
-import de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.interfaces.ISensor;
+import de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.ISensor;
 
 
 public class KrakenService extends Service implements Callback {

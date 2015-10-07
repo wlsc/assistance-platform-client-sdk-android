@@ -1,4 +1,4 @@
-package de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.abstract_sensors;
+package de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors;
 
 import android.content.Context;
 import android.util.Log;

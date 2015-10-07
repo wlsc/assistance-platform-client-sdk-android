@@ -8,21 +8,20 @@ import java.util.List;
 
 import de.tudarmstadt.informatik.tk.android.kraken.communication.RetroServerPushManager;
 import de.tudarmstadt.informatik.tk.android.kraken.db.DaoSession;
-import de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.contentobserver.BrowserHistorySensor;
-import de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.contentobserver.CalendarSensor;
-import de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.contentobserver.CallLogSensor;
-import de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.contentobserver.ContactsSensor;
-import de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.interfaces.ISensor;
-import de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.periodic.BackgroundTrafficSensor;
-import de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.periodic.RingtoneSensor;
-import de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.triggered.AccelerometerSensor;
-import de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.triggered.ActivitySensor;
-import de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.triggered.ConnectionSensor;
-import de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.triggered.ForegroundEventSensor;
-import de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.triggered.ForegroundTrafficSensor;
-import de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.triggered.LightSensor;
-import de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.triggered.LocationSensor;
-import de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.triggered.MeasurementSensor;
+import de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.impl.contentobserver.BrowserHistoryEvent;
+import de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.impl.contentobserver.CalendarEvent;
+import de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.impl.contentobserver.CallLogEvent;
+import de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.impl.contentobserver.ContactsEvent;
+import de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.impl.periodic.BackgroundTrafficEvent;
+import de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.impl.periodic.RingtoneEvent;
+import de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.impl.triggered.AccelerometerSensor;
+import de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.impl.triggered.MotionActivityEvent;
+import de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.impl.triggered.ConnectionSensor;
+import de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.impl.triggered.ForegroundEvent;
+import de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.impl.triggered.ForegroundTrafficEvent;
+import de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.impl.triggered.LightSensor;
+import de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.impl.triggered.LocationSensor;
+import de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.impl.triggered.MeasurementEvent;
 
 
 public class SensorManager {
@@ -53,9 +52,9 @@ public class SensorManager {
         m_liSensors.add(accelerometerSensor);
         retroServerPushManager.setPushType(accelerometerSensor, accelerometerSensor.getPushType());
 
-        ActivitySensor activitySensor = new ActivitySensor(context);
-        m_liSensors.add(activitySensor);
-        retroServerPushManager.setPushType(activitySensor, activitySensor.getPushType());
+        MotionActivityEvent motionActivityEvent = new MotionActivityEvent(context);
+        m_liSensors.add(motionActivityEvent);
+        retroServerPushManager.setPushType(motionActivityEvent, motionActivityEvent.getPushType());
 
         // works
         LightSensor lightSensor = new LightSensor(context);
@@ -67,9 +66,9 @@ public class SensorManager {
         m_liSensors.add(locationSensor);
         retroServerPushManager.setPushType(locationSensor, locationSensor.getPushType());
 
-        MeasurementSensor measurementSensor = new MeasurementSensor(context);
-        m_liSensors.add(measurementSensor);
-        retroServerPushManager.setPushType(measurementSensor, measurementSensor.getPushType());
+        MeasurementEvent measurementEvent = new MeasurementEvent(context);
+        m_liSensors.add(measurementEvent);
+        retroServerPushManager.setPushType(measurementEvent, measurementEvent.getPushType());
 
         // works
         ConnectionSensor connectionSensor = new ConnectionSensor(context);
@@ -77,14 +76,14 @@ public class SensorManager {
         retroServerPushManager.setPushType(connectionSensor, connectionSensor.getPushType());
 
         //new foreground traffic
-        ForegroundTrafficSensor foregroundTrafficSensor = new ForegroundTrafficSensor(context);
-        m_liSensors.add(foregroundTrafficSensor);
-        retroServerPushManager.setPushType(foregroundTrafficSensor, foregroundTrafficSensor.getPushType());
+        ForegroundTrafficEvent foregroundTrafficEvent = new ForegroundTrafficEvent(context);
+        m_liSensors.add(foregroundTrafficEvent);
+        retroServerPushManager.setPushType(foregroundTrafficEvent, foregroundTrafficEvent.getPushType());
 
         //new periodic background traffic
-        BackgroundTrafficSensor backgroundTrafficSensor = new BackgroundTrafficSensor(context);
-        m_liSensors.add(backgroundTrafficSensor);
-        retroServerPushManager.setPushType(backgroundTrafficSensor, backgroundTrafficSensor.getPushType());
+        BackgroundTrafficEvent backgroundTrafficEvent = new BackgroundTrafficEvent(context);
+        m_liSensors.add(backgroundTrafficEvent);
+        retroServerPushManager.setPushType(backgroundTrafficEvent, backgroundTrafficEvent.getPushType());
 
         // loudness sensor is blocking microphone and consuming too much battery
         // LoudnessSensor loudnessSensor = new LoudnessSensor(context);
@@ -92,29 +91,29 @@ public class SensorManager {
         // ServerPushManager.getInstance(context).setPushType(loudnessSensor, loudnessSensor.getPushType());
 
         // periodic
-        RingtoneSensor ringtoneSensor = new RingtoneSensor(context);
-        m_liSensors.add(ringtoneSensor);
-        retroServerPushManager.setPushType(ringtoneSensor, ringtoneSensor.getPushType());
+        RingtoneEvent ringtoneEvent = new RingtoneEvent(context);
+        m_liSensors.add(ringtoneEvent);
+        retroServerPushManager.setPushType(ringtoneEvent, ringtoneEvent.getPushType());
 
-        CalendarSensor calendarSensor = new CalendarSensor(context);
-        m_liSensors.add(calendarSensor);
-        retroServerPushManager.setPushType(calendarSensor, calendarSensor.getPushType());
+        CalendarEvent calendarEvent = new CalendarEvent(context);
+        m_liSensors.add(calendarEvent);
+        retroServerPushManager.setPushType(calendarEvent, calendarEvent.getPushType());
 
-        ContactsSensor contactsSensor = new ContactsSensor(context);
-        m_liSensors.add(contactsSensor);
-        retroServerPushManager.setPushType(contactsSensor, contactsSensor.getPushType());
+        ContactsEvent contactsEvent = new ContactsEvent(context);
+        m_liSensors.add(contactsEvent);
+        retroServerPushManager.setPushType(contactsEvent, contactsEvent.getPushType());
 
-        CallLogSensor callLogSensor = new CallLogSensor(context);
-        m_liSensors.add(callLogSensor);
-        retroServerPushManager.setPushType(callLogSensor, callLogSensor.getPushType());
+        CallLogEvent callLogEvent = new CallLogEvent(context);
+        m_liSensors.add(callLogEvent);
+        retroServerPushManager.setPushType(callLogEvent, callLogEvent.getPushType());
 
-        BrowserHistorySensor browserHistorySensor = new BrowserHistorySensor(context);
-        m_liSensors.add(browserHistorySensor);
-        retroServerPushManager.setPushType(browserHistorySensor, browserHistorySensor.getPushType());
+        BrowserHistoryEvent browserHistoryEvent = new BrowserHistoryEvent(context);
+        m_liSensors.add(browserHistoryEvent);
+        retroServerPushManager.setPushType(browserHistoryEvent, browserHistoryEvent.getPushType());
 
-        ForegroundEventSensor foregroundEventSensor = new ForegroundEventSensor(context);
-        m_liSensors.add(foregroundEventSensor);
-        retroServerPushManager.setPushType(foregroundEventSensor, foregroundEventSensor.getPushType());
+        ForegroundEvent foregroundEvent = new ForegroundEvent(context);
+        m_liSensors.add(foregroundEvent);
+        retroServerPushManager.setPushType(foregroundEvent, foregroundEvent.getPushType());
 
         for (ISensor sensor : m_liSensors) {
             m_mapSensors.put(sensor.getSensorType(), sensor);

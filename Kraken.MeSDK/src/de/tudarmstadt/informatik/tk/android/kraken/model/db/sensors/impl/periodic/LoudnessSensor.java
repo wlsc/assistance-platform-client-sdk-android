@@ -1,4 +1,4 @@
-package de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.periodic;
+package de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.impl.periodic;
 
 import android.content.Context;
 import android.media.AudioFormat;
@@ -14,7 +14,7 @@ import java.util.Calendar;
 import java.util.LinkedList;
 
 import de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.ESensorType;
-import de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.abstract_sensors.AbstractPeriodicSensor;
+import de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.AbstractPeriodicSensor;
 
 
 public class LoudnessSensor extends AbstractPeriodicSensor implements Callback {

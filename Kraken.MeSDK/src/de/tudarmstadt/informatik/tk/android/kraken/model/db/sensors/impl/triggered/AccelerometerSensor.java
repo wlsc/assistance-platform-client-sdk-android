@@ -1,4 +1,4 @@
-package de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.triggered;
+package de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.impl.triggered;
 
 import android.content.Context;
 import android.hardware.Sensor;
@@ -13,7 +13,7 @@ import java.util.Locale;
 import de.tudarmstadt.informatik.tk.android.kraken.db.DbAccelerometerSensor;
 import de.tudarmstadt.informatik.tk.android.kraken.db.DbAccelerometerSensorDao;
 import de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.ESensorType;
-import de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.abstract_sensors.AbstractTriggeredSensor;
+import de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.AbstractTriggeredSensor;
 import de.tudarmstadt.informatik.tk.android.kraken.util.DateUtils;
 
 public class AccelerometerSensor extends AbstractTriggeredSensor implements SensorEventListener {

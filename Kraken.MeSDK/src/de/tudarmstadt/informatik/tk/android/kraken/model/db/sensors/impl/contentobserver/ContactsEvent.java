@@ -1,4 +1,4 @@
-package de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.contentobserver;
+package de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.impl.contentobserver;
 
 import android.content.Context;
 import android.database.Cursor;
@@ -13,9 +13,9 @@ import java.lang.reflect.Method;
 
 import de.tudarmstadt.informatik.tk.android.kraken.communication.EPushType;
 import de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.ESensorType;
-import de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.abstract_sensors.AbstractContentObserverSensor;
+import de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.AbstractContentObserverSensor;
 
-public class ContactsSensor extends AbstractContentObserverSensor {
+public class ContactsEvent extends AbstractContentObserverSensor {
 
     private static final Uri URI_EMAIL = Email.CONTENT_URI;
     private static final Uri URI_DATA = Data.CONTENT_URI;
@@ -34,7 +34,7 @@ public class ContactsSensor extends AbstractContentObserverSensor {
 
     private boolean m_bFlushToServer;
 
-    public ContactsSensor(Context context) {
+    public ContactsEvent(Context context) {
         super(context);
     }
 
