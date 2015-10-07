@@ -1,4 +1,4 @@
-package de.tudarmstadt.informatik.tk.android.kraken.api.endpoint;
+package de.tudarmstadt.informatik.tk.android.kraken.model.api.endpoint;
 
 import de.tudarmstadt.informatik.tk.android.kraken.Config;
 import de.tudarmstadt.informatik.tk.android.kraken.model.api.EventUploadRequest;

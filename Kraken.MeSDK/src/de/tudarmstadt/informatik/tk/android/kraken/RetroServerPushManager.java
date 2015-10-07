@@ -1,4 +1,4 @@
-package de.tudarmstadt.informatik.tk.android.kraken.api;
+package de.tudarmstadt.informatik.tk.android.kraken;
 
 import android.content.Context;
 import android.util.Log;
@@ -14,10 +14,9 @@ import java.util.concurrent.Future;
 import java.util.concurrent.ScheduledExecutorService;
 
 import de.greenrobot.dao.AbstractDao;
-import de.tudarmstadt.informatik.tk.android.kraken.ServiceManager;
-import de.tudarmstadt.informatik.tk.android.kraken.PreferenceManager;
-import de.tudarmstadt.informatik.tk.android.kraken.api.endpoint.EventUploadEndpoint;
-import de.tudarmstadt.informatik.tk.android.kraken.db.DbManager;
+import de.tudarmstadt.informatik.tk.android.kraken.model.api.endpoint.EventUploadEndpoint;
+import de.tudarmstadt.informatik.tk.android.kraken.model.api.endpoint.ServiceGenerator;
+import de.tudarmstadt.informatik.tk.android.kraken.provider.DbProvider;
 import de.tudarmstadt.informatik.tk.android.kraken.db.DbAccelerometerSensor;
 import de.tudarmstadt.informatik.tk.android.kraken.db.DbAccelerometerSensorDao;
 import de.tudarmstadt.informatik.tk.android.kraken.db.DbPositionSensor;
@@ -134,11 +133,11 @@ public class RetroServerPushManager {
         }
 
         if (dbAccelerometerSensorDao == null) {
-            dbAccelerometerSensorDao = DbManager.getInstance(mContext).getDaoSession().getDbAccelerometerSensorDao();
+            dbAccelerometerSensorDao = DbProvider.getInstance(mContext).getDaoSession().getDbAccelerometerSensorDao();
         }
 
         if (dbPositionSensorDao == null) {
-            dbPositionSensorDao = DbManager.getInstance(mContext).getDaoSession().getDbPositionSensorDao();
+            dbPositionSensorDao = DbProvider.getInstance(mContext).getDaoSession().getDbPositionSensorDao();
         }
     }
 
@@ -375,7 +374,7 @@ public class RetroServerPushManager {
         if (dbAccelerometerSensors != null) {
 
             if (dbAccelerometerSensorDao == null) {
-                dbAccelerometerSensorDao = DbManager.getInstance(mContext).getDaoSession().getDbAccelerometerSensorDao();
+                dbAccelerometerSensorDao = DbProvider.getInstance(mContext).getDaoSession().getDbAccelerometerSensorDao();
             }
 
             dbAccelerometerSensorDao.deleteInTx(dbAccelerometerSensors);
@@ -384,7 +383,7 @@ public class RetroServerPushManager {
         if (dbPositionSensors != null) {
 
             if (dbPositionSensorDao == null) {
-                dbPositionSensorDao = DbManager.getInstance(mContext).getDaoSession().getDbPositionSensorDao();
+                dbPositionSensorDao = DbProvider.getInstance(mContext).getDaoSession().getDbPositionSensorDao();
             }
 
             dbPositionSensorDao.deleteInTx(dbPositionSensors);

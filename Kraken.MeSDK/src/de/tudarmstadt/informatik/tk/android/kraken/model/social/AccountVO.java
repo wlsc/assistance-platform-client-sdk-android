@@ -1,8 +1,8 @@
-package de.tudarmstadt.informatik.tk.android.kraken.common.authentication;
+package de.tudarmstadt.informatik.tk.android.kraken.model.social;
 
 import java.io.Serializable;
 
-import de.tudarmstadt.informatik.tk.android.kraken.common.SocialNetworkProvider;
+import de.tudarmstadt.informatik.tk.android.kraken.provider.SocialNetworkProvider;
 import de.tudarmstadt.informatik.tk.android.kraken.model.enums.PermissionLevel;
 
 

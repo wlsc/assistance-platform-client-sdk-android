@@ -18,7 +18,7 @@ import de.tudarmstadt.informatik.tk.android.kraken.R;
 import de.tudarmstadt.informatik.tk.android.kraken.model.social.AbstractSocialLogin;
 import de.tudarmstadt.informatik.tk.android.kraken.model.social.SocialLogin;
 import de.tudarmstadt.informatik.tk.android.kraken.ui.activities.accounts.AccountsAdapter;
-import de.tudarmstadt.informatik.tk.android.kraken.common.SocialNetworkProvider;
+import de.tudarmstadt.informatik.tk.android.kraken.provider.SocialNetworkProvider;
 
 public class GoogleSocialLogin extends AbstractSocialLogin implements SocialLogin {
 

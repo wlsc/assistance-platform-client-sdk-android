@@ -15,8 +15,8 @@ import android.net.Uri;
 import android.util.Log;
 import de.tudarmstadt.informatik.tk.android.kraken.R;
 import de.tudarmstadt.informatik.tk.android.kraken.ui.activities.accounts.AccountsAdapter;
-import de.tudarmstadt.informatik.tk.android.kraken.api.Authentication;
-import de.tudarmstadt.informatik.tk.android.kraken.common.SocialNetworkProvider;
+import de.tudarmstadt.informatik.tk.android.kraken.provider.SocialAuthProvider;
+import de.tudarmstadt.informatik.tk.android.kraken.provider.SocialNetworkProvider;
 
 public class TwitterSocialLogin extends AbstractSocialLogin implements SocialLogin {
 
@@ -150,7 +150,7 @@ public class TwitterSocialLogin extends AbstractSocialLogin implements SocialLog
 	
     public void completeLogin()
     {
-    	Authentication.getInstance(m_context).setAuthentication(getSocialNetworkProvider(), m_accessToken.getToken());
+    	SocialAuthProvider.getInstance(m_context).setAuthentication(getSocialNetworkProvider(), m_accessToken.getToken());
 		m_context.runOnUiThread(new Runnable() {
 			@Override
 			public void run() {

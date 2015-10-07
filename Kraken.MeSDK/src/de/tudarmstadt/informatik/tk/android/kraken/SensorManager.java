@@ -6,7 +6,6 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
-import de.tudarmstadt.informatik.tk.android.kraken.api.RetroServerPushManager;
 import de.tudarmstadt.informatik.tk.android.kraken.db.DaoSession;
 import de.tudarmstadt.informatik.tk.android.kraken.model.enums.ESensorType;
 import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.ISensor;

@@ -18,7 +18,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-import de.tudarmstadt.informatik.tk.android.kraken.db.DbManager;
+import de.tudarmstadt.informatik.tk.android.kraken.provider.DbProvider;
 import de.tudarmstadt.informatik.tk.android.kraken.db.DbMotionActivityEvent;
 import de.tudarmstadt.informatik.tk.android.kraken.db.DbMotionActivityEventDao;
 import de.tudarmstadt.informatik.tk.android.kraken.model.enums.ESensorType;
@@ -65,7 +65,7 @@ public class MotionActivityEvent extends AbstractTriggeredEvent implements Googl
                 .build();
 
         if (dbMotionActivityEventDao == null) {
-            dbMotionActivityEventDao = DbManager.getInstance(context).getDaoSession().getDbMotionActivityEventDao();
+            dbMotionActivityEventDao = DbProvider.getInstance(context).getDaoSession().getDbMotionActivityEventDao();
         }
     }
 

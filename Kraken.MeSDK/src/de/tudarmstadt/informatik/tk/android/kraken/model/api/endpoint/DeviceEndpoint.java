@@ -1,4 +1,4 @@
-package de.tudarmstadt.informatik.tk.android.kraken.api.endpoint;
+package de.tudarmstadt.informatik.tk.android.kraken.model.api.endpoint;
 
 import java.util.List;
 

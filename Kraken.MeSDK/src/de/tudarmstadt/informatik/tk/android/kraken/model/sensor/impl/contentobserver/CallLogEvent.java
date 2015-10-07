@@ -3,7 +3,7 @@ package de.tudarmstadt.informatik.tk.android.kraken.model.sensor.impl.contentobs
 import android.content.Context;
 import android.net.Uri;
 
-import de.tudarmstadt.informatik.tk.android.kraken.db.DbManager;
+import de.tudarmstadt.informatik.tk.android.kraken.provider.DbProvider;
 import de.tudarmstadt.informatik.tk.android.kraken.model.enums.ESensorType;
 import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.AbstractContentObserverEvent;
 
@@ -49,7 +49,7 @@ public class CallLogEvent extends AbstractContentObserverEvent {
     protected void syncData() {
 
         if (mDaoSession == null) {
-            mDaoSession = DbManager.getInstance(context).getDaoSession();
+            mDaoSession = DbProvider.getInstance(context).getDaoSession();
         }
         //throw new IllegalAccessError("no valid daoSession available!");
 

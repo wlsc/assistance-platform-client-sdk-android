@@ -2,7 +2,7 @@ package de.tudarmstadt.informatik.tk.android.kraken.model.social;
 
 import android.app.Activity;
 
-import de.tudarmstadt.informatik.tk.android.kraken.common.SocialNetworkProvider;
+import de.tudarmstadt.informatik.tk.android.kraken.provider.SocialNetworkProvider;
 import de.tudarmstadt.informatik.tk.android.kraken.ui.activities.accounts.AccountsAdapter;
 
 public interface SocialLogin {

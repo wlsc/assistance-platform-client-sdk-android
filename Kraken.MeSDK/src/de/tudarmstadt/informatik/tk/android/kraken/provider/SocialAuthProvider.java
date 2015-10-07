@@ -1,24 +1,23 @@
-package de.tudarmstadt.informatik.tk.android.kraken.api;
+package de.tudarmstadt.informatik.tk.android.kraken.provider;
 
 import android.content.Context;
 import android.content.SharedPreferences;
 
 import de.tudarmstadt.informatik.tk.android.kraken.Settings;
-import de.tudarmstadt.informatik.tk.android.kraken.common.SocialNetworkProvider;
 
-public class Authentication {
+public class SocialAuthProvider {
 
-    private static Authentication m_authentication = null;
+    private static SocialAuthProvider m_socialAuthProvider = null;
     private static SharedPreferences m_sharedPreferences;
     private static Context m_context;
 
-    public static Authentication getInstance(Context context) {
-        if (m_authentication == null) {
+    public static SocialAuthProvider getInstance(Context context) {
+        if (m_socialAuthProvider == null) {
             m_context = context;
-            m_authentication = new Authentication();
+            m_socialAuthProvider = new SocialAuthProvider();
             m_sharedPreferences = context.getApplicationContext().getSharedPreferences(Settings.PREFERENCES_NAME, Context.MODE_PRIVATE);
         }
-        return m_authentication;
+        return m_socialAuthProvider;
     }
 
     public void setAuthentication(SocialNetworkProvider provider, String strToken) {

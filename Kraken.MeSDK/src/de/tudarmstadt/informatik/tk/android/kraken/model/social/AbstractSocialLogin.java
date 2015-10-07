@@ -5,10 +5,9 @@ import android.os.Bundle;
 
 import org.json.JSONObject;
 
-import de.tudarmstadt.informatik.tk.android.kraken.api.Authentication;
+import de.tudarmstadt.informatik.tk.android.kraken.provider.SocialAuthProvider;
 import de.tudarmstadt.informatik.tk.android.kraken.model.enums.MessageType;
-import de.tudarmstadt.informatik.tk.android.kraken.common.SocialNetworkProvider;
-import de.tudarmstadt.informatik.tk.android.kraken.common.authentication.AccountVO;
+import de.tudarmstadt.informatik.tk.android.kraken.provider.SocialNetworkProvider;
 import de.tudarmstadt.informatik.tk.android.kraken.handler.IServerCommunicationResponseHandler;
 import de.tudarmstadt.informatik.tk.android.kraken.ui.activities.accounts.AccountsAdapter;
 
@@ -25,12 +24,12 @@ public abstract class AbstractSocialLogin implements SocialLogin {
 
     @Override
     public boolean isLoggedIn() {
-        return (Authentication.getInstance(m_ctxActivity).getAuthentication(getSocialNetworkProvider()) != null);
+        return (SocialAuthProvider.getInstance(m_ctxActivity).getAuthentication(getSocialNetworkProvider()) != null);
     }
 
     @Override
     public void logout(final AccountsAdapter adapter) {
-        Authentication.getInstance(m_ctxActivity).removeAuthentication(getSocialNetworkProvider());
+        SocialAuthProvider.getInstance(m_ctxActivity).removeAuthentication(getSocialNetworkProvider());
         m_ctxActivity.runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -101,7 +100,7 @@ public abstract class AbstractSocialLogin implements SocialLogin {
                         String strToken = jsonAccessToken.getString("token");
 
                         // get used AccessToken and save in Preferences
-                        Authentication.getInstance(m_ctxActivity).setAuthentication(provider, strToken);
+                        SocialAuthProvider.getInstance(m_ctxActivity).setAuthentication(provider, strToken);
 
                         m_ctxActivity.finish();
 

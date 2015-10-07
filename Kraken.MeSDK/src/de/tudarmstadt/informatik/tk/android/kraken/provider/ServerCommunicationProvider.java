@@ -1,10 +1,11 @@
-package de.tudarmstadt.informatik.tk.android.kraken.api;
+package de.tudarmstadt.informatik.tk.android.kraken.provider;
 
 import android.content.Context;
 import android.util.Log;
 
 import de.tudarmstadt.informatik.tk.android.kraken.PreferenceManager;
-import de.tudarmstadt.informatik.tk.android.kraken.api.endpoint.DeviceEndpoint;
+import de.tudarmstadt.informatik.tk.android.kraken.model.api.endpoint.ServiceGenerator;
+import de.tudarmstadt.informatik.tk.android.kraken.model.api.endpoint.DeviceEndpoint;
 import de.tudarmstadt.informatik.tk.android.kraken.model.api.device.DeviceRegistrationRequest;
 import retrofit.Callback;
 import retrofit.RetrofitError;
@@ -16,15 +17,15 @@ import retrofit.client.Response;
  * @author Wladimir Schmidt (wlsc.dev@gmail.com)
  * @date 07.08.2015
  */
-public class ServerCommunication {
+public class ServerCommunicationProvider {
 
-    private static final String TAG = ServerCommunication.class.getSimpleName();
+    private static final String TAG = ServerCommunicationProvider.class.getSimpleName();
 
     private static Context mContext;
 
-    private static ServerCommunication INSTANCE;
+    private static ServerCommunicationProvider INSTANCE;
 
-    private ServerCommunication() {
+    private ServerCommunicationProvider() {
     }
 
     /**
@@ -33,10 +34,10 @@ public class ServerCommunication {
      * @param context
      * @return
      */
-    public static ServerCommunication getInstance(Context context) {
+    public static ServerCommunicationProvider getInstance(Context context) {
 
         if (INSTANCE == null) {
-            INSTANCE = new ServerCommunication();
+            INSTANCE = new ServerCommunicationProvider();
         }
 
         mContext = context;
@@ -80,6 +81,8 @@ public class ServerCommunication {
             }
         });
     }
+
+//    public void
 
     /**
      * Saves device GCM registration id to db

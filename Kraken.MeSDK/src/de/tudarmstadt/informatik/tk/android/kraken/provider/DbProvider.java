@@ -1,18 +1,21 @@
 
-package de.tudarmstadt.informatik.tk.android.kraken.db;
+package de.tudarmstadt.informatik.tk.android.kraken.provider;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 
 import de.greenrobot.dao.identityscope.IdentityScopeType;
 import de.tudarmstadt.informatik.tk.android.kraken.Settings;
+import de.tudarmstadt.informatik.tk.android.kraken.db.DaoMaster;
+import de.tudarmstadt.informatik.tk.android.kraken.db.DaoSession;
+import de.tudarmstadt.informatik.tk.android.kraken.util.db.DbAssistanceOpenHelper;
 
 /**
  * Singleton database manager
  */
-public class DbManager {
+public class DbProvider {
 
-    private static DbManager INSTANCE;
+    private static DbProvider INSTANCE;
 
     private SQLiteDatabase mDb;
     private DaoMaster mDaoMaster;
@@ -23,7 +26,7 @@ public class DbManager {
      *
      * @param context
      */
-    private DbManager(Context context) {
+    private DbProvider(Context context) {
 
         DbAssistanceOpenHelper helper = new DbAssistanceOpenHelper(context, Settings.DATABASE_NAME, null);
         mDb = helper.getWritableDatabase();
@@ -38,10 +41,10 @@ public class DbManager {
      * @param context
      * @return
      */
-    public static DbManager getInstance(Context context) {
+    public static DbProvider getInstance(Context context) {
 
         if (INSTANCE == null) {
-            INSTANCE = new DbManager(context);
+            INSTANCE = new DbProvider(context);
         }
 
         return INSTANCE;

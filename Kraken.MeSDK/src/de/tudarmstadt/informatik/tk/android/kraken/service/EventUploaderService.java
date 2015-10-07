@@ -10,20 +10,22 @@ import com.google.android.gms.gcm.TaskParams;
 import java.util.LinkedList;
 import java.util.List;
 
-import de.tudarmstadt.informatik.tk.android.kraken.ServiceManager;
 import de.tudarmstadt.informatik.tk.android.kraken.PreferenceManager;
-import de.tudarmstadt.informatik.tk.android.kraken.api.ServiceGenerator;
-import de.tudarmstadt.informatik.tk.android.kraken.api.endpoint.EventUploadEndpoint;
-import de.tudarmstadt.informatik.tk.android.kraken.db.DbManager;
+import de.tudarmstadt.informatik.tk.android.kraken.ServiceManager;
+import de.tudarmstadt.informatik.tk.android.kraken.model.api.endpoint.ServiceGenerator;
+import de.tudarmstadt.informatik.tk.android.kraken.model.api.endpoint.EventUploadEndpoint;
 import de.tudarmstadt.informatik.tk.android.kraken.db.DbAccelerometerSensor;
 import de.tudarmstadt.informatik.tk.android.kraken.db.DbAccelerometerSensorDao;
+import de.tudarmstadt.informatik.tk.android.kraken.provider.DbProvider;
+import de.tudarmstadt.informatik.tk.android.kraken.db.DbMotionActivityEvent;
+import de.tudarmstadt.informatik.tk.android.kraken.db.DbMotionActivityEventDao;
 import de.tudarmstadt.informatik.tk.android.kraken.db.DbPositionSensor;
 import de.tudarmstadt.informatik.tk.android.kraken.db.DbPositionSensorDao;
-import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.Sensor;
 import de.tudarmstadt.informatik.tk.android.kraken.model.api.EventUploadRequest;
 import de.tudarmstadt.informatik.tk.android.kraken.model.api.sensors.AccelerometerSensorRequest;
 import de.tudarmstadt.informatik.tk.android.kraken.model.api.sensors.PositionSensorRequest;
 import de.tudarmstadt.informatik.tk.android.kraken.model.api.sensors.SensorType;
+import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.Sensor;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
@@ -32,9 +34,9 @@ import retrofit.client.Response;
  * @author Wladimir Schmidt (wlsc.dev@gmail.com)
  * @date 07.10.2015
  */
-public class UploadService extends GcmTaskService {
+public class EventUploaderService extends GcmTaskService {
 
-    private static final String TAG = UploadService.class.getSimpleName();
+    private static final String TAG = EventUploaderService.class.getSimpleName();
 
     private static final int PUSH_NUMBER_OF_EACH_ELEMENTS = 50;
 
@@ -56,9 +58,11 @@ public class UploadService extends GcmTaskService {
 
     private List<DbAccelerometerSensor> dbAccelerometerSensors;
     private List<DbPositionSensor> dbPositionSensors;
+    private List<DbMotionActivityEvent> dbMotionActivityEvents;
 
     private static DbAccelerometerSensorDao dbAccelerometerSensorDao;
     private static DbPositionSensorDao dbPositionSensorDao;
+    private static DbMotionActivityEventDao dbMotionActivityEventDao;
 
     @Override
     public void onCreate() {
@@ -77,11 +81,15 @@ public class UploadService extends GcmTaskService {
         }
 
         if (dbAccelerometerSensorDao == null) {
-            dbAccelerometerSensorDao = DbManager.getInstance(getApplicationContext()).getDaoSession().getDbAccelerometerSensorDao();
+            dbAccelerometerSensorDao = DbProvider.getInstance(getApplicationContext()).getDaoSession().getDbAccelerometerSensorDao();
         }
 
         if (dbPositionSensorDao == null) {
-            dbPositionSensorDao = DbManager.getInstance(getApplicationContext()).getDaoSession().getDbPositionSensorDao();
+            dbPositionSensorDao = DbProvider.getInstance(getApplicationContext()).getDaoSession().getDbPositionSensorDao();
+        }
+
+        if (dbMotionActivityEventDao == null) {
+            dbMotionActivityEventDao = DbProvider.getInstance(getApplicationContext()).getDaoSession().getDbMotionActivityEventDao();
         }
 
         if (periodicTask == null) {
@@ -89,7 +97,7 @@ public class UploadService extends GcmTaskService {
             Log.d(TAG, "Setting up periodic task...");
 
             periodicTask = new PeriodicTask.Builder()
-                    .setService(UploadService.class)
+                    .setService(EventUploaderService.class)
                     .setPeriod(periodSecs)
                     .setFlex(flexSecs)
                     .setTag(tag)
@@ -106,7 +114,7 @@ public class UploadService extends GcmTaskService {
     public int onRunTask(TaskParams taskParams) {
         // Do some upload work.
 
-        Log.d(TAG, "On run task executed");
+        Log.d(TAG, "onRunTask executed");
 
         EventUploadRequest eventUploadRequest = new EventUploadRequest();
 
@@ -205,6 +213,7 @@ public class UploadService extends GcmTaskService {
         return result;
     }
 
+
     /**
      * Pushes events data to server
      *
@@ -254,25 +263,46 @@ public class UploadService extends GcmTaskService {
 
         Log.d(TAG, "Removing sent event data from db...");
 
-        if (dbAccelerometerSensors != null) {
+        // remove transmitted accelerometer sensor data
+        if (dbAccelerometerSensors != null && !dbAccelerometerSensors.isEmpty()) {
 
             if (dbAccelerometerSensorDao == null) {
-                dbAccelerometerSensorDao = DbManager.getInstance(getApplicationContext()).getDaoSession().getDbAccelerometerSensorDao();
+                dbAccelerometerSensorDao = DbProvider.getInstance(getApplicationContext()).getDaoSession().getDbAccelerometerSensorDao();
             }
 
             dbAccelerometerSensorDao.deleteInTx(dbAccelerometerSensors);
         }
 
-        if (dbPositionSensors != null) {
+        // remove transmitted location sensor data
+        if (dbPositionSensors != null && !dbPositionSensors.isEmpty()) {
 
             if (dbPositionSensorDao == null) {
-                dbPositionSensorDao = DbManager.getInstance(getApplicationContext()).getDaoSession().getDbPositionSensorDao();
+                dbPositionSensorDao = DbProvider.getInstance(getApplicationContext()).getDaoSession().getDbPositionSensorDao();
             }
 
             dbPositionSensorDao.deleteInTx(dbPositionSensors);
         }
 
+        // remove transmitted motion activity events
+        if (dbMotionActivityEvents != null && !dbMotionActivityEvents.isEmpty()) {
+
+            if (dbMotionActivityEventDao == null) {
+                dbMotionActivityEventDao = DbProvider.getInstance(getApplicationContext()).getDaoSession().getDbMotionActivityEventDao();
+            }
+
+            dbMotionActivityEventDao.deleteInTx(dbMotionActivityEvents);
+        }
+
         Log.d(TAG, "Finished removing data from db");
     }
 
+    @Override
+    public void onDestroy() {
+
+        dbAccelerometerSensorDao = null;
+        dbPositionSensorDao = null;
+        dbMotionActivityEventDao = null;
+
+        super.onDestroy();
+    }
 }

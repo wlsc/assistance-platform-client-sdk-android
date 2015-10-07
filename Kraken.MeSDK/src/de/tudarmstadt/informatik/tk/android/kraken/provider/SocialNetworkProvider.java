@@ -1,4 +1,4 @@
-package de.tudarmstadt.informatik.tk.android.kraken.common;
+package de.tudarmstadt.informatik.tk.android.kraken.provider;
 
 /**
  * Social network provider

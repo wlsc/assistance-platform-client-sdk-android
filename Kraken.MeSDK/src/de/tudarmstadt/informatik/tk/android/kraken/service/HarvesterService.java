@@ -23,9 +23,9 @@ import de.tudarmstadt.informatik.tk.android.kraken.ActivityCommunicator;
 import de.tudarmstadt.informatik.tk.android.kraken.Settings;
 import de.tudarmstadt.informatik.tk.android.kraken.PreferenceManager;
 import de.tudarmstadt.informatik.tk.android.kraken.R;
-import de.tudarmstadt.informatik.tk.android.kraken.api.RetroServerPushManager;
+import de.tudarmstadt.informatik.tk.android.kraken.RetroServerPushManager;
 import de.tudarmstadt.informatik.tk.android.kraken.db.DaoSession;
-import de.tudarmstadt.informatik.tk.android.kraken.db.DbManager;
+import de.tudarmstadt.informatik.tk.android.kraken.provider.DbProvider;
 import de.tudarmstadt.informatik.tk.android.kraken.db.DbModuleInstallation;
 import de.tudarmstadt.informatik.tk.android.kraken.db.DbModuleInstallationDao;
 import de.tudarmstadt.informatik.tk.android.kraken.model.enums.ECommandType;
@@ -45,7 +45,7 @@ public class HarvesterService extends Service implements Callback {
 
     private SensorManager mSensorManager;
     private PreferenceManager mPreferenceManager;
-    private DbManager mDbManager;
+    private DbProvider mDbProvider;
 
     private static DbModuleInstallationDao dbModuleInstallationDao;
 
@@ -60,7 +60,7 @@ public class HarvesterService extends Service implements Callback {
     }
 
     public DaoSession getDaoSession() {
-        return mDbManager.getDaoSession();
+        return mDbProvider.getDaoSession();
     }
 
     @Override
@@ -72,7 +72,7 @@ public class HarvesterService extends Service implements Callback {
         Log.d(TAG, "Service starting...");
 
         // Init database FIRST!
-        mDbManager = DbManager.getInstance(getApplicationContext());
+        mDbProvider = DbProvider.getInstance(getApplicationContext());
 
         mPreferenceManager = PreferenceManager.getInstance(getApplicationContext());
 
@@ -90,7 +90,7 @@ public class HarvesterService extends Service implements Callback {
             m_bIsRunning = true;
 
             if (dbModuleInstallationDao == null) {
-                dbModuleInstallationDao = mDbManager.getDaoSession().getDbModuleInstallationDao();
+                dbModuleInstallationDao = mDbProvider.getDaoSession().getDbModuleInstallationDao();
             }
 
             SharedPreferences sharedPreferences = android.preference.PreferenceManager.getDefaultSharedPreferences(getApplicationContext());

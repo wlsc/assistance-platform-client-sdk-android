@@ -11,7 +11,7 @@ import com.google.android.gms.gcm.GoogleCloudMessaging;
 
 import java.io.IOException;
 
-import de.tudarmstadt.informatik.tk.android.kraken.api.ServerCommunication;
+import de.tudarmstadt.informatik.tk.android.kraken.provider.ServerCommunicationProvider;
 
 public class GcmManager {
 
@@ -141,6 +141,6 @@ public class GcmManager {
 
         Log.d(TAG, "Sending GCM registration token to backend...");
 
-        ServerCommunication.getInstance(mContext).sendGcmRegistrationToken(registrationToken);
+        ServerCommunicationProvider.getInstance(mContext).sendGcmRegistrationToken(registrationToken);
     }
 }

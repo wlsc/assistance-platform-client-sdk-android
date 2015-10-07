@@ -1,4 +1,4 @@
-package de.tudarmstadt.informatik.tk.android.kraken.api;
+package de.tudarmstadt.informatik.tk.android.kraken.model.api.endpoint;
 
 import com.google.gson.GsonBuilder;
 

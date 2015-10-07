@@ -1,10 +1,10 @@
-package de.tudarmstadt.informatik.tk.android.kraken.db;
+package de.tudarmstadt.informatik.tk.android.kraken.util.db;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
-import de.greenrobot.dao.Property;
+import de.tudarmstadt.informatik.tk.android.kraken.db.DaoMaster;
 
 /**
  * @author Karsten Planz
@@ -40,28 +40,5 @@ public class DbAssistanceOpenHelper extends DaoMaster.OpenHelper {
             default:
                 return;
         }
-    }
-
-    /**
-     * Adds one more table to database
-     *
-     * @param db
-     * @param table
-     * @param property
-     * @param type
-     */
-    public void addColumn(SQLiteDatabase db, String table, Property property, String type) {
-        db.execSQL("ALTER TABLE '" + table + "' ADD '" + property.columnName + "' " + type);
-    }
-
-    /**
-     * Renames a given table
-     *
-     * @param db
-     * @param tableOld
-     * @param tableNew
-     */
-    public void renameTable(SQLiteDatabase db, String tableOld, String tableNew) {
-        db.execSQL("ALTER TABLE '" + tableOld + "' RENAME TO '" + tableNew + "'");
     }
 }

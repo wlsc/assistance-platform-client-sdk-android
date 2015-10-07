@@ -22,9 +22,9 @@ import de.greenrobot.dao.Property;
 import de.greenrobot.dao.query.Query;
 import de.greenrobot.dao.query.QueryBuilder;
 import de.tudarmstadt.informatik.tk.android.kraken.Settings;
-import de.tudarmstadt.informatik.tk.android.kraken.api.RetroServerPushManager;
+import de.tudarmstadt.informatik.tk.android.kraken.RetroServerPushManager;
 import de.tudarmstadt.informatik.tk.android.kraken.db.DaoSession;
-import de.tudarmstadt.informatik.tk.android.kraken.db.DbManager;
+import de.tudarmstadt.informatik.tk.android.kraken.provider.DbProvider;
 import de.tudarmstadt.informatik.tk.android.kraken.interfaces.IDbSensor;
 import de.tudarmstadt.informatik.tk.android.kraken.interfaces.IDbUpdatableSensor;
 import de.tudarmstadt.informatik.tk.android.kraken.model.enums.EPushType;
@@ -62,7 +62,7 @@ public abstract class AbstractSensor implements ISensor {
 //        lastDataFlushTimestamp = sharedPreferences.getLong(getSensorType().toString() + KrakenSdkSettings.PREFERENCES_SENSOR_LAST_PUSHED_TIMESTAMP_POSTFIX, -1);
 
         if (mDaoSession == null) {
-            mDaoSession = DbManager.getInstance(context).getDaoSession();
+            mDaoSession = DbProvider.getInstance(context).getDaoSession();
         }
     }
 
@@ -153,7 +153,7 @@ public abstract class AbstractSensor implements ISensor {
             IllegalArgumentException {
 
         if (mDaoSession == null) {
-            mDaoSession = DbManager.getInstance(context).getDaoSession();
+            mDaoSession = DbProvider.getInstance(context).getDaoSession();
         }
 
         if (mDaoSession == null) {
