@@ -99,7 +99,7 @@
         </service>
 
         <service
-            android:name=".service.RegistrationIntentService"
+            android:name=".service.GcmRegistrationIntentService"
             android:exported="false" />
 
         <service

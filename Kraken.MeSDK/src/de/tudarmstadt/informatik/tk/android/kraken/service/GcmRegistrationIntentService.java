@@ -17,12 +17,14 @@ import de.tudarmstadt.informatik.tk.android.kraken.KrakenGcmManager;
 import de.tudarmstadt.informatik.tk.android.kraken.PreferenceManager;
 
 /**
+ * Does GCM mobile client registration
+ *
  * @author Wladimir Schmidt (wlsc.dev@gmail.com)
  * @date 29.09.2015
  */
-public class RegistrationIntentService extends IntentService {
+public class GcmRegistrationIntentService extends IntentService {
 
-    private static final String TAG = RegistrationIntentService.class.getSimpleName();
+    private static final String TAG = GcmRegistrationIntentService.class.getSimpleName();
 
     private static final String TOPICS_SERVICE = "/topics/";
     private static final String[] TOPICS = {"global"};
@@ -30,7 +32,7 @@ public class RegistrationIntentService extends IntentService {
     /**
      * Creates an IntentService.  Invoked by your subclass's constructor.
      */
-    public RegistrationIntentService() {
+    public GcmRegistrationIntentService() {
         super(TAG);
     }
 

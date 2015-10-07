@@ -26,7 +26,7 @@ public class KrakenInstanceIDListenerService extends InstanceIDListenerService {
         Log.d(TAG, "onTokenRefresh was invoked! Refreshing token...");
 
         // Fetch updated Instance ID token and notify our app's server of any changes (if applicable).
-        Intent intent = new Intent(this, RegistrationIntentService.class);
+        Intent intent = new Intent(this, GcmRegistrationIntentService.class);
         startService(intent);
 
     }
