@@ -11,7 +11,7 @@ import de.tudarmstadt.informatik.tk.android.kraken.common.MessageType;
 import de.tudarmstadt.informatik.tk.android.kraken.common.SocialNetworkProvider;
 import de.tudarmstadt.informatik.tk.android.kraken.common.authentication.AccountVO;
 import de.tudarmstadt.informatik.tk.android.kraken.communication.Authentication;
-import de.tudarmstadt.informatik.tk.android.kraken.communication.IServerCommunicationResponseHandler;
+import de.tudarmstadt.informatik.tk.android.kraken.handler.IServerCommunicationResponseHandler;
 import de.tudarmstadt.informatik.tk.android.kraken.communication.ServerCommunication;
 import de.tudarmstadt.informatik.tk.android.kraken.ui.activities.accounts.AccountsAdapter;
 import de.tudarmstadt.informatik.tk.android.kraken.util.KrakenUtils;

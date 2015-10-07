@@ -6,6 +6,7 @@ import org.json.JSONObject;
 
 import de.tudarmstadt.informatik.tk.android.kraken.PreferenceManager;
 import de.tudarmstadt.informatik.tk.android.kraken.communication.endpoint.DeviceEndpoint;
+import de.tudarmstadt.informatik.tk.android.kraken.handler.IServerCommunicationResponseHandler;
 import de.tudarmstadt.informatik.tk.android.kraken.model.api.device.DeviceRegistrationRequest;
 import retrofit.Callback;
 import retrofit.RetrofitError;

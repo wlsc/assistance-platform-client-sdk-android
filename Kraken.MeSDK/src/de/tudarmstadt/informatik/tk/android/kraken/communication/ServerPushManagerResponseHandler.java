@@ -3,6 +3,8 @@ package de.tudarmstadt.informatik.tk.android.kraken.communication;
 import android.content.Context;
 import android.os.Bundle;
 
+import de.tudarmstadt.informatik.tk.android.kraken.handler.IServerCommunicationResponseHandler;
+
 public class ServerPushManagerResponseHandler implements IServerCommunicationResponseHandler {
 
 //    private List<SensorData> m_liSensorMapping;

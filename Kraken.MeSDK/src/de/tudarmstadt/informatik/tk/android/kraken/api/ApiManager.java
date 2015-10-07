@@ -13,7 +13,7 @@ import java.util.Set;
 
 import de.tudarmstadt.informatik.tk.android.kraken.api.entities.CalendarEvent;
 import de.tudarmstadt.informatik.tk.android.kraken.api.entities.ForegroundEvent;
-import de.tudarmstadt.informatik.tk.android.kraken.communication.IServerCommunicationResponseHandler;
+import de.tudarmstadt.informatik.tk.android.kraken.handler.IServerCommunicationResponseHandler;
 import de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.ESensorType;
 
 

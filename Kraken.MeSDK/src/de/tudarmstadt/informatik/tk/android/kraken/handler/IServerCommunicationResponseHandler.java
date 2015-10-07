@@ -1,4 +1,4 @@
-package de.tudarmstadt.informatik.tk.android.kraken.communication;
+package de.tudarmstadt.informatik.tk.android.kraken.handler;
 
 import android.os.Bundle;
 
