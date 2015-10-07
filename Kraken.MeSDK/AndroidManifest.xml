@@ -4,6 +4,7 @@
     android:versionCode="1"
     android:versionName="1.0">
 
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="com.google.android.gms.permission.ACTIVITY_RECOGNITION" />
     <uses-permission android:name="android.permission.READ_CALENDAR" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -46,8 +47,27 @@
             android:value="@string/app_id" />
 
         <service
+            android:name=".service.UploadService"
+            android:exported="true"
+            android:permission="com.google.android.gms.permission.BIND_NETWORK_TASK_SERVICE">
+            <intent-filter>
+                <action android:name="com.google.android.gms.gcm.ACTION_TASK_READY" />
+            </intent-filter>
+        </service>
+
+
+        <service
             android:name=".service.KrakenService"
-            android:exported="false" />
+            android:exported="false">
+            <intent-filter>
+                <action android:name="de.tudarmstadt.informatik.tk.android.kraken.service.KrakenService" />
+            </intent-filter>
+        </service>
+
+        <service
+            android:name=".service.HarvesterService"
+            android:exported="false"
+            android:label="HarvesterService" />
 
         <service
             android:name=".service.KrakenAccessibilityService"

@@ -82,7 +82,7 @@ public class KrakenService extends Service implements Callback {
     }
 
     /**
-     * Inits service
+     * Initializes a service
      */
     private void initService() {
 

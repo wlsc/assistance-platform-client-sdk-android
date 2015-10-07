@@ -121,16 +121,16 @@ public class RetroServerPushManager {
 
         if (mFuture == null) {
 
-            mFuture = mScheduledTaskExecutor.scheduleAtFixedRate(new Runnable() {
-
-                @Override
-                public void run() {
-
-                    Log.d(TAG, "Invoking periodic push data to server...");
-
-                    flushData(EPushType.PERIODIC);
-                }
-            }, PERIODIC_PUSH_DELAY_IN_MIN, PERIODIC_PUSH_PERIOD_IN_MIN, TimeUnit.MINUTES);
+//            mFuture = mScheduledTaskExecutor.scheduleAtFixedRate(new Runnable() {
+//
+//                @Override
+//                public void run() {
+//
+//                    Log.d(TAG, "Invoking periodic push data to server...");
+//
+//                    flushData(EPushType.PERIODIC);
+//                }
+//            }, PERIODIC_PUSH_DELAY_IN_MIN, PERIODIC_PUSH_PERIOD_IN_MIN, TimeUnit.MINUTES);
         }
 
         if (dbAccelerometerSensorDao == null) {
