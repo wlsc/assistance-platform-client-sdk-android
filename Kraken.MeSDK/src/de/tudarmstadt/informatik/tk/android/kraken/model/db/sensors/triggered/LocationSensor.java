@@ -84,6 +84,7 @@ public class LocationSensor extends AbstractTriggeredSensor implements GoogleApi
     /**
      * Starts sensing
      */
+    @Override
     public void startSensor() {
 
         mGoogleApiClient = new GoogleApiClient.Builder(context)
@@ -104,6 +105,7 @@ public class LocationSensor extends AbstractTriggeredSensor implements GoogleApi
         isRunning = true;
     }
 
+    @Override
     public void stopSensor() {
         if (mGoogleApiClient != null) {
             if (mGoogleApiClient.isConnected()) {
