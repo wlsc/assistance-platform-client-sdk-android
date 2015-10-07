@@ -212,17 +212,17 @@ public class AssistanceDatabaseGenerator {
     motionActivitySensor.setTableName("motion_activity_event");
     motionActivitySensor.addIdProperty().autoincrement().index();
     motionActivitySensor.implementsInterface(Config.KRAKEN_PACKAGE_SENSOR);
-    motionActivitySensor.addBooleanProperty("walking");
-    motionActivitySensor.addBooleanProperty("running");
-    motionActivitySensor.addBooleanProperty("cycling");
-    motionActivitySensor.addBooleanProperty("driving");
-    motionActivitySensor.addBooleanProperty("stationary");
-    motionActivitySensor.addBooleanProperty("unknown");
+    motionActivitySensor.addIntProperty("walking");
+    motionActivitySensor.addIntProperty("running");
+    motionActivitySensor.addIntProperty("cycling");
+    motionActivitySensor.addIntProperty("driving");
+    motionActivitySensor.addIntProperty("stationary");
+    motionActivitySensor.addIntProperty("unknown");
     motionActivitySensor.addIntProperty("accuracy");
     motionActivitySensor.addStringProperty("created").notNull();
     // OPTIONAL
-    motionActivitySensor.addBooleanProperty("onFoot");
-    motionActivitySensor.addBooleanProperty("tilting");
+    motionActivitySensor.addIntProperty("onFoot");
+    motionActivitySensor.addIntProperty("tilting");
 
     // ----- Connection -----
     // REQUIRED

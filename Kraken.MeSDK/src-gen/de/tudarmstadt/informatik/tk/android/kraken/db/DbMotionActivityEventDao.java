@@ -24,16 +24,16 @@ public class DbMotionActivityEventDao extends AbstractDao<DbMotionActivityEvent,
     */
     public static class Properties {
         public final static Property Id = new Property(0, Long.class, "id", true, "_id");
-        public final static Property Walking = new Property(1, Boolean.class, "walking", false, "WALKING");
-        public final static Property Running = new Property(2, Boolean.class, "running", false, "RUNNING");
-        public final static Property Cycling = new Property(3, Boolean.class, "cycling", false, "CYCLING");
-        public final static Property Driving = new Property(4, Boolean.class, "driving", false, "DRIVING");
-        public final static Property Stationary = new Property(5, Boolean.class, "stationary", false, "STATIONARY");
-        public final static Property Unknown = new Property(6, Boolean.class, "unknown", false, "UNKNOWN");
+        public final static Property Walking = new Property(1, Integer.class, "walking", false, "WALKING");
+        public final static Property Running = new Property(2, Integer.class, "running", false, "RUNNING");
+        public final static Property Cycling = new Property(3, Integer.class, "cycling", false, "CYCLING");
+        public final static Property Driving = new Property(4, Integer.class, "driving", false, "DRIVING");
+        public final static Property Stationary = new Property(5, Integer.class, "stationary", false, "STATIONARY");
+        public final static Property Unknown = new Property(6, Integer.class, "unknown", false, "UNKNOWN");
         public final static Property Accuracy = new Property(7, Integer.class, "accuracy", false, "ACCURACY");
         public final static Property Created = new Property(8, String.class, "created", false, "CREATED");
-        public final static Property OnFoot = new Property(9, Boolean.class, "onFoot", false, "ON_FOOT");
-        public final static Property Tilting = new Property(10, Boolean.class, "tilting", false, "TILTING");
+        public final static Property OnFoot = new Property(9, Integer.class, "onFoot", false, "ON_FOOT");
+        public final static Property Tilting = new Property(10, Integer.class, "tilting", false, "TILTING");
     };
 
 
@@ -81,34 +81,34 @@ public class DbMotionActivityEventDao extends AbstractDao<DbMotionActivityEvent,
             stmt.bindLong(1, id);
         }
  
-        Boolean walking = entity.getWalking();
+        Integer walking = entity.getWalking();
         if (walking != null) {
-            stmt.bindLong(2, walking ? 1L: 0L);
+            stmt.bindLong(2, walking);
         }
  
-        Boolean running = entity.getRunning();
+        Integer running = entity.getRunning();
         if (running != null) {
-            stmt.bindLong(3, running ? 1L: 0L);
+            stmt.bindLong(3, running);
         }
  
-        Boolean cycling = entity.getCycling();
+        Integer cycling = entity.getCycling();
         if (cycling != null) {
-            stmt.bindLong(4, cycling ? 1L: 0L);
+            stmt.bindLong(4, cycling);
         }
  
-        Boolean driving = entity.getDriving();
+        Integer driving = entity.getDriving();
         if (driving != null) {
-            stmt.bindLong(5, driving ? 1L: 0L);
+            stmt.bindLong(5, driving);
         }
  
-        Boolean stationary = entity.getStationary();
+        Integer stationary = entity.getStationary();
         if (stationary != null) {
-            stmt.bindLong(6, stationary ? 1L: 0L);
+            stmt.bindLong(6, stationary);
         }
  
-        Boolean unknown = entity.getUnknown();
+        Integer unknown = entity.getUnknown();
         if (unknown != null) {
-            stmt.bindLong(7, unknown ? 1L: 0L);
+            stmt.bindLong(7, unknown);
         }
  
         Integer accuracy = entity.getAccuracy();
@@ -117,14 +117,14 @@ public class DbMotionActivityEventDao extends AbstractDao<DbMotionActivityEvent,
         }
         stmt.bindString(9, entity.getCreated());
  
-        Boolean onFoot = entity.getOnFoot();
+        Integer onFoot = entity.getOnFoot();
         if (onFoot != null) {
-            stmt.bindLong(10, onFoot ? 1L: 0L);
+            stmt.bindLong(10, onFoot);
         }
  
-        Boolean tilting = entity.getTilting();
+        Integer tilting = entity.getTilting();
         if (tilting != null) {
-            stmt.bindLong(11, tilting ? 1L: 0L);
+            stmt.bindLong(11, tilting);
         }
     }
 
@@ -139,16 +139,16 @@ public class DbMotionActivityEventDao extends AbstractDao<DbMotionActivityEvent,
     public DbMotionActivityEvent readEntity(Cursor cursor, int offset) {
         DbMotionActivityEvent entity = new DbMotionActivityEvent( //
             cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0), // id
-            cursor.isNull(offset + 1) ? null : cursor.getShort(offset + 1) != 0, // walking
-            cursor.isNull(offset + 2) ? null : cursor.getShort(offset + 2) != 0, // running
-            cursor.isNull(offset + 3) ? null : cursor.getShort(offset + 3) != 0, // cycling
-            cursor.isNull(offset + 4) ? null : cursor.getShort(offset + 4) != 0, // driving
-            cursor.isNull(offset + 5) ? null : cursor.getShort(offset + 5) != 0, // stationary
-            cursor.isNull(offset + 6) ? null : cursor.getShort(offset + 6) != 0, // unknown
+            cursor.isNull(offset + 1) ? null : cursor.getInt(offset + 1), // walking
+            cursor.isNull(offset + 2) ? null : cursor.getInt(offset + 2), // running
+            cursor.isNull(offset + 3) ? null : cursor.getInt(offset + 3), // cycling
+            cursor.isNull(offset + 4) ? null : cursor.getInt(offset + 4), // driving
+            cursor.isNull(offset + 5) ? null : cursor.getInt(offset + 5), // stationary
+            cursor.isNull(offset + 6) ? null : cursor.getInt(offset + 6), // unknown
             cursor.isNull(offset + 7) ? null : cursor.getInt(offset + 7), // accuracy
             cursor.getString(offset + 8), // created
-            cursor.isNull(offset + 9) ? null : cursor.getShort(offset + 9) != 0, // onFoot
-            cursor.isNull(offset + 10) ? null : cursor.getShort(offset + 10) != 0 // tilting
+            cursor.isNull(offset + 9) ? null : cursor.getInt(offset + 9), // onFoot
+            cursor.isNull(offset + 10) ? null : cursor.getInt(offset + 10) // tilting
         );
         return entity;
     }
@@ -157,16 +157,16 @@ public class DbMotionActivityEventDao extends AbstractDao<DbMotionActivityEvent,
     @Override
     public void readEntity(Cursor cursor, DbMotionActivityEvent entity, int offset) {
         entity.setId(cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0));
-        entity.setWalking(cursor.isNull(offset + 1) ? null : cursor.getShort(offset + 1) != 0);
-        entity.setRunning(cursor.isNull(offset + 2) ? null : cursor.getShort(offset + 2) != 0);
-        entity.setCycling(cursor.isNull(offset + 3) ? null : cursor.getShort(offset + 3) != 0);
-        entity.setDriving(cursor.isNull(offset + 4) ? null : cursor.getShort(offset + 4) != 0);
-        entity.setStationary(cursor.isNull(offset + 5) ? null : cursor.getShort(offset + 5) != 0);
-        entity.setUnknown(cursor.isNull(offset + 6) ? null : cursor.getShort(offset + 6) != 0);
+        entity.setWalking(cursor.isNull(offset + 1) ? null : cursor.getInt(offset + 1));
+        entity.setRunning(cursor.isNull(offset + 2) ? null : cursor.getInt(offset + 2));
+        entity.setCycling(cursor.isNull(offset + 3) ? null : cursor.getInt(offset + 3));
+        entity.setDriving(cursor.isNull(offset + 4) ? null : cursor.getInt(offset + 4));
+        entity.setStationary(cursor.isNull(offset + 5) ? null : cursor.getInt(offset + 5));
+        entity.setUnknown(cursor.isNull(offset + 6) ? null : cursor.getInt(offset + 6));
         entity.setAccuracy(cursor.isNull(offset + 7) ? null : cursor.getInt(offset + 7));
         entity.setCreated(cursor.getString(offset + 8));
-        entity.setOnFoot(cursor.isNull(offset + 9) ? null : cursor.getShort(offset + 9) != 0);
-        entity.setTilting(cursor.isNull(offset + 10) ? null : cursor.getShort(offset + 10) != 0);
+        entity.setOnFoot(cursor.isNull(offset + 9) ? null : cursor.getInt(offset + 9));
+        entity.setTilting(cursor.isNull(offset + 10) ? null : cursor.getInt(offset + 10));
      }
     
     /** @inheritdoc */
