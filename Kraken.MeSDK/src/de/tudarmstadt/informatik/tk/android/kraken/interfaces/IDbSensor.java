@@ -1,8 +1,6 @@
 package de.tudarmstadt.informatik.tk.android.kraken.interfaces;
 
-import java.io.Serializable;
-
-public interface IDbSensor extends Serializable {
+public interface IDbSensor {
 
     Long getId();
 

@@ -1,22 +1,17 @@
 package de.tudarmstadt.informatik.tk.android.kraken;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.AsyncTask;
-import android.os.Bundle;
+import android.util.Log;
 
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 
-import de.tudarmstadt.informatik.tk.android.kraken.handler.IServerCommunicationResponseHandler;
-import de.tudarmstadt.informatik.tk.android.kraken.communication.ServerCommunication;
+import de.tudarmstadt.informatik.tk.android.kraken.api.ServerCommunication;
 
 public class GcmManager {
 
@@ -144,50 +139,8 @@ public class GcmManager {
 
     public void sendRegistrationIdToBackend(String registrationToken) {
 
-        ServerCommunication serverCommunication = new ServerCommunication(mContext, new GcmRegIdSentHandler());
-        serverCommunication.postRequest(registrationToken);
-    }
+        Log.d(TAG, "Sending GCM registration token to backend...");
 
-    /**
-     * Stores the registration ID and app versionCode in the application's
-     * {@code SharedPreferences}.
-     */
-    private void storeRegistrationId() {
-        final SharedPreferences prefs = getGCMPreferences();
-        int appVersion = getAppVersion(mContext);
-        SharedPreferences.Editor editor = prefs.edit();
-        editor.putString(PROPERTY_REG_ID, registrationToken);
-        editor.putInt(APP_VERSION, appVersion);
-        editor.commit();
-    }
-
-    @SuppressLint("DefaultLocale")
-    private String hash(String value) {
-        String hash = null;
-        try {
-            MessageDigest digest = MessageDigest.getInstance("SHA-1");
-            byte[] bytes = value.getBytes("UTF-8");
-            digest.update(bytes, 0, bytes.length);
-            bytes = digest.digest();
-            StringBuilder sb = new StringBuilder();
-            for (byte b : bytes) {
-                sb.append(String.format("%02X", b));
-            }
-            hash = sb.toString().toLowerCase();
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-        return hash;
-    }
-
-    private static class GcmRegIdSentHandler implements IServerCommunicationResponseHandler {
-        @Override
-        public void handleData(Bundle data) {
-            if (data.containsKey("error") && data.getBoolean("error") == false) {
-                getInstance().storeRegistrationId();
-            }
-        }
+        ServerCommunication.getInstance(mContext).sendGcmRegistrationToken(registrationToken);
     }
 }

@@ -11,8 +11,8 @@ import de.tudarmstadt.informatik.tk.android.kraken.PreferenceManager;
 import de.tudarmstadt.informatik.tk.android.kraken.R;
 import de.tudarmstadt.informatik.tk.android.kraken.ServiceManager;
 import de.tudarmstadt.informatik.tk.android.kraken.Settings;
-import de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.ESensorType;
-import de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.SensorManager;
+import de.tudarmstadt.informatik.tk.android.kraken.model.enums.ESensorType;
+import de.tudarmstadt.informatik.tk.android.kraken.SensorManager;
 
 
 @Deprecated

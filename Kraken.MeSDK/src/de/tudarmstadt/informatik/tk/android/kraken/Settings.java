@@ -1,7 +1,7 @@
 package de.tudarmstadt.informatik.tk.android.kraken;
 
 
-import de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.ESensorType;
+import de.tudarmstadt.informatik.tk.android.kraken.model.enums.ESensorType;
 
 public class Settings {
 

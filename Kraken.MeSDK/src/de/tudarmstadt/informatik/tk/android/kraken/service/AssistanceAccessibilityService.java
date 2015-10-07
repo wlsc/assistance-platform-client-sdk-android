@@ -5,10 +5,10 @@ import android.content.Intent;
 import android.util.Log;
 import android.view.accessibility.AccessibilityEvent;
 
-import de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.ESensorType;
-import de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.SensorManager;
-import de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.impl.triggered.ForegroundEvent;
-import de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.impl.triggered.ForegroundTrafficEvent;
+import de.tudarmstadt.informatik.tk.android.kraken.model.enums.ESensorType;
+import de.tudarmstadt.informatik.tk.android.kraken.SensorManager;
+import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.impl.triggered.ForegroundEvent;
+import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.impl.triggered.ForegroundTrafficEvent;
 
 
 public class AssistanceAccessibilityService extends AccessibilityService {

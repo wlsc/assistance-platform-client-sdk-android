@@ -14,42 +14,42 @@ import android.widget.TextView;
 import java.util.LinkedList;
 
 import de.tudarmstadt.informatik.tk.android.kraken.R;
-import de.tudarmstadt.informatik.tk.android.kraken.login.ILoginData;
-import de.tudarmstadt.informatik.tk.android.kraken.login.LoginFacebook;
-import de.tudarmstadt.informatik.tk.android.kraken.login.LoginGoogle;
-import de.tudarmstadt.informatik.tk.android.kraken.login.LoginLive;
+import de.tudarmstadt.informatik.tk.android.kraken.model.social.SocialLogin;
+import de.tudarmstadt.informatik.tk.android.kraken.model.social.impl.FacebookSocialLogin;
+import de.tudarmstadt.informatik.tk.android.kraken.model.social.impl.GoogleSocialLogin;
+import de.tudarmstadt.informatik.tk.android.kraken.model.social.impl.LiveSocialLogin;
 
 @Deprecated
 public class AccountsAdapter extends BaseAdapter {
 
-	LinkedList<ILoginData> m_liData = new LinkedList<ILoginData>();
+	LinkedList<SocialLogin> m_liData = new LinkedList<SocialLogin>();
 	private Activity m_context;
 	private ListView m_listView;
-	private LoginGoogle m_loginGoogle;
-	private LoginFacebook m_loginFacebook;
+	private GoogleSocialLogin m_GoogleSocialLogin;
+	private FacebookSocialLogin m_FacebookSocialLogin;
 //	private LoginTwitter m_loginTwitter;
-	private LoginLive m_loginLive;
+	private LiveSocialLogin m_LiveSocialLogin;
 
 	public AccountsAdapter(Activity context, ListView listView, Intent intent) {
 		this.m_context = context;
 		this.m_listView = listView;
 
-		m_loginLive = LoginLive.getInstance();
-		m_loginLive.setContext(context);
-		m_liData.push(m_loginLive);
+		m_LiveSocialLogin = LiveSocialLogin.getInstance();
+		m_LiveSocialLogin.setContext(context);
+		m_liData.push(m_LiveSocialLogin);
 
 //		m_loginTwitter = LoginTwitter.getInstance();
 //		m_loginTwitter.setContext(context);
 //		m_loginTwitter.CallbackFromActivity(this, intent);
 //		m_liData.push(m_loginTwitter);
 
-		m_loginGoogle = LoginGoogle.getInstance();
-		m_loginGoogle.setContext(context);
-		m_liData.push(m_loginGoogle);
+		m_GoogleSocialLogin = GoogleSocialLogin.getInstance();
+		m_GoogleSocialLogin.setContext(context);
+		m_liData.push(m_GoogleSocialLogin);
 
-		m_loginFacebook = LoginFacebook.getInstance();
-		m_loginFacebook.setContext(context);
-		m_liData.push(m_loginFacebook);
+		m_FacebookSocialLogin = FacebookSocialLogin.getInstance();
+		m_FacebookSocialLogin.setContext(context);
+		m_liData.push(m_FacebookSocialLogin);
 	}
 
 	@Override
@@ -74,7 +74,7 @@ public class AccountsAdapter extends BaseAdapter {
 	@Override
 	public View getView(int position, View view, ViewGroup parent) {
 
-		final ILoginData loginData = m_liData.get(position);
+		final SocialLogin loginData = m_liData.get(position);
 		boolean needsFacebookView = "facebook".equalsIgnoreCase(loginData.getName());
 
 		if (view == null || needsFacebookView != isFacebookView(view)) {
@@ -100,7 +100,7 @@ public class AccountsAdapter extends BaseAdapter {
 			setLoginButtonBehaviour(btn, loginData.isLoggedIn(), loginData);
 		}
 		if ("facebook".equalsIgnoreCase(loginData.getName()))
-			LoginFacebook.prepareFacebookLogin(view);
+			FacebookSocialLogin.prepareFacebookLogin(view);
 
 		return view;
 	}
@@ -114,7 +114,7 @@ public class AccountsAdapter extends BaseAdapter {
 
 			if (strName.equalsIgnoreCase(strAccountName)) {
 				for (int j = 0; j < getCount(); j++) {
-					ILoginData loginData = (ILoginData) getItem(j);
+					SocialLogin loginData = (SocialLogin) getItem(j);
 					if (strName.equalsIgnoreCase(loginData.getName())) {
 						Button btn = (Button) item.findViewById(R.id.btnAccountLogin);
 						setLoginButtonBehaviour(btn, loginData.isLoggedIn(), loginData);
@@ -125,7 +125,7 @@ public class AccountsAdapter extends BaseAdapter {
 		}
 	}
 
-	private void setLoginButtonBehaviour(Button btn, boolean bLoggedIn, final ILoginData loginData) {
+	private void setLoginButtonBehaviour(Button btn, boolean bLoggedIn, final SocialLogin loginData) {
 		final AccountsAdapter adapter = this;
 		if (loginData.getName().equals("Google")) {
 			if (!bLoggedIn) {

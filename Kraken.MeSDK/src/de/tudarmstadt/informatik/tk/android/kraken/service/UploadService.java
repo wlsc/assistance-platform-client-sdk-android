@@ -12,14 +12,14 @@ import java.util.List;
 
 import de.tudarmstadt.informatik.tk.android.kraken.ServiceManager;
 import de.tudarmstadt.informatik.tk.android.kraken.PreferenceManager;
-import de.tudarmstadt.informatik.tk.android.kraken.communication.ServiceGenerator;
-import de.tudarmstadt.informatik.tk.android.kraken.communication.endpoint.EventUploadEndpoint;
+import de.tudarmstadt.informatik.tk.android.kraken.api.ServiceGenerator;
+import de.tudarmstadt.informatik.tk.android.kraken.api.endpoint.EventUploadEndpoint;
 import de.tudarmstadt.informatik.tk.android.kraken.db.DbManager;
 import de.tudarmstadt.informatik.tk.android.kraken.db.DbAccelerometerSensor;
 import de.tudarmstadt.informatik.tk.android.kraken.db.DbAccelerometerSensorDao;
 import de.tudarmstadt.informatik.tk.android.kraken.db.DbPositionSensor;
 import de.tudarmstadt.informatik.tk.android.kraken.db.DbPositionSensorDao;
-import de.tudarmstadt.informatik.tk.android.kraken.interfaces.Sensor;
+import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.Sensor;
 import de.tudarmstadt.informatik.tk.android.kraken.model.api.EventUploadRequest;
 import de.tudarmstadt.informatik.tk.android.kraken.model.api.sensors.AccelerometerSensorRequest;
 import de.tudarmstadt.informatik.tk.android.kraken.model.api.sensors.PositionSensorRequest;

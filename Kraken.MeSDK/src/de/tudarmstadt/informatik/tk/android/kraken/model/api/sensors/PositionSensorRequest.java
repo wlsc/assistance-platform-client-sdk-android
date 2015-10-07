@@ -3,7 +3,7 @@ package de.tudarmstadt.informatik.tk.android.kraken.model.api.sensors;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-import de.tudarmstadt.informatik.tk.android.kraken.interfaces.Sensor;
+import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.Sensor;
 
 /**
  * @author Wladimir Schmidt (wlsc.dev@gmail.com)

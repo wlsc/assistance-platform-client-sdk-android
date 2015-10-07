@@ -11,8 +11,8 @@ import com.facebook.SessionState;
 import com.facebook.UiLifecycleHelper;
 
 import de.tudarmstadt.informatik.tk.android.kraken.R;
-import de.tudarmstadt.informatik.tk.android.kraken.login.LoginFacebook;
-import de.tudarmstadt.informatik.tk.android.kraken.login.LoginGoogle;
+import de.tudarmstadt.informatik.tk.android.kraken.model.social.impl.FacebookSocialLogin;
+import de.tudarmstadt.informatik.tk.android.kraken.model.social.impl.GoogleSocialLogin;
 
 @Deprecated
 public class AccountsActivity extends Activity {
@@ -39,14 +39,14 @@ public class AccountsActivity extends Activity {
 	private Session.StatusCallback callback = new Session.StatusCallback() {
 		@Override
 		public void call(Session session, SessionState state, Exception exception) {
-			LoginFacebook.onSessionStateChange(session, state, exception);
+			FacebookSocialLogin.onSessionStateChange(session, state, exception);
 		}
 	};
 	
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
-        LoginGoogle.getInstance().handleAuthorizeResult(requestCode, resultCode, data);
+        GoogleSocialLogin.getInstance().handleAuthorizeResult(requestCode, resultCode, data);
 
 		super.onActivityResult(requestCode, resultCode, data);
 		uiHelper.onActivityResult(requestCode, resultCode, data);

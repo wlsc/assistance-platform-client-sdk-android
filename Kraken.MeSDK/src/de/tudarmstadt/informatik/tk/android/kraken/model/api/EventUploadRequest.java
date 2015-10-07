@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
-import de.tudarmstadt.informatik.tk.android.kraken.interfaces.Sensor;
+import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.Sensor;
 
 /**
  * Request to assistance server with sensors / dataEvents data

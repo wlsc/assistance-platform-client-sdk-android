@@ -23,21 +23,19 @@ import de.tudarmstadt.informatik.tk.android.kraken.ActivityCommunicator;
 import de.tudarmstadt.informatik.tk.android.kraken.Settings;
 import de.tudarmstadt.informatik.tk.android.kraken.PreferenceManager;
 import de.tudarmstadt.informatik.tk.android.kraken.R;
-import de.tudarmstadt.informatik.tk.android.kraken.communication.RetroServerPushManager;
+import de.tudarmstadt.informatik.tk.android.kraken.api.RetroServerPushManager;
 import de.tudarmstadt.informatik.tk.android.kraken.db.DaoSession;
 import de.tudarmstadt.informatik.tk.android.kraken.db.DbManager;
 import de.tudarmstadt.informatik.tk.android.kraken.db.DbModuleInstallation;
 import de.tudarmstadt.informatik.tk.android.kraken.db.DbModuleInstallationDao;
-import de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.ECommandType;
-import de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.SensorManager;
-import de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.ISensor;
+import de.tudarmstadt.informatik.tk.android.kraken.model.enums.ECommandType;
+import de.tudarmstadt.informatik.tk.android.kraken.SensorManager;
+import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.ISensor;
 
 
 public class HarvesterService extends Service implements Callback {
 
     private static final String TAG = HarvesterService.class.getSimpleName();
-
-    // public static ScheduledExecutorService m_scheduleTaskExecutor;
 
     private boolean m_bIsRunning = false;
 

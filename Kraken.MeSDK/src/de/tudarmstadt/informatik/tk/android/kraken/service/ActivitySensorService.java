@@ -6,7 +6,7 @@ import android.util.Log;
 
 import com.google.android.gms.location.ActivityRecognitionResult;
 
-import de.tudarmstadt.informatik.tk.android.kraken.model.db.sensors.impl.triggered.MotionActivityEvent;
+import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.impl.triggered.MotionActivityEvent;
 
 public class ActivitySensorService extends IntentService {
 
