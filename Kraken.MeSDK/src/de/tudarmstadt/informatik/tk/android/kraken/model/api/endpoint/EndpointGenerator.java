@@ -11,24 +11,24 @@ import retrofit.client.OkClient;
 import retrofit.converter.GsonConverter;
 
 /**
- * Generates Retrofit services
+ * Generates Retrofit endpoints
  *
  * @author Wladimir Schmidt (wlsc.dev@gmail.com)
  * @date 27.06.2015
  */
-public class ServiceGenerator {
+public class EndpointGenerator {
 
-    private ServiceGenerator() {
+    private EndpointGenerator() {
     }
 
     /**
-     * Generates retrofit custom API HTTP request services
+     * Generates retrofit custom API HTTP request endpoints
      *
-     * @param serviceClass
+     * @param clazz
      * @param <T>
      * @return
      */
-    public static <T> T createService(Class<T> serviceClass) {
+    public static <T> T create(Class<T> clazz) {
 
         GsonBuilder gsonBuilder = new GsonBuilder().excludeFieldsWithoutExposeAnnotation();
 
@@ -41,6 +41,6 @@ public class ServiceGenerator {
                 .setClient(new OkClient(new UntrustedOkHttpClient().getClient()))
                 .build();
 
-        return adapter.create(serviceClass);
+        return adapter.create(clazz);
     }
 }

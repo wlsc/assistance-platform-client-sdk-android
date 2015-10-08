@@ -5,7 +5,7 @@ import android.content.Context;
 import de.tudarmstadt.informatik.tk.android.kraken.PreferenceManager;
 import de.tudarmstadt.informatik.tk.android.kraken.model.api.device.DeviceRegistrationRequest;
 import de.tudarmstadt.informatik.tk.android.kraken.model.api.endpoint.DeviceEndpoint;
-import de.tudarmstadt.informatik.tk.android.kraken.model.api.endpoint.ServiceGenerator;
+import de.tudarmstadt.informatik.tk.android.kraken.model.api.endpoint.EndpointGenerator;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
@@ -65,7 +65,7 @@ public class ServerCommunicationProvider {
         deviceRegistrationRequest.setDeviceId(serverDeviceId);
         deviceRegistrationRequest.setRegistrationToken(registrationToken);
 
-        DeviceEndpoint deviceEndpoint = ServiceGenerator.createService(DeviceEndpoint.class);
+        DeviceEndpoint deviceEndpoint = EndpointGenerator.create(DeviceEndpoint.class);
         deviceEndpoint.registerDevice(userToken, deviceRegistrationRequest, new Callback<Void>() {
 
             @Override

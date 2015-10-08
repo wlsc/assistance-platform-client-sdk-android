@@ -17,7 +17,7 @@ import java.util.List;
 import de.tudarmstadt.informatik.tk.android.kraken.PreferenceManager;
 import de.tudarmstadt.informatik.tk.android.kraken.model.api.EventUploadRequest;
 import de.tudarmstadt.informatik.tk.android.kraken.model.api.endpoint.EventUploadEndpoint;
-import de.tudarmstadt.informatik.tk.android.kraken.model.api.endpoint.ServiceGenerator;
+import de.tudarmstadt.informatik.tk.android.kraken.model.api.endpoint.EndpointGenerator;
 import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.Sensor;
 import de.tudarmstadt.informatik.tk.android.kraken.provider.DbProvider;
 import retrofit.Callback;
@@ -118,7 +118,7 @@ public class EventUploaderService extends GcmTaskService {
         }
 
         // send to upload data service
-        EventUploadEndpoint eventUploadEndpoint = ServiceGenerator.createService(EventUploadEndpoint.class);
+        EventUploadEndpoint eventUploadEndpoint = EndpointGenerator.create(EventUploadEndpoint.class);
 
         String userToken = mPreferenceManager.getUserToken();
 
