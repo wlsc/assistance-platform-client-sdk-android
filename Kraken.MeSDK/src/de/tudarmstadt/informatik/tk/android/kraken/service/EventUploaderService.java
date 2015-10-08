@@ -16,8 +16,8 @@ import java.util.List;
 
 import de.tudarmstadt.informatik.tk.android.kraken.PreferenceManager;
 import de.tudarmstadt.informatik.tk.android.kraken.model.api.EventUploadRequest;
-import de.tudarmstadt.informatik.tk.android.kraken.model.api.endpoint.EventUploadEndpoint;
 import de.tudarmstadt.informatik.tk.android.kraken.model.api.endpoint.EndpointGenerator;
+import de.tudarmstadt.informatik.tk.android.kraken.model.api.endpoint.EventUploadEndpoint;
 import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.Sensor;
 import de.tudarmstadt.informatik.tk.android.kraken.provider.DbProvider;
 import retrofit.Callback;
@@ -37,9 +37,9 @@ public class EventUploaderService extends GcmTaskService {
     // task identifier
     private long taskID = 999;
     // the task should be executed every 30 seconds
-    private long periodSecs = 5L;
+    private long periodSecs = 30L;
     // the task can run as early as -15 seconds from the scheduled time
-    private long flexSecs = 1L;
+    private long flexSecs = 15L;
 
     // an unique task identifier
     private String taskTag = "periodic | " + taskID + ": " + periodSecs + "s, f:" + flexSecs;
