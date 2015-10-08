@@ -15,10 +15,15 @@ import de.tudarmstadt.informatik.tk.android.kraken.db.DaoMaster;
 import de.tudarmstadt.informatik.tk.android.kraken.db.DaoSession;
 import de.tudarmstadt.informatik.tk.android.kraken.db.DbAccelerometerSensor;
 import de.tudarmstadt.informatik.tk.android.kraken.db.DbAccelerometerSensorDao;
+import de.tudarmstadt.informatik.tk.android.kraken.db.DbDevice;
+import de.tudarmstadt.informatik.tk.android.kraken.db.DbDeviceDao;
+import de.tudarmstadt.informatik.tk.android.kraken.db.DbForegroundEvent;
+import de.tudarmstadt.informatik.tk.android.kraken.db.DbForegroundEventDao;
 import de.tudarmstadt.informatik.tk.android.kraken.db.DbMotionActivityEvent;
 import de.tudarmstadt.informatik.tk.android.kraken.db.DbMotionActivityEventDao;
 import de.tudarmstadt.informatik.tk.android.kraken.db.DbPositionSensor;
 import de.tudarmstadt.informatik.tk.android.kraken.db.DbPositionSensorDao;
+import de.tudarmstadt.informatik.tk.android.kraken.interfaces.IDbSensor;
 import de.tudarmstadt.informatik.tk.android.kraken.model.api.sensors.AccelerometerSensorRequest;
 import de.tudarmstadt.informatik.tk.android.kraken.model.api.sensors.MotionActivityEventRequest;
 import de.tudarmstadt.informatik.tk.android.kraken.model.api.sensors.PositionSensorRequest;
@@ -27,7 +32,10 @@ import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.Sensor;
 import de.tudarmstadt.informatik.tk.android.kraken.util.db.DbAssistanceOpenHelper;
 
 /**
- * Singleton database manager
+ * Singleton database provider
+ *
+ * @author Wladimir Schmidt (wlsc.dev@gmail.com)
+ * @date 08.10.2015
  */
 public class DbProvider {
 
@@ -39,9 +47,14 @@ public class DbProvider {
     private DaoMaster mDaoMaster;
     private DaoSession mDaoSession;
 
+    /**
+     * DAOs
+     */
+    private static DbDeviceDao dbDeviceDao;
     private static DbAccelerometerSensorDao dbAccelerometerSensorDao;
     private static DbPositionSensorDao dbPositionSensorDao;
     private static DbMotionActivityEventDao dbMotionActivityEventDao;
+    private static DbForegroundEventDao dbForegroundEventDao;
 
     private List<DbAccelerometerSensor> dbAccelerometerSensors;
     private List<DbPositionSensor> dbPositionSensors;
@@ -60,6 +73,10 @@ public class DbProvider {
         mDaoMaster = new DaoMaster(mDb);
         mDaoSession = mDaoMaster.newSession(IdentityScopeType.None);
 
+        if (dbDeviceDao == null) {
+            dbDeviceDao = getDaoSession().getDbDeviceDao();
+        }
+
         if (dbAccelerometerSensorDao == null) {
             dbAccelerometerSensorDao = getDaoSession().getDbAccelerometerSensorDao();
         }
@@ -70,6 +87,10 @@ public class DbProvider {
 
         if (dbMotionActivityEventDao == null) {
             dbMotionActivityEventDao = getDaoSession().getDbMotionActivityEventDao();
+        }
+
+        if (dbForegroundEventDao == null) {
+            dbForegroundEventDao = getDaoSession().getDbForegroundEventDao();
         }
     }
 
@@ -110,10 +131,34 @@ public class DbProvider {
      * @param deviceId
      * @param registrationToken
      */
-    public void saveRegistrationTokenToDb(long deviceId, String registrationToken) {
+    public boolean saveRegistrationTokenToDb(long deviceId, String registrationToken) {
 
         Log.d(TAG, "Saving GCM registration token to DB...");
 
+        if (registrationToken == null) {
+            Log.e(TAG, "GCM registration token IS null!");
+            return false;
+        }
+
+        DbDevice device = dbDeviceDao
+                .queryBuilder()
+                .where(DbDeviceDao.Properties.Id.eq(deviceId))
+                .build()
+                .unique();
+
+        if (device == null) {
+            Log.d(TAG, "Not found any device with id: " + deviceId);
+            return false;
+        } else {
+
+            device.setGcmRegistrationToken(registrationToken);
+
+            dbDeviceDao.update(device);
+
+            Log.d(TAG, "Finished saving GCM token");
+
+            return true;
+        }
     }
 
     /**
@@ -290,6 +335,29 @@ public class DbProvider {
 
                 result.add(motionActivityEventRequest);
             }
+        }
+
+        return result;
+    }
+
+    /**
+     * Generic insert for db events/sensors
+     *
+     * @param sensor
+     * @param type
+     */
+    public long insertEntry(IDbSensor sensor, int type) {
+
+        if (sensor == null) {
+            return -1;
+        }
+
+        long result = -1;
+
+        switch (type) {
+            case SensorType.FOREGROUND:
+                result = dbForegroundEventDao.insertOrReplace((DbForegroundEvent) sensor);
+                break;
         }
 
         return result;

@@ -13,8 +13,8 @@ import com.google.android.gms.iid.InstanceID;
 import java.io.IOException;
 
 import de.tudarmstadt.informatik.tk.android.kraken.Config;
-import de.tudarmstadt.informatik.tk.android.kraken.GcmManager;
 import de.tudarmstadt.informatik.tk.android.kraken.PreferenceManager;
+import de.tudarmstadt.informatik.tk.android.kraken.provider.ServerCommunicationProvider;
 
 /**
  * Does GCM mobile client registration
@@ -63,7 +63,7 @@ public class GcmRegistrationIntentService extends IntentService {
             sendRegistrationToServer(token);
 
             // Subscribe to topic channels
-            subscribeTopics(token);
+//            subscribeTopics(token);
 
             // You should store a boolean that indicates whether the generated token has been
             // sent to your server. If the boolean is false, send the token to your server,
@@ -90,7 +90,10 @@ public class GcmRegistrationIntentService extends IntentService {
      */
     private void sendRegistrationToServer(String token) {
 
-        GcmManager.getInstance(getApplicationContext()).sendRegistrationIdToBackend(token);
+        Log.d(TAG, "Sending GCM registration token to backend...");
+
+        final ServerCommunicationProvider communicationProvider = ServerCommunicationProvider.getInstance(getApplicationContext());
+        communicationProvider.sendGcmRegistrationToken(token);
     }
 
     /**

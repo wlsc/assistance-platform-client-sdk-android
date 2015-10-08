@@ -5,6 +5,6 @@
     android:canRetrieveWindowContent="true"
     android:description="@string/tutorial_finish_accessibility"
     android:notificationTimeout="100"
-    android:settingsActivity="de.tudarmstadt.informatik.tk.kraken.android.activities.MainActivity" />
+    android:settingsActivity="de.tudarmstadt.informatik.tk.android.assistance.activity.MainActivity" />
 
     <!--  typeViewClicked|typeViewFocused|typeAllMask|typeViewLongClicked|typeViewSelected|typeViewFocused|typeViewTextChanged|typeViewTextSelectionChanged|typeViewScrolled|typeWindowStateChanged|typeNotificationStateChanged|typeViewHoverEnter|typeViewHoverExit -->

@@ -8,8 +8,14 @@ import android.content.pm.PackageManager;
 import android.util.Log;
 import android.view.accessibility.AccessibilityEvent;
 
+import java.util.Date;
+import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import de.tudarmstadt.informatik.tk.android.kraken.db.DbForegroundEvent;
+import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.impl.triggered.ForegroundEvent;
+import de.tudarmstadt.informatik.tk.android.kraken.util.DateUtils;
 
 import static android.content.pm.PackageManager.NameNotFoundException;
 
@@ -24,7 +30,6 @@ public class AccessibilityEventFilterUtils {
     private static final String[] BROWSER_PACKAGES = new String[]{
             "com.android.chrome"
     };
-
 
     /**
      * Internal states
@@ -48,104 +53,106 @@ public class AccessibilityEventFilterUtils {
      * @param event AccessibilityEvent
      * @return ForegroundEvent
      */
-//    public SensorForegroundEvent filter(AccessibilityEvent event) {
-//
-//        if(event == null || event.getPackageName() == null) {
-//            return null;
-//        }
-//
-//        String packageName = event.getPackageName().toString();
-//        String className = event.getClassName() == null? null : event.getClassName().toString();
-//        String appName = getAppName(packageName);
-//
-//        SensorForegroundEvent foregroundEvent = new SensorForegroundEvent();
-//        foregroundEvent.setPackageName(packageName);
-//        foregroundEvent.setAppName(appName);
-//        foregroundEvent.setClassName(className);
-//
-//        switch (event.getEventType()) {
-//
-//            case AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED:
-//
-//                String activityLabel = getActivityLabel(packageName, className);
-//                foregroundEvent.setActivityLabel(activityLabel);
-//                foregroundEvent.setKeystrokes(keyStrokes);
-//
-//                /** new app in foreground */
-//                if (!lastApp.equals(packageName)) {
-//
-//                    if((System.currentTimeMillis() - lastTimestamp) < MIN_DURATION_APP_CHANGE) {
-//                        //break;
-//                    }
-//
-//                    foregroundEvent.setEventType(ForegroundEventSensor.EVENT_APP);
-//
-//                    lWindow("App", appName, packageName, className, activityLabel);
-//
-//                    lastTimestamp = System.currentTimeMillis();
-//
-//                    /** reset the counter */
-//                    keyStrokes = 0;
-//                }
-//                /** same app but different activity */
-//                else if (!lastClass.equals(className)) {
-//
-//                    foregroundEvent.setEventType(ForegroundEventSensor.EVENT_ACTIVITY);
-//
-//                    lWindow("Activity", appName, packageName, className, activityLabel);
-//                }
-//                else {
-//                    // lMisc(event.getEventType(), appName, packageName, className);
-//                    break;
-//                }
-//
-//                /** update current running app */
-//                lastApp = packageName;
-//                lastClass = className;
-//
-//                return foregroundEvent;
-//
-//            /*
-//            No longer needed now we have browser history?
-//            TODO: remove?
-//            case AccessibilityEvent.TYPE_VIEW_TEXT_SELECTION_CHANGED:
-//
-//                String text = getEventText(event);
-//
-//                Log.d("kraken", "is url? " + text + " --> " + isUrl(text));
-//                //lMisc(event.getEventType(), appName, packageName, className);
-//
-//                boolean isBrowser = Arrays.asList(BROWSER_PACKAGES).contains(packageName);
-//
-//                // check if the content is a valid url and save it
-//                if (isBrowser && isUrl(text)) {
-//
-//                    foregroundEvent.setEventType(ForegroundEventSensor.EVENT_URL);
-//                    foregroundEvent.setUrl(text);
-//
-//                    lUrl(text, appName, packageName, className);
-//
-//                    return foregroundEvent;
-//                }
-//
-//                break;
-//            */
-//
-//            case AccessibilityEvent.TYPE_VIEW_TEXT_CHANGED:
-//
-//                /** increment the counter */
-//                keyStrokes++;
-//
-//                break;
-//
-//            default:
-//
-//                // lMisc(event.getEventType(), appName, packageName, className);
-//
-//        }
-//
-//        return null;
-//    }
+    public DbForegroundEvent filter(AccessibilityEvent event) {
+
+        if (event == null || event.getPackageName() == null) {
+            return null;
+        }
+
+        String packageName = event.getPackageName().toString();
+        String className = event.getClassName() == null ? null : event.getClassName().toString();
+        String appName = getAppName(packageName);
+
+        DbForegroundEvent foregroundEvent = new DbForegroundEvent();
+        foregroundEvent.setPackageName(packageName);
+        foregroundEvent.setAppName(appName);
+        foregroundEvent.setClassName(className);
+
+        switch (event.getEventType()) {
+
+            case AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED:
+
+                String activityLabel = getActivityLabel(packageName, className);
+                foregroundEvent.setActivityLabel(activityLabel);
+                foregroundEvent.setKeystrokes(keyStrokes);
+
+                /** new app in foreground */
+                if (!lastApp.equals(packageName)) {
+
+                    if ((System.currentTimeMillis() - lastTimestamp) < MIN_DURATION_APP_CHANGE) {
+                        //break;
+                    }
+
+                    foregroundEvent.setEventType(ForegroundEvent.EVENT_APP);
+
+                    lWindow("App", appName, packageName, className, activityLabel);
+
+                    lastTimestamp = System.currentTimeMillis();
+
+                    /** reset the counter */
+                    keyStrokes = 0;
+                }
+                /** same app but different activity */
+                else if (!lastClass.equals(className)) {
+
+                    foregroundEvent.setEventType(ForegroundEvent.EVENT_ACTIVITY);
+
+                    lWindow("Activity", appName, packageName, className, activityLabel);
+                } else {
+                    // lMisc(event.getEventType(), appName, packageName, className);
+                    break;
+                }
+
+                /** update current running app */
+                lastApp = packageName;
+                lastClass = className;
+
+                foregroundEvent.setCreated(DateUtils.dateToISO8601String(new Date(), Locale.getDefault()));
+
+                return foregroundEvent;
+
+            /*
+            No longer needed now we have browser history?
+            TODO: remove?
+            case AccessibilityEvent.TYPE_VIEW_TEXT_SELECTION_CHANGED:
+
+                String text = getEventText(event);
+
+                Log.d("kraken", "is url? " + text + " --> " + isUrl(text));
+                //lMisc(event.getEventType(), appName, packageName, className);
+
+                boolean isBrowser = Arrays.asList(BROWSER_PACKAGES).contains(packageName);
+
+                // check if the content is a valid url and save it
+                if (isBrowser && isUrl(text)) {
+
+                    foregroundEvent.setEventType(ForegroundEventSensor.EVENT_URL);
+                    foregroundEvent.setUrl(text);
+
+                    lUrl(text, appName, packageName, className);
+
+                    return foregroundEvent;
+                }
+
+                break;
+            */
+
+            case AccessibilityEvent.TYPE_VIEW_TEXT_CHANGED:
+
+                /** increment the counter */
+                keyStrokes++;
+
+                break;
+
+            default:
+
+                // lMisc(event.getEventType(), appName, packageName, className);
+
+        }
+
+        return null;
+    }
+
     private void lMisc(int type, String appName, String packageName, String className) {
         l("[%s] %s, %s, %s", type, appName, packageName, className);
     }
