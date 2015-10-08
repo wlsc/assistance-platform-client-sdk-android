@@ -10,7 +10,12 @@ import de.tudarmstadt.informatik.tk.android.kraken.model.api.sensors.SensorType;
 import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.impl.triggered.ForegroundEvent;
 import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.impl.triggered.ForegroundTrafficEvent;
 
-
+/**
+ * Assistance Accessibility Service implementation
+ *
+ * @edited by Wladimir Schmidt (wlsc.dev@gmail.com)
+ * @date 08.10.2015
+ */
 public class AssistanceAccessibilityService extends AccessibilityService {
 
     private static final String TAG = AssistanceAccessibilityService.class.getSimpleName();

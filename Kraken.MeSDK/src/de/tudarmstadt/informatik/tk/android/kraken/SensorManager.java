@@ -8,22 +8,14 @@ import java.util.List;
 
 import de.tudarmstadt.informatik.tk.android.kraken.model.enums.EPushType;
 import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.ISensor;
-import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.impl.contentobserver.BrowserHistoryEvent;
-import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.impl.contentobserver.CalendarEvent;
-import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.impl.contentobserver.CallLogEvent;
-import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.impl.contentobserver.ContactsEvent;
-import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.impl.periodic.BackgroundTrafficEvent;
-import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.impl.periodic.RingtoneEvent;
 import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.impl.triggered.AccelerometerSensor;
-import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.impl.triggered.ConnectionSensor;
 import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.impl.triggered.ForegroundEvent;
-import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.impl.triggered.ForegroundTrafficEvent;
-import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.impl.triggered.LightSensor;
 import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.impl.triggered.LocationSensor;
-import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.impl.triggered.MeasurementEvent;
 import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.impl.triggered.MotionActivityEvent;
 
 /**
+ * Main sensor provider
+ *
  * @edited by Wladimir Schmidt (wlsc.dev@gmail.com)
  * @date 08.10.2015
  */
@@ -77,27 +69,27 @@ public class SensorManager {
         mAvailableSensors.add(motionActivityEvent);
 
         // works
-        LightSensor lightSensor = new LightSensor(mContext);
-        mAvailableSensors.add(lightSensor);
+//        LightSensor lightSensor = new LightSensor(mContext);
+//        mAvailableSensors.add(lightSensor);
 
         // works
         LocationSensor locationSensor = new LocationSensor(mContext);
         mAvailableSensors.add(locationSensor);
 
-        MeasurementEvent measurementEvent = new MeasurementEvent(mContext);
-        mAvailableSensors.add(measurementEvent);
+//        MeasurementEvent measurementEvent = new MeasurementEvent(mContext);
+//        mAvailableSensors.add(measurementEvent);
 
         // works
-        ConnectionSensor connectionSensor = new ConnectionSensor(mContext);
-        mAvailableSensors.add(connectionSensor);
+//        ConnectionSensor connectionSensor = new ConnectionSensor(mContext);
+//        mAvailableSensors.add(connectionSensor);
 
         //new foreground traffic
-        ForegroundTrafficEvent foregroundTrafficEvent = new ForegroundTrafficEvent(mContext);
-        mAvailableSensors.add(foregroundTrafficEvent);
+//        ForegroundTrafficEvent foregroundTrafficEvent = new ForegroundTrafficEvent(mContext);
+//        mAvailableSensors.add(foregroundTrafficEvent);
 
         //new periodic background traffic
-        BackgroundTrafficEvent backgroundTrafficEvent = new BackgroundTrafficEvent(mContext);
-        mAvailableSensors.add(backgroundTrafficEvent);
+//        BackgroundTrafficEvent backgroundTrafficEvent = new BackgroundTrafficEvent(mContext);
+//        mAvailableSensors.add(backgroundTrafficEvent);
 
         // loudness sensor is blocking microphone and consuming too much battery
         // LoudnessSensor loudnessSensor = new LoudnessSensor(mContext);
@@ -107,20 +99,20 @@ public class SensorManager {
          * Periodic events / sensors
          */
 
-        RingtoneEvent ringtoneEvent = new RingtoneEvent(mContext);
-        mAvailableSensors.add(ringtoneEvent);
+//        RingtoneEvent ringtoneEvent = new RingtoneEvent(mContext);
+//        mAvailableSensors.add(ringtoneEvent);
 
-        CalendarEvent calendarEvent = new CalendarEvent(mContext);
-        mAvailableSensors.add(calendarEvent);
+//        CalendarEvent calendarEvent = new CalendarEvent(mContext);
+//        mAvailableSensors.add(calendarEvent);
 
-        ContactsEvent contactsEvent = new ContactsEvent(mContext);
-        mAvailableSensors.add(contactsEvent);
+//        ContactsEvent contactsEvent = new ContactsEvent(mContext);
+//        mAvailableSensors.add(contactsEvent);
 
-        CallLogEvent callLogEvent = new CallLogEvent(mContext);
-        mAvailableSensors.add(callLogEvent);
+//        CallLogEvent callLogEvent = new CallLogEvent(mContext);
+//        mAvailableSensors.add(callLogEvent);
 
-        BrowserHistoryEvent browserHistoryEvent = new BrowserHistoryEvent(mContext);
-        mAvailableSensors.add(browserHistoryEvent);
+//        BrowserHistoryEvent browserHistoryEvent = new BrowserHistoryEvent(mContext);
+//        mAvailableSensors.add(browserHistoryEvent);
 
         ForegroundEvent foregroundEvent = new ForegroundEvent(mContext);
         mAvailableSensors.add(foregroundEvent);

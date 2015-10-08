@@ -133,7 +133,6 @@ public class EventUploaderService extends GcmTaskService {
 
                     // successful transmission of event data -> remove that data from db
                     DbProvider.getInstance(getApplicationContext()).removeDbSentEvents(events);
-
                 }
             }
 
