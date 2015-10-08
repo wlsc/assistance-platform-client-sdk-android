@@ -18,7 +18,7 @@ import java.util.Locale;
 
 import de.tudarmstadt.informatik.tk.android.kraken.db.DbPositionSensor;
 import de.tudarmstadt.informatik.tk.android.kraken.db.DbPositionSensorDao;
-import de.tudarmstadt.informatik.tk.android.kraken.model.enums.ESensorType;
+import de.tudarmstadt.informatik.tk.android.kraken.model.api.sensors.SensorType;
 import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.AbstractTriggeredEvent;
 import de.tudarmstadt.informatik.tk.android.kraken.util.DateUtils;
 
@@ -211,8 +211,8 @@ public class LocationSensor extends AbstractTriggeredEvent implements GoogleApiC
     }
 
     @Override
-    public ESensorType getSensorType() {
-        return ESensorType.SENSOR_LOCATION;
+    public int getType() {
+        return SensorType.LOCATION;
     }
 
     @Override

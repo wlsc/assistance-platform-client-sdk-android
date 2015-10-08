@@ -2,7 +2,7 @@ package de.tudarmstadt.informatik.tk.android.kraken.model.sensor.impl.triggered;
 
 import android.content.Context;
 
-import de.tudarmstadt.informatik.tk.android.kraken.model.enums.ESensorType;
+import de.tudarmstadt.informatik.tk.android.kraken.model.api.sensors.SensorType;
 import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.AbstractTriggeredEvent;
 
 
@@ -32,8 +32,8 @@ public class MeasurementEvent extends AbstractTriggeredEvent {
     }
 
     @Override
-    public ESensorType getSensorType() {
-        return ESensorType.MEASUREMENT_LOG;
+    public int getType() {
+        return SensorType.MEASUREMENT_LOG;
     }
 
     @Override

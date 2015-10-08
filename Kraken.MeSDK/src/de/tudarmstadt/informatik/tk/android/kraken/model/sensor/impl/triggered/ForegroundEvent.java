@@ -16,8 +16,8 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+import de.tudarmstadt.informatik.tk.android.kraken.model.api.sensors.SensorType;
 import de.tudarmstadt.informatik.tk.android.kraken.model.enums.EPushType;
-import de.tudarmstadt.informatik.tk.android.kraken.model.enums.ESensorType;
 import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.AbstractTriggeredEvent;
 import de.tudarmstadt.informatik.tk.android.kraken.util.ImageUtils;
 import de.tudarmstadt.informatik.tk.android.kraken.util.sensors.AccessibilityEventFilterUtils;
@@ -161,13 +161,9 @@ public class ForegroundEvent extends AbstractTriggeredEvent {
         }
     }
 
-//    private void insertEvent(SensorForegroundEvent foregroundEvent) {
-//        handleDBEntry(foregroundEvent);
-//    }
-
     @Override
-    public ESensorType getSensorType() {
-        return ESensorType.SENSOR_FOREGROUND_EVENT;
+    public int getType() {
+        return SensorType.FOREGROUND;
     }
 
 

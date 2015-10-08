@@ -3,9 +3,9 @@ package de.tudarmstadt.informatik.tk.android.kraken.model.sensor.impl.contentobs
 import android.content.Context;
 import android.net.Uri;
 
-import de.tudarmstadt.informatik.tk.android.kraken.provider.DbProvider;
-import de.tudarmstadt.informatik.tk.android.kraken.model.enums.ESensorType;
+import de.tudarmstadt.informatik.tk.android.kraken.model.api.sensors.SensorType;
 import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.AbstractContentObserverEvent;
+import de.tudarmstadt.informatik.tk.android.kraken.provider.DbProvider;
 
 public class CallLogEvent extends AbstractContentObserverEvent {
 
@@ -21,8 +21,8 @@ public class CallLogEvent extends AbstractContentObserverEvent {
     }
 
     @Override
-    public ESensorType getSensorType() {
-        return ESensorType.SENSOR_CALL_LOG;
+    public int getType() {
+        return SensorType.CALL_LOG;
     }
 
     @Override
@@ -83,7 +83,7 @@ public class CallLogEvent extends AbstractContentObserverEvent {
 //		}
 //		cur.close();
 
-//        String strFullqualifiedDatabaseClassName = getSensorType().getFullqualifiedDatabaseClassName();
+//        String strFullqualifiedDatabaseClassName = getType().getFullqualifiedDatabaseClassName();
 //        //SensorData callLogs = flushData(mDaoSession, strFullqualifiedDatabaseClassName);
 //        //ServerPushManager.getInstance(context).flushManually(callLogs);
 //        ApiMessage.DataWrapper callLogs = flushDataRetro(strFullqualifiedDatabaseClassName);

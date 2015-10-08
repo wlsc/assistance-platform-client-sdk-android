@@ -1,9 +1,9 @@
 package de.tudarmstadt.informatik.tk.android.kraken.service;
 
 import android.content.Context;
+import android.os.Handler;
 import android.support.v4.util.SparseArrayCompat;
 import android.util.Log;
-import android.util.SparseArray;
 
 import com.google.android.gms.gcm.GcmNetworkManager;
 import com.google.android.gms.gcm.GcmTaskService;
@@ -35,14 +35,14 @@ public class EventUploaderService extends GcmTaskService {
     private static final int PUSH_NUMBER_OF_EACH_ELEMENTS = 20;
 
     // task identifier
-    private long taskID = 1;
+    private long taskID = 999;
     // the task should be executed every 30 seconds
     private long periodSecs = 5L;
     // the task can run as early as -15 seconds from the scheduled time
     private long flexSecs = 1L;
 
     // an unique task identifier
-    private String taskTag = "periodic | " + taskID++ + ": " + periodSecs + "s, f:" + flexSecs;
+    private String taskTag = "periodic | " + taskID + ": " + periodSecs + "s, f:" + flexSecs;
 
     private static PreferenceManager mPreferenceManager;
 
@@ -58,6 +58,8 @@ public class EventUploaderService extends GcmTaskService {
             mPreferenceManager = PreferenceManager.getInstance(getApplicationContext());
         }
 
+        schedulePeriodicTask(getApplicationContext(), periodSecs, flexSecs, taskTag);
+
         Log.d(TAG, "Finished!");
     }
 
@@ -66,26 +68,34 @@ public class EventUploaderService extends GcmTaskService {
 
         Log.d(TAG, "Upload task has started");
 
-        EventUploadRequest eventUploadRequest = new EventUploadRequest();
+        Handler handler = new Handler(getMainLooper());
+        handler.post(new Runnable() {
 
-        long serverDeviceId = mPreferenceManager.getServerDeviceId();
+            @Override
+            public void run() {
 
-        Log.d(TAG, "Sync server device id: " + serverDeviceId);
+                EventUploadRequest eventUploadRequest = new EventUploadRequest();
 
-        events = new SparseArrayCompat<>();
-        events = DbProvider.getInstance(getApplicationContext()).getEntriesForUpload(PUSH_NUMBER_OF_EACH_ELEMENTS);
+                long serverDeviceId = mPreferenceManager.getServerDeviceId();
 
-        List<Sensor> eventsAsList = new LinkedList<>();
+                Log.d(TAG, "Sync server device id: " + serverDeviceId);
 
-        for (int i = 0; i < events.size(); i++) {
-            int key = events.keyAt(i);
-            eventsAsList.addAll(events.get(key));
-        }
+                events = new SparseArrayCompat<>();
+                events = DbProvider.getInstance(getApplicationContext()).getEntriesForUpload(PUSH_NUMBER_OF_EACH_ELEMENTS);
 
-        eventUploadRequest.setDataEvents(eventsAsList);
-        eventUploadRequest.setServerDeviceId(serverDeviceId);
+                List<Sensor> eventsAsList = new LinkedList<>();
 
-        doUploadEventData(eventUploadRequest);
+                for (int i = 0; i < events.size(); i++) {
+                    int key = events.keyAt(i);
+                    eventsAsList.addAll(events.get(key));
+                }
+
+                eventUploadRequest.setDataEvents(eventsAsList);
+                eventUploadRequest.setServerDeviceId(serverDeviceId);
+
+                doUploadEventData(eventUploadRequest);
+            }
+        });
 
         return GcmNetworkManager.RESULT_SUCCESS;
     }
@@ -141,10 +151,17 @@ public class EventUploaderService extends GcmTaskService {
         Log.d(TAG, "Reinitialize periodic task...");
 
         // first cancel any running event uploader tasks
-        GcmNetworkManager.getInstance(getApplicationContext()).cancelAllTasks(EventUploaderService.class);
+        cancelPeriodicTask(getApplicationContext());
         schedulePeriodicTask(getApplicationContext(), periodSecs, flexSecs, taskTag);
 
         super.onInitializeTasks();
+    }
+
+    /**
+     * Cancels GCM Network Manager periodic task
+     */
+    public static void cancelPeriodicTask(Context context) {
+        GcmNetworkManager.getInstance(context).cancelAllTasks(EventUploaderService.class);
     }
 
     /**
@@ -152,16 +169,21 @@ public class EventUploaderService extends GcmTaskService {
      */
     public static void schedulePeriodicTask(Context context, long periodSecs, long flexSecs, String tag) {
 
+        Log.d(TAG, "Scheduling periodic task...");
+
         PeriodicTask periodicTask = new PeriodicTask.Builder()
                 .setService(EventUploaderService.class)
                 .setPeriod(periodSecs)
                 .setFlex(flexSecs)
                 .setTag(tag)
                 .setPersisted(true)
+                .setUpdateCurrent(true)
                 .setRequiredNetwork(Task.NETWORK_STATE_ANY)
                 .setRequiresCharging(false)
                 .build();
 
         GcmNetworkManager.getInstance(context).schedule(periodicTask);
+
+        Log.d(TAG, "Periodic task scheduled!");
     }
 }

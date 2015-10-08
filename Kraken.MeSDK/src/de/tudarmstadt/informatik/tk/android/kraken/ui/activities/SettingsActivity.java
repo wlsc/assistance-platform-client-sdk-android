@@ -90,26 +90,26 @@ public class SettingsActivity extends PreferenceActivity implements Preference.O
         } else if (key.startsWith(KRAKEN_SENSOR_ENABLED_PREFIX)) {
             boolean disabled = !(boolean) newValue;
             ESensorType sensorType = ESensorType.valueOf(key.replaceFirst(KRAKEN_SENSOR_ENABLED_PREFIX, ""));
-            mSensorManager.getSensor(sensorType).setDisabledByUser(disabled);
-            if (!disabled) {
-                mSensorManager.getSensor(sensorType).startSensor();
-                //start background traffic sensor if data usage slider go on and start location sensor, too
-                if (sensorType == ESensorType.SENSOR_NETWORK_TRAFFIC) {
-                    mSensorManager.getSensor(ESensorType.SENSOR_BACKGROUND_TRAFFIC).startSensor();
-                    mSensorManager.getSensor(ESensorType.SENSOR_LOCATION).startSensor();
-                    SwitchPreference switchPreference = (SwitchPreference) findPreference(KRAKEN_SENSOR_ENABLED_PREFIX + ESensorType.SENSOR_LOCATION.toString());
-                    switchPreference.setChecked(true);
-                }
-            } else {
-                mSensorManager.getSensor(sensorType).stopSensor();
-                //stop background traffic sensor if data usage slider go off and stop location sensor, too
-                if (sensorType == ESensorType.SENSOR_NETWORK_TRAFFIC) {
-                    mSensorManager.getSensor(ESensorType.SENSOR_BACKGROUND_TRAFFIC).stopSensor();
-                    mSensorManager.getSensor(ESensorType.SENSOR_NETWORK_TRAFFIC).stopSensor();
-                    SwitchPreference switchPreference = (SwitchPreference) findPreference(KRAKEN_SENSOR_ENABLED_PREFIX + ESensorType.SENSOR_LOCATION.toString());
-                    switchPreference.setChecked(false);
-                }
-            }
+//            mSensorManager.getSensor(sensorType).setDisabledByUser(disabled);
+//            if (!disabled) {
+//                mSensorManager.getSensor(sensorType).startSensor();
+//                //start background traffic sensor if data usage slider go on and start location sensor, too
+//                if (sensorType == ESensorType.SENSOR_NETWORK_TRAFFIC) {
+//                    mSensorManager.getSensor(ESensorType.SENSOR_BACKGROUND_TRAFFIC).startSensor();
+//                    mSensorManager.getSensor(ESensorType.SENSOR_LOCATION).startSensor();
+//                    SwitchPreference switchPreference = (SwitchPreference) findPreference(KRAKEN_SENSOR_ENABLED_PREFIX + ESensorType.SENSOR_LOCATION.toString());
+//                    switchPreference.setChecked(true);
+//                }
+//            } else {
+//                mSensorManager.getSensor(sensorType).stopSensor();
+//                //stop background traffic sensor if data usage slider go off and stop location sensor, too
+//                if (sensorType == ESensorType.SENSOR_NETWORK_TRAFFIC) {
+//                    mSensorManager.getSensor(ESensorType.SENSOR_BACKGROUND_TRAFFIC).stopSensor();
+//                    mSensorManager.getSensor(ESensorType.SENSOR_NETWORK_TRAFFIC).stopSensor();
+//                    SwitchPreference switchPreference = (SwitchPreference) findPreference(KRAKEN_SENSOR_ENABLED_PREFIX + ESensorType.SENSOR_LOCATION.toString());
+//                    switchPreference.setChecked(false);
+//                }
+//            }
         }
         return true;
     }

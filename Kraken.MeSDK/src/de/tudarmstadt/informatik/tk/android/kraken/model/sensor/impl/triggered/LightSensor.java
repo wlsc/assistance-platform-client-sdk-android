@@ -6,7 +6,7 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 
-import de.tudarmstadt.informatik.tk.android.kraken.model.enums.ESensorType;
+import de.tudarmstadt.informatik.tk.android.kraken.model.api.sensors.SensorType;
 import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.AbstractTriggeredEvent;
 
 
@@ -57,8 +57,8 @@ public class LightSensor extends AbstractTriggeredEvent implements SensorEventLi
     }
 
     @Override
-    public ESensorType getSensorType() {
-        return ESensorType.SENSOR_LIGHT;
+    public int getType() {
+        return SensorType.LIGHT;
     }
 
     @Override

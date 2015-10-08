@@ -33,7 +33,10 @@ import de.tudarmstadt.informatik.tk.android.kraken.model.enums.ECommandType;
 import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.ISensor;
 import de.tudarmstadt.informatik.tk.android.kraken.provider.DbProvider;
 
-
+/**
+ * @edited by Wladimir Schmidt (wlsc.dev@gmail.com)
+ * @date 08.10.2015
+ */
 public class HarvesterService extends Service implements Callback {
 
     private static final String TAG = HarvesterService.class.getSimpleName();
@@ -43,13 +46,13 @@ public class HarvesterService extends Service implements Callback {
     private final Messenger messenger = new Messenger(new Handler(this));
 
     // task identifier
-    private long taskID = 1;
+    private long taskID = 999;
     // the task should be executed every 30 seconds
     private long periodSecs = 5L;
     // the task can run as early as -15 seconds from the scheduled time
     private long flexSecs = 1L;
     // an unique task identifier
-    private String taskTag = "periodic | " + taskID++ + ": " + periodSecs + "s, f:" + flexSecs;
+    private String taskTag = "periodic | " + taskID + ": " + periodSecs + "s, f:" + flexSecs;
 
     private SensorManager mSensorManager;
     private PreferenceManager mPreferenceManager;
@@ -111,7 +114,8 @@ public class HarvesterService extends Service implements Callback {
 
             monitorStart();
 
-            EventUploaderService.schedulePeriodicTask(getApplicationContext(), 5L, 1L, taskTag);
+            Log.d(TAG, "Uploader task tag: " + taskTag);
+//            EventUploaderService.schedulePeriodicTask(getApplicationContext(), 5L, 1L, taskTag);
 
         } else {
             Log.d(TAG, "No active module were found!");
@@ -128,7 +132,7 @@ public class HarvesterService extends Service implements Callback {
         Log.d(TAG, "Service was initiated.");
     }
 
-    private void stopKrakenService() {
+    private void stopService() {
 
         monitorStop();
 
@@ -165,7 +169,7 @@ public class HarvesterService extends Service implements Callback {
         Log.d(TAG, "All sensors are enabled!");
 
         // TODO: enable that later
-        startAccessibilityService();
+//        startAccessibilityService();
     }
 
     /**
@@ -262,7 +266,7 @@ public class HarvesterService extends Service implements Callback {
 
         Log.d(TAG, "Destroying service...");
 
-        stopKrakenService();
+        stopService();
 
         dbModuleInstallationDao = null;
 
@@ -313,7 +317,7 @@ public class HarvesterService extends Service implements Callback {
                 break;
             case STOP_SERVICE:
                 Log.d(TAG, "Command: STOP_SERVICE received");
-                stopKrakenService();
+                stopService();
                 break;
             case REMOVE_HANDLER:
                 Log.d(TAG, "Command: REMOVE_HANDLER received");

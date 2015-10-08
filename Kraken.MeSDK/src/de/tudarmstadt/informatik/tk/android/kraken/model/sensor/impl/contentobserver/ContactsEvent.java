@@ -11,8 +11,8 @@ import android.provider.ContactsContract.Data;
 
 import java.lang.reflect.Method;
 
+import de.tudarmstadt.informatik.tk.android.kraken.model.api.sensors.SensorType;
 import de.tudarmstadt.informatik.tk.android.kraken.model.enums.EPushType;
-import de.tudarmstadt.informatik.tk.android.kraken.model.enums.ESensorType;
 import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.AbstractContentObserverEvent;
 
 public class ContactsEvent extends AbstractContentObserverEvent {
@@ -39,8 +39,8 @@ public class ContactsEvent extends AbstractContentObserverEvent {
     }
 
     @Override
-    public ESensorType getSensorType() {
-        return ESensorType.SENSOR_CONTACTS;
+    public int getType() {
+        return SensorType.CONTACTS;
     }
 
     @Override
@@ -126,7 +126,7 @@ public class ContactsEvent extends AbstractContentObserverEvent {
 //
 //
 //		if (m_bFlushToServer) {
-//            String strFullqualifiedDatabaseClassName = getSensorType().getFullqualifiedDatabaseClassName();
+//            String strFullqualifiedDatabaseClassName = getType().getFullqualifiedDatabaseClassName();
 //            ApiMessage.DataWrapper dataContact = flushDataRetro(strFullqualifiedDatabaseClassName);
 //            ApiMessage.DataWrapper dataMail = flushDataRetro(strFullqualifiedDatabaseClassName + "Mail");
 //            ApiMessage.DataWrapper dataNumber = flushDataRetro(strFullqualifiedDatabaseClassName + "Number");

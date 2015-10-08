@@ -40,7 +40,7 @@ public class LoudnessEventRequest implements Sensor {
         this.id = id;
         this.loudness = loudness;
         this.created = created;
-        this.type = SensorType.LOUDNESS_EVENT;
+        this.type = SensorType.LOUDNESS;
         this.typeStr = SensorType.getApiName(this.type);
     }
 

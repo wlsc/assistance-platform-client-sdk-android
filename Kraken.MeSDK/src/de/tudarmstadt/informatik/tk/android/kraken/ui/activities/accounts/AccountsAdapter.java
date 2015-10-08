@@ -39,7 +39,7 @@ public class AccountsAdapter extends BaseAdapter {
 		m_liData.push(m_LiveSocialLogin);
 
 //		m_loginTwitter = LoginTwitter.getInstance();
-//		m_loginTwitter.setContext(context);
+//		m_loginTwitter.setContextToSensors(context);
 //		m_loginTwitter.CallbackFromActivity(this, intent);
 //		m_liData.push(m_loginTwitter);
 

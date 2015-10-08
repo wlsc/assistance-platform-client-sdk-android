@@ -43,8 +43,8 @@ public class ForegroundTrafficEvent extends AbstractTriggeredEvent {
     }
 
     @Override
-    public ESensorType getSensorType() {
-        return null;
+    public int getType() {
+        return -1;
     }
 
     @Override

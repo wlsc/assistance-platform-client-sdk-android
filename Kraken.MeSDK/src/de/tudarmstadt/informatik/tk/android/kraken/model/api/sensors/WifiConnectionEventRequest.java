@@ -70,7 +70,7 @@ public class WifiConnectionEventRequest implements Sensor {
         this.linkSpeed = linkSpeed;
         this.signalStrength = signalStrength;
         this.networkId = networkId;
-        this.type = SensorType.WIFI_CONNECTION_EVENT;
+        this.type = SensorType.WIFI_CONNECTION;
         this.typeStr = SensorType.getApiName(this.type);
     }
 

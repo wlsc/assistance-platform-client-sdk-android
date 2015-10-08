@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-import de.tudarmstadt.informatik.tk.android.kraken.model.enums.ESensorType;
+import de.tudarmstadt.informatik.tk.android.kraken.model.api.sensors.SensorType;
 import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.AbstractPeriodicEvent;
 import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.ISensor;
 
@@ -33,8 +33,8 @@ public class RunningProcessesReaderEvent extends AbstractPeriodicEvent implement
     }
 
     @Override
-    public ESensorType getSensorType() {
-        return ESensorType.ONE_TIME_SENSOR_RUNNING_PROCESSES;
+    public int getType() {
+        return SensorType.ONE_TIME_SENSOR_RUNNING_PROCESSES;
     }
 
     @Override

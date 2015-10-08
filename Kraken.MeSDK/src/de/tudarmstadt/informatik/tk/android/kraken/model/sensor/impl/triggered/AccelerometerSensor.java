@@ -12,7 +12,7 @@ import java.util.Locale;
 
 import de.tudarmstadt.informatik.tk.android.kraken.db.DbAccelerometerSensor;
 import de.tudarmstadt.informatik.tk.android.kraken.db.DbAccelerometerSensorDao;
-import de.tudarmstadt.informatik.tk.android.kraken.model.enums.ESensorType;
+import de.tudarmstadt.informatik.tk.android.kraken.model.api.sensors.SensorType;
 import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.AbstractTriggeredEvent;
 import de.tudarmstadt.informatik.tk.android.kraken.util.DateUtils;
 
@@ -80,7 +80,6 @@ public class AccelerometerSensor extends AbstractTriggeredEvent implements Senso
 
     @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
-//        reset();
 
         Log.d(TAG, "Accuracy changed. Old: " + this.accuracy + " new: " + accuracy);
 
@@ -88,6 +87,12 @@ public class AccelerometerSensor extends AbstractTriggeredEvent implements Senso
 
         // checks for saving new data
         if (isTimeToSaveData(System.nanoTime())) {
+
+            // accuracy has changed faster than accelerometer itself
+            // ignore that accuracy
+            if (x == 0 && y == 0 && z == 0) {
+                return;
+            }
 
             mLastEventDumpingTimestamp = System.nanoTime();
 
@@ -97,8 +102,6 @@ public class AccelerometerSensor extends AbstractTriggeredEvent implements Senso
 
     @Override
     public void onSensorChanged(SensorEvent event) {
-
-//        boolean bValueAdded = addNewValueToAverage(event, false);
 
         // updating values
         x = event.values[0];
@@ -113,11 +116,6 @@ public class AccelerometerSensor extends AbstractTriggeredEvent implements Senso
             // time to dump/save data into db
             dumpData();
         }
-
-//        if (!bValueAdded) {
-//            sendCurrentSeries();
-//            addNewValueToAverage(event, true);
-//        }
     }
 
     /**
@@ -211,8 +209,8 @@ public class AccelerometerSensor extends AbstractTriggeredEvent implements Senso
     }
 
     @Override
-    public ESensorType getSensorType() {
-        return ESensorType.ACCELEROMETER_SENSOR;
+    public int getType() {
+        return SensorType.ACCELEROMETER;
     }
 
 }

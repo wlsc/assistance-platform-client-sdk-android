@@ -11,7 +11,7 @@ import de.tudarmstadt.informatik.tk.android.kraken.R;
 public class SensorType {
 
     /**
-     * Types of hard and soft sensors
+     * Type of sensors and events
      */
 
     public static final int LOCATION = 1;
@@ -22,22 +22,47 @@ public class SensorType {
 
     public static final int MAGNETIC_FIELD = 4;
 
-    public static final int MOTION_ACTIVITY_EVENT = 5;
+    public static final int MOTION_ACTIVITY = 5;
 
-    public static final int CONNECTION_EVENT = 6;
+    public static final int CONNECTION = 6;
 
-    public static final int WIFI_CONNECTION_EVENT = 7;
+    public static final int WIFI_CONNECTION = 7;
 
-    public static final int MOBILE_DATA_CONNECTION_EVENT = 8;
+    public static final int MOBILE_DATA_CONNECTION = 8;
 
-    public static final int LOUDNESS_EVENT = 9;
+    public static final int LOUDNESS = 9;
 
     public static final int MAGNETIC_FIELD_UNCALIBRATED = 10;
 
     public static final int GYROSCOPE_UNCALIBRATED = 11;
 
-    public static final int FOREGROUND_EVENT = 12;
+    public static final int FOREGROUND = 12;
 
+    public static final int LIGHT = 13;
+
+    public static final int ONE_TIME_SENSOR_RUNNING_SERVICES = 14;
+
+    public static final int ONE_TIME_SENSOR_ACCOUNT_READER = 15;
+
+    public static final int ONE_TIME_SENSOR_RUNNING_TASKS = 16;
+
+    public static final int ONE_TIME_SENSOR_RUNNING_PROCESSES = 17;
+
+    public static final int RINGTONE = 18;
+
+    public static final int BACKGROUND_TRAFFIC = 19;
+
+    public static final int CONTACTS = 20;
+
+    public static final int CALL_LOG = 21;
+
+    public static final int CALENDAR = 22;
+
+    public static final int BROWSER_HISTORY = 23;
+
+    public static final int NETWORK_TRAFFIC = 24;
+
+    public static final int MEASUREMENT_LOG = 25;
 
     private SensorType() {
     }
@@ -52,22 +77,24 @@ public class SensorType {
                 return res.getString(R.string.sensor_accelerometer);
             case MAGNETIC_FIELD:
                 return res.getString(R.string.sensor_magnetic_field);
-            case MOTION_ACTIVITY_EVENT:
+            case MOTION_ACTIVITY:
                 return res.getString(R.string.sensor_motion_activity);
-            case CONNECTION_EVENT:
+            case CONNECTION:
                 return res.getString(R.string.sensor_connection);
-            case WIFI_CONNECTION_EVENT:
+            case WIFI_CONNECTION:
                 return res.getString(R.string.sensor_wifi_connection);
-            case MOBILE_DATA_CONNECTION_EVENT:
+            case MOBILE_DATA_CONNECTION:
                 return res.getString(R.string.sensor_mobile_connection);
-            case LOUDNESS_EVENT:
+            case LOUDNESS:
                 return res.getString(R.string.sensor_loudness);
             case MAGNETIC_FIELD_UNCALIBRATED:
                 return res.getString(R.string.sensor_magnetic_field_uncalibrated);
             case GYROSCOPE_UNCALIBRATED:
                 return res.getString(R.string.sensor_gyroscope_uncalibrated);
-            case FOREGROUND_EVENT:
+            case FOREGROUND:
                 return res.getString(R.string.sensor_foreground_event);
+            case LIGHT:
+                return res.getString(R.string.sensor_light);
             default:
                 return "";
         }
@@ -90,22 +117,24 @@ public class SensorType {
                 return "accelerometer";
             case MAGNETIC_FIELD:
                 return "magneticfield";
-            case MOTION_ACTIVITY_EVENT:
+            case MOTION_ACTIVITY:
                 return "motionactivity";
-            case CONNECTION_EVENT:
+            case CONNECTION:
                 return "connection";
-            case WIFI_CONNECTION_EVENT:
+            case WIFI_CONNECTION:
                 return "wificonnection";
-            case MOBILE_DATA_CONNECTION_EVENT:
+            case MOBILE_DATA_CONNECTION:
                 return "mobileconnection";
-            case LOUDNESS_EVENT:
+            case LOUDNESS:
                 return "loudness";
             case MAGNETIC_FIELD_UNCALIBRATED:
                 return "magnetic_field_uncalibrated";
             case GYROSCOPE_UNCALIBRATED:
                 return "gyroscope_uncalibrated";
-            case FOREGROUND_EVENT:
+            case FOREGROUND:
                 return "foreground_event";
+            case LIGHT:
+                return "light";
             default:
                 return "";
         }

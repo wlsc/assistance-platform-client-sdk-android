@@ -2,7 +2,6 @@ package de.tudarmstadt.informatik.tk.android.kraken.model.sensor.impl.periodic.i
 
 import android.content.Context;
 
-import de.tudarmstadt.informatik.tk.android.kraken.model.enums.ESensorType;
 import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.AbstractPeriodicEvent;
 import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.ISensor;
 
@@ -21,9 +20,9 @@ public class AlarmClockReaderEvent extends AbstractPeriodicEvent implements ISen
     }
 
     @Override
-    public ESensorType getSensorType() {
+    public int getType() {
         // TODO Auto-generated method stub
-        return null;
+        return -1;
     }
 
     @Override

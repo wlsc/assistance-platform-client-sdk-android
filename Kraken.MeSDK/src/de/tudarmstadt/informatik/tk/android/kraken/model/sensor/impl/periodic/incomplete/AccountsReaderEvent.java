@@ -4,7 +4,7 @@ import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.content.Context;
 
-import de.tudarmstadt.informatik.tk.android.kraken.model.enums.ESensorType;
+import de.tudarmstadt.informatik.tk.android.kraken.model.api.sensors.SensorType;
 import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.AbstractPeriodicEvent;
 import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.ISensor;
 
@@ -24,8 +24,8 @@ public class AccountsReaderEvent extends AbstractPeriodicEvent implements ISenso
     }
 
     @Override
-    public ESensorType getSensorType() {
-        return ESensorType.ONE_TIME_SENSOR_ACCOUNT_READER;
+    public int getType() {
+        return SensorType.ONE_TIME_SENSOR_ACCOUNT_READER;
     }
 
     @Override

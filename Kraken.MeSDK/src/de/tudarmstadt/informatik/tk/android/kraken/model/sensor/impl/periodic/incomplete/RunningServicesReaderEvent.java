@@ -7,7 +7,7 @@ import android.content.Context;
 import java.util.LinkedList;
 import java.util.List;
 
-import de.tudarmstadt.informatik.tk.android.kraken.model.enums.ESensorType;
+import de.tudarmstadt.informatik.tk.android.kraken.model.api.sensors.SensorType;
 import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.AbstractPeriodicEvent;
 import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.ISensor;
 
@@ -31,8 +31,8 @@ public class RunningServicesReaderEvent extends AbstractPeriodicEvent implements
     }
 
     @Override
-    public ESensorType getSensorType() {
-        return ESensorType.ONE_TIME_SENSOR_RUNNING_SERVICES;
+    public int getType() {
+        return SensorType.ONE_TIME_SENSOR_RUNNING_SERVICES;
     }
 
     @Override

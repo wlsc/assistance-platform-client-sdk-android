@@ -45,7 +45,7 @@ public class ConnectionEventRequest implements Sensor {
         this.wifi = isWifi;
         this.mobile = isMobile;
         this.created = created;
-        this.type = SensorType.CONNECTION_EVENT;
+        this.type = SensorType.CONNECTION;
         this.typeStr = SensorType.getApiName(this.type);
     }
 

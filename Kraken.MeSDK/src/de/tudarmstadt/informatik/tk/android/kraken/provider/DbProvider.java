@@ -5,7 +5,6 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.v4.util.SparseArrayCompat;
 import android.util.Log;
-import android.util.SparseArray;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -122,7 +121,7 @@ public class DbProvider {
      *
      * @param events
      */
-    public void removeDbSentEvents(SparseArray<List<Sensor>> events) {
+    public void removeDbSentEvents(SparseArrayCompat<List<Sensor>> events) {
 
         Log.d(TAG, "Removing sent events from db...");
 
@@ -141,12 +140,12 @@ public class DbProvider {
                         dbPositionSensorDao.deleteInTx(dbPositionSensors);
                     }
                     break;
-                case SensorType.MOTION_ACTIVITY_EVENT:
+                case SensorType.MOTION_ACTIVITY:
                     if (dbMotionActivityEvents != null) {
                         dbMotionActivityEventDao.deleteInTx(dbMotionActivityEvents);
                     }
                     break;
-                case SensorType.FOREGROUND_EVENT:
+                case SensorType.FOREGROUND:
                     break;
             }
         }
@@ -171,7 +170,7 @@ public class DbProvider {
         entries.put(SensorType.LOCATION, positionList);
 
         List<Sensor> motionActivityList = getMotionActivityEntries(numberOfElements);
-        entries.put(SensorType.MOTION_ACTIVITY_EVENT, motionActivityList);
+        entries.put(SensorType.MOTION_ACTIVITY, motionActivityList);
 
         return entries;
     }
@@ -277,7 +276,7 @@ public class DbProvider {
 
                 MotionActivityEventRequest motionActivityEventRequest = new MotionActivityEventRequest();
 
-                motionActivityEventRequest.setType(SensorType.MOTION_ACTIVITY_EVENT);
+                motionActivityEventRequest.setType(SensorType.MOTION_ACTIVITY);
                 motionActivityEventRequest.setTypeStr(SensorType.getApiName(SensorType.LOCATION));
                 motionActivityEventRequest.setRunning(sensor.getRunning());
                 motionActivityEventRequest.setStationary(sensor.getStationary());

@@ -56,7 +56,7 @@ public class MobileConnectionEventRequest implements Sensor {
         this.mobileNetworkCode = mobileNetworkCode;
         this.created = created;
         this.voipAvailable = voipAvailable;
-        this.type = SensorType.MOBILE_DATA_CONNECTION_EVENT;
+        this.type = SensorType.MOBILE_DATA_CONNECTION;
         this.typeStr = SensorType.getApiName(this.type);
     }
 

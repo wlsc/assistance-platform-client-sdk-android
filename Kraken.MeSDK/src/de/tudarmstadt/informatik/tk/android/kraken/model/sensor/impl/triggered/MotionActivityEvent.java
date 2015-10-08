@@ -18,11 +18,11 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-import de.tudarmstadt.informatik.tk.android.kraken.provider.DbProvider;
 import de.tudarmstadt.informatik.tk.android.kraken.db.DbMotionActivityEvent;
 import de.tudarmstadt.informatik.tk.android.kraken.db.DbMotionActivityEventDao;
-import de.tudarmstadt.informatik.tk.android.kraken.model.enums.ESensorType;
+import de.tudarmstadt.informatik.tk.android.kraken.model.api.sensors.SensorType;
 import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.AbstractTriggeredEvent;
+import de.tudarmstadt.informatik.tk.android.kraken.provider.DbProvider;
 import de.tudarmstadt.informatik.tk.android.kraken.service.ActivitySensorService;
 import de.tudarmstadt.informatik.tk.android.kraken.util.DateUtils;
 
@@ -76,10 +76,6 @@ public class MotionActivityEvent extends AbstractTriggeredEvent implements Googl
 
         DbMotionActivityEvent motionActivityEvent = new DbMotionActivityEvent();
 
-        // set accuracy from most probable activity!
-        motionActivityEvent.setAccuracy(mostProbableActivity == null ? 0 : mostProbableActivity.getConfidence());
-        motionActivityEvent.setCreated(DateUtils.dateToISO8601String(new Date(), Locale.getDefault()));
-
         for (DetectedActivity activity : probableActivities) {
 
             if (activity == null) {
@@ -120,6 +116,8 @@ public class MotionActivityEvent extends AbstractTriggeredEvent implements Googl
                     break;
             }
         }
+
+        motionActivityEvent.setCreated(DateUtils.dateToISO8601String(new Date(), Locale.getDefault()));
 
         // insert db entry
         dbMotionActivityEventDao.insertOrReplace(motionActivityEvent);
@@ -226,8 +224,8 @@ public class MotionActivityEvent extends AbstractTriggeredEvent implements Googl
     }
 
     @Override
-    public ESensorType getSensorType() {
-        return ESensorType.MOTION_ACTIVITY_EVENT;
+    public int getType() {
+        return SensorType.MOTION_ACTIVITY;
     }
 
     @Override

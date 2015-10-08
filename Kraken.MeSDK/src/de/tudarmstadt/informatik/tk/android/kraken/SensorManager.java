@@ -6,8 +6,7 @@ import android.support.v4.util.SparseArrayCompat;
 import java.util.LinkedList;
 import java.util.List;
 
-import de.tudarmstadt.informatik.tk.android.kraken.db.DaoSession;
-import de.tudarmstadt.informatik.tk.android.kraken.model.enums.ESensorType;
+import de.tudarmstadt.informatik.tk.android.kraken.model.enums.EPushType;
 import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.ISensor;
 import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.impl.contentobserver.BrowserHistoryEvent;
 import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.impl.contentobserver.CalendarEvent;
@@ -24,135 +23,182 @@ import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.impl.triggered.L
 import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.impl.triggered.MeasurementEvent;
 import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.impl.triggered.MotionActivityEvent;
 
-
+/**
+ * @edited by Wladimir Schmidt (wlsc.dev@gmail.com)
+ * @date 08.10.2015
+ */
 public class SensorManager {
 
-//    private HashMap<ESensorType, ISensor> sensorsMapping = new HashMap<>();
-    private SparseArrayCompat<ISensor> sensorsMapping = new SparseArrayCompat<>();
-    private List<ISensor> m_liSensors = new LinkedList<>();
+    private SparseArrayCompat<ISensor> sensorByType = new SparseArrayCompat<>();
+
+    private List<ISensor> mAvailableSensors = new LinkedList<>();
 
     private static SensorManager INSTANCE;
+
+    private Context mContext;
+
+    /**
+     * Constructs this class
+     *
+     * @param context
+     */
+    private SensorManager(Context context) {
+
+        this.mContext = context;
+
+        initSensors();
+    }
 
     public static SensorManager getInstance(Context ctx) {
 
         if (INSTANCE == null) {
             INSTANCE = new SensorManager(ctx);
         } else {
-            INSTANCE.setContext(ctx);
+            INSTANCE.setContextToSensors(ctx);
         }
 
         return INSTANCE;
     }
 
-    private SensorManager(Context context) {
+    /**
+     * Initializes available sensors
+     */
+    private void initSensors() {
 
-        final RetroServerPushManager retroServerPushManager = RetroServerPushManager.getInstance(context);
-
-        // // triggered
-        // works
-        AccelerometerSensor accelerometerSensor = new AccelerometerSensor(context);
-        m_liSensors.add(accelerometerSensor);
-        retroServerPushManager.setPushType(accelerometerSensor, accelerometerSensor.getPushType());
-
-        MotionActivityEvent motionActivityEvent = MotionActivityEvent.getInstance(context);
-        m_liSensors.add(motionActivityEvent);
-        retroServerPushManager.setPushType(motionActivityEvent, motionActivityEvent.getPushType());
+        /**
+         * Triggered events / sensors
+         */
 
         // works
-        LightSensor lightSensor = new LightSensor(context);
-        m_liSensors.add(lightSensor);
-        retroServerPushManager.setPushType(lightSensor, lightSensor.getPushType());
+        AccelerometerSensor accelerometerSensor = new AccelerometerSensor(mContext);
+        mAvailableSensors.add(accelerometerSensor);
+
+        MotionActivityEvent motionActivityEvent = MotionActivityEvent.getInstance(mContext);
+        mAvailableSensors.add(motionActivityEvent);
 
         // works
-        LocationSensor locationSensor = new LocationSensor(context);
-        m_liSensors.add(locationSensor);
-        retroServerPushManager.setPushType(locationSensor, locationSensor.getPushType());
-
-        MeasurementEvent measurementEvent = new MeasurementEvent(context);
-        m_liSensors.add(measurementEvent);
-        retroServerPushManager.setPushType(measurementEvent, measurementEvent.getPushType());
+        LightSensor lightSensor = new LightSensor(mContext);
+        mAvailableSensors.add(lightSensor);
 
         // works
-        ConnectionSensor connectionSensor = new ConnectionSensor(context);
-        m_liSensors.add(connectionSensor);
-        retroServerPushManager.setPushType(connectionSensor, connectionSensor.getPushType());
+        LocationSensor locationSensor = new LocationSensor(mContext);
+        mAvailableSensors.add(locationSensor);
+
+        MeasurementEvent measurementEvent = new MeasurementEvent(mContext);
+        mAvailableSensors.add(measurementEvent);
+
+        // works
+        ConnectionSensor connectionSensor = new ConnectionSensor(mContext);
+        mAvailableSensors.add(connectionSensor);
 
         //new foreground traffic
-        ForegroundTrafficEvent foregroundTrafficEvent = new ForegroundTrafficEvent(context);
-        m_liSensors.add(foregroundTrafficEvent);
-        retroServerPushManager.setPushType(foregroundTrafficEvent, foregroundTrafficEvent.getPushType());
+        ForegroundTrafficEvent foregroundTrafficEvent = new ForegroundTrafficEvent(mContext);
+        mAvailableSensors.add(foregroundTrafficEvent);
 
         //new periodic background traffic
-        BackgroundTrafficEvent backgroundTrafficEvent = new BackgroundTrafficEvent(context);
-        m_liSensors.add(backgroundTrafficEvent);
-        retroServerPushManager.setPushType(backgroundTrafficEvent, backgroundTrafficEvent.getPushType());
+        BackgroundTrafficEvent backgroundTrafficEvent = new BackgroundTrafficEvent(mContext);
+        mAvailableSensors.add(backgroundTrafficEvent);
 
         // loudness sensor is blocking microphone and consuming too much battery
-        // LoudnessSensor loudnessSensor = new LoudnessSensor(context);
-        // m_liSensors.add(loudnessSensor);
-        // ServerPushManager.getInstance(context).setPushType(loudnessSensor, loudnessSensor.getPushType());
+        // LoudnessSensor loudnessSensor = new LoudnessSensor(mContext);
+        // mAvailableSensors.add(loudnessSensor);
 
-        // periodic
-        RingtoneEvent ringtoneEvent = new RingtoneEvent(context);
-        m_liSensors.add(ringtoneEvent);
-        retroServerPushManager.setPushType(ringtoneEvent, ringtoneEvent.getPushType());
+        /**
+         * Periodic events / sensors
+         */
 
-        CalendarEvent calendarEvent = new CalendarEvent(context);
-        m_liSensors.add(calendarEvent);
-        retroServerPushManager.setPushType(calendarEvent, calendarEvent.getPushType());
+        RingtoneEvent ringtoneEvent = new RingtoneEvent(mContext);
+        mAvailableSensors.add(ringtoneEvent);
 
-        ContactsEvent contactsEvent = new ContactsEvent(context);
-        m_liSensors.add(contactsEvent);
-        retroServerPushManager.setPushType(contactsEvent, contactsEvent.getPushType());
+        CalendarEvent calendarEvent = new CalendarEvent(mContext);
+        mAvailableSensors.add(calendarEvent);
 
-        CallLogEvent callLogEvent = new CallLogEvent(context);
-        m_liSensors.add(callLogEvent);
-        retroServerPushManager.setPushType(callLogEvent, callLogEvent.getPushType());
+        ContactsEvent contactsEvent = new ContactsEvent(mContext);
+        mAvailableSensors.add(contactsEvent);
 
-        BrowserHistoryEvent browserHistoryEvent = new BrowserHistoryEvent(context);
-        m_liSensors.add(browserHistoryEvent);
-        retroServerPushManager.setPushType(browserHistoryEvent, browserHistoryEvent.getPushType());
+        CallLogEvent callLogEvent = new CallLogEvent(mContext);
+        mAvailableSensors.add(callLogEvent);
 
-        ForegroundEvent foregroundEvent = new ForegroundEvent(context);
-        m_liSensors.add(foregroundEvent);
-        retroServerPushManager.setPushType(foregroundEvent, foregroundEvent.getPushType());
+        BrowserHistoryEvent browserHistoryEvent = new BrowserHistoryEvent(mContext);
+        mAvailableSensors.add(browserHistoryEvent);
 
-        for (ISensor sensor : m_liSensors) {
-            sensorsMapping.put(sensor.getSensorType(), sensor);
+        ForegroundEvent foregroundEvent = new ForegroundEvent(mContext);
+        mAvailableSensors.add(foregroundEvent);
+
+        /**
+         * Save them in map for further fast access
+         */
+        for (ISensor sensor : mAvailableSensors) {
+            sensorByType.put(sensor.getType(), sensor);
         }
     }
 
-    public List<ISensor> getSensors() {
-        return m_liSensors;
-    }
+    /**
+     * Returns available sensors by their PushType
+     *
+     * @param pushType
+     * @return
+     */
+    public List<ISensor> getSensorsByPushType(EPushType pushType) {
 
-    public ISensor getSensor(ESensorType type) {
-        return sensorsMapping.get(type);
-    }
+        List<ISensor> result = new LinkedList<>();
 
-    public List<ISensor> getEnabledSensors() {
+        if (pushType == null) {
+            return result;
+        }
 
-        List<ISensor> liSensors = new LinkedList<ISensor>();
-
-        for (ISensor sensor : m_liSensors) {
-            if (!sensor.isDisabledBySystem() && !sensor.isDisabledByUser()) {
-                liSensors.add(sensor);
+        for (ISensor sensor : mAvailableSensors) {
+            if (sensor.getPushType().equals(pushType)) {
+                result.add(sensor);
             }
         }
 
-        return liSensors;
+        return result;
     }
 
-    public void setContext(Context ctx) {
-        for (ISensor sensor : m_liSensors) {
+    public List<ISensor> getAvailableSensors() {
+        return mAvailableSensors;
+    }
+
+    /**
+     * Returns a sensor by it given type
+     *
+     * @param type
+     * @return
+     */
+    public ISensor getSensor(int type) {
+        return sensorByType.get(type);
+    }
+
+    /**
+     * Returns all enabled sensors / events
+     *
+     * @return
+     */
+    public List<ISensor> getEnabledSensors() {
+
+        List<ISensor> result = new LinkedList<>();
+
+        for (ISensor sensor : mAvailableSensors) {
+
+            if (sensor.isDisabledBySystem() || sensor.isDisabledByUser()) {
+                continue;
+            }
+
+            result.add(sensor);
+        }
+
+        return result;
+    }
+
+    /**
+     * Assigns given context to available sensors
+     *
+     * @param ctx
+     */
+    public void setContextToSensors(Context ctx) {
+        for (ISensor sensor : mAvailableSensors) {
             sensor.setContext(ctx);
         }
     }
-
-    public void setDaoSession(DaoSession daoSession) {
-        for (ISensor sensor : m_liSensors) {
-            sensor.setDaoSession(daoSession);
-        }
-    }
-
 }

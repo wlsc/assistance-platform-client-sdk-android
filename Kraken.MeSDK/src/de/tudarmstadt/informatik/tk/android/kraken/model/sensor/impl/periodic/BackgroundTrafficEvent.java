@@ -6,8 +6,8 @@ import android.content.pm.PackageManager;
 
 import java.util.List;
 
+import de.tudarmstadt.informatik.tk.android.kraken.model.api.sensors.SensorType;
 import de.tudarmstadt.informatik.tk.android.kraken.model.enums.EPushType;
-import de.tudarmstadt.informatik.tk.android.kraken.model.enums.ESensorType;
 import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.AbstractPeriodicEvent;
 import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.ISensor;
 
@@ -75,8 +75,8 @@ public class BackgroundTrafficEvent extends AbstractPeriodicEvent implements ISe
      * @return sensor type of sensor
      */
     @Override
-    public ESensorType getSensorType() {
-        return ESensorType.SENSOR_BACKGROUND_TRAFFIC;
+    public int getType() {
+        return SensorType.BACKGROUND_TRAFFIC;
     }
 
     /**

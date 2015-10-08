@@ -2,15 +2,8 @@ package de.tudarmstadt.informatik.tk.android.kraken.model.sensor;
 
 import android.content.Context;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.List;
-
-import de.tudarmstadt.informatik.tk.android.kraken.model.enums.EPushType;
 import de.tudarmstadt.informatik.tk.android.kraken.db.DaoSession;
-import de.tudarmstadt.informatik.tk.android.kraken.interfaces.IDbSensor;
-import de.tudarmstadt.informatik.tk.android.kraken.model.enums.ESensorType;
+import de.tudarmstadt.informatik.tk.android.kraken.model.enums.EPushType;
 
 
 public interface ISensor {
@@ -19,36 +12,25 @@ public interface ISensor {
 
     void stopSensor();
 
-    ESensorType getSensorType();
+    int getType();
 
     void setContext(Context context);
 
     boolean isDisabledByUser();
 
-    void setDisabledByUser(boolean bDisabled);
+    void setDisabledByUser(boolean isDisabled);
 
     boolean isDisabledBySystem();
 
-    void setDisabledBySystem(boolean bDisabled);
-
-    boolean flushData(DaoSession daoSession) throws JSONException, IllegalAccessException, NoSuchFieldException, ClassNotFoundException;
-
-    List<Sensor> flushDataRetro();
-
-    List<Sensor> flushDataRetro(String strFullqualifiedSensorClassName);
+    void setDisabledBySystem(boolean isDisabled);
 
     EPushType getPushType();
-
-    //	MessageType getMessageType();
-    void configure(JSONObject json);
 
     int getPushIntervalInMin();
 
     void setPushIntervalInMin(int value);
 
     boolean isRunning();
-
-    void removeDataFromDb(List<? extends IDbSensor> liSensorData, String strFullqualifiedSensorClassName);
 
     void setDaoSession(DaoSession daoSession);
 

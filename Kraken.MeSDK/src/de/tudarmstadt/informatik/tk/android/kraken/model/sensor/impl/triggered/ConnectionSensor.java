@@ -15,7 +15,7 @@ import java.util.Date;
 import java.util.Locale;
 
 import de.tudarmstadt.informatik.tk.android.kraken.db.DbConnectionEvent;
-import de.tudarmstadt.informatik.tk.android.kraken.model.enums.ESensorType;
+import de.tudarmstadt.informatik.tk.android.kraken.model.api.sensors.SensorType;
 import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.AbstractTriggeredEvent;
 import de.tudarmstadt.informatik.tk.android.kraken.util.DateUtils;
 
@@ -153,8 +153,8 @@ public class ConnectionSensor extends AbstractTriggeredEvent {
     }
 
     @Override
-    public ESensorType getSensorType() {
-        return ESensorType.CONNECTION_EVENT;
+    public int getType() {
+        return SensorType.CONNECTION;
     }
 
     @Override

@@ -6,11 +6,7 @@ import android.provider.CalendarContract.Events;
 import android.provider.CalendarContract.Reminders;
 import android.util.Log;
 
-import de.greenrobot.dao.Property;
-import de.greenrobot.dao.query.Query;
-import de.greenrobot.dao.query.QueryBuilder;
-import de.tudarmstadt.informatik.tk.android.kraken.interfaces.IDbSensor;
-import de.tudarmstadt.informatik.tk.android.kraken.model.enums.ESensorType;
+import de.tudarmstadt.informatik.tk.android.kraken.model.api.sensors.SensorType;
 import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.AbstractContentObserverEvent;
 
 public class CalendarEvent extends AbstractContentObserverEvent {
@@ -33,8 +29,8 @@ public class CalendarEvent extends AbstractContentObserverEvent {
     private static final String[] PROJECTION_REMINDERS = new String[]{Reminders._ID, Reminders.METHOD, Reminders.MINUTES};
 
     @Override
-    public ESensorType getSensorType() {
-        return ESensorType.SENSOR_CALENDAR;
+    public int getType() {
+        return SensorType.CALENDAR;
     }
 
     @Override
@@ -115,7 +111,7 @@ public class CalendarEvent extends AbstractContentObserverEvent {
 //			m_bFlushToServer = true;
 //
 //		if (m_bFlushToServer) {
-//            String strFullqualifiedDatabaseClassName = getSensorType().getFullqualifiedDatabaseClassName();
+//            String strFullqualifiedDatabaseClassName = getType().getFullqualifiedDatabaseClassName();
 //            //SensorData dataEvents = flushData(mDaoSession, strFullqualifiedDatabaseClassName);
 //            //SensorData dataReminders = flushData(mDaoSession, strFullqualifiedDatabaseClassName + "Reminder");
 //            //ServerPushManager.getInstance(context).flushManually(dataEvents, dataReminders);
@@ -290,16 +286,6 @@ public class CalendarEvent extends AbstractContentObserverEvent {
         });
         thread.setName("CalendarSensorThread");
         thread.start();
-    }
-
-    @Override
-    protected Query<? extends IDbSensor> getDbQuery(Class<? extends IDbSensor> sensorClass, long longTimestamp, QueryBuilder<? extends IDbSensor> qb)
-            throws ClassNotFoundException, NoSuchFieldException, IllegalAccessException, IllegalArgumentException {
-        Property propIsNew = getPropertiesArgument(sensorClass, "IsNew");
-        Property propIsUpdated = getPropertiesArgument(sensorClass, "IsUpdated");
-        Property propIsDeleted = getPropertiesArgument(sensorClass, "IsDeleted");
-        Query<? extends IDbSensor> query = qb.where(qb.or(propIsNew.eq(true), propIsUpdated.eq(true), propIsDeleted.eq(true))).build();
-        return query;
     }
 
     @Override

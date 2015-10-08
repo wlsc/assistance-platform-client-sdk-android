@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<accessibility-service
-     xmlns:android="http://schemas.android.com/apk/res/android"
-     android:accessibilityEventTypes="typeAllMask"
-     android:accessibilityFeedbackType="feedbackGeneric"
-     android:notificationTimeout="100"
-     android:settingsActivity="de.tudarmstadt.informatik.tk.kraken.android.activities.MainActivity"
-     android:description="@string/tutorial_finish_accessibility"
-     android:canRetrieveWindowContent="true"
-/>
-<!--  typeViewClicked|typeViewFocused|typeAllMask|typeViewLongClicked|typeViewSelected|typeViewFocused|typeViewTextChanged|typeViewTextSelectionChanged|typeViewScrolled|typeWindowStateChanged|typeNotificationStateChanged|typeViewHoverEnter|typeViewHoverExit -->
+<accessibility-service xmlns:android="http://schemas.android.com/apk/res/android"
+    android:accessibilityEventTypes="typeAllMask"
+    android:accessibilityFeedbackType="feedbackGeneric"
+    android:canRetrieveWindowContent="true"
+    android:description="@string/tutorial_finish_accessibility"
+    android:notificationTimeout="100"
+    android:settingsActivity="de.tudarmstadt.informatik.tk.kraken.android.activities.MainActivity" />
+
+    <!--  typeViewClicked|typeViewFocused|typeAllMask|typeViewLongClicked|typeViewSelected|typeViewFocused|typeViewTextChanged|typeViewTextSelectionChanged|typeViewScrolled|typeWindowStateChanged|typeNotificationStateChanged|typeViewHoverEnter|typeViewHoverExit -->
