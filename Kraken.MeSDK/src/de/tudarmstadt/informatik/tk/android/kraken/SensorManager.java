@@ -1,8 +1,8 @@
 package de.tudarmstadt.informatik.tk.android.kraken;
 
 import android.content.Context;
+import android.support.v4.util.SparseArrayCompat;
 
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -27,7 +27,8 @@ import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.impl.triggered.M
 
 public class SensorManager {
 
-    private HashMap<ESensorType, ISensor> m_mapSensors = new HashMap<>();
+//    private HashMap<ESensorType, ISensor> sensorsMapping = new HashMap<>();
+    private SparseArrayCompat<ISensor> sensorsMapping = new SparseArrayCompat<>();
     private List<ISensor> m_liSensors = new LinkedList<>();
 
     private static SensorManager INSTANCE;
@@ -117,7 +118,7 @@ public class SensorManager {
         retroServerPushManager.setPushType(foregroundEvent, foregroundEvent.getPushType());
 
         for (ISensor sensor : m_liSensors) {
-            m_mapSensors.put(sensor.getSensorType(), sensor);
+            sensorsMapping.put(sensor.getSensorType(), sensor);
         }
     }
 
@@ -126,7 +127,7 @@ public class SensorManager {
     }
 
     public ISensor getSensor(ESensorType type) {
-        return m_mapSensors.get(type);
+        return sensorsMapping.get(type);
     }
 
     public List<ISensor> getEnabledSensors() {

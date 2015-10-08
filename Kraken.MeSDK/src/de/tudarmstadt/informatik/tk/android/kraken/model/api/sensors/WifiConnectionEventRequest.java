@@ -9,7 +9,7 @@ import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.Sensor;
  * @author Wladimir Schmidt (wlsc.dev@gmail.com)
  * @date 30.08.2015
  */
-public class WifiConnectionEvent implements Sensor {
+public class WifiConnectionEventRequest implements Sensor {
 
     private Long id;
 
@@ -53,14 +53,14 @@ public class WifiConnectionEvent implements Sensor {
 
     private int type;
 
-    public WifiConnectionEvent() {
+    public WifiConnectionEventRequest() {
     }
 
-    public WifiConnectionEvent(long id) {
+    public WifiConnectionEventRequest(long id) {
         this.id = id;
     }
 
-    public WifiConnectionEvent(long id, String ssid, String bssid, String created, Integer channel, Integer frequency, Integer linkSpeed, Integer signalStrength, Integer networkId) {
+    public WifiConnectionEventRequest(long id, String ssid, String bssid, String created, Integer channel, Integer frequency, Integer linkSpeed, Integer signalStrength, Integer networkId) {
         this.id = id;
         this.ssid = ssid;
         this.bssid = bssid;

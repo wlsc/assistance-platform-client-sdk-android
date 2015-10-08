@@ -18,11 +18,11 @@ import de.tudarmstadt.informatik.tk.android.kraken.service.HarvesterService;
  * @author Wladimir Schmidt (wlsc.dev@gmail.com)
  * @date 28.06.2015
  */
-public class ServiceManager implements Handler.Callback {
+public class HarvesterServiceManager implements Handler.Callback {
 
-    private static final String TAG = ServiceManager.class.getSimpleName();
+    private static final String TAG = HarvesterServiceManager.class.getSimpleName();
 
-    private static ServiceManager INSTANCE;
+    private static HarvesterServiceManager INSTANCE;
 
     private final Context mContext;
     private final Intent mKrakenIntent;
@@ -56,17 +56,17 @@ public class ServiceManager implements Handler.Callback {
 //        }
 //    };
 
-    private ServiceManager(Context context) {
+    private HarvesterServiceManager(Context context) {
 
         mContext = context;
         mKrakenIntent = new Intent(context, HarvesterService.class);
         EventBus.getDefault().register(this);
     }
 
-    public static ServiceManager getInstance(Context context) {
+    public static HarvesterServiceManager getInstance(Context context) {
 
         if (INSTANCE == null) {
-            INSTANCE = new ServiceManager(context);
+            INSTANCE = new HarvesterServiceManager(context);
         }
 
         return INSTANCE;
@@ -87,7 +87,7 @@ public class ServiceManager implements Handler.Callback {
     /**
      * Starts sensing service
      */
-    public void startKrakenService() {
+    public void startService() {
 
         mContext.startService(mKrakenIntent);
 
@@ -101,7 +101,7 @@ public class ServiceManager implements Handler.Callback {
     /**
      * Stops sensing service
      */
-    public void stopKrakenService() {
+    public void stopService() {
 
         mContext.stopService(mKrakenIntent);
 
@@ -137,8 +137,8 @@ public class ServiceManager implements Handler.Callback {
 
         Log.d(TAG, "StartSensingEvent received");
 
-        ServiceManager service = ServiceManager.getInstance(event.getContext());
-        service.startKrakenService();
+        HarvesterServiceManager service = HarvesterServiceManager.getInstance(event.getContext());
+        service.startService();
     }
 
     /**
@@ -150,7 +150,7 @@ public class ServiceManager implements Handler.Callback {
 
         Log.d(TAG, "StopSensingEvent received");
 
-        ServiceManager service = ServiceManager.getInstance(event.getContext());
-        service.stopKrakenService();
+        HarvesterServiceManager service = HarvesterServiceManager.getInstance(event.getContext());
+        service.stopService();
     }
 }

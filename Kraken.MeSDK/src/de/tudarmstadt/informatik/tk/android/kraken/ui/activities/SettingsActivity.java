@@ -9,7 +9,7 @@ import android.view.MenuItem;
 
 import de.tudarmstadt.informatik.tk.android.kraken.PreferenceManager;
 import de.tudarmstadt.informatik.tk.android.kraken.R;
-import de.tudarmstadt.informatik.tk.android.kraken.ServiceManager;
+import de.tudarmstadt.informatik.tk.android.kraken.HarvesterServiceManager;
 import de.tudarmstadt.informatik.tk.android.kraken.Settings;
 import de.tudarmstadt.informatik.tk.android.kraken.model.enums.ESensorType;
 import de.tudarmstadt.informatik.tk.android.kraken.SensorManager;
@@ -21,7 +21,7 @@ public class SettingsActivity extends PreferenceActivity implements Preference.O
 
     private static final String KRAKEN_SENSOR_ENABLED_PREFIX = "KrakenSensorEnabled_";
 
-    private ServiceManager mServiceManager;
+    private HarvesterServiceManager mHarvesterServiceManager;
     private PreferenceManager mPreferenceManager;
     private SensorManager mSensorManager;
 
@@ -32,12 +32,12 @@ public class SettingsActivity extends PreferenceActivity implements Preference.O
         getActionBar().setDisplayHomeAsUpEnabled(true);
 
         mPreferenceManager = PreferenceManager.getInstance(this);
-        mServiceManager = ServiceManager.getInstance(getApplicationContext());
+        mHarvesterServiceManager = HarvesterServiceManager.getInstance(getApplicationContext());
         mSensorManager = SensorManager.getInstance(this);
 
         addPreferencesFromResource(R.xml.preferences);
 
-        boolean serviceRunning = mServiceManager.isServiceRunning();
+        boolean serviceRunning = mHarvesterServiceManager.isServiceRunning();
         SwitchPreference krakenActivatedPref = (SwitchPreference) findPreference(PreferenceManager.KRAKEN_ACTIVATED);
         krakenActivatedPref.setChecked(serviceRunning);
 
@@ -77,12 +77,12 @@ public class SettingsActivity extends PreferenceActivity implements Preference.O
         if (key.equals(PreferenceManager.KRAKEN_ACTIVATED)) {
             boolean activated = (boolean) newValue;
             if (activated) {
-                mServiceManager.startKrakenService();
+                mHarvesterServiceManager.startService();
             } else {
-                mServiceManager.stopKrakenService();
+                mHarvesterServiceManager.stopService();
             }
         } else if (key.equals(PreferenceManager.KRAKEN_SHOW_NOTIFICATION)) {
-            mServiceManager.showIcon((boolean) newValue);
+            mHarvesterServiceManager.showIcon((boolean) newValue);
         } else if (key.equals(PreferenceManager.KRAKEN_DATA_PROFILE)) {
             String profile = (String) newValue;
 //            KrakenUtils.initDataProfile(this, profile);

@@ -136,7 +136,7 @@ public class HarvesterService extends Service implements Callback {
 //        RetroServerPushManager.stopPeriodicPush();
 
         setActivityHandler(null);
-        hideIcon();
+        stopForeground(true);
         stopSelf();
     }
 

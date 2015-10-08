@@ -3,6 +3,7 @@ package de.tudarmstadt.informatik.tk.android.kraken.provider;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
+import android.support.v4.util.SparseArrayCompat;
 import android.util.Log;
 import android.util.SparseArray;
 
@@ -159,9 +160,9 @@ public class DbProvider {
      * @param numberOfElements
      * @return
      */
-    public SparseArray<List<Sensor>> getEntriesForUpload(int numberOfElements) {
+    public SparseArrayCompat<List<Sensor>> getEntriesForUpload(int numberOfElements) {
 
-        SparseArray<List<Sensor>> entries = new SparseArray<>();
+        SparseArrayCompat<List<Sensor>> entries = new SparseArrayCompat<>();
 
         List<Sensor> accelerometerList = getAccelerometerEntries(numberOfElements);
         entries.put(SensorType.ACCELEROMETER, accelerometerList);
@@ -286,7 +287,6 @@ public class DbProvider {
                 motionActivityEventRequest.setOnFoot(sensor.getOnFoot());
                 motionActivityEventRequest.setTilting(sensor.getTilting());
                 motionActivityEventRequest.setUnknown(sensor.getUnknown());
-                motionActivityEventRequest.setAccuracy(sensor.getAccuracy());
                 motionActivityEventRequest.setCreated(sensor.getCreated());
 
                 result.add(motionActivityEventRequest);

@@ -38,10 +38,6 @@ public class MotionActivityEventRequest implements Sensor {
     @Expose
     private Integer unknown;
 
-    @SerializedName("accuracy")
-    @Expose
-    private Integer accuracy;
-
     @SerializedName("created")
     @Expose
     private String created;
@@ -67,7 +63,7 @@ public class MotionActivityEventRequest implements Sensor {
         this.id = id;
     }
 
-    public MotionActivityEventRequest(long id, Integer walking, Integer running, Integer cycling, Integer driving, Integer stationary, Integer unknown, Integer accuracy, String created, Integer onFoot, Integer tilting) {
+    public MotionActivityEventRequest(long id, Integer walking, Integer running, Integer cycling, Integer driving, Integer stationary, Integer unknown, String created, Integer onFoot, Integer tilting) {
         this.id = id;
         this.walking = walking;
         this.running = running;
@@ -75,7 +71,6 @@ public class MotionActivityEventRequest implements Sensor {
         this.driving = driving;
         this.stationary = stationary;
         this.unknown = unknown;
-        this.accuracy = accuracy;
         this.created = created;
         this.onFoot = onFoot;
         this.tilting = tilting;
@@ -139,14 +134,6 @@ public class MotionActivityEventRequest implements Sensor {
         this.unknown = unknown;
     }
 
-    public Integer getAccuracy() {
-        return accuracy;
-    }
-
-    public void setAccuracy(Integer accuracy) {
-        this.accuracy = accuracy;
-    }
-
     /**
      * Not-null value.
      */
@@ -205,7 +192,6 @@ public class MotionActivityEventRequest implements Sensor {
                 ", driving=" + driving +
                 ", stationary=" + stationary +
                 ", unknown=" + unknown +
-                ", accuracy=" + accuracy +
                 ", created='" + created + '\'' +
                 ", onFoot=" + onFoot +
                 ", tilting=" + tilting +

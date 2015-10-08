@@ -1,6 +1,7 @@
 package de.tudarmstadt.informatik.tk.android.kraken.service;
 
 import android.content.Context;
+import android.support.v4.util.SparseArrayCompat;
 import android.util.Log;
 import android.util.SparseArray;
 
@@ -14,7 +15,6 @@ import java.util.LinkedList;
 import java.util.List;
 
 import de.tudarmstadt.informatik.tk.android.kraken.PreferenceManager;
-import de.tudarmstadt.informatik.tk.android.kraken.ServiceManager;
 import de.tudarmstadt.informatik.tk.android.kraken.model.api.EventUploadRequest;
 import de.tudarmstadt.informatik.tk.android.kraken.model.api.endpoint.EventUploadEndpoint;
 import de.tudarmstadt.informatik.tk.android.kraken.model.api.endpoint.ServiceGenerator;
@@ -44,11 +44,9 @@ public class EventUploaderService extends GcmTaskService {
     // an unique task identifier
     private String taskTag = "periodic | " + taskID++ + ": " + periodSecs + "s, f:" + flexSecs;
 
-    private ServiceManager serviceManager;
-
     private static PreferenceManager mPreferenceManager;
 
-    private SparseArray<List<Sensor>> events;
+    private SparseArrayCompat<List<Sensor>> events;
 
     @Override
     public void onCreate() {
@@ -74,7 +72,7 @@ public class EventUploaderService extends GcmTaskService {
 
         Log.d(TAG, "Sync server device id: " + serverDeviceId);
 
-        events = new SparseArray<>();
+        events = new SparseArrayCompat<>();
         events = DbProvider.getInstance(getApplicationContext()).getEntriesForUpload(PUSH_NUMBER_OF_EACH_ELEMENTS);
 
         List<Sensor> eventsAsList = new LinkedList<>();
