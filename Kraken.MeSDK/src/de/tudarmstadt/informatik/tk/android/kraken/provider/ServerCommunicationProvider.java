@@ -74,7 +74,7 @@ public class ServerCommunicationProvider {
                 if (response != null && (response.getStatus() == 200 || response.getStatus() == 204)) {
 
                     // persist registration
-                    dbProvider.saveRegistrationTokenToDb(serverDeviceId, registrationToken);
+                    dbProvider.saveRegistrationTokenToDb(registrationToken);
 
                 } else {
                     // TODO: handle response null

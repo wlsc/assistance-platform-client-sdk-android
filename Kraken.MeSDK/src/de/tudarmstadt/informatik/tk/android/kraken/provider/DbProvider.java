@@ -10,6 +10,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import de.greenrobot.dao.identityscope.IdentityScopeType;
+import de.tudarmstadt.informatik.tk.android.kraken.PreferenceManager;
 import de.tudarmstadt.informatik.tk.android.kraken.Settings;
 import de.tudarmstadt.informatik.tk.android.kraken.db.DaoMaster;
 import de.tudarmstadt.informatik.tk.android.kraken.db.DaoSession;
@@ -23,6 +24,8 @@ import de.tudarmstadt.informatik.tk.android.kraken.db.DbMotionActivityEvent;
 import de.tudarmstadt.informatik.tk.android.kraken.db.DbMotionActivityEventDao;
 import de.tudarmstadt.informatik.tk.android.kraken.db.DbPositionSensor;
 import de.tudarmstadt.informatik.tk.android.kraken.db.DbPositionSensorDao;
+import de.tudarmstadt.informatik.tk.android.kraken.db.DbUser;
+import de.tudarmstadt.informatik.tk.android.kraken.db.DbUserDao;
 import de.tudarmstadt.informatik.tk.android.kraken.interfaces.IDbSensor;
 import de.tudarmstadt.informatik.tk.android.kraken.model.api.sensors.AccelerometerSensorRequest;
 import de.tudarmstadt.informatik.tk.android.kraken.model.api.sensors.ForegroundEventRequest;
@@ -52,6 +55,7 @@ public class DbProvider {
     /**
      * DAOs
      */
+    private static DbUserDao dbUserDao;
     private static DbDeviceDao dbDeviceDao;
     private static DbAccelerometerSensorDao dbAccelerometerSensorDao;
     private static DbPositionSensorDao dbPositionSensorDao;
@@ -80,6 +84,10 @@ public class DbProvider {
 
         mDaoMaster = new DaoMaster(mDb);
         mDaoSession = mDaoMaster.newSession(IdentityScopeType.None);
+
+        if (dbUserDao == null) {
+            dbUserDao = getDaoSession().getDbUserDao();
+        }
 
         if (dbDeviceDao == null) {
             dbDeviceDao = getDaoSession().getDbDeviceDao();
@@ -136,10 +144,9 @@ public class DbProvider {
     /**
      * Saves device GCM registration id to db
      *
-     * @param deviceId
      * @param registrationToken
      */
-    public boolean saveRegistrationTokenToDb(long deviceId, String registrationToken) {
+    public boolean saveRegistrationTokenToDb(String registrationToken) {
 
         Log.d(TAG, "Saving GCM registration token to DB...");
 
@@ -148,14 +155,29 @@ public class DbProvider {
             return false;
         }
 
+        final String userToken = PreferenceManager.getInstance(mContext).getUserToken();
+        final long serverDeviceId = PreferenceManager.getInstance(mContext).getServerDeviceId();
+
+        DbUser user = dbUserDao
+                .queryBuilder()
+                .where(DbUserDao.Properties.Token.eq(userToken))
+                .build()
+                .unique();
+
+        if (user == null) {
+            Log.d(TAG, "No such user found! Token: " + userToken);
+            return false;
+        }
+
         DbDevice device = dbDeviceDao
                 .queryBuilder()
-                .where(DbDeviceDao.Properties.Id.eq(deviceId))
+                .where(DbDeviceDao.Properties.UserId.eq(user.getId()))
+                .where(DbDeviceDao.Properties.ServerDeviceId.eq(serverDeviceId))
                 .build()
                 .unique();
 
         if (device == null) {
-            Log.d(TAG, "Not found any device with id: " + deviceId);
+            Log.d(TAG, "Not found any device with id: " + serverDeviceId);
             return false;
         } else {
 
