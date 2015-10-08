@@ -33,6 +33,7 @@ import de.tudarmstadt.informatik.tk.android.kraken.model.api.sensors.MotionActiv
 import de.tudarmstadt.informatik.tk.android.kraken.model.api.sensors.PositionSensorRequest;
 import de.tudarmstadt.informatik.tk.android.kraken.model.api.sensors.SensorType;
 import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.Sensor;
+import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.impl.triggered.ForegroundEvent;
 import de.tudarmstadt.informatik.tk.android.kraken.util.db.DbAssistanceOpenHelper;
 
 /**
@@ -435,7 +436,11 @@ public class DbProvider {
 
         switch (type) {
             case SensorType.FOREGROUND:
+                Log.d(ForegroundEvent.class.getSimpleName(), "Dumping data to db...");
+
                 result = dbForegroundEventDao.insertOrReplace((DbForegroundEvent) sensor);
+
+                Log.d(ForegroundEvent.class.getSimpleName(), "Finished dumping data");
                 break;
         }
 

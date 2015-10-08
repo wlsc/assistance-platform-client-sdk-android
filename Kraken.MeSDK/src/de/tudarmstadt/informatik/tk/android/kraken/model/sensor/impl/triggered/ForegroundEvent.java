@@ -209,6 +209,8 @@ public class ForegroundEvent extends AbstractTriggeredEvent {
                 foregroundEvent.setEventType(EVENT_SCREEN_ON);
             }
 
+            foregroundEvent.setCreated(DateUtils.dateToISO8601String(new Date(), Locale.getDefault()));
+
             dbProvider.insertEntry(foregroundEvent, SensorType.FOREGROUND);
         }
     }
