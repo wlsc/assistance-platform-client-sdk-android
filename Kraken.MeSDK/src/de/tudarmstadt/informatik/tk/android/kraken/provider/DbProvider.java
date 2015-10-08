@@ -25,6 +25,7 @@ import de.tudarmstadt.informatik.tk.android.kraken.db.DbPositionSensor;
 import de.tudarmstadt.informatik.tk.android.kraken.db.DbPositionSensorDao;
 import de.tudarmstadt.informatik.tk.android.kraken.interfaces.IDbSensor;
 import de.tudarmstadt.informatik.tk.android.kraken.model.api.sensors.AccelerometerSensorRequest;
+import de.tudarmstadt.informatik.tk.android.kraken.model.api.sensors.ForegroundEventRequest;
 import de.tudarmstadt.informatik.tk.android.kraken.model.api.sensors.MotionActivityEventRequest;
 import de.tudarmstadt.informatik.tk.android.kraken.model.api.sensors.PositionSensorRequest;
 import de.tudarmstadt.informatik.tk.android.kraken.model.api.sensors.SensorType;
@@ -41,6 +42,7 @@ public class DbProvider {
 
     private static final String TAG = DbProvider.class.getSimpleName();
 
+    private Context mContext;
     private static DbProvider INSTANCE;
 
     private SQLiteDatabase mDb;
@@ -56,9 +58,13 @@ public class DbProvider {
     private static DbMotionActivityEventDao dbMotionActivityEventDao;
     private static DbForegroundEventDao dbForegroundEventDao;
 
+    /**
+     * Lists with transmitted db objects to remove them after
+     */
     private List<DbAccelerometerSensor> dbAccelerometerSensors;
     private List<DbPositionSensor> dbPositionSensors;
     private List<DbMotionActivityEvent> dbMotionActivityEvents;
+    private List<DbForegroundEvent> dbForegroundEvents;
 
     /**
      * Constructor
@@ -66,6 +72,8 @@ public class DbProvider {
      * @param context
      */
     private DbProvider(Context context) {
+
+        this.mContext = context;
 
         DbAssistanceOpenHelper helper = new DbAssistanceOpenHelper(context, Settings.DATABASE_NAME, null);
         mDb = helper.getWritableDatabase();
@@ -191,6 +199,9 @@ public class DbProvider {
                     }
                     break;
                 case SensorType.FOREGROUND:
+                    if (dbForegroundEvents != null) {
+                        dbForegroundEventDao.deleteInTx(dbForegroundEvents);
+                    }
                     break;
             }
         }
@@ -216,6 +227,9 @@ public class DbProvider {
 
         List<Sensor> motionActivityList = getMotionActivityEntries(numberOfElements);
         entries.put(SensorType.MOTION_ACTIVITY, motionActivityList);
+
+        List<Sensor> foregroundEventList = getForegroundEventEntries(numberOfElements);
+        entries.put(SensorType.FOREGROUND, foregroundEventList);
 
         return entries;
     }
@@ -322,7 +336,7 @@ public class DbProvider {
                 MotionActivityEventRequest motionActivityEventRequest = new MotionActivityEventRequest();
 
                 motionActivityEventRequest.setType(SensorType.MOTION_ACTIVITY);
-                motionActivityEventRequest.setTypeStr(SensorType.getApiName(SensorType.LOCATION));
+                motionActivityEventRequest.setTypeStr(SensorType.getApiName(SensorType.MOTION_ACTIVITY));
                 motionActivityEventRequest.setRunning(sensor.getRunning());
                 motionActivityEventRequest.setStationary(sensor.getStationary());
                 motionActivityEventRequest.setCycling(sensor.getCycling());
@@ -334,6 +348,49 @@ public class DbProvider {
                 motionActivityEventRequest.setCreated(sensor.getCreated());
 
                 result.add(motionActivityEventRequest);
+            }
+        }
+
+        return result;
+    }
+
+    /**
+     * Returns number of first entries of foreground events from database
+     *
+     * @param numberElements
+     * @return
+     */
+    private List<Sensor> getForegroundEventEntries(int numberElements) {
+
+        List<Sensor> result = new LinkedList<>();
+
+        dbForegroundEvents = dbForegroundEventDao
+                .queryBuilder()
+                .limit(numberElements)
+                .build()
+                .list();
+
+        if (dbForegroundEvents != null) {
+
+            for (int i = 0; i < dbForegroundEvents.size(); i++) {
+
+                DbForegroundEvent sensor = dbForegroundEvents.get(i);
+
+                ForegroundEventRequest foregroundEventRequest = new ForegroundEventRequest();
+
+                foregroundEventRequest.setType(SensorType.FOREGROUND);
+                foregroundEventRequest.setTypeStr(SensorType.getApiName(SensorType.FOREGROUND));
+                foregroundEventRequest.setAppName(sensor.getAppName());
+                foregroundEventRequest.setActivityLabel(sensor.getActivityLabel());
+                foregroundEventRequest.setClassName(sensor.getClassName());
+                foregroundEventRequest.setColor(sensor.getColor());
+                foregroundEventRequest.setKeystrokes(sensor.getKeystrokes());
+                foregroundEventRequest.setPackageName(sensor.getPackageName());
+                foregroundEventRequest.setUrl(sensor.getUrl());
+                foregroundEventRequest.setEventType(SensorType.getName(sensor.getEventType(), mContext.getResources()));
+                foregroundEventRequest.setCreated(sensor.getCreated());
+
+                result.add(foregroundEventRequest);
             }
         }
 
