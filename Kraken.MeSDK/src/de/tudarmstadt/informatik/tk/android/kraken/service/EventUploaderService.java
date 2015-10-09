@@ -58,7 +58,13 @@ public class EventUploaderService extends GcmTaskService {
             mPreferenceManager = PreferenceManager.getInstance(getApplicationContext());
         }
 
-        schedulePeriodicTask(getApplicationContext(), periodSecs, flexSecs, taskTag);
+        String userToken = mPreferenceManager.getUserToken();
+
+        if (userToken != null && !userToken.isEmpty()) {
+            schedulePeriodicTask(getApplicationContext(), periodSecs, flexSecs, taskTag);
+        } else {
+            Log.d(TAG, "User is not logged in. Scheduled task won't start");
+        }
 
         Log.d(TAG, "Finished!");
     }
@@ -79,6 +85,13 @@ public class EventUploaderService extends GcmTaskService {
                 long serverDeviceId = mPreferenceManager.getServerDeviceId();
 
                 Log.d(TAG, "Sync server device id: " + serverDeviceId);
+
+                // user logged out
+                if (serverDeviceId == -1) {
+                    Log.d(TAG, "User logged out -- periodic task has been canceled!");
+                    GcmNetworkManager.getInstance(getApplicationContext()).cancelAllTasks(EventUploaderService.class);
+                    return;
+                }
 
                 events = new SparseArrayCompat<>();
                 events = DbProvider.getInstance(getApplicationContext()).getEntriesForUpload(PUSH_NUMBER_OF_EACH_ELEMENTS);
