@@ -1,9 +1,14 @@
 package de.tudarmstadt.informatik.tk.android.kraken.service;
 
+import android.app.NotificationManager;
+import android.content.Context;
 import android.os.Bundle;
+import android.support.v7.app.NotificationCompat;
 import android.util.Log;
 
 import com.google.android.gms.gcm.GcmListenerService;
+
+import de.tudarmstadt.informatik.tk.android.kraken.R;
 
 /**
  * Google Cloud Messaging receiver
@@ -44,18 +49,18 @@ public class AssistanceGcmListenerService extends GcmListenerService {
 //                PendingIntent.FLAG_ONE_SHOT);
 
 //        Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-//
-//        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this)
-//                .setSmallIcon(R.drawable.ic_kraken_service)
-//                .setContentTitle("GCM Message")
-//                .setContentText(message)
-//                .setAutoCancel(true)
+
+        NotificationCompat.Builder notificationBuilder = (NotificationCompat.Builder) new NotificationCompat.Builder(this)
+                .setSmallIcon(R.drawable.ic_kraken_service)
+                .setContentTitle("GCM Message")
+                .setContentText(message)
+                .setAutoCancel(true);
 //                .setSound(defaultSoundUri)
 //                .setContentIntent(pendingIntent);
-//
-//        NotificationManager notificationManager =
-//                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-//
-//        notificationManager.notify(0 /* ID of notification */, notificationBuilder.build());
+
+        NotificationManager notificationManager =
+                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+
+        notificationManager.notify(0 /* ID of notification */, notificationBuilder.build());
     }
 }
