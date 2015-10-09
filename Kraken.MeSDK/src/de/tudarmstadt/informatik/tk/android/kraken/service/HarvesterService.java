@@ -1,6 +1,5 @@
 package de.tudarmstadt.informatik.tk.android.kraken.service;
 
-import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.Service;
 import android.content.Intent;
@@ -194,7 +193,7 @@ public class HarvesterService extends Service implements Callback {
                         .setSmallIcon(R.drawable.ic_kraken_service)
                         .setContentTitle(getString(R.string.service_running_notification_title))
                         .setContentText(getString(R.string.service_running_notification_text))
-                        .setPriority(Notification.PRIORITY_MIN)
+//                        .setPriority(Notification.PRIORITY_MIN)
                         .setOngoing(true);
 
         mNotificationManager.notify(Settings.DEFAULT_NOTIFICATION_ID, mBuilder.build());
@@ -235,7 +234,7 @@ public class HarvesterService extends Service implements Callback {
                         .setSmallIcon(R.drawable.ic_kraken_service)
                         .setContentTitle(getString(R.string.service_running_notification_title))
                         .setContentText(getString(R.string.service_running_notification_text))
-                        .setPriority(Notification.PRIORITY_MIN)
+//                        .setPriority(Notification.PRIORITY_MIN)
                         .setOngoing(true);
 
         startForeground(Settings.DEFAULT_NOTIFICATION_ID, mBuilder.build());
