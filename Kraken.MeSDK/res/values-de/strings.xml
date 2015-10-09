@@ -50,7 +50,7 @@
     <string name="tutorial_dataprofile_title">Datenprofil auswählen</string>
     <string name="tutorial_dataprofile_text">Du kannst diese und weitere Optionen jederzeit in den Einstellungen der App anpassen.</string>
     <string name="tutorial_finish_title">Nur noch zwei Schritte</string>
-    <string name="tutorial_finish_accessibility">Damit Kraken richtig funktioniert, musst Du die Bedienungshilfe für Kraken.Me aktivieren. Dazu einfach über den Button die Bedienungshilfen Einstellungen aufrufen und den Kraken.Me Dienst einschalten.</string>
+    <string name="tutorial_finish_accessibility">Damit Assitance App richtig funktioniert, musst Du die Bedienungshilfe aktivieren. Dazu einfach schalten Sie oben ein!</string>
     <string name="tutorial_accessibility_activate">Jetzt aktivieren</string>
     <string name="tutorial_finish_login">Um Kraken zu verwenden ist ein Login erforderlich.</string>
     <string name="tutorial_disclaimer_title">Disclaimer</string>

@@ -45,15 +45,6 @@ public class HarvesterService extends Service implements Callback {
 
     private final Messenger messenger = new Messenger(new Handler(this));
 
-    // task identifier
-    private long taskID = 999;
-    // the task should be executed every 30 seconds
-    private long periodSecs = 5L;
-    // the task can run as early as -15 seconds from the scheduled time
-    private long flexSecs = 1L;
-    // an unique task identifier
-    private String taskTag = "periodic | " + taskID + ": " + periodSecs + "s, f:" + flexSecs;
-
     private SensorManager mSensorManager;
     private PreferenceManager mPreferenceManager;
     private DbProvider mDbProvider;
@@ -81,7 +72,6 @@ public class HarvesterService extends Service implements Callback {
 
         Log.d(TAG, "Service starting...");
 
-        // Init database FIRST!
         mDbProvider = DbProvider.getInstance(getApplicationContext());
 
         mPreferenceManager = PreferenceManager.getInstance(getApplicationContext());
@@ -114,14 +104,10 @@ public class HarvesterService extends Service implements Callback {
 
             monitorStart();
 
-            Log.d(TAG, "Uploader task tag: " + taskTag);
-//            EventUploaderService.schedulePeriodicTask(getApplicationContext(), 5L, 1L, taskTag);
-
+            startAccessibilityService();
         } else {
             Log.d(TAG, "No active module were found!");
         }
-
-//        RetroServerPushManager.getInstance(getApplicationContext());
 
         if (mPreferenceManager.getShowNotification()) {
             showIcon();
@@ -137,7 +123,6 @@ public class HarvesterService extends Service implements Callback {
         monitorStop();
 
         GcmNetworkManager.getInstance(getApplicationContext()).cancelAllTasks(EventUploaderService.class);
-//        RetroServerPushManager.stopPeriodicPush();
 
         setActivityHandler(null);
         stopForeground(true);
@@ -167,9 +152,6 @@ public class HarvesterService extends Service implements Callback {
         }
 
         Log.d(TAG, "All sensors are enabled!");
-
-        // TODO: enable that later
-//        startAccessibilityService();
     }
 
     /**
@@ -370,7 +352,7 @@ public class HarvesterService extends Service implements Callback {
     /**
      * Starts AccessibilityService
      */
-    private void startAccessibilityService() {
+    public void startAccessibilityService() {
 
         Log.d(TAG, "Starting accessibility service...");
 

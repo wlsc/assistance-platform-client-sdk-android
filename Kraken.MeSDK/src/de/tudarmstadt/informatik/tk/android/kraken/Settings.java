@@ -5,9 +5,12 @@ import de.tudarmstadt.informatik.tk.android.kraken.model.enums.ESensorType;
 
 public class Settings {
 
+    private Settings() {
+    }
+
     /*
-    *   Assistance login server. CAUTION: Please write this address without "/" at the end!
-    */
+        *   Assistance login server. CAUTION: Please write this address without "/" at the end!
+        */
     public static final String ASSISTANCE_ENDPOINT = "https://130.83.163.115";  // production
 //    public static final String ASSISTANCE_ENDPOINT = "http://192.168.56.1";   // development: genymotion emulator
 //    public static final String ASSISTANCE_ENDPOINT = "http://192.168.1.102";  // development: localhost
@@ -20,7 +23,7 @@ public class Settings {
 
     public static final String DEVICE_SET_USER_DEFINED_NAME_ENDPOINT = "/devices/set_user_defined_name";
 
-    public static final String PREFERENCES_NAME = "KrakenSDKPreferences";
+    public static final String PREFERENCES_NAME = "AssistanceSDKPreferences";
 
     public static final String DATABASE_NAME = "assistance.sqlite";
 

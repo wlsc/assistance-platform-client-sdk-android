@@ -72,7 +72,7 @@
     <string name="tutorial_dataprofile_title">Pick a data profile</string>
     <string name="tutorial_dataprofile_text">You will be able to change these settings later.</string>
     <string name="tutorial_finish_title">Just two more steps</string>
-    <string name="tutorial_finish_accessibility">For Kraken to work properly you need to activate the accessibility option. Therefore just open the Accessibility Settings via the Button and enable the Kraken.Me service.</string>
+    <string name="tutorial_finish_accessibility">For an Assistance App to work properly you need to activate the accessibility service. Just turn the switch on and that’s it!</string>
     <string name="tutorial_accessibility_activate">Activate now</string>
     <string name="tutorial_finish_login">You have to login first to use Kraken.</string>
     <string name="tutorial_disclaimer_title">Disclaimer</string>

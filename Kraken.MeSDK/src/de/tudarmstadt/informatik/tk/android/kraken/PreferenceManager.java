@@ -29,7 +29,7 @@ public class PreferenceManager {
     public static final String KRAKEN_DATA_PROFILE_BASIC = "KrakenDataProfileBasic";
     public static final String KRAKEN_DATA_PROFILE_FULL = "KrakenDataProfileFull";
 
-    public static final boolean DEFAULT_KRAKEN_ACTIVATED = true;
+    public static final boolean DEFAULT_KRAKEN_ACTIVATED = false;
     public static final boolean DEFAULT_KRAKEN_SHOW_NOTIFICATION = false;
     public static final String DEFAULT_KRAKEN_DATA_PROFILE = KRAKEN_DATA_PROFILE_BASIC;
 

@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.util.Log;
 import android.view.accessibility.AccessibilityEvent;
 
+import de.tudarmstadt.informatik.tk.android.kraken.PreferenceManager;
 import de.tudarmstadt.informatik.tk.android.kraken.SensorManager;
 import de.tudarmstadt.informatik.tk.android.kraken.model.api.sensors.SensorType;
 import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.impl.triggered.ForegroundEvent;
@@ -58,7 +59,10 @@ public class AssistanceAccessibilityService extends AccessibilityService {
 
     @Override
     public boolean onUnbind(Intent intent) {
-        Log.d(TAG, "onUnbind");
+
+        Log.d(TAG, "Unbinding accessibility service...");
+
+        PreferenceManager.getInstance(getApplicationContext()).setActivated(false);
 
         return super.onUnbind(intent);
     }
@@ -74,13 +78,10 @@ public class AssistanceAccessibilityService extends AccessibilityService {
     protected void onServiceConnected() {
         super.onServiceConnected();
 
-        Log.d(TAG, "Service connected.");
+        Log.d(TAG, "Service connected!");
 
-        /*AccessibilityServiceInfo info = new AccessibilityServiceInfo();
-        info.flags = AccessibilityServiceInfo.DEFAULT;
-        info.eventTypes = AccessibilityEvent.TYPES_ALL_MASK;
-        info.feedbackType = AccessibilityServiceInfo.FEEDBACK_GENERIC;
-        setServiceInfo(info);*/
+        PreferenceManager.getInstance(getApplicationContext()).setActivated(true);
+
     }
 
 }
