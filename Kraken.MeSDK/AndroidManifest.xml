@@ -27,10 +27,10 @@
     <uses-permission android:name="android.permission.WAKE_LOCK" />
 
     <permission
-        android:name="${applicationId}.permission.C2D_MESSAGE"
+        android:name="de.tudarmstadt.informatik.tk.android.assistance.permission.C2D_MESSAGE"
         android:protectionLevel="signature" />
 
-    <uses-permission android:name="${applicationId}.permission.C2D_MESSAGE" />
+    <uses-permission android:name="de.tudarmstadt.informatik.tk.android.assistance.permission.C2D_MESSAGE" />
 
     <application android:allowBackup="false">
 
@@ -79,7 +79,11 @@
 
         <service
             android:name=".service.AssistanceGcmListenerService"
-            android:exported="false" />
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+            </intent-filter>
+        </service>
 
         <service
             android:name=".service.AssistanceInstanceIDListenerService"
@@ -140,11 +144,13 @@
 
         <receiver
             android:name="com.google.android.gms.gcm.GcmReceiver"
+            android:exported="true"
             android:permission="com.google.android.c2dm.permission.SEND">
             <intent-filter>
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+                <action android:name="com.google.android.c2dm.intent.REGISTRATION" />
 
-                <category android:name="de.tudarmstadt.informatik.tk.kraken.android" />
+                <category android:name="com.example.gcm" />
             </intent-filter>
         </receiver>
 

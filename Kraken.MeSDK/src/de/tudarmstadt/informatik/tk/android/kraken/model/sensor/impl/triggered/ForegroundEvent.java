@@ -129,6 +129,8 @@ public class ForegroundEvent extends AbstractTriggeredEvent {
 
                 dbProvider.insertEntry(foregroundEvent, SensorType.FOREGROUND);
             }
+        } else {
+            Log.d(TAG, "Event received, but sensor was NOT started!");
         }
     }
 
