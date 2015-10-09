@@ -47,6 +47,7 @@ public class DbProvider {
     private static final String TAG = DbProvider.class.getSimpleName();
 
     private Context mContext;
+
     private static DbProvider INSTANCE;
 
     private SQLiteDatabase mDb;
@@ -56,12 +57,12 @@ public class DbProvider {
     /**
      * DAOs
      */
-    private static DbUserDao dbUserDao;
-    private static DbDeviceDao dbDeviceDao;
-    private static DbAccelerometerSensorDao dbAccelerometerSensorDao;
-    private static DbPositionSensorDao dbPositionSensorDao;
-    private static DbMotionActivityEventDao dbMotionActivityEventDao;
-    private static DbForegroundEventDao dbForegroundEventDao;
+    private static DbUserDao userDao;
+    private static DbDeviceDao deviceDao;
+    private static DbAccelerometerSensorDao accelerometerSensorDao;
+    private static DbPositionSensorDao positionSensorDao;
+    private static DbMotionActivityEventDao motionActivityEventDao;
+    private static DbForegroundEventDao foregroundEventDao;
 
     /**
      * Lists with transmitted db objects to remove them after
@@ -86,28 +87,28 @@ public class DbProvider {
         mDaoMaster = new DaoMaster(mDb);
         mDaoSession = mDaoMaster.newSession(IdentityScopeType.None);
 
-        if (dbUserDao == null) {
-            dbUserDao = getDaoSession().getDbUserDao();
+        if (userDao == null) {
+            userDao = getDaoSession().getDbUserDao();
         }
 
-        if (dbDeviceDao == null) {
-            dbDeviceDao = getDaoSession().getDbDeviceDao();
+        if (deviceDao == null) {
+            deviceDao = getDaoSession().getDbDeviceDao();
         }
 
-        if (dbAccelerometerSensorDao == null) {
-            dbAccelerometerSensorDao = getDaoSession().getDbAccelerometerSensorDao();
+        if (accelerometerSensorDao == null) {
+            accelerometerSensorDao = getDaoSession().getDbAccelerometerSensorDao();
         }
 
-        if (dbPositionSensorDao == null) {
-            dbPositionSensorDao = getDaoSession().getDbPositionSensorDao();
+        if (positionSensorDao == null) {
+            positionSensorDao = getDaoSession().getDbPositionSensorDao();
         }
 
-        if (dbMotionActivityEventDao == null) {
-            dbMotionActivityEventDao = getDaoSession().getDbMotionActivityEventDao();
+        if (motionActivityEventDao == null) {
+            motionActivityEventDao = getDaoSession().getDbMotionActivityEventDao();
         }
 
-        if (dbForegroundEventDao == null) {
-            dbForegroundEventDao = getDaoSession().getDbForegroundEventDao();
+        if (foregroundEventDao == null) {
+            foregroundEventDao = getDaoSession().getDbForegroundEventDao();
         }
     }
 
@@ -159,7 +160,7 @@ public class DbProvider {
         final String userToken = PreferenceManager.getInstance(mContext).getUserToken();
         final long serverDeviceId = PreferenceManager.getInstance(mContext).getServerDeviceId();
 
-        DbUser user = dbUserDao
+        DbUser user = userDao
                 .queryBuilder()
                 .where(DbUserDao.Properties.Token.eq(userToken))
                 .build()
@@ -170,7 +171,7 @@ public class DbProvider {
             return false;
         }
 
-        DbDevice device = dbDeviceDao
+        DbDevice device = deviceDao
                 .queryBuilder()
                 .where(DbDeviceDao.Properties.UserId.eq(user.getId()))
                 .where(DbDeviceDao.Properties.ServerDeviceId.eq(serverDeviceId))
@@ -184,7 +185,7 @@ public class DbProvider {
 
             device.setGcmRegistrationToken(registrationToken);
 
-            dbDeviceDao.update(device);
+            deviceDao.update(device);
 
             Log.d(TAG, "Finished saving GCM token");
 
@@ -208,22 +209,22 @@ public class DbProvider {
             switch (sensorType) {
                 case SensorType.ACCELEROMETER:
                     if (dbAccelerometerSensors != null) {
-                        dbAccelerometerSensorDao.deleteInTx(dbAccelerometerSensors);
+                        accelerometerSensorDao.deleteInTx(dbAccelerometerSensors);
                     }
                     break;
                 case SensorType.LOCATION:
                     if (dbPositionSensors != null) {
-                        dbPositionSensorDao.deleteInTx(dbPositionSensors);
+                        positionSensorDao.deleteInTx(dbPositionSensors);
                     }
                     break;
                 case SensorType.MOTION_ACTIVITY:
                     if (dbMotionActivityEvents != null) {
-                        dbMotionActivityEventDao.deleteInTx(dbMotionActivityEvents);
+                        motionActivityEventDao.deleteInTx(dbMotionActivityEvents);
                     }
                     break;
                 case SensorType.FOREGROUND:
                     if (dbForegroundEvents != null) {
-                        dbForegroundEventDao.deleteInTx(dbForegroundEvents);
+                        foregroundEventDao.deleteInTx(dbForegroundEvents);
                     }
                     break;
             }
@@ -266,7 +267,7 @@ public class DbProvider {
 
         List<Sensor> result = new LinkedList<>();
 
-        dbAccelerometerSensors = dbAccelerometerSensorDao
+        dbAccelerometerSensors = accelerometerSensorDao
                 .queryBuilder()
                 .limit(numberElements)
                 .build()
@@ -304,7 +305,7 @@ public class DbProvider {
 
         List<Sensor> result = new LinkedList<>();
 
-        dbPositionSensors = dbPositionSensorDao
+        dbPositionSensors = positionSensorDao
                 .queryBuilder()
                 .limit(numberElements)
                 .build()
@@ -344,7 +345,7 @@ public class DbProvider {
 
         List<Sensor> result = new LinkedList<>();
 
-        dbMotionActivityEvents = dbMotionActivityEventDao
+        dbMotionActivityEvents = motionActivityEventDao
                 .queryBuilder()
                 .limit(numberElements)
                 .build()
@@ -387,7 +388,7 @@ public class DbProvider {
 
         List<Sensor> result = new LinkedList<>();
 
-        dbForegroundEvents = dbForegroundEventDao
+        dbForegroundEvents = foregroundEventDao
                 .queryBuilder()
                 .limit(numberElements)
                 .build()
@@ -439,12 +440,81 @@ public class DbProvider {
 
                 Log.d(ForegroundEvent.class.getSimpleName(), "Dumping data to db...");
 
-                result = dbForegroundEventDao.insertOrReplace((DbForegroundEvent) sensor);
+                result = foregroundEventDao.insertOrReplace((DbForegroundEvent) sensor);
 
                 Log.d(ForegroundEvent.class.getSimpleName(), "Finished dumping data");
                 break;
         }
 
         return result;
+    }
+
+    /**
+     * Returns db user by email
+     *
+     * @param userEmail
+     * @return
+     */
+    public DbUser getUserByEmail(String userEmail) {
+
+        if (userEmail == null) {
+            return null;
+        }
+
+        return userDao
+                .queryBuilder()
+                .where(DbUserDao.Properties.PrimaryEmail.eq(userEmail))
+                .limit(1)
+                .build()
+                .unique();
+    }
+
+    /**
+     * Returns db user by registered token
+     *
+     * @param userToken
+     * @return
+     */
+    public DbUser getUserByToken(String userToken) {
+
+        if (userToken == null) {
+            return null;
+        }
+
+        return userDao
+                .queryBuilder()
+                .where(DbUserDao.Properties.Token.eq(userToken))
+                .limit(1)
+                .build()
+                .unique();
+    }
+
+    /**
+     * Inserts new user
+     *
+     * @return
+     */
+    public long insertUser(DbUser user) {
+
+        if (user == null) {
+            return -1L;
+        }
+
+        return userDao.insert(user);
+    }
+
+    /**
+     * Inserts new device
+     *
+     * @param device
+     * @return
+     */
+    public long insertDevice(DbDevice device) {
+
+        if (device == null) {
+            return -1L;
+        }
+
+        return deviceDao.insert(device);
     }
 }
