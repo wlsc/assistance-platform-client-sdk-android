@@ -352,7 +352,7 @@ public class HarvesterService extends Service implements Callback {
     /**
      * Starts AccessibilityService
      */
-    public void startAccessibilityService() {
+    private void startAccessibilityService() {
 
         Log.d(TAG, "Starting accessibility service...");
 
