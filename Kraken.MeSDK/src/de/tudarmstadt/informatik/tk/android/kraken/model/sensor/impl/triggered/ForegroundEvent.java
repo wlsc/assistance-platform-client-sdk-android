@@ -88,7 +88,7 @@ public class ForegroundEvent extends AbstractTriggeredEvent {
         dbForegroundEvent.setEventType(EVENT_ASSISTANCE_START);
         dbForegroundEvent.setCreated(DateUtils.dateToISO8601String(new Date(), Locale.getDefault()));
 
-        dbProvider.insertEntry(dbForegroundEvent, SensorType.FOREGROUND);
+        dbProvider.insertEventEntry(dbForegroundEvent, SensorType.FOREGROUND);
     }
 
     @Override
@@ -112,7 +112,7 @@ public class ForegroundEvent extends AbstractTriggeredEvent {
             dbForegroundEvent.setEventType(EVENT_ASSISTANCE_STOP);
             dbForegroundEvent.setCreated(DateUtils.dateToISO8601String(new Date(), Locale.getDefault()));
 
-            dbProvider.insertEntry(dbForegroundEvent, SensorType.FOREGROUND);
+            dbProvider.insertEventEntry(dbForegroundEvent, SensorType.FOREGROUND);
         }
     }
 
@@ -127,7 +127,7 @@ public class ForegroundEvent extends AbstractTriggeredEvent {
                 String color = storeIcon(foregroundEvent.getPackageName());
                 foregroundEvent.setColor(color);
 
-                dbProvider.insertEntry(foregroundEvent, SensorType.FOREGROUND);
+                dbProvider.insertEventEntry(foregroundEvent, SensorType.FOREGROUND);
             }
         } else {
             Log.d(TAG, "Event received, but sensor was NOT started!");
@@ -213,7 +213,7 @@ public class ForegroundEvent extends AbstractTriggeredEvent {
 
             foregroundEvent.setCreated(DateUtils.dateToISO8601String(new Date(), Locale.getDefault()));
 
-            dbProvider.insertEntry(foregroundEvent, SensorType.FOREGROUND);
+            dbProvider.insertEventEntry(foregroundEvent, SensorType.FOREGROUND);
         }
     }
 

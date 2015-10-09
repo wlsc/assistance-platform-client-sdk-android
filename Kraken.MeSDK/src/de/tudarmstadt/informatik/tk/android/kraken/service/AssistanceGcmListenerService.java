@@ -8,6 +8,7 @@ import android.util.Log;
 
 import com.google.android.gms.gcm.GcmListenerService;
 
+import de.tudarmstadt.informatik.tk.android.kraken.Config;
 import de.tudarmstadt.informatik.tk.android.kraken.R;
 
 /**
@@ -28,12 +29,18 @@ public class AssistanceGcmListenerService extends GcmListenerService {
 
         Log.d(TAG, "GCM Message received");
 
-        String message = data.getString("message");
+        // make sure sender is OUR server
+        if (Config.GCM_SENDER_ID.equals(from)) {
 
-        Log.d(TAG, "From: " + from);
-        Log.d(TAG, "Message: " + message);
+            String message = data.getString("message");
 
-        showNotification(message);
+            Log.d(TAG, "From: " + from);
+            Log.d(TAG, "Message: " + message);
+
+            showNotification(message);
+        } else {
+            Log.d(TAG, "GCM Message was sent from UNKNOWN server. Notification was dropped!");
+        }
     }
 
     /**

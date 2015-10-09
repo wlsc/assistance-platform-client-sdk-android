@@ -426,16 +426,17 @@ public class DbProvider {
      * @param sensor
      * @param type
      */
-    public long insertEntry(IDbSensor sensor, int type) {
+    public long insertEventEntry(IDbSensor sensor, int type) {
 
         if (sensor == null) {
-            return -1;
+            return -1L;
         }
 
-        long result = -1;
+        long result = -1L;
 
         switch (type) {
             case SensorType.FOREGROUND:
+
                 Log.d(ForegroundEvent.class.getSimpleName(), "Dumping data to db...");
 
                 result = dbForegroundEventDao.insertOrReplace((DbForegroundEvent) sensor);
