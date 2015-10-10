@@ -11,7 +11,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import de.greenrobot.dao.identityscope.IdentityScopeType;
-import de.tudarmstadt.informatik.tk.android.kraken.Settings;
+import de.tudarmstadt.informatik.tk.android.kraken.Config;
 import de.tudarmstadt.informatik.tk.android.kraken.db.DaoMaster;
 import de.tudarmstadt.informatik.tk.android.kraken.db.DaoSession;
 import de.tudarmstadt.informatik.tk.android.kraken.db.DbAccelerometerSensor;
@@ -90,7 +90,7 @@ public class DbProvider {
 
         this.mContext = context;
 
-        DbAssistanceOpenHelper helper = new DbAssistanceOpenHelper(context, Settings.DATABASE_NAME, null);
+        DbAssistanceOpenHelper helper = new DbAssistanceOpenHelper(context, Config.DATABASE_NAME, null);
         mDb = helper.getWritableDatabase();
 
         mDaoMaster = new DaoMaster(mDb);

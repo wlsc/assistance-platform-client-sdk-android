@@ -5,8 +5,13 @@ import android.content.SharedPreferences;
 
 public class PreferenceProvider {
 
+    public static final String PREFERENCES_NAME = "AssistanceSDKPreferences";
+
     // Kraken prefs
     private static final String KRAKEN_PREFS = "KrakenPrefs";
+
+    public static final String PREFERENCES_SENSOR_DISABLED_BY_USER_POSTFIX = "_disabledByUser";
+    public static final String PREFERENCES_SENSOR_LAST_PUSHED_TIMESTAMP_POSTFIX = "_lastPushedTimestamp";
 
     public static final String KRAKEN_FIRST_START = "KrakenFirstStart";
     public static final String KRAKEN_ACCEPT_DISCLAIMER = "KrakenAcceptDisclaimer";

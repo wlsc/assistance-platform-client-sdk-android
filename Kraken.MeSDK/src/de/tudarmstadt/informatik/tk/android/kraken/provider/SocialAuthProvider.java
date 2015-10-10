@@ -3,8 +3,6 @@ package de.tudarmstadt.informatik.tk.android.kraken.provider;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import de.tudarmstadt.informatik.tk.android.kraken.Settings;
-
 public class SocialAuthProvider {
 
     private static SocialAuthProvider m_socialAuthProvider = null;
@@ -15,7 +13,7 @@ public class SocialAuthProvider {
         if (m_socialAuthProvider == null) {
             m_context = context;
             m_socialAuthProvider = new SocialAuthProvider();
-            m_sharedPreferences = context.getApplicationContext().getSharedPreferences(Settings.PREFERENCES_NAME, Context.MODE_PRIVATE);
+            m_sharedPreferences = context.getApplicationContext().getSharedPreferences(PreferenceProvider.PREFERENCES_NAME, Context.MODE_PRIVATE);
         }
         return m_socialAuthProvider;
     }

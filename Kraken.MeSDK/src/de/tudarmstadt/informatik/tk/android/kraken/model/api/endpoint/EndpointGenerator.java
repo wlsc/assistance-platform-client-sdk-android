@@ -3,7 +3,6 @@ package de.tudarmstadt.informatik.tk.android.kraken.model.api.endpoint;
 import com.google.gson.GsonBuilder;
 
 import de.tudarmstadt.informatik.tk.android.kraken.Config;
-import de.tudarmstadt.informatik.tk.android.kraken.Settings;
 import de.tudarmstadt.informatik.tk.android.kraken.model.httpclient.UntrustedOkHttpClient;
 import retrofit.RestAdapter;
 import retrofit.android.AndroidLog;
@@ -37,7 +36,7 @@ public class EndpointGenerator {
                 .setLogLevel(RestAdapter.LogLevel.FULL) // enabling log traces
                 .setLog(new AndroidLog(Config.HTTP_LOGGER_NAME))
                 .setConverter(new GsonConverter(gsonBuilder.create()))
-                .setEndpoint(Settings.ASSISTANCE_ENDPOINT)
+                .setEndpoint(Config.ASSISTANCE_ENDPOINT)
                 .setClient(new OkClient(new UntrustedOkHttpClient().getClient()))
                 .build();
 

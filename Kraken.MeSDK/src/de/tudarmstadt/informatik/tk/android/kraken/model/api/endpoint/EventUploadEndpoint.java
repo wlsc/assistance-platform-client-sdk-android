@@ -13,7 +13,7 @@ import retrofit.http.POST;
  */
 public interface EventUploadEndpoint {
 
-    @POST(Config.ASSISTANCE_EVENT_UPLOAD_ENDPOINT)
+    @POST(Config.ASSISTANCE_EVENT_UPLOAD_SERVICE_ENDPOINT)
     void uploadData(@Header("X-AUTH-TOKEN") String userToken,
                     @Body EventUploadRequest body,
                     Callback<Void> callback);

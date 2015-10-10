@@ -21,15 +21,15 @@ import java.io.Serializable;
 import java.util.List;
 
 import de.tudarmstadt.informatik.tk.android.kraken.ActivityCommunicator;
-import de.tudarmstadt.informatik.tk.android.kraken.provider.PreferenceProvider;
+import de.tudarmstadt.informatik.tk.android.kraken.Config;
 import de.tudarmstadt.informatik.tk.android.kraken.R;
-import de.tudarmstadt.informatik.tk.android.kraken.provider.SensorProvider;
-import de.tudarmstadt.informatik.tk.android.kraken.Settings;
 import de.tudarmstadt.informatik.tk.android.kraken.db.DaoSession;
 import de.tudarmstadt.informatik.tk.android.kraken.db.DbModuleInstallation;
 import de.tudarmstadt.informatik.tk.android.kraken.model.enums.ECommandType;
 import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.ISensor;
 import de.tudarmstadt.informatik.tk.android.kraken.provider.DbProvider;
+import de.tudarmstadt.informatik.tk.android.kraken.provider.PreferenceProvider;
+import de.tudarmstadt.informatik.tk.android.kraken.provider.SensorProvider;
 
 /**
  * @edited by Wladimir Schmidt (wlsc.dev@gmail.com)
@@ -189,7 +189,7 @@ public class HarvesterService extends Service implements Callback {
 //                        .setPriority(Notification.PRIORITY_MIN)
                         .setOngoing(true);
 
-        mNotificationManager.notify(Settings.DEFAULT_NOTIFICATION_ID, mBuilder.build());
+        mNotificationManager.notify(Config.DEFAULT_NOTIFICATION_ID, mBuilder.build());
     }
 
     /**
@@ -203,7 +203,7 @@ public class HarvesterService extends Service implements Callback {
             mNotificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         }
 
-        mNotificationManager.cancel(Settings.DEFAULT_NOTIFICATION_ID);
+        mNotificationManager.cancel(Config.DEFAULT_NOTIFICATION_ID);
     }
 
     @Override
@@ -211,9 +211,9 @@ public class HarvesterService extends Service implements Callback {
 
         Log.d(TAG, "onStartCommand");
 
-        if (intent != null && intent.hasExtra(Settings.INTENT_EXTRA_SHOW_ICON)) {
+        if (intent != null && intent.hasExtra(Config.INTENT_EXTRA_SHOW_ICON)) {
 
-            boolean showIcon = intent.getBooleanExtra(Settings.INTENT_EXTRA_SHOW_ICON, PreferenceProvider.DEFAULT_KRAKEN_SHOW_NOTIFICATION);
+            boolean showIcon = intent.getBooleanExtra(Config.INTENT_EXTRA_SHOW_ICON, PreferenceProvider.DEFAULT_KRAKEN_SHOW_NOTIFICATION);
 
             if (showIcon) {
                 showIcon();
@@ -230,7 +230,7 @@ public class HarvesterService extends Service implements Callback {
 //                        .setPriority(Notification.PRIORITY_MIN)
                         .setOngoing(true);
 
-        startForeground(Settings.DEFAULT_NOTIFICATION_ID, mBuilder.build());
+        startForeground(Config.DEFAULT_NOTIFICATION_ID, mBuilder.build());
 
         return Service.START_STICKY;
     }
