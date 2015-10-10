@@ -6,6 +6,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.support.v4.util.SparseArrayCompat;
 import android.util.Log;
 
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -20,6 +21,12 @@ import de.tudarmstadt.informatik.tk.android.kraken.db.DbDevice;
 import de.tudarmstadt.informatik.tk.android.kraken.db.DbDeviceDao;
 import de.tudarmstadt.informatik.tk.android.kraken.db.DbForegroundEvent;
 import de.tudarmstadt.informatik.tk.android.kraken.db.DbForegroundEventDao;
+import de.tudarmstadt.informatik.tk.android.kraken.db.DbModule;
+import de.tudarmstadt.informatik.tk.android.kraken.db.DbModuleCapability;
+import de.tudarmstadt.informatik.tk.android.kraken.db.DbModuleCapabilityDao;
+import de.tudarmstadt.informatik.tk.android.kraken.db.DbModuleDao;
+import de.tudarmstadt.informatik.tk.android.kraken.db.DbModuleInstallation;
+import de.tudarmstadt.informatik.tk.android.kraken.db.DbModuleInstallationDao;
 import de.tudarmstadt.informatik.tk.android.kraken.db.DbMotionActivityEvent;
 import de.tudarmstadt.informatik.tk.android.kraken.db.DbMotionActivityEventDao;
 import de.tudarmstadt.informatik.tk.android.kraken.db.DbPositionSensor;
@@ -57,12 +64,15 @@ public class DbProvider {
     /**
      * DAOs
      */
-    private static DbUserDao userDao;
-    private static DbDeviceDao deviceDao;
-    private static DbAccelerometerSensorDao accelerometerSensorDao;
-    private static DbPositionSensorDao positionSensorDao;
-    private static DbMotionActivityEventDao motionActivityEventDao;
-    private static DbForegroundEventDao foregroundEventDao;
+    private DbUserDao userDao;
+    private DbDeviceDao deviceDao;
+    private DbModuleDao moduleDao;
+    private DbModuleCapabilityDao moduleCapabilityDao;
+    private DbModuleInstallationDao moduleInstallationDao;
+    private DbAccelerometerSensorDao accelerometerSensorDao;
+    private DbPositionSensorDao positionSensorDao;
+    private DbMotionActivityEventDao motionActivityEventDao;
+    private DbForegroundEventDao foregroundEventDao;
 
     /**
      * Lists with transmitted db objects to remove them after
@@ -93,6 +103,18 @@ public class DbProvider {
 
         if (deviceDao == null) {
             deviceDao = getDaoSession().getDbDeviceDao();
+        }
+
+        if (moduleDao == null) {
+            moduleDao = getDaoSession().getDbModuleDao();
+        }
+
+        if (moduleCapabilityDao == null) {
+            moduleCapabilityDao = getDaoSession().getDbModuleCapabilityDao();
+        }
+
+        if (moduleInstallationDao == null) {
+            moduleInstallationDao = getDaoSession().getDbModuleInstallationDao();
         }
 
         if (accelerometerSensorDao == null) {
@@ -490,6 +512,109 @@ public class DbProvider {
     }
 
     /**
+     * Returns db user device by id
+     *
+     * @param deviceId
+     * @return
+     */
+    public DbDevice getDeviceById(long deviceId) {
+
+        if (deviceId < 0) {
+            return null;
+        }
+
+        return deviceDao
+                .queryBuilder()
+                .where(DbDeviceDao.Properties.Id.eq(deviceId))
+                .limit(1)
+                .build()
+                .unique();
+    }
+
+    /**
+     * Returns db module installation by user id
+     *
+     * @param userId
+     * @return
+     */
+    public List<DbModuleInstallation> getModuleInstallationsByUserId(long userId) {
+
+        if (userId < 0) {
+            return Collections.emptyList();
+        }
+
+        return moduleInstallationDao
+                .queryBuilder()
+                .where(DbModuleInstallationDao.Properties.UserId.eq(userId))
+                .build()
+                .list();
+    }
+
+    /**
+     * Returns db module installations by user id and module id
+     *
+     * @param userId
+     * @param moduleId
+     * @return
+     */
+    public List<DbModuleInstallation> getModuleInstallationsByUserId(long userId, long moduleId) {
+
+        if (userId < 0) {
+            return Collections.emptyList();
+        }
+
+        return moduleInstallationDao
+                .queryBuilder()
+                .where(DbModuleInstallationDao.Properties.UserId.eq(userId))
+                .where(DbModuleInstallationDao.Properties.ModuleId.eq(moduleId))
+                .build()
+                .list();
+    }
+
+    /**
+     * Returns db module installation by user id and module id
+     *
+     * @param userId
+     * @return
+     */
+    public DbModuleInstallation getModuleInstallationForModuleByUserId(long userId, long moduleId) {
+
+        if (userId < 0) {
+            return null;
+        }
+
+        return moduleInstallationDao
+                .queryBuilder()
+                .where(DbModuleInstallationDao.Properties.UserId.eq(userId))
+                .where(DbModuleInstallationDao.Properties.ModuleId.eq(moduleId))
+                .limit(1)
+                .build()
+                .unique();
+    }
+
+    /**
+     * Returns module by its package id and user id
+     *
+     * @param modulePackageName
+     * @param userId
+     * @return
+     */
+    public DbModule getModuleByPackageIdUserId(String modulePackageName, Long userId) {
+
+        if (modulePackageName == null || userId < 0) {
+            return null;
+        }
+
+        return moduleDao
+                .queryBuilder()
+                .where(DbModuleDao.Properties.PackageName.eq(modulePackageName))
+                .where(DbModuleDao.Properties.UserId.eq(userId))
+                .limit(1)
+                .build()
+                .unique();
+    }
+
+    /**
      * Inserts new user
      *
      * @return
@@ -500,7 +625,7 @@ public class DbProvider {
             return -1L;
         }
 
-        return userDao.insert(user);
+        return userDao.insertOrReplace(user);
     }
 
     /**
@@ -515,6 +640,122 @@ public class DbProvider {
             return -1L;
         }
 
-        return deviceDao.insert(device);
+        return deviceDao.insertOrReplace(device);
+    }
+
+    /**
+     * Inserts new module
+     *
+     * @param module
+     * @return
+     */
+    public long insertModule(DbModule module) {
+
+        if (module == null) {
+            return -1L;
+        }
+
+        return moduleDao.insertOrReplace(module);
+    }
+
+    /**
+     * Inserts new module capability
+     *
+     * @param moduleCapability
+     * @return
+     */
+    public long insertModuleCapability(DbModuleCapability moduleCapability) {
+
+        if (moduleCapability == null) {
+            return -1L;
+        }
+
+        return moduleCapabilityDao.insertOrReplace(moduleCapability);
+    }
+
+    /**
+     * Inserts new module capabilities
+     *
+     * @param moduleCapabilities
+     * @return
+     */
+    public void insertModuleCapabilities(List<DbModuleCapability> moduleCapabilities) {
+
+        if (moduleCapabilities == null) {
+            return;
+        }
+
+        moduleCapabilityDao.insertInTx(moduleCapabilities);
+    }
+
+    /**
+     * Inserts new module installation
+     *
+     * @param moduleInstallation
+     * @return
+     */
+    public long insertModuleInstallation(DbModuleInstallation moduleInstallation) {
+
+        if (moduleInstallation == null) {
+            return -1L;
+        }
+
+        return moduleInstallationDao.insertOrReplace(moduleInstallation);
+    }
+
+    /**
+     * Updates device
+     *
+     * @param device
+     */
+    public void updateDevice(DbDevice device) {
+
+        if (device == null) {
+            return;
+        }
+
+        deviceDao.update(device);
+    }
+
+    /**
+     * Updates user
+     *
+     * @param user
+     */
+    public void updateUser(DbUser user) {
+
+        if (user == null) {
+            return;
+        }
+
+        userDao.update(user);
+    }
+
+    /**
+     * Updates module installation
+     *
+     * @param moduleInstallation
+     */
+    public void updateModuleInstallation(DbModuleInstallation moduleInstallation) {
+
+        if (moduleInstallation == null) {
+            return;
+        }
+
+        moduleInstallationDao.update(moduleInstallation);
+    }
+
+    /**
+     * Removes installed modules
+     *
+     * @param moduleInstallations
+     */
+    public void removeInstalledModules(List<DbModuleInstallation> moduleInstallations) {
+
+        if (moduleInstallations == null) {
+            return;
+        }
+
+        moduleInstallationDao.deleteInTx(moduleInstallations);
     }
 }

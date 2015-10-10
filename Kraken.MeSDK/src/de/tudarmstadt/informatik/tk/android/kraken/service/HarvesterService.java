@@ -27,7 +27,6 @@ import de.tudarmstadt.informatik.tk.android.kraken.SensorManager;
 import de.tudarmstadt.informatik.tk.android.kraken.Settings;
 import de.tudarmstadt.informatik.tk.android.kraken.db.DaoSession;
 import de.tudarmstadt.informatik.tk.android.kraken.db.DbModuleInstallation;
-import de.tudarmstadt.informatik.tk.android.kraken.db.DbModuleInstallationDao;
 import de.tudarmstadt.informatik.tk.android.kraken.model.enums.ECommandType;
 import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.ISensor;
 import de.tudarmstadt.informatik.tk.android.kraken.provider.DbProvider;
@@ -46,9 +45,8 @@ public class HarvesterService extends Service implements Callback {
 
     private SensorManager mSensorManager;
     private PreferenceManager mPreferenceManager;
-    private DbProvider mDbProvider;
 
-    private static DbModuleInstallationDao dbModuleInstallationDao;
+    private DbProvider dbProvider;
 
     private NotificationManager mNotificationManager;
 
@@ -60,7 +58,7 @@ public class HarvesterService extends Service implements Callback {
     }
 
     public DaoSession getDaoSession() {
-        return mDbProvider.getDaoSession();
+        return dbProvider.getDaoSession();
     }
 
     @Override
@@ -71,7 +69,9 @@ public class HarvesterService extends Service implements Callback {
 
         Log.d(TAG, "Service starting...");
 
-        mDbProvider = DbProvider.getInstance(getApplicationContext());
+        if (dbProvider == null) {
+            dbProvider = DbProvider.getInstance(getApplicationContext());
+        }
 
         mPreferenceManager = PreferenceManager.getInstance(getApplicationContext());
 
@@ -85,18 +85,11 @@ public class HarvesterService extends Service implements Callback {
 
         Log.d(TAG, "Initializing service...");
 
-        if (dbModuleInstallationDao == null) {
-            dbModuleInstallationDao = mDbProvider.getDaoSession().getDbModuleInstallationDao();
-        }
-
         SharedPreferences sharedPreferences = android.preference.PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         long userId = sharedPreferences.getLong("current_user_id", -1);
 
-        List<DbModuleInstallation> dbModuleInstallations = dbModuleInstallationDao
-                .queryBuilder()
-                .where(DbModuleInstallationDao.Properties.UserId.eq(userId))
-                .build()
-                .list();
+        List<DbModuleInstallation> dbModuleInstallations = dbProvider
+                .getModuleInstallationsByUserId(userId);
 
         if (dbModuleInstallations != null && !dbModuleInstallations.isEmpty()) {
             Log.d(TAG, "Found active modules -> starting monitoring activities...");
@@ -244,30 +237,21 @@ public class HarvesterService extends Service implements Callback {
 
     @Override
     public void onDestroy() {
-
         Log.d(TAG, "Destroying service...");
-
         stopService();
-
-        dbModuleInstallationDao = null;
-
         super.onDestroy();
     }
 
     @Override
     public boolean onUnbind(Intent intent) {
-
         Log.d(TAG, "Unbinding...");
-
         setActivityHandler(null);
         return super.onUnbind(intent);
     }
 
     @Override
     public IBinder onBind(Intent intent) {
-
         Log.d(TAG, "Binding...");
-
         return messenger.getBinder();
     }
 
