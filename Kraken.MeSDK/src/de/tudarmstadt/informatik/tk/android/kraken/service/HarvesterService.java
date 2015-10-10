@@ -21,9 +21,9 @@ import java.io.Serializable;
 import java.util.List;
 
 import de.tudarmstadt.informatik.tk.android.kraken.ActivityCommunicator;
-import de.tudarmstadt.informatik.tk.android.kraken.PreferenceManager;
+import de.tudarmstadt.informatik.tk.android.kraken.provider.PreferenceProvider;
 import de.tudarmstadt.informatik.tk.android.kraken.R;
-import de.tudarmstadt.informatik.tk.android.kraken.SensorManager;
+import de.tudarmstadt.informatik.tk.android.kraken.provider.SensorProvider;
 import de.tudarmstadt.informatik.tk.android.kraken.Settings;
 import de.tudarmstadt.informatik.tk.android.kraken.db.DaoSession;
 import de.tudarmstadt.informatik.tk.android.kraken.db.DbModuleInstallation;
@@ -43,8 +43,8 @@ public class HarvesterService extends Service implements Callback {
 
     private final Messenger messenger = new Messenger(new Handler(this));
 
-    private SensorManager mSensorManager;
-    private PreferenceManager mPreferenceManager;
+    private SensorProvider mSensorProvider;
+    private PreferenceProvider mPreferenceProvider;
 
     private DbProvider dbProvider;
 
@@ -73,7 +73,7 @@ public class HarvesterService extends Service implements Callback {
             dbProvider = DbProvider.getInstance(getApplicationContext());
         }
 
-        mPreferenceManager = PreferenceManager.getInstance(getApplicationContext());
+        mPreferenceProvider = PreferenceProvider.getInstance(getApplicationContext());
 
         initService();
     }
@@ -101,7 +101,7 @@ public class HarvesterService extends Service implements Callback {
             Log.d(TAG, "No active module were found!");
         }
 
-        if (mPreferenceManager.getShowNotification()) {
+        if (mPreferenceProvider.getShowNotification()) {
             showIcon();
         } else {
             hideIcon();
@@ -130,9 +130,9 @@ public class HarvesterService extends Service implements Callback {
 
 //		Handler handler = ActivityCommunicator.getHandler();
 
-        mSensorManager = SensorManager.getInstance(this);
+        mSensorProvider = SensorProvider.getInstance(this);
 
-        List<ISensor> enabledSensors = mSensorManager.getEnabledSensors();
+        List<ISensor> enabledSensors = mSensorProvider.getEnabledSensors();
 
         for (ISensor sensor : enabledSensors) {
 
@@ -153,11 +153,11 @@ public class HarvesterService extends Service implements Callback {
 
         Log.d(TAG, "Stopping service...");
 
-        if (mSensorManager == null) {
-            mSensorManager = SensorManager.getInstance(this);
+        if (mSensorProvider == null) {
+            mSensorProvider = SensorProvider.getInstance(this);
         }
 
-        for (ISensor sensor : mSensorManager.getEnabledSensors()) {
+        for (ISensor sensor : mSensorProvider.getEnabledSensors()) {
 
             if (sensor == null) {
                 continue;
@@ -213,7 +213,7 @@ public class HarvesterService extends Service implements Callback {
 
         if (intent != null && intent.hasExtra(Settings.INTENT_EXTRA_SHOW_ICON)) {
 
-            boolean showIcon = intent.getBooleanExtra(Settings.INTENT_EXTRA_SHOW_ICON, PreferenceManager.DEFAULT_KRAKEN_SHOW_NOTIFICATION);
+            boolean showIcon = intent.getBooleanExtra(Settings.INTENT_EXTRA_SHOW_ICON, PreferenceProvider.DEFAULT_KRAKEN_SHOW_NOTIFICATION);
 
             if (showIcon) {
                 showIcon();

@@ -5,8 +5,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
-import de.tudarmstadt.informatik.tk.android.kraken.HarvesterServiceManager;
-import de.tudarmstadt.informatik.tk.android.kraken.PreferenceManager;
+import de.tudarmstadt.informatik.tk.android.kraken.provider.HarvesterServiceProvider;
+import de.tudarmstadt.informatik.tk.android.kraken.provider.PreferenceProvider;
 
 /**
  * @author Karsten Planz
@@ -22,7 +22,7 @@ public class BootReceiver extends BroadcastReceiver {
         // check for proper action
         if ("android.intent.action.BOOT_COMPLETED".equals(intent.getAction())) {
 
-            boolean activated = PreferenceManager.getInstance(context).getActivated();
+            boolean activated = PreferenceProvider.getInstance(context).getActivated();
 
             Log.d(TAG, "BootReceiver onReceive " + activated);
 
@@ -30,7 +30,7 @@ public class BootReceiver extends BroadcastReceiver {
 
                 Log.d(TAG, "Start on boot activated -> starting service...");
 
-                final HarvesterServiceManager service = HarvesterServiceManager.getInstance(context);
+                final HarvesterServiceProvider service = HarvesterServiceProvider.getInstance(context);
                 service.startService();
             }
         }

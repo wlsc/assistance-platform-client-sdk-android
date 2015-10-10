@@ -11,7 +11,6 @@ import java.util.LinkedList;
 import java.util.List;
 
 import de.greenrobot.dao.identityscope.IdentityScopeType;
-import de.tudarmstadt.informatik.tk.android.kraken.PreferenceManager;
 import de.tudarmstadt.informatik.tk.android.kraken.Settings;
 import de.tudarmstadt.informatik.tk.android.kraken.db.DaoMaster;
 import de.tudarmstadt.informatik.tk.android.kraken.db.DaoSession;
@@ -179,8 +178,8 @@ public class DbProvider {
             return false;
         }
 
-        final String userToken = PreferenceManager.getInstance(mContext).getUserToken();
-        final long serverDeviceId = PreferenceManager.getInstance(mContext).getServerDeviceId();
+        final String userToken = PreferenceProvider.getInstance(mContext).getUserToken();
+        final long serverDeviceId = PreferenceProvider.getInstance(mContext).getServerDeviceId();
 
         DbUser user = userDao
                 .queryBuilder()

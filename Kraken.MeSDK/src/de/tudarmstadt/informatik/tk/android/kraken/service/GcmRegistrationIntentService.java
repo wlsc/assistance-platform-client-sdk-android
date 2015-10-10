@@ -13,7 +13,7 @@ import com.google.android.gms.iid.InstanceID;
 import java.io.IOException;
 
 import de.tudarmstadt.informatik.tk.android.kraken.Config;
-import de.tudarmstadt.informatik.tk.android.kraken.PreferenceManager;
+import de.tudarmstadt.informatik.tk.android.kraken.provider.PreferenceProvider;
 import de.tudarmstadt.informatik.tk.android.kraken.provider.ServerCommunicationProvider;
 
 /**
@@ -68,18 +68,18 @@ public class GcmRegistrationIntentService extends IntentService {
             // You should store a boolean that indicates whether the generated token has been
             // sent to your server. If the boolean is false, send the token to your server,
             // otherwise your server should have already received the token.
-            PreferenceManager.getInstance(getApplicationContext()).setSentTokenToServer(true);
+            PreferenceProvider.getInstance(getApplicationContext()).setSentTokenToServer(true);
 
         } catch (Exception e) {
 
             Log.e(TAG, "Failed to complete token refresh", e);
             // If an exception happens while fetching the new token or updating our registration data
             // on a third-party server, this ensures that we'll attempt the update at a later time.
-            PreferenceManager.getInstance(getApplicationContext()).setSentTokenToServer(false);
+            PreferenceProvider.getInstance(getApplicationContext()).setSentTokenToServer(false);
         }
 
         // Notify UI that registration has completed, so the progress indicator can be hidden.
-        Intent registrationComplete = new Intent(PreferenceManager.REGISTRATION_COMPLETE);
+        Intent registrationComplete = new Intent(PreferenceProvider.REGISTRATION_COMPLETE);
         LocalBroadcastManager.getInstance(this).sendBroadcast(registrationComplete);
     }
 

@@ -1,4 +1,4 @@
-package de.tudarmstadt.informatik.tk.android.kraken;
+package de.tudarmstadt.informatik.tk.android.kraken.provider;
 
 import android.content.Context;
 import android.support.v4.util.SparseArrayCompat;
@@ -19,13 +19,13 @@ import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.impl.triggered.M
  * @edited by Wladimir Schmidt (wlsc.dev@gmail.com)
  * @date 08.10.2015
  */
-public class SensorManager {
+public class SensorProvider {
 
     private SparseArrayCompat<ISensor> sensorByType = new SparseArrayCompat<>();
 
     private List<ISensor> mAvailableSensors = new LinkedList<>();
 
-    private static SensorManager INSTANCE;
+    private static SensorProvider INSTANCE;
 
     private Context mContext;
 
@@ -34,17 +34,17 @@ public class SensorManager {
      *
      * @param context
      */
-    private SensorManager(Context context) {
+    private SensorProvider(Context context) {
 
         this.mContext = context;
 
         initSensors();
     }
 
-    public static SensorManager getInstance(Context ctx) {
+    public static SensorProvider getInstance(Context ctx) {
 
         if (INSTANCE == null) {
-            INSTANCE = new SensorManager(ctx);
+            INSTANCE = new SensorProvider(ctx);
         } else {
             INSTANCE.setContextToSensors(ctx);
         }

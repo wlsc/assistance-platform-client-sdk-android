@@ -1,4 +1,4 @@
-package de.tudarmstadt.informatik.tk.android.kraken;
+package de.tudarmstadt.informatik.tk.android.kraken.provider;
 
 import android.app.ActivityManager;
 import android.content.Context;
@@ -18,11 +18,11 @@ import de.tudarmstadt.informatik.tk.android.kraken.service.HarvesterService;
  * @author Wladimir Schmidt (wlsc.dev@gmail.com)
  * @date 28.06.2015
  */
-public class HarvesterServiceManager implements Handler.Callback {
+public class HarvesterServiceProvider implements Handler.Callback {
 
-    private static final String TAG = HarvesterServiceManager.class.getSimpleName();
+    private static final String TAG = HarvesterServiceProvider.class.getSimpleName();
 
-    private static HarvesterServiceManager INSTANCE;
+    private static HarvesterServiceProvider INSTANCE;
 
     private final Context mContext;
     private final Intent mKrakenIntent;
@@ -56,17 +56,17 @@ public class HarvesterServiceManager implements Handler.Callback {
 //        }
 //    };
 
-    private HarvesterServiceManager(Context context) {
+    private HarvesterServiceProvider(Context context) {
 
         mContext = context;
         mKrakenIntent = new Intent(context, HarvesterService.class);
         EventBus.getDefault().register(this);
     }
 
-    public static HarvesterServiceManager getInstance(Context context) {
+    public static HarvesterServiceProvider getInstance(Context context) {
 
         if (INSTANCE == null) {
-            INSTANCE = new HarvesterServiceManager(context);
+            INSTANCE = new HarvesterServiceProvider(context);
         }
 
         return INSTANCE;
@@ -137,7 +137,7 @@ public class HarvesterServiceManager implements Handler.Callback {
 
         Log.d(TAG, "StartSensingEvent received");
 
-        HarvesterServiceManager service = HarvesterServiceManager.getInstance(event.getContext());
+        HarvesterServiceProvider service = HarvesterServiceProvider.getInstance(event.getContext());
         service.startService();
     }
 
@@ -150,7 +150,7 @@ public class HarvesterServiceManager implements Handler.Callback {
 
         Log.d(TAG, "StopSensingEvent received");
 
-        HarvesterServiceManager service = HarvesterServiceManager.getInstance(event.getContext());
+        HarvesterServiceProvider service = HarvesterServiceProvider.getInstance(event.getContext());
         service.stopService();
     }
 }

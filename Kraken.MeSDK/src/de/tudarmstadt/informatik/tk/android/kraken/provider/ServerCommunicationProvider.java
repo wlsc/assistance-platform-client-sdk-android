@@ -2,7 +2,6 @@ package de.tudarmstadt.informatik.tk.android.kraken.provider;
 
 import android.content.Context;
 
-import de.tudarmstadt.informatik.tk.android.kraken.PreferenceManager;
 import de.tudarmstadt.informatik.tk.android.kraken.model.api.device.DeviceRegistrationRequest;
 import de.tudarmstadt.informatik.tk.android.kraken.model.api.endpoint.DeviceEndpoint;
 import de.tudarmstadt.informatik.tk.android.kraken.model.api.endpoint.EndpointGenerator;
@@ -57,8 +56,8 @@ public class ServerCommunicationProvider {
      */
     public void sendGcmRegistrationToken(final String registrationToken) {
 
-        final String userToken = PreferenceManager.getInstance(mContext).getUserToken();
-        final long serverDeviceId = PreferenceManager.getInstance(mContext).getServerDeviceId();
+        final String userToken = PreferenceProvider.getInstance(mContext).getUserToken();
+        final long serverDeviceId = PreferenceProvider.getInstance(mContext).getServerDeviceId();
 
         DeviceRegistrationRequest deviceRegistrationRequest = new DeviceRegistrationRequest();
 

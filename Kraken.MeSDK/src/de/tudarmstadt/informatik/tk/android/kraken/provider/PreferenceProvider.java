@@ -1,9 +1,9 @@
-package de.tudarmstadt.informatik.tk.android.kraken;
+package de.tudarmstadt.informatik.tk.android.kraken.provider;
 
 import android.content.Context;
 import android.content.SharedPreferences;
 
-public class PreferenceManager {
+public class PreferenceProvider {
 
     // Kraken prefs
     private static final String KRAKEN_PREFS = "KrakenPrefs";
@@ -36,16 +36,16 @@ public class PreferenceManager {
 
     private SharedPreferences prefs;
     private SharedPreferences defaultPrefs;
-    private static PreferenceManager manager;
+    private static PreferenceProvider manager;
 
-    public PreferenceManager(Context context) {
+    public PreferenceProvider(Context context) {
         this.prefs = context.getSharedPreferences(KRAKEN_PREFS, Context.MODE_PRIVATE);
         this.defaultPrefs = android.preference.PreferenceManager.getDefaultSharedPreferences(context);
     }
 
-    public static PreferenceManager getInstance(Context context) {
+    public static PreferenceProvider getInstance(Context context) {
         if (manager == null) {
-            manager = new PreferenceManager(context);
+            manager = new PreferenceProvider(context);
         }
         return manager;
     }

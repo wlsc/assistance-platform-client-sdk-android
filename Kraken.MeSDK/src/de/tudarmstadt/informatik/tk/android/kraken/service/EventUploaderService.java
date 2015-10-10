@@ -14,7 +14,7 @@ import com.google.android.gms.gcm.TaskParams;
 import java.util.LinkedList;
 import java.util.List;
 
-import de.tudarmstadt.informatik.tk.android.kraken.PreferenceManager;
+import de.tudarmstadt.informatik.tk.android.kraken.provider.PreferenceProvider;
 import de.tudarmstadt.informatik.tk.android.kraken.model.api.EventUploadRequest;
 import de.tudarmstadt.informatik.tk.android.kraken.model.api.endpoint.EndpointGenerator;
 import de.tudarmstadt.informatik.tk.android.kraken.model.api.endpoint.EventUploadEndpoint;
@@ -44,7 +44,7 @@ public class EventUploaderService extends GcmTaskService {
     // an unique task identifier
     private String taskTag = "periodic | " + taskID + ": " + periodSecs + "s, f:" + flexSecs;
 
-    private static PreferenceManager mPreferenceManager;
+    private static PreferenceProvider mPreferenceProvider;
 
     private SparseArrayCompat<List<Sensor>> events;
 
@@ -54,11 +54,11 @@ public class EventUploaderService extends GcmTaskService {
 
         Log.d(TAG, "Initializing...");
 
-        if (mPreferenceManager == null) {
-            mPreferenceManager = PreferenceManager.getInstance(getApplicationContext());
+        if (mPreferenceProvider == null) {
+            mPreferenceProvider = PreferenceProvider.getInstance(getApplicationContext());
         }
 
-        String userToken = mPreferenceManager.getUserToken();
+        String userToken = mPreferenceProvider.getUserToken();
 
         if (userToken != null && !userToken.isEmpty()) {
             schedulePeriodicTask(getApplicationContext(), periodSecs, flexSecs, taskTag);
@@ -82,7 +82,7 @@ public class EventUploaderService extends GcmTaskService {
 
                 EventUploadRequest eventUploadRequest = new EventUploadRequest();
 
-                long serverDeviceId = mPreferenceManager.getServerDeviceId();
+                long serverDeviceId = mPreferenceProvider.getServerDeviceId();
 
                 Log.d(TAG, "Sync server device id: " + serverDeviceId);
 
@@ -133,7 +133,7 @@ public class EventUploaderService extends GcmTaskService {
         // send to upload data service
         EventUploadEndpoint eventUploadEndpoint = EndpointGenerator.create(EventUploadEndpoint.class);
 
-        String userToken = mPreferenceManager.getUserToken();
+        String userToken = mPreferenceProvider.getUserToken();
 
         eventUploadEndpoint.uploadData(userToken, eventUploadRequest, new Callback<Void>() {
 

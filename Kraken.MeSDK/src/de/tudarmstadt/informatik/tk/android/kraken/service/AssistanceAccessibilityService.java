@@ -5,8 +5,8 @@ import android.content.Intent;
 import android.util.Log;
 import android.view.accessibility.AccessibilityEvent;
 
-import de.tudarmstadt.informatik.tk.android.kraken.PreferenceManager;
-import de.tudarmstadt.informatik.tk.android.kraken.SensorManager;
+import de.tudarmstadt.informatik.tk.android.kraken.provider.PreferenceProvider;
+import de.tudarmstadt.informatik.tk.android.kraken.provider.SensorProvider;
 import de.tudarmstadt.informatik.tk.android.kraken.model.api.sensors.SensorType;
 import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.impl.triggered.ForegroundEvent;
 import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.impl.triggered.ForegroundTrafficEvent;
@@ -30,11 +30,11 @@ public class AssistanceAccessibilityService extends AccessibilityService {
 
         Log.d(TAG, "Starting service...");
 
-        mForegroundSensor = (ForegroundEvent) SensorManager
+        mForegroundSensor = (ForegroundEvent) SensorProvider
                 .getInstance(getApplicationContext())
                 .getSensor(SensorType.FOREGROUND);
 
-        mForegroundTrafficEvent = (ForegroundTrafficEvent) SensorManager
+        mForegroundTrafficEvent = (ForegroundTrafficEvent) SensorProvider
                 .getInstance(getApplicationContext())
                 .getSensor(SensorType.NETWORK_TRAFFIC);
 
@@ -62,7 +62,7 @@ public class AssistanceAccessibilityService extends AccessibilityService {
 
         Log.d(TAG, "Unbinding accessibility service...");
 
-        PreferenceManager.getInstance(getApplicationContext()).setActivated(false);
+        PreferenceProvider.getInstance(getApplicationContext()).setActivated(false);
 
         return super.onUnbind(intent);
     }
@@ -80,7 +80,7 @@ public class AssistanceAccessibilityService extends AccessibilityService {
 
         Log.d(TAG, "Service connected!");
 
-        PreferenceManager.getInstance(getApplicationContext()).setActivated(true);
+        PreferenceProvider.getInstance(getApplicationContext()).setActivated(true);
 
     }
 
