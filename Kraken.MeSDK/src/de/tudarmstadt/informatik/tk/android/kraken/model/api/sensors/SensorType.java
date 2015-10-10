@@ -32,8 +32,10 @@ public class SensorType {
 
     public static final int LOUDNESS = 9;
 
+    @Deprecated
     public static final int MAGNETIC_FIELD_UNCALIBRATED = 10;
 
+    @Deprecated
     public static final int GYROSCOPE_UNCALIBRATED = 11;
 
     public static final int FOREGROUND = 12;
@@ -132,7 +134,7 @@ public class SensorType {
             case GYROSCOPE_UNCALIBRATED:
                 return "gyroscope_uncalibrated";
             case FOREGROUND:
-                return "foreground_event";
+                return "foreground";
             case LIGHT:
                 return "light";
             default:
