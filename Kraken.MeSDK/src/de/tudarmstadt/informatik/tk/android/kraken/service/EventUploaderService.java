@@ -127,6 +127,7 @@ public class EventUploaderService extends GcmTaskService {
         }
 
         if (eventUploadRequest.getDataEvents().size() == 0) {
+            Log.d(TAG, "No new data found");
             return;
         }
 
