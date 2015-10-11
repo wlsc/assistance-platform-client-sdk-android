@@ -1,0 +1,3 @@
+include ':app', ':LiveSDK'
+
+project(':LiveSDK').projectDir = new File('libs/LiveSDK/src')

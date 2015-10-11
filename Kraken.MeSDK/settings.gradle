@@ -1,3 +1,0 @@
-include ':krakenSDK:liveSDK'
-
-project(':krakenSDK:liveSDK').projectDir = new File('libs/LiveSDK/src')
