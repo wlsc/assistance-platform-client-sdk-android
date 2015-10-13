@@ -96,6 +96,9 @@ public class HarvesterService extends Service implements Callback {
 
             monitorStart();
 
+            // schedule uploader task
+            startService(new Intent(this, EventUploaderService.class));
+
             startAccessibilityService();
         } else {
             Log.d(TAG, "No active module were found!");
