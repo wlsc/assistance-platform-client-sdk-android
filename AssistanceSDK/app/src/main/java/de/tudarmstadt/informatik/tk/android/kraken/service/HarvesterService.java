@@ -58,6 +58,10 @@ public class HarvesterService extends Service implements Callback {
     }
 
     public DaoSession getDaoSession() {
+
+        if (dbProvider == null) {
+            dbProvider = DbProvider.getInstance(getApplicationContext());
+        }
         return dbProvider.getDaoSession();
     }
 
@@ -69,11 +73,18 @@ public class HarvesterService extends Service implements Callback {
 
         Log.d(TAG, "Service starting...");
 
+        mPreferenceProvider = PreferenceProvider.getInstance(getApplicationContext());
+
+        String userToken = mPreferenceProvider.getUserToken();
+
+        // check if user is logged in
+        if (userToken == null || userToken.isEmpty()) {
+            return;
+        }
+
         if (dbProvider == null) {
             dbProvider = DbProvider.getInstance(getApplicationContext());
         }
-
-        mPreferenceProvider = PreferenceProvider.getInstance(getApplicationContext());
 
         initService();
     }

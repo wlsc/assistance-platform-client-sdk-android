@@ -60,7 +60,10 @@ public class HarvesterServiceProvider implements Handler.Callback {
 
         mContext = context;
         mKrakenIntent = new Intent(context, HarvesterService.class);
-        EventBus.getDefault().register(this);
+
+        if (!EventBus.getDefault().isRegistered(this)) {
+            EventBus.getDefault().register(this);
+        }
     }
 
     public static HarvesterServiceProvider getInstance(Context context) {
@@ -137,7 +140,7 @@ public class HarvesterServiceProvider implements Handler.Callback {
 
         Log.d(TAG, "StartSensingEvent received");
 
-        HarvesterServiceProvider service = HarvesterServiceProvider.getInstance(event.getContext());
+        HarvesterServiceProvider service = getInstance(event.getContext());
         service.startService();
     }
 
@@ -150,7 +153,7 @@ public class HarvesterServiceProvider implements Handler.Callback {
 
         Log.d(TAG, "StopSensingEvent received");
 
-        HarvesterServiceProvider service = HarvesterServiceProvider.getInstance(event.getContext());
+        HarvesterServiceProvider service = getInstance(event.getContext());
         service.stopService();
     }
 }
