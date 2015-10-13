@@ -50,6 +50,8 @@ public class HarvesterService extends Service implements Callback {
 
     private NotificationManager mNotificationManager;
 
+    private static boolean mSensorsStarted = false;
+
     public HarvesterService() {
     }
 
@@ -69,7 +71,9 @@ public class HarvesterService extends Service implements Callback {
     public void onCreate() {
         super.onCreate();
 
-        INSTANCE = this;
+        if (INSTANCE == null) {
+            INSTANCE = this;
+        }
 
         Log.d(TAG, "Service starting...");
 
@@ -142,6 +146,8 @@ public class HarvesterService extends Service implements Callback {
 
         Log.d(TAG, "Starting monitoring service...");
 
+        mSensorsStarted = true;
+
 //		Handler handler = ActivityCommunicator.getHandler();
 
         mSensorProvider = SensorProvider.getInstance(this);
@@ -166,6 +172,8 @@ public class HarvesterService extends Service implements Callback {
     private void monitorStop() {
 
         Log.d(TAG, "Stopping service...");
+
+        mSensorsStarted = false;
 
         if (mSensorProvider == null) {
             mSensorProvider = SensorProvider.getInstance(this);
@@ -234,6 +242,16 @@ public class HarvesterService extends Service implements Callback {
             } else {
                 hideIcon();
             }
+        }
+
+        String userToken = mPreferenceProvider.getUserToken();
+
+        if (userToken != null && !userToken.isEmpty()) {
+            if (!mSensorsStarted) {
+                monitorStart();
+            }
+        } else {
+            monitorStop();
         }
 
         NotificationCompat.Builder mBuilder =

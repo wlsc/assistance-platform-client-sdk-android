@@ -6,11 +6,7 @@ import android.content.Intent;
 import android.os.Handler;
 import android.os.Message;
 import android.os.Messenger;
-import android.util.Log;
 
-import de.greenrobot.event.EventBus;
-import de.tudarmstadt.informatik.tk.android.kraken.event.StartSensingEvent;
-import de.tudarmstadt.informatik.tk.android.kraken.event.StopSensingEvent;
 import de.tudarmstadt.informatik.tk.android.kraken.service.HarvesterService;
 
 /**
@@ -25,7 +21,6 @@ public class HarvesterServiceProvider implements Handler.Callback {
     private static HarvesterServiceProvider INSTANCE;
 
     private final Context mContext;
-    private final Intent mKrakenIntent;
     private Messenger mMessenger;
 
     private boolean isServiceBound = false;
@@ -57,13 +52,7 @@ public class HarvesterServiceProvider implements Handler.Callback {
 //    };
 
     private HarvesterServiceProvider(Context context) {
-
         mContext = context;
-        mKrakenIntent = new Intent(context, HarvesterService.class);
-
-        if (!EventBus.getDefault().isRegistered(this)) {
-            EventBus.getDefault().register(this);
-        }
     }
 
     public static HarvesterServiceProvider getInstance(Context context) {
@@ -90,34 +79,26 @@ public class HarvesterServiceProvider implements Handler.Callback {
     /**
      * Starts sensing service
      */
-    public void startService() {
+    public void startSensingService() {
 
-        mContext.startService(mKrakenIntent);
+        mContext.startService(new Intent(mContext, HarvesterService.class));
 
         showIcon(true);
-
-        if (!EventBus.getDefault().isRegistered(this)) {
-            EventBus.getDefault().register(this);
-        }
     }
 
     /**
      * Stops sensing service
      */
-    public void stopService() {
+    public void stopSensingService() {
 
-        mContext.stopService(mKrakenIntent);
+        mContext.stopService(new Intent(mContext, HarvesterService.class));
 
         showIcon(false);
-
-        if (EventBus.getDefault().isRegistered(this)) {
-            EventBus.getDefault().unregister(this);
-        }
     }
 
     public void showIcon(boolean show) {
 
-        Intent intent = mKrakenIntent;
+        Intent intent = new Intent(mContext, HarvesterService.class);
         intent.putExtra("showIcon", show);
         mContext.startService(intent);
     }
@@ -129,31 +110,5 @@ public class HarvesterServiceProvider implements Handler.Callback {
     @Override
     public boolean handleMessage(Message msg) {
         return false;
-    }
-
-    /**
-     * On start sensing event
-     *
-     * @param event
-     */
-    public void onEvent(StartSensingEvent event) {
-
-        Log.d(TAG, "StartSensingEvent received");
-
-        HarvesterServiceProvider service = getInstance(event.getContext());
-        service.startService();
-    }
-
-    /**
-     * On stop sensing event
-     *
-     * @param event
-     */
-    public void onEvent(StopSensingEvent event) {
-
-        Log.d(TAG, "StopSensingEvent received");
-
-        HarvesterServiceProvider service = getInstance(event.getContext());
-        service.stopService();
     }
 }

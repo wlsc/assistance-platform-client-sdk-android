@@ -288,11 +288,18 @@ public class DbProvider {
 
         List<Sensor> result = new LinkedList<>();
 
-        dbAccelerometerSensors = accelerometerSensorDao
-                .queryBuilder()
-                .limit(numberElements)
-                .build()
-                .list();
+        if (numberElements == 0) {
+            dbAccelerometerSensors = accelerometerSensorDao
+                    .queryBuilder()
+                    .build()
+                    .list();
+        } else {
+            dbAccelerometerSensors = accelerometerSensorDao
+                    .queryBuilder()
+                    .limit(numberElements)
+                    .build()
+                    .list();
+        }
 
         if (dbAccelerometerSensors != null) {
 
@@ -326,11 +333,18 @@ public class DbProvider {
 
         List<Sensor> result = new LinkedList<>();
 
-        dbPositionSensors = positionSensorDao
-                .queryBuilder()
-                .limit(numberElements)
-                .build()
-                .list();
+        if (numberElements == 0) {
+            dbPositionSensors = positionSensorDao
+                    .queryBuilder()
+                    .build()
+                    .list();
+        } else {
+            dbPositionSensors = positionSensorDao
+                    .queryBuilder()
+                    .limit(numberElements)
+                    .build()
+                    .list();
+        }
 
         if (dbPositionSensors != null) {
 
@@ -366,11 +380,18 @@ public class DbProvider {
 
         List<Sensor> result = new LinkedList<>();
 
-        dbMotionActivityEvents = motionActivityEventDao
-                .queryBuilder()
-                .limit(numberElements)
-                .build()
-                .list();
+        if (numberElements == 0) {
+            dbMotionActivityEvents = motionActivityEventDao
+                    .queryBuilder()
+                    .build()
+                    .list();
+        } else {
+            dbMotionActivityEvents = motionActivityEventDao
+                    .queryBuilder()
+                    .limit(numberElements)
+                    .build()
+                    .list();
+        }
 
         if (dbMotionActivityEvents != null) {
 
@@ -409,11 +430,18 @@ public class DbProvider {
 
         List<Sensor> result = new LinkedList<>();
 
-        dbForegroundEvents = foregroundEventDao
-                .queryBuilder()
-                .limit(numberElements)
-                .build()
-                .list();
+        if (numberElements == 0) {
+            dbForegroundEvents = foregroundEventDao
+                    .queryBuilder()
+                    .build()
+                    .list();
+        } else {
+            dbForegroundEvents = foregroundEventDao
+                    .queryBuilder()
+                    .limit(numberElements)
+                    .build()
+                    .list();
+        }
 
         if (dbForegroundEvents != null) {
 

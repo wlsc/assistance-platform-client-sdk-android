@@ -55,7 +55,7 @@ public class ForegroundEvent extends AbstractTriggeredEvent {
 
     private AccessibilityEventFilterUtils mEventFilter;
     private ScreenReceiver mReceiver;
-    private boolean mStarted;
+    private static boolean mStarted;
 
     private DbProvider dbProvider;
 
@@ -99,8 +99,8 @@ public class ForegroundEvent extends AbstractTriggeredEvent {
             try {
                 if (context != null && mReceiver != null) {
                     context.unregisterReceiver(mReceiver);
-                    mReceiver = null;
                 }
+                mReceiver = null;
             } catch (IllegalArgumentException e) {
                 Log.e(TAG, "Cannot stop sensor", e);
             }

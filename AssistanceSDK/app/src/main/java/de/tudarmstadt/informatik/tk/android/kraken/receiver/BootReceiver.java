@@ -31,7 +31,7 @@ public class BootReceiver extends BroadcastReceiver {
                 Log.d(TAG, "Start on boot activated -> starting service...");
 
                 final HarvesterServiceProvider service = HarvesterServiceProvider.getInstance(context);
-                service.startService();
+                service.startSensingService();
             }
         }
     }

@@ -93,6 +93,8 @@ public class LocationSensor extends AbstractTriggeredEvent implements GoogleApiC
                 .addOnConnectionFailedListener(this)
                 .build();
 
+        mGoogleApiClient.connect();
+
         // Create the LocationRequest object
         m_locationRequest = LocationRequest.create();
         // Use high accuracy
@@ -101,7 +103,6 @@ public class LocationSensor extends AbstractTriggeredEvent implements GoogleApiC
         m_locationRequest.setInterval(updateInterval * 1000);
         // Set the fastest update interval to x seconds
         m_locationRequest.setFastestInterval(FASTEST_INTERVAL_IN_SECONDS * 1000);
-        mGoogleApiClient.connect();
         isRunning = true;
     }
 
