@@ -1,6 +1,7 @@
 package de.tudarmstadt.informatik.tk.android.kraken.service;
 
 import android.content.Context;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.util.SparseArrayCompat;
@@ -34,7 +35,7 @@ public class EventUploaderService extends GcmTaskService {
 
     private static final String TAG = EventUploaderService.class.getSimpleName();
 
-    private static final int EVENTS_NUMBER_TO_SPLIT_AFTER = 1000;
+    private static final int EVENTS_NUMBER_TO_SPLIT_AFTER = 500;
 
     private static final int PUSH_NUMBER_OF_EACH_ELEMENTS = 20;
 
@@ -93,6 +94,7 @@ public class EventUploaderService extends GcmTaskService {
 
                 // upload all data at once
                 if (value == UPLOAD_ALL_FLAG) {
+
                     isPeriodic = false;
 
                     Handler handler = new Handler(getMainLooper());
@@ -101,7 +103,7 @@ public class EventUploaderService extends GcmTaskService {
                         @Override
                         public void run() {
 
-                            long serverDeviceId = mPreferenceProvider.getServerDeviceId();
+                            final long serverDeviceId = mPreferenceProvider.getServerDeviceId();
 
                             Log.d(TAG, "Sync server device id: " + serverDeviceId);
 
@@ -115,20 +117,57 @@ public class EventUploaderService extends GcmTaskService {
                             events = new SparseArrayCompat<>();
                             events = DbProvider.getInstance(getApplicationContext()).getEntriesForUpload(0);
 
-                            List<Sensor> eventsAsList = new LinkedList<>();
+                            final List<Sensor> eventsAsList = new LinkedList<>();
 
                             for (int i = 0; i < events.size(); i++) {
                                 int key = events.keyAt(i);
                                 eventsAsList.addAll(events.get(key));
                             }
 
-                            Log.d(TAG, "Events size: " + eventsAsList.size());
+                            // partial upload
+                            int eventsSize = eventsAsList.size();
 
-                            EventUploadRequest eventUploadRequest = new EventUploadRequest();
-                            eventUploadRequest.setDataEvents(eventsAsList);
-                            eventUploadRequest.setServerDeviceId(serverDeviceId);
+                            Log.d(TAG, "There are " + eventsSize + " events to upload");
 
-                            doUploadEventData(eventUploadRequest);
+                            if (eventsSize < EVENTS_NUMBER_TO_SPLIT_AFTER) {
+                                // send as usual
+
+                                Log.d(TAG, "Sending data in normal mode");
+
+                                EventUploadRequest eventUploadRequest = new EventUploadRequest();
+                                eventUploadRequest.setDataEvents(eventsAsList);
+                                eventUploadRequest.setServerDeviceId(serverDeviceId);
+
+                                doUploadEventData(eventUploadRequest);
+
+                            } else {
+                                // send partial with many requests
+                                int howMuchToSend = eventsSize / EVENTS_NUMBER_TO_SPLIT_AFTER;
+
+                                Log.d(TAG, "Sending partial data with " + howMuchToSend + " requests");
+
+                                for (int i = 0; i <= howMuchToSend; i++) {
+
+                                    final int finalCounter = i;
+                                    
+                                    AsyncTask.execute(new Runnable() {
+
+                                        @Override
+                                        public void run() {
+
+                                            List<Sensor> tmpSensors = eventsAsList
+                                                    .subList(finalCounter * EVENTS_NUMBER_TO_SPLIT_AFTER,
+                                                            (finalCounter + 1) * EVENTS_NUMBER_TO_SPLIT_AFTER);
+
+                                            EventUploadRequest eventUploadRequest = new EventUploadRequest();
+                                            eventUploadRequest.setDataEvents(tmpSensors);
+                                            eventUploadRequest.setServerDeviceId(serverDeviceId);
+
+                                            doUploadEventData(eventUploadRequest);
+                                        }
+                                    });
+                                }
+                            }
                         }
                     });
                 }
@@ -167,8 +206,13 @@ public class EventUploaderService extends GcmTaskService {
 
                     // partial upload
                     int eventsSize = eventsAsList.size();
+
+                    Log.d(TAG, "There are " + eventsSize + " events to upload");
+
                     if (eventsSize < EVENTS_NUMBER_TO_SPLIT_AFTER) {
                         // send as usual
+
+                        Log.d(TAG, "Sending data in normal mode");
 
                         EventUploadRequest eventUploadRequest = new EventUploadRequest();
                         eventUploadRequest.setDataEvents(eventsAsList);
@@ -179,6 +223,8 @@ public class EventUploaderService extends GcmTaskService {
                     } else {
                         // send partial with many requests
                         int howMuchToSend = eventsSize / EVENTS_NUMBER_TO_SPLIT_AFTER;
+
+                        Log.d(TAG, "Sending partial data with " + howMuchToSend + " requests");
 
                         for (int i = 0; i <= howMuchToSend; i++) {
 

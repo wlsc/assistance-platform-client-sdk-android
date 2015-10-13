@@ -128,6 +128,8 @@ public class ForegroundEvent extends AbstractTriggeredEvent {
                 foregroundEvent.setColor(color);
 
                 dbProvider.insertEventEntry(foregroundEvent, SensorType.FOREGROUND);
+            } else {
+                Log.d(TAG, "Cannot save event: event filter gave NULL back");
             }
         } else {
             Log.d(TAG, "Event received, but sensor was NOT started!");
