@@ -28,6 +28,7 @@ import de.tudarmstadt.informatik.tk.android.kraken.db.DbModuleInstallation;
 import de.tudarmstadt.informatik.tk.android.kraken.model.enums.ECommandType;
 import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.ISensor;
 import de.tudarmstadt.informatik.tk.android.kraken.provider.DbProvider;
+import de.tudarmstadt.informatik.tk.android.kraken.provider.HarvesterServiceProvider;
 import de.tudarmstadt.informatik.tk.android.kraken.provider.PreferenceProvider;
 import de.tudarmstadt.informatik.tk.android.kraken.provider.SensorProvider;
 
@@ -249,6 +250,7 @@ public class HarvesterService extends Service implements Callback {
         if (userToken != null && !userToken.isEmpty()) {
             if (!mSensorsStarted) {
                 monitorStart();
+                HarvesterServiceProvider.getInstance(getApplicationContext()).startSensingService();
             }
         } else {
             monitorStop();
