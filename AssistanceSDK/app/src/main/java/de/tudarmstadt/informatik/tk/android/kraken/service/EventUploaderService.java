@@ -37,12 +37,12 @@ public class EventUploaderService extends GcmTaskService {
 
     private static final int EVENTS_NUMBER_TO_SPLIT_AFTER = 500;
 
-    private static final int PUSH_NUMBER_OF_EACH_ELEMENTS = 20;
+    private static final int PUSH_NUMBER_OF_EACH_ELEMENTS = 80;
 
     // task identifier
     private static final long taskID = 999;
     // the task should be executed every 30 seconds
-    private static final long periodSecs = 30L;
+    private static final long periodSecs = 60L;
     // the task can run as early as -15 seconds from the scheduled time
     private static final long flexSecs = 15L;
 
@@ -149,7 +149,7 @@ public class EventUploaderService extends GcmTaskService {
                                 for (int i = 0; i <= howMuchToSend; i++) {
 
                                     final int finalCounter = i;
-                                    
+
                                     AsyncTask.execute(new Runnable() {
 
                                         @Override
