@@ -1,6 +1,5 @@
 package de.tudarmstadt.informatik.tk.android.kraken.provider;
 
-import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Handler;
@@ -8,6 +7,7 @@ import android.os.Message;
 import android.os.Messenger;
 
 import de.tudarmstadt.informatik.tk.android.kraken.service.HarvesterService;
+import de.tudarmstadt.informatik.tk.android.kraken.util.DeviceUtils;
 
 /**
  * @author Karsten Planz
@@ -65,15 +65,7 @@ public class HarvesterServiceProvider implements Handler.Callback {
     }
 
     public boolean isServiceRunning() {
-
-        ActivityManager manager = (ActivityManager) mContext.getSystemService(Context.ACTIVITY_SERVICE);
-
-        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
-            if (HarvesterService.class.getName().equals(service.service.getClassName())) {
-                return true;
-            }
-        }
-        return false;
+        return DeviceUtils.isServiceRunning(mContext, HarvesterService.class);
     }
 
     /**
