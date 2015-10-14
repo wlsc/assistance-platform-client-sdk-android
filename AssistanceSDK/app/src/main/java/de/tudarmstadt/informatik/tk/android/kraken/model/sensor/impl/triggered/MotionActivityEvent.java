@@ -19,7 +19,6 @@ import java.util.List;
 import java.util.Locale;
 
 import de.tudarmstadt.informatik.tk.android.kraken.db.DbMotionActivityEvent;
-import de.tudarmstadt.informatik.tk.android.kraken.db.DbMotionActivityEventDao;
 import de.tudarmstadt.informatik.tk.android.kraken.model.api.sensors.SensorType;
 import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.AbstractTriggeredEvent;
 import de.tudarmstadt.informatik.tk.android.kraken.provider.DbProvider;
@@ -43,7 +42,7 @@ public class MotionActivityEvent extends AbstractTriggeredEvent implements Googl
 
     private static MotionActivityEvent INSTANCE;
 
-    private DbMotionActivityEventDao dbMotionActivityEventDao;
+    private DbProvider dbProvider;
 
     /**
      * High possibility motion action
@@ -64,15 +63,13 @@ public class MotionActivityEvent extends AbstractTriggeredEvent implements Googl
                 .addOnConnectionFailedListener(this)
                 .build();
 
-        if (dbMotionActivityEventDao == null) {
-            dbMotionActivityEventDao = DbProvider.getInstance(context).getDaoSession().getDbMotionActivityEventDao();
+        if (dbProvider == null) {
+            dbProvider = DbProvider.getInstance(context);
         }
     }
 
     @Override
     protected void dumpData() {
-
-        Log.d(TAG, "Dumping data to db...");
 
         DbMotionActivityEvent motionActivityEvent = new DbMotionActivityEvent();
 
@@ -120,9 +117,7 @@ public class MotionActivityEvent extends AbstractTriggeredEvent implements Googl
         motionActivityEvent.setCreated(DateUtils.dateToISO8601String(new Date(), Locale.getDefault()));
 
         // insert db entry
-        dbMotionActivityEventDao.insertOrReplace(motionActivityEvent);
-
-        Log.d(TAG, "Finished dumping data.");
+        dbProvider.insertEventEntry(motionActivityEvent, getType());
     }
 
     /**

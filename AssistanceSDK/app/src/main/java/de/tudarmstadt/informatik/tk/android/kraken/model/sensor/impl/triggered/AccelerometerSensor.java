@@ -58,7 +58,7 @@ public class AccelerometerSensor extends AbstractTriggeredEvent implements Senso
         dbAccelerometerSensor.setAccuracy(accuracy);
         dbAccelerometerSensor.setCreated(DateUtils.dateToISO8601String(new Date(), Locale.getDefault()));
 
-        dbProvider.insertEventEntry(dbAccelerometerSensor, Sensor.TYPE_ACCELEROMETER);
+        dbProvider.insertEventEntry(dbAccelerometerSensor, getType());
     }
 
     @Override

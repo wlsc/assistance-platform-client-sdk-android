@@ -112,7 +112,7 @@ public class ForegroundEvent extends AbstractTriggeredEvent {
             dbForegroundEvent.setEventType(EVENT_ASSISTANCE_STOP);
             dbForegroundEvent.setCreated(DateUtils.dateToISO8601String(new Date(), Locale.getDefault()));
 
-            dbProvider.insertEventEntry(dbForegroundEvent, SensorType.FOREGROUND);
+            dbProvider.insertEventEntry(dbForegroundEvent, getType());
         }
     }
 

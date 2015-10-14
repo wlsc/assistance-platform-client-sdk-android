@@ -42,6 +42,7 @@ import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.Sensor;
 import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.impl.triggered.AccelerometerSensor;
 import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.impl.triggered.ForegroundEvent;
 import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.impl.triggered.LocationSensor;
+import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.impl.triggered.MotionActivityEvent;
 import de.tudarmstadt.informatik.tk.android.kraken.util.db.DbAssistanceOpenHelper;
 
 /**
@@ -508,6 +509,14 @@ public class DbProvider {
                 result = foregroundEventDao.insertOrReplace((DbForegroundEvent) sensor);
 
                 Log.d(ForegroundEvent.class.getSimpleName(), "Finished dumping data");
+                break;
+            case SensorType.MOTION_ACTIVITY:
+
+                Log.d(MotionActivityEvent.class.getSimpleName(), "Dumping data to db...");
+
+                result = motionActivityEventDao.insertOrReplace((DbMotionActivityEvent) sensor);
+
+                Log.d(MotionActivityEvent.class.getSimpleName(), "Finished dumping data");
                 break;
         }
 

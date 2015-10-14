@@ -74,7 +74,7 @@ public class LocationSensor extends AbstractTriggeredEvent implements GoogleApiC
         dbPositionSensor.setSpeed(speed);
         dbPositionSensor.setCreated(DateUtils.dateToISO8601String(new Date(), Locale.getDefault()));
 
-        dbProvider.insertEventEntry(dbPositionSensor, SensorType.LOCATION);
+        dbProvider.insertEventEntry(dbPositionSensor, getType());
     }
 
     /**
