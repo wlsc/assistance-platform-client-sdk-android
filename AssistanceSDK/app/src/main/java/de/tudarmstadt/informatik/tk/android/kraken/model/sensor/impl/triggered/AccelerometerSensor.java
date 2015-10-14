@@ -11,9 +11,9 @@ import java.util.Date;
 import java.util.Locale;
 
 import de.tudarmstadt.informatik.tk.android.kraken.db.DbAccelerometerSensor;
-import de.tudarmstadt.informatik.tk.android.kraken.db.DbAccelerometerSensorDao;
 import de.tudarmstadt.informatik.tk.android.kraken.model.api.sensors.SensorType;
 import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.AbstractTriggeredEvent;
+import de.tudarmstadt.informatik.tk.android.kraken.provider.DbProvider;
 import de.tudarmstadt.informatik.tk.android.kraken.util.DateUtils;
 
 public class AccelerometerSensor extends AbstractTriggeredEvent implements SensorEventListener {
@@ -25,9 +25,9 @@ public class AccelerometerSensor extends AbstractTriggeredEvent implements Senso
     private int updateInterval = 10;    // in seconds
     // -----------------------------------------------------
 
-    private static DbAccelerometerSensorDao accelerometerSensorDao;
     private SensorManager mSensorManager;
     private Sensor mAccelerometerSensor;
+    private DbProvider dbProvider;
 
     private long mLastEventDumpingTimestamp = 0;    // in nanoseconds
 
@@ -39,18 +39,16 @@ public class AccelerometerSensor extends AbstractTriggeredEvent implements Senso
     public AccelerometerSensor(Context context) {
         super(context);
 
+        if (dbProvider == null) {
+            dbProvider = DbProvider.getInstance(context);
+        }
+
         mSensorManager = (SensorManager) this.context.getSystemService(Context.SENSOR_SERVICE);
         mAccelerometerSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-
-        if (accelerometerSensorDao == null) {
-            accelerometerSensorDao = mDaoSession.getDbAccelerometerSensorDao();
-        }
     }
 
     @Override
     protected void dumpData() {
-
-        Log.d(TAG, "Dumping data to db...");
 
         DbAccelerometerSensor dbAccelerometerSensor = new DbAccelerometerSensor();
 
@@ -60,9 +58,7 @@ public class AccelerometerSensor extends AbstractTriggeredEvent implements Senso
         dbAccelerometerSensor.setAccuracy(accuracy);
         dbAccelerometerSensor.setCreated(DateUtils.dateToISO8601String(new Date(), Locale.getDefault()));
 
-        accelerometerSensorDao.insert(dbAccelerometerSensor);
-
-        Log.d(TAG, "Finished dumping data.");
+        dbProvider.insertEventEntry(dbAccelerometerSensor, Sensor.TYPE_ACCELEROMETER);
     }
 
     @Override

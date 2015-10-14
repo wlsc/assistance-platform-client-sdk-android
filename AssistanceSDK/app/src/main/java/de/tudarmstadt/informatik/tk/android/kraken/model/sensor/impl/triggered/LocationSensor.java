@@ -17,9 +17,9 @@ import java.util.Date;
 import java.util.Locale;
 
 import de.tudarmstadt.informatik.tk.android.kraken.db.DbPositionSensor;
-import de.tudarmstadt.informatik.tk.android.kraken.db.DbPositionSensorDao;
 import de.tudarmstadt.informatik.tk.android.kraken.model.api.sensors.SensorType;
 import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.AbstractTriggeredEvent;
+import de.tudarmstadt.informatik.tk.android.kraken.provider.DbProvider;
 import de.tudarmstadt.informatik.tk.android.kraken.util.DateUtils;
 
 
@@ -44,8 +44,6 @@ public class LocationSensor extends AbstractTriggeredEvent implements GoogleApiC
 
     private final static int CONNECTION_FAILURE_RESOLUTION_REQUEST = 9000;
 
-    private static DbPositionSensorDao dbPositionSensorDao;
-
     private Double latitude;
     private Double longitude;
     private Double accuracyHorizontal;
@@ -53,18 +51,18 @@ public class LocationSensor extends AbstractTriggeredEvent implements GoogleApiC
     private Float speed;
     private Double altitude;
 
+    private DbProvider dbProvider;
+
     public LocationSensor(Context context) {
         super(context);
 
-        if (dbPositionSensorDao == null) {
-            dbPositionSensorDao = mDaoSession.getDbPositionSensorDao();
+        if (dbProvider == null) {
+            dbProvider = DbProvider.getInstance(context);
         }
     }
 
     @Override
     protected void dumpData() {
-
-        Log.d(TAG, "Dumping data to db...");
 
         DbPositionSensor dbPositionSensor = new DbPositionSensor();
 
@@ -76,9 +74,7 @@ public class LocationSensor extends AbstractTriggeredEvent implements GoogleApiC
         dbPositionSensor.setSpeed(speed);
         dbPositionSensor.setCreated(DateUtils.dateToISO8601String(new Date(), Locale.getDefault()));
 
-        dbPositionSensorDao.insert(dbPositionSensor);
-
-        Log.d(TAG, "Finished dumping data.");
+        dbProvider.insertEventEntry(dbPositionSensor, SensorType.LOCATION);
     }
 
     /**
