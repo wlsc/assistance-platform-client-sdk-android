@@ -2,7 +2,7 @@ package de.tudarmstadt.informatik.tk.android.kraken.model.social;
 
 import java.io.Serializable;
 
-import de.tudarmstadt.informatik.tk.android.kraken.provider.SocialNetworkProvider;
+import de.tudarmstadt.informatik.tk.android.kraken.model.enums.SocialNetworkEnum;
 import de.tudarmstadt.informatik.tk.android.kraken.model.enums.PermissionLevel;
 
 
@@ -19,7 +19,7 @@ public class AccountVO implements Serializable {
 
     private static final long serialVersionUID = 1227902155752371848L;
 
-    private SocialNetworkProvider provider;
+    private SocialNetworkEnum provider;
 
     private PermissionLevel permissionLevel;
 
@@ -111,12 +111,12 @@ public class AccountVO implements Serializable {
     }
 
 
-    public SocialNetworkProvider getProvider() {
+    public SocialNetworkEnum getProvider() {
         return provider;
     }
 
 
-    public void setProvider(SocialNetworkProvider provider) {
+    public void setProvider(SocialNetworkEnum provider) {
         this.provider = provider;
     }
 

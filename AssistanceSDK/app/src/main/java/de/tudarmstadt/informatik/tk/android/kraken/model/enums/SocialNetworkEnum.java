@@ -1,4 +1,4 @@
-package de.tudarmstadt.informatik.tk.android.kraken.provider;
+package de.tudarmstadt.informatik.tk.android.kraken.model.enums;
 
 /**
  * Social network provider
@@ -7,7 +7,7 @@ package de.tudarmstadt.informatik.tk.android.kraken.provider;
  * @version 1.0
  * @date 17.10.2013
  */
-public enum SocialNetworkProvider {
+public enum SocialNetworkEnum {
 	FACEBOOK, GOOGLE, TWITTER, LIVE, FOURSQUARE, LINKEDIN, XING;
 
 	public String getProviderName() {

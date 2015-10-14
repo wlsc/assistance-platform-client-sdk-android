@@ -3,6 +3,8 @@ package de.tudarmstadt.informatik.tk.android.kraken.provider;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import de.tudarmstadt.informatik.tk.android.kraken.model.enums.SocialNetworkEnum;
+
 public class SocialAuthProvider {
 
     private static SocialAuthProvider m_socialAuthProvider = null;
@@ -18,15 +20,15 @@ public class SocialAuthProvider {
         return m_socialAuthProvider;
     }
 
-    public void setAuthentication(SocialNetworkProvider provider, String strToken) {
+    public void setAuthentication(SocialNetworkEnum provider, String strToken) {
         m_sharedPreferences.edit().putString(provider.toString(), strToken).commit();
     }
 
-    public String getAuthentication(SocialNetworkProvider provider) {
+    public String getAuthentication(SocialNetworkEnum provider) {
         return m_sharedPreferences.getString(provider.toString(), null);
     }
 
-    public void removeAuthentication(SocialNetworkProvider provider) {
+    public void removeAuthentication(SocialNetworkEnum provider) {
         m_sharedPreferences.edit().remove(provider.toString()).commit();
         if (!anyLoggedIn()) {
 //            SdkAuthentication.getInstance(m_context).setKroken(null);
@@ -35,7 +37,7 @@ public class SocialAuthProvider {
     }
 
     public boolean anyLoggedIn() {
-        for (SocialNetworkProvider provider : SocialNetworkProvider.values()) {
+        for (SocialNetworkEnum provider : SocialNetworkEnum.values()) {
             if (m_sharedPreferences.getString(provider.toString(), null) != null)
                 return true;
         }

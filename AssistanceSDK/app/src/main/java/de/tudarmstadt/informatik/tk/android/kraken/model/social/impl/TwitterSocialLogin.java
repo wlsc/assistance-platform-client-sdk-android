@@ -16,7 +16,7 @@ import android.util.Log;
 import de.tudarmstadt.informatik.tk.android.kraken.R;
 import de.tudarmstadt.informatik.tk.android.kraken.ui.activities.accounts.AccountsAdapter;
 import de.tudarmstadt.informatik.tk.android.kraken.provider.SocialAuthProvider;
-import de.tudarmstadt.informatik.tk.android.kraken.provider.SocialNetworkProvider;
+import de.tudarmstadt.informatik.tk.android.kraken.model.enums.SocialNetworkEnum;
 
 public class TwitterSocialLogin extends AbstractSocialLogin implements SocialLogin {
 
@@ -172,8 +172,8 @@ public class TwitterSocialLogin extends AbstractSocialLogin implements SocialLog
     }
 
 	@Override
-	public SocialNetworkProvider getSocialNetworkProvider() {
-		return SocialNetworkProvider.TWITTER;
+	public SocialNetworkEnum getSocialNetworkProvider() {
+		return SocialNetworkEnum.TWITTER;
 	}
     
 }

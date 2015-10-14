@@ -7,7 +7,7 @@ import org.json.JSONObject;
 
 import de.tudarmstadt.informatik.tk.android.kraken.provider.SocialAuthProvider;
 import de.tudarmstadt.informatik.tk.android.kraken.model.enums.MessageType;
-import de.tudarmstadt.informatik.tk.android.kraken.provider.SocialNetworkProvider;
+import de.tudarmstadt.informatik.tk.android.kraken.model.enums.SocialNetworkEnum;
 import de.tudarmstadt.informatik.tk.android.kraken.handler.IServerCommunicationResponseHandler;
 import de.tudarmstadt.informatik.tk.android.kraken.ui.activities.accounts.AccountsAdapter;
 
@@ -94,7 +94,7 @@ public abstract class AbstractSocialLogin implements SocialLogin {
 
                         JSONObject jsonAccount = jsonData.getJSONObject("account");
                         String strProvider = jsonAccount.getString("provider");
-                        SocialNetworkProvider provider = SocialNetworkProvider.valueOf(strProvider);
+                        SocialNetworkEnum provider = SocialNetworkEnum.valueOf(strProvider);
 
                         JSONObject jsonAccessToken = jsonAccount.getJSONObject("accessToken");
                         String strToken = jsonAccessToken.getString("token");
