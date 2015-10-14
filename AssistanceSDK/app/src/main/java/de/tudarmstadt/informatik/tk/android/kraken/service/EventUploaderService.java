@@ -149,6 +149,14 @@ public class EventUploaderService extends GcmTaskService {
                                 for (int i = 0; i <= howMuchToSend; i++) {
 
                                     final int finalCounter = i;
+                                    int lastElementIndex = (finalCounter + 1) * EVENTS_NUMBER_TO_SPLIT_AFTER;
+
+                                    // assign last element index
+                                    if (i == howMuchToSend) {
+                                        lastElementIndex = eventsSize - 1;
+                                    }
+
+                                    final int finalLastElementIndex = lastElementIndex;
 
                                     AsyncTask.execute(new Runnable() {
 
@@ -157,7 +165,7 @@ public class EventUploaderService extends GcmTaskService {
 
                                             List<Sensor> tmpSensors = eventsAsList
                                                     .subList(finalCounter * EVENTS_NUMBER_TO_SPLIT_AFTER,
-                                                            (finalCounter + 1) * EVENTS_NUMBER_TO_SPLIT_AFTER);
+                                                            finalLastElementIndex);
 
                                             EventUploadRequest eventUploadRequest = new EventUploadRequest();
                                             eventUploadRequest.setDataEvents(tmpSensors);
@@ -183,7 +191,7 @@ public class EventUploaderService extends GcmTaskService {
                 @Override
                 public void run() {
 
-                    long serverDeviceId = mPreferenceProvider.getServerDeviceId();
+                    final long serverDeviceId = mPreferenceProvider.getServerDeviceId();
 
                     Log.d(TAG, "Sync server device id: " + serverDeviceId);
 
@@ -197,7 +205,7 @@ public class EventUploaderService extends GcmTaskService {
                     events = new SparseArrayCompat<>();
                     events = DbProvider.getInstance(getApplicationContext()).getEntriesForUpload(PUSH_NUMBER_OF_EACH_ELEMENTS);
 
-                    List<Sensor> eventsAsList = new LinkedList<>();
+                    final List<Sensor> eventsAsList = new LinkedList<>();
 
                     for (int i = 0; i < events.size(); i++) {
                         int key = events.keyAt(i);
@@ -228,15 +236,32 @@ public class EventUploaderService extends GcmTaskService {
 
                         for (int i = 0; i <= howMuchToSend; i++) {
 
-                            List<Sensor> tmpSensors = eventsAsList
-                                    .subList(i * EVENTS_NUMBER_TO_SPLIT_AFTER,
-                                            (i + 1) * EVENTS_NUMBER_TO_SPLIT_AFTER);
+                            final int finalCounter = i;
+                            int lastElementIndex = (finalCounter + 1) * EVENTS_NUMBER_TO_SPLIT_AFTER;
 
-                            EventUploadRequest eventUploadRequest = new EventUploadRequest();
-                            eventUploadRequest.setDataEvents(tmpSensors);
-                            eventUploadRequest.setServerDeviceId(serverDeviceId);
+                            // assign last element index
+                            if (i == howMuchToSend) {
+                                lastElementIndex = eventsSize - 1;
+                            }
 
-                            doUploadEventData(eventUploadRequest);
+                            final int finalLastElementIndex = lastElementIndex;
+
+                            AsyncTask.execute(new Runnable() {
+
+                                @Override
+                                public void run() {
+
+                                    List<Sensor> tmpSensors = eventsAsList
+                                            .subList(finalCounter * EVENTS_NUMBER_TO_SPLIT_AFTER,
+                                                    finalLastElementIndex);
+
+                                    EventUploadRequest eventUploadRequest = new EventUploadRequest();
+                                    eventUploadRequest.setDataEvents(tmpSensors);
+                                    eventUploadRequest.setServerDeviceId(serverDeviceId);
+
+                                    doUploadEventData(eventUploadRequest);
+                                }
+                            });
                         }
                     }
                 }
