@@ -40,7 +40,7 @@ public class WifiCatcherReceiver extends BroadcastReceiver {
      * 10 seconds that the system allows before considering the receiver to
      * be blocked and a candidate to be killed). You cannot launch a popup dialog
      * in your implementation of onReceive().
-     * <p>
+     * <p/>
      * <p><b>If this BroadcastReceiver was launched through a &lt;receiver&gt; tag,
      * then the object is no longer alive after returning from this
      * function.</b>  This means you should not perform any operations that
@@ -50,7 +50,7 @@ public class WifiCatcherReceiver extends BroadcastReceiver {
      * {@link Context#bindService(Intent, ServiceConnection, int)}.  If you wish
      * to interact with a service that is already running, you can use
      * {@link #peekService}.
-     * <p>
+     * <p/>
      * <p>The Intent filters used in {@link Context#registerReceiver}
      * and in application manifests are <em>not</em> guaranteed to be exclusive. They
      * are hints to the operating system about how to find suitable recipients. It is
@@ -72,6 +72,14 @@ public class WifiCatcherReceiver extends BroadcastReceiver {
             // check for internet connection
             if (DeviceUtils.isOnline(context)) {
                 Log.d(TAG, "Internet is ONLINE");
+
+                // checking that user is logged in the app
+                String userToken = PreferenceProvider.getInstance(context).getUserToken();
+
+                if (userToken.isEmpty()) {
+                    // do nothing. do not start upload
+                    return;
+                }
 
                 AsyncTask<Void, Void, Void> asyncTask = new AsyncTask<Void, Void, Void>() {
 
