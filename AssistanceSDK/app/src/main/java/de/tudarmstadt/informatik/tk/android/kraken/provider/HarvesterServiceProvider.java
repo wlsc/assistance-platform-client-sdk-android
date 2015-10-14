@@ -6,6 +6,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.os.Messenger;
 
+import de.tudarmstadt.informatik.tk.android.kraken.model.enums.ECommandType;
 import de.tudarmstadt.informatik.tk.android.kraken.service.HarvesterService;
 import de.tudarmstadt.informatik.tk.android.kraken.util.DeviceUtils;
 
@@ -21,6 +22,7 @@ public class HarvesterServiceProvider implements Handler.Callback {
     private static HarvesterServiceProvider INSTANCE;
 
     private final Context mContext;
+    private final Intent mSensingIntent;
     private Messenger mMessenger;
 
     private boolean isServiceBound = false;
@@ -53,6 +55,7 @@ public class HarvesterServiceProvider implements Handler.Callback {
 
     private HarvesterServiceProvider(Context context) {
         mContext = context;
+        mSensingIntent = new Intent(mContext, HarvesterService.class);
     }
 
     public static HarvesterServiceProvider getInstance(Context context) {
@@ -73,7 +76,7 @@ public class HarvesterServiceProvider implements Handler.Callback {
      */
     public void startSensingService() {
 
-        mContext.startService(new Intent(mContext, HarvesterService.class));
+        mContext.startService(mSensingIntent);
 
         showIcon(true);
     }
@@ -83,9 +86,9 @@ public class HarvesterServiceProvider implements Handler.Callback {
      */
     public void stopSensingService() {
 
-        mContext.stopService(new Intent(mContext, HarvesterService.class));
-
-        showIcon(false);
+        Intent intent = new Intent(mContext, HarvesterService.class);
+        intent.putExtra("command", ECommandType.STOP_SERVICE);
+        mContext.stopService(intent);
     }
 
     public void showIcon(boolean show) {
