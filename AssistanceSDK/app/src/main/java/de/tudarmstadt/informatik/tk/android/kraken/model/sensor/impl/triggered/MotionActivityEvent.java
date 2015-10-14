@@ -35,7 +35,7 @@ public class MotionActivityEvent extends AbstractTriggeredEvent implements Googl
     private int DETECTION_INTERVAL_IN_SEC = 120;
     // -----------------------------------------------------
 
-    private GoogleApiClient mGoogleApiClient = null;
+    private GoogleApiClient mGoogleApiClient;
 
     private PendingIntent m_activityRecognitionPendingIntent;
 
@@ -211,6 +211,15 @@ public class MotionActivityEvent extends AbstractTriggeredEvent implements Googl
 
         Intent intent = new Intent(context, ActivitySensorService.class);
         m_activityRecognitionPendingIntent = PendingIntent.getService(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        if (mGoogleApiClient == null) {
+
+            mGoogleApiClient = new GoogleApiClient.Builder(context)
+                    .addApi(ActivityRecognition.API)
+                    .addConnectionCallbacks(this)
+                    .addOnConnectionFailedListener(this)
+                    .build();
+        }
 
         ActivityRecognition.ActivityRecognitionApi.requestActivityUpdates(mGoogleApiClient, DETECTION_INTERVAL_IN_SEC * 1000, m_activityRecognitionPendingIntent);
     }
