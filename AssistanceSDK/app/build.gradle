@@ -39,7 +39,7 @@ dependencies {
     // twitter library
     compile 'org.twitter4j:twitter4j-core:4.0.4'
     // support library
-    compile 'com.android.support:appcompat-v7:23.0.1'
+    compile 'com.android.support:appcompat-v7:23.1.0'
     // google play library
     compile 'com.google.android.gms:play-services-base:8.1.0'
     compile 'com.google.android.gms:play-services-gcm:8.1.0'
