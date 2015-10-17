@@ -102,7 +102,7 @@ public class ForegroundEvent extends AbstractTriggeredEvent {
                 }
                 mReceiver = null;
             } catch (IllegalArgumentException e) {
-                Log.e(TAG, "Cannot stop sensor", e);
+                Log.e(TAG, "Cannot unregister receiver", e);
             }
 
             mStarted = false;
@@ -133,8 +133,13 @@ public class ForegroundEvent extends AbstractTriggeredEvent {
             }
         } else {
             Log.d(TAG, "Event received, but sensor was NOT started! Unregistering receiver...");
-            if(context != null && mReceiver != null) {
-                context.unregisterReceiver(mReceiver);
+            try {
+                if (context != null && mReceiver != null) {
+                    context.unregisterReceiver(mReceiver);
+                }
+                mReceiver = null;
+            } catch (IllegalArgumentException e) {
+                Log.e(TAG, "Cannot unregister receiver", e);
             }
         }
     }
