@@ -23,6 +23,7 @@ import de.tudarmstadt.informatik.tk.android.kraken.model.api.endpoint.EventUploa
 import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.Sensor;
 import de.tudarmstadt.informatik.tk.android.kraken.provider.DbProvider;
 import de.tudarmstadt.informatik.tk.android.kraken.provider.PreferenceProvider;
+import de.tudarmstadt.informatik.tk.android.kraken.util.DeviceUtils;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
@@ -286,6 +287,12 @@ public class EventUploaderService extends GcmTaskService {
 
         if (eventUploadRequest.getDataEvents().size() == 0) {
             Log.d(TAG, "No new data found");
+            return;
+        }
+
+        // check Airplane Mode enabled
+        if (DeviceUtils.isAirplaneModeEnabled(getApplicationContext())) {
+            Log.d(TAG, "Airplane Mode enabled. Ignoring upload request");
             return;
         }
 
