@@ -145,7 +145,7 @@ public class EventUploaderService extends GcmTaskService {
                                 // send partial with many requests
                                 int howMuchToSend = eventsSize / EVENTS_NUMBER_TO_SPLIT_AFTER;
 
-                                Log.d(TAG, "Sending partial data with " + howMuchToSend + " requests");
+                                Log.d(TAG, "Sending partial data with " + (howMuchToSend + 1) + " requests");
 
                                 for (int i = 0; i <= howMuchToSend; i++) {
 
@@ -233,7 +233,7 @@ public class EventUploaderService extends GcmTaskService {
                         // send partial with many requests
                         int howMuchToSend = eventsSize / EVENTS_NUMBER_TO_SPLIT_AFTER;
 
-                        Log.d(TAG, "Sending partial data with " + howMuchToSend + " requests");
+                        Log.d(TAG, "Sending partial data with " + (howMuchToSend + 1) + " requests");
 
                         for (int i = 0; i <= howMuchToSend; i++) {
 
