@@ -290,7 +290,7 @@ public class EventUploaderService extends GcmTaskService {
         }
 
         // send to upload data service
-        EventUploadEndpoint eventUploadEndpoint = EndpointGenerator.create(EventUploadEndpoint.class);
+        EventUploadEndpoint eventUploadEndpoint = EndpointGenerator.getInstance(getApplicationContext()).create(EventUploadEndpoint.class);
 
         String userToken = mPreferenceProvider.getUserToken();
 

@@ -64,7 +64,7 @@ public class ServerCommunicationProvider {
         deviceRegistrationRequest.setDeviceId(serverDeviceId);
         deviceRegistrationRequest.setRegistrationToken(registrationToken);
 
-        DeviceEndpoint deviceEndpoint = EndpointGenerator.create(DeviceEndpoint.class);
+        DeviceEndpoint deviceEndpoint = EndpointGenerator.getInstance(mContext).create(DeviceEndpoint.class);
         deviceEndpoint.registerDevice(userToken, deviceRegistrationRequest, new Callback<Void>() {
 
             @Override
