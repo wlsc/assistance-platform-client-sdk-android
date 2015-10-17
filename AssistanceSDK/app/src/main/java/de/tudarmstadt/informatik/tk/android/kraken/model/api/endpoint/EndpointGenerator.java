@@ -2,6 +2,7 @@ package de.tudarmstadt.informatik.tk.android.kraken.model.api.endpoint;
 
 import com.google.gson.GsonBuilder;
 
+import de.tudarmstadt.informatik.tk.android.kraken.BuildConfig;
 import de.tudarmstadt.informatik.tk.android.kraken.Config;
 import de.tudarmstadt.informatik.tk.android.kraken.model.httpclient.UntrustedOkHttpClient;
 import retrofit.RestAdapter;
@@ -29,11 +30,20 @@ public class EndpointGenerator {
      */
     public static <T> T create(Class<T> clazz) {
 
+        // JSON parser
         GsonBuilder gsonBuilder = new GsonBuilder().excludeFieldsWithoutExposeAnnotation();
+
+        RestAdapter.LogLevel httpLogLevel = RestAdapter.LogLevel.NONE;
+
+        // setting to output information for http client
+        // in debug mode
+        if (BuildConfig.DEBUG) {
+            httpLogLevel = RestAdapter.LogLevel.FULL;
+        }
 
         RestAdapter adapter = new RestAdapter.Builder()
 //                .setErrorHandler(new AssistanceErrorHandler())
-                .setLogLevel(RestAdapter.LogLevel.FULL) // enabling log traces
+                .setLogLevel(httpLogLevel) // enabling log traces
                 .setLog(new AndroidLog(Config.HTTP_LOGGER_NAME))
                 .setConverter(new GsonConverter(gsonBuilder.create()))
                 .setEndpoint(Config.ASSISTANCE_ENDPOINT)

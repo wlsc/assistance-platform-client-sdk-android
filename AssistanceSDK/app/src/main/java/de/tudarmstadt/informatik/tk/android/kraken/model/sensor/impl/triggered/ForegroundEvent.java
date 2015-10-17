@@ -95,7 +95,6 @@ public class ForegroundEvent extends AbstractTriggeredEvent {
     public void stopSensor() {
 
         if (mStarted) {
-            // TODO: find out why this exception is thrown
             try {
                 if (context != null && mReceiver != null) {
                     context.unregisterReceiver(mReceiver);
