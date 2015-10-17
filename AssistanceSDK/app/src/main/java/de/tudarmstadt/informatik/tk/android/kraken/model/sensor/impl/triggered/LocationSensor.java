@@ -131,6 +131,7 @@ public class LocationSensor extends AbstractTriggeredEvent implements GoogleApiC
             } catch (IntentSender.SendIntentException e) {
                 // Log the error
                 Log.e(TAG, "Cannot start resolution for location connection. Error: ", e);
+                mGoogleApiClient.connect();
             }
         } else {
             /*

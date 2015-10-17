@@ -132,7 +132,10 @@ public class ForegroundEvent extends AbstractTriggeredEvent {
                 Log.d(TAG, "Cannot save event: event filter gave NULL back");
             }
         } else {
-            Log.d(TAG, "Event received, but sensor was NOT started!");
+            Log.d(TAG, "Event received, but sensor was NOT started! Unregistering receiver...");
+            if(context != null && mReceiver != null) {
+                context.unregisterReceiver(mReceiver);
+            }
         }
     }
 
