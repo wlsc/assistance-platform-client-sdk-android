@@ -61,6 +61,12 @@ public class ForegroundEvent extends AbstractTriggeredEvent {
 
     public ForegroundEvent(Context context) {
         super(context);
+    }
+
+    @Override
+    public void startSensor() {
+
+        mStarted = true;
 
         if (mReceiver == null) {
             mReceiver = new ScreenReceiver();
@@ -69,12 +75,6 @@ public class ForegroundEvent extends AbstractTriggeredEvent {
         if (dbProvider == null) {
             dbProvider = DbProvider.getInstance(context);
         }
-    }
-
-    @Override
-    public void startSensor() {
-
-        mStarted = true;
 
         mEventFilter = new AccessibilityEventFilterUtils(context);
 
@@ -112,6 +112,10 @@ public class ForegroundEvent extends AbstractTriggeredEvent {
             dbForegroundEvent.setCreated(DateUtils.dateToISO8601String(new Date(), Locale.getDefault()));
 
             dbProvider.insertEventEntry(dbForegroundEvent, getType());
+        }
+
+        if (dbProvider != null) {
+            dbProvider = DbProvider.getInstance(context);
         }
     }
 
