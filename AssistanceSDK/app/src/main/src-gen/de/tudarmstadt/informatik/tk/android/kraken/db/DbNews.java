@@ -14,6 +14,7 @@ public class DbNews {
     /** Not-null value. */
     private String created;
     private Long moduleId;
+    private Long userId;
 
     /** Used to resolve relations */
     private transient DaoSession daoSession;
@@ -24,6 +25,9 @@ public class DbNews {
     private DbModule dbModule;
     private Long dbModule__resolvedKey;
 
+    private DbUser dbUser;
+    private Long dbUser__resolvedKey;
+
 
     public DbNews() {
     }
@@ -32,11 +36,12 @@ public class DbNews {
         this.id = id;
     }
 
-    public DbNews(Long id, String content, String created, Long moduleId) {
+    public DbNews(Long id, String content, String created, Long moduleId, Long userId) {
         this.id = id;
         this.content = content;
         this.created = created;
         this.moduleId = moduleId;
+        this.userId = userId;
     }
 
     /** called by internal mechanisms, do not call yourself. */
@@ -79,6 +84,14 @@ public class DbNews {
         this.moduleId = moduleId;
     }
 
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
+    }
+
     /** To-one relationship, resolved on first access. */
     public DbModule getDbModule() {
         Long __key = this.moduleId;
@@ -101,6 +114,31 @@ public class DbNews {
             this.dbModule = dbModule;
             moduleId = dbModule == null ? null : dbModule.getId();
             dbModule__resolvedKey = moduleId;
+        }
+    }
+
+    /** To-one relationship, resolved on first access. */
+    public DbUser getDbUser() {
+        Long __key = this.userId;
+        if (dbUser__resolvedKey == null || !dbUser__resolvedKey.equals(__key)) {
+            if (daoSession == null) {
+                throw new DaoException("Entity is detached from DAO context");
+            }
+            DbUserDao targetDao = daoSession.getDbUserDao();
+            DbUser dbUserNew = targetDao.load(__key);
+            synchronized (this) {
+                dbUser = dbUserNew;
+            	dbUser__resolvedKey = __key;
+            }
+        }
+        return dbUser;
+    }
+
+    public void setDbUser(DbUser dbUser) {
+        synchronized (this) {
+            this.dbUser = dbUser;
+            userId = dbUser == null ? null : dbUser.getId();
+            dbUser__resolvedKey = userId;
         }
     }
 

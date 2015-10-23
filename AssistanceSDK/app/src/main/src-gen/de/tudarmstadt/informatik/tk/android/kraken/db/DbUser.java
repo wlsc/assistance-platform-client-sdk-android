@@ -32,6 +32,7 @@ public class DbUser {
     private List<DbDevice> dbDeviceList;
     private List<DbModule> dbModuleList;
     private List<DbModuleInstallation> dbModuleInstallationList;
+    private List<DbNews> dbNewsList;
 
     public DbUser() {
     }
@@ -220,6 +221,28 @@ public class DbUser {
     /** Resets a to-many relationship, making the next get call to query for a fresh result. */
     public synchronized void resetDbModuleInstallationList() {
         dbModuleInstallationList = null;
+    }
+
+    /** To-many relationship, resolved on first access (and after reset). Changes to to-many relations are not persisted, make changes to the target entity. */
+    public List<DbNews> getDbNewsList() {
+        if (dbNewsList == null) {
+            if (daoSession == null) {
+                throw new DaoException("Entity is detached from DAO context");
+            }
+            DbNewsDao targetDao = daoSession.getDbNewsDao();
+            List<DbNews> dbNewsListNew = targetDao._queryDbUser_DbNewsList(id);
+            synchronized (this) {
+                if(dbNewsList == null) {
+                    dbNewsList = dbNewsListNew;
+                }
+            }
+        }
+        return dbNewsList;
+    }
+
+    /** Resets a to-many relationship, making the next get call to query for a fresh result. */
+    public synchronized void resetDbNewsList() {
+        dbNewsList = null;
     }
 
     /** Convenient call for {@link AbstractDao#delete(Object)}. Entity must attached to an entity context. */

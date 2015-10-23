@@ -140,8 +140,12 @@ public class AssistanceDatabaseGenerator {
       
     Property newsFKModuleProperty =
         assistanceNews.addLongProperty("moduleId").index().getProperty();
+    Property newsFKUserProperty =
+        assistanceNews.addLongProperty("userId").index().getProperty();
     assistanceNews.addToOne(module, newsFKModuleProperty);
     module.addToMany(assistanceNews, newsFKModuleProperty);
+    assistanceNews.addToOne(user, newsFKUserProperty);
+    user.addToMany(assistanceNews, newsFKUserProperty);
     
     // ****************************************
     // ------------ COMMON SENSORS ------------
