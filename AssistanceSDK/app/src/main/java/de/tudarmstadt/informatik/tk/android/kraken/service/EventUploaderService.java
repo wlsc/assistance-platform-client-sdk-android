@@ -318,7 +318,7 @@ public class EventUploaderService extends GcmTaskService {
             @Override
             public void failure(RetrofitError error) {
                 // TODO process error
-                Log.d(TAG, "Server returned error!");
+                Log.d(TAG, "Server returned error! Kind: "+error.getKind().name());
             }
         });
     }

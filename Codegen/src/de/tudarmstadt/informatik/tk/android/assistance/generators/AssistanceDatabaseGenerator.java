@@ -130,7 +130,19 @@ public class AssistanceDatabaseGenerator {
     module.addToMany(moduleInstallation, moduleInstallationFKModuleProperty);
     moduleInstallation.addToOne(user, moduleInstallationFKUserProperty);
     user.addToMany(moduleInstallation, moduleInstallationFKUserProperty);
-
+    
+    // ----- Assistance News scheme -----
+    Entity assistanceNews = schema.addEntity("DbNews");
+    assistanceNews.setTableName("news");
+    assistanceNews.addIdProperty().autoincrement().index();
+    assistanceNews.addStringProperty("content");
+    assistanceNews.addStringProperty("created").notNull();
+      
+    Property newsFKModuleProperty =
+        assistanceNews.addLongProperty("moduleId").index().getProperty();
+    assistanceNews.addToOne(module, newsFKModuleProperty);
+    module.addToMany(assistanceNews, newsFKModuleProperty);
+    
     // ****************************************
     // ------------ COMMON SENSORS ------------
     // ****************************************
