@@ -134,6 +134,6 @@ public class WifiCatcherReceiver extends BroadcastReceiver {
         EventUploaderService.scheduleOneTimeTask(context,
                 UPLOAD_ALL_TASL_START_SECS,
                 UPLOAD_ALL_TASL_END_SECS,
-                "onetimetag|1");
+                "onetimetag | 1");
     }
 }

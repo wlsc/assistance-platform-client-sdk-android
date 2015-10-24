@@ -44,11 +44,21 @@ public class EventUploaderService extends GcmTaskService {
     private static final long taskID = 999;
     // the task should be executed every 30 seconds
     private static final long periodSecs = 60L;
+    // fallback for period in case of server is not available
+    private static final long periodServerNotAvailableFallbackSecs = 300L;
     // the task can run as early as -15 seconds from the scheduled time
     private static final long flexSecs = 15L;
+    // fallback for flexibility in case of server not available
+    private static final long flexServerNotAvailableFallbackSecs = 100L;
 
-    // an unique task identifier
-    private static final String taskTag = "periodic | " + taskID + ": " + periodSecs + "s, f:" + flexSecs;
+    // an unique default task identifier
+    private static String taskTagDefault = "periodic | " + taskID + ": " + periodSecs + "s, f:" + flexSecs;
+    // an unique connection fallback task identifier
+    private static String taskTagFallback = "periodic | " +
+            taskID + ": " +
+            periodServerNotAvailableFallbackSecs +
+            "s, f:" +
+            flexServerNotAvailableFallbackSecs;
 
     private static final String UPLOAD_ALL_FLAG_NAME = "UPLOAD_ALL";
     private static final int UPLOAD_ALL_FLAG = 1;
@@ -56,6 +66,8 @@ public class EventUploaderService extends GcmTaskService {
     private static PreferenceProvider mPreferenceProvider;
 
     private SparseArrayCompat<List<Sensor>> events;
+
+    private static boolean isNeedInConnectionFallback;
 
     @Override
     public void onCreate() {
@@ -70,7 +82,17 @@ public class EventUploaderService extends GcmTaskService {
         String userToken = mPreferenceProvider.getUserToken();
 
         if (userToken != null && !userToken.isEmpty()) {
-            schedulePeriodicTask(getApplicationContext(), periodSecs, flexSecs, taskTag);
+
+            cancelAllTasks(getApplicationContext());
+
+            if (isNeedInConnectionFallback) {
+                schedulePeriodicTask(getApplicationContext(),
+                        periodServerNotAvailableFallbackSecs,
+                        flexServerNotAvailableFallbackSecs,
+                        taskTagFallback);
+            } else {
+                schedulePeriodicTask(getApplicationContext(), periodSecs, flexSecs, taskTagDefault);
+            }
         } else {
             Log.d(TAG, "User is not logged in. Scheduled task won't start");
         }
@@ -310,6 +332,8 @@ public class EventUploaderService extends GcmTaskService {
 
                     Log.d(TAG, "OK response from server received");
 
+                    isNeedInConnectionFallback = false;
+
                     // successful transmission of event data -> remove that data from db
                     DbProvider.getInstance(getApplicationContext()).removeDbSentEvents(events);
                 }
@@ -318,7 +342,10 @@ public class EventUploaderService extends GcmTaskService {
             @Override
             public void failure(RetrofitError error) {
                 // TODO process error
-                Log.d(TAG, "Server returned error! Kind: "+error.getKind().name());
+                Log.d(TAG, "Server returned error! Kind: " + error.getKind().name());
+
+                // fallbacking request
+                isNeedInConnectionFallback = true;
             }
         });
     }
@@ -330,7 +357,15 @@ public class EventUploaderService extends GcmTaskService {
 
         // first cancel any running event uploader tasks
         cancelAllTasks(getApplicationContext());
-        schedulePeriodicTask(getApplicationContext(), periodSecs, flexSecs, taskTag);
+
+        if (isNeedInConnectionFallback) {
+            schedulePeriodicTask(getApplicationContext(),
+                    periodServerNotAvailableFallbackSecs,
+                    flexServerNotAvailableFallbackSecs,
+                    taskTagFallback);
+        } else {
+            schedulePeriodicTask(getApplicationContext(), periodSecs, flexSecs, taskTagDefault);
+        }
 
         super.onInitializeTasks();
     }
@@ -346,7 +381,7 @@ public class EventUploaderService extends GcmTaskService {
      * Cancels this GCM Network Manager periodic task
      */
     public static void cancel(Context context) {
-        GcmNetworkManager.getInstance(context).cancelTask(taskTag, EventUploaderService.class);
+        GcmNetworkManager.getInstance(context).cancelTask(taskTagDefault, EventUploaderService.class);
     }
 
     /**
@@ -359,14 +394,14 @@ public class EventUploaderService extends GcmTaskService {
     /**
      * Schedules an periodic upload task
      */
-    public static void schedulePeriodicTask(Context context, long periodSecs, long flexSecs, String tag) {
+    public static void schedulePeriodicTask(Context context, long paramPeriodSecs, long paramFlexSecs, String tag) {
 
         Log.d(TAG, "Scheduling periodic task...");
 
         PeriodicTask periodicTask = new PeriodicTask.Builder()
                 .setService(EventUploaderService.class)
-                .setPeriod(periodSecs)
-                .setFlex(flexSecs)
+                .setPeriod(paramPeriodSecs)
+                .setFlex(paramFlexSecs)
                 .setTag(tag)
                 .setPersisted(true)
                 .setUpdateCurrent(true)
