@@ -28,6 +28,8 @@ import de.tudarmstadt.informatik.tk.android.kraken.db.DbModuleInstallation;
 import de.tudarmstadt.informatik.tk.android.kraken.db.DbModuleInstallationDao;
 import de.tudarmstadt.informatik.tk.android.kraken.db.DbMotionActivityEvent;
 import de.tudarmstadt.informatik.tk.android.kraken.db.DbMotionActivityEventDao;
+import de.tudarmstadt.informatik.tk.android.kraken.db.DbNews;
+import de.tudarmstadt.informatik.tk.android.kraken.db.DbNewsDao;
 import de.tudarmstadt.informatik.tk.android.kraken.db.DbPositionSensor;
 import de.tudarmstadt.informatik.tk.android.kraken.db.DbPositionSensorDao;
 import de.tudarmstadt.informatik.tk.android.kraken.db.DbUser;
@@ -66,11 +68,21 @@ public class DbProvider {
     /**
      * DAOs
      */
+    // User
     private DbUserDao userDao;
+
+    // Device
     private DbDeviceDao deviceDao;
+
+    // Modules
     private DbModuleDao moduleDao;
     private DbModuleCapabilityDao moduleCapabilityDao;
     private DbModuleInstallationDao moduleInstallationDao;
+
+    // Assistance news
+    private DbNewsDao newsDao;
+
+    // Sensors
     private DbAccelerometerSensorDao accelerometerSensorDao;
     private DbPositionSensorDao positionSensorDao;
     private DbMotionActivityEventDao motionActivityEventDao;
@@ -119,6 +131,10 @@ public class DbProvider {
             moduleInstallationDao = getDaoSession().getDbModuleInstallationDao();
         }
 
+        if (newsDao == null) {
+            newsDao = getDaoSession().getDbNewsDao();
+        }
+
         if (accelerometerSensorDao == null) {
             accelerometerSensorDao = getDaoSession().getDbAccelerometerSensorDao();
         }
@@ -165,6 +181,21 @@ public class DbProvider {
 
     public SQLiteDatabase getDatabase() {
         return mDb;
+    }
+
+    /**
+     * Returns list of DB cached user assistance entries
+     *
+     * @param userId
+     * @param moduleId
+     * @return
+     */
+    public List<DbNews> getNews(Long userId) {
+        return newsDao
+                .queryBuilder()
+                .where(DbNewsDao.Properties.UserId.eq(userId))
+                .build()
+                .list();
     }
 
     /**
