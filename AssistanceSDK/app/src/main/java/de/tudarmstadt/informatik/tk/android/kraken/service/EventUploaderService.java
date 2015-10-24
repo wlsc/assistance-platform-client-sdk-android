@@ -332,10 +332,15 @@ public class EventUploaderService extends GcmTaskService {
 
                     Log.d(TAG, "OK response from server received");
 
-                    isNeedInConnectionFallback = false;
-
                     // successful transmission of event data -> remove that data from db
                     DbProvider.getInstance(getApplicationContext()).removeDbSentEvents(events);
+
+                    // reschedule default periodic task
+                    if (isNeedInConnectionFallback) {
+                        isNeedInConnectionFallback = false;
+
+                        rescheduleDefaultPeriodicTask();
+                    }
                 }
             }
 
@@ -344,19 +349,48 @@ public class EventUploaderService extends GcmTaskService {
                 // TODO process error
                 Log.d(TAG, "Server returned error! Kind: " + error.getKind().name());
 
-                // fallbacking request
-                isNeedInConnectionFallback = true;
+                // fallbacking periodic request
+                if (!isNeedInConnectionFallback) {
+                    isNeedInConnectionFallback = true;
 
-                // cancelling default periodic task
-                cancelByTag(getApplicationContext(), taskTagDefault);
-
-                // reschedule periodic task with fallback timings
-                schedulePeriodicTask(getApplicationContext(),
-                        periodServerNotAvailableFallbackSecs,
-                        flexServerNotAvailableFallbackSecs,
-                        taskTagFallback);
+                    rescheduleFallbackPeriodicTask();
+                }
             }
         });
+    }
+
+    /**
+     * Rescheduling default task by canceling fallback one
+     */
+    private void rescheduleDefaultPeriodicTask() {
+
+        Log.d(TAG, "Rescheduling  default periodic task...");
+
+        // cancelling fallback periodic task
+        cancelByTag(getApplicationContext(), taskTagFallback);
+
+        // reschedule periodic task with default timings
+        schedulePeriodicTask(getApplicationContext(),
+                periodSecs,
+                flexSecs,
+                taskTagDefault);
+    }
+
+    /**
+     * Rescheduling fallback task by canceling default one
+     */
+    private void rescheduleFallbackPeriodicTask() {
+
+        Log.d(TAG, "Rescheduling  fallback periodic task...");
+
+        // cancelling default periodic task
+        cancelByTag(getApplicationContext(), taskTagDefault);
+
+        // reschedule periodic task with fallback timings
+        schedulePeriodicTask(getApplicationContext(),
+                periodServerNotAvailableFallbackSecs,
+                flexServerNotAvailableFallbackSecs,
+                taskTagFallback);
     }
 
     @Override
