@@ -346,6 +346,15 @@ public class EventUploaderService extends GcmTaskService {
 
                 // fallbacking request
                 isNeedInConnectionFallback = true;
+
+                // cancelling default periodic task
+                cancelByTag(getApplicationContext(), taskTagDefault);
+
+                // reschedule periodic task with fallback timings
+                schedulePeriodicTask(getApplicationContext(),
+                        periodServerNotAvailableFallbackSecs,
+                        flexServerNotAvailableFallbackSecs,
+                        taskTagFallback);
             }
         });
     }
@@ -378,7 +387,7 @@ public class EventUploaderService extends GcmTaskService {
     }
 
     /**
-     * Cancels this GCM Network Manager periodic task
+     * Cancels default periodic task
      */
     public static void cancel(Context context) {
         GcmNetworkManager.getInstance(context).cancelTask(taskTagDefault, EventUploaderService.class);
