@@ -318,6 +318,12 @@ public class EventUploaderService extends GcmTaskService {
             return;
         }
 
+        // device is not online
+        if (!DeviceUtils.isOnline(getApplicationContext())) {
+            Log.d(TAG, "Device is not online. Ignoring upload request");
+            return;
+        }
+
         // send to upload data service
         EventUploadEndpoint eventUploadEndpoint = EndpointGenerator.getInstance(getApplicationContext()).create(EventUploadEndpoint.class);
 
@@ -364,7 +370,7 @@ public class EventUploaderService extends GcmTaskService {
      */
     private void rescheduleDefaultPeriodicTask() {
 
-        Log.d(TAG, "Rescheduling  default periodic task...");
+        Log.d(TAG, "Rescheduling default periodic task...");
 
         // cancelling fallback periodic task
         cancelByTag(getApplicationContext(), taskTagFallback);
@@ -381,7 +387,7 @@ public class EventUploaderService extends GcmTaskService {
      */
     private void rescheduleFallbackPeriodicTask() {
 
-        Log.d(TAG, "Rescheduling  fallback periodic task...");
+        Log.d(TAG, "Rescheduling fallback periodic task...");
 
         // cancelling default periodic task
         cancelByTag(getApplicationContext(), taskTagDefault);
