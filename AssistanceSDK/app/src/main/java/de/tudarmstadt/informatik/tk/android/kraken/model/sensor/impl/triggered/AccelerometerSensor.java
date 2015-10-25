@@ -64,20 +64,29 @@ public class AccelerometerSensor extends AbstractTriggeredEvent implements Senso
     @Override
     public void startSensor() {
         reset();
-        mSensorManager.registerListener(this, mAccelerometerSensor, SENSOR_DELAY_BETWEEN_TWO_EVENTS);
-        isRunning = true;
+
+        // if device not running light sensor
+        if (mSensorManager != null) {
+
+            mSensorManager.registerListener(this, mAccelerometerSensor, SENSOR_DELAY_BETWEEN_TWO_EVENTS);
+            isRunning = true;
+        }
     }
 
     @Override
     public void stopSensor() {
-        mSensorManager.unregisterListener(this, mAccelerometerSensor);
+
+        // if device not running light sensor
+        if (mSensorManager != null) {
+            mSensorManager.unregisterListener(this, mAccelerometerSensor);
+        }
         isRunning = false;
     }
 
     @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
 
-        Log.d(TAG, "Accuracy changed. Old: " + this.accuracy + " new: " + accuracy);
+        Log.d(TAG, "Accuracy has changed. Old: " + this.accuracy + " new: " + accuracy);
 
         this.accuracy = accuracy;
 
