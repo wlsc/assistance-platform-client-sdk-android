@@ -6,54 +6,80 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 
+import java.util.Date;
+import java.util.Locale;
+
+import de.tudarmstadt.informatik.tk.android.kraken.db.DbLightSensor;
 import de.tudarmstadt.informatik.tk.android.kraken.model.api.sensors.SensorType;
 import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.AbstractTriggeredEvent;
+import de.tudarmstadt.informatik.tk.android.kraken.provider.DbProvider;
+import de.tudarmstadt.informatik.tk.android.kraken.util.DateUtils;
 
 
 public class LightSensor extends AbstractTriggeredEvent implements SensorEventListener {
 
-    public static enum Configuration {
-        SENSOR_DELAY_BETWEEN_TWO_EVENTS, MIN_DIFFERENCE;
-    }
-
-    ;
-
     // ------------------- Configuration -------------------
     private int SENSOR_DELAY_BETWEEN_TWO_EVENTS = SensorManager.SENSOR_DELAY_NORMAL;
-    private int MIN_DIFFERENCE = 5;
+    private int SENSOR_MIN_DIFFERENCE = 5;
     // -----------------------------------------------------
 
-    private SensorManager m_sensorManager;
-    private Sensor m_accelerometerSensor;
-    private float m_floatLastValue;
+    private DbProvider dbProvider;
+
+    private SensorManager mSensorManager;
+    private Sensor mAccelerometerSensor;
+
+    private int accuracy;
+    private float mLastValue;
 
     public LightSensor(Context context) {
         super(context);
 
-        m_sensorManager = (SensorManager) this.context.getSystemService(Context.SENSOR_SERVICE);
-        m_accelerometerSensor = m_sensorManager.getDefaultSensor(Sensor.TYPE_LIGHT);
+        if (dbProvider == null) {
+            dbProvider = DbProvider.getInstance(context);
+        }
+
+        mSensorManager = (SensorManager) this.context.getSystemService(Context.SENSOR_SERVICE);
+        mAccelerometerSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_LIGHT);
     }
 
     @Override
     protected void dumpData() {
 
+        DbLightSensor sensorLight = new DbLightSensor();
+
+        sensorLight.setValue(mLastValue);
+        sensorLight.setAccuracy(accuracy);
+        sensorLight.setCreated(DateUtils.dateToISO8601String(new Date(), Locale.getDefault()));
+
+        dbProvider.insertEventEntry(sensorLight, getType());
     }
 
     @Override
     public void startSensor() {
-        m_sensorManager.registerListener(this, m_accelerometerSensor, SENSOR_DELAY_BETWEEN_TWO_EVENTS);
-        isRunning = true;
+
+        if (mSensorManager != null) {
+
+            mSensorManager.registerListener(this,
+                    mAccelerometerSensor,
+                    SENSOR_DELAY_BETWEEN_TWO_EVENTS);
+            isRunning = true;
+        }
     }
 
     @Override
     public void stopSensor() {
-        m_sensorManager.unregisterListener(this, m_accelerometerSensor);
+
+        if (mSensorManager != null) {
+            mSensorManager.unregisterListener(this, mAccelerometerSensor);
+        }
+
         isRunning = false;
     }
 
     @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
 
+        this.accuracy = accuracy;
     }
 
     @Override
@@ -63,18 +89,20 @@ public class LightSensor extends AbstractTriggeredEvent implements SensorEventLi
 
     @Override
     public void reset() {
-
+        mLastValue = 0;
     }
 
     @Override
     public void onSensorChanged(SensorEvent event) {
-//		float floatValue = event.values[0];
-//		if (floatValue < m_floatLastValue - MIN_DIFFERENCE || floatValue > m_floatLastValue + MIN_DIFFERENCE) {
-//			m_floatLastValue = floatValue;
-//			SensorLight sensorLight = new SensorLight();
-//			sensorLight.setAccuracy(event.accuracy);
-//			sensorLight.setValue(floatValue);
-//			handleDBEntry(sensorLight);
-//		}
+
+        float currentValue = event.values[0];
+
+        if (currentValue < mLastValue - SENSOR_MIN_DIFFERENCE ||
+                (currentValue > (mLastValue + SENSOR_MIN_DIFFERENCE))) {
+
+            mLastValue = currentValue;
+
+            dumpData();
+        }
     }
 }

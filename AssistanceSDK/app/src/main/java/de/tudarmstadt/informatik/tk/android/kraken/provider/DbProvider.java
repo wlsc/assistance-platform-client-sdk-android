@@ -20,6 +20,8 @@ import de.tudarmstadt.informatik.tk.android.kraken.db.DbDevice;
 import de.tudarmstadt.informatik.tk.android.kraken.db.DbDeviceDao;
 import de.tudarmstadt.informatik.tk.android.kraken.db.DbForegroundEvent;
 import de.tudarmstadt.informatik.tk.android.kraken.db.DbForegroundEventDao;
+import de.tudarmstadt.informatik.tk.android.kraken.db.DbLightSensor;
+import de.tudarmstadt.informatik.tk.android.kraken.db.DbLightSensorDao;
 import de.tudarmstadt.informatik.tk.android.kraken.db.DbModule;
 import de.tudarmstadt.informatik.tk.android.kraken.db.DbModuleCapability;
 import de.tudarmstadt.informatik.tk.android.kraken.db.DbModuleCapabilityDao;
@@ -43,6 +45,7 @@ import de.tudarmstadt.informatik.tk.android.kraken.model.api.sensors.SensorType;
 import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.Sensor;
 import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.impl.triggered.AccelerometerSensor;
 import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.impl.triggered.ForegroundEvent;
+import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.impl.triggered.LightSensor;
 import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.impl.triggered.LocationSensor;
 import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.impl.triggered.MotionActivityEvent;
 import de.tudarmstadt.informatik.tk.android.kraken.util.db.DbAssistanceOpenHelper;
@@ -82,11 +85,12 @@ public class DbProvider {
     // Assistance news
     private DbNewsDao newsDao;
 
-    // Sensors
+    // Sensors / Events
     private DbAccelerometerSensorDao accelerometerSensorDao;
     private DbPositionSensorDao positionSensorDao;
     private DbMotionActivityEventDao motionActivityEventDao;
     private DbForegroundEventDao foregroundEventDao;
+    private DbLightSensorDao lightSensorDao;
 
     /**
      * Lists with transmitted db objects to remove them after
@@ -149,6 +153,10 @@ public class DbProvider {
 
         if (foregroundEventDao == null) {
             foregroundEventDao = getDaoSession().getDbForegroundEventDao();
+        }
+
+        if (lightSensorDao == null) {
+            lightSensorDao = getDaoSession().getDbLightSensorDao();
         }
     }
 
@@ -520,19 +528,23 @@ public class DbProvider {
 
         switch (type) {
             case SensorType.ACCELEROMETER:
+
                 Log.d(AccelerometerSensor.class.getSimpleName(), "Dumping data to db...");
 
                 result = accelerometerSensorDao.insertOrReplace((DbAccelerometerSensor) sensor);
 
                 Log.d(AccelerometerSensor.class.getSimpleName(), "Finished dumping data");
                 break;
+
             case SensorType.LOCATION:
+
                 Log.d(LocationSensor.class.getSimpleName(), "Dumping data to db...");
 
                 result = positionSensorDao.insertOrReplace((DbPositionSensor) sensor);
 
                 Log.d(LocationSensor.class.getSimpleName(), "Finished dumping data");
                 break;
+
             case SensorType.FOREGROUND:
 
                 Log.d(ForegroundEvent.class.getSimpleName(), "Dumping data to db...");
@@ -541,6 +553,7 @@ public class DbProvider {
 
                 Log.d(ForegroundEvent.class.getSimpleName(), "Finished dumping data");
                 break;
+
             case SensorType.MOTION_ACTIVITY:
 
                 Log.d(MotionActivityEvent.class.getSimpleName(), "Dumping data to db...");
@@ -548,6 +561,15 @@ public class DbProvider {
                 result = motionActivityEventDao.insertOrReplace((DbMotionActivityEvent) sensor);
 
                 Log.d(MotionActivityEvent.class.getSimpleName(), "Finished dumping data");
+                break;
+
+            case SensorType.LIGHT:
+
+                Log.d(LightSensor.class.getSimpleName(), "Dumping data to db...");
+
+                result = lightSensorDao.insertOrReplace((DbLightSensor) sensor);
+
+                Log.d(LightSensor.class.getSimpleName(), "Finished dumping data");
                 break;
         }
 
