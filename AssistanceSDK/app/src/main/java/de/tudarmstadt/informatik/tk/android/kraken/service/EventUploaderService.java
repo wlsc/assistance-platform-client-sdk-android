@@ -37,7 +37,6 @@ public class EventUploaderService extends GcmTaskService {
     private static final String TAG = EventUploaderService.class.getSimpleName();
 
     private static final int EVENTS_NUMBER_TO_SPLIT_AFTER = 500;
-
     private static final int PUSH_NUMBER_OF_EACH_ELEMENTS = 80;
 
     // task identifier
@@ -52,7 +51,11 @@ public class EventUploaderService extends GcmTaskService {
     private static final long flexServerNotAvailableFallbackSecs = 100L;
 
     // an unique default task identifier
-    private static String taskTagDefault = "periodic | " + taskID + ": " + periodSecs + "s, f:" + flexSecs;
+    private static String taskTagDefault = "periodic | " +
+            taskID + ": " +
+            periodSecs + "s, f:" +
+            flexSecs;
+    
     // an unique connection fallback task identifier
     private static String taskTagFallback = "periodic | " +
             taskID + ": " +
@@ -103,7 +106,19 @@ public class EventUploaderService extends GcmTaskService {
     @Override
     public int onRunTask(TaskParams taskParams) {
 
-        Log.d(TAG, "Upload task has started");
+        Log.d(TAG, "Task uploader has started");
+
+        // check Airplane Mode enabled
+        if (DeviceUtils.isAirplaneModeEnabled(getApplicationContext())) {
+            Log.d(TAG, "Airplane Mode enabled. Upload request ignored");
+            return GcmNetworkManager.RESULT_FAILURE;
+        }
+
+        // device is not online
+        if (!DeviceUtils.isOnline(getApplicationContext())) {
+            Log.d(TAG, "Device is not online. Upload request ignored");
+            return GcmNetworkManager.RESULT_FAILURE;
+        }
 
         boolean isPeriodic = true;
 
@@ -133,12 +148,14 @@ public class EventUploaderService extends GcmTaskService {
                             // user logged out
                             if (serverDeviceId == -1) {
                                 Log.d(TAG, "User logged out -- all tasks has been canceled!");
-                                GcmNetworkManager.getInstance(getApplicationContext()).cancelAllTasks(EventUploaderService.class);
+                                GcmNetworkManager.getInstance(getApplicationContext())
+                                        .cancelAllTasks(EventUploaderService.class);
                                 return;
                             }
 
                             events = new SparseArrayCompat<>();
-                            events = DbProvider.getInstance(getApplicationContext()).getEntriesForUpload(0);
+                            events = DbProvider.getInstance(getApplicationContext())
+                                    .getEntriesForUpload(0);
 
                             final List<Sensor> eventsAsList = new LinkedList<>();
 
@@ -221,12 +238,14 @@ public class EventUploaderService extends GcmTaskService {
                     // user logged out
                     if (serverDeviceId == -1) {
                         Log.d(TAG, "User logged out -- all tasks has been canceled!");
-                        GcmNetworkManager.getInstance(getApplicationContext()).cancelAllTasks(EventUploaderService.class);
+                        GcmNetworkManager.getInstance(getApplicationContext())
+                                .cancelAllTasks(EventUploaderService.class);
                         return;
                     }
 
                     events = new SparseArrayCompat<>();
-                    events = DbProvider.getInstance(getApplicationContext()).getEntriesForUpload(PUSH_NUMBER_OF_EACH_ELEMENTS);
+                    events = DbProvider.getInstance(getApplicationContext())
+                            .getEntriesForUpload(PUSH_NUMBER_OF_EACH_ELEMENTS);
 
                     final List<Sensor> eventsAsList = new LinkedList<>();
 
@@ -304,6 +323,7 @@ public class EventUploaderService extends GcmTaskService {
         Log.d(TAG, "Uploading data...");
 
         if (eventUploadRequest == null || eventUploadRequest.getDataEvents() == null) {
+            Log.d(TAG, "eventUploadRequest is null or events list is empty!");
             return;
         }
 
@@ -312,57 +332,48 @@ public class EventUploaderService extends GcmTaskService {
             return;
         }
 
-        // check Airplane Mode enabled
-        if (DeviceUtils.isAirplaneModeEnabled(getApplicationContext())) {
-            Log.d(TAG, "Airplane Mode enabled. Ignoring upload request");
-            return;
-        }
-
-        // device is not online
-        if (!DeviceUtils.isOnline(getApplicationContext())) {
-            Log.d(TAG, "Device is not online. Ignoring upload request");
-            return;
-        }
-
         // send to upload data service
-        EventUploadEndpoint eventUploadEndpoint = EndpointGenerator.getInstance(getApplicationContext()).create(EventUploadEndpoint.class);
+        EventUploadEndpoint eventUploadEndpoint = EndpointGenerator
+                .getInstance(getApplicationContext())
+                .create(EventUploadEndpoint.class);
 
         String userToken = mPreferenceProvider.getUserToken();
 
-        eventUploadEndpoint.uploadData(userToken, eventUploadRequest, new Callback<Void>() {
+        eventUploadEndpoint.uploadData(userToken, eventUploadRequest,
+                new Callback<Void>() {
 
-            @Override
-            public void success(Void aVoid, Response response) {
+                    @Override
+                    public void success(Void aVoid, Response response) {
 
-                if (response != null && (response.getStatus() == 200 || response.getStatus() == 204)) {
+                        if (response != null && (response.getStatus() == 200 || response.getStatus() == 204)) {
 
-                    Log.d(TAG, "OK response from server received");
+                            Log.d(TAG, "OK response from server received");
 
-                    // successful transmission of event data -> remove that data from db
-                    DbProvider.getInstance(getApplicationContext()).removeDbSentEvents(events);
+                            // successful transmission of event data -> remove that data from db
+                            DbProvider.getInstance(getApplicationContext()).removeDbSentEvents(events);
 
-                    // reschedule default periodic task
-                    if (isNeedInConnectionFallback) {
-                        isNeedInConnectionFallback = false;
+                            // reschedule default periodic task
+                            if (isNeedInConnectionFallback) {
+                                isNeedInConnectionFallback = false;
 
-                        rescheduleDefaultPeriodicTask();
+                                rescheduleDefaultPeriodicTask();
+                            }
+                        }
                     }
-                }
-            }
 
-            @Override
-            public void failure(RetrofitError error) {
-                // TODO process error
-                Log.d(TAG, "Server returned error! Kind: " + error.getKind().name());
+                    @Override
+                    public void failure(RetrofitError error) {
+                        // TODO process error
+                        Log.d(TAG, "Server returned error! Kind: " + error.getKind().name());
 
-                // fallbacking periodic request
-                if (!isNeedInConnectionFallback) {
-                    isNeedInConnectionFallback = true;
+                        // fallbacking periodic request
+                        if (!isNeedInConnectionFallback) {
+                            isNeedInConnectionFallback = true;
 
-                    rescheduleFallbackPeriodicTask();
-                }
-            }
-        });
+                            rescheduleFallbackPeriodicTask();
+                        }
+                    }
+                });
     }
 
     /**
