@@ -58,10 +58,14 @@ public class PositionSensorRequest implements Sensor {
     private int type;
 
     public PositionSensorRequest() {
+        this.type = SensorType.LOCATION;
+        this.typeStr = SensorType.getApiName(this.type);
     }
 
     public PositionSensorRequest(long id) {
         this.id = id;
+        this.type = SensorType.LOCATION;
+        this.typeStr = SensorType.getApiName(this.type);
     }
 
     public PositionSensorRequest(long id, Double latitude, Double longitude, Double accuracyHorizontal, Float speed, String created, Double altitude, Double accuracyVertical, Integer course, Integer floor) {

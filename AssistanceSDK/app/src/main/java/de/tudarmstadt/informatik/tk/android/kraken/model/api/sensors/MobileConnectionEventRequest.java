@@ -43,10 +43,15 @@ public class MobileConnectionEventRequest implements Sensor {
     private int type;
 
     public MobileConnectionEventRequest() {
+        this.type = SensorType.MOBILE_DATA_CONNECTION;
+        this.typeStr = SensorType.getApiName(this.type);
+
     }
 
     public MobileConnectionEventRequest(long id) {
         this.id = id;
+        this.type = SensorType.MOBILE_DATA_CONNECTION;
+        this.typeStr = SensorType.getApiName(this.type);
     }
 
     public MobileConnectionEventRequest(long id, String carrierName, String mobileCarrierCode, String mobileNetworkCode, String created, Boolean voipAvailable) {

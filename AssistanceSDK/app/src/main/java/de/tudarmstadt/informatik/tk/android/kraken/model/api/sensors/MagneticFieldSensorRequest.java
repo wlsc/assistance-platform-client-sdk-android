@@ -67,10 +67,14 @@ public class MagneticFieldSensorRequest implements Sensor {
     private int type;
 
     public MagneticFieldSensorRequest() {
+        this.type = SensorType.MAGNETIC_FIELD;
+        this.typeStr = SensorType.getApiName(this.type);
     }
 
     public MagneticFieldSensorRequest(long id) {
         this.id = id;
+        this.type = SensorType.MAGNETIC_FIELD;
+        this.typeStr = SensorType.getApiName(this.type);
     }
 
     public MagneticFieldSensorRequest(long id, Double x, Double y, Double z, String created, Integer accuracy) {

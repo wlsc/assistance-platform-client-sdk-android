@@ -34,10 +34,14 @@ public class ConnectionEventRequest implements Sensor {
     private int type;
 
     public ConnectionEventRequest() {
+        this.type = SensorType.CONNECTION;
+        this.typeStr = SensorType.getApiName(this.type);
     }
 
     public ConnectionEventRequest(long id) {
         this.id = id;
+        this.type = SensorType.CONNECTION;
+        this.typeStr = SensorType.getApiName(this.type);
     }
 
     public ConnectionEventRequest(long id, boolean isWifi, boolean isMobile, String created) {

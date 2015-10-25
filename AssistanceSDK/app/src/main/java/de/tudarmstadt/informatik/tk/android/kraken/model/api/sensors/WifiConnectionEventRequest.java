@@ -54,10 +54,14 @@ public class WifiConnectionEventRequest implements Sensor {
     private int type;
 
     public WifiConnectionEventRequest() {
+        this.type = SensorType.WIFI_CONNECTION;
+        this.typeStr = SensorType.getApiName(this.type);
     }
 
     public WifiConnectionEventRequest(long id) {
         this.id = id;
+        this.type = SensorType.WIFI_CONNECTION;
+        this.typeStr = SensorType.getApiName(this.type);
     }
 
     public WifiConnectionEventRequest(long id, String ssid, String bssid, String created, Integer channel, Integer frequency, Integer linkSpeed, Integer signalStrength, Integer networkId) {

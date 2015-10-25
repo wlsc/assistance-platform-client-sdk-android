@@ -43,10 +43,14 @@ public class AccelerometerSensorRequest implements Sensor {
     private int type;
 
     public AccelerometerSensorRequest() {
+        this.type = SensorType.ACCELEROMETER;
+        this.typeStr = SensorType.getApiName(this.type);
     }
 
     public AccelerometerSensorRequest(long id) {
         this.id = id;
+        this.type = SensorType.ACCELEROMETER;
+        this.typeStr = SensorType.getApiName(this.type);
     }
 
     public AccelerometerSensorRequest(long id, Double x, Double y, Double z, String created, Integer accuracy) {

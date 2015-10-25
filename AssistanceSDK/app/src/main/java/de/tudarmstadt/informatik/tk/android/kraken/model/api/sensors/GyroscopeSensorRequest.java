@@ -64,10 +64,14 @@ public class GyroscopeSensorRequest implements Sensor {
     private int type;
 
     public GyroscopeSensorRequest() {
+        this.type = SensorType.GYROSCOPE;
+        this.typeStr = SensorType.getApiName(this.type);
     }
 
     public GyroscopeSensorRequest(long id) {
         this.id = id;
+        this.type = SensorType.GYROSCOPE;
+        this.typeStr = SensorType.getApiName(this.type);
     }
 
     public GyroscopeSensorRequest(long id, Double x, Double y, Double z, String created) {

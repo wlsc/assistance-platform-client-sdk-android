@@ -30,10 +30,14 @@ public class LoudnessEventRequest implements Sensor {
     private int type;
 
     public LoudnessEventRequest() {
+        this.type = SensorType.LOUDNESS;
+        this.typeStr = SensorType.getApiName(this.type);
     }
 
     public LoudnessEventRequest(long id) {
         this.id = id;
+        this.type = SensorType.LOUDNESS;
+        this.typeStr = SensorType.getApiName(this.type);
     }
 
     public LoudnessEventRequest(long id, float loudness, String created) {

@@ -58,10 +58,14 @@ public class ForegroundEventRequest implements Sensor {
     private int type;
 
     public ForegroundEventRequest() {
+        this.type = SensorType.FOREGROUND;
+        this.typeStr = SensorType.getApiName(this.type);
     }
 
     public ForegroundEventRequest(Long id) {
         this.id = id;
+        this.type = SensorType.FOREGROUND;
+        this.typeStr = SensorType.getApiName(this.type);
     }
 
     public ForegroundEventRequest(Long id, String packageName, String appName, String className, String activityLabel, String color, String url, String eventType, Integer keystrokes, String created) {
