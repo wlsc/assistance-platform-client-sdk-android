@@ -25,7 +25,11 @@ import de.tudarmstadt.informatik.tk.android.kraken.provider.DbProvider;
 import de.tudarmstadt.informatik.tk.android.kraken.service.ActivitySensorService;
 import de.tudarmstadt.informatik.tk.android.kraken.util.DateUtils;
 
-
+/**
+ * @author Unknown
+ * @edited by Wladimir Schmidt (wlsc.dev@gmail.com)
+ * @date 08.10.2015
+ */
 public class MotionActivityEvent extends AbstractTriggeredEvent implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
     private static final String TAG = MotionActivityEvent.class.getSimpleName();
@@ -36,7 +40,7 @@ public class MotionActivityEvent extends AbstractTriggeredEvent implements Googl
 
     private GoogleApiClient mGoogleApiClient;
 
-    private PendingIntent m_activityRecognitionPendingIntent;
+    private PendingIntent mActivityRecognitionPendingIntent;
 
     private final static int CONNECTION_FAILURE_RESOLUTION_REQUEST = 9000;
 
@@ -135,6 +139,7 @@ public class MotionActivityEvent extends AbstractTriggeredEvent implements Googl
         return INSTANCE;
     }
 
+    @Override
     public void startSensor() {
 
         // If a request is not already underway
@@ -143,27 +148,25 @@ public class MotionActivityEvent extends AbstractTriggeredEvent implements Googl
             isRunning = true;
             // Request a connection to Location Services
             mGoogleApiClient.connect();
-            //
         }
     }
 
+    @Override
     public void stopSensor() {
+
         if (mGoogleApiClient != null) {
             try {
                 if (mGoogleApiClient.isConnected()) {
-                    ActivityRecognition.ActivityRecognitionApi.removeActivityUpdates(mGoogleApiClient, m_activityRecognitionPendingIntent);
+                    ActivityRecognition.ActivityRecognitionApi.removeActivityUpdates(mGoogleApiClient, mActivityRecognitionPendingIntent);
                     mGoogleApiClient.disconnect();
                 }
             } catch (IllegalStateException e) {
-
                 Log.e(TAG, "Cannot disconnect from Google Api!", e);
-
-                // stopping sensor
+            } finally {
                 isRunning = false;
+                mGoogleApiClient = null;
             }
         }
-
-        isRunning = false;
     }
 
     @Override
@@ -171,32 +174,34 @@ public class MotionActivityEvent extends AbstractTriggeredEvent implements Googl
 
         Log.d(TAG, "Connection failed.");
 
-        // Turn off the request flag
-        isRunning = false;
+        try {
 
         /*
          * If the error has a resolution, start a Google Play services activity
 		 * to resolve it.
 		 */
-        if (connectionResult.hasResolution()) {
+            if (connectionResult.hasResolution()) {
 
-            try {
-                connectionResult.startResolutionForResult((Activity) context, CONNECTION_FAILURE_RESOLUTION_REQUEST);
-            } catch (SendIntentException e) {
-                Log.e(TAG, "Cannot start resolution", e);
+                try {
+                    connectionResult.startResolutionForResult((Activity) context,
+                            CONNECTION_FAILURE_RESOLUTION_REQUEST);
+                } catch (SendIntentException e) {
+                    Log.e(TAG, "Cannot start resolution", e);
+                }
+                // If no resolution is available, display an error dialog
+            } else {
+                Log.d(TAG, "Cannot find any resolution");
+                // // Get the error code
+                // int errorCode = connectionResult.getErrorCode();
+                // // Get the error dialog from Google Play services
+                // Dialog errorDialog =
+                // GooglePlayServicesUtil.getErrorDialog(errorCode, (Activity)
+                // context,
+                // CONNECTION_FAILURE_RESOLUTION_REQUEST);
             }
-            // If no resolution is available, display an error dialog
-        } else {
-            Log.d(TAG, "Cannot find any resolution");
-            // // Get the error code
-            // int errorCode = connectionResult.getErrorCode();
-            // // Get the error dialog from Google Play services
-            // Dialog errorDialog =
-            // GooglePlayServicesUtil.getErrorDialog(errorCode, (Activity)
-            // context,
-            // CONNECTION_FAILURE_RESOLUTION_REQUEST);
+        } finally {
+            isRunning = false;
         }
-
     }
 
     @Override
@@ -205,7 +210,11 @@ public class MotionActivityEvent extends AbstractTriggeredEvent implements Googl
         Log.d(TAG, "Connection established.");
 
         Intent intent = new Intent(context, ActivitySensorService.class);
-        m_activityRecognitionPendingIntent = PendingIntent.getService(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        mActivityRecognitionPendingIntent = PendingIntent.getService(
+                context,
+                0,
+                intent,
+                PendingIntent.FLAG_UPDATE_CURRENT);
 
         if (mGoogleApiClient == null) {
 
@@ -216,7 +225,10 @@ public class MotionActivityEvent extends AbstractTriggeredEvent implements Googl
                     .build();
         }
 
-        ActivityRecognition.ActivityRecognitionApi.requestActivityUpdates(mGoogleApiClient, DETECTION_INTERVAL_IN_SEC * 1000, m_activityRecognitionPendingIntent);
+        ActivityRecognition.ActivityRecognitionApi.requestActivityUpdates(
+                mGoogleApiClient,
+                DETECTION_INTERVAL_IN_SEC * 1000,
+                mActivityRecognitionPendingIntent);
     }
 
     @Override

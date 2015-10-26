@@ -22,8 +22,14 @@ import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.AbstractTriggere
 import de.tudarmstadt.informatik.tk.android.kraken.provider.DbProvider;
 import de.tudarmstadt.informatik.tk.android.kraken.util.DateUtils;
 
-
-public class LocationSensor extends AbstractTriggeredEvent implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener,
+/**
+ * @author Unknown
+ * @edited by Wladimir Schmidt (wlsc.dev@gmail.com)
+ * @date 08.10.2015
+ */
+public class LocationSensor extends AbstractTriggeredEvent implements
+        GoogleApiClient.ConnectionCallbacks,
+        GoogleApiClient.OnConnectionFailedListener,
         LocationListener {
 
     private static final String TAG = LocationSensor.class.getSimpleName();
@@ -37,10 +43,10 @@ public class LocationSensor extends AbstractTriggeredEvent implements GoogleApiC
     private int FASTEST_INTERVAL_IN_SECONDS = 30;
     //-----------------------------------------------------
 
-    private long mLastEventDumpingTimestamp = 0;    // in nanoseconds
+    private long mLastEventDumpingTimestamp;    // in nanoseconds
 
-    private GoogleApiClient mGoogleApiClient = null;
-    private LocationRequest m_locationRequest = null;
+    private GoogleApiClient mGoogleApiClient;
+    private LocationRequest mLocationRequest;
 
     private final static int CONNECTION_FAILURE_RESOLUTION_REQUEST = 9000;
 
@@ -92,25 +98,29 @@ public class LocationSensor extends AbstractTriggeredEvent implements GoogleApiC
         mGoogleApiClient.connect();
 
         // Create the LocationRequest object
-        m_locationRequest = LocationRequest.create();
+        mLocationRequest = LocationRequest.create();
         // Use high accuracy
-        m_locationRequest.setPriority(ACCURACY);
+        mLocationRequest.setPriority(ACCURACY);
         // Set the update interval to x seconds
-        m_locationRequest.setInterval(updateInterval * 1000);
+        mLocationRequest.setInterval(updateInterval * 1000);
         // Set the fastest update interval to x seconds
-        m_locationRequest.setFastestInterval(FASTEST_INTERVAL_IN_SECONDS * 1000);
+        mLocationRequest.setFastestInterval(FASTEST_INTERVAL_IN_SECONDS * 1000);
         isRunning = true;
     }
 
     @Override
     public void stopSensor() {
-        if (mGoogleApiClient != null) {
-            if (mGoogleApiClient.isConnected()) {
-                LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
-                mGoogleApiClient.disconnect();
+
+        try {
+            if (mGoogleApiClient != null) {
+                if (mGoogleApiClient.isConnected()) {
+                    LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
+                    mGoogleApiClient.disconnect();
+                }
             }
+        } finally {
+            isRunning = false;
         }
-        isRunning = false;
     }
 
     @Override
@@ -141,7 +151,6 @@ public class LocationSensor extends AbstractTriggeredEvent implements GoogleApiC
             // showErrorDialog(connectionResult.getErrorCode());
             Log.e(TAG, "Cannot find any resolution for location connection error");
         }
-
     }
 
     @Override
@@ -155,13 +164,14 @@ public class LocationSensor extends AbstractTriggeredEvent implements GoogleApiC
             onLocationChanged(loc);
         }
 
-        LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, m_locationRequest, this);
+        LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient,
+                mLocationRequest,
+                this);
     }
 
     @Override
     public void onConnectionSuspended(int i) {
         // Display the connection status
-//		Toast.makeText(context, "Disconnected. Please re-connect.", Toast.LENGTH_SHORT).show();
         Log.d(TAG, "Location connection is suspended.");
     }
 
@@ -169,7 +179,7 @@ public class LocationSensor extends AbstractTriggeredEvent implements GoogleApiC
     public void onLocationChanged(android.location.Location location) {
 
         // location changed -> update values
-        Log.d(TAG, "Location has changed.");
+        Log.d(TAG, "Location has changed");
 
         latitude = location.getLatitude();
         longitude = location.getLongitude();

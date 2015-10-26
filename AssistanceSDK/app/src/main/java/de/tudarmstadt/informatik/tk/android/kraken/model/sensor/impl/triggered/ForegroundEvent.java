@@ -99,27 +99,32 @@ public class ForegroundEvent extends AbstractTriggeredEvent {
                 if (context != null && mReceiver != null) {
                     context.unregisterReceiver(mReceiver);
                 }
-                mReceiver = null;
             } catch (IllegalArgumentException e) {
                 Log.e(TAG, "Cannot unregister receiver", e);
+            } finally {
+
+                mReceiver = null;
+                mStarted = false;
+
+                if (dbProvider == null) {
+                    dbProvider = DbProvider.getInstance(context);
+                }
+
+                DbForegroundEvent dbForegroundEvent = new DbForegroundEvent();
+
+                dbForegroundEvent.setEventType(EVENT_ASSISTANCE_STOP);
+                dbForegroundEvent.setCreated(DateUtils.dateToISO8601String(new Date(), Locale.getDefault()));
+
+                dbProvider.insertEventEntry(dbForegroundEvent, getType());
             }
-
-            mStarted = false;
-
-            DbForegroundEvent dbForegroundEvent = new DbForegroundEvent();
-
-            dbForegroundEvent.setEventType(EVENT_ASSISTANCE_STOP);
-            dbForegroundEvent.setCreated(DateUtils.dateToISO8601String(new Date(), Locale.getDefault()));
-
-            dbProvider.insertEventEntry(dbForegroundEvent, getType());
-        }
-
-        if (dbProvider != null) {
-            dbProvider = DbProvider.getInstance(context);
         }
     }
 
     public void onEvent(AccessibilityEvent event) {
+
+        if (dbProvider == null) {
+            dbProvider = DbProvider.getInstance(context);
+        }
 
         if (mStarted) {
 
@@ -140,9 +145,10 @@ public class ForegroundEvent extends AbstractTriggeredEvent {
                 if (context != null && mReceiver != null) {
                     context.unregisterReceiver(mReceiver);
                 }
-                mReceiver = null;
             } catch (IllegalArgumentException e) {
                 Log.e(TAG, "Cannot unregister receiver", e);
+            } finally {
+                mReceiver = null;
             }
         }
     }
@@ -208,7 +214,9 @@ public class ForegroundEvent extends AbstractTriggeredEvent {
         return SensorType.FOREGROUND;
     }
 
-
+    /**
+     * Screen register
+     */
     private class ScreenReceiver extends BroadcastReceiver {
 
         @Override
@@ -226,7 +234,7 @@ public class ForegroundEvent extends AbstractTriggeredEvent {
 
             foregroundEvent.setCreated(DateUtils.dateToISO8601String(new Date(), Locale.getDefault()));
 
-            dbProvider.insertEventEntry(foregroundEvent, SensorType.FOREGROUND);
+            dbProvider.insertEventEntry(foregroundEvent, getType());
         }
     }
 

@@ -16,6 +16,12 @@ import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.AbstractTriggere
 import de.tudarmstadt.informatik.tk.android.kraken.provider.DbProvider;
 import de.tudarmstadt.informatik.tk.android.kraken.util.DateUtils;
 
+/**
+ * @author Unknown
+ * @edited by Wladimir Schmidt (wlsc.dev@gmail.com)
+ * @date 08.10.2015
+ */
+
 public class AccelerometerSensor extends AbstractTriggeredEvent implements SensorEventListener {
 
     private static final String TAG = AccelerometerSensor.class.getSimpleName();
@@ -43,7 +49,7 @@ public class AccelerometerSensor extends AbstractTriggeredEvent implements Senso
             dbProvider = DbProvider.getInstance(context);
         }
 
-        mSensorManager = (SensorManager) this.context.getSystemService(Context.SENSOR_SERVICE);
+        mSensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
         mAccelerometerSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
     }
 
@@ -76,11 +82,15 @@ public class AccelerometerSensor extends AbstractTriggeredEvent implements Senso
     @Override
     public void stopSensor() {
 
-        // if device not running light sensor
-        if (mSensorManager != null) {
-            mSensorManager.unregisterListener(this, mAccelerometerSensor);
+        try {
+            // if device not running light sensor
+            if (mSensorManager != null) {
+                mSensorManager.unregisterListener(this, mAccelerometerSensor);
+            }
+        } finally {
+            isRunning = false;
+            mSensorManager = null;
         }
-        isRunning = false;
     }
 
     @Override
