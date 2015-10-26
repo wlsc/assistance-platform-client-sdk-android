@@ -5,9 +5,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
+import android.os.Build;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 
@@ -15,117 +15,105 @@ import java.util.Date;
 import java.util.Locale;
 
 import de.tudarmstadt.informatik.tk.android.kraken.db.DbConnectionEvent;
+import de.tudarmstadt.informatik.tk.android.kraken.db.DbMobileConnectionEvent;
+import de.tudarmstadt.informatik.tk.android.kraken.db.DbWifiConnectionEvent;
 import de.tudarmstadt.informatik.tk.android.kraken.model.api.sensors.SensorType;
 import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.AbstractTriggeredEvent;
+import de.tudarmstadt.informatik.tk.android.kraken.provider.DbProvider;
 import de.tudarmstadt.informatik.tk.android.kraken.util.DateUtils;
+import de.tudarmstadt.informatik.tk.android.kraken.util.DeviceUtils;
 
+/**
+ * @author Unknown
+ * @edited by Wladimir Schmidt (wlsc.dev@gmail.com)
+ * @date 26.10.2015
+ */
 public class ConnectionSensor extends AbstractTriggeredEvent {
 
     private static final String TAG = ConnectionReceiver.class.getSimpleName();
+
+    private boolean isStarted;
+
+    private static ConnectionReceiver mReceiver;
 
     private boolean isMobileDataAvailable;
     private boolean isWifiDataAvailable;
 
     /**
-     * WIFI
+     * WIFI information
      */
     private String ssid;
     private String bssid;
-    private Integer channel;
-    private Integer frequency;
-    private Integer linkSpeed;
-    private Integer signalStrength;
-    private Integer networkId;
+    private int channel;
+    private int frequency;
+    private int linkSpeed;
+    private int signalStrength;
+    private int networkId;
 
     /**
-     * MOBILE
+     * MOBILE information
      */
-    private String carrierName;
+    private String mobileCarrierName;
     private String mobileCarrierCode;
     private String mobileNetworkCode;
 
-    private class ConnectionReceiver extends BroadcastReceiver {
-
-        @Override
-        public void onReceive(Context context, Intent intent) {
-
-            Log.d(TAG, "Received connection event");
-
-            ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-//            NetworkInfo activeNetInfo = connectivityManager.getActiveNetworkInfo();
-            NetworkInfo mobNetInfo = connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
-            NetworkInfo mobWifiInfo = connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
-
-//            if (activeNetInfo != null) {
-//                connectionEvent.setActiveNetwork(activeNetInfo.getType());
-//            }
-
-            /**
-             * MOBILE CONNECTION
-             */
-            if (mobNetInfo != null && mobNetInfo.isConnected()) {
-
-                isMobileDataAvailable = true;
-
-                TelephonyManager manager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
-
-                carrierName = manager.getNetworkOperatorName();
-
-                String networkOperator = manager.getNetworkOperator();
-
-                if (networkOperator != null) {
-                    mobileCarrierCode = networkOperator.substring(0, 3);
-                    mobileNetworkCode = networkOperator.substring(3);
-                }
-
-
-            } else {
-                isMobileDataAvailable = false;
-            }
-
-            /**
-             * WIFI CONNECTION
-             */
-            if (mobWifiInfo != null && mobWifiInfo.isConnected()) {
-
-                isWifiDataAvailable = true;
-
-                WifiManager wifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
-                WifiInfo info = wifiManager.getConnectionInfo();
-
-                ssid = info.getSSID();
-
-            } else {
-                isWifiDataAvailable = false;
-            }
-
-            dumpData();
-//			handleDBEntry(connectionEvent);
-        }
-
-    }
-
-    private boolean m_bSensorStarted = false;
-    private ConnectionReceiver connectionReceiver;
+    private DbProvider dbProvider;
 
     public ConnectionSensor(Context context) {
         super(context);
-        connectionReceiver = new ConnectionReceiver();
+
+        if (mReceiver == null) {
+            mReceiver = new ConnectionReceiver();
+        }
+
+        if (dbProvider == null) {
+            dbProvider = DbProvider.getInstance(context);
+        }
     }
 
     @Override
     protected void dumpData() {
 
-        Log.d(TAG, "Dumping connection event data...");
+        String created = DateUtils.dateToISO8601String(new Date(), Locale.getDefault());
 
+        /**
+         * Connection event
+         */
         DbConnectionEvent connectionEvent = new DbConnectionEvent();
 
         connectionEvent.setIsMobile(isMobileDataAvailable);
         connectionEvent.setIsWifi(isWifiDataAvailable);
-        connectionEvent.setCreated(DateUtils.dateToISO8601String(new Date(), Locale.getDefault()));
+        connectionEvent.setCreated(created);
 
+        dbProvider.insertEventEntry(connectionEvent, SensorType.CONNECTION);
 
-        Log.d(TAG, "Finished.");
+        /**
+         * Mobile data information
+         */
+        DbMobileConnectionEvent mobileConnectionEvent = new DbMobileConnectionEvent();
+
+        mobileConnectionEvent.setCarrierName(mobileCarrierName);
+        mobileConnectionEvent.setMobileCarrierCode(mobileCarrierCode);
+        mobileConnectionEvent.setMobileNetworkCode(mobileNetworkCode);
+        mobileConnectionEvent.setCreated(created);
+
+        dbProvider.insertEventEntry(mobileConnectionEvent, SensorType.MOBILE_DATA_CONNECTION);
+
+        /**
+         * WIFI data information
+         */
+        DbWifiConnectionEvent wifiConnectionEvent = new DbWifiConnectionEvent();
+
+        wifiConnectionEvent.setSsid(ssid);
+        wifiConnectionEvent.setBssid(bssid);
+        wifiConnectionEvent.setChannel(channel);
+        wifiConnectionEvent.setFrequency(frequency);
+        wifiConnectionEvent.setLinkSpeed(linkSpeed);
+        wifiConnectionEvent.setSignalStrength(signalStrength);
+        wifiConnectionEvent.setNetworkId(networkId);
+        wifiConnectionEvent.setCreated(created);
+
+        dbProvider.insertEventEntry(wifiConnectionEvent, SensorType.WIFI_CONNECTION);
     }
 
     @Override
@@ -133,22 +121,29 @@ public class ConnectionSensor extends AbstractTriggeredEvent {
 
         IntentFilter filter = new IntentFilter();
         filter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
-        context.registerReceiver(connectionReceiver, filter);
-        m_bSensorStarted = true;
+
+        context.registerReceiver(mReceiver, filter);
+
+        isStarted = true;
     }
 
     @Override
     public void stopSensor() {
 
-        if (m_bSensorStarted) {
-//            RetroServerPushManager.getInstance(context).setWLANConnected(false);
-            // TODO: find out why this exception is thrown
+        if (isStarted) {
+
             try {
-                context.unregisterReceiver(connectionReceiver);
+
+                if (context != null && mReceiver != null) {
+                    context.unregisterReceiver(mReceiver);
+                }
+
             } catch (IllegalArgumentException e) {
                 Log.e(TAG, "Cannot unregister receiver!", e);
+            } finally {
+                isStarted = false;
+                mReceiver = null;
             }
-            m_bSensorStarted = false;
         }
     }
 
@@ -159,7 +154,86 @@ public class ConnectionSensor extends AbstractTriggeredEvent {
 
     @Override
     public void reset() {
+
         isMobileDataAvailable = false;
         isWifiDataAvailable = false;
+
+        mobileCarrierName = null;
+        mobileCarrierCode = null;
+        mobileNetworkCode = null;
+
+        ssid = null;
+        bssid = null;
+        channel = -0;
+        frequency = 0;
+        linkSpeed = 0;
+        signalStrength = 0;
+        networkId = 0;
+    }
+
+    /**
+     * Connection event receiver
+     */
+    private class ConnectionReceiver extends BroadcastReceiver {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+
+            Log.d(TAG, "Received connection event");
+
+            /**
+             * MOBILE CONNECTION
+             */
+            if (DeviceUtils.isConnectedMobile(context)) {
+
+                isMobileDataAvailable = true;
+
+                TelephonyManager manager = (TelephonyManager) context
+                        .getSystemService(Context.TELEPHONY_SERVICE);
+
+                mobileCarrierName = manager.getNetworkOperatorName();
+
+                String networkOperator = manager.getNetworkOperator();
+
+                if (networkOperator != null) {
+                    mobileCarrierCode = networkOperator.substring(0, 3);
+                    mobileNetworkCode = networkOperator.substring(3);
+                }
+
+            } else {
+                isMobileDataAvailable = false;
+            }
+
+            /**
+             * WIFI CONNECTION
+             */
+            if (DeviceUtils.isConnectedWifi(context)) {
+
+                isWifiDataAvailable = true;
+
+                WifiManager wifiManager = (WifiManager) context
+                        .getSystemService(Context.WIFI_SERVICE);
+                WifiInfo info = wifiManager.getConnectionInfo();
+
+                ssid = info.getSSID();
+                bssid = info.getBSSID();
+
+                // TODO: find a way to get a channel
+                channel = -1;
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    frequency = info.getFrequency();
+                }
+
+                linkSpeed = info.getLinkSpeed();
+                signalStrength = info.getRssi();
+                networkId = info.getNetworkId();
+
+            } else {
+                isWifiDataAvailable = false;
+            }
+
+            dumpData();
+        }
     }
 }

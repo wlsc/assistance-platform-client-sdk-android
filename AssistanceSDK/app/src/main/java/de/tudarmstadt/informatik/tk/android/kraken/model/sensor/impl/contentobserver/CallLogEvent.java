@@ -38,7 +38,7 @@ public class CallLogEvent extends AbstractContentObserverEvent {
             @Override
             public void run() {
                 syncData();
-                context.getContentResolver().registerContentObserver(URI_CALL_LOG, true, m_observer);
+                context.getContentResolver().registerContentObserver(URI_CALL_LOG, true, mObserver);
             }
         });
         thread.setName("CallLogSensorThread");

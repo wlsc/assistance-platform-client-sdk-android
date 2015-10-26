@@ -16,12 +16,16 @@ import de.tudarmstadt.informatik.tk.android.kraken.db.DaoMaster;
 import de.tudarmstadt.informatik.tk.android.kraken.db.DaoSession;
 import de.tudarmstadt.informatik.tk.android.kraken.db.DbAccelerometerSensor;
 import de.tudarmstadt.informatik.tk.android.kraken.db.DbAccelerometerSensorDao;
+import de.tudarmstadt.informatik.tk.android.kraken.db.DbConnectionEvent;
+import de.tudarmstadt.informatik.tk.android.kraken.db.DbConnectionEventDao;
 import de.tudarmstadt.informatik.tk.android.kraken.db.DbDevice;
 import de.tudarmstadt.informatik.tk.android.kraken.db.DbDeviceDao;
 import de.tudarmstadt.informatik.tk.android.kraken.db.DbForegroundEvent;
 import de.tudarmstadt.informatik.tk.android.kraken.db.DbForegroundEventDao;
 import de.tudarmstadt.informatik.tk.android.kraken.db.DbLightSensor;
 import de.tudarmstadt.informatik.tk.android.kraken.db.DbLightSensorDao;
+import de.tudarmstadt.informatik.tk.android.kraken.db.DbMobileConnectionEvent;
+import de.tudarmstadt.informatik.tk.android.kraken.db.DbMobileConnectionEventDao;
 import de.tudarmstadt.informatik.tk.android.kraken.db.DbModule;
 import de.tudarmstadt.informatik.tk.android.kraken.db.DbModuleCapability;
 import de.tudarmstadt.informatik.tk.android.kraken.db.DbModuleCapabilityDao;
@@ -36,6 +40,8 @@ import de.tudarmstadt.informatik.tk.android.kraken.db.DbPositionSensor;
 import de.tudarmstadt.informatik.tk.android.kraken.db.DbPositionSensorDao;
 import de.tudarmstadt.informatik.tk.android.kraken.db.DbUser;
 import de.tudarmstadt.informatik.tk.android.kraken.db.DbUserDao;
+import de.tudarmstadt.informatik.tk.android.kraken.db.DbWifiConnectionEvent;
+import de.tudarmstadt.informatik.tk.android.kraken.db.DbWifiConnectionEventDao;
 import de.tudarmstadt.informatik.tk.android.kraken.interfaces.IDbSensor;
 import de.tudarmstadt.informatik.tk.android.kraken.model.api.sensors.AccelerometerSensorRequest;
 import de.tudarmstadt.informatik.tk.android.kraken.model.api.sensors.ForegroundEventRequest;
@@ -44,6 +50,7 @@ import de.tudarmstadt.informatik.tk.android.kraken.model.api.sensors.PositionSen
 import de.tudarmstadt.informatik.tk.android.kraken.model.api.sensors.SensorType;
 import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.Sensor;
 import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.impl.triggered.AccelerometerSensor;
+import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.impl.triggered.ConnectionSensor;
 import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.impl.triggered.ForegroundEvent;
 import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.impl.triggered.LightSensor;
 import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.impl.triggered.LocationSensor;
@@ -91,6 +98,9 @@ public class DbProvider {
     private DbMotionActivityEventDao motionActivityEventDao;
     private DbForegroundEventDao foregroundEventDao;
     private DbLightSensorDao lightSensorDao;
+    private DbConnectionEventDao connectionEventDao;
+    private DbMobileConnectionEventDao mobileConnectionEventDao;
+    private DbWifiConnectionEventDao wifiConnectionEventDao;
 
     /**
      * Lists with transmitted db objects to remove them after
@@ -157,6 +167,18 @@ public class DbProvider {
 
         if (lightSensorDao == null) {
             lightSensorDao = getDaoSession().getDbLightSensorDao();
+        }
+
+        if (connectionEventDao == null) {
+            connectionEventDao = getDaoSession().getDbConnectionEventDao();
+        }
+
+        if (mobileConnectionEventDao == null) {
+            mobileConnectionEventDao = getDaoSession().getDbMobileConnectionEventDao();
+        }
+
+        if (wifiConnectionEventDao == null) {
+            wifiConnectionEventDao = getDaoSession().getDbWifiConnectionEventDao();
         }
     }
 
@@ -521,10 +543,10 @@ public class DbProvider {
     public long insertEventEntry(IDbSensor sensor, int type) {
 
         if (sensor == null) {
-            return -1L;
+            return -1l;
         }
 
-        long result = -1L;
+        long result = -1l;
 
         switch (type) {
             case SensorType.ACCELEROMETER:
@@ -570,6 +592,33 @@ public class DbProvider {
                 result = lightSensorDao.insertOrReplace((DbLightSensor) sensor);
 
                 Log.d(LightSensor.class.getSimpleName(), "Finished dumping data");
+                break;
+
+            case SensorType.CONNECTION:
+
+                Log.d(ConnectionSensor.class.getSimpleName(), "Dumping CONNECTION data to db...");
+
+                result = connectionEventDao.insertOrReplace((DbConnectionEvent) sensor);
+
+                Log.d(ConnectionSensor.class.getSimpleName(), "Finished dumping data");
+                break;
+
+            case SensorType.MOBILE_DATA_CONNECTION:
+
+                Log.d(ConnectionSensor.class.getSimpleName(), "Dumping MOBILE CONNECTION data to db...");
+
+                result = mobileConnectionEventDao.insertOrReplace((DbMobileConnectionEvent) sensor);
+
+                Log.d(ConnectionSensor.class.getSimpleName(), "Finished dumping data");
+                break;
+
+            case SensorType.WIFI_CONNECTION:
+
+                Log.d(ConnectionSensor.class.getSimpleName(), "Dumping WIFI CONNECTION data to db...");
+
+                result = wifiConnectionEventDao.insertOrReplace((DbWifiConnectionEvent) sensor);
+
+                Log.d(ConnectionSensor.class.getSimpleName(), "Finished dumping data");
                 break;
         }
 

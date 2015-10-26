@@ -88,7 +88,7 @@ public class ForegroundEvent extends AbstractTriggeredEvent {
         dbForegroundEvent.setEventType(EVENT_ASSISTANCE_START);
         dbForegroundEvent.setCreated(DateUtils.dateToISO8601String(new Date(), Locale.getDefault()));
 
-        dbProvider.insertEventEntry(dbForegroundEvent, SensorType.FOREGROUND);
+        dbProvider.insertEventEntry(dbForegroundEvent, getType());
     }
 
     @Override
@@ -135,7 +135,7 @@ public class ForegroundEvent extends AbstractTriggeredEvent {
                 String color = storeIcon(foregroundEvent.getPackageName());
                 foregroundEvent.setColor(color);
 
-                dbProvider.insertEventEntry(foregroundEvent, SensorType.FOREGROUND);
+                dbProvider.insertEventEntry(foregroundEvent, getType());
             } else {
                 Log.d(TAG, "Cannot save event: event filter gave NULL back");
             }

@@ -280,8 +280,8 @@ public class CalendarEvent extends AbstractContentObserverEvent {
             @Override
             public void run() {
                 syncData();
-                context.getContentResolver().registerContentObserver(URI_CALENDAR, true, m_observer);
-                context.getContentResolver().registerContentObserver(URI_REMINDER, true, m_observer);
+                context.getContentResolver().registerContentObserver(URI_CALENDAR, true, mObserver);
+                context.getContentResolver().registerContentObserver(URI_REMINDER, true, mObserver);
             }
         });
         thread.setName("CalendarSensorThread");

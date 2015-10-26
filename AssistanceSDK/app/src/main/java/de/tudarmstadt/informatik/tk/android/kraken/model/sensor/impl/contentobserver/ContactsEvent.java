@@ -338,7 +338,7 @@ public class ContactsEvent extends AbstractContentObserverEvent {
             @Override
             public void run() {
                 syncData();
-                context.getContentResolver().registerContentObserver(URI_CONTACTS, true, m_observer);
+                context.getContentResolver().registerContentObserver(URI_CONTACTS, true, mObserver);
             }
         });
         thread.setName("ContactsSensorThread");

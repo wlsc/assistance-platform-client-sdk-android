@@ -153,7 +153,7 @@ public class BrowserHistoryEvent extends AbstractContentObserverEvent {
 //            @Override
 //            public void run() {
 //                syncData();
-//                context.getContentResolver().registerContentObserver(URI_BROWSER_HISTORY, true, m_observer);
+//                context.getContentResolver().registerContentObserver(URI_BROWSER_HISTORY, true, mObserver);
 //            }
 //        });
 //        thread.setName("BrowserHistorySensorThread");

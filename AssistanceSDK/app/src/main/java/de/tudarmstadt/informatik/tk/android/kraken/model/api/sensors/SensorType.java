@@ -32,12 +32,6 @@ public class SensorType {
 
     public static final int LOUDNESS = 9;
 
-    @Deprecated
-    public static final int MAGNETIC_FIELD_UNCALIBRATED = 10;
-
-    @Deprecated
-    public static final int GYROSCOPE_UNCALIBRATED = 11;
-
     public static final int FOREGROUND = 12;
 
     public static final int LIGHT = 13;
@@ -64,8 +58,6 @@ public class SensorType {
 
     public static final int NETWORK_TRAFFIC = 24;
 
-    public static final int MEASUREMENT_LOG = 25;
-
     private SensorType() {
     }
 
@@ -89,10 +81,6 @@ public class SensorType {
                 return res.getString(R.string.sensor_mobile_connection);
             case LOUDNESS:
                 return res.getString(R.string.sensor_loudness);
-            case MAGNETIC_FIELD_UNCALIBRATED:
-                return res.getString(R.string.sensor_magnetic_field_uncalibrated);
-            case GYROSCOPE_UNCALIBRATED:
-                return res.getString(R.string.sensor_gyroscope_uncalibrated);
             case FOREGROUND:
                 return res.getString(R.string.sensor_foreground_event);
             case LIGHT:
@@ -129,10 +117,6 @@ public class SensorType {
                 return "mobileconnection";
             case LOUDNESS:
                 return "loudness";
-            case MAGNETIC_FIELD_UNCALIBRATED:
-                return "magnetic_field_uncalibrated";
-            case GYROSCOPE_UNCALIBRATED:
-                return "gyroscope_uncalibrated";
             case FOREGROUND:
                 return "foreground";
             case LIGHT:

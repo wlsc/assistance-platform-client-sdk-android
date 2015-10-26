@@ -56,7 +56,8 @@ public class MotionActivityEventRequest implements Sensor {
 
     private int type;
 
-    public MotionActivityEventRequest() {this.type = SensorType.MOTION_ACTIVITY;
+    public MotionActivityEventRequest() {
+        this.type = SensorType.MOTION_ACTIVITY;
         this.typeStr = SensorType.getApiName(this.type);
 
     }
