@@ -9,7 +9,7 @@ import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.Sensor;
  * @author Wladimir Schmidt (wlsc.dev@gmail.com)
  * @date 30.08.2015
  */
-public class PositionSensorRequest implements Sensor {
+public class LocationSensorRequest implements Sensor {
 
     private Long id;
 
@@ -57,18 +57,18 @@ public class PositionSensorRequest implements Sensor {
 
     private int type;
 
-    public PositionSensorRequest() {
+    public LocationSensorRequest() {
         this.type = SensorType.LOCATION;
         this.typeStr = SensorType.getApiName(this.type);
     }
 
-    public PositionSensorRequest(long id) {
+    public LocationSensorRequest(long id) {
         this.id = id;
         this.type = SensorType.LOCATION;
         this.typeStr = SensorType.getApiName(this.type);
     }
 
-    public PositionSensorRequest(long id, Double latitude, Double longitude, Double accuracyHorizontal, Float speed, String created, Double altitude, Double accuracyVertical, Integer course, Integer floor) {
+    public LocationSensorRequest(long id, Double latitude, Double longitude, Double accuracyHorizontal, Float speed, String created, Double altitude, Double accuracyVertical, Integer course, Integer floor) {
         this.id = id;
         this.latitude = latitude;
         this.longitude = longitude;

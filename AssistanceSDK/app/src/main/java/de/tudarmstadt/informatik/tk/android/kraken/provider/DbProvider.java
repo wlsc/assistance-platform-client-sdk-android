@@ -46,7 +46,7 @@ import de.tudarmstadt.informatik.tk.android.kraken.interfaces.IDbSensor;
 import de.tudarmstadt.informatik.tk.android.kraken.model.api.sensors.AccelerometerSensorRequest;
 import de.tudarmstadt.informatik.tk.android.kraken.model.api.sensors.ForegroundEventRequest;
 import de.tudarmstadt.informatik.tk.android.kraken.model.api.sensors.MotionActivityEventRequest;
-import de.tudarmstadt.informatik.tk.android.kraken.model.api.sensors.PositionSensorRequest;
+import de.tudarmstadt.informatik.tk.android.kraken.model.api.sensors.LocationSensorRequest;
 import de.tudarmstadt.informatik.tk.android.kraken.model.api.sensors.SensorType;
 import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.Sensor;
 import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.impl.triggered.AccelerometerSensor;
@@ -416,19 +416,19 @@ public class DbProvider {
 
                 DbPositionSensor sensor = dbPositionSensors.get(i);
 
-                PositionSensorRequest positionSensorRequest = new PositionSensorRequest();
+                LocationSensorRequest locationSensorRequest = new LocationSensorRequest();
 
-                positionSensorRequest.setType(SensorType.LOCATION);
-                positionSensorRequest.setTypeStr(SensorType.getApiName(SensorType.LOCATION));
-                positionSensorRequest.setLatitude(sensor.getLatitude());
-                positionSensorRequest.setLongitude(sensor.getLongitude());
-                positionSensorRequest.setAccuracyHorizontal(sensor.getAccuracyHorizontal());
-                positionSensorRequest.setAccuracyVertical(sensor.getAccuracyVertical());
-                positionSensorRequest.setAltitude(sensor.getAltitude());
-                positionSensorRequest.setSpeed(sensor.getSpeed());
-                positionSensorRequest.setCreated(sensor.getCreated());
+                locationSensorRequest.setType(SensorType.LOCATION);
+                locationSensorRequest.setTypeStr(SensorType.getApiName(SensorType.LOCATION));
+                locationSensorRequest.setLatitude(sensor.getLatitude());
+                locationSensorRequest.setLongitude(sensor.getLongitude());
+                locationSensorRequest.setAccuracyHorizontal(sensor.getAccuracyHorizontal());
+                locationSensorRequest.setAccuracyVertical(sensor.getAccuracyVertical());
+                locationSensorRequest.setAltitude(sensor.getAltitude());
+                locationSensorRequest.setSpeed(sensor.getSpeed());
+                locationSensorRequest.setCreated(sensor.getCreated());
 
-                result.add(positionSensorRequest);
+                result.add(locationSensorRequest);
             }
         }
 
