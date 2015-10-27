@@ -37,11 +37,11 @@ public class LocationSensor extends
 
     //------------------- Configuration -------------------
     // Accuracy
-    private int ACCURACY = LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY;
+    private static final int ACCURACY = LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY;
     // Update frequency in seconds
-    private int updateInterval = 15;
+    private static final int UPDATE_INTERVAL = 15;
     // The fastest update frequency, in seconds
-    private int FASTEST_INTERVAL_IN_SECONDS = 30;
+    private static final int FASTEST_INTERVAL_IN_SECONDS = 30;
     //-----------------------------------------------------
 
     private long mLastEventDumpingTimestamp;    // in nanoseconds
@@ -97,7 +97,7 @@ public class LocationSensor extends
         // Use high accuracy
         mLocationRequest.setPriority(ACCURACY);
         // Set the update interval to x seconds
-        mLocationRequest.setInterval(updateInterval * 1000);
+        mLocationRequest.setInterval(UPDATE_INTERVAL * 1000);
         // Set the fastest update interval to x seconds
         mLocationRequest.setFastestInterval(FASTEST_INTERVAL_IN_SECONDS * 1000);
 
@@ -210,7 +210,7 @@ public class LocationSensor extends
             return true;
         } else {
             // the time has come -> save data into db
-            if ((timestamp - mLastEventDumpingTimestamp) / 1000000000 > updateInterval) {
+            if ((timestamp - mLastEventDumpingTimestamp) / 1000000000 > UPDATE_INTERVAL) {
                 return true;
             }
         }

@@ -38,7 +38,7 @@ public class ForegroundTrafficEvent extends AbstractTriggeredEvent {
     private static String EVENT_SCREEN_ON = "1";
     public static String EVENT_START_KRAKEN = "2";
 
-    private Receiver mReceiver;
+    private ScreenReceiver mReceiver;
     private AccessibilityEventFilterUtils mEventFilter;
 
     private ActivityManager m_ActivityManager;
@@ -54,7 +54,7 @@ public class ForegroundTrafficEvent extends AbstractTriggeredEvent {
     public ForegroundTrafficEvent(Context context) {
         super(context);
 
-        mReceiver = new Receiver();
+        mReceiver = new ScreenReceiver();
         m_ActivityManager = (ActivityManager) this.context.getSystemService(Context.ACTIVITY_SERVICE);
         m_PackageManager = context.getPackageManager();
         mEventFilter = new AccessibilityEventFilterUtils(this.context);
@@ -208,12 +208,12 @@ public class ForegroundTrafficEvent extends AbstractTriggeredEvent {
     /**
      * Receiver of an intent send by sendBroadcast().
      */
-    public class Receiver extends BroadcastReceiver {
+    private class ScreenReceiver extends BroadcastReceiver {
 
         /**
          * do something only if intent action is screen off or on
          *
-         * @param context global information about Kraken.Me app in which the reciver is running
+         * @param context
          * @param intent  the intent being received
          */
         @Override

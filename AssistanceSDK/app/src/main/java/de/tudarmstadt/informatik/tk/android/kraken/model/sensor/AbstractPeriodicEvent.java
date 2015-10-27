@@ -12,14 +12,9 @@ public abstract class AbstractPeriodicEvent extends AbstractSensor {
 
     private static final String TAG = AbstractPeriodicEvent.class.getSimpleName();
 
-    private ScheduledExecutorService m_scheduledTaskExecutor;
+    private ScheduledExecutorService mScheduledTaskExecutor;
     private Future<?> m_future;
-    protected boolean m_bLooperPrepared = false;
-
-
-    public enum Configuration {
-        DATA_INTERVAL_IN_SEC;
-    }
+    protected boolean m_bLooperPrepared;
 
     // ------------------- Configuration -------------------
     private int DATA_INTERVAL_IN_SEC = 600;
@@ -27,14 +22,14 @@ public abstract class AbstractPeriodicEvent extends AbstractSensor {
 
     public AbstractPeriodicEvent(Context context) {
         super(context);
-        m_scheduledTaskExecutor = Executors.newSingleThreadScheduledExecutor();
+        mScheduledTaskExecutor = Executors.newSingleThreadScheduledExecutor();
     }
 
     @Override
     public void startSensor() {
 
         if (m_future == null) {
-            m_future = m_scheduledTaskExecutor.scheduleAtFixedRate(new Runnable() {
+            m_future = mScheduledTaskExecutor.scheduleAtFixedRate(new Runnable() {
 
                 @Override
                 public void run() {

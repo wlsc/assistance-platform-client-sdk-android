@@ -15,14 +15,18 @@ import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.AbstractTriggere
 import de.tudarmstadt.informatik.tk.android.kraken.provider.DbProvider;
 import de.tudarmstadt.informatik.tk.android.kraken.util.DateUtils;
 
-
+/**
+ * @author Unknown
+ * @edited by Wladimir Schmidt (wlsc.dev@gmail.com)
+ * @date 26.10.2015
+ */
 public class LightSensor
         extends AbstractTriggeredEvent
         implements SensorEventListener {
 
     // ------------------- Configuration -------------------
-    private int SENSOR_DELAY_BETWEEN_TWO_EVENTS = SensorManager.SENSOR_DELAY_NORMAL;
-    private int SENSOR_MIN_DIFFERENCE = 5;
+    private static final int SENSOR_DELAY_BETWEEN_TWO_EVENTS = SensorManager.SENSOR_DELAY_NORMAL;
+    private static final int SENSOR_MIN_DIFFERENCE = 5;
     // -----------------------------------------------------
 
     private DbProvider dbProvider;

@@ -21,13 +21,15 @@ import de.tudarmstadt.informatik.tk.android.kraken.util.DateUtils;
  * @date 08.10.2015
  */
 
-public class AccelerometerSensor extends AbstractTriggeredEvent implements SensorEventListener {
+public class AccelerometerSensor extends
+        AbstractTriggeredEvent implements
+        SensorEventListener {
 
     private static final String TAG = AccelerometerSensor.class.getSimpleName();
 
     // ------------------- Configuration -------------------
-    private int SENSOR_DELAY_BETWEEN_TWO_EVENTS = SensorManager.SENSOR_DELAY_NORMAL;
-    private int updateInterval = 10;    // in seconds
+    private static final int SENSOR_DELAY_BETWEEN_TWO_EVENTS = SensorManager.SENSOR_DELAY_NORMAL;
+    private static final int UPDATE_INTERVAL = 10;    // in seconds
     // -----------------------------------------------------
 
     private SensorManager mSensorManager;
@@ -141,7 +143,7 @@ public class AccelerometerSensor extends AbstractTriggeredEvent implements Senso
         } else {
 
             // the time has come -> save data into db
-            if ((timestamp - mLastEventDumpingTimestamp) / 1000000000 > updateInterval) {
+            if ((timestamp - mLastEventDumpingTimestamp) / 1000000000 > UPDATE_INTERVAL) {
                 return true;
             }
         }
@@ -157,7 +159,7 @@ public class AccelerometerSensor extends AbstractTriggeredEvent implements Senso
 //            m_floatSumAccelerationZ = Math.abs(event.values[2]);
 //            m_intNumValues = 1;
 //            return true;
-//        } else if (event.timestamp < mCurrentEventTimestamp + updateInterval * 1000000000L) {
+//        } else if (event.timestamp < mCurrentEventTimestamp + UPDATE_INTERVAL * 1000000000L) {
 //            m_floatSumAccelerationX += Math.abs(event.values[0]);
 //            m_floatSumAccelerationY += Math.abs(event.values[1]);
 //            m_floatSumAccelerationZ += Math.abs(event.values[2]);
@@ -207,14 +209,6 @@ public class AccelerometerSensor extends AbstractTriggeredEvent implements Senso
 
     public void setAccuracy(int accuracy) {
         this.accuracy = accuracy;
-    }
-
-    public int getUpdateInterval() {
-        return this.updateInterval;
-    }
-
-    public void setUpdateInterval(int updateInterval) {
-        this.updateInterval = updateInterval;
     }
 
     @Override

@@ -37,14 +37,14 @@ public class MotionActivityEvent extends
     private static final String TAG = MotionActivityEvent.class.getSimpleName();
 
     // ------------------- Configuration -------------------
-    private int DETECTION_INTERVAL_IN_SEC = 120;
+    private static final int DETECTION_INTERVAL_IN_SEC = 120;
     // -----------------------------------------------------
 
     private GoogleApiClient mGoogleApiClient;
 
     private PendingIntent mActivityRecognitionPendingIntent;
 
-    private final static int CONNECTION_FAILURE_RESOLUTION_REQUEST = 9000;
+    private static final int CONNECTION_FAILURE_RESOLUTION_REQUEST = 9000;
 
     private static MotionActivityEvent INSTANCE;
 

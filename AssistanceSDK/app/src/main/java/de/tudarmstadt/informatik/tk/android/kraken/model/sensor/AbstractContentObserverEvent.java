@@ -23,8 +23,6 @@ public abstract class AbstractContentObserverEvent extends AbstractSensor {
     private Timer mTimer = new Timer();
     protected Observer mObserver = new Observer();
 
-    private boolean isRunning;
-
     private class SyncTimer extends TimerTask {
         @Override
         public void run() {
@@ -40,6 +38,36 @@ public abstract class AbstractContentObserverEvent extends AbstractSensor {
             mTimer = null;
         }
     }
+
+    public AbstractContentObserverEvent(Context context) {
+        super(context);
+    }
+
+    @Override
+    public void stopSensor() {
+
+        try {
+
+            if (context != null && mObserver != null) {
+                context.getContentResolver().unregisterContentObserver(mObserver);
+            }
+
+        } finally {
+            setRunning(false);
+        }
+    }
+
+    protected String getStringByColumnName(Cursor cur, String strColumnName) {
+        int index = cur.getColumnIndex(strColumnName);
+        return (index == -1) ? null : cur.getString(cur.getColumnIndex(strColumnName));
+    }
+
+    @Override
+    public EPushType getPushType() {
+        return EPushType.MANUALLY_WLAN_ONLY;
+    }
+
+    abstract protected void syncData();
 
     private class Observer extends ContentObserver {
 
@@ -70,27 +98,5 @@ public abstract class AbstractContentObserverEvent extends AbstractSensor {
             mTimer.schedule(mTimerTask, TIME_TO_WAIT_BEFORE_SYNCING_IN_SEC * 1000);
         }
     }
-
-    public AbstractContentObserverEvent(Context context) {
-        super(context);
-    }
-
-    @Override
-    public void stopSensor() {
-        isRunning = false;
-        context.getContentResolver().unregisterContentObserver(mObserver);
-    }
-
-    protected String getStringByColumnName(Cursor cur, String strColumnName) {
-        int index = cur.getColumnIndex(strColumnName);
-        return (index == -1) ? null : cur.getString(cur.getColumnIndex(strColumnName));
-    }
-
-    @Override
-    public EPushType getPushType() {
-        return EPushType.MANUALLY_WLAN_ONLY;
-    }
-
-    abstract protected void syncData();
 
 }
