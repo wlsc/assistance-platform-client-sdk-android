@@ -26,6 +26,8 @@ import de.tudarmstadt.informatik.tk.android.kraken.db.DbGyroscopeSensor;
 import de.tudarmstadt.informatik.tk.android.kraken.db.DbGyroscopeSensorDao;
 import de.tudarmstadt.informatik.tk.android.kraken.db.DbLightSensor;
 import de.tudarmstadt.informatik.tk.android.kraken.db.DbLightSensorDao;
+import de.tudarmstadt.informatik.tk.android.kraken.db.DbMagneticFieldSensor;
+import de.tudarmstadt.informatik.tk.android.kraken.db.DbMagneticFieldSensorDao;
 import de.tudarmstadt.informatik.tk.android.kraken.db.DbMobileConnectionEvent;
 import de.tudarmstadt.informatik.tk.android.kraken.db.DbMobileConnectionEventDao;
 import de.tudarmstadt.informatik.tk.android.kraken.db.DbModule;
@@ -60,6 +62,7 @@ import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.impl.triggered.F
 import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.impl.triggered.GyroscopeSensor;
 import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.impl.triggered.LightSensor;
 import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.impl.triggered.LocationSensor;
+import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.impl.triggered.MagneticFieldSensor;
 import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.impl.triggered.MotionActivityEvent;
 import de.tudarmstadt.informatik.tk.android.kraken.util.db.DbAssistanceOpenHelper;
 
@@ -101,6 +104,7 @@ public class DbProvider {
     // Sensors / Events
     private DbAccelerometerSensorDao accelerometerSensorDao;
     private DbGyroscopeSensorDao gyroscopeSensorDao;
+    private DbMagneticFieldSensorDao magneticFieldSensorDao;
     private DbPositionSensorDao positionSensorDao;
     private DbMotionActivityEventDao motionActivityEventDao;
     private DbForegroundEventDao foregroundEventDao;
@@ -163,6 +167,10 @@ public class DbProvider {
 
         if (gyroscopeSensorDao == null) {
             gyroscopeSensorDao = getDaoSession().getDbGyroscopeSensorDao();
+        }
+
+        if (magneticFieldSensorDao == null) {
+            magneticFieldSensorDao = getDaoSession().getDbMagneticFieldSensorDao();
         }
 
         if (positionSensorDao == null) {
@@ -581,6 +589,15 @@ public class DbProvider {
                 result = gyroscopeSensorDao.insertOrReplace((DbGyroscopeSensor) sensor);
 
                 Log.d(GyroscopeSensor.class.getSimpleName(), "Finished dumping data");
+                break;
+
+            case SensorType.MAGNETIC_FIELD:
+
+                Log.d(MagneticFieldSensor.class.getSimpleName(), "Dumping data to db...");
+
+                result = magneticFieldSensorDao.insertOrReplace((DbMagneticFieldSensor) sensor);
+
+                Log.d(MagneticFieldSensor.class.getSimpleName(), "Finished dumping data");
                 break;
 
             case SensorType.LOCATION:
