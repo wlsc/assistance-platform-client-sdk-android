@@ -12,6 +12,7 @@ public class DbGyroscopeSensor implements de.tudarmstadt.informatik.tk.android.k
     private Double z;
     /** Not-null value. */
     private String created;
+    private Integer accuracy;
     private Float xUncalibratedNoDrift;
     private Float yUncalibratedNoDrift;
     private Float zUncalibratedNoDrift;
@@ -26,12 +27,13 @@ public class DbGyroscopeSensor implements de.tudarmstadt.informatik.tk.android.k
         this.id = id;
     }
 
-    public DbGyroscopeSensor(Long id, Double x, Double y, Double z, String created, Float xUncalibratedNoDrift, Float yUncalibratedNoDrift, Float zUncalibratedNoDrift, Float xUncalibratedEstimatedDrift, Float yUncalibratedEstimatedDrift, Float zUncalibratedEstimatedDrift) {
+    public DbGyroscopeSensor(Long id, Double x, Double y, Double z, String created, Integer accuracy, Float xUncalibratedNoDrift, Float yUncalibratedNoDrift, Float zUncalibratedNoDrift, Float xUncalibratedEstimatedDrift, Float yUncalibratedEstimatedDrift, Float zUncalibratedEstimatedDrift) {
         this.id = id;
         this.x = x;
         this.y = y;
         this.z = z;
         this.created = created;
+        this.accuracy = accuracy;
         this.xUncalibratedNoDrift = xUncalibratedNoDrift;
         this.yUncalibratedNoDrift = yUncalibratedNoDrift;
         this.zUncalibratedNoDrift = zUncalibratedNoDrift;
@@ -80,6 +82,14 @@ public class DbGyroscopeSensor implements de.tudarmstadt.informatik.tk.android.k
     /** Not-null value; ensure this value is available before it is saved to the database. */
     public void setCreated(String created) {
         this.created = created;
+    }
+
+    public Integer getAccuracy() {
+        return accuracy;
+    }
+
+    public void setAccuracy(Integer accuracy) {
+        this.accuracy = accuracy;
     }
 
     public Float getXUncalibratedNoDrift() {

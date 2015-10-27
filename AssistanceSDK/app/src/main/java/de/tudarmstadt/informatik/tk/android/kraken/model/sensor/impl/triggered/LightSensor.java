@@ -89,7 +89,9 @@ public class LightSensor
     @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
 
-        this.accuracy = accuracy;
+        if (sensor.getType() == getType()) {
+            this.accuracy = accuracy;
+        }
     }
 
     @Override
@@ -105,14 +107,17 @@ public class LightSensor
     @Override
     public void onSensorChanged(SensorEvent event) {
 
-        float currentValue = event.values[0];
+        if (event.sensor.getType() == getType()) {
 
-        if (currentValue < mLastValue - SENSOR_MIN_DIFFERENCE ||
-                (currentValue > (mLastValue + SENSOR_MIN_DIFFERENCE))) {
+            float currentValue = event.values[0];
 
-            mLastValue = currentValue;
+            if (currentValue < mLastValue - SENSOR_MIN_DIFFERENCE ||
+                    (currentValue > (mLastValue + SENSOR_MIN_DIFFERENCE))) {
 
-            dumpData();
+                mLastValue = currentValue;
+
+                dumpData();
+            }
         }
     }
 }

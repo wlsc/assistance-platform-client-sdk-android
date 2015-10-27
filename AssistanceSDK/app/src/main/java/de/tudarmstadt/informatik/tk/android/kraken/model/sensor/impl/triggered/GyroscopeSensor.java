@@ -120,22 +120,34 @@ public class GyroscopeSensor extends AbstractTriggeredEvent implements SensorEve
     @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
 
-        Log.d(TAG, "Accuracy has changed. Old: " + this.accuracy + " new: " + accuracy);
+        if (sensor.getType() == Sensor.TYPE_GYROSCOPE ||
+                sensor.getType() == Sensor.TYPE_GYROSCOPE_UNCALIBRATED) {
 
-        this.accuracy = accuracy;
+            Log.d(TAG, "Accuracy has changed. Old: " + this.accuracy + " new: " + accuracy);
 
-        // checks for saving new data
-        if (isTimeToSaveData(System.nanoTime())) {
+            this.accuracy = accuracy;
 
-            // accuracy has changed faster than accelerometer itself
-            // ignore that accuracy
-            if (x == 0 && y == 0 && z == 0) {
-                return;
+            // checks for saving new data
+            if (isTimeToSaveData(System.nanoTime())) {
+
+                // accuracy has changed faster than sensor itself
+                // ignore that accuracy
+                if (x == 0 &&
+                        y == 0 &&
+                        z == 0 &&
+                        xUncalibratedNoDrift == 0 &&
+                        yUncalibratedNoDrift == 0 &&
+                        zUncalibratedNoDrift == 0 &&
+                        xUncalibratedEstimatedDrift == 0 &&
+                        yUncalibratedEstimatedDrift == 0 &&
+                        zUncalibratedEstimatedDrift == 0) {
+                    return;
+                }
+
+                mLastEventDumpingTimestamp = System.nanoTime();
+
+                dumpData();
             }
-
-            mLastEventDumpingTimestamp = System.nanoTime();
-
-            dumpData();
         }
     }
 
@@ -240,6 +252,7 @@ public class GyroscopeSensor extends AbstractTriggeredEvent implements SensorEve
             gyroscopeSensor.setZUncalibratedEstimatedDrift(zUncalibratedEstimatedDrift);
         }
 
+        gyroscopeSensor.setAccuracy(accuracy);
         gyroscopeSensor.setCreated(DateUtils.dateToISO8601String(new Date(), Locale.getDefault()));
 
         dbProvider.insertEventEntry(gyroscopeSensor, getType());
@@ -259,7 +272,7 @@ public class GyroscopeSensor extends AbstractTriggeredEvent implements SensorEve
         } else {
 
             // the time has come -> save data into db
-            if ((timestamp - mLastEventDumpingTimestamp) / 1000000000 > UPDATE_INTERVAL) {
+            if ((timestamp - mLastEventDumpingTimestamp) / 1_000_000_000 > UPDATE_INTERVAL) {
                 return true;
             }
         }

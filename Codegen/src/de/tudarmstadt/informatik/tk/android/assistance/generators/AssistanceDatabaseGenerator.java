@@ -179,6 +179,7 @@ public class AssistanceDatabaseGenerator {
     gyroscopeSensor.addDoubleProperty("z");
     gyroscopeSensor.addStringProperty("created").notNull();
     // OPTIONAL
+    gyroscopeSensor.addIntProperty("accuracy");
     gyroscopeSensor.addFloatProperty("xUncalibratedNoDrift");
     gyroscopeSensor.addFloatProperty("yUncalibratedNoDrift");
     gyroscopeSensor.addFloatProperty("zUncalibratedNoDrift");

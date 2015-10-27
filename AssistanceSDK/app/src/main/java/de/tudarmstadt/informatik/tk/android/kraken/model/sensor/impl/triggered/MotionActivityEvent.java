@@ -153,7 +153,10 @@ public class MotionActivityEvent extends
         if (mGoogleApiClient != null) {
             try {
                 if (mGoogleApiClient.isConnected()) {
-                    ActivityRecognition.ActivityRecognitionApi.removeActivityUpdates(mGoogleApiClient, mActivityRecognitionPendingIntent);
+                    ActivityRecognition.ActivityRecognitionApi
+                            .removeActivityUpdates(
+                                    mGoogleApiClient,
+                                    mActivityRecognitionPendingIntent);
                     mGoogleApiClient.disconnect();
                 }
             } catch (IllegalStateException e) {

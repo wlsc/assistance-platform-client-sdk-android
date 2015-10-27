@@ -65,7 +65,6 @@ public class AccelerometerSensor extends
 
     @Override
     public void startSensor() {
-        reset();
 
         if (mSensorManager != null) {
 
@@ -91,22 +90,25 @@ public class AccelerometerSensor extends
     @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
 
-        Log.d(TAG, "Accuracy has changed. Old: " + this.accuracy + " new: " + accuracy);
+        if (sensor.getType() == getType()) {
 
-        this.accuracy = accuracy;
+            Log.d(TAG, "Accuracy has changed. Old: " + this.accuracy + " new: " + accuracy);
 
-        // checks for saving new data
-        if (isTimeToSaveData(System.nanoTime())) {
+            this.accuracy = accuracy;
 
-            // accuracy has changed faster than accelerometer itself
-            // ignore that accuracy
-            if (x == 0 && y == 0 && z == 0) {
-                return;
+            // checks for saving new data
+            if (isTimeToSaveData(System.nanoTime())) {
+
+                // accuracy has changed faster than accelerometer itself
+                // ignore that accuracy
+                if (x == 0 && y == 0 && z == 0) {
+                    return;
+                }
+
+                mLastEventDumpingTimestamp = System.nanoTime();
+
+                dumpData();
             }
-
-            mLastEventDumpingTimestamp = System.nanoTime();
-
-            dumpData();
         }
     }
 
