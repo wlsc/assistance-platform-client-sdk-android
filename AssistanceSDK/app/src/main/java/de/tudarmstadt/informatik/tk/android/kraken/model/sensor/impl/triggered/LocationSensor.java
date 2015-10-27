@@ -19,6 +19,7 @@ import java.util.Locale;
 import de.tudarmstadt.informatik.tk.android.kraken.db.DbPositionSensor;
 import de.tudarmstadt.informatik.tk.android.kraken.model.api.sensors.SensorType;
 import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.AbstractTriggeredEvent;
+import de.tudarmstadt.informatik.tk.android.kraken.provider.PreferenceProvider;
 import de.tudarmstadt.informatik.tk.android.kraken.util.DateUtils;
 
 /**
@@ -182,6 +183,10 @@ public class LocationSensor extends
         accuracyVertical = Double.valueOf(location.getAccuracy());
         speed = location.getSpeed();
         altitude = location.getAltitude();
+
+        // saving them to SharedPreferences to further fast access
+        PreferenceProvider.getInstance(context).setLastLatitude(latitude);
+        PreferenceProvider.getInstance(context).setLastLongitude(longitude);
 
         // checks for saving new data
         if (isTimeToSaveData(System.nanoTime())) {

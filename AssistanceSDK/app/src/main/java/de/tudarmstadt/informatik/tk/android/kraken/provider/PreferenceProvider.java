@@ -23,6 +23,10 @@ public class PreferenceProvider {
     private static final String SENT_TOKEN_TO_SERVER = "sentTokenToServer";
     public static final String REGISTRATION_COMPLETE = "registrationComplete";
 
+    // Last known user location
+    private static final String ASSISTANCE_LAST_LATITUDE = "lastKnownLatitude";
+    private static final String ASSISTANCE_LAST_LONGITUDE = "lastKnownLongitude";
+
     // Default prefs
     public static final String KRAKEN_ACTIVATED = "KrakenActivated";
     public static final String KRAKEN_SHOW_NOTIFICATION = "KrakenShowNotification";
@@ -131,6 +135,33 @@ public class PreferenceProvider {
         this.defaultPrefs.edit().putBoolean(KRAKEN_SHOW_NOTIFICATION, showNotification).apply();
     }
 
+    /**
+     * Returns last known location latitude
+     */
+    public Double getLastLatitude() {
+        return Double.longBitsToDouble(prefs.getLong(ASSISTANCE_LAST_LATITUDE, 0));
+    }
+
+    /**
+     * Saves last known location latitude
+     */
+    public void setLastLatitude(Double latitude) {
+        prefs.edit().putLong(ASSISTANCE_LAST_LATITUDE, Double.doubleToLongBits(latitude)).apply();
+    }
+
+    /**
+     * Returns last known location longitude
+     */
+    public Double getLastLongitude() {
+        return Double.longBitsToDouble(prefs.getLong(ASSISTANCE_LAST_LONGITUDE, 0));
+    }
+
+    /**
+     * Saves last known location longitude
+     */
+    public void setLastLongitude(Double longitude) {
+        prefs.edit().putLong(ASSISTANCE_LAST_LONGITUDE, Double.doubleToLongBits(longitude)).apply();
+    }
 
     public SharedPreferences getDefaultPreferences() {
         return defaultPrefs;

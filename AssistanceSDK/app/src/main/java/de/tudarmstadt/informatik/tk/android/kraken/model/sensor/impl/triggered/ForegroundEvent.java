@@ -63,8 +63,6 @@ public class ForegroundEvent extends AbstractTriggeredEvent {
     @Override
     public void startSensor() {
 
-        setRunning(true);
-
         if (mReceiver == null) {
             mReceiver = new ScreenReceiver();
         }
@@ -82,6 +80,8 @@ public class ForegroundEvent extends AbstractTriggeredEvent {
         dbForegroundEvent.setCreated(DateUtils.dateToISO8601String(new Date(), Locale.getDefault()));
 
         dbProvider.insertEventEntry(dbForegroundEvent, getType());
+
+        setRunning(true);
     }
 
     @Override

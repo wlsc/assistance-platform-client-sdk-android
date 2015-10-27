@@ -47,14 +47,12 @@ public class AssistanceAccessibilityService extends AccessibilityService {
         Log.d(TAG, "onAccessibilityEvent");
 
         mForegroundSensor.onEvent(event);
-
-//        mForegroundTrafficSensor.onEvent(event);
+        mForegroundTrafficEvent.onEvent(event);
     }
 
     @Override
     public void onInterrupt() {
-
-        Log.d(TAG, "Service interrupted!");
+        Log.d(TAG, "Service was interrupted!");
     }
 
     @Override
@@ -78,7 +76,7 @@ public class AssistanceAccessibilityService extends AccessibilityService {
     protected void onServiceConnected() {
         super.onServiceConnected();
 
-        Log.d(TAG, "Service connected!");
+        Log.d(TAG, "Service is connected!");
 
         PreferenceProvider.getInstance(getApplicationContext()).setActivated(true);
 

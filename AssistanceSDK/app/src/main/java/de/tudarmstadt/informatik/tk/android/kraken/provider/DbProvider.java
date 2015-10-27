@@ -34,6 +34,8 @@ import de.tudarmstadt.informatik.tk.android.kraken.db.DbModuleInstallation;
 import de.tudarmstadt.informatik.tk.android.kraken.db.DbModuleInstallationDao;
 import de.tudarmstadt.informatik.tk.android.kraken.db.DbMotionActivityEvent;
 import de.tudarmstadt.informatik.tk.android.kraken.db.DbMotionActivityEventDao;
+import de.tudarmstadt.informatik.tk.android.kraken.db.DbNetworkTrafficEvent;
+import de.tudarmstadt.informatik.tk.android.kraken.db.DbNetworkTrafficEventDao;
 import de.tudarmstadt.informatik.tk.android.kraken.db.DbNews;
 import de.tudarmstadt.informatik.tk.android.kraken.db.DbNewsDao;
 import de.tudarmstadt.informatik.tk.android.kraken.db.DbPositionSensor;
@@ -45,13 +47,14 @@ import de.tudarmstadt.informatik.tk.android.kraken.db.DbWifiConnectionEventDao;
 import de.tudarmstadt.informatik.tk.android.kraken.interfaces.IDbSensor;
 import de.tudarmstadt.informatik.tk.android.kraken.model.api.sensors.AccelerometerSensorRequest;
 import de.tudarmstadt.informatik.tk.android.kraken.model.api.sensors.ForegroundEventRequest;
-import de.tudarmstadt.informatik.tk.android.kraken.model.api.sensors.MotionActivityEventRequest;
 import de.tudarmstadt.informatik.tk.android.kraken.model.api.sensors.LocationSensorRequest;
+import de.tudarmstadt.informatik.tk.android.kraken.model.api.sensors.MotionActivityEventRequest;
 import de.tudarmstadt.informatik.tk.android.kraken.model.api.sensors.SensorType;
 import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.Sensor;
 import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.impl.triggered.AccelerometerSensor;
 import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.impl.triggered.ConnectionSensor;
 import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.impl.triggered.ForegroundEvent;
+import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.impl.triggered.ForegroundTrafficEvent;
 import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.impl.triggered.LightSensor;
 import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.impl.triggered.LocationSensor;
 import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.impl.triggered.MotionActivityEvent;
@@ -101,6 +104,7 @@ public class DbProvider {
     private DbConnectionEventDao connectionEventDao;
     private DbMobileConnectionEventDao mobileConnectionEventDao;
     private DbWifiConnectionEventDao wifiConnectionEventDao;
+    private DbNetworkTrafficEventDao networkTrafficEventDao;
 
     /**
      * Lists with transmitted db objects to remove them after
@@ -179,6 +183,10 @@ public class DbProvider {
 
         if (wifiConnectionEventDao == null) {
             wifiConnectionEventDao = getDaoSession().getDbWifiConnectionEventDao();
+        }
+
+        if (networkTrafficEventDao == null) {
+            networkTrafficEventDao = getDaoSession().getDbNetworkTrafficEventDao();
         }
     }
 
@@ -619,6 +627,16 @@ public class DbProvider {
                 result = wifiConnectionEventDao.insertOrReplace((DbWifiConnectionEvent) sensor);
 
                 Log.d(ConnectionSensor.class.getSimpleName(), "Finished dumping data");
+                break;
+
+            case SensorType.NETWORK_TRAFFIC:
+
+                Log.d(ForegroundTrafficEvent.class.getSimpleName(),
+                        "Dumping NETWORK TRAFFIC data to db...");
+
+                result = networkTrafficEventDao.insertOrReplace((DbNetworkTrafficEvent) sensor);
+
+                Log.d(ForegroundTrafficEvent.class.getSimpleName(), "Finished dumping data");
                 break;
         }
 
