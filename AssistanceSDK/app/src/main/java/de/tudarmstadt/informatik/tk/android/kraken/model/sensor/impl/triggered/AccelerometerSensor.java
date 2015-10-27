@@ -35,12 +35,12 @@ public class AccelerometerSensor extends
     private SensorManager mSensorManager;
     private Sensor mAccelerometerSensor;
 
-    private long mLastEventDumpingTimestamp = 0;    // in nanoseconds
+    private long mLastEventDumpingTimestamp;    // in nanoseconds
 
     private double x;
     private double y;
     private double z;
-    private int accuracy = 0;
+    private int accuracy;
 
     public AccelerometerSensor(Context context) {
         super(context);
@@ -67,7 +67,6 @@ public class AccelerometerSensor extends
     public void startSensor() {
         reset();
 
-        // if device not running light sensor
         if (mSensorManager != null) {
 
             mSensorManager.registerListener(this, mAccelerometerSensor, SENSOR_DELAY_BETWEEN_TWO_EVENTS);
@@ -79,7 +78,7 @@ public class AccelerometerSensor extends
     public void stopSensor() {
 
         try {
-            // if device not running light sensor
+
             if (mSensorManager != null) {
                 mSensorManager.unregisterListener(this, mAccelerometerSensor);
             }
@@ -114,18 +113,22 @@ public class AccelerometerSensor extends
     @Override
     public void onSensorChanged(SensorEvent event) {
 
-        // updating values
-        x = event.values[0];
-        y = event.values[1];
-        z = event.values[2];
+        // serve only this type
+        if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
 
-        // checks for saving new data
-        if (isTimeToSaveData(event.timestamp)) {
+            // updating values
+            x = event.values[0];
+            y = event.values[1];
+            z = event.values[2];
 
-            mLastEventDumpingTimestamp = event.timestamp;
+            // checks for saving new data
+            if (isTimeToSaveData(event.timestamp)) {
 
-            // time to dump/save data into db
-            dumpData();
+                mLastEventDumpingTimestamp = event.timestamp;
+
+                // time to dump/save data into db
+                dumpData();
+            }
         }
     }
 
