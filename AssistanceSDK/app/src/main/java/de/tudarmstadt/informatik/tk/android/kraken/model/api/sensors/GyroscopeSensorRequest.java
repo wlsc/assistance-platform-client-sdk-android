@@ -74,11 +74,17 @@ public class GyroscopeSensorRequest implements Sensor {
         this.typeStr = SensorType.getApiName(this.type);
     }
 
-    public GyroscopeSensorRequest(long id, Double x, Double y, Double z, String created) {
+    public GyroscopeSensorRequest(Long id, Double x, Double y, Double z, float xUncalibratedNoDrift, float yUncalibratedNoDrift, float zUncalibratedNoDrift, float xUncalibratedEstimatedDrift, float yUncalibratedEstimatedDrift, float zUncalibratedEstimatedDrift, String created) {
         this.id = id;
         this.x = x;
         this.y = y;
         this.z = z;
+        this.xUncalibratedNoDrift = xUncalibratedNoDrift;
+        this.yUncalibratedNoDrift = yUncalibratedNoDrift;
+        this.zUncalibratedNoDrift = zUncalibratedNoDrift;
+        this.xUncalibratedEstimatedDrift = xUncalibratedEstimatedDrift;
+        this.yUncalibratedEstimatedDrift = yUncalibratedEstimatedDrift;
+        this.zUncalibratedEstimatedDrift = zUncalibratedEstimatedDrift;
         this.created = created;
         this.type = SensorType.GYROSCOPE;
         this.typeStr = SensorType.getApiName(this.type);

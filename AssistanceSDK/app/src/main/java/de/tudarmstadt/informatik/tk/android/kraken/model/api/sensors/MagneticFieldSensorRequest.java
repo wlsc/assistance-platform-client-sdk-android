@@ -77,11 +77,17 @@ public class MagneticFieldSensorRequest implements Sensor {
         this.typeStr = SensorType.getApiName(this.type);
     }
 
-    public MagneticFieldSensorRequest(long id, Double x, Double y, Double z, String created, Integer accuracy) {
+    public MagneticFieldSensorRequest(Long id, Double x, Double y, Double z, float xUncalibratedNoHardIron, float yUncalibratedNoHardIron, float zUncalibratedNoHardIron, float xUncalibratedEstimatedIronBias, float yUncalibratedEstimatedIronBias, float zUncalibratedEstimatedIronBias, String created, Integer accuracy) {
         this.id = id;
         this.x = x;
         this.y = y;
         this.z = z;
+        this.xUncalibratedNoHardIron = xUncalibratedNoHardIron;
+        this.yUncalibratedNoHardIron = yUncalibratedNoHardIron;
+        this.zUncalibratedNoHardIron = zUncalibratedNoHardIron;
+        this.xUncalibratedEstimatedIronBias = xUncalibratedEstimatedIronBias;
+        this.yUncalibratedEstimatedIronBias = yUncalibratedEstimatedIronBias;
+        this.zUncalibratedEstimatedIronBias = zUncalibratedEstimatedIronBias;
         this.created = created;
         this.accuracy = accuracy;
         this.type = SensorType.MAGNETIC_FIELD;
