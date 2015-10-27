@@ -57,14 +57,8 @@ public class LocationSensor extends AbstractTriggeredEvent implements
     private Float speed;
     private Double altitude;
 
-    private DbProvider dbProvider;
-
     public LocationSensor(Context context) {
         super(context);
-
-        if (dbProvider == null) {
-            dbProvider = DbProvider.getInstance(context);
-        }
     }
 
     @Override

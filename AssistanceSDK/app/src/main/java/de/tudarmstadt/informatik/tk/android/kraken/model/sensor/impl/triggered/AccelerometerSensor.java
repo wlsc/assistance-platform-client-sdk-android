@@ -13,7 +13,6 @@ import java.util.Locale;
 import de.tudarmstadt.informatik.tk.android.kraken.db.DbAccelerometerSensor;
 import de.tudarmstadt.informatik.tk.android.kraken.model.api.sensors.SensorType;
 import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.AbstractTriggeredEvent;
-import de.tudarmstadt.informatik.tk.android.kraken.provider.DbProvider;
 import de.tudarmstadt.informatik.tk.android.kraken.util.DateUtils;
 
 /**
@@ -33,7 +32,6 @@ public class AccelerometerSensor extends AbstractTriggeredEvent implements Senso
 
     private SensorManager mSensorManager;
     private Sensor mAccelerometerSensor;
-    private DbProvider dbProvider;
 
     private long mLastEventDumpingTimestamp = 0;    // in nanoseconds
 
@@ -44,10 +42,6 @@ public class AccelerometerSensor extends AbstractTriggeredEvent implements Senso
 
     public AccelerometerSensor(Context context) {
         super(context);
-
-        if (dbProvider == null) {
-            dbProvider = DbProvider.getInstance(context);
-        }
 
         mSensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
         mAccelerometerSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);

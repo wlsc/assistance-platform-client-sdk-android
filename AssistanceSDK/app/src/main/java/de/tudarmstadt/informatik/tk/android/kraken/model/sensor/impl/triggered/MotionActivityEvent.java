@@ -46,8 +46,6 @@ public class MotionActivityEvent extends AbstractTriggeredEvent implements Googl
 
     private static MotionActivityEvent INSTANCE;
 
-    private DbProvider dbProvider;
-
     /**
      * High possibility motion action
      */
@@ -66,10 +64,6 @@ public class MotionActivityEvent extends AbstractTriggeredEvent implements Googl
                 .addConnectionCallbacks(this)
                 .addOnConnectionFailedListener(this)
                 .build();
-
-        if (dbProvider == null) {
-            dbProvider = DbProvider.getInstance(context);
-        }
     }
 
     @Override

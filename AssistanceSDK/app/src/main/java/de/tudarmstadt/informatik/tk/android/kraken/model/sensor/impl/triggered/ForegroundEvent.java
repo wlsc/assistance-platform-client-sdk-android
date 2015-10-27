@@ -57,8 +57,6 @@ public class ForegroundEvent extends AbstractTriggeredEvent {
     private ScreenReceiver mReceiver;
     private static boolean mStarted;
 
-    private DbProvider dbProvider;
-
     public ForegroundEvent(Context context) {
         super(context);
     }
@@ -70,10 +68,6 @@ public class ForegroundEvent extends AbstractTriggeredEvent {
 
         if (mReceiver == null) {
             mReceiver = new ScreenReceiver();
-        }
-
-        if (dbProvider == null) {
-            dbProvider = DbProvider.getInstance(context);
         }
 
         mEventFilter = new AccessibilityEventFilterUtils(context);

@@ -57,17 +57,11 @@ public class ConnectionSensor extends AbstractTriggeredEvent {
     private String mobileCarrierCode;
     private String mobileNetworkCode;
 
-    private DbProvider dbProvider;
-
     public ConnectionSensor(Context context) {
         super(context);
 
         if (mReceiver == null) {
             mReceiver = new ConnectionReceiver();
-        }
-
-        if (dbProvider == null) {
-            dbProvider = DbProvider.getInstance(context);
         }
     }
 

@@ -2,8 +2,6 @@ package de.tudarmstadt.informatik.tk.android.kraken.model.sensor;
 
 import android.content.Context;
 
-import java.util.HashMap;
-
 import de.tudarmstadt.informatik.tk.android.kraken.db.DaoSession;
 import de.tudarmstadt.informatik.tk.android.kraken.model.enums.EPushType;
 import de.tudarmstadt.informatik.tk.android.kraken.provider.DbProvider;
@@ -21,6 +19,7 @@ public abstract class AbstractSensor implements ISensor {
     protected Context context;
 
     protected DaoSession mDaoSession;
+    protected DbProvider dbProvider;
 
     private boolean isDisabledByUser;
     private boolean isDisabledBySystem;
@@ -28,13 +27,15 @@ public abstract class AbstractSensor implements ISensor {
     protected int pushIntervallInMin;
     protected boolean isRunning;
 
-    private HashMap<String, Boolean> m_mapNewData = new HashMap<String, Boolean>();
-
     public AbstractSensor(Context context) {
         setContext(context);
 
         if (mDaoSession == null) {
             mDaoSession = DbProvider.getInstance(context).getDaoSession();
+        }
+
+        if (dbProvider == null) {
+            dbProvider = DbProvider.getInstance(context);
         }
     }
 
