@@ -19,7 +19,6 @@ import de.tudarmstadt.informatik.tk.android.kraken.db.DbMobileConnectionEvent;
 import de.tudarmstadt.informatik.tk.android.kraken.db.DbWifiConnectionEvent;
 import de.tudarmstadt.informatik.tk.android.kraken.model.api.sensors.SensorType;
 import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.AbstractTriggeredEvent;
-import de.tudarmstadt.informatik.tk.android.kraken.provider.DbProvider;
 import de.tudarmstadt.informatik.tk.android.kraken.util.DateUtils;
 import de.tudarmstadt.informatik.tk.android.kraken.util.DeviceUtils;
 
@@ -31,8 +30,6 @@ import de.tudarmstadt.informatik.tk.android.kraken.util.DeviceUtils;
 public class ConnectionSensor extends AbstractTriggeredEvent {
 
     private static final String TAG = ConnectionReceiver.class.getSimpleName();
-
-    private boolean isStarted;
 
     private static ConnectionReceiver mReceiver;
 
@@ -66,7 +63,7 @@ public class ConnectionSensor extends AbstractTriggeredEvent {
     }
 
     @Override
-    protected void dumpData() {
+    public void dumpData() {
 
         String created = DateUtils.dateToISO8601String(new Date(), Locale.getDefault());
 
@@ -118,13 +115,13 @@ public class ConnectionSensor extends AbstractTriggeredEvent {
 
         context.registerReceiver(mReceiver, filter);
 
-        isStarted = true;
+        setRunning(true);
     }
 
     @Override
     public void stopSensor() {
 
-        if (isStarted) {
+        if (isRunning()) {
 
             try {
 
@@ -135,7 +132,7 @@ public class ConnectionSensor extends AbstractTriggeredEvent {
             } catch (IllegalArgumentException e) {
                 Log.e(TAG, "Cannot unregister receiver!", e);
             } finally {
-                isStarted = false;
+                setRunning(false);
                 mReceiver = null;
             }
         }

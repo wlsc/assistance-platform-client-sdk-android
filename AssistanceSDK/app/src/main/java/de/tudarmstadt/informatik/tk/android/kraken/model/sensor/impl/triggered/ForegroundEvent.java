@@ -55,7 +55,6 @@ public class ForegroundEvent extends AbstractTriggeredEvent {
 
     private AccessibilityEventFilterUtils mEventFilter;
     private ScreenReceiver mReceiver;
-    private static boolean mStarted;
 
     public ForegroundEvent(Context context) {
         super(context);
@@ -64,7 +63,7 @@ public class ForegroundEvent extends AbstractTriggeredEvent {
     @Override
     public void startSensor() {
 
-        mStarted = true;
+        setRunning(true);
 
         if (mReceiver == null) {
             mReceiver = new ScreenReceiver();
@@ -88,7 +87,7 @@ public class ForegroundEvent extends AbstractTriggeredEvent {
     @Override
     public void stopSensor() {
 
-        if (mStarted) {
+        if (isRunning()) {
             try {
                 if (context != null && mReceiver != null) {
                     context.unregisterReceiver(mReceiver);
@@ -98,7 +97,7 @@ public class ForegroundEvent extends AbstractTriggeredEvent {
             } finally {
 
                 mReceiver = null;
-                mStarted = false;
+                setRunning(false);
 
                 if (dbProvider == null) {
                     dbProvider = DbProvider.getInstance(context);
@@ -120,7 +119,7 @@ public class ForegroundEvent extends AbstractTriggeredEvent {
             dbProvider = DbProvider.getInstance(context);
         }
 
-        if (mStarted) {
+        if (isRunning()) {
 
             DbForegroundEvent foregroundEvent = mEventFilter.filter(event);
 
@@ -238,8 +237,7 @@ public class ForegroundEvent extends AbstractTriggeredEvent {
     }
 
     @Override
-    protected void dumpData() {
-
+    public void dumpData() {
     }
 
     @Override

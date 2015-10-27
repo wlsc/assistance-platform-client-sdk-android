@@ -32,7 +32,11 @@ public interface ISensor {
 
     boolean isRunning();
 
+    void setRunning(boolean isRunning);
+
     void setDaoSession(DaoSession daoSession);
 
     void reset();
+
+    void dumpData();
 }

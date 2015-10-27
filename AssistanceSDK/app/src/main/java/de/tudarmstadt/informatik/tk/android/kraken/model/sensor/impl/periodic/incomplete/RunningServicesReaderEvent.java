@@ -12,11 +12,13 @@ import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.AbstractPeriodic
 import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.ISensor;
 
 
-public class RunningServicesReaderEvent extends AbstractPeriodicEvent implements ISensor {
+public class RunningServicesReaderEvent extends
+        AbstractPeriodicEvent implements
+        ISensor {
 
     private static final int MAXIMUM_SERVICES = 20;
     private ActivityManager m_activityManager;
-    @SuppressWarnings("unused")
+
     private List<String> m_liLastServices = new LinkedList<String>();
 
     public RunningServicesReaderEvent(Context context) {
@@ -26,7 +28,7 @@ public class RunningServicesReaderEvent extends AbstractPeriodicEvent implements
     }
 
     @Override
-    protected void dumpData() {
+    public void dumpData() {
 
     }
 

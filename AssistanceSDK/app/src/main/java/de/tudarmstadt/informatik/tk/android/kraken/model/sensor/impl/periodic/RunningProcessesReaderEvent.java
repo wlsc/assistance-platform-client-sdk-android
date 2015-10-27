@@ -28,7 +28,7 @@ public class RunningProcessesReaderEvent extends AbstractPeriodicEvent implement
     }
 
     @Override
-    protected void dumpData() {
+    public void dumpData() {
 
     }
 

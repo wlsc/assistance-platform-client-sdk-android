@@ -16,7 +16,7 @@ public class CallLogEvent extends AbstractContentObserverEvent {
     }
 
     @Override
-    protected void dumpData() {
+    public void dumpData() {
 
     }
 
@@ -32,7 +32,9 @@ public class CallLogEvent extends AbstractContentObserverEvent {
 
     @Override
     public void startSensor() {
-        isRunning = true;
+
+        setRunning(true);
+
         Thread thread = new Thread(new Runnable() {
 
             @Override
@@ -41,6 +43,7 @@ public class CallLogEvent extends AbstractContentObserverEvent {
                 context.getContentResolver().registerContentObserver(URI_CALL_LOG, true, mObserver);
             }
         });
+
         thread.setName("CallLogSensorThread");
         thread.start();
     }

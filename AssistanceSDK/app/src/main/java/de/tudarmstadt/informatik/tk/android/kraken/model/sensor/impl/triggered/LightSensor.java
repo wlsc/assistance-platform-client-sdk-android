@@ -16,7 +16,9 @@ import de.tudarmstadt.informatik.tk.android.kraken.provider.DbProvider;
 import de.tudarmstadt.informatik.tk.android.kraken.util.DateUtils;
 
 
-public class LightSensor extends AbstractTriggeredEvent implements SensorEventListener {
+public class LightSensor
+        extends AbstractTriggeredEvent
+        implements SensorEventListener {
 
     // ------------------- Configuration -------------------
     private int SENSOR_DELAY_BETWEEN_TWO_EVENTS = SensorManager.SENSOR_DELAY_NORMAL;
@@ -43,7 +45,7 @@ public class LightSensor extends AbstractTriggeredEvent implements SensorEventLi
     }
 
     @Override
-    protected void dumpData() {
+    public void dumpData() {
 
         DbLightSensor sensorLight = new DbLightSensor();
 
@@ -62,18 +64,22 @@ public class LightSensor extends AbstractTriggeredEvent implements SensorEventLi
             mSensorManager.registerListener(this,
                     mAccelerometerSensor,
                     SENSOR_DELAY_BETWEEN_TWO_EVENTS);
-            isRunning = true;
+
+            setRunning(true);
         }
     }
 
     @Override
     public void stopSensor() {
 
-        if (mSensorManager != null) {
-            mSensorManager.unregisterListener(this, mAccelerometerSensor);
+        try {
+            if (mSensorManager != null) {
+                mSensorManager.unregisterListener(this, mAccelerometerSensor);
+            }
+        } finally {
+            setRunning(false);
+            mSensorManager = null;
         }
-
-        isRunning = false;
     }
 
     @Override

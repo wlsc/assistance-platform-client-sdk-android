@@ -19,7 +19,7 @@ public class AccountsReaderEvent extends AbstractPeriodicEvent implements ISenso
     }
 
     @Override
-    protected void dumpData() {
+    public void dumpData() {
 
     }
 

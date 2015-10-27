@@ -19,7 +19,6 @@ import java.util.Locale;
 import de.tudarmstadt.informatik.tk.android.kraken.db.DbPositionSensor;
 import de.tudarmstadt.informatik.tk.android.kraken.model.api.sensors.SensorType;
 import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.AbstractTriggeredEvent;
-import de.tudarmstadt.informatik.tk.android.kraken.provider.DbProvider;
 import de.tudarmstadt.informatik.tk.android.kraken.util.DateUtils;
 
 /**
@@ -27,7 +26,8 @@ import de.tudarmstadt.informatik.tk.android.kraken.util.DateUtils;
  * @edited by Wladimir Schmidt (wlsc.dev@gmail.com)
  * @date 08.10.2015
  */
-public class LocationSensor extends AbstractTriggeredEvent implements
+public class LocationSensor extends
+        AbstractTriggeredEvent implements
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener,
         LocationListener {
@@ -62,7 +62,7 @@ public class LocationSensor extends AbstractTriggeredEvent implements
     }
 
     @Override
-    protected void dumpData() {
+    public void dumpData() {
 
         DbPositionSensor dbPositionSensor = new DbPositionSensor();
 
@@ -99,7 +99,8 @@ public class LocationSensor extends AbstractTriggeredEvent implements
         mLocationRequest.setInterval(updateInterval * 1000);
         // Set the fastest update interval to x seconds
         mLocationRequest.setFastestInterval(FASTEST_INTERVAL_IN_SECONDS * 1000);
-        isRunning = true;
+
+        setRunning(true);
     }
 
     @Override
@@ -113,7 +114,7 @@ public class LocationSensor extends AbstractTriggeredEvent implements
                 }
             }
         } finally {
-            isRunning = false;
+            setRunning(false);
         }
     }
 

@@ -18,7 +18,9 @@ import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.ISensor;
  * <p/>
  * Created by Stefan Hacker on 09.12.14.
  */
-public class BackgroundTrafficEvent extends AbstractPeriodicEvent implements ISensor {
+public class BackgroundTrafficEvent extends
+        AbstractPeriodicEvent implements
+        ISensor {
 
     private static final int INIT_DATA_INTERVAL = 5 * 60;
     private PackageManager m_PackageManager;
@@ -90,7 +92,7 @@ public class BackgroundTrafficEvent extends AbstractPeriodicEvent implements ISe
     }
 
     @Override
-    protected void dumpData() {
+    public void dumpData() {
 
     }
 

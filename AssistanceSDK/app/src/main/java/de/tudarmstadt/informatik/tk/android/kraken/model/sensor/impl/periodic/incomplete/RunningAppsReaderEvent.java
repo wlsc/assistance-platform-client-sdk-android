@@ -17,7 +17,7 @@ public class RunningAppsReaderEvent extends AbstractPeriodicEvent implements ISe
 
     private static final int MAXIMUM_SERVICES = 20;
     private ActivityManager m_activityManager;
-    @SuppressWarnings("unused")
+
     private List<String> m_liLastServices = new LinkedList<String>();
 
     public RunningAppsReaderEvent(Context context) {
@@ -27,7 +27,7 @@ public class RunningAppsReaderEvent extends AbstractPeriodicEvent implements ISe
     }
 
     @Override
-    protected void dumpData() {
+    public void dumpData() {
 
     }
 

@@ -18,14 +18,15 @@ public abstract class AbstractSensor implements ISensor {
 
     protected Context context;
 
+    private boolean isRunning;
+
     protected DaoSession mDaoSession;
     protected DbProvider dbProvider;
 
     private boolean isDisabledByUser;
     private boolean isDisabledBySystem;
-    protected long lastDataFlushTimestamp = -1;
+    protected long lastDataFlushTimestamp;
     protected int pushIntervallInMin;
-    protected boolean isRunning;
 
     public AbstractSensor(Context context) {
         setContext(context);
@@ -85,14 +86,17 @@ public abstract class AbstractSensor implements ISensor {
     }
 
     @Override
+    public void setDaoSession(DaoSession daoSession) {
+        this.mDaoSession = daoSession;
+    }
+
+    @Override
     public boolean isRunning() {
         return isRunning;
     }
 
     @Override
-    public void setDaoSession(DaoSession daoSession) {
-        this.mDaoSession = daoSession;
+    public void setRunning(boolean isRunning) {
+        this.isRunning = isRunning;
     }
-
-    protected abstract void dumpData();
 }

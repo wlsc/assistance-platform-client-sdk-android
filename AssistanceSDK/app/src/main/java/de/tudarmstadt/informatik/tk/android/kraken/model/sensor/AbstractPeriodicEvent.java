@@ -46,16 +46,21 @@ public abstract class AbstractPeriodicEvent extends AbstractSensor {
                 }
             }, 0, getDataIntervallInSec(), TimeUnit.SECONDS);
         }
-        isRunning = true;
+
+        setRunning(true);
     }
 
     @Override
     public void stopSensor() {
-        if (m_future != null) {
-            m_future.cancel(true);
-            m_future = null;
+
+        try {
+            if (m_future != null) {
+                m_future.cancel(true);
+                m_future = null;
+            }
+        } finally {
+            setRunning(false);
         }
-        isRunning = false;
     }
 
     abstract protected void getData();

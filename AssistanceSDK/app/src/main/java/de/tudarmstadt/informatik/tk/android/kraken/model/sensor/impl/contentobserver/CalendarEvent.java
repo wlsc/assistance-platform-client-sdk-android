@@ -18,7 +18,6 @@ public class CalendarEvent extends AbstractContentObserverEvent {
 
     public CalendarEvent(Context context) {
         super(context);
-
     }
 
     private static final String[] PROJECTION_EVENTS = new String[]{Events._ID, Events.ALL_DAY, Events.AVAILABILITY, Events.CALENDAR_ID, Events.DESCRIPTION,
@@ -274,7 +273,9 @@ public class CalendarEvent extends AbstractContentObserverEvent {
 
     @Override
     public void startSensor() {
-        isRunning = true;
+
+        setRunning(true);
+
         Thread thread = new Thread(new Runnable() {
 
             @Override
@@ -289,7 +290,7 @@ public class CalendarEvent extends AbstractContentObserverEvent {
     }
 
     @Override
-    protected void dumpData() {
+    public void dumpData() {
 
     }
 

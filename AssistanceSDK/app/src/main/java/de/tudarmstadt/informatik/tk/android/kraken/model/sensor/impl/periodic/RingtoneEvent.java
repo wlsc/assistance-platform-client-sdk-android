@@ -21,7 +21,7 @@ public class RingtoneEvent extends AbstractPeriodicEvent implements ISensor {
     }
 
     @Override
-    protected void dumpData() {
+    public void dumpData() {
 
     }
 

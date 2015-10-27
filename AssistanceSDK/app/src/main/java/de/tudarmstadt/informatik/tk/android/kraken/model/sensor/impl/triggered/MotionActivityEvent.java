@@ -21,7 +21,6 @@ import java.util.Locale;
 import de.tudarmstadt.informatik.tk.android.kraken.db.DbMotionActivityEvent;
 import de.tudarmstadt.informatik.tk.android.kraken.model.api.sensors.SensorType;
 import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.AbstractTriggeredEvent;
-import de.tudarmstadt.informatik.tk.android.kraken.provider.DbProvider;
 import de.tudarmstadt.informatik.tk.android.kraken.service.ActivitySensorService;
 import de.tudarmstadt.informatik.tk.android.kraken.util.DateUtils;
 
@@ -30,7 +29,10 @@ import de.tudarmstadt.informatik.tk.android.kraken.util.DateUtils;
  * @edited by Wladimir Schmidt (wlsc.dev@gmail.com)
  * @date 08.10.2015
  */
-public class MotionActivityEvent extends AbstractTriggeredEvent implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
+public class MotionActivityEvent extends
+        AbstractTriggeredEvent implements
+        GoogleApiClient.ConnectionCallbacks,
+        GoogleApiClient.OnConnectionFailedListener {
 
     private static final String TAG = MotionActivityEvent.class.getSimpleName();
 
@@ -67,7 +69,7 @@ public class MotionActivityEvent extends AbstractTriggeredEvent implements Googl
     }
 
     @Override
-    protected void dumpData() {
+    public void dumpData() {
 
         DbMotionActivityEvent motionActivityEvent = new DbMotionActivityEvent();
 
@@ -137,9 +139,9 @@ public class MotionActivityEvent extends AbstractTriggeredEvent implements Googl
     public void startSensor() {
 
         // If a request is not already underway
-        if (!isRunning) {
+        if (!isRunning()) {
             // Indicate that a request is in progress
-            isRunning = true;
+            setRunning(true);
             // Request a connection to Location Services
             mGoogleApiClient.connect();
         }
@@ -157,7 +159,7 @@ public class MotionActivityEvent extends AbstractTriggeredEvent implements Googl
             } catch (IllegalStateException e) {
                 Log.e(TAG, "Cannot disconnect from Google Api!", e);
             } finally {
-                isRunning = false;
+                setRunning(false);
                 mGoogleApiClient = null;
             }
         }
@@ -194,7 +196,7 @@ public class MotionActivityEvent extends AbstractTriggeredEvent implements Googl
                 // CONNECTION_FAILURE_RESOLUTION_REQUEST);
             }
         } finally {
-            isRunning = false;
+            setRunning(false);
         }
     }
 
@@ -227,8 +229,10 @@ public class MotionActivityEvent extends AbstractTriggeredEvent implements Googl
 
     @Override
     public void onConnectionSuspended(int i) {
-        // Turn off the request flag
-        isRunning = false;
+
+        // panic! stopping everything
+
+        setRunning(false);
         // Delete the client
         mGoogleApiClient = null;
     }
@@ -236,6 +240,11 @@ public class MotionActivityEvent extends AbstractTriggeredEvent implements Googl
     @Override
     public int getType() {
         return SensorType.MOTION_ACTIVITY;
+    }
+
+    @Override
+    public boolean isRunning() {
+        return isRunning();
     }
 
     @Override

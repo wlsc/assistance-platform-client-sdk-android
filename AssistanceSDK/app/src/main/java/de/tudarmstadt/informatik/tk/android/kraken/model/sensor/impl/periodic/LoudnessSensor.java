@@ -101,7 +101,7 @@ public class LoudnessSensor extends AbstractPeriodicEvent implements Callback {
     }
 
     @Override
-    protected void dumpData() {
+    public void dumpData() {
 
     }
 

@@ -12,7 +12,9 @@ import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.AbstractPeriodic
 import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.ISensor;
 
 
-public class RunningTasksReaderEvent extends AbstractPeriodicEvent implements ISensor {
+public class RunningTasksReaderEvent extends
+        AbstractPeriodicEvent implements
+        ISensor {
 
     private static final int MAXIMUM_TASKS = 10;
     private ActivityManager m_activityManager;
@@ -25,7 +27,7 @@ public class RunningTasksReaderEvent extends AbstractPeriodicEvent implements IS
     }
 
     @Override
-    protected void dumpData() {
+    public void dumpData() {
 
     }
 

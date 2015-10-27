@@ -48,7 +48,7 @@ public class AccelerometerSensor extends AbstractTriggeredEvent implements Senso
     }
 
     @Override
-    protected void dumpData() {
+    public void dumpData() {
 
         DbAccelerometerSensor dbAccelerometerSensor = new DbAccelerometerSensor();
 
@@ -69,7 +69,7 @@ public class AccelerometerSensor extends AbstractTriggeredEvent implements Senso
         if (mSensorManager != null) {
 
             mSensorManager.registerListener(this, mAccelerometerSensor, SENSOR_DELAY_BETWEEN_TWO_EVENTS);
-            isRunning = true;
+            setRunning(true);
         }
     }
 
@@ -82,7 +82,7 @@ public class AccelerometerSensor extends AbstractTriggeredEvent implements Senso
                 mSensorManager.unregisterListener(this, mAccelerometerSensor);
             }
         } finally {
-            isRunning = false;
+            setRunning(false);
             mSensorManager = null;
         }
     }

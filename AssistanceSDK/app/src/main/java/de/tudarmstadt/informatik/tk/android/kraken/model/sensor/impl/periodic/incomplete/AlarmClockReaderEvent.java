@@ -15,7 +15,7 @@ public class AlarmClockReaderEvent extends AbstractPeriodicEvent implements ISen
     }
 
     @Override
-    protected void dumpData() {
+    public void dumpData() {
 
     }
 

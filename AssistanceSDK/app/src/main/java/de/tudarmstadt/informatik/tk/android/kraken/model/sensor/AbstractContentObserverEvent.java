@@ -23,6 +23,8 @@ public abstract class AbstractContentObserverEvent extends AbstractSensor {
     private Timer mTimer = new Timer();
     protected Observer mObserver = new Observer();
 
+    private boolean isRunning;
+
     private class SyncTimer extends TimerTask {
         @Override
         public void run() {

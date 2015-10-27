@@ -333,7 +333,9 @@ public class ContactsEvent extends AbstractContentObserverEvent {
 
     @Override
     public void startSensor() {
-        isRunning = true;
+
+        setRunning(true);
+
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
@@ -351,7 +353,7 @@ public class ContactsEvent extends AbstractContentObserverEvent {
     }
 
     @Override
-    protected void dumpData() {
+    public void dumpData() {
 
     }
 

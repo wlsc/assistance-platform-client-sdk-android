@@ -14,7 +14,7 @@ import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.AbstractContentO
  */
 public class BrowserHistoryEvent extends AbstractContentObserverEvent {
 
-//    protected static final Uri URI_BROWSER_HISTORY = Browser.BOOKMARKS_URI;
+    //    protected static final Uri URI_BROWSER_HISTORY = Browser.BOOKMARKS_URI;
     protected static final Uri URI_CHROME_HISTORY = Uri.parse("content://com.android.chrome.browser/bookmarks");
 
     private Method m_methodForGetAllExistingHistory;
@@ -27,7 +27,7 @@ public class BrowserHistoryEvent extends AbstractContentObserverEvent {
     }
 
     @Override
-    protected void dumpData() {
+    public void dumpData() {
 
     }
 
@@ -147,7 +147,8 @@ public class BrowserHistoryEvent extends AbstractContentObserverEvent {
 
     @Override
     public void startSensor() {
-        isRunning = true;
+
+        setRunning(true);
 //        Thread thread = new Thread(new Runnable() {
 //
 //            @Override
@@ -158,6 +159,12 @@ public class BrowserHistoryEvent extends AbstractContentObserverEvent {
 //        });
 //        thread.setName("BrowserHistorySensorThread");
 //        thread.start();
+    }
+
+    @Override
+    public void stopSensor() {
+        // TODO: implement this
+        setRunning(false);
     }
 
     @Override
