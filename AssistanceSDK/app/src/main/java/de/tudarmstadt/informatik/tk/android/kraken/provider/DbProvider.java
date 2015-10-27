@@ -22,6 +22,8 @@ import de.tudarmstadt.informatik.tk.android.kraken.db.DbDevice;
 import de.tudarmstadt.informatik.tk.android.kraken.db.DbDeviceDao;
 import de.tudarmstadt.informatik.tk.android.kraken.db.DbForegroundEvent;
 import de.tudarmstadt.informatik.tk.android.kraken.db.DbForegroundEventDao;
+import de.tudarmstadt.informatik.tk.android.kraken.db.DbGyroscopeSensor;
+import de.tudarmstadt.informatik.tk.android.kraken.db.DbGyroscopeSensorDao;
 import de.tudarmstadt.informatik.tk.android.kraken.db.DbLightSensor;
 import de.tudarmstadt.informatik.tk.android.kraken.db.DbLightSensorDao;
 import de.tudarmstadt.informatik.tk.android.kraken.db.DbMobileConnectionEvent;
@@ -55,6 +57,7 @@ import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.impl.triggered.A
 import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.impl.triggered.ConnectionSensor;
 import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.impl.triggered.ForegroundEvent;
 import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.impl.triggered.ForegroundTrafficEvent;
+import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.impl.triggered.GyroscopeSensor;
 import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.impl.triggered.LightSensor;
 import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.impl.triggered.LocationSensor;
 import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.impl.triggered.MotionActivityEvent;
@@ -97,6 +100,7 @@ public class DbProvider {
 
     // Sensors / Events
     private DbAccelerometerSensorDao accelerometerSensorDao;
+    private DbGyroscopeSensorDao gyroscopeSensorDao;
     private DbPositionSensorDao positionSensorDao;
     private DbMotionActivityEventDao motionActivityEventDao;
     private DbForegroundEventDao foregroundEventDao;
@@ -155,6 +159,10 @@ public class DbProvider {
 
         if (accelerometerSensorDao == null) {
             accelerometerSensorDao = getDaoSession().getDbAccelerometerSensorDao();
+        }
+
+        if (gyroscopeSensorDao == null) {
+            gyroscopeSensorDao = getDaoSession().getDbGyroscopeSensorDao();
         }
 
         if (positionSensorDao == null) {
@@ -564,6 +572,15 @@ public class DbProvider {
                 result = accelerometerSensorDao.insertOrReplace((DbAccelerometerSensor) sensor);
 
                 Log.d(AccelerometerSensor.class.getSimpleName(), "Finished dumping data");
+                break;
+
+            case SensorType.GYROSCOPE:
+
+                Log.d(GyroscopeSensor.class.getSimpleName(), "Dumping data to db...");
+
+                result = gyroscopeSensorDao.insertOrReplace((DbGyroscopeSensor) sensor);
+
+                Log.d(GyroscopeSensor.class.getSimpleName(), "Finished dumping data");
                 break;
 
             case SensorType.LOCATION:
