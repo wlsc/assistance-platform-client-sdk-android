@@ -398,6 +398,7 @@ public class AssistanceDatabaseGenerator {
     callLogEvent.setTableName("call_log_event");
     callLogEvent.addIdProperty().autoincrement().index();
     callLogEvent.implementsInterface(Config.KRAKEN_PACKAGE_UPDATABLE_SENSOR);
+    callLogEvent.addLongProperty("callId");
     callLogEvent.addIntProperty("type");
     callLogEvent.addStringProperty("name");
     callLogEvent.addStringProperty("number");

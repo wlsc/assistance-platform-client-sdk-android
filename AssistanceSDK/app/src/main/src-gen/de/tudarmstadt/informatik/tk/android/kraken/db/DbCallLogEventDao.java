@@ -24,15 +24,16 @@ public class DbCallLogEventDao extends AbstractDao<DbCallLogEvent, Long> {
     */
     public static class Properties {
         public final static Property Id = new Property(0, Long.class, "id", true, "_id");
-        public final static Property Type = new Property(1, Integer.class, "type", false, "TYPE");
-        public final static Property Name = new Property(2, String.class, "name", false, "NAME");
-        public final static Property Number = new Property(3, String.class, "number", false, "NUMBER");
-        public final static Property Date = new Property(4, Long.class, "date", false, "DATE");
-        public final static Property Duration = new Property(5, Long.class, "duration", false, "DURATION");
-        public final static Property IsNew = new Property(6, Boolean.class, "isNew", false, "IS_NEW");
-        public final static Property IsUpdated = new Property(7, Boolean.class, "isUpdated", false, "IS_UPDATED");
-        public final static Property IsDeleted = new Property(8, Boolean.class, "isDeleted", false, "IS_DELETED");
-        public final static Property Created = new Property(9, String.class, "created", false, "CREATED");
+        public final static Property CallId = new Property(1, Long.class, "callId", false, "CALL_ID");
+        public final static Property Type = new Property(2, Integer.class, "type", false, "TYPE");
+        public final static Property Name = new Property(3, String.class, "name", false, "NAME");
+        public final static Property Number = new Property(4, String.class, "number", false, "NUMBER");
+        public final static Property Date = new Property(5, Long.class, "date", false, "DATE");
+        public final static Property Duration = new Property(6, Long.class, "duration", false, "DURATION");
+        public final static Property IsNew = new Property(7, Boolean.class, "isNew", false, "IS_NEW");
+        public final static Property IsUpdated = new Property(8, Boolean.class, "isUpdated", false, "IS_UPDATED");
+        public final static Property IsDeleted = new Property(9, Boolean.class, "isDeleted", false, "IS_DELETED");
+        public final static Property Created = new Property(10, String.class, "created", false, "CREATED");
     };
 
 
@@ -49,15 +50,16 @@ public class DbCallLogEventDao extends AbstractDao<DbCallLogEvent, Long> {
         String constraint = ifNotExists? "IF NOT EXISTS ": "";
         db.execSQL("CREATE TABLE " + constraint + "\"call_log_event\" (" + //
                 "\"_id\" INTEGER PRIMARY KEY AUTOINCREMENT ," + // 0: id
-                "\"TYPE\" INTEGER," + // 1: type
-                "\"NAME\" TEXT," + // 2: name
-                "\"NUMBER\" TEXT," + // 3: number
-                "\"DATE\" INTEGER," + // 4: date
-                "\"DURATION\" INTEGER," + // 5: duration
-                "\"IS_NEW\" INTEGER," + // 6: isNew
-                "\"IS_UPDATED\" INTEGER," + // 7: isUpdated
-                "\"IS_DELETED\" INTEGER," + // 8: isDeleted
-                "\"CREATED\" TEXT NOT NULL );"); // 9: created
+                "\"CALL_ID\" INTEGER," + // 1: callId
+                "\"TYPE\" INTEGER," + // 2: type
+                "\"NAME\" TEXT," + // 3: name
+                "\"NUMBER\" TEXT," + // 4: number
+                "\"DATE\" INTEGER," + // 5: date
+                "\"DURATION\" INTEGER," + // 6: duration
+                "\"IS_NEW\" INTEGER," + // 7: isNew
+                "\"IS_UPDATED\" INTEGER," + // 8: isUpdated
+                "\"IS_DELETED\" INTEGER," + // 9: isDeleted
+                "\"CREATED\" TEXT NOT NULL );"); // 10: created
         // Add Indexes
         db.execSQL("CREATE INDEX " + constraint + "IDX_call_log_event__id ON call_log_event" +
                 " (\"_id\");");
@@ -79,46 +81,51 @@ public class DbCallLogEventDao extends AbstractDao<DbCallLogEvent, Long> {
             stmt.bindLong(1, id);
         }
  
+        Long callId = entity.getCallId();
+        if (callId != null) {
+            stmt.bindLong(2, callId);
+        }
+ 
         Integer type = entity.getType();
         if (type != null) {
-            stmt.bindLong(2, type);
+            stmt.bindLong(3, type);
         }
  
         String name = entity.getName();
         if (name != null) {
-            stmt.bindString(3, name);
+            stmt.bindString(4, name);
         }
  
         String number = entity.getNumber();
         if (number != null) {
-            stmt.bindString(4, number);
+            stmt.bindString(5, number);
         }
  
         Long date = entity.getDate();
         if (date != null) {
-            stmt.bindLong(5, date);
+            stmt.bindLong(6, date);
         }
  
         Long duration = entity.getDuration();
         if (duration != null) {
-            stmt.bindLong(6, duration);
+            stmt.bindLong(7, duration);
         }
  
         Boolean isNew = entity.getIsNew();
         if (isNew != null) {
-            stmt.bindLong(7, isNew ? 1L: 0L);
+            stmt.bindLong(8, isNew ? 1L: 0L);
         }
  
         Boolean isUpdated = entity.getIsUpdated();
         if (isUpdated != null) {
-            stmt.bindLong(8, isUpdated ? 1L: 0L);
+            stmt.bindLong(9, isUpdated ? 1L: 0L);
         }
  
         Boolean isDeleted = entity.getIsDeleted();
         if (isDeleted != null) {
-            stmt.bindLong(9, isDeleted ? 1L: 0L);
+            stmt.bindLong(10, isDeleted ? 1L: 0L);
         }
-        stmt.bindString(10, entity.getCreated());
+        stmt.bindString(11, entity.getCreated());
     }
 
     /** @inheritdoc */
@@ -132,15 +139,16 @@ public class DbCallLogEventDao extends AbstractDao<DbCallLogEvent, Long> {
     public DbCallLogEvent readEntity(Cursor cursor, int offset) {
         DbCallLogEvent entity = new DbCallLogEvent( //
             cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0), // id
-            cursor.isNull(offset + 1) ? null : cursor.getInt(offset + 1), // type
-            cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // name
-            cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // number
-            cursor.isNull(offset + 4) ? null : cursor.getLong(offset + 4), // date
-            cursor.isNull(offset + 5) ? null : cursor.getLong(offset + 5), // duration
-            cursor.isNull(offset + 6) ? null : cursor.getShort(offset + 6) != 0, // isNew
-            cursor.isNull(offset + 7) ? null : cursor.getShort(offset + 7) != 0, // isUpdated
-            cursor.isNull(offset + 8) ? null : cursor.getShort(offset + 8) != 0, // isDeleted
-            cursor.getString(offset + 9) // created
+            cursor.isNull(offset + 1) ? null : cursor.getLong(offset + 1), // callId
+            cursor.isNull(offset + 2) ? null : cursor.getInt(offset + 2), // type
+            cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // name
+            cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4), // number
+            cursor.isNull(offset + 5) ? null : cursor.getLong(offset + 5), // date
+            cursor.isNull(offset + 6) ? null : cursor.getLong(offset + 6), // duration
+            cursor.isNull(offset + 7) ? null : cursor.getShort(offset + 7) != 0, // isNew
+            cursor.isNull(offset + 8) ? null : cursor.getShort(offset + 8) != 0, // isUpdated
+            cursor.isNull(offset + 9) ? null : cursor.getShort(offset + 9) != 0, // isDeleted
+            cursor.getString(offset + 10) // created
         );
         return entity;
     }
@@ -149,15 +157,16 @@ public class DbCallLogEventDao extends AbstractDao<DbCallLogEvent, Long> {
     @Override
     public void readEntity(Cursor cursor, DbCallLogEvent entity, int offset) {
         entity.setId(cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0));
-        entity.setType(cursor.isNull(offset + 1) ? null : cursor.getInt(offset + 1));
-        entity.setName(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
-        entity.setNumber(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
-        entity.setDate(cursor.isNull(offset + 4) ? null : cursor.getLong(offset + 4));
-        entity.setDuration(cursor.isNull(offset + 5) ? null : cursor.getLong(offset + 5));
-        entity.setIsNew(cursor.isNull(offset + 6) ? null : cursor.getShort(offset + 6) != 0);
-        entity.setIsUpdated(cursor.isNull(offset + 7) ? null : cursor.getShort(offset + 7) != 0);
-        entity.setIsDeleted(cursor.isNull(offset + 8) ? null : cursor.getShort(offset + 8) != 0);
-        entity.setCreated(cursor.getString(offset + 9));
+        entity.setCallId(cursor.isNull(offset + 1) ? null : cursor.getLong(offset + 1));
+        entity.setType(cursor.isNull(offset + 2) ? null : cursor.getInt(offset + 2));
+        entity.setName(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
+        entity.setNumber(cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4));
+        entity.setDate(cursor.isNull(offset + 5) ? null : cursor.getLong(offset + 5));
+        entity.setDuration(cursor.isNull(offset + 6) ? null : cursor.getLong(offset + 6));
+        entity.setIsNew(cursor.isNull(offset + 7) ? null : cursor.getShort(offset + 7) != 0);
+        entity.setIsUpdated(cursor.isNull(offset + 8) ? null : cursor.getShort(offset + 8) != 0);
+        entity.setIsDeleted(cursor.isNull(offset + 9) ? null : cursor.getShort(offset + 9) != 0);
+        entity.setCreated(cursor.getString(offset + 10));
      }
     
     /** @inheritdoc */

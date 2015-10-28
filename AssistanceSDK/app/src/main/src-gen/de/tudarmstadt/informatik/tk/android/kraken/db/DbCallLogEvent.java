@@ -7,6 +7,7 @@ package de.tudarmstadt.informatik.tk.android.kraken.db;
 public class DbCallLogEvent implements de.tudarmstadt.informatik.tk.android.kraken.interfaces.IDbUpdatableSensor {
 
     private Long id;
+    private Long callId;
     private Integer type;
     private String name;
     private String number;
@@ -25,8 +26,9 @@ public class DbCallLogEvent implements de.tudarmstadt.informatik.tk.android.krak
         this.id = id;
     }
 
-    public DbCallLogEvent(Long id, Integer type, String name, String number, Long date, Long duration, Boolean isNew, Boolean isUpdated, Boolean isDeleted, String created) {
+    public DbCallLogEvent(Long id, Long callId, Integer type, String name, String number, Long date, Long duration, Boolean isNew, Boolean isUpdated, Boolean isDeleted, String created) {
         this.id = id;
+        this.callId = callId;
         this.type = type;
         this.name = name;
         this.number = number;
@@ -44,6 +46,14 @@ public class DbCallLogEvent implements de.tudarmstadt.informatik.tk.android.krak
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Long getCallId() {
+        return callId;
+    }
+
+    public void setCallId(Long callId) {
+        this.callId = callId;
     }
 
     public Integer getType() {
