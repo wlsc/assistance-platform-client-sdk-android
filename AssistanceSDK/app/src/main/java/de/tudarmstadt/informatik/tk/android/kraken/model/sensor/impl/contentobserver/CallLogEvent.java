@@ -1,12 +1,20 @@
 package de.tudarmstadt.informatik.tk.android.kraken.model.sensor.impl.contentobserver;
 
+import android.content.ContentResolver;
 import android.content.Context;
+import android.database.Cursor;
 import android.net.Uri;
+import android.provider.CallLog;
 
+import de.tudarmstadt.informatik.tk.android.kraken.db.DbCallLogEvent;
 import de.tudarmstadt.informatik.tk.android.kraken.model.api.sensors.SensorType;
 import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.AbstractContentObserverEvent;
-import de.tudarmstadt.informatik.tk.android.kraken.provider.DbProvider;
 
+/**
+ * @author Unknown
+ * @edited by Wladimir Schmidt (wlsc.dev@gmail.com)
+ * @date 27.10.2015
+ */
 public class CallLogEvent extends AbstractContentObserverEvent {
 
     protected static final Uri URI_CALL_LOG = android.provider.CallLog.Calls.CONTENT_URI;
@@ -39,6 +47,7 @@ public class CallLogEvent extends AbstractContentObserverEvent {
 
             @Override
             public void run() {
+
                 syncData();
                 context.getContentResolver().registerContentObserver(URI_CALL_LOG, true, mObserver);
             }
@@ -51,47 +60,53 @@ public class CallLogEvent extends AbstractContentObserverEvent {
     @Override
     protected void syncData() {
 
-        if (mDaoSession == null) {
-            mDaoSession = DbProvider.getInstance(context).getDaoSession();
+        if (context == null) {
+            return;
         }
-        //throw new IllegalAccessError("no valid daoSession available!");
 
-//		SensorCallLogDao daoObject = mDaoSession.getSensorCallLogDao();
-//		Property propId = SensorCallLogDao.Properties.CallId;
-//		SensorCallLog lastItem = daoObject.queryBuilder().orderDesc(propId).limit(1).unique();
+        long longLastKnownCallLogId = -1;
 
-//		long longLastKnownCallLogId = -1;
-//		if (lastItem != null)
-//			longLastKnownCallLogId = lastItem.getCallId();
-//
-//		ContentResolver cr = context.getContentResolver();
-//		Cursor cur = cr
-//				.query(android.provider.CallLog.Calls.CONTENT_URI, null, Calls._ID + ">?", new String[] { String.valueOf(longLastKnownCallLogId) }, null);
-//		if (cur == null || cur.getCount() == 0)
-//			return;
-//
-//		// Iterate over event
-//		while (cur.moveToNext() && isRunning) {
-//			SensorCallLog callLog = new SensorCallLog();
-//			callLog.setCallId(getLongByColumnName(cur, Calls._ID));
-//			callLog.setType(getIntByColumnName(cur, Calls.TYPE));
-//			callLog.setNumber(getStringByColumnName(cur, Calls.NUMBER));
-//			callLog.setName(getStringByColumnName(cur, Calls.CACHED_NAME));
-//			callLog.setDate(getLongByColumnName(cur, Calls.DATE));
-//			callLog.setDuration(getLongByColumnName(cur, Calls.DURATION));
-//			callLog.setIsNew(true);
-//			callLog.setIsDeleted(false);
-//			callLog.setIsUpdated(false);
-//			handleDBEntry(callLog, false, true, false);
-//		}
-//		cur.close();
+        DbCallLogEvent lastItem = dbProvider.getLastCallLogEvent();
 
-//        String strFullqualifiedDatabaseClassName = getType().getFullqualifiedDatabaseClassName();
-//        //SensorData callLogs = flushData(mDaoSession, strFullqualifiedDatabaseClassName);
-//        //ServerPushManager.getInstance(context).flushManually(callLogs);
-//        ApiMessage.DataWrapper callLogs = flushDataRetro(strFullqualifiedDatabaseClassName);
-//        if (callLogs != null) {
-//            RetroServerPushManager.getInstance(context).flushManually(getPushType(), callLogs);
-//        }
+        if (lastItem != null) {
+            longLastKnownCallLogId = lastItem.getCallId();
+        }
+
+        Cursor cur = null;
+
+        try {
+
+            ContentResolver cr = context.getContentResolver();
+
+            cur = cr.query(android.provider.CallLog.Calls.CONTENT_URI,
+                    null,
+                    CallLog.Calls._ID + ">?",
+                    new String[]{String.valueOf(longLastKnownCallLogId)},
+                    null);
+
+            if (cur == null || cur.getCount() == 0) {
+                return;
+            }
+
+            // Iterate over event
+            while (cur.moveToNext() && isRunning()) {
+
+                DbCallLogEvent callLogEvent = new DbCallLogEvent();
+
+                callLogEvent.setCallId(getLongByColumnName(cur, CallLog.Calls._ID));
+                callLogEvent.setType(getIntByColumnName(cur, CallLog.Calls.TYPE));
+                callLogEvent.setNumber(getStringByColumnName(cur, CallLog.Calls.NUMBER));
+                callLogEvent.setName(getStringByColumnName(cur, CallLog.Calls.CACHED_NAME));
+                callLogEvent.setDate(getLongByColumnName(cur, CallLog.Calls.DATE));
+                callLogEvent.setDuration(getLongByColumnName(cur, CallLog.Calls.DURATION));
+                callLogEvent.setIsNew(true);
+                callLogEvent.setIsDeleted(false);
+                callLogEvent.setIsUpdated(false);
+
+                dbProvider.insertEventEntry(callLogEvent, getType());
+            }
+        } finally {
+            cur.close();
+        }
     }
 }

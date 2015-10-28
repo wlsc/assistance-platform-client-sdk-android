@@ -16,6 +16,8 @@ import de.tudarmstadt.informatik.tk.android.kraken.db.DaoMaster;
 import de.tudarmstadt.informatik.tk.android.kraken.db.DaoSession;
 import de.tudarmstadt.informatik.tk.android.kraken.db.DbAccelerometerSensor;
 import de.tudarmstadt.informatik.tk.android.kraken.db.DbAccelerometerSensorDao;
+import de.tudarmstadt.informatik.tk.android.kraken.db.DbCallLogEvent;
+import de.tudarmstadt.informatik.tk.android.kraken.db.DbCallLogEventDao;
 import de.tudarmstadt.informatik.tk.android.kraken.db.DbConnectionEvent;
 import de.tudarmstadt.informatik.tk.android.kraken.db.DbConnectionEventDao;
 import de.tudarmstadt.informatik.tk.android.kraken.db.DbDevice;
@@ -55,6 +57,7 @@ import de.tudarmstadt.informatik.tk.android.kraken.model.api.sensors.LocationSen
 import de.tudarmstadt.informatik.tk.android.kraken.model.api.sensors.MotionActivityEventRequest;
 import de.tudarmstadt.informatik.tk.android.kraken.model.api.sensors.SensorType;
 import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.Sensor;
+import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.impl.contentobserver.CallLogEvent;
 import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.impl.triggered.AccelerometerSensor;
 import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.impl.triggered.ConnectionSensor;
 import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.impl.triggered.ForegroundEvent;
@@ -113,6 +116,7 @@ public class DbProvider {
     private DbMobileConnectionEventDao mobileConnectionEventDao;
     private DbWifiConnectionEventDao wifiConnectionEventDao;
     private DbNetworkTrafficEventDao networkTrafficEventDao;
+    private DbCallLogEventDao callLogEventDao;
 
     /**
      * Lists with transmitted db objects to remove them after
@@ -203,6 +207,10 @@ public class DbProvider {
 
         if (networkTrafficEventDao == null) {
             networkTrafficEventDao = getDaoSession().getDbNetworkTrafficEventDao();
+        }
+
+        if (callLogEventDao == null) {
+            callLogEventDao = getDaoSession().getDbCallLogEventDao();
         }
     }
 
@@ -672,6 +680,16 @@ public class DbProvider {
 
                 Log.d(ForegroundTrafficEvent.class.getSimpleName(), "Finished dumping data");
                 break;
+
+            case SensorType.CALL_LOG:
+
+                Log.d(CallLogEvent.class.getSimpleName(),
+                        "Dumping CALL LOG EVENT data to db...");
+
+                result = callLogEventDao.insertOrReplace((DbCallLogEvent) sensor);
+
+                Log.d(CallLogEvent.class.getSimpleName(), "Finished dumping data");
+                break;
         }
 
         return result;
@@ -963,5 +981,19 @@ public class DbProvider {
         }
 
         moduleInstallationDao.deleteInTx(moduleInstallations);
+    }
+
+    /**
+     * Returns last element from table
+     *
+     * @return
+     */
+    public DbCallLogEvent getLastCallLogEvent() {
+        return callLogEventDao
+                .queryBuilder()
+                .orderDesc(DbCallLogEventDao.Properties.Id)
+                .limit(1)
+                .build()
+                .unique();
     }
 }
