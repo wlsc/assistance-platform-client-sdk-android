@@ -7,7 +7,7 @@ import android.view.accessibility.AccessibilityEvent;
 
 import de.tudarmstadt.informatik.tk.android.kraken.provider.PreferenceProvider;
 import de.tudarmstadt.informatik.tk.android.kraken.provider.SensorProvider;
-import de.tudarmstadt.informatik.tk.android.kraken.model.api.sensors.SensorType;
+import de.tudarmstadt.informatik.tk.android.kraken.model.api.dto.DTOType;
 import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.impl.triggered.ForegroundEvent;
 import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.impl.triggered.ForegroundTrafficEvent;
 
@@ -32,11 +32,11 @@ public class AssistanceAccessibilityService extends AccessibilityService {
 
         mForegroundSensor = (ForegroundEvent) SensorProvider
                 .getInstance(getApplicationContext())
-                .getSensor(SensorType.FOREGROUND);
+                .getSensor(DTOType.FOREGROUND);
 
         mForegroundTrafficEvent = (ForegroundTrafficEvent) SensorProvider
                 .getInstance(getApplicationContext())
-                .getSensor(SensorType.NETWORK_TRAFFIC);
+                .getSensor(DTOType.NETWORK_TRAFFIC);
 
         Log.d(TAG, "Successfully started.");
     }

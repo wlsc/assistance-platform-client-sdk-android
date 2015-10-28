@@ -8,7 +8,7 @@ import android.content.Context;
 import java.util.LinkedList;
 import java.util.List;
 
-import de.tudarmstadt.informatik.tk.android.kraken.model.api.sensors.SensorType;
+import de.tudarmstadt.informatik.tk.android.kraken.model.api.dto.DTOType;
 import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.AbstractPeriodicEvent;
 import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.ISensor;
 
@@ -33,7 +33,7 @@ public class RunningAppsReaderEvent extends AbstractPeriodicEvent implements ISe
 
     @Override
     public int getType() {
-        return SensorType.ONE_TIME_SENSOR_RUNNING_SERVICES;
+        return DTOType.ONE_TIME_SENSOR_RUNNING_SERVICES;
     }
 
     @Override

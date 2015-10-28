@@ -51,11 +51,11 @@ import de.tudarmstadt.informatik.tk.android.kraken.db.DbUserDao;
 import de.tudarmstadt.informatik.tk.android.kraken.db.DbWifiConnectionEvent;
 import de.tudarmstadt.informatik.tk.android.kraken.db.DbWifiConnectionEventDao;
 import de.tudarmstadt.informatik.tk.android.kraken.interfaces.IDbSensor;
-import de.tudarmstadt.informatik.tk.android.kraken.model.api.sensors.AccelerometerSensorRequest;
-import de.tudarmstadt.informatik.tk.android.kraken.model.api.sensors.ForegroundEventRequest;
-import de.tudarmstadt.informatik.tk.android.kraken.model.api.sensors.LocationSensorRequest;
-import de.tudarmstadt.informatik.tk.android.kraken.model.api.sensors.MotionActivityEventRequest;
-import de.tudarmstadt.informatik.tk.android.kraken.model.api.sensors.SensorType;
+import de.tudarmstadt.informatik.tk.android.kraken.model.api.dto.sensor.AccelerometerSensorRequest;
+import de.tudarmstadt.informatik.tk.android.kraken.model.api.dto.event.ForegroundEventRequest;
+import de.tudarmstadt.informatik.tk.android.kraken.model.api.dto.sensor.LocationSensorRequest;
+import de.tudarmstadt.informatik.tk.android.kraken.model.api.dto.event.MotionActivityEventRequest;
+import de.tudarmstadt.informatik.tk.android.kraken.model.api.dto.DTOType;
 import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.Sensor;
 import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.impl.contentobserver.CallLogEvent;
 import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.impl.triggered.AccelerometerSensor;
@@ -324,22 +324,22 @@ public class DbProvider {
             int sensorType = events.keyAt(i);
 
             switch (sensorType) {
-                case SensorType.ACCELEROMETER:
+                case DTOType.ACCELEROMETER:
                     if (dbAccelerometerSensors != null) {
                         accelerometerSensorDao.deleteInTx(dbAccelerometerSensors);
                     }
                     break;
-                case SensorType.LOCATION:
+                case DTOType.LOCATION:
                     if (dbPositionSensors != null) {
                         positionSensorDao.deleteInTx(dbPositionSensors);
                     }
                     break;
-                case SensorType.MOTION_ACTIVITY:
+                case DTOType.MOTION_ACTIVITY:
                     if (dbMotionActivityEvents != null) {
                         motionActivityEventDao.deleteInTx(dbMotionActivityEvents);
                     }
                     break;
-                case SensorType.FOREGROUND:
+                case DTOType.FOREGROUND:
                     if (dbForegroundEvents != null) {
                         foregroundEventDao.deleteInTx(dbForegroundEvents);
                     }
@@ -361,16 +361,16 @@ public class DbProvider {
         SparseArrayCompat<List<Sensor>> entries = new SparseArrayCompat<>();
 
         List<Sensor> accelerometerList = getAccelerometerEntries(numberOfElements);
-        entries.put(SensorType.ACCELEROMETER, accelerometerList);
+        entries.put(DTOType.ACCELEROMETER, accelerometerList);
 
         List<Sensor> positionList = getPositionEntries(numberOfElements);
-        entries.put(SensorType.LOCATION, positionList);
+        entries.put(DTOType.LOCATION, positionList);
 
         List<Sensor> motionActivityList = getMotionActivityEntries(numberOfElements);
-        entries.put(SensorType.MOTION_ACTIVITY, motionActivityList);
+        entries.put(DTOType.MOTION_ACTIVITY, motionActivityList);
 
         List<Sensor> foregroundEventList = getForegroundEventEntries(numberOfElements);
-        entries.put(SensorType.FOREGROUND, foregroundEventList);
+        entries.put(DTOType.FOREGROUND, foregroundEventList);
 
         return entries;
     }
@@ -405,8 +405,8 @@ public class DbProvider {
 
                 AccelerometerSensorRequest accelerometerSensorRequest = new AccelerometerSensorRequest();
 
-                accelerometerSensorRequest.setType(SensorType.ACCELEROMETER);
-                accelerometerSensorRequest.setTypeStr(SensorType.getApiName(SensorType.ACCELEROMETER));
+                accelerometerSensorRequest.setType(DTOType.ACCELEROMETER);
+                accelerometerSensorRequest.setTypeStr(DTOType.getApiName(DTOType.ACCELEROMETER));
                 accelerometerSensorRequest.setX(sensor.getX());
                 accelerometerSensorRequest.setY(sensor.getY());
                 accelerometerSensorRequest.setZ(sensor.getZ());
@@ -450,8 +450,8 @@ public class DbProvider {
 
                 LocationSensorRequest locationSensorRequest = new LocationSensorRequest();
 
-                locationSensorRequest.setType(SensorType.LOCATION);
-                locationSensorRequest.setTypeStr(SensorType.getApiName(SensorType.LOCATION));
+                locationSensorRequest.setType(DTOType.LOCATION);
+                locationSensorRequest.setTypeStr(DTOType.getApiName(DTOType.LOCATION));
                 locationSensorRequest.setLatitude(sensor.getLatitude());
                 locationSensorRequest.setLongitude(sensor.getLongitude());
                 locationSensorRequest.setAccuracyHorizontal(sensor.getAccuracyHorizontal());
@@ -497,8 +497,8 @@ public class DbProvider {
 
                 MotionActivityEventRequest motionActivityEventRequest = new MotionActivityEventRequest();
 
-                motionActivityEventRequest.setType(SensorType.MOTION_ACTIVITY);
-                motionActivityEventRequest.setTypeStr(SensorType.getApiName(SensorType.MOTION_ACTIVITY));
+                motionActivityEventRequest.setType(DTOType.MOTION_ACTIVITY);
+                motionActivityEventRequest.setTypeStr(DTOType.getApiName(DTOType.MOTION_ACTIVITY));
                 motionActivityEventRequest.setRunning(sensor.getRunning());
                 motionActivityEventRequest.setStationary(sensor.getStationary());
                 motionActivityEventRequest.setCycling(sensor.getCycling());
@@ -547,8 +547,8 @@ public class DbProvider {
 
                 ForegroundEventRequest foregroundEventRequest = new ForegroundEventRequest();
 
-                foregroundEventRequest.setType(SensorType.FOREGROUND);
-                foregroundEventRequest.setTypeStr(SensorType.getApiName(SensorType.FOREGROUND));
+                foregroundEventRequest.setType(DTOType.FOREGROUND);
+                foregroundEventRequest.setTypeStr(DTOType.getApiName(DTOType.FOREGROUND));
                 foregroundEventRequest.setAppName(sensor.getAppName());
                 foregroundEventRequest.setActivityLabel(sensor.getActivityLabel());
                 foregroundEventRequest.setClassName(sensor.getClassName());
@@ -556,7 +556,7 @@ public class DbProvider {
                 foregroundEventRequest.setKeystrokes(sensor.getKeystrokes());
                 foregroundEventRequest.setPackageName(sensor.getPackageName());
                 foregroundEventRequest.setUrl(sensor.getUrl());
-                foregroundEventRequest.setEventType(SensorType.getName(sensor.getEventType(), mContext.getResources()));
+                foregroundEventRequest.setEventType(DTOType.getName(sensor.getEventType(), mContext.getResources()));
                 foregroundEventRequest.setCreated(sensor.getCreated());
 
                 result.add(foregroundEventRequest);
@@ -581,7 +581,7 @@ public class DbProvider {
         long result = -1l;
 
         switch (type) {
-            case SensorType.ACCELEROMETER:
+            case DTOType.ACCELEROMETER:
 
                 Log.d(AccelerometerSensor.class.getSimpleName(), "Dumping data to db...");
 
@@ -590,7 +590,7 @@ public class DbProvider {
                 Log.d(AccelerometerSensor.class.getSimpleName(), "Finished dumping data");
                 break;
 
-            case SensorType.GYROSCOPE:
+            case DTOType.GYROSCOPE:
 
                 Log.d(GyroscopeSensor.class.getSimpleName(), "Dumping data to db...");
 
@@ -599,7 +599,7 @@ public class DbProvider {
                 Log.d(GyroscopeSensor.class.getSimpleName(), "Finished dumping data");
                 break;
 
-            case SensorType.MAGNETIC_FIELD:
+            case DTOType.MAGNETIC_FIELD:
 
                 Log.d(MagneticFieldSensor.class.getSimpleName(), "Dumping data to db...");
 
@@ -608,7 +608,7 @@ public class DbProvider {
                 Log.d(MagneticFieldSensor.class.getSimpleName(), "Finished dumping data");
                 break;
 
-            case SensorType.LOCATION:
+            case DTOType.LOCATION:
 
                 Log.d(LocationSensor.class.getSimpleName(), "Dumping data to db...");
 
@@ -617,7 +617,7 @@ public class DbProvider {
                 Log.d(LocationSensor.class.getSimpleName(), "Finished dumping data");
                 break;
 
-            case SensorType.FOREGROUND:
+            case DTOType.FOREGROUND:
 
                 Log.d(ForegroundEvent.class.getSimpleName(), "Dumping data to db...");
 
@@ -626,7 +626,7 @@ public class DbProvider {
                 Log.d(ForegroundEvent.class.getSimpleName(), "Finished dumping data");
                 break;
 
-            case SensorType.MOTION_ACTIVITY:
+            case DTOType.MOTION_ACTIVITY:
 
                 Log.d(MotionActivityEvent.class.getSimpleName(), "Dumping data to db...");
 
@@ -635,7 +635,7 @@ public class DbProvider {
                 Log.d(MotionActivityEvent.class.getSimpleName(), "Finished dumping data");
                 break;
 
-            case SensorType.LIGHT:
+            case DTOType.LIGHT:
 
                 Log.d(LightSensor.class.getSimpleName(), "Dumping data to db...");
 
@@ -644,7 +644,7 @@ public class DbProvider {
                 Log.d(LightSensor.class.getSimpleName(), "Finished dumping data");
                 break;
 
-            case SensorType.CONNECTION:
+            case DTOType.CONNECTION:
 
                 Log.d(ConnectionSensor.class.getSimpleName(), "Dumping CONNECTION data to db...");
 
@@ -653,7 +653,7 @@ public class DbProvider {
                 Log.d(ConnectionSensor.class.getSimpleName(), "Finished dumping data");
                 break;
 
-            case SensorType.MOBILE_DATA_CONNECTION:
+            case DTOType.MOBILE_DATA_CONNECTION:
 
                 Log.d(ConnectionSensor.class.getSimpleName(), "Dumping MOBILE CONNECTION data to db...");
 
@@ -662,7 +662,7 @@ public class DbProvider {
                 Log.d(ConnectionSensor.class.getSimpleName(), "Finished dumping data");
                 break;
 
-            case SensorType.WIFI_CONNECTION:
+            case DTOType.WIFI_CONNECTION:
 
                 Log.d(ConnectionSensor.class.getSimpleName(), "Dumping WIFI CONNECTION data to db...");
 
@@ -671,7 +671,7 @@ public class DbProvider {
                 Log.d(ConnectionSensor.class.getSimpleName(), "Finished dumping data");
                 break;
 
-            case SensorType.NETWORK_TRAFFIC:
+            case DTOType.NETWORK_TRAFFIC:
 
                 Log.d(ForegroundTrafficEvent.class.getSimpleName(),
                         "Dumping NETWORK TRAFFIC data to db...");
@@ -681,7 +681,7 @@ public class DbProvider {
                 Log.d(ForegroundTrafficEvent.class.getSimpleName(), "Finished dumping data");
                 break;
 
-            case SensorType.CALL_LOG:
+            case DTOType.CALL_LOG:
 
                 Log.d(CallLogEvent.class.getSimpleName(),
                         "Dumping CALL LOG EVENT data to db...");

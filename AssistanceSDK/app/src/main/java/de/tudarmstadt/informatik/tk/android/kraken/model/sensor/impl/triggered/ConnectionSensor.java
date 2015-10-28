@@ -17,7 +17,7 @@ import java.util.Locale;
 import de.tudarmstadt.informatik.tk.android.kraken.db.DbConnectionEvent;
 import de.tudarmstadt.informatik.tk.android.kraken.db.DbMobileConnectionEvent;
 import de.tudarmstadt.informatik.tk.android.kraken.db.DbWifiConnectionEvent;
-import de.tudarmstadt.informatik.tk.android.kraken.model.api.sensors.SensorType;
+import de.tudarmstadt.informatik.tk.android.kraken.model.api.dto.DTOType;
 import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.AbstractTriggeredEvent;
 import de.tudarmstadt.informatik.tk.android.kraken.util.DateUtils;
 import de.tudarmstadt.informatik.tk.android.kraken.util.DeviceUtils;
@@ -76,7 +76,7 @@ public class ConnectionSensor extends AbstractTriggeredEvent {
         connectionEvent.setIsWifi(isWifiDataAvailable);
         connectionEvent.setCreated(created);
 
-        dbProvider.insertEventEntry(connectionEvent, SensorType.CONNECTION);
+        dbProvider.insertEventEntry(connectionEvent, DTOType.CONNECTION);
 
         /**
          * Mobile data information
@@ -88,7 +88,7 @@ public class ConnectionSensor extends AbstractTriggeredEvent {
         mobileConnectionEvent.setMobileNetworkCode(mobileNetworkCode);
         mobileConnectionEvent.setCreated(created);
 
-        dbProvider.insertEventEntry(mobileConnectionEvent, SensorType.MOBILE_DATA_CONNECTION);
+        dbProvider.insertEventEntry(mobileConnectionEvent, DTOType.MOBILE_DATA_CONNECTION);
 
         /**
          * WIFI data information
@@ -104,7 +104,7 @@ public class ConnectionSensor extends AbstractTriggeredEvent {
         wifiConnectionEvent.setNetworkId(networkId);
         wifiConnectionEvent.setCreated(created);
 
-        dbProvider.insertEventEntry(wifiConnectionEvent, SensorType.WIFI_CONNECTION);
+        dbProvider.insertEventEntry(wifiConnectionEvent, DTOType.WIFI_CONNECTION);
     }
 
     @Override
@@ -140,7 +140,7 @@ public class ConnectionSensor extends AbstractTriggeredEvent {
 
     @Override
     public int getType() {
-        return SensorType.CONNECTION;
+        return DTOType.CONNECTION;
     }
 
     @Override

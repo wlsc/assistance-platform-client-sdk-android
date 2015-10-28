@@ -1,9 +1,10 @@
-package de.tudarmstadt.informatik.tk.android.kraken.model.api.sensors;
+package de.tudarmstadt.informatik.tk.android.kraken.model.api.dto.event;
 
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import de.tudarmstadt.informatik.tk.android.kraken.model.api.dto.DTOType;
 import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.Sensor;
 
 /**
@@ -43,15 +44,15 @@ public class MobileConnectionEventRequest implements Sensor {
     private int type;
 
     public MobileConnectionEventRequest() {
-        this.type = SensorType.MOBILE_DATA_CONNECTION;
-        this.typeStr = SensorType.getApiName(this.type);
+        this.type = DTOType.MOBILE_DATA_CONNECTION;
+        this.typeStr = DTOType.getApiName(this.type);
 
     }
 
     public MobileConnectionEventRequest(long id) {
         this.id = id;
-        this.type = SensorType.MOBILE_DATA_CONNECTION;
-        this.typeStr = SensorType.getApiName(this.type);
+        this.type = DTOType.MOBILE_DATA_CONNECTION;
+        this.typeStr = DTOType.getApiName(this.type);
     }
 
     public MobileConnectionEventRequest(long id, String carrierName, String mobileCarrierCode, String mobileNetworkCode, String created, Boolean voipAvailable) {
@@ -61,8 +62,8 @@ public class MobileConnectionEventRequest implements Sensor {
         this.mobileNetworkCode = mobileNetworkCode;
         this.created = created;
         this.voipAvailable = voipAvailable;
-        this.type = SensorType.MOBILE_DATA_CONNECTION;
-        this.typeStr = SensorType.getApiName(this.type);
+        this.type = DTOType.MOBILE_DATA_CONNECTION;
+        this.typeStr = DTOType.getApiName(this.type);
     }
 
     public Long getId() {

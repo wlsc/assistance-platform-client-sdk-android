@@ -1,8 +1,9 @@
-package de.tudarmstadt.informatik.tk.android.kraken.model.api.sensors;
+package de.tudarmstadt.informatik.tk.android.kraken.model.api.dto.event;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import de.tudarmstadt.informatik.tk.android.kraken.model.api.dto.DTOType;
 import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.Sensor;
 
 /**
@@ -34,14 +35,14 @@ public class ConnectionEventRequest implements Sensor {
     private int type;
 
     public ConnectionEventRequest() {
-        this.type = SensorType.CONNECTION;
-        this.typeStr = SensorType.getApiName(this.type);
+        this.type = DTOType.CONNECTION;
+        this.typeStr = DTOType.getApiName(this.type);
     }
 
     public ConnectionEventRequest(long id) {
         this.id = id;
-        this.type = SensorType.CONNECTION;
-        this.typeStr = SensorType.getApiName(this.type);
+        this.type = DTOType.CONNECTION;
+        this.typeStr = DTOType.getApiName(this.type);
     }
 
     public ConnectionEventRequest(long id, boolean isWifi, boolean isMobile, String created) {
@@ -49,8 +50,8 @@ public class ConnectionEventRequest implements Sensor {
         this.wifi = isWifi;
         this.mobile = isMobile;
         this.created = created;
-        this.type = SensorType.CONNECTION;
-        this.typeStr = SensorType.getApiName(this.type);
+        this.type = DTOType.CONNECTION;
+        this.typeStr = DTOType.getApiName(this.type);
     }
 
     public Long getId() {

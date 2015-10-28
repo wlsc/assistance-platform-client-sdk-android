@@ -1,4 +1,4 @@
-package de.tudarmstadt.informatik.tk.android.kraken.model.api.sensors;
+package de.tudarmstadt.informatik.tk.android.kraken.model.api.dto;
 
 import android.content.res.Resources;
 
@@ -8,7 +8,7 @@ import de.tudarmstadt.informatik.tk.android.kraken.R;
  * @author Wladimir Schmidt (wlsc.dev@gmail.com)
  * @date 30.08.2015
  */
-public class SensorType {
+public class DTOType {
 
     /**
      * Type of sensors and events
@@ -58,7 +58,7 @@ public class SensorType {
 
     public static final int NETWORK_TRAFFIC = 24;
 
-    private SensorType() {
+    private DTOType() {
     }
 
     public static final String getName(int type, Resources res) {

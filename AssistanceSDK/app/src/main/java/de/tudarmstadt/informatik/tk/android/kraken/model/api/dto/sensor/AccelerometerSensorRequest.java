@@ -1,8 +1,9 @@
-package de.tudarmstadt.informatik.tk.android.kraken.model.api.sensors;
+package de.tudarmstadt.informatik.tk.android.kraken.model.api.dto.sensor;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import de.tudarmstadt.informatik.tk.android.kraken.model.api.dto.DTOType;
 import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.Sensor;
 
 /**
@@ -43,14 +44,14 @@ public class AccelerometerSensorRequest implements Sensor {
     private int type;
 
     public AccelerometerSensorRequest() {
-        this.type = SensorType.ACCELEROMETER;
-        this.typeStr = SensorType.getApiName(this.type);
+        this.type = DTOType.ACCELEROMETER;
+        this.typeStr = DTOType.getApiName(this.type);
     }
 
     public AccelerometerSensorRequest(long id) {
         this.id = id;
-        this.type = SensorType.ACCELEROMETER;
-        this.typeStr = SensorType.getApiName(this.type);
+        this.type = DTOType.ACCELEROMETER;
+        this.typeStr = DTOType.getApiName(this.type);
     }
 
     public AccelerometerSensorRequest(long id, Double x, Double y, Double z, String created, Integer accuracy) {
@@ -60,8 +61,8 @@ public class AccelerometerSensorRequest implements Sensor {
         this.z = z;
         this.created = created;
         this.accuracy = accuracy;
-        this.type = SensorType.ACCELEROMETER;
-        this.typeStr = SensorType.getApiName(this.type);
+        this.type = DTOType.ACCELEROMETER;
+        this.typeStr = DTOType.getApiName(this.type);
     }
 
     public Long getId() {

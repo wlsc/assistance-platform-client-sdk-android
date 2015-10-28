@@ -19,7 +19,7 @@ import java.util.Locale;
 import java.util.Map;
 
 import de.tudarmstadt.informatik.tk.android.kraken.db.DbForegroundEvent;
-import de.tudarmstadt.informatik.tk.android.kraken.model.api.sensors.SensorType;
+import de.tudarmstadt.informatik.tk.android.kraken.model.api.dto.DTOType;
 import de.tudarmstadt.informatik.tk.android.kraken.model.enums.EPushType;
 import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.AbstractTriggeredEvent;
 import de.tudarmstadt.informatik.tk.android.kraken.provider.DbProvider;
@@ -204,7 +204,7 @@ public class ForegroundEvent extends AbstractTriggeredEvent {
 
     @Override
     public int getType() {
-        return SensorType.FOREGROUND;
+        return DTOType.FOREGROUND;
     }
 
     /**

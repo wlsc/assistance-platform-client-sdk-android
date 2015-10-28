@@ -1,9 +1,10 @@
-package de.tudarmstadt.informatik.tk.android.kraken.model.api.sensors;
+package de.tudarmstadt.informatik.tk.android.kraken.model.api.dto.sensor;
 
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import de.tudarmstadt.informatik.tk.android.kraken.model.api.dto.DTOType;
 import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.Sensor;
 
 /**
@@ -64,14 +65,14 @@ public class GyroscopeSensorRequest implements Sensor {
     private int type;
 
     public GyroscopeSensorRequest() {
-        this.type = SensorType.GYROSCOPE;
-        this.typeStr = SensorType.getApiName(this.type);
+        this.type = DTOType.GYROSCOPE;
+        this.typeStr = DTOType.getApiName(this.type);
     }
 
     public GyroscopeSensorRequest(long id) {
         this.id = id;
-        this.type = SensorType.GYROSCOPE;
-        this.typeStr = SensorType.getApiName(this.type);
+        this.type = DTOType.GYROSCOPE;
+        this.typeStr = DTOType.getApiName(this.type);
     }
 
     public GyroscopeSensorRequest(Long id, Double x, Double y, Double z, float xUncalibratedNoDrift, float yUncalibratedNoDrift, float zUncalibratedNoDrift, float xUncalibratedEstimatedDrift, float yUncalibratedEstimatedDrift, float zUncalibratedEstimatedDrift, String created) {
@@ -86,8 +87,8 @@ public class GyroscopeSensorRequest implements Sensor {
         this.yUncalibratedEstimatedDrift = yUncalibratedEstimatedDrift;
         this.zUncalibratedEstimatedDrift = zUncalibratedEstimatedDrift;
         this.created = created;
-        this.type = SensorType.GYROSCOPE;
-        this.typeStr = SensorType.getApiName(this.type);
+        this.type = DTOType.GYROSCOPE;
+        this.typeStr = DTOType.getApiName(this.type);
     }
 
     public Long getId() {

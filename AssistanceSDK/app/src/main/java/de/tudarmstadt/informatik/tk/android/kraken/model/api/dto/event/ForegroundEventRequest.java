@@ -1,8 +1,9 @@
-package de.tudarmstadt.informatik.tk.android.kraken.model.api.sensors;
+package de.tudarmstadt.informatik.tk.android.kraken.model.api.dto.event;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import de.tudarmstadt.informatik.tk.android.kraken.model.api.dto.DTOType;
 import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.Sensor;
 
 /**
@@ -58,14 +59,14 @@ public class ForegroundEventRequest implements Sensor {
     private int type;
 
     public ForegroundEventRequest() {
-        this.type = SensorType.FOREGROUND;
-        this.typeStr = SensorType.getApiName(this.type);
+        this.type = DTOType.FOREGROUND;
+        this.typeStr = DTOType.getApiName(this.type);
     }
 
     public ForegroundEventRequest(Long id) {
         this.id = id;
-        this.type = SensorType.FOREGROUND;
-        this.typeStr = SensorType.getApiName(this.type);
+        this.type = DTOType.FOREGROUND;
+        this.typeStr = DTOType.getApiName(this.type);
     }
 
     public ForegroundEventRequest(Long id, String packageName, String appName, String className, String activityLabel, String color, String url, String eventType, Integer keystrokes, String created) {
@@ -79,8 +80,8 @@ public class ForegroundEventRequest implements Sensor {
         this.eventType = eventType;
         this.keystrokes = keystrokes;
         this.created = created;
-        this.type = SensorType.FOREGROUND;
-        this.typeStr = SensorType.getApiName(this.type);
+        this.type = DTOType.FOREGROUND;
+        this.typeStr = DTOType.getApiName(this.type);
     }
 
     @Override

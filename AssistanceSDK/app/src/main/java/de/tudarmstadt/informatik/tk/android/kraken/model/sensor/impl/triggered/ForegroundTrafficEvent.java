@@ -15,7 +15,7 @@ import java.util.List;
 
 import de.tudarmstadt.informatik.tk.android.kraken.db.DbForegroundEvent;
 import de.tudarmstadt.informatik.tk.android.kraken.db.DbNetworkTrafficEvent;
-import de.tudarmstadt.informatik.tk.android.kraken.model.api.sensors.SensorType;
+import de.tudarmstadt.informatik.tk.android.kraken.model.api.dto.DTOType;
 import de.tudarmstadt.informatik.tk.android.kraken.model.enums.EPushType;
 import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.AbstractTriggeredEvent;
 import de.tudarmstadt.informatik.tk.android.kraken.provider.DbProvider;
@@ -111,7 +111,7 @@ public class ForegroundTrafficEvent extends AbstractTriggeredEvent {
      */
     @Override
     public int getType() {
-        return SensorType.NETWORK_TRAFFIC;
+        return DTOType.NETWORK_TRAFFIC;
     }
 
     /**

@@ -7,7 +7,7 @@ import android.net.Uri;
 import android.provider.CallLog;
 
 import de.tudarmstadt.informatik.tk.android.kraken.db.DbCallLogEvent;
-import de.tudarmstadt.informatik.tk.android.kraken.model.api.sensors.SensorType;
+import de.tudarmstadt.informatik.tk.android.kraken.model.api.dto.DTOType;
 import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.AbstractContentObserverEvent;
 
 /**
@@ -30,7 +30,7 @@ public class CallLogEvent extends AbstractContentObserverEvent {
 
     @Override
     public int getType() {
-        return SensorType.CALL_LOG;
+        return DTOType.CALL_LOG;
     }
 
     @Override

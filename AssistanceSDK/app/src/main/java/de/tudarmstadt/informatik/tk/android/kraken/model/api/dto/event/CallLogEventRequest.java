@@ -1,8 +1,9 @@
-package de.tudarmstadt.informatik.tk.android.kraken.model.api.sensors;
+package de.tudarmstadt.informatik.tk.android.kraken.model.api.dto.event;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import de.tudarmstadt.informatik.tk.android.kraken.model.api.dto.DTOType;
 import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.Sensor;
 
 /**
@@ -63,14 +64,14 @@ public class CallLogEventRequest implements Sensor {
     private int type;
 
     public CallLogEventRequest() {
-        this.type = SensorType.CALL_LOG;
-        this.typeStr = SensorType.getApiName(this.type);
+        this.type = DTOType.CALL_LOG;
+        this.typeStr = DTOType.getApiName(this.type);
     }
 
     public CallLogEventRequest(Long id) {
         this.id = id;
-        this.type = SensorType.CALL_LOG;
-        this.typeStr = SensorType.getApiName(this.type);
+        this.type = DTOType.CALL_LOG;
+        this.typeStr = DTOType.getApiName(this.type);
 
     }
 
@@ -86,8 +87,8 @@ public class CallLogEventRequest implements Sensor {
         this.isUpdated = isUpdated;
         this.isDeleted = isDeleted;
         this.created = created;
-        this.type = SensorType.CALL_LOG;
-        this.typeStr = SensorType.getApiName(this.type);
+        this.type = DTOType.CALL_LOG;
+        this.typeStr = DTOType.getApiName(this.type);
     }
 
     public Long getId() {

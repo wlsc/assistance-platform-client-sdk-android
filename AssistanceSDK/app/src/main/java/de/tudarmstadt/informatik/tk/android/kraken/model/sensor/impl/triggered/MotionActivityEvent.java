@@ -19,7 +19,7 @@ import java.util.List;
 import java.util.Locale;
 
 import de.tudarmstadt.informatik.tk.android.kraken.db.DbMotionActivityEvent;
-import de.tudarmstadt.informatik.tk.android.kraken.model.api.sensors.SensorType;
+import de.tudarmstadt.informatik.tk.android.kraken.model.api.dto.DTOType;
 import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.AbstractTriggeredEvent;
 import de.tudarmstadt.informatik.tk.android.kraken.service.ActivitySensorService;
 import de.tudarmstadt.informatik.tk.android.kraken.util.DateUtils;
@@ -242,7 +242,7 @@ public class MotionActivityEvent extends
 
     @Override
     public int getType() {
-        return SensorType.MOTION_ACTIVITY;
+        return DTOType.MOTION_ACTIVITY;
     }
 
     @Override

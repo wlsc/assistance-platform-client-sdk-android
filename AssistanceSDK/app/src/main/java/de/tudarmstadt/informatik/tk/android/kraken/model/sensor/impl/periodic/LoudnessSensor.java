@@ -13,7 +13,7 @@ import android.telephony.TelephonyManager;
 import java.util.Calendar;
 import java.util.LinkedList;
 
-import de.tudarmstadt.informatik.tk.android.kraken.model.api.sensors.SensorType;
+import de.tudarmstadt.informatik.tk.android.kraken.model.api.dto.DTOType;
 import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.AbstractPeriodicEvent;
 
 
@@ -149,7 +149,7 @@ public class LoudnessSensor extends AbstractPeriodicEvent implements Callback {
 
     @Override
     public int getType() {
-        return SensorType.LOUDNESS;
+        return DTOType.LOUDNESS;
     }
 
     @Override

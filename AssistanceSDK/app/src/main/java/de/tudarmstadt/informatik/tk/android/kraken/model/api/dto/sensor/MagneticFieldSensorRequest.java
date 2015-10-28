@@ -1,8 +1,9 @@
-package de.tudarmstadt.informatik.tk.android.kraken.model.api.sensors;
+package de.tudarmstadt.informatik.tk.android.kraken.model.api.dto.sensor;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import de.tudarmstadt.informatik.tk.android.kraken.model.api.dto.DTOType;
 import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.Sensor;
 
 /**
@@ -67,14 +68,14 @@ public class MagneticFieldSensorRequest implements Sensor {
     private int type;
 
     public MagneticFieldSensorRequest() {
-        this.type = SensorType.MAGNETIC_FIELD;
-        this.typeStr = SensorType.getApiName(this.type);
+        this.type = DTOType.MAGNETIC_FIELD;
+        this.typeStr = DTOType.getApiName(this.type);
     }
 
     public MagneticFieldSensorRequest(long id) {
         this.id = id;
-        this.type = SensorType.MAGNETIC_FIELD;
-        this.typeStr = SensorType.getApiName(this.type);
+        this.type = DTOType.MAGNETIC_FIELD;
+        this.typeStr = DTOType.getApiName(this.type);
     }
 
     public MagneticFieldSensorRequest(Long id, Double x, Double y, Double z, float xUncalibratedNoHardIron, float yUncalibratedNoHardIron, float zUncalibratedNoHardIron, float xUncalibratedEstimatedIronBias, float yUncalibratedEstimatedIronBias, float zUncalibratedEstimatedIronBias, String created, Integer accuracy) {
@@ -90,8 +91,8 @@ public class MagneticFieldSensorRequest implements Sensor {
         this.zUncalibratedEstimatedIronBias = zUncalibratedEstimatedIronBias;
         this.created = created;
         this.accuracy = accuracy;
-        this.type = SensorType.MAGNETIC_FIELD;
-        this.typeStr = SensorType.getApiName(this.type);
+        this.type = DTOType.MAGNETIC_FIELD;
+        this.typeStr = DTOType.getApiName(this.type);
     }
 
     public Long getId() {

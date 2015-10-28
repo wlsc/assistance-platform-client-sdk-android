@@ -1,8 +1,9 @@
-package de.tudarmstadt.informatik.tk.android.kraken.model.api.sensors;
+package de.tudarmstadt.informatik.tk.android.kraken.model.api.dto.sensor;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import de.tudarmstadt.informatik.tk.android.kraken.model.api.dto.DTOType;
 import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.Sensor;
 
 /**
@@ -58,14 +59,14 @@ public class LocationSensorRequest implements Sensor {
     private int type;
 
     public LocationSensorRequest() {
-        this.type = SensorType.LOCATION;
-        this.typeStr = SensorType.getApiName(this.type);
+        this.type = DTOType.LOCATION;
+        this.typeStr = DTOType.getApiName(this.type);
     }
 
     public LocationSensorRequest(long id) {
         this.id = id;
-        this.type = SensorType.LOCATION;
-        this.typeStr = SensorType.getApiName(this.type);
+        this.type = DTOType.LOCATION;
+        this.typeStr = DTOType.getApiName(this.type);
     }
 
     public LocationSensorRequest(long id, Double latitude, Double longitude, Double accuracyHorizontal, Float speed, String created, Double altitude, Double accuracyVertical, Integer course, Integer floor) {
@@ -79,8 +80,8 @@ public class LocationSensorRequest implements Sensor {
         this.accuracyVertical = accuracyVertical;
         this.course = course;
         this.floor = floor;
-        this.type = SensorType.LOCATION;
-        this.typeStr = SensorType.getApiName(this.type);
+        this.type = DTOType.LOCATION;
+        this.typeStr = DTOType.getApiName(this.type);
     }
 
     public Long getId() {

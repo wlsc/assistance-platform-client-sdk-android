@@ -1,9 +1,10 @@
-package de.tudarmstadt.informatik.tk.android.kraken.model.api.sensors;
+package de.tudarmstadt.informatik.tk.android.kraken.model.api.dto.event;
 
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import de.tudarmstadt.informatik.tk.android.kraken.model.api.dto.DTOType;
 import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.Sensor;
 
 /**
@@ -57,15 +58,15 @@ public class MotionActivityEventRequest implements Sensor {
     private int type;
 
     public MotionActivityEventRequest() {
-        this.type = SensorType.MOTION_ACTIVITY;
-        this.typeStr = SensorType.getApiName(this.type);
+        this.type = DTOType.MOTION_ACTIVITY;
+        this.typeStr = DTOType.getApiName(this.type);
 
     }
 
     public MotionActivityEventRequest(long id) {
         this.id = id;
-        this.type = SensorType.MOTION_ACTIVITY;
-        this.typeStr = SensorType.getApiName(this.type);
+        this.type = DTOType.MOTION_ACTIVITY;
+        this.typeStr = DTOType.getApiName(this.type);
     }
 
     public MotionActivityEventRequest(long id, Integer walking, Integer running, Integer cycling, Integer driving, Integer stationary, Integer unknown, String created, Integer onFoot, Integer tilting) {
@@ -79,8 +80,8 @@ public class MotionActivityEventRequest implements Sensor {
         this.created = created;
         this.onFoot = onFoot;
         this.tilting = tilting;
-        this.type = SensorType.MOTION_ACTIVITY;
-        this.typeStr = SensorType.getApiName(this.type);
+        this.type = DTOType.MOTION_ACTIVITY;
+        this.typeStr = DTOType.getApiName(this.type);
     }
 
     public Long getId() {

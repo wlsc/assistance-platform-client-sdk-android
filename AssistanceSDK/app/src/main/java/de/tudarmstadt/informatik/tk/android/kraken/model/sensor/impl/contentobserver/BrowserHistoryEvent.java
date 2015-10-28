@@ -6,7 +6,7 @@ import android.util.Log;
 
 import java.lang.reflect.Method;
 
-import de.tudarmstadt.informatik.tk.android.kraken.model.api.sensors.SensorType;
+import de.tudarmstadt.informatik.tk.android.kraken.model.api.dto.DTOType;
 import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.AbstractContentObserverEvent;
 
 
@@ -181,7 +181,7 @@ public class BrowserHistoryEvent extends AbstractContentObserverEvent {
 
     @Override
     public int getType() {
-        return SensorType.BROWSER_HISTORY;
+        return DTOType.BROWSER_HISTORY;
     }
 
     @Override

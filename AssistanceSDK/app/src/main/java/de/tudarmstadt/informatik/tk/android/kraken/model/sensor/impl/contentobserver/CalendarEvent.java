@@ -6,7 +6,7 @@ import android.provider.CalendarContract.Events;
 import android.provider.CalendarContract.Reminders;
 import android.util.Log;
 
-import de.tudarmstadt.informatik.tk.android.kraken.model.api.sensors.SensorType;
+import de.tudarmstadt.informatik.tk.android.kraken.model.api.dto.DTOType;
 import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.AbstractContentObserverEvent;
 
 public class CalendarEvent extends AbstractContentObserverEvent {
@@ -29,7 +29,7 @@ public class CalendarEvent extends AbstractContentObserverEvent {
 
     @Override
     public int getType() {
-        return SensorType.CALENDAR;
+        return DTOType.CALENDAR;
     }
 
     @Override
