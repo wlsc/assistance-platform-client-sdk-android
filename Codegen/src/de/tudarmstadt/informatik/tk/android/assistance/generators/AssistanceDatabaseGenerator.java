@@ -414,6 +414,7 @@ public class AssistanceDatabaseGenerator {
     calendarEvent.setTableName("calendar_event");
     calendarEvent.addIdProperty().autoincrement().index();
     calendarEvent.implementsInterface(Config.KRAKEN_PACKAGE_UPDATABLE_SENSOR);
+    calendarEvent.addLongProperty("eventId");
     calendarEvent.addLongProperty("calendarId");
     calendarEvent.addBooleanProperty("allDay");
     calendarEvent.addIntProperty("availability");

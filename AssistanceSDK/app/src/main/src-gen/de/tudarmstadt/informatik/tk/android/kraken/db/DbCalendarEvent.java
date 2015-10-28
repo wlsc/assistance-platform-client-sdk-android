@@ -7,6 +7,7 @@ package de.tudarmstadt.informatik.tk.android.kraken.db;
 public class DbCalendarEvent implements de.tudarmstadt.informatik.tk.android.kraken.interfaces.IDbUpdatableSensor {
 
     private Long id;
+    private Long eventId;
     private Long calendarId;
     private Boolean allDay;
     private Integer availability;
@@ -41,8 +42,9 @@ public class DbCalendarEvent implements de.tudarmstadt.informatik.tk.android.kra
         this.id = id;
     }
 
-    public DbCalendarEvent(Long id, Long calendarId, Boolean allDay, Integer availability, String description, Long timestampStart, Long timestampEnd, String duration, String location, String timezoneStart, String timezoneEnd, String recurrenceExceptionDate, String recurrenceExceptionRule, Boolean hasAlarm, Long lastDate, Boolean originalAllDay, String originalId, Long originalInstanceTime, String recurrenceDate, String recurrenceRule, Integer status, String title, Boolean isNew, Boolean isUpdated, Boolean isDeleted, String created) {
+    public DbCalendarEvent(Long id, Long eventId, Long calendarId, Boolean allDay, Integer availability, String description, Long timestampStart, Long timestampEnd, String duration, String location, String timezoneStart, String timezoneEnd, String recurrenceExceptionDate, String recurrenceExceptionRule, Boolean hasAlarm, Long lastDate, Boolean originalAllDay, String originalId, Long originalInstanceTime, String recurrenceDate, String recurrenceRule, Integer status, String title, Boolean isNew, Boolean isUpdated, Boolean isDeleted, String created) {
         this.id = id;
+        this.eventId = eventId;
         this.calendarId = calendarId;
         this.allDay = allDay;
         this.availability = availability;
@@ -76,6 +78,14 @@ public class DbCalendarEvent implements de.tudarmstadt.informatik.tk.android.kra
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Long getEventId() {
+        return eventId;
+    }
+
+    public void setEventId(Long eventId) {
+        this.eventId = eventId;
     }
 
     public Long getCalendarId() {
