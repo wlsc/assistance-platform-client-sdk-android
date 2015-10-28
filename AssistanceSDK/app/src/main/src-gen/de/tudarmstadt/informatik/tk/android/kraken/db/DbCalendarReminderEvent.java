@@ -7,6 +7,7 @@ package de.tudarmstadt.informatik.tk.android.kraken.db;
 public class DbCalendarReminderEvent implements de.tudarmstadt.informatik.tk.android.kraken.interfaces.IDbUpdatableSensor {
 
     private Long id;
+    private Long reminderId;
     private Long eventId;
     private Integer method;
     private Integer minutes;
@@ -23,8 +24,9 @@ public class DbCalendarReminderEvent implements de.tudarmstadt.informatik.tk.and
         this.id = id;
     }
 
-    public DbCalendarReminderEvent(Long id, Long eventId, Integer method, Integer minutes, Boolean isNew, Boolean isUpdated, Boolean isDeleted, String created) {
+    public DbCalendarReminderEvent(Long id, Long reminderId, Long eventId, Integer method, Integer minutes, Boolean isNew, Boolean isUpdated, Boolean isDeleted, String created) {
         this.id = id;
+        this.reminderId = reminderId;
         this.eventId = eventId;
         this.method = method;
         this.minutes = minutes;
@@ -40,6 +42,14 @@ public class DbCalendarReminderEvent implements de.tudarmstadt.informatik.tk.and
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Long getReminderId() {
+        return reminderId;
+    }
+
+    public void setReminderId(Long reminderId) {
+        this.reminderId = reminderId;
     }
 
     public Long getEventId() {

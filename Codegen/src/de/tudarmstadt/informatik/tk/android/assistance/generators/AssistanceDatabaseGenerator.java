@@ -446,6 +446,7 @@ public class AssistanceDatabaseGenerator {
     calendarReminderEvent.setTableName("calendar_reminder_event");
     calendarReminderEvent.addIdProperty().autoincrement().index();
     calendarReminderEvent.implementsInterface(Config.KRAKEN_PACKAGE_UPDATABLE_SENSOR);
+    calendarReminderEvent.addLongProperty("reminderId");
     calendarReminderEvent.addLongProperty("eventId");
     calendarReminderEvent.addIntProperty("method");
     calendarReminderEvent.addIntProperty("minutes");
