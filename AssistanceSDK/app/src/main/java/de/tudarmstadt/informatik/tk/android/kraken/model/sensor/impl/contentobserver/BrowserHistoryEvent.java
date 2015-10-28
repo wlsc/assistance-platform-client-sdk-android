@@ -2,6 +2,7 @@ package de.tudarmstadt.informatik.tk.android.kraken.model.sensor.impl.contentobs
 
 import android.content.Context;
 import android.net.Uri;
+import android.util.Log;
 
 import java.lang.reflect.Method;
 
@@ -14,10 +15,16 @@ import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.AbstractContentO
  */
 public class BrowserHistoryEvent extends AbstractContentObserverEvent {
 
-    //    protected static final Uri URI_BROWSER_HISTORY = Browser.BOOKMARKS_URI;
-    protected static final Uri URI_CHROME_HISTORY = Uri.parse("content://com.android.chrome.browser/bookmarks");
+    private static final String TAG = BrowserHistoryEvent.class.getSimpleName();
 
-    private Method m_methodForGetAllExistingHistory;
+    // this one was deleted in SDK 23
+    //        protected static final Uri URI_BROWSER_HISTORY = Browser.BOOKMARKS_URI;
+    private static final Uri URI_CHROME_BOOKMARKS = Uri.parse("content://com.android.chrome.browser/bookmarks");
+
+    // 0 = history, 1 = bookmark
+//    private static final String WHAT_TO_SELECT = Browser.BookmarkColumns.BOOKMARK + " = 0";
+
+    private Method mMethodForGetAllExistingHistory;
     private boolean m_bFlushToServer;
     private Method m_checkDifferenceMethodForHistoryChange;
     private Method m_getKeyMethodForSensorContact;
@@ -33,20 +40,22 @@ public class BrowserHistoryEvent extends AbstractContentObserverEvent {
 
     @Override
     protected void syncData() {
+
+        Log.d(TAG, "Syncing data...");
+
 //        ContentResolver cr = context.getContentResolver();
-//        Cursor cur = cr
-//                .query(URI_BROWSER_HISTORY, null, null, null, null);
+//        Cursor cur = cr.query(URI_CHROME_BOOKMARKS, null, null, null, null);
 //
-//        Log.d("kraken", "BrowserHistorySensor syncData");
-//
-//        if (cur == null)
+//        if (cur == null) {
+//            Log.d(TAG, "Cursor is null. Aborting...");
 //            return;
+//        }
 //
-//        HashMap<Long, SensorBrowserHistory> allExistingHistory;
+//        Map<Long, DbBrowserHistoryEvent> allExistingHistory;
 //        try {
 //            allExistingHistory = getAllExistingHistory();
 //        } catch (Exception e) {
-//            e.printStackTrace();
+//            Log.e(TAG, "Cannot get all history", e);
 //            return;
 //        }
 //
@@ -72,8 +81,7 @@ public class BrowserHistoryEvent extends AbstractContentObserverEvent {
 //            //Log.d("kraken", "BrowserHistorySensor new Item");
 //
 //            try {
-//                if (checkForHistoryChange(allExistingHistory, browserHistory))
-//                {
+//                if (checkForHistoryChange(allExistingHistory, browserHistory)) {
 //                    //Log.d("kraken", "BrowserHistorySensor checkForHistoryChange true");
 //                    //Log.d("kraken", "BrowserHistorySensor: " + title + ", " + url + ", " + bookmark + ", " + created + ", " + lastVisited + ", " + visits);
 //                    handleDBEntry(browserHistory, !browserHistory.getIsNew(), false, true);
@@ -100,14 +108,18 @@ public class BrowserHistoryEvent extends AbstractContentObserverEvent {
 //        cur.close();
     }
 
-//    private HashMap<Long, SensorBrowserHistory> getAllExistingHistory() throws NoSuchMethodException, NoSuchFieldException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
-//
-//        if (m_methodForGetAllExistingHistory == null)
-//        {
-//            m_methodForGetAllExistingHistory = SensorBrowserHistory.class.getDeclaredMethod("getHistoryId");
-//            m_methodForGetAllExistingHistory.setAccessible(true);
+//    private Map<Long, DbBrowserHistoryEvent> getAllExistingHistory() throws
+//            NoSuchMethodException,
+//            NoSuchFieldException,
+//            IllegalAccessException,
+//            IllegalArgumentException,
+//            InvocationTargetException {
+
+//        if (mMethodForGetAllExistingHistory == null) {
+//            mMethodForGetAllExistingHistory = DbBrowserHistoryEvent.class.getDeclaredMethod("getHistoryId");
+//            mMethodForGetAllExistingHistory.setAccessible(true);
 //        }
-//        return getAllExistingEntries(SensorBrowserHistory.class, m_methodForGetAllExistingHistory);
+//        return getAllExistingEntries(SensorBrowserHistory.class, mMethodForGetAllExistingHistory);
 //    }
 
 //    private boolean checkForHistoryChange(HashMap<Long, SensorBrowserHistory> map, SensorBrowserHistory newSensorBrowserHistory) throws Exception {
@@ -115,16 +127,14 @@ public class BrowserHistoryEvent extends AbstractContentObserverEvent {
 //            long id = newSensorBrowserHistory.getHistoryId();
 //            SensorBrowserHistory existingReminder = map.get(id);
 //
-//            if (m_checkDifferenceMethodForHistoryChange == null || m_getKeyMethodForSensorContact == null)
-//            {
+//            if (m_checkDifferenceMethodForHistoryChange == null || m_getKeyMethodForSensorContact == null) {
 //                m_getKeyMethodForSensorContact = SensorBrowserHistory.class.getDeclaredMethod("getHistoryId");
 //                m_getKeyMethodForSensorContact.setAccessible(true);
 //                m_checkDifferenceMethodForHistoryChange = getClass().getDeclaredMethod("hasHistoryDifference", new Class[]{SensorBrowserHistory.class, SensorBrowserHistory.class});
 //                m_checkDifferenceMethodForHistoryChange.setAccessible(true);
 //            }
 //            boolean result = checkForChange(map, newSensorBrowserHistory, m_getKeyMethodForSensorContact, m_checkDifferenceMethodForHistoryChange);
-//            if (!result)
-//            {
+//            if (!result) {
 //                newSensorBrowserHistory.setId(existingReminder.getId());
 //            }
 //            return result;
@@ -148,7 +158,6 @@ public class BrowserHistoryEvent extends AbstractContentObserverEvent {
     @Override
     public void startSensor() {
 
-        setRunning(true);
 //        Thread thread = new Thread(new Runnable() {
 //
 //            @Override
@@ -157,8 +166,11 @@ public class BrowserHistoryEvent extends AbstractContentObserverEvent {
 //                context.getContentResolver().registerContentObserver(URI_BROWSER_HISTORY, true, mObserver);
 //            }
 //        });
+//
 //        thread.setName("BrowserHistorySensorThread");
 //        thread.start();
+//
+//        setRunning(true);
     }
 
     @Override
