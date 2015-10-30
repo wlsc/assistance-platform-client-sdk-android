@@ -5,11 +5,11 @@ import android.content.Intent;
 import android.util.Log;
 import android.view.accessibility.AccessibilityEvent;
 
-import de.tudarmstadt.informatik.tk.android.kraken.provider.PreferenceProvider;
-import de.tudarmstadt.informatik.tk.android.kraken.provider.SensorProvider;
 import de.tudarmstadt.informatik.tk.android.kraken.model.api.dto.DtoType;
 import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.impl.triggered.ForegroundEvent;
 import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.impl.triggered.ForegroundTrafficEvent;
+import de.tudarmstadt.informatik.tk.android.kraken.provider.PreferenceProvider;
+import de.tudarmstadt.informatik.tk.android.kraken.provider.SensorProvider;
 
 /**
  * Assistance Accessibility Service implementation
@@ -46,8 +46,13 @@ public class AssistanceAccessibilityService extends AccessibilityService {
 
         Log.d(TAG, "onAccessibilityEvent");
 
-        mForegroundSensor.onEvent(event);
-        mForegroundTrafficEvent.onEvent(event);
+        if (mForegroundSensor != null) {
+            mForegroundSensor.onEvent(event);
+        }
+
+        if (mForegroundTrafficEvent != null) {
+            mForegroundTrafficEvent.onEvent(event);
+        }
     }
 
     @Override
