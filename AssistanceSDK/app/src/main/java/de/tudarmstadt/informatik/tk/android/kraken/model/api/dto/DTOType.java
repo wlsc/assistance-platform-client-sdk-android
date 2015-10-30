@@ -58,6 +58,8 @@ public class DTOType {
 
     public static final int NETWORK_TRAFFIC = 24;
 
+    public static final int CALENDAR_REMINDER = 25;
+
     private DTOType() {
     }
 
