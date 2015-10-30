@@ -11,7 +11,7 @@ import java.util.Date;
 import java.util.Locale;
 
 import de.tudarmstadt.informatik.tk.android.kraken.db.DbGyroscopeSensor;
-import de.tudarmstadt.informatik.tk.android.kraken.model.api.dto.DTOType;
+import de.tudarmstadt.informatik.tk.android.kraken.model.api.dto.DtoType;
 import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.AbstractTriggeredEvent;
 import de.tudarmstadt.informatik.tk.android.kraken.util.DateUtils;
 
@@ -183,7 +183,7 @@ public class GyroscopeSensor extends AbstractTriggeredEvent implements SensorEve
 
     @Override
     public int getType() {
-        return DTOType.GYROSCOPE;
+        return DtoType.GYROSCOPE;
     }
 
     @Override
@@ -255,7 +255,7 @@ public class GyroscopeSensor extends AbstractTriggeredEvent implements SensorEve
         gyroscopeSensor.setAccuracy(accuracy);
         gyroscopeSensor.setCreated(DateUtils.dateToISO8601String(new Date(), Locale.getDefault()));
 
-        dbProvider.insertEventEntry(gyroscopeSensor, getType());
+        dbProvider.getGyroscopeSensorDao().insert(gyroscopeSensor);
     }
 
     /**

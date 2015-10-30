@@ -17,7 +17,7 @@ import java.util.Locale;
 import de.tudarmstadt.informatik.tk.android.kraken.db.DbConnectionEvent;
 import de.tudarmstadt.informatik.tk.android.kraken.db.DbMobileConnectionEvent;
 import de.tudarmstadt.informatik.tk.android.kraken.db.DbWifiConnectionEvent;
-import de.tudarmstadt.informatik.tk.android.kraken.model.api.dto.DTOType;
+import de.tudarmstadt.informatik.tk.android.kraken.model.api.dto.DtoType;
 import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.AbstractTriggeredEvent;
 import de.tudarmstadt.informatik.tk.android.kraken.util.DateUtils;
 import de.tudarmstadt.informatik.tk.android.kraken.util.DeviceUtils;
@@ -76,7 +76,7 @@ public class ConnectionSensor extends AbstractTriggeredEvent {
         connectionEvent.setIsWifi(isWifiDataAvailable);
         connectionEvent.setCreated(created);
 
-        dbProvider.insertEventEntry(connectionEvent, DTOType.CONNECTION);
+        dbProvider.getConnectionEventDao().insert(connectionEvent);
 
         /**
          * Mobile data information
@@ -88,7 +88,7 @@ public class ConnectionSensor extends AbstractTriggeredEvent {
         mobileConnectionEvent.setMobileNetworkCode(mobileNetworkCode);
         mobileConnectionEvent.setCreated(created);
 
-        dbProvider.insertEventEntry(mobileConnectionEvent, DTOType.MOBILE_DATA_CONNECTION);
+        dbProvider.getMobileConnectionEventDao().insert(mobileConnectionEvent);
 
         /**
          * WIFI data information
@@ -104,7 +104,7 @@ public class ConnectionSensor extends AbstractTriggeredEvent {
         wifiConnectionEvent.setNetworkId(networkId);
         wifiConnectionEvent.setCreated(created);
 
-        dbProvider.insertEventEntry(wifiConnectionEvent, DTOType.WIFI_CONNECTION);
+        dbProvider.getWifiConnectionEventDao().insert(wifiConnectionEvent);
     }
 
     @Override
@@ -140,7 +140,7 @@ public class ConnectionSensor extends AbstractTriggeredEvent {
 
     @Override
     public int getType() {
-        return DTOType.CONNECTION;
+        return DtoType.CONNECTION;
     }
 
     @Override

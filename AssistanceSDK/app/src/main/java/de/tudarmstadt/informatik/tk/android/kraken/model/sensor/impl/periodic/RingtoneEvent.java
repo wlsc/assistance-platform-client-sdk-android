@@ -3,7 +3,7 @@ package de.tudarmstadt.informatik.tk.android.kraken.model.sensor.impl.periodic;
 import android.content.Context;
 import android.media.AudioManager;
 
-import de.tudarmstadt.informatik.tk.android.kraken.model.api.dto.DTOType;
+import de.tudarmstadt.informatik.tk.android.kraken.model.api.dto.DtoType;
 import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.AbstractPeriodicEvent;
 import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.ISensor;
 
@@ -27,7 +27,7 @@ public class RingtoneEvent extends AbstractPeriodicEvent implements ISensor {
 
     @Override
     public int getType() {
-        return DTOType.RINGTONE;
+        return DtoType.RINGTONE;
     }
 
     @Override

@@ -3,14 +3,14 @@ package de.tudarmstadt.informatik.tk.android.kraken.model.api.dto.sensor;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-import de.tudarmstadt.informatik.tk.android.kraken.model.api.dto.DTOType;
+import de.tudarmstadt.informatik.tk.android.kraken.model.api.dto.DtoType;
 import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.Sensor;
 
 /**
  * @author Wladimir Schmidt (wlsc.dev@gmail.com)
  * @date 30.08.2015
  */
-public class AccelerometerSensorRequest implements Sensor {
+public class AccelerometerSensorDto implements Sensor {
 
     private Long id;
 
@@ -43,26 +43,26 @@ public class AccelerometerSensorRequest implements Sensor {
 
     private int type;
 
-    public AccelerometerSensorRequest() {
-        this.type = DTOType.ACCELEROMETER;
-        this.typeStr = DTOType.getApiName(this.type);
+    public AccelerometerSensorDto() {
+        this.type = DtoType.ACCELEROMETER;
+        this.typeStr = DtoType.getApiName(this.type);
     }
 
-    public AccelerometerSensorRequest(long id) {
+    public AccelerometerSensorDto(long id) {
         this.id = id;
-        this.type = DTOType.ACCELEROMETER;
-        this.typeStr = DTOType.getApiName(this.type);
+        this.type = DtoType.ACCELEROMETER;
+        this.typeStr = DtoType.getApiName(this.type);
     }
 
-    public AccelerometerSensorRequest(long id, Double x, Double y, Double z, String created, Integer accuracy) {
+    public AccelerometerSensorDto(long id, Double x, Double y, Double z, String created, Integer accuracy) {
         this.id = id;
         this.x = x;
         this.y = y;
         this.z = z;
         this.created = created;
         this.accuracy = accuracy;
-        this.type = DTOType.ACCELEROMETER;
-        this.typeStr = DTOType.getApiName(this.type);
+        this.type = DtoType.ACCELEROMETER;
+        this.typeStr = DtoType.getApiName(this.type);
     }
 
     public Long getId() {

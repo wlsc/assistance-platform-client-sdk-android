@@ -17,7 +17,9 @@ import com.google.android.gms.gcm.TaskParams;
 import java.util.LinkedList;
 import java.util.List;
 
+import de.tudarmstadt.informatik.tk.android.kraken.interfaces.IDbSensor;
 import de.tudarmstadt.informatik.tk.android.kraken.model.api.EventUploadRequest;
+import de.tudarmstadt.informatik.tk.android.kraken.model.api.dto.DtoType;
 import de.tudarmstadt.informatik.tk.android.kraken.model.api.endpoint.EndpointGenerator;
 import de.tudarmstadt.informatik.tk.android.kraken.model.api.endpoint.EventUploadEndpoint;
 import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.Sensor;
@@ -55,7 +57,7 @@ public class EventUploaderService extends GcmTaskService {
             taskID + ": " +
             periodSecs + "s, f:" +
             flexSecs;
-    
+
     // an unique connection fallback task identifier
     private static String taskTagFallback = "periodic | " +
             taskID + ": " +
@@ -68,7 +70,8 @@ public class EventUploaderService extends GcmTaskService {
 
     private static PreferenceProvider mPreferenceProvider;
 
-    private SparseArrayCompat<List<Sensor>> events;
+    private SparseArrayCompat<List<? extends IDbSensor>> requestDbEvents;
+    private SparseArrayCompat<List<Sensor>> requestEvents;
 
     private static boolean isNeedInConnectionFallback;
 
@@ -153,15 +156,14 @@ public class EventUploaderService extends GcmTaskService {
                                 return;
                             }
 
-                            events = new SparseArrayCompat<>();
-                            events = DbProvider.getInstance(getApplicationContext())
-                                    .getEntriesForUpload(0);
+                            requestEvents = new SparseArrayCompat<>();
+                            requestEvents = getEntriesForUpload(0);
 
                             final List<Sensor> eventsAsList = new LinkedList<>();
 
-                            for (int i = 0; i < events.size(); i++) {
-                                int key = events.keyAt(i);
-                                eventsAsList.addAll(events.get(key));
+                            for (int i = 0; i < requestEvents.size(); i++) {
+                                int key = requestEvents.keyAt(i);
+                                eventsAsList.addAll(requestEvents.get(key));
                             }
 
                             // partial upload
@@ -243,15 +245,14 @@ public class EventUploaderService extends GcmTaskService {
                         return;
                     }
 
-                    events = new SparseArrayCompat<>();
-                    events = DbProvider.getInstance(getApplicationContext())
-                            .getEntriesForUpload(PUSH_NUMBER_OF_EACH_ELEMENTS);
+                    requestEvents = new SparseArrayCompat<>();
+                    requestEvents = getEntriesForUpload(PUSH_NUMBER_OF_EACH_ELEMENTS);
 
                     final List<Sensor> eventsAsList = new LinkedList<>();
 
-                    for (int i = 0; i < events.size(); i++) {
-                        int key = events.keyAt(i);
-                        eventsAsList.addAll(events.get(key));
+                    for (int i = 0; i < requestEvents.size(); i++) {
+                        int key = requestEvents.keyAt(i);
+                        eventsAsList.addAll(requestEvents.get(key));
                     }
 
                     // partial upload
@@ -350,7 +351,7 @@ public class EventUploaderService extends GcmTaskService {
                             Log.d(TAG, "OK response from server received");
 
                             // successful transmission of event data -> remove that data from db
-                            DbProvider.getInstance(getApplicationContext()).removeDbSentEvents(events);
+                            removeDbSentEvents(requestDbEvents);
 
                             // reschedule default periodic task
                             if (isNeedInConnectionFallback) {
@@ -428,6 +429,103 @@ public class EventUploaderService extends GcmTaskService {
         }
 
         super.onInitializeTasks();
+    }
+
+    /**
+     * Returns events for upload to server
+     *
+     * @param numberOfElements
+     * @return
+     */
+    public SparseArrayCompat<List<Sensor>> getEntriesForUpload(int numberOfElements) {
+
+        SparseArrayCompat<List<Sensor>> entries = new SparseArrayCompat<>();
+
+        DbProvider dbProvider = DbProvider.getInstance(getApplicationContext());
+
+        List<? extends IDbSensor> dbAccelerometerList = dbProvider
+                .getAccelerometerSensorDao()
+                .getFirstN(numberOfElements);
+
+        requestDbEvents.put(DtoType.ACCELEROMETER, dbAccelerometerList);
+
+        entries.put(DtoType.ACCELEROMETER, dbProvider
+                .getAccelerometerSensorDao()
+                .convertObjects(dbAccelerometerList));
+
+        List<? extends IDbSensor> dbLocationList = dbProvider
+                .getLocationSensorDao()
+                .getFirstN(numberOfElements);
+
+        requestDbEvents.put(DtoType.LOCATION, dbLocationList);
+
+        entries.put(DtoType.LOCATION, dbProvider
+                .getLocationSensorDao()
+                .convertObjects(dbLocationList));
+
+        List<? extends IDbSensor> motionActivityList = dbProvider
+                .getMotionActivityEventDao()
+                .getFirstN(numberOfElements);
+
+        requestDbEvents.put(DtoType.MOTION_ACTIVITY, motionActivityList);
+
+        entries.put(DtoType.MOTION_ACTIVITY, dbProvider
+                .getMotionActivityEventDao()
+                .convertObjects(motionActivityList));
+
+        List<? extends IDbSensor> foregroundEventList = dbProvider
+                .getForegroundEventDao()
+                .getFirstN(numberOfElements);
+
+        requestDbEvents.put(DtoType.FOREGROUND, foregroundEventList);
+
+        entries.put(DtoType.FOREGROUND, dbProvider
+                .getForegroundEventDao()
+                .convertObjects(foregroundEventList));
+
+        return entries;
+    }
+
+    /**
+     * Removes successful transmitted entries from database
+     *
+     * @param dbEvents
+     */
+    public void removeDbSentEvents(SparseArrayCompat<List<? extends IDbSensor>> dbEvents) {
+
+        Log.d(TAG, "Removing sent events from db...");
+
+        for (int i = 0; i < dbEvents.size(); i++) {
+
+            int sensorType = dbEvents.keyAt(i);
+            List<? extends IDbSensor> values = dbEvents.get(i);
+
+            if (values == null || values.isEmpty()) {
+                continue;
+            }
+
+            DbProvider dbProvider = DbProvider.getInstance(getApplicationContext());
+
+            switch (sensorType) {
+                case DtoType.ACCELEROMETER:
+                    dbProvider.getAccelerometerSensorDao().delete(values);
+                    break;
+                case DtoType.LOCATION:
+                    dbProvider.getLocationSensorDao().delete(values);
+                    break;
+                case DtoType.MOTION_ACTIVITY:
+                    dbProvider.getMotionActivityEventDao().delete(values);
+                    break;
+                case DtoType.FOREGROUND:
+                    dbProvider.getForegroundEventDao().delete(values);
+                    break;
+            }
+        }
+
+        requestDbEvents.clear();
+        requestEvents.clear();
+
+        Log.d(TAG, "Finished removing data from db");
     }
 
     /**

@@ -6,7 +6,7 @@ import android.content.pm.PackageManager;
 
 import java.util.List;
 
-import de.tudarmstadt.informatik.tk.android.kraken.model.api.dto.DTOType;
+import de.tudarmstadt.informatik.tk.android.kraken.model.api.dto.DtoType;
 import de.tudarmstadt.informatik.tk.android.kraken.model.enums.EPushType;
 import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.AbstractPeriodicEvent;
 import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.ISensor;
@@ -78,7 +78,7 @@ public class BackgroundTrafficEvent extends
      */
     @Override
     public int getType() {
-        return DTOType.BACKGROUND_TRAFFIC;
+        return DtoType.BACKGROUND_TRAFFIC;
     }
 
     /**

@@ -17,7 +17,7 @@ import java.util.Date;
 import java.util.Locale;
 
 import de.tudarmstadt.informatik.tk.android.kraken.db.DbPositionSensor;
-import de.tudarmstadt.informatik.tk.android.kraken.model.api.dto.DTOType;
+import de.tudarmstadt.informatik.tk.android.kraken.model.api.dto.DtoType;
 import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.AbstractTriggeredEvent;
 import de.tudarmstadt.informatik.tk.android.kraken.provider.PreferenceProvider;
 import de.tudarmstadt.informatik.tk.android.kraken.util.DateUtils;
@@ -75,7 +75,7 @@ public class LocationSensor extends
         dbPositionSensor.setSpeed(speed);
         dbPositionSensor.setCreated(DateUtils.dateToISO8601String(new Date(), Locale.getDefault()));
 
-        dbProvider.insertEventEntry(dbPositionSensor, getType());
+        dbProvider.getLocationSensorDao().insert(dbPositionSensor);
     }
 
     /**
@@ -220,7 +220,7 @@ public class LocationSensor extends
 
     @Override
     public int getType() {
-        return DTOType.LOCATION;
+        return DtoType.LOCATION;
     }
 
     @Override

@@ -1,7 +1,9 @@
 package de.tudarmstadt.informatik.tk.android.kraken.provider;
 
 import android.content.Context;
+import android.util.Log;
 
+import de.tudarmstadt.informatik.tk.android.kraken.db.DbUser;
 import de.tudarmstadt.informatik.tk.android.kraken.model.api.device.DeviceRegistrationRequest;
 import de.tudarmstadt.informatik.tk.android.kraken.model.api.endpoint.DeviceEndpoint;
 import de.tudarmstadt.informatik.tk.android.kraken.model.api.endpoint.EndpointGenerator;
@@ -73,8 +75,22 @@ public class ServerCommunicationProvider {
                 if (response != null && (response.getStatus() == 200 || response.getStatus() == 204)) {
 
                     // persist registration
-                    dbProvider.saveRegistrationTokenToDb(registrationToken);
+                    final String userToken = PreferenceProvider.getInstance(mContext).getUserToken();
 
+                    DbUser user = dbProvider.getUserDao().getUserByToken(userToken);
+
+                    if (user == null) {
+                        Log.d(TAG, "No such user found! Token: " + userToken);
+                        return;
+                    } else {
+
+                        final long serverDeviceId = PreferenceProvider.getInstance(mContext).getServerDeviceId();
+
+                        dbProvider.getDeviceDao().saveRegistrationTokenToDb(
+                                registrationToken,
+                                user.getId(),
+                                serverDeviceId);
+                    }
                 } else {
                     // TODO: handle response null
                 }

@@ -10,7 +10,7 @@ import java.util.Date;
 import java.util.Locale;
 
 import de.tudarmstadt.informatik.tk.android.kraken.db.DbLightSensor;
-import de.tudarmstadt.informatik.tk.android.kraken.model.api.dto.DTOType;
+import de.tudarmstadt.informatik.tk.android.kraken.model.api.dto.DtoType;
 import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.AbstractTriggeredEvent;
 import de.tudarmstadt.informatik.tk.android.kraken.provider.DbProvider;
 import de.tudarmstadt.informatik.tk.android.kraken.util.DateUtils;
@@ -57,7 +57,7 @@ public class LightSensor
         sensorLight.setAccuracy(accuracy);
         sensorLight.setCreated(DateUtils.dateToISO8601String(new Date(), Locale.getDefault()));
 
-        dbProvider.insertEventEntry(sensorLight, getType());
+        dbProvider.getLightSensorDao().insert(sensorLight);
     }
 
     @Override
@@ -96,7 +96,7 @@ public class LightSensor
 
     @Override
     public int getType() {
-        return DTOType.LIGHT;
+        return DtoType.LIGHT;
     }
 
     @Override

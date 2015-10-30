@@ -105,6 +105,7 @@ public class HarvesterService extends Service implements Callback {
         long userId = sharedPreferences.getLong("current_user_id", -1);
 
         List<DbModuleInstallation> dbModuleInstallations = dbProvider
+                .getModuleInstallationDao()
                 .getModuleInstallationsByUserId(userId);
 
         if (dbModuleInstallations != null && !dbModuleInstallations.isEmpty()) {

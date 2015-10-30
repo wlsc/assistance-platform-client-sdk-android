@@ -3,7 +3,7 @@ package de.tudarmstadt.informatik.tk.android.kraken.model.api.dto.event;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-import de.tudarmstadt.informatik.tk.android.kraken.model.api.dto.DTOType;
+import de.tudarmstadt.informatik.tk.android.kraken.model.api.dto.DtoType;
 import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.Sensor;
 
 /**
@@ -49,14 +49,14 @@ public class NetworkTrafficEventDto implements Sensor {
     private int type;
 
     public NetworkTrafficEventDto() {
-        this.type = DTOType.NETWORK_TRAFFIC;
-        this.typeStr = DTOType.getApiName(this.type);
+        this.type = DtoType.NETWORK_TRAFFIC;
+        this.typeStr = DtoType.getApiName(this.type);
     }
 
     public NetworkTrafficEventDto(Long id) {
         this.id = id;
-        this.type = DTOType.NETWORK_TRAFFIC;
-        this.typeStr = DTOType.getApiName(this.type);
+        this.type = DtoType.NETWORK_TRAFFIC;
+        this.typeStr = DtoType.getApiName(this.type);
     }
 
     public NetworkTrafficEventDto(Long id, String appName, Long rxBytes, Long txBytes, Boolean background, Double longitude, Double latitude, String created) {
@@ -68,8 +68,8 @@ public class NetworkTrafficEventDto implements Sensor {
         this.longitude = longitude;
         this.latitude = latitude;
         this.created = created;
-        this.type = DTOType.NETWORK_TRAFFIC;
-        this.typeStr = DTOType.getApiName(this.type);
+        this.type = DtoType.NETWORK_TRAFFIC;
+        this.typeStr = DtoType.getApiName(this.type);
     }
 
     public Long getId() {

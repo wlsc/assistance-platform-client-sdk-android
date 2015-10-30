@@ -3,14 +3,14 @@ package de.tudarmstadt.informatik.tk.android.kraken.model.api.dto.event;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-import de.tudarmstadt.informatik.tk.android.kraken.model.api.dto.DTOType;
+import de.tudarmstadt.informatik.tk.android.kraken.model.api.dto.DtoType;
 import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.Sensor;
 
 /**
  * @author Wladimir Schmidt (wlsc.dev@gmail.com)
  * @date 30.08.2015
  */
-public class LoudnessEventRequest implements Sensor {
+public class LoudnessEventDto implements Sensor {
 
     private Long id;
 
@@ -30,23 +30,23 @@ public class LoudnessEventRequest implements Sensor {
 
     private int type;
 
-    public LoudnessEventRequest() {
-        this.type = DTOType.LOUDNESS;
-        this.typeStr = DTOType.getApiName(this.type);
+    public LoudnessEventDto() {
+        this.type = DtoType.LOUDNESS;
+        this.typeStr = DtoType.getApiName(this.type);
     }
 
-    public LoudnessEventRequest(long id) {
+    public LoudnessEventDto(long id) {
         this.id = id;
-        this.type = DTOType.LOUDNESS;
-        this.typeStr = DTOType.getApiName(this.type);
+        this.type = DtoType.LOUDNESS;
+        this.typeStr = DtoType.getApiName(this.type);
     }
 
-    public LoudnessEventRequest(long id, float loudness, String created) {
+    public LoudnessEventDto(long id, float loudness, String created) {
         this.id = id;
         this.loudness = loudness;
         this.created = created;
-        this.type = DTOType.LOUDNESS;
-        this.typeStr = DTOType.getApiName(this.type);
+        this.type = DtoType.LOUDNESS;
+        this.typeStr = DtoType.getApiName(this.type);
     }
 
     public Long getId() {

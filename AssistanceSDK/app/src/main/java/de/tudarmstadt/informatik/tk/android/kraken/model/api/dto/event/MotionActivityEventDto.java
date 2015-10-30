@@ -4,14 +4,14 @@ package de.tudarmstadt.informatik.tk.android.kraken.model.api.dto.event;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-import de.tudarmstadt.informatik.tk.android.kraken.model.api.dto.DTOType;
+import de.tudarmstadt.informatik.tk.android.kraken.model.api.dto.DtoType;
 import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.Sensor;
 
 /**
  * @author Wladimir Schmidt (wlsc.dev@gmail.com)
  * @date 30.08.2015
  */
-public class MotionActivityEventRequest implements Sensor {
+public class MotionActivityEventDto implements Sensor {
 
     private Long id;
 
@@ -57,19 +57,19 @@ public class MotionActivityEventRequest implements Sensor {
 
     private int type;
 
-    public MotionActivityEventRequest() {
-        this.type = DTOType.MOTION_ACTIVITY;
-        this.typeStr = DTOType.getApiName(this.type);
+    public MotionActivityEventDto() {
+        this.type = DtoType.MOTION_ACTIVITY;
+        this.typeStr = DtoType.getApiName(this.type);
 
     }
 
-    public MotionActivityEventRequest(long id) {
+    public MotionActivityEventDto(long id) {
         this.id = id;
-        this.type = DTOType.MOTION_ACTIVITY;
-        this.typeStr = DTOType.getApiName(this.type);
+        this.type = DtoType.MOTION_ACTIVITY;
+        this.typeStr = DtoType.getApiName(this.type);
     }
 
-    public MotionActivityEventRequest(long id, Integer walking, Integer running, Integer cycling, Integer driving, Integer stationary, Integer unknown, String created, Integer onFoot, Integer tilting) {
+    public MotionActivityEventDto(long id, Integer walking, Integer running, Integer cycling, Integer driving, Integer stationary, Integer unknown, String created, Integer onFoot, Integer tilting) {
         this.id = id;
         this.walking = walking;
         this.running = running;
@@ -80,8 +80,8 @@ public class MotionActivityEventRequest implements Sensor {
         this.created = created;
         this.onFoot = onFoot;
         this.tilting = tilting;
-        this.type = DTOType.MOTION_ACTIVITY;
-        this.typeStr = DTOType.getApiName(this.type);
+        this.type = DtoType.MOTION_ACTIVITY;
+        this.typeStr = DtoType.getApiName(this.type);
     }
 
     public Long getId() {

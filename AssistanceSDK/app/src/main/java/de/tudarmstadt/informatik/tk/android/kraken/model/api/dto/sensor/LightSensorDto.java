@@ -3,7 +3,7 @@ package de.tudarmstadt.informatik.tk.android.kraken.model.api.dto.sensor;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-import de.tudarmstadt.informatik.tk.android.kraken.model.api.dto.DTOType;
+import de.tudarmstadt.informatik.tk.android.kraken.model.api.dto.DtoType;
 import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.Sensor;
 
 /**
@@ -12,7 +12,7 @@ import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.Sensor;
  * @author Wladimir Schmidt (wlsc.dev@gmail.com)
  * @date 25.10.2015
  */
-public class LightSensorRequest implements Sensor {
+public class LightSensorDto implements Sensor {
 
     private Long id;
 
@@ -34,26 +34,26 @@ public class LightSensorRequest implements Sensor {
 
     private int type;
 
-    public LightSensorRequest() {
-        this.type = DTOType.LIGHT;
-        this.typeStr = DTOType.getApiName(this.type);
+    public LightSensorDto() {
+        this.type = DtoType.LIGHT;
+        this.typeStr = DtoType.getApiName(this.type);
     }
 
-    public LightSensorRequest(Long id) {
+    public LightSensorDto(Long id) {
         this.id = id;
-        this.type = DTOType.LIGHT;
-        this.typeStr = DTOType.getApiName(this.type);
+        this.type = DtoType.LIGHT;
+        this.typeStr = DtoType.getApiName(this.type);
     }
 
-    public LightSensorRequest(Long id, Float value, Integer accuracy, String created, String typeStr, int type) {
+    public LightSensorDto(Long id, Float value, Integer accuracy, String created, String typeStr, int type) {
         this.id = id;
         this.value = value;
         this.accuracy = accuracy;
         this.created = created;
         this.typeStr = typeStr;
         this.type = type;
-        this.type = DTOType.LIGHT;
-        this.typeStr = DTOType.getApiName(this.type);
+        this.type = DtoType.LIGHT;
+        this.typeStr = DtoType.getApiName(this.type);
     }
 
     public Long getId() {

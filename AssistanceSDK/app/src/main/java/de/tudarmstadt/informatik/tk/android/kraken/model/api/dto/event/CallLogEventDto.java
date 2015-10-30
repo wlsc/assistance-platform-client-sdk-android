@@ -3,14 +3,14 @@ package de.tudarmstadt.informatik.tk.android.kraken.model.api.dto.event;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-import de.tudarmstadt.informatik.tk.android.kraken.model.api.dto.DTOType;
+import de.tudarmstadt.informatik.tk.android.kraken.model.api.dto.DtoType;
 import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.Sensor;
 
 /**
  * @author Wladimir Schmidt (wlsc.dev@gmail.com)
  * @date 28.10.2015
  */
-public class CallLogEventRequest implements Sensor {
+public class CallLogEventDto implements Sensor {
 
     private Long id;
 
@@ -63,19 +63,19 @@ public class CallLogEventRequest implements Sensor {
 
     private int type;
 
-    public CallLogEventRequest() {
-        this.type = DTOType.CALL_LOG;
-        this.typeStr = DTOType.getApiName(this.type);
+    public CallLogEventDto() {
+        this.type = DtoType.CALL_LOG;
+        this.typeStr = DtoType.getApiName(this.type);
     }
 
-    public CallLogEventRequest(Long id) {
+    public CallLogEventDto(Long id) {
         this.id = id;
-        this.type = DTOType.CALL_LOG;
-        this.typeStr = DTOType.getApiName(this.type);
+        this.type = DtoType.CALL_LOG;
+        this.typeStr = DtoType.getApiName(this.type);
 
     }
 
-    public CallLogEventRequest(Long id, Long callId, Integer callType, String name, String number, Long date, Long duration, Boolean isNew, Boolean isUpdated, Boolean isDeleted, String created) {
+    public CallLogEventDto(Long id, Long callId, Integer callType, String name, String number, Long date, Long duration, Boolean isNew, Boolean isUpdated, Boolean isDeleted, String created) {
         this.id = id;
         this.callId = callId;
         this.callType = callType;
@@ -87,8 +87,8 @@ public class CallLogEventRequest implements Sensor {
         this.isUpdated = isUpdated;
         this.isDeleted = isDeleted;
         this.created = created;
-        this.type = DTOType.CALL_LOG;
-        this.typeStr = DTOType.getApiName(this.type);
+        this.type = DtoType.CALL_LOG;
+        this.typeStr = DtoType.getApiName(this.type);
     }
 
     public Long getId() {

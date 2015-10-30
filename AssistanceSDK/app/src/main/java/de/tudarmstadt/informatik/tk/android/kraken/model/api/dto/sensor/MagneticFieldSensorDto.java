@@ -3,14 +3,14 @@ package de.tudarmstadt.informatik.tk.android.kraken.model.api.dto.sensor;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-import de.tudarmstadt.informatik.tk.android.kraken.model.api.dto.DTOType;
+import de.tudarmstadt.informatik.tk.android.kraken.model.api.dto.DtoType;
 import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.Sensor;
 
 /**
  * @author Wladimir Schmidt (wlsc.dev@gmail.com)
  * @date 30.08.2015
  */
-public class MagneticFieldSensorRequest implements Sensor {
+public class MagneticFieldSensorDto implements Sensor {
 
     private Long id;
 
@@ -67,18 +67,18 @@ public class MagneticFieldSensorRequest implements Sensor {
 
     private int type;
 
-    public MagneticFieldSensorRequest() {
-        this.type = DTOType.MAGNETIC_FIELD;
-        this.typeStr = DTOType.getApiName(this.type);
+    public MagneticFieldSensorDto() {
+        this.type = DtoType.MAGNETIC_FIELD;
+        this.typeStr = DtoType.getApiName(this.type);
     }
 
-    public MagneticFieldSensorRequest(long id) {
+    public MagneticFieldSensorDto(long id) {
         this.id = id;
-        this.type = DTOType.MAGNETIC_FIELD;
-        this.typeStr = DTOType.getApiName(this.type);
+        this.type = DtoType.MAGNETIC_FIELD;
+        this.typeStr = DtoType.getApiName(this.type);
     }
 
-    public MagneticFieldSensorRequest(Long id, Double x, Double y, Double z, float xUncalibratedNoHardIron, float yUncalibratedNoHardIron, float zUncalibratedNoHardIron, float xUncalibratedEstimatedIronBias, float yUncalibratedEstimatedIronBias, float zUncalibratedEstimatedIronBias, String created, Integer accuracy) {
+    public MagneticFieldSensorDto(Long id, Double x, Double y, Double z, float xUncalibratedNoHardIron, float yUncalibratedNoHardIron, float zUncalibratedNoHardIron, float xUncalibratedEstimatedIronBias, float yUncalibratedEstimatedIronBias, float zUncalibratedEstimatedIronBias, String created, Integer accuracy) {
         this.id = id;
         this.x = x;
         this.y = y;
@@ -91,8 +91,8 @@ public class MagneticFieldSensorRequest implements Sensor {
         this.zUncalibratedEstimatedIronBias = zUncalibratedEstimatedIronBias;
         this.created = created;
         this.accuracy = accuracy;
-        this.type = DTOType.MAGNETIC_FIELD;
-        this.typeStr = DTOType.getApiName(this.type);
+        this.type = DtoType.MAGNETIC_FIELD;
+        this.typeStr = DtoType.getApiName(this.type);
     }
 
     public Long getId() {

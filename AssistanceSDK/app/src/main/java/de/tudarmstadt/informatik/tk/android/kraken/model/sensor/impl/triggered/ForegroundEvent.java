@@ -19,7 +19,7 @@ import java.util.Locale;
 import java.util.Map;
 
 import de.tudarmstadt.informatik.tk.android.kraken.db.DbForegroundEvent;
-import de.tudarmstadt.informatik.tk.android.kraken.model.api.dto.DTOType;
+import de.tudarmstadt.informatik.tk.android.kraken.model.api.dto.DtoType;
 import de.tudarmstadt.informatik.tk.android.kraken.model.enums.EPushType;
 import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.AbstractTriggeredEvent;
 import de.tudarmstadt.informatik.tk.android.kraken.provider.DbProvider;
@@ -79,7 +79,7 @@ public class ForegroundEvent extends AbstractTriggeredEvent {
         dbForegroundEvent.setEventType(EVENT_ASSISTANCE_START);
         dbForegroundEvent.setCreated(DateUtils.dateToISO8601String(new Date(), Locale.getDefault()));
 
-        dbProvider.insertEventEntry(dbForegroundEvent, getType());
+        dbProvider.getForegroundEventDao().insert(dbForegroundEvent);
 
         setRunning(true);
     }
@@ -108,7 +108,7 @@ public class ForegroundEvent extends AbstractTriggeredEvent {
                 dbForegroundEvent.setEventType(EVENT_ASSISTANCE_STOP);
                 dbForegroundEvent.setCreated(DateUtils.dateToISO8601String(new Date(), Locale.getDefault()));
 
-                dbProvider.insertEventEntry(dbForegroundEvent, getType());
+                dbProvider.getForegroundEventDao().insert(dbForegroundEvent);
             }
         }
     }
@@ -128,7 +128,7 @@ public class ForegroundEvent extends AbstractTriggeredEvent {
                 String color = storeIcon(foregroundEvent.getPackageName());
                 foregroundEvent.setColor(color);
 
-                dbProvider.insertEventEntry(foregroundEvent, getType());
+                dbProvider.getForegroundEventDao().insert(foregroundEvent);
             } else {
                 Log.d(TAG, "Cannot save event: event filter gave NULL back");
             }
@@ -204,7 +204,7 @@ public class ForegroundEvent extends AbstractTriggeredEvent {
 
     @Override
     public int getType() {
-        return DTOType.FOREGROUND;
+        return DtoType.FOREGROUND;
     }
 
     /**
@@ -227,7 +227,7 @@ public class ForegroundEvent extends AbstractTriggeredEvent {
 
             foregroundEvent.setCreated(DateUtils.dateToISO8601String(new Date(), Locale.getDefault()));
 
-            dbProvider.insertEventEntry(foregroundEvent, getType());
+            dbProvider.getForegroundEventDao().insert(foregroundEvent);
         }
     }
 

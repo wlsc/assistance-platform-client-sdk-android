@@ -3,7 +3,7 @@ package de.tudarmstadt.informatik.tk.android.kraken.model.api.dto.event;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-import de.tudarmstadt.informatik.tk.android.kraken.model.api.dto.DTOType;
+import de.tudarmstadt.informatik.tk.android.kraken.model.api.dto.DtoType;
 import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.Sensor;
 
 /**
@@ -12,7 +12,7 @@ import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.Sensor;
  * @author Wladimir Schmidt (wlsc.dev@gmail.com)
  * @date 08.10.2015
  */
-public class ForegroundEventRequest implements Sensor {
+public class ForegroundEventDto implements Sensor {
 
     private Long id;
 
@@ -58,18 +58,18 @@ public class ForegroundEventRequest implements Sensor {
 
     private int type;
 
-    public ForegroundEventRequest() {
-        this.type = DTOType.FOREGROUND;
-        this.typeStr = DTOType.getApiName(this.type);
+    public ForegroundEventDto() {
+        this.type = DtoType.FOREGROUND;
+        this.typeStr = DtoType.getApiName(this.type);
     }
 
-    public ForegroundEventRequest(Long id) {
+    public ForegroundEventDto(Long id) {
         this.id = id;
-        this.type = DTOType.FOREGROUND;
-        this.typeStr = DTOType.getApiName(this.type);
+        this.type = DtoType.FOREGROUND;
+        this.typeStr = DtoType.getApiName(this.type);
     }
 
-    public ForegroundEventRequest(Long id, String packageName, String appName, String className, String activityLabel, String color, String url, String eventType, Integer keystrokes, String created) {
+    public ForegroundEventDto(Long id, String packageName, String appName, String className, String activityLabel, String color, String url, String eventType, Integer keystrokes, String created) {
         this.id = id;
         this.packageName = packageName;
         this.appName = appName;
@@ -80,8 +80,8 @@ public class ForegroundEventRequest implements Sensor {
         this.eventType = eventType;
         this.keystrokes = keystrokes;
         this.created = created;
-        this.type = DTOType.FOREGROUND;
-        this.typeStr = DTOType.getApiName(this.type);
+        this.type = DtoType.FOREGROUND;
+        this.typeStr = DtoType.getApiName(this.type);
     }
 
     @Override

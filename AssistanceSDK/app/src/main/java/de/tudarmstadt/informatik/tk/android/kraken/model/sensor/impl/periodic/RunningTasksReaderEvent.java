@@ -7,7 +7,7 @@ import android.content.Context;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.tudarmstadt.informatik.tk.android.kraken.model.api.dto.DTOType;
+import de.tudarmstadt.informatik.tk.android.kraken.model.api.dto.DtoType;
 import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.AbstractPeriodicEvent;
 import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.ISensor;
 
@@ -33,7 +33,7 @@ public class RunningTasksReaderEvent extends
 
     @Override
     public int getType() {
-        return DTOType.ONE_TIME_SENSOR_RUNNING_TASKS;
+        return DtoType.ONE_TIME_SENSOR_RUNNING_TASKS;
     }
 
     @Override

@@ -7,7 +7,7 @@ import android.net.Uri;
 import android.provider.CallLog;
 
 import de.tudarmstadt.informatik.tk.android.kraken.db.DbCallLogEvent;
-import de.tudarmstadt.informatik.tk.android.kraken.model.api.dto.DTOType;
+import de.tudarmstadt.informatik.tk.android.kraken.model.api.dto.DtoType;
 import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.AbstractContentObserverEvent;
 
 /**
@@ -30,7 +30,7 @@ public class CallLogEvent extends AbstractContentObserverEvent {
 
     @Override
     public int getType() {
-        return DTOType.CALL_LOG;
+        return DtoType.CALL_LOG;
     }
 
     @Override
@@ -66,7 +66,7 @@ public class CallLogEvent extends AbstractContentObserverEvent {
 
         long longLastKnownCallLogId = -1;
 
-        DbCallLogEvent lastItem = dbProvider.getLastCallLogEvent();
+        DbCallLogEvent lastItem = dbProvider.getCallLogEventDao().getLastCallLogEvent();
 
         if (lastItem != null) {
             longLastKnownCallLogId = lastItem.getCallId();
@@ -103,7 +103,7 @@ public class CallLogEvent extends AbstractContentObserverEvent {
                 callLogEvent.setIsDeleted(false);
                 callLogEvent.setIsUpdated(false);
 
-                dbProvider.insertEventEntry(callLogEvent, getType());
+                dbProvider.getCallLogEventDao().insert(callLogEvent);
             }
         } finally {
             cur.close();

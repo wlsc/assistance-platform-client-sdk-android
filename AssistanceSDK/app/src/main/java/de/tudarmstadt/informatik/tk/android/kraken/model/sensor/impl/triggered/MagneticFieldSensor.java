@@ -11,7 +11,7 @@ import java.util.Date;
 import java.util.Locale;
 
 import de.tudarmstadt.informatik.tk.android.kraken.db.DbMagneticFieldSensor;
-import de.tudarmstadt.informatik.tk.android.kraken.model.api.dto.DTOType;
+import de.tudarmstadt.informatik.tk.android.kraken.model.api.dto.DtoType;
 import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.AbstractTriggeredEvent;
 import de.tudarmstadt.informatik.tk.android.kraken.util.DateUtils;
 
@@ -179,7 +179,7 @@ public class MagneticFieldSensor extends AbstractTriggeredEvent implements Senso
 
     @Override
     public int getType() {
-        return DTOType.MAGNETIC_FIELD;
+        return DtoType.MAGNETIC_FIELD;
     }
 
     @Override
@@ -250,7 +250,7 @@ public class MagneticFieldSensor extends AbstractTriggeredEvent implements Senso
         magneticFieldSensor.setAccuracy(accuracy);
         magneticFieldSensor.setCreated(DateUtils.dateToISO8601String(new Date(), Locale.getDefault()));
 
-        dbProvider.insertEventEntry(magneticFieldSensor, getType());
+        dbProvider.getMagneticFieldSensorDao().insert(magneticFieldSensor);
     }
 
     /**

@@ -11,7 +11,7 @@ import java.util.Date;
 import java.util.Locale;
 
 import de.tudarmstadt.informatik.tk.android.kraken.db.DbAccelerometerSensor;
-import de.tudarmstadt.informatik.tk.android.kraken.model.api.dto.DTOType;
+import de.tudarmstadt.informatik.tk.android.kraken.model.api.dto.DtoType;
 import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.AbstractTriggeredEvent;
 import de.tudarmstadt.informatik.tk.android.kraken.util.DateUtils;
 
@@ -60,7 +60,7 @@ public class AccelerometerSensor extends
         dbAccelerometerSensor.setAccuracy(accuracy);
         dbAccelerometerSensor.setCreated(DateUtils.dateToISO8601String(new Date(), Locale.getDefault()));
 
-        dbProvider.insertEventEntry(dbAccelerometerSensor, getType());
+        dbProvider.getAccelerometerSensorDao().insert(dbAccelerometerSensor);
     }
 
     @Override
@@ -218,7 +218,7 @@ public class AccelerometerSensor extends
 
     @Override
     public int getType() {
-        return DTOType.ACCELEROMETER;
+        return DtoType.ACCELEROMETER;
     }
 
 }

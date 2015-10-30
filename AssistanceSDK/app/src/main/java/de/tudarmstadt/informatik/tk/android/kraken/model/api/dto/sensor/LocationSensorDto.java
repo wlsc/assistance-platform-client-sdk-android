@@ -3,14 +3,14 @@ package de.tudarmstadt.informatik.tk.android.kraken.model.api.dto.sensor;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-import de.tudarmstadt.informatik.tk.android.kraken.model.api.dto.DTOType;
+import de.tudarmstadt.informatik.tk.android.kraken.model.api.dto.DtoType;
 import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.Sensor;
 
 /**
  * @author Wladimir Schmidt (wlsc.dev@gmail.com)
  * @date 30.08.2015
  */
-public class LocationSensorRequest implements Sensor {
+public class LocationSensorDto implements Sensor {
 
     private Long id;
 
@@ -58,18 +58,18 @@ public class LocationSensorRequest implements Sensor {
 
     private int type;
 
-    public LocationSensorRequest() {
-        this.type = DTOType.LOCATION;
-        this.typeStr = DTOType.getApiName(this.type);
+    public LocationSensorDto() {
+        this.type = DtoType.LOCATION;
+        this.typeStr = DtoType.getApiName(this.type);
     }
 
-    public LocationSensorRequest(long id) {
+    public LocationSensorDto(long id) {
         this.id = id;
-        this.type = DTOType.LOCATION;
-        this.typeStr = DTOType.getApiName(this.type);
+        this.type = DtoType.LOCATION;
+        this.typeStr = DtoType.getApiName(this.type);
     }
 
-    public LocationSensorRequest(long id, Double latitude, Double longitude, Double accuracyHorizontal, Float speed, String created, Double altitude, Double accuracyVertical, Integer course, Integer floor) {
+    public LocationSensorDto(long id, Double latitude, Double longitude, Double accuracyHorizontal, Float speed, String created, Double altitude, Double accuracyVertical, Integer course, Integer floor) {
         this.id = id;
         this.latitude = latitude;
         this.longitude = longitude;
@@ -80,8 +80,8 @@ public class LocationSensorRequest implements Sensor {
         this.accuracyVertical = accuracyVertical;
         this.course = course;
         this.floor = floor;
-        this.type = DTOType.LOCATION;
-        this.typeStr = DTOType.getApiName(this.type);
+        this.type = DtoType.LOCATION;
+        this.typeStr = DtoType.getApiName(this.type);
     }
 
     public Long getId() {

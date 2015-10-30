@@ -4,14 +4,14 @@ package de.tudarmstadt.informatik.tk.android.kraken.model.api.dto.event;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-import de.tudarmstadt.informatik.tk.android.kraken.model.api.dto.DTOType;
+import de.tudarmstadt.informatik.tk.android.kraken.model.api.dto.DtoType;
 import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.Sensor;
 
 /**
  * @author Wladimir Schmidt (wlsc.dev@gmail.com)
  * @date 30.08.2015
  */
-public class MobileConnectionEventRequest implements Sensor {
+public class MobileConnectionEventDto implements Sensor {
 
     private Long id;
 
@@ -43,27 +43,27 @@ public class MobileConnectionEventRequest implements Sensor {
 
     private int type;
 
-    public MobileConnectionEventRequest() {
-        this.type = DTOType.MOBILE_DATA_CONNECTION;
-        this.typeStr = DTOType.getApiName(this.type);
+    public MobileConnectionEventDto() {
+        this.type = DtoType.MOBILE_DATA_CONNECTION;
+        this.typeStr = DtoType.getApiName(this.type);
 
     }
 
-    public MobileConnectionEventRequest(long id) {
+    public MobileConnectionEventDto(long id) {
         this.id = id;
-        this.type = DTOType.MOBILE_DATA_CONNECTION;
-        this.typeStr = DTOType.getApiName(this.type);
+        this.type = DtoType.MOBILE_DATA_CONNECTION;
+        this.typeStr = DtoType.getApiName(this.type);
     }
 
-    public MobileConnectionEventRequest(long id, String carrierName, String mobileCarrierCode, String mobileNetworkCode, String created, Boolean voipAvailable) {
+    public MobileConnectionEventDto(long id, String carrierName, String mobileCarrierCode, String mobileNetworkCode, String created, Boolean voipAvailable) {
         this.id = id;
         this.carrierName = carrierName;
         this.mobileCarrierCode = mobileCarrierCode;
         this.mobileNetworkCode = mobileNetworkCode;
         this.created = created;
         this.voipAvailable = voipAvailable;
-        this.type = DTOType.MOBILE_DATA_CONNECTION;
-        this.typeStr = DTOType.getApiName(this.type);
+        this.type = DtoType.MOBILE_DATA_CONNECTION;
+        this.typeStr = DtoType.getApiName(this.type);
     }
 
     public Long getId() {

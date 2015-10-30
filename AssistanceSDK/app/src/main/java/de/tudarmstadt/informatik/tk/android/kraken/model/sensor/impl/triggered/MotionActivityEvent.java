@@ -19,7 +19,7 @@ import java.util.List;
 import java.util.Locale;
 
 import de.tudarmstadt.informatik.tk.android.kraken.db.DbMotionActivityEvent;
-import de.tudarmstadt.informatik.tk.android.kraken.model.api.dto.DTOType;
+import de.tudarmstadt.informatik.tk.android.kraken.model.api.dto.DtoType;
 import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.AbstractTriggeredEvent;
 import de.tudarmstadt.informatik.tk.android.kraken.service.ActivitySensorService;
 import de.tudarmstadt.informatik.tk.android.kraken.util.DateUtils;
@@ -117,7 +117,7 @@ public class MotionActivityEvent extends
         motionActivityEvent.setCreated(DateUtils.dateToISO8601String(new Date(), Locale.getDefault()));
 
         // insert db entry
-        dbProvider.insertEventEntry(motionActivityEvent, getType());
+        dbProvider.getMotionActivityEventDao().insert(motionActivityEvent);
     }
 
     /**
@@ -242,7 +242,7 @@ public class MotionActivityEvent extends
 
     @Override
     public int getType() {
-        return DTOType.MOTION_ACTIVITY;
+        return DtoType.MOTION_ACTIVITY;
     }
 
     @Override

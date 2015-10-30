@@ -3,14 +3,14 @@ package de.tudarmstadt.informatik.tk.android.kraken.model.api.dto.event;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-import de.tudarmstadt.informatik.tk.android.kraken.model.api.dto.DTOType;
+import de.tudarmstadt.informatik.tk.android.kraken.model.api.dto.DtoType;
 import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.Sensor;
 
 /**
  * @author Wladimir Schmidt (wlsc.dev@gmail.com)
  * @date 30.08.2015
  */
-public class ConnectionEventRequest implements Sensor {
+public class ConnectionEventDto implements Sensor {
 
     private Long id;
 
@@ -34,24 +34,24 @@ public class ConnectionEventRequest implements Sensor {
 
     private int type;
 
-    public ConnectionEventRequest() {
-        this.type = DTOType.CONNECTION;
-        this.typeStr = DTOType.getApiName(this.type);
+    public ConnectionEventDto() {
+        this.type = DtoType.CONNECTION;
+        this.typeStr = DtoType.getApiName(this.type);
     }
 
-    public ConnectionEventRequest(long id) {
+    public ConnectionEventDto(long id) {
         this.id = id;
-        this.type = DTOType.CONNECTION;
-        this.typeStr = DTOType.getApiName(this.type);
+        this.type = DtoType.CONNECTION;
+        this.typeStr = DtoType.getApiName(this.type);
     }
 
-    public ConnectionEventRequest(long id, boolean isWifi, boolean isMobile, String created) {
+    public ConnectionEventDto(long id, boolean isWifi, boolean isMobile, String created) {
         this.id = id;
         this.wifi = isWifi;
         this.mobile = isMobile;
         this.created = created;
-        this.type = DTOType.CONNECTION;
-        this.typeStr = DTOType.getApiName(this.type);
+        this.type = DtoType.CONNECTION;
+        this.typeStr = DtoType.getApiName(this.type);
     }
 
     public Long getId() {

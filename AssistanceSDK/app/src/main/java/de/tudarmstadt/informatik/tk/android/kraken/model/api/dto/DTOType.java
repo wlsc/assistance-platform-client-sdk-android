@@ -8,7 +8,7 @@ import de.tudarmstadt.informatik.tk.android.kraken.R;
  * @author Wladimir Schmidt (wlsc.dev@gmail.com)
  * @date 30.08.2015
  */
-public class DTOType {
+public class DtoType {
 
     /**
      * Type of sensors and events
@@ -60,7 +60,7 @@ public class DTOType {
 
     public static final int CALENDAR_REMINDER = 25;
 
-    private DTOType() {
+    private DtoType() {
     }
 
     public static final String getName(int type, Resources res) {

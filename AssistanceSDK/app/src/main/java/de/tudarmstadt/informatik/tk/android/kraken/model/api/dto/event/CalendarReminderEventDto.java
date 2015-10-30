@@ -3,7 +3,7 @@ package de.tudarmstadt.informatik.tk.android.kraken.model.api.dto.event;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-import de.tudarmstadt.informatik.tk.android.kraken.model.api.dto.DTOType;
+import de.tudarmstadt.informatik.tk.android.kraken.model.api.dto.DtoType;
 import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.Sensor;
 
 /**
@@ -53,14 +53,14 @@ public class CalendarReminderEventDto implements Sensor {
     private int type;
 
     public CalendarReminderEventDto() {
-        this.type = DTOType.CALENDAR_REMINDER;
-        this.typeStr = DTOType.getApiName(this.type);
+        this.type = DtoType.CALENDAR_REMINDER;
+        this.typeStr = DtoType.getApiName(this.type);
     }
 
     public CalendarReminderEventDto(Long id) {
         this.id = id;
-        this.type = DTOType.CALENDAR_REMINDER;
-        this.typeStr = DTOType.getApiName(this.type);
+        this.type = DtoType.CALENDAR_REMINDER;
+        this.typeStr = DtoType.getApiName(this.type);
     }
 
     public CalendarReminderEventDto(Long id, Long reminderId, Long eventId, Integer method, Integer minutes, Boolean isNew, Boolean isUpdated, Boolean isDeleted, String created) {
@@ -73,8 +73,8 @@ public class CalendarReminderEventDto implements Sensor {
         this.isUpdated = isUpdated;
         this.isDeleted = isDeleted;
         this.created = created;
-        this.type = DTOType.CALENDAR_REMINDER;
-        this.typeStr = DTOType.getApiName(this.type);
+        this.type = DtoType.CALENDAR_REMINDER;
+        this.typeStr = DtoType.getApiName(this.type);
     }
 
     public Long getId() {

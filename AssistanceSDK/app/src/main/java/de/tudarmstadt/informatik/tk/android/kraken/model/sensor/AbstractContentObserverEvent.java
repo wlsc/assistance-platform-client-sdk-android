@@ -58,22 +58,22 @@ public abstract class AbstractContentObserverEvent extends AbstractSensor {
     }
 
     protected String getStringByColumnName(Cursor cur, String strColumnName) {
-        int index =  cur.getColumnIndex(strColumnName);
+        int index = cur.getColumnIndex(strColumnName);
         return (index == -1) ? null : cur.getString(cur.getColumnIndex(strColumnName));
     }
 
     protected long getLongByColumnName(Cursor cur, String strColumnName) {
-        int index =  cur.getColumnIndex(strColumnName);
+        int index = cur.getColumnIndex(strColumnName);
         return (index == -1) ? 0 : cur.getLong(cur.getColumnIndex(strColumnName));
     }
 
     protected int getIntByColumnName(Cursor cur, String strColumnName) {
-        int index =  cur.getColumnIndex(strColumnName);
+        int index = cur.getColumnIndex(strColumnName);
         return (index == -1) ? 0 : cur.getInt(cur.getColumnIndex(strColumnName));
     }
 
     protected boolean getBoolByColumnName(Cursor cur, String strColumnName) {
-        int index =  cur.getColumnIndex(strColumnName);
+        int index = cur.getColumnIndex(strColumnName);
         return (index == -1) ? false : (cur.getInt(cur.getColumnIndex(strColumnName)) == 1);
     }
 

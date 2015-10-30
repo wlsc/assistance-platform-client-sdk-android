@@ -15,7 +15,7 @@ import java.util.List;
 
 import de.tudarmstadt.informatik.tk.android.kraken.db.DbForegroundEvent;
 import de.tudarmstadt.informatik.tk.android.kraken.db.DbNetworkTrafficEvent;
-import de.tudarmstadt.informatik.tk.android.kraken.model.api.dto.DTOType;
+import de.tudarmstadt.informatik.tk.android.kraken.model.api.dto.DtoType;
 import de.tudarmstadt.informatik.tk.android.kraken.model.enums.EPushType;
 import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.AbstractTriggeredEvent;
 import de.tudarmstadt.informatik.tk.android.kraken.provider.DbProvider;
@@ -111,7 +111,7 @@ public class ForegroundTrafficEvent extends AbstractTriggeredEvent {
      */
     @Override
     public int getType() {
-        return DTOType.NETWORK_TRAFFIC;
+        return DtoType.NETWORK_TRAFFIC;
     }
 
     /**
@@ -197,7 +197,7 @@ public class ForegroundTrafficEvent extends AbstractTriggeredEvent {
 
                 networkTrafficEvent.setBackground(false);
 
-                dbProvider.insertEventEntry(networkTrafficEvent, getType());
+                dbProvider.getNetworkTrafficEventDao().insert(networkTrafficEvent);
 
                 //found a match, don't need to search anymore
                 break;
@@ -246,7 +246,7 @@ public class ForegroundTrafficEvent extends AbstractTriggeredEvent {
 
             networkTrafficEvent.setBackground(false);
 
-            dbProvider.insertEventEntry(networkTrafficEvent, getType());
+            dbProvider.getNetworkTrafficEventDao().insert(networkTrafficEvent);
         }
     }
 }

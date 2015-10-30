@@ -3,14 +3,14 @@ package de.tudarmstadt.informatik.tk.android.kraken.model.api.dto.event;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-import de.tudarmstadt.informatik.tk.android.kraken.model.api.dto.DTOType;
+import de.tudarmstadt.informatik.tk.android.kraken.model.api.dto.DtoType;
 import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.Sensor;
 
 /**
  * @author Wladimir Schmidt (wlsc.dev@gmail.com)
  * @date 30.08.2015
  */
-public class WifiConnectionEventRequest implements Sensor {
+public class WifiConnectionEventDto implements Sensor {
 
     private Long id;
 
@@ -54,18 +54,18 @@ public class WifiConnectionEventRequest implements Sensor {
 
     private int type;
 
-    public WifiConnectionEventRequest() {
-        this.type = DTOType.WIFI_CONNECTION;
-        this.typeStr = DTOType.getApiName(this.type);
+    public WifiConnectionEventDto() {
+        this.type = DtoType.WIFI_CONNECTION;
+        this.typeStr = DtoType.getApiName(this.type);
     }
 
-    public WifiConnectionEventRequest(long id) {
+    public WifiConnectionEventDto(long id) {
         this.id = id;
-        this.type = DTOType.WIFI_CONNECTION;
-        this.typeStr = DTOType.getApiName(this.type);
+        this.type = DtoType.WIFI_CONNECTION;
+        this.typeStr = DtoType.getApiName(this.type);
     }
 
-    public WifiConnectionEventRequest(long id, String ssid, String bssid, String created, Integer channel, Integer frequency, Integer linkSpeed, Integer signalStrength, Integer networkId) {
+    public WifiConnectionEventDto(long id, String ssid, String bssid, String created, Integer channel, Integer frequency, Integer linkSpeed, Integer signalStrength, Integer networkId) {
         this.id = id;
         this.ssid = ssid;
         this.bssid = bssid;
@@ -75,8 +75,8 @@ public class WifiConnectionEventRequest implements Sensor {
         this.linkSpeed = linkSpeed;
         this.signalStrength = signalStrength;
         this.networkId = networkId;
-        this.type = DTOType.WIFI_CONNECTION;
-        this.typeStr = DTOType.getApiName(this.type);
+        this.type = DtoType.WIFI_CONNECTION;
+        this.typeStr = DtoType.getApiName(this.type);
     }
 
     public Long getId() {
