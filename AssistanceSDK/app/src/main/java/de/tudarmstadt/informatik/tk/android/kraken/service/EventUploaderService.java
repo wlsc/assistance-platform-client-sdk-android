@@ -157,6 +157,7 @@ public class EventUploaderService extends GcmTaskService {
                             }
 
                             requestEvents = new SparseArrayCompat<>();
+                            requestDbEvents = new SparseArrayCompat<List<? extends IDbSensor>>();
                             requestEvents = getEntriesForUpload(0);
 
                             final List<Sensor> eventsAsList = new LinkedList<>();
@@ -246,6 +247,7 @@ public class EventUploaderService extends GcmTaskService {
                     }
 
                     requestEvents = new SparseArrayCompat<>();
+                    requestDbEvents = new SparseArrayCompat<List<? extends IDbSensor>>();
                     requestEvents = getEntriesForUpload(PUSH_NUMBER_OF_EACH_ELEMENTS);
 
                     final List<Sensor> eventsAsList = new LinkedList<>();
