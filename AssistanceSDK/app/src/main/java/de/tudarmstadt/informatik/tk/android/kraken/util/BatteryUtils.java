@@ -22,12 +22,16 @@ public class BatteryUtils {
      */
     public static boolean isPluggedInWithAc(Context context) {
 
-        final IntentFilter filter = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
-        Intent intent = context.registerReceiver(null, filter);
+        Intent intent = getBatteryChangedIntent(context);
         int plugged = intent.getIntExtra(BatteryManager.EXTRA_PLUGGED, -1);
         boolean isPlugged = plugged == BatteryManager.BATTERY_PLUGGED_AC;
 
         return isPlugged;
+    }
+
+    private static Intent getBatteryChangedIntent(Context context) {
+        final IntentFilter filter = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
+        return context.registerReceiver(null, filter);
     }
 
     /**
@@ -38,8 +42,7 @@ public class BatteryUtils {
      */
     public static boolean isPluggedInWithUsb(Context context) {
 
-        final IntentFilter filter = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
-        Intent intent = context.registerReceiver(null, filter);
+        Intent intent = getBatteryChangedIntent(context);
         int plugged = intent.getIntExtra(BatteryManager.EXTRA_PLUGGED, -1);
         boolean isPlugged = plugged == BatteryManager.BATTERY_PLUGGED_USB;
 
@@ -54,8 +57,7 @@ public class BatteryUtils {
      */
     public static boolean isPluggedInWithWirelessCharger(Context context) {
 
-        final IntentFilter filter = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
-        Intent intent = context.registerReceiver(null, filter);
+        Intent intent = getBatteryChangedIntent(context);
         int plugged = intent.getIntExtra(BatteryManager.EXTRA_PLUGGED, -1);
         boolean isPlugged = plugged == BatteryManager.BATTERY_PLUGGED_WIRELESS;
 
@@ -70,13 +72,29 @@ public class BatteryUtils {
      */
     public static boolean isPluggedIn(Context context) {
 
-        final IntentFilter filter = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
-        Intent intent = context.registerReceiver(null, filter);
+        Intent intent = getBatteryChangedIntent(context);
         int plugged = intent.getIntExtra(BatteryManager.EXTRA_PLUGGED, -1);
         boolean isPlugged = (plugged == BatteryManager.BATTERY_PLUGGED_AC) ||
                 (plugged == BatteryManager.BATTERY_PLUGGED_USB) ||
                 (plugged == BatteryManager.BATTERY_PLUGGED_WIRELESS);
 
         return isPlugged;
+    }
+
+    /**
+     * Returns battery percentage status
+     *
+     * @param context
+     * @return
+     */
+    public static float getBatteryPercentage(Context context) {
+
+        Intent intent = getBatteryChangedIntent(context);
+        int level = intent.getIntExtra(BatteryManager.EXTRA_LEVEL, -1);
+        int scale = intent.getIntExtra(BatteryManager.EXTRA_SCALE, -1);
+
+        float batteryPct = level / (float) scale;
+
+        return batteryPct;
     }
 }
