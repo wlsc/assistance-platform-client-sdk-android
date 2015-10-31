@@ -8,7 +8,7 @@ import de.tudarmstadt.informatik.tk.android.kraken.provider.dao.sensing.CommonEv
  * @author Wladimir Schmidt (wlsc.dev@gmail.com)
  * @date 31.10.2015
  */
-public interface PowerStatusEventDao extends CommonEventDao {
+public interface PowerStateEventDao extends CommonEventDao {
 
     PowerStateEventDto convertObject(DbPowerStateEvent dbSensor);
 

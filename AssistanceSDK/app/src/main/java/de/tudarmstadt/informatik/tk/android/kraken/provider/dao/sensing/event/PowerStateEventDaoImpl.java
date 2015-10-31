@@ -19,11 +19,11 @@ import de.tudarmstadt.informatik.tk.android.kraken.provider.dao.sensing.CommonEv
  */
 public class PowerStateEventDaoImpl extends
         CommonEventDaoImpl implements
-        PowerStatusEventDao {
+        PowerStateEventDao {
 
     private static final String TAG = PowerStateEventDaoImpl.class.getSimpleName();
 
-    private static PowerStatusEventDao INSTANCE;
+    private static PowerStateEventDao INSTANCE;
 
     private DbPowerStateEventDao dao;
 
@@ -34,7 +34,7 @@ public class PowerStateEventDaoImpl extends
         }
     }
 
-    public static PowerStatusEventDao getInstance(DaoSession mDaoSession) {
+    public static PowerStateEventDao getInstance(DaoSession mDaoSession) {
 
         if (INSTANCE == null) {
             INSTANCE = new PowerStateEventDaoImpl(mDaoSession);
@@ -76,7 +76,7 @@ public class PowerStateEventDaoImpl extends
 
         Log.d(ForegroundTrafficEvent.class.getSimpleName(), "Finished dumping data");
 
-        return 0;
+        return result;
     }
 
     @Override

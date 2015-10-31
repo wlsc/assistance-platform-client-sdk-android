@@ -6,7 +6,17 @@ import android.content.Intent;
 import android.os.Handler;
 import android.util.Log;
 
+import java.util.Date;
+import java.util.Locale;
+
+import de.tudarmstadt.informatik.tk.android.kraken.db.DbPowerStateEvent;
+import de.tudarmstadt.informatik.tk.android.kraken.model.constant.PowerState;
+import de.tudarmstadt.informatik.tk.android.kraken.provider.DaoProvider;
 import de.tudarmstadt.informatik.tk.android.kraken.provider.HarvesterServiceProvider;
+import de.tudarmstadt.informatik.tk.android.kraken.service.HarvesterService;
+import de.tudarmstadt.informatik.tk.android.kraken.util.BatteryUtils;
+import de.tudarmstadt.informatik.tk.android.kraken.util.DateUtils;
+import de.tudarmstadt.informatik.tk.android.kraken.util.DeviceUtils;
 
 /**
  * @author Wladimir Schmidt (wlsc.dev@gmail.com)
@@ -57,28 +67,59 @@ public class PowerStatusReceiver extends BroadcastReceiver {
         final String action = intent.getAction();
         Log.d(TAG, "Power status has changed. Type: " + action);
 
-        if (Intent.ACTION_POWER_CONNECTED.equals(action)) {
+        DbPowerStateEvent powerStateEvent = new DbPowerStateEvent();
+        powerStateEvent.setCreated(DateUtils.dateToISO8601String(new Date(), Locale.getDefault()));
 
+        boolean isAc = BatteryUtils.isPluggedInWithAc(context);
+        boolean isUsb = BatteryUtils.isPluggedInWithUsb(context);
+        boolean isWireless = BatteryUtils.isPluggedInWithWirelessCharger(context);
+
+        if (isAc) {
+            powerStateEvent.setState(PowerState.AC_ADAPTER);
+        }
+
+        if (isUsb) {
+            powerStateEvent.setState(PowerState.USB);
+        }
+
+        if (isWireless) {
+            powerStateEvent.setState(PowerState.WIRELESS);
+        }
+
+        if (Intent.ACTION_POWER_CONNECTED.equals(action)) {
             Log.d(TAG, "Power connected");
+
+            boolean isRunning = DeviceUtils.isServiceRunning(context, HarvesterService.class);
+
+            if (!isRunning) {
+                HarvesterServiceProvider.getInstance(context).startSensingService();
+            }
         }
 
         if (Intent.ACTION_POWER_DISCONNECTED.equals(action)) {
-
             Log.d(TAG, "Power disconnected");
+
+            powerStateEvent.setState(PowerState.NONE);
         }
 
         if (Intent.ACTION_BATTERY_LOW.equals(action)) {
-
             Log.d(TAG, "Remaining battery is really low");
 
             HarvesterServiceProvider.getInstance(context).stopSensingService();
+
+            powerStateEvent.setIsLow(true);
+            powerStateEvent.setIsOkay(false);
         }
 
         if (Intent.ACTION_BATTERY_OKAY.equals(action)) {
-
             Log.d(TAG, "Remaining battery is OKAY");
 
             HarvesterServiceProvider.getInstance(context).startSensingService();
+
+            powerStateEvent.setIsLow(false);
+            powerStateEvent.setIsOkay(true);
         }
+
+        DaoProvider.getInstance(context).getPowerStateEventDao().insert(powerStateEvent);
     }
 }

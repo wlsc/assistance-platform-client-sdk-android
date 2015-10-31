@@ -34,6 +34,8 @@ import de.tudarmstadt.informatik.tk.android.kraken.provider.dao.sensing.event.Mo
 import de.tudarmstadt.informatik.tk.android.kraken.provider.dao.sensing.event.MotionActivityEventDaoImpl;
 import de.tudarmstadt.informatik.tk.android.kraken.provider.dao.sensing.event.NetworkTrafficEventDao;
 import de.tudarmstadt.informatik.tk.android.kraken.provider.dao.sensing.event.NetworkTrafficEventDaoImpl;
+import de.tudarmstadt.informatik.tk.android.kraken.provider.dao.sensing.event.PowerStateEventDao;
+import de.tudarmstadt.informatik.tk.android.kraken.provider.dao.sensing.event.PowerStateEventDaoImpl;
 import de.tudarmstadt.informatik.tk.android.kraken.provider.dao.sensing.event.WifiConnectionEventDao;
 import de.tudarmstadt.informatik.tk.android.kraken.provider.dao.sensing.event.WifiConnectionEventDaoImpl;
 import de.tudarmstadt.informatik.tk.android.kraken.provider.dao.sensing.sensor.AccelerometerSensorDao;
@@ -274,6 +276,15 @@ public class DaoProvider {
      */
     public WifiConnectionEventDao getWifiConnectionEventDao() {
         return WifiConnectionEventDaoImpl.getInstance(mDaoSession);
+    }
+
+    /**
+     * PowerStateEventDao
+     *
+     * @return
+     */
+    public PowerStateEventDao getPowerStateEventDao() {
+        return PowerStateEventDaoImpl.getInstance(mDaoSession);
     }
 
     /**
