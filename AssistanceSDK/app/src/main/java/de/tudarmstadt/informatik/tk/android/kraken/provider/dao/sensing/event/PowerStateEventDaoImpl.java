@@ -2,12 +2,15 @@ package de.tudarmstadt.informatik.tk.android.kraken.provider.dao.sensing.event;
 
 import android.util.Log;
 
+import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 
 import de.tudarmstadt.informatik.tk.android.kraken.db.DaoSession;
 import de.tudarmstadt.informatik.tk.android.kraken.db.DbPowerStateEvent;
 import de.tudarmstadt.informatik.tk.android.kraken.db.DbPowerStateEventDao;
 import de.tudarmstadt.informatik.tk.android.kraken.interfaces.IDbSensor;
+import de.tudarmstadt.informatik.tk.android.kraken.model.api.dto.DtoType;
 import de.tudarmstadt.informatik.tk.android.kraken.model.api.dto.event.PowerStateEventDto;
 import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.Sensor;
 import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.impl.triggered.ForegroundTrafficEvent;
@@ -45,22 +48,59 @@ public class PowerStateEventDaoImpl extends
 
     @Override
     public PowerStateEventDto convertObject(DbPowerStateEvent dbSensor) {
-        return null;
+
+        if (dbSensor == null) {
+            return null;
+        }
+
+        PowerStateEventDto result = new PowerStateEventDto();
+
+        result.setId(dbSensor.getId());
+        result.setIsOkay(dbSensor.getIsOkay());
+        result.setIsLow(dbSensor.getIsLow());
+        result.setState(dbSensor.getState());
+        result.setType(DtoType.POWER_STATE);
+        result.setTypeStr(DtoType.getApiName(DtoType.POWER_STATE));
+        result.setCreated(dbSensor.getCreated());
+
+        return result;
     }
 
     @Override
     public List<? extends IDbSensor> getAll() {
-        return null;
+        return dao
+                .queryBuilder()
+                .build()
+                .list();
     }
 
     @Override
     public List<? extends IDbSensor> getFirstN(int amount) {
-        return null;
+
+        if (amount <= 0) {
+            return Collections.EMPTY_LIST;
+        }
+
+        return dao
+                .queryBuilder()
+                .limit(amount)
+                .build()
+                .list();
     }
 
     @Override
     public List<? extends IDbSensor> getLastN(int amount) {
-        return null;
+
+        if (amount <= 0) {
+            return Collections.EMPTY_LIST;
+        }
+
+        return dao
+                .queryBuilder()
+                .orderDesc(DbPowerStateEventDao.Properties.Id)
+                .limit(amount)
+                .build()
+                .list();
     }
 
     @Override
@@ -82,10 +122,25 @@ public class PowerStateEventDaoImpl extends
     @Override
     public void delete(List<? extends IDbSensor> events) {
 
+        if (events == null || events.isEmpty()) {
+            return;
+        }
+
+        dao.deleteInTx((Iterable<DbPowerStateEvent>) events);
     }
 
     @Override
     public List<Sensor> convertObjects(List<? extends IDbSensor> dbSensors) {
-        return null;
+
+        List<Sensor> result = new LinkedList<>();
+
+        if (dbSensors != null && !dbSensors.isEmpty()) {
+
+            for (DbPowerStateEvent dbSensor : (List<DbPowerStateEvent>) dbSensors) {
+                result.add(convertObject(dbSensor));
+            }
+        }
+
+        return result;
     }
 }
