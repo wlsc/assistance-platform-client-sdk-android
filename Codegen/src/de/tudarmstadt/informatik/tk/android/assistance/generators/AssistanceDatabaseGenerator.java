@@ -508,8 +508,8 @@ public class AssistanceDatabaseGenerator {
     contactEvent.addToMany(contactMailEvent, contactNumberfkContactEvent);
     
     // ----- Power Status Event -----
-    Entity powerStatusEvent = schema.addEntity("DbPowerStatusEvent");
-    powerStatusEvent.setTableName("power_status_event");
+    Entity powerStatusEvent = schema.addEntity("DbPowerStateEvent");
+    powerStatusEvent.setTableName("power_state_event");
     powerStatusEvent.addIdProperty().autoincrement().index();
     powerStatusEvent.implementsInterface(Config.KRAKEN_PACKAGE_SENSOR);
     powerStatusEvent.addIntProperty("state");

@@ -10,7 +10,7 @@ import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.Sensor;
  * @author Wladimir Schmidt (wlsc.dev@gmail.com)
  * @date 31.10.2015
  */
-public class PowerStateDto implements Sensor {
+public class PowerStateEventDto implements Sensor {
 
     private Long id;
 
@@ -36,18 +36,18 @@ public class PowerStateDto implements Sensor {
 
     private int type;
 
-    public PowerStateDto() {
+    public PowerStateEventDto() {
         this.type = DtoType.POWER_STATE;
         this.typeStr = DtoType.getApiName(this.type);
     }
 
-    public PowerStateDto(Long id) {
+    public PowerStateEventDto(Long id) {
         this.id = id;
         this.type = DtoType.POWER_STATE;
         this.typeStr = DtoType.getApiName(this.type);
     }
 
-    public PowerStateDto(Long id, Integer state, Boolean isLow, Boolean isOkay, String created) {
+    public PowerStateEventDto(Long id, Integer state, Boolean isLow, Boolean isOkay, String created) {
         this.id = id;
         this.state = state;
         this.isLow = isLow;
