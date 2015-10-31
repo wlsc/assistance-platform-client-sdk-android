@@ -32,6 +32,8 @@ public class DtoType {
 
     public static final int LOUDNESS = 9;
 
+    public static final int POWER_STATE = 10;
+
     public static final int FOREGROUND = 12;
 
     public static final int LIGHT = 13;
@@ -87,6 +89,8 @@ public class DtoType {
                 return res.getString(R.string.sensor_foreground_event);
             case LIGHT:
                 return res.getString(R.string.sensor_light);
+            case POWER_STATE:
+                return res.getString(R.string.event_power_state);
             default:
                 return "";
         }
@@ -123,6 +127,8 @@ public class DtoType {
                 return "foreground";
             case LIGHT:
                 return "light";
+            case POWER_STATE:
+                return "powerstate";
             default:
                 return "";
         }

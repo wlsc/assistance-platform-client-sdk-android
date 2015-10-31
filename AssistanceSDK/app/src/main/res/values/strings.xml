@@ -20,6 +20,7 @@
     <string name="measurement_log">Log</string>
     <string name="sensor_activity">Activity</string>
     <string name="sensor_light">Ambient light</string>
+    <string name="event_power_state">Power state</string>
     <string name="sensor_location">Location</string>
     <string name="sensor_ringtone">Ringtone</string>
     <string name="one_time_sensor_account_reader">Account reader</string>
