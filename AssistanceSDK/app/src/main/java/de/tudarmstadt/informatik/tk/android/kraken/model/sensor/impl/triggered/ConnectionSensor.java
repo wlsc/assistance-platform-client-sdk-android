@@ -19,8 +19,8 @@ import de.tudarmstadt.informatik.tk.android.kraken.db.DbMobileConnectionEvent;
 import de.tudarmstadt.informatik.tk.android.kraken.db.DbWifiConnectionEvent;
 import de.tudarmstadt.informatik.tk.android.kraken.model.api.dto.DtoType;
 import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.AbstractTriggeredEvent;
+import de.tudarmstadt.informatik.tk.android.kraken.util.ConnectionUtils;
 import de.tudarmstadt.informatik.tk.android.kraken.util.DateUtils;
-import de.tudarmstadt.informatik.tk.android.kraken.util.DeviceUtils;
 
 /**
  * @author Unknown
@@ -175,7 +175,7 @@ public class ConnectionSensor extends AbstractTriggeredEvent {
             /**
              * MOBILE CONNECTION
              */
-            if (DeviceUtils.isConnectedMobile(context)) {
+            if (ConnectionUtils.isConnectedMobile(context)) {
 
                 isMobileDataAvailable = true;
 
@@ -198,7 +198,7 @@ public class ConnectionSensor extends AbstractTriggeredEvent {
             /**
              * WIFI CONNECTION
              */
-            if (DeviceUtils.isConnectedWifi(context)) {
+            if (ConnectionUtils.isConnectedWifi(context)) {
 
                 isWifiDataAvailable = true;
 

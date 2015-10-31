@@ -9,7 +9,7 @@ import android.util.Log;
 
 import de.tudarmstadt.informatik.tk.android.kraken.provider.PreferenceProvider;
 import de.tudarmstadt.informatik.tk.android.kraken.service.EventUploaderService;
-import de.tudarmstadt.informatik.tk.android.kraken.util.DeviceUtils;
+import de.tudarmstadt.informatik.tk.android.kraken.util.ConnectionUtils;
 
 /**
  * @author Wladimir Schmidt (wlsc.dev@gmail.com)
@@ -66,11 +66,11 @@ public class WifiCatcherReceiver extends BroadcastReceiver {
     public void onReceive(final Context context, Intent intent) {
         Log.d(TAG, "Connectivity has changed");
 
-        if (DeviceUtils.isConnectedWifi(context)) {
+        if (ConnectionUtils.isConnectedWifi(context)) {
             Log.d(TAG, "WI-FI is connected");
 
             // check for internet connection
-            if (DeviceUtils.isOnline(context)) {
+            if (ConnectionUtils.isOnline(context)) {
                 Log.d(TAG, "Internet is ONLINE");
 
                 // checking that user is logged in the app

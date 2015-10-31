@@ -25,7 +25,7 @@ import de.tudarmstadt.informatik.tk.android.kraken.model.api.endpoint.EventUploa
 import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.Sensor;
 import de.tudarmstadt.informatik.tk.android.kraken.provider.DbProvider;
 import de.tudarmstadt.informatik.tk.android.kraken.provider.PreferenceProvider;
-import de.tudarmstadt.informatik.tk.android.kraken.util.DeviceUtils;
+import de.tudarmstadt.informatik.tk.android.kraken.util.ConnectionUtils;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
@@ -112,13 +112,13 @@ public class EventUploaderService extends GcmTaskService {
         Log.d(TAG, "Task uploader has started");
 
         // check Airplane Mode enabled
-        if (DeviceUtils.isAirplaneModeEnabled(getApplicationContext())) {
+        if (ConnectionUtils.isAirplaneModeEnabled(getApplicationContext())) {
             Log.d(TAG, "Airplane Mode enabled. Upload request ignored");
             return GcmNetworkManager.RESULT_FAILURE;
         }
 
         // device is not online
-        if (!DeviceUtils.isOnline(getApplicationContext())) {
+        if (!ConnectionUtils.isOnline(getApplicationContext())) {
             Log.d(TAG, "Device is not online. Upload request ignored");
             return GcmNetworkManager.RESULT_FAILURE;
         }
