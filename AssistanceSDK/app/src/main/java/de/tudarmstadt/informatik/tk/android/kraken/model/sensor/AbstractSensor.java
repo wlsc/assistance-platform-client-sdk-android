@@ -4,7 +4,7 @@ import android.content.Context;
 
 import de.tudarmstadt.informatik.tk.android.kraken.db.DaoSession;
 import de.tudarmstadt.informatik.tk.android.kraken.model.enums.EPushType;
-import de.tudarmstadt.informatik.tk.android.kraken.provider.DbProvider;
+import de.tudarmstadt.informatik.tk.android.kraken.provider.DaoProvider;
 import de.tudarmstadt.informatik.tk.android.kraken.service.HarvesterService;
 
 /**
@@ -21,7 +21,7 @@ public abstract class AbstractSensor implements ISensor {
     private boolean isRunning;
 
     protected DaoSession mDaoSession;
-    protected DbProvider dbProvider;
+    protected DaoProvider daoProvider;
 
     private boolean isDisabledByUser;
     private boolean isDisabledBySystem;
@@ -32,11 +32,11 @@ public abstract class AbstractSensor implements ISensor {
         setContext(context);
 
         if (mDaoSession == null) {
-            mDaoSession = DbProvider.getInstance(context).getDaoSession();
+            mDaoSession = DaoProvider.getInstance(context).getDaoSession();
         }
 
-        if (dbProvider == null) {
-            dbProvider = DbProvider.getInstance(context);
+        if (daoProvider == null) {
+            daoProvider = DaoProvider.getInstance(context);
         }
     }
 

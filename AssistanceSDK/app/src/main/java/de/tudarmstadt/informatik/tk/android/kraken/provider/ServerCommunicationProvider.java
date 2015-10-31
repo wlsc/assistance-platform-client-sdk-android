@@ -25,7 +25,7 @@ public class ServerCommunicationProvider {
 
     private static ServerCommunicationProvider INSTANCE;
 
-    private static DbProvider dbProvider;
+    private static DaoProvider daoProvider;
 
     private ServerCommunicationProvider() {
     }
@@ -44,8 +44,8 @@ public class ServerCommunicationProvider {
 
         mContext = context;
 
-        if (dbProvider == null) {
-            dbProvider = DbProvider.getInstance(context);
+        if (daoProvider == null) {
+            daoProvider = DaoProvider.getInstance(context);
         }
 
         return INSTANCE;
@@ -77,7 +77,7 @@ public class ServerCommunicationProvider {
                     // persist registration
                     final String userToken = PreferenceProvider.getInstance(mContext).getUserToken();
 
-                    DbUser user = dbProvider.getUserDao().getUserByToken(userToken);
+                    DbUser user = daoProvider.getUserDao().getUserByToken(userToken);
 
                     if (user == null) {
                         Log.d(TAG, "No such user found! Token: " + userToken);
@@ -86,7 +86,7 @@ public class ServerCommunicationProvider {
 
                         final long serverDeviceId = PreferenceProvider.getInstance(mContext).getServerDeviceId();
 
-                        dbProvider.getDeviceDao().saveRegistrationTokenToDb(
+                        daoProvider.getDeviceDao().saveRegistrationTokenToDb(
                                 registrationToken,
                                 user.getId(),
                                 serverDeviceId);

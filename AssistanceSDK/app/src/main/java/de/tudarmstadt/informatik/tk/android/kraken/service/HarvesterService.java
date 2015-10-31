@@ -27,7 +27,7 @@ import de.tudarmstadt.informatik.tk.android.kraken.db.DaoSession;
 import de.tudarmstadt.informatik.tk.android.kraken.db.DbModuleInstallation;
 import de.tudarmstadt.informatik.tk.android.kraken.model.enums.ECommandType;
 import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.ISensor;
-import de.tudarmstadt.informatik.tk.android.kraken.provider.DbProvider;
+import de.tudarmstadt.informatik.tk.android.kraken.provider.DaoProvider;
 import de.tudarmstadt.informatik.tk.android.kraken.provider.HarvesterServiceProvider;
 import de.tudarmstadt.informatik.tk.android.kraken.provider.PreferenceProvider;
 import de.tudarmstadt.informatik.tk.android.kraken.provider.SensorProvider;
@@ -47,7 +47,7 @@ public class HarvesterService extends Service implements Callback {
     private SensorProvider mSensorProvider;
     private PreferenceProvider mPreferenceProvider;
 
-    private DbProvider dbProvider;
+    private DaoProvider daoProvider;
 
     private NotificationManager mNotificationManager;
 
@@ -62,10 +62,10 @@ public class HarvesterService extends Service implements Callback {
 
     public DaoSession getDaoSession() {
 
-        if (dbProvider == null) {
-            dbProvider = DbProvider.getInstance(getApplicationContext());
+        if (daoProvider == null) {
+            daoProvider = DaoProvider.getInstance(getApplicationContext());
         }
-        return dbProvider.getDaoSession();
+        return daoProvider.getDaoSession();
     }
 
     @Override
@@ -87,8 +87,8 @@ public class HarvesterService extends Service implements Callback {
             return;
         }
 
-        if (dbProvider == null) {
-            dbProvider = DbProvider.getInstance(getApplicationContext());
+        if (daoProvider == null) {
+            daoProvider = DaoProvider.getInstance(getApplicationContext());
         }
 
         initService();
@@ -104,7 +104,7 @@ public class HarvesterService extends Service implements Callback {
         SharedPreferences sharedPreferences = android.preference.PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         long userId = sharedPreferences.getLong("current_user_id", -1);
 
-        List<DbModuleInstallation> dbModuleInstallations = dbProvider
+        List<DbModuleInstallation> dbModuleInstallations = daoProvider
                 .getModuleInstallationDao()
                 .getModuleInstallationsByUserId(userId);
 

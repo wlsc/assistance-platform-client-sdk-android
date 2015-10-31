@@ -12,7 +12,7 @@ import java.util.Locale;
 import de.tudarmstadt.informatik.tk.android.kraken.db.DbLightSensor;
 import de.tudarmstadt.informatik.tk.android.kraken.model.api.dto.DtoType;
 import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.AbstractTriggeredEvent;
-import de.tudarmstadt.informatik.tk.android.kraken.provider.DbProvider;
+import de.tudarmstadt.informatik.tk.android.kraken.provider.DaoProvider;
 import de.tudarmstadt.informatik.tk.android.kraken.util.DateUtils;
 
 /**
@@ -29,7 +29,7 @@ public class LightSensor
     private static final int SENSOR_MIN_DIFFERENCE = 5;
     // -----------------------------------------------------
 
-    private DbProvider dbProvider;
+    private DaoProvider daoProvider;
 
     private SensorManager mSensorManager;
     private Sensor mAccelerometerSensor;
@@ -40,8 +40,8 @@ public class LightSensor
     public LightSensor(Context context) {
         super(context);
 
-        if (dbProvider == null) {
-            dbProvider = DbProvider.getInstance(context);
+        if (daoProvider == null) {
+            daoProvider = DaoProvider.getInstance(context);
         }
 
         mSensorManager = (SensorManager) this.context.getSystemService(Context.SENSOR_SERVICE);
@@ -57,7 +57,7 @@ public class LightSensor
         sensorLight.setAccuracy(accuracy);
         sensorLight.setCreated(DateUtils.dateToISO8601String(new Date(), Locale.getDefault()));
 
-        dbProvider.getLightSensorDao().insert(sensorLight);
+        daoProvider.getLightSensorDao().insert(sensorLight);
     }
 
     @Override

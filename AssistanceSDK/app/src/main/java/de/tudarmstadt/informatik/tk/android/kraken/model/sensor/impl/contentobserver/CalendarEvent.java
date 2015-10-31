@@ -89,7 +89,7 @@ public class CalendarEvent extends AbstractContentObserverEvent {
         Map<Long, DbCalendarEvent> allExistingEvents = new HashMap<>();
         try {
 
-            List<? extends IDbSensor> dbEvents = dbProvider.getCalendarEventDao().getAll();
+            List<? extends IDbSensor> dbEvents = daoProvider.getCalendarEventDao().getAll();
 
             for (IDbSensor dbSensor : dbEvents) {
                 DbCalendarEvent sensor = (DbCalendarEvent) dbSensor;
@@ -272,7 +272,7 @@ public class CalendarEvent extends AbstractContentObserverEvent {
      */
     private Map<Long, DbCalendarReminderEvent> getExistingReminders(long eventId) {
 
-        List<DbCalendarReminderEvent> list = dbProvider
+        List<DbCalendarReminderEvent> list = daoProvider
                 .getCalendarReminderEventDao()
                 .getAllByEventId(eventId);
 

@@ -76,7 +76,7 @@ public class ConnectionSensor extends AbstractTriggeredEvent {
         connectionEvent.setIsWifi(isWifiDataAvailable);
         connectionEvent.setCreated(created);
 
-        dbProvider.getConnectionEventDao().insert(connectionEvent);
+        daoProvider.getConnectionEventDao().insert(connectionEvent);
 
         /**
          * Mobile data information
@@ -88,7 +88,7 @@ public class ConnectionSensor extends AbstractTriggeredEvent {
         mobileConnectionEvent.setMobileNetworkCode(mobileNetworkCode);
         mobileConnectionEvent.setCreated(created);
 
-        dbProvider.getMobileConnectionEventDao().insert(mobileConnectionEvent);
+        daoProvider.getMobileConnectionEventDao().insert(mobileConnectionEvent);
 
         /**
          * WIFI data information
@@ -104,7 +104,7 @@ public class ConnectionSensor extends AbstractTriggeredEvent {
         wifiConnectionEvent.setNetworkId(networkId);
         wifiConnectionEvent.setCreated(created);
 
-        dbProvider.getWifiConnectionEventDao().insert(wifiConnectionEvent);
+        daoProvider.getWifiConnectionEventDao().insert(wifiConnectionEvent);
     }
 
     @Override

@@ -75,7 +75,7 @@ public class LocationSensor extends
         dbPositionSensor.setSpeed(speed);
         dbPositionSensor.setCreated(DateUtils.dateToISO8601String(new Date(), Locale.getDefault()));
 
-        dbProvider.getLocationSensorDao().insert(dbPositionSensor);
+        daoProvider.getLocationSensorDao().insert(dbPositionSensor);
     }
 
     /**

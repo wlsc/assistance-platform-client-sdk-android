@@ -22,7 +22,7 @@ import de.tudarmstadt.informatik.tk.android.kraken.db.DbForegroundEvent;
 import de.tudarmstadt.informatik.tk.android.kraken.model.api.dto.DtoType;
 import de.tudarmstadt.informatik.tk.android.kraken.model.enums.EPushType;
 import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.AbstractTriggeredEvent;
-import de.tudarmstadt.informatik.tk.android.kraken.provider.DbProvider;
+import de.tudarmstadt.informatik.tk.android.kraken.provider.DaoProvider;
 import de.tudarmstadt.informatik.tk.android.kraken.util.DateUtils;
 import de.tudarmstadt.informatik.tk.android.kraken.util.ImageUtils;
 import de.tudarmstadt.informatik.tk.android.kraken.util.sensors.AccessibilityEventFilterUtils;
@@ -79,7 +79,7 @@ public class ForegroundEvent extends AbstractTriggeredEvent {
         dbForegroundEvent.setEventType(EVENT_ASSISTANCE_START);
         dbForegroundEvent.setCreated(DateUtils.dateToISO8601String(new Date(), Locale.getDefault()));
 
-        dbProvider.getForegroundEventDao().insert(dbForegroundEvent);
+        daoProvider.getForegroundEventDao().insert(dbForegroundEvent);
 
         setRunning(true);
     }
@@ -99,8 +99,8 @@ public class ForegroundEvent extends AbstractTriggeredEvent {
                 mReceiver = null;
                 setRunning(false);
 
-                if (dbProvider == null) {
-                    dbProvider = DbProvider.getInstance(context);
+                if (daoProvider == null) {
+                    daoProvider = DaoProvider.getInstance(context);
                 }
 
                 DbForegroundEvent dbForegroundEvent = new DbForegroundEvent();
@@ -108,15 +108,15 @@ public class ForegroundEvent extends AbstractTriggeredEvent {
                 dbForegroundEvent.setEventType(EVENT_ASSISTANCE_STOP);
                 dbForegroundEvent.setCreated(DateUtils.dateToISO8601String(new Date(), Locale.getDefault()));
 
-                dbProvider.getForegroundEventDao().insert(dbForegroundEvent);
+                daoProvider.getForegroundEventDao().insert(dbForegroundEvent);
             }
         }
     }
 
     public void onEvent(AccessibilityEvent event) {
 
-        if (dbProvider == null) {
-            dbProvider = DbProvider.getInstance(context);
+        if (daoProvider == null) {
+            daoProvider = DaoProvider.getInstance(context);
         }
 
         if (isRunning()) {
@@ -128,7 +128,7 @@ public class ForegroundEvent extends AbstractTriggeredEvent {
                 String color = storeIcon(foregroundEvent.getPackageName());
                 foregroundEvent.setColor(color);
 
-                dbProvider.getForegroundEventDao().insert(foregroundEvent);
+                daoProvider.getForegroundEventDao().insert(foregroundEvent);
             } else {
                 Log.d(TAG, "Cannot save event: event filter gave NULL back");
             }
@@ -227,7 +227,7 @@ public class ForegroundEvent extends AbstractTriggeredEvent {
 
             foregroundEvent.setCreated(DateUtils.dateToISO8601String(new Date(), Locale.getDefault()));
 
-            dbProvider.getForegroundEventDao().insert(foregroundEvent);
+            daoProvider.getForegroundEventDao().insert(foregroundEvent);
         }
     }
 

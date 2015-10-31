@@ -66,7 +66,7 @@ public class CallLogEvent extends AbstractContentObserverEvent {
 
         long longLastKnownCallLogId = -1;
 
-        DbCallLogEvent lastItem = dbProvider.getCallLogEventDao().getLastCallLogEvent();
+        DbCallLogEvent lastItem = daoProvider.getCallLogEventDao().getLastCallLogEvent();
 
         if (lastItem != null) {
             longLastKnownCallLogId = lastItem.getCallId();
@@ -103,7 +103,7 @@ public class CallLogEvent extends AbstractContentObserverEvent {
                 callLogEvent.setIsDeleted(false);
                 callLogEvent.setIsUpdated(false);
 
-                dbProvider.getCallLogEventDao().insert(callLogEvent);
+                daoProvider.getCallLogEventDao().insert(callLogEvent);
             }
         } finally {
             cur.close();

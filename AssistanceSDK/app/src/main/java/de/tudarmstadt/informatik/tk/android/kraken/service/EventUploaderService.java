@@ -23,7 +23,7 @@ import de.tudarmstadt.informatik.tk.android.kraken.model.api.dto.DtoType;
 import de.tudarmstadt.informatik.tk.android.kraken.model.api.endpoint.EndpointGenerator;
 import de.tudarmstadt.informatik.tk.android.kraken.model.api.endpoint.EventUploadEndpoint;
 import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.Sensor;
-import de.tudarmstadt.informatik.tk.android.kraken.provider.DbProvider;
+import de.tudarmstadt.informatik.tk.android.kraken.provider.DaoProvider;
 import de.tudarmstadt.informatik.tk.android.kraken.provider.PreferenceProvider;
 import de.tudarmstadt.informatik.tk.android.kraken.util.ConnectionUtils;
 import retrofit.Callback;
@@ -443,45 +443,45 @@ public class EventUploaderService extends GcmTaskService {
 
         SparseArrayCompat<List<Sensor>> entries = new SparseArrayCompat<>();
 
-        DbProvider dbProvider = DbProvider.getInstance(getApplicationContext());
+        DaoProvider daoProvider = DaoProvider.getInstance(getApplicationContext());
 
-        List<? extends IDbSensor> dbAccelerometerList = dbProvider
+        List<? extends IDbSensor> dbAccelerometerList = daoProvider
                 .getAccelerometerSensorDao()
                 .getFirstN(numberOfElements);
 
         requestDbEvents.put(DtoType.ACCELEROMETER, dbAccelerometerList);
 
-        entries.put(DtoType.ACCELEROMETER, dbProvider
+        entries.put(DtoType.ACCELEROMETER, daoProvider
                 .getAccelerometerSensorDao()
                 .convertObjects(dbAccelerometerList));
 
-        List<? extends IDbSensor> dbLocationList = dbProvider
+        List<? extends IDbSensor> dbLocationList = daoProvider
                 .getLocationSensorDao()
                 .getFirstN(numberOfElements);
 
         requestDbEvents.put(DtoType.LOCATION, dbLocationList);
 
-        entries.put(DtoType.LOCATION, dbProvider
+        entries.put(DtoType.LOCATION, daoProvider
                 .getLocationSensorDao()
                 .convertObjects(dbLocationList));
 
-        List<? extends IDbSensor> motionActivityList = dbProvider
+        List<? extends IDbSensor> motionActivityList = daoProvider
                 .getMotionActivityEventDao()
                 .getFirstN(numberOfElements);
 
         requestDbEvents.put(DtoType.MOTION_ACTIVITY, motionActivityList);
 
-        entries.put(DtoType.MOTION_ACTIVITY, dbProvider
+        entries.put(DtoType.MOTION_ACTIVITY, daoProvider
                 .getMotionActivityEventDao()
                 .convertObjects(motionActivityList));
 
-        List<? extends IDbSensor> foregroundEventList = dbProvider
+        List<? extends IDbSensor> foregroundEventList = daoProvider
                 .getForegroundEventDao()
                 .getFirstN(numberOfElements);
 
         requestDbEvents.put(DtoType.FOREGROUND, foregroundEventList);
 
-        entries.put(DtoType.FOREGROUND, dbProvider
+        entries.put(DtoType.FOREGROUND, daoProvider
                 .getForegroundEventDao()
                 .convertObjects(foregroundEventList));
 
@@ -506,20 +506,20 @@ public class EventUploaderService extends GcmTaskService {
                 continue;
             }
 
-            DbProvider dbProvider = DbProvider.getInstance(getApplicationContext());
+            DaoProvider daoProvider = DaoProvider.getInstance(getApplicationContext());
 
             switch (sensorType) {
                 case DtoType.ACCELEROMETER:
-                    dbProvider.getAccelerometerSensorDao().delete(values);
+                    daoProvider.getAccelerometerSensorDao().delete(values);
                     break;
                 case DtoType.LOCATION:
-                    dbProvider.getLocationSensorDao().delete(values);
+                    daoProvider.getLocationSensorDao().delete(values);
                     break;
                 case DtoType.MOTION_ACTIVITY:
-                    dbProvider.getMotionActivityEventDao().delete(values);
+                    daoProvider.getMotionActivityEventDao().delete(values);
                     break;
                 case DtoType.FOREGROUND:
-                    dbProvider.getForegroundEventDao().delete(values);
+                    daoProvider.getForegroundEventDao().delete(values);
                     break;
             }
         }

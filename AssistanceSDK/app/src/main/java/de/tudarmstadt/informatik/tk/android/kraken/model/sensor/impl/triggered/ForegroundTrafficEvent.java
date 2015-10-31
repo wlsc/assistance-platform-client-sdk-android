@@ -18,7 +18,7 @@ import de.tudarmstadt.informatik.tk.android.kraken.db.DbNetworkTrafficEvent;
 import de.tudarmstadt.informatik.tk.android.kraken.model.api.dto.DtoType;
 import de.tudarmstadt.informatik.tk.android.kraken.model.enums.EPushType;
 import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.AbstractTriggeredEvent;
-import de.tudarmstadt.informatik.tk.android.kraken.provider.DbProvider;
+import de.tudarmstadt.informatik.tk.android.kraken.provider.DaoProvider;
 import de.tudarmstadt.informatik.tk.android.kraken.provider.PreferenceProvider;
 import de.tudarmstadt.informatik.tk.android.kraken.util.sensors.AccessibilityEventFilterUtils;
 
@@ -165,8 +165,8 @@ public class ForegroundTrafficEvent extends AbstractTriggeredEvent {
      */
     private void storeData(DbForegroundEvent event) {
 
-        if (dbProvider == null) {
-            dbProvider = DbProvider.getInstance(context);
+        if (daoProvider == null) {
+            daoProvider = DaoProvider.getInstance(context);
         }
 
         DbNetworkTrafficEvent networkTrafficEvent = new DbNetworkTrafficEvent();
@@ -197,7 +197,7 @@ public class ForegroundTrafficEvent extends AbstractTriggeredEvent {
 
                 networkTrafficEvent.setBackground(false);
 
-                dbProvider.getNetworkTrafficEventDao().insert(networkTrafficEvent);
+                daoProvider.getNetworkTrafficEventDao().insert(networkTrafficEvent);
 
                 //found a match, don't need to search anymore
                 break;
@@ -219,8 +219,8 @@ public class ForegroundTrafficEvent extends AbstractTriggeredEvent {
         @Override
         public void onReceive(Context context, Intent intent) {
 
-            if (dbProvider == null) {
-                dbProvider = DbProvider.getInstance(context);
+            if (daoProvider == null) {
+                daoProvider = DaoProvider.getInstance(context);
             }
 
             DbNetworkTrafficEvent networkTrafficEvent = new DbNetworkTrafficEvent();
@@ -246,7 +246,7 @@ public class ForegroundTrafficEvent extends AbstractTriggeredEvent {
 
             networkTrafficEvent.setBackground(false);
 
-            dbProvider.getNetworkTrafficEventDao().insert(networkTrafficEvent);
+            daoProvider.getNetworkTrafficEventDao().insert(networkTrafficEvent);
         }
     }
 }

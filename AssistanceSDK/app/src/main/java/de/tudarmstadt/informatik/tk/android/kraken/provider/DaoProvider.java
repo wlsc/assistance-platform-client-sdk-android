@@ -56,11 +56,11 @@ import de.tudarmstadt.informatik.tk.android.kraken.util.db.DbAssistanceOpenHelpe
  * @author Wladimir Schmidt (wlsc.dev@gmail.com)
  * @date 08.10.2015
  */
-public class DbProvider {
+public class DaoProvider {
 
-    private static final String TAG = DbProvider.class.getSimpleName();
+    private static final String TAG = DaoProvider.class.getSimpleName();
 
-    private static DbProvider INSTANCE;
+    private static DaoProvider INSTANCE;
 
     private SQLiteDatabase mDb;
     private DaoMaster mDaoMaster;
@@ -71,7 +71,7 @@ public class DbProvider {
      *
      * @param context
      */
-    private DbProvider(Context context) {
+    private DaoProvider(Context context) {
 
         DbAssistanceOpenHelper helper = new DbAssistanceOpenHelper(context, Config.DATABASE_NAME, null);
         mDb = helper.getWritableDatabase();
@@ -86,10 +86,10 @@ public class DbProvider {
      * @param context
      * @return
      */
-    public static DbProvider getInstance(Context context) {
+    public static DaoProvider getInstance(Context context) {
 
         if (INSTANCE == null) {
-            INSTANCE = new DbProvider(context);
+            INSTANCE = new DaoProvider(context);
         }
 
         return INSTANCE;
