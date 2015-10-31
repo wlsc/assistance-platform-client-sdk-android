@@ -15,9 +15,9 @@ import de.tudarmstadt.informatik.tk.android.kraken.util.ConnectionUtils;
  * @author Wladimir Schmidt (wlsc.dev@gmail.com)
  * @date 12.10.2015
  */
-public class WifiCatcherReceiver extends BroadcastReceiver {
+public class WifiStateReceiver extends BroadcastReceiver {
 
-    private static final String TAG = WifiCatcherReceiver.class.getSimpleName();
+    private static final String TAG = WifiStateReceiver.class.getSimpleName();
 
     // Earliest point in time in the future
     // from which your task might start executing
