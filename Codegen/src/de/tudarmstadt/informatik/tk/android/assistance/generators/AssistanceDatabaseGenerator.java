@@ -506,7 +506,17 @@ public class AssistanceDatabaseGenerator {
         contactMailEvent.addLongProperty("contactId").index().getProperty();
     contactMailEvent.addToOne(contactEvent, contactNumberfkContactEvent);
     contactEvent.addToMany(contactMailEvent, contactNumberfkContactEvent);
-
+    
+    // ----- Power Status Event -----
+    Entity powerStatusEvent = schema.addEntity("DbPowerStatusEvent");
+    powerStatusEvent.setTableName("power_status_event");
+    powerStatusEvent.addIdProperty().autoincrement().index();
+    powerStatusEvent.implementsInterface(Config.KRAKEN_PACKAGE_SENSOR);
+    powerStatusEvent.addIntProperty("state");
+    powerStatusEvent.addBooleanProperty("isLow");
+    powerStatusEvent.addBooleanProperty("isOkay");
+//    powerStatusEvent.addBooleanProperty("isCharged");
+    powerStatusEvent.addStringProperty("created").notNull();
 
     // **************************
     // **** GENERATE CLASSES ****
