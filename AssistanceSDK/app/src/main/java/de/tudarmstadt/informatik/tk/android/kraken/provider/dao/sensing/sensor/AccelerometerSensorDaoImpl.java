@@ -60,6 +60,7 @@ public class AccelerometerSensorDaoImpl extends
 
         AccelerometerSensorDto result = new AccelerometerSensorDto();
 
+        result.setId(dbSensor.getId());
         result.setType(DtoType.ACCELEROMETER);
         result.setTypeStr(DtoType.getApiName(DtoType.ACCELEROMETER));
         result.setX(dbSensor.getX());

@@ -55,6 +55,7 @@ public class MotionActivityEventDaoImpl extends
 
         MotionActivityEventDto result = new MotionActivityEventDto();
 
+        result.setId(sensor.getId());
         result.setType(DtoType.MOTION_ACTIVITY);
         result.setTypeStr(DtoType.getApiName(DtoType.MOTION_ACTIVITY));
         result.setRunning(sensor.getRunning());

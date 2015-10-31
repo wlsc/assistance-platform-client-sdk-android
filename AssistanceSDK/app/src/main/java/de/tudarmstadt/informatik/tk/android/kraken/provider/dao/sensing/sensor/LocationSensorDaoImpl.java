@@ -61,6 +61,7 @@ public class LocationSensorDaoImpl extends
 
         LocationSensorDto result = new LocationSensorDto();
 
+        result.setId(sensor.getId());
         result.setType(DtoType.LOCATION);
         result.setTypeStr(DtoType.getApiName(DtoType.LOCATION));
         result.setLatitude(sensor.getLatitude());
