@@ -20,7 +20,7 @@ public class BootReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
 
         // check for proper action
-        if ("android.intent.action.BOOT_COMPLETED".equals(intent.getAction())) {
+        if (Intent.ACTION_BOOT_COMPLETED.equals(intent.getAction())) {
 
             boolean activated = PreferenceProvider.getInstance(context).getActivated();
 
@@ -33,6 +33,8 @@ public class BootReceiver extends BroadcastReceiver {
                 final HarvesterServiceProvider service = HarvesterServiceProvider.getInstance(context);
                 service.startSensingService();
             }
+        } else {
+            Log.d(TAG, "Action was not " + Intent.ACTION_BOOT_COMPLETED);
         }
     }
 }
