@@ -28,12 +28,12 @@ public class MotionActivityEventDaoImpl extends
 
     private static MotionActivityEventDao INSTANCE;
 
-    private DbMotionActivityEventDao motionActivityEventDao;
+    private DbMotionActivityEventDao dao;
 
     private MotionActivityEventDaoImpl(DaoSession daoSession) {
 
-        if (motionActivityEventDao == null) {
-            motionActivityEventDao = daoSession.getDbMotionActivityEventDao();
+        if (dao == null) {
+            dao = daoSession.getDbMotionActivityEventDao();
         }
     }
 
@@ -56,8 +56,6 @@ public class MotionActivityEventDaoImpl extends
         MotionActivityEventDto result = new MotionActivityEventDto();
 
         result.setId(sensor.getId());
-        result.setType(DtoType.MOTION_ACTIVITY);
-        result.setTypeStr(DtoType.getApiName(DtoType.MOTION_ACTIVITY));
         result.setRunning(sensor.getRunning());
         result.setStationary(sensor.getStationary());
         result.setCycling(sensor.getCycling());
@@ -66,6 +64,8 @@ public class MotionActivityEventDaoImpl extends
         result.setOnFoot(sensor.getOnFoot());
         result.setTilting(sensor.getTilting());
         result.setUnknown(sensor.getUnknown());
+        result.setType(DtoType.MOTION_ACTIVITY);
+        result.setTypeStr(DtoType.getApiName(DtoType.MOTION_ACTIVITY));
         result.setCreated(sensor.getCreated());
 
         return result;
@@ -88,7 +88,7 @@ public class MotionActivityEventDaoImpl extends
 
     @Override
     public List<? extends IDbSensor> getAll() {
-        return motionActivityEventDao
+        return dao
                 .queryBuilder()
                 .build()
                 .list();
@@ -101,7 +101,7 @@ public class MotionActivityEventDaoImpl extends
             return Collections.EMPTY_LIST;
         }
 
-        return motionActivityEventDao
+        return dao
                 .queryBuilder()
                 .limit(amount)
                 .build()
@@ -115,7 +115,7 @@ public class MotionActivityEventDaoImpl extends
             return Collections.EMPTY_LIST;
         }
 
-        return motionActivityEventDao
+        return dao
                 .queryBuilder()
                 .orderDesc(DbMotionActivityEventDao.Properties.Id)
                 .limit(amount)
@@ -132,7 +132,7 @@ public class MotionActivityEventDaoImpl extends
 
         Log.d(MotionActivityEvent.class.getSimpleName(), "Dumping data to db...");
 
-        long result = motionActivityEventDao.insertOrReplace((DbMotionActivityEvent) sensor);
+        long result = dao.insertOrReplace((DbMotionActivityEvent) sensor);
 
         Log.d(MotionActivityEvent.class.getSimpleName(), "Finished dumping data");
 
@@ -146,6 +146,6 @@ public class MotionActivityEventDaoImpl extends
             return;
         }
 
-        motionActivityEventDao.deleteInTx((Iterable<DbMotionActivityEvent>) events);
+        dao.deleteInTx((Iterable<DbMotionActivityEvent>) events);
     }
 }

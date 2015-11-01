@@ -2,12 +2,15 @@ package de.tudarmstadt.informatik.tk.android.kraken.provider.dao.sensing.event;
 
 import android.util.Log;
 
+import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 
 import de.tudarmstadt.informatik.tk.android.kraken.db.DaoSession;
 import de.tudarmstadt.informatik.tk.android.kraken.db.DbMobileConnectionEvent;
 import de.tudarmstadt.informatik.tk.android.kraken.db.DbMobileConnectionEventDao;
 import de.tudarmstadt.informatik.tk.android.kraken.interfaces.IDbSensor;
+import de.tudarmstadt.informatik.tk.android.kraken.model.api.dto.DtoType;
 import de.tudarmstadt.informatik.tk.android.kraken.model.api.dto.event.MobileConnectionEventDto;
 import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.Sensor;
 import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.impl.triggered.ConnectionSensor;
@@ -25,12 +28,12 @@ public class MobileConnectionEventDaoImpl extends
 
     private static MobileConnectionEventDao INSTANCE;
 
-    private DbMobileConnectionEventDao mobileConnectionEventDao;
+    private DbMobileConnectionEventDao dao;
 
     private MobileConnectionEventDaoImpl(DaoSession daoSession) {
 
-        if (mobileConnectionEventDao == null) {
-            mobileConnectionEventDao = daoSession.getDbMobileConnectionEventDao();
+        if (dao == null) {
+            dao = daoSession.getDbMobileConnectionEventDao();
         }
     }
 
@@ -44,28 +47,76 @@ public class MobileConnectionEventDaoImpl extends
     }
 
     @Override
-    public MobileConnectionEventDto convertObject(DbMobileConnectionEvent dbSensor) {
-        return null;
+    public MobileConnectionEventDto convertObject(DbMobileConnectionEvent sensor) {
+
+        if (sensor == null) {
+            return null;
+        }
+
+        MobileConnectionEventDto result = new MobileConnectionEventDto();
+
+        result.setId(sensor.getId());
+        result.setCarrierName(sensor.getCarrierName());
+        result.setMobileCarrierCode(sensor.getMobileCarrierCode());
+        result.setMobileNetworkCode(sensor.getMobileNetworkCode());
+        result.setVoipAvailable(sensor.getVoipAvailable());
+        result.setType(DtoType.MOBILE_DATA_CONNECTION);
+        result.setTypeStr(DtoType.getApiName(DtoType.MOBILE_DATA_CONNECTION));
+        result.setCreated(sensor.getCreated());
+
+        return result;
     }
 
     @Override
     public List<Sensor> convertObjects(List<? extends IDbSensor> dbSensors) {
-        return null;
+
+        List<Sensor> result = new LinkedList<>();
+
+        if (dbSensors != null && !dbSensors.isEmpty()) {
+
+            for (DbMobileConnectionEvent dbSensor : (List<DbMobileConnectionEvent>) dbSensors) {
+                result.add(convertObject(dbSensor));
+            }
+        }
+
+        return result;
     }
 
     @Override
     public List<? extends IDbSensor> getAll() {
-        return null;
+        return dao
+                .queryBuilder()
+                .build()
+                .list();
     }
 
     @Override
     public List<? extends IDbSensor> getFirstN(int amount) {
-        return null;
+
+        if (amount <= 0) {
+            return Collections.EMPTY_LIST;
+        }
+
+        return dao
+                .queryBuilder()
+                .limit(amount)
+                .build()
+                .list();
     }
 
     @Override
     public List<? extends IDbSensor> getLastN(int amount) {
-        return null;
+
+        if (amount <= 0) {
+            return Collections.EMPTY_LIST;
+        }
+
+        return dao
+                .queryBuilder()
+                .orderDesc(DbMobileConnectionEventDao.Properties.Id)
+                .limit(amount)
+                .build()
+                .list();
     }
 
     @Override
@@ -77,7 +128,7 @@ public class MobileConnectionEventDaoImpl extends
 
         Log.d(ConnectionSensor.class.getSimpleName(), "Dumping MOBILE CONNECTION data to db...");
 
-        long result = mobileConnectionEventDao.insertOrReplace((DbMobileConnectionEvent) sensor);
+        long result = dao.insertOrReplace((DbMobileConnectionEvent) sensor);
 
         Log.d(ConnectionSensor.class.getSimpleName(), "Finished dumping data");
 
@@ -87,5 +138,10 @@ public class MobileConnectionEventDaoImpl extends
     @Override
     public void delete(List<? extends IDbSensor> events) {
 
+        if (events == null || events.isEmpty()) {
+            return;
+        }
+
+        dao.deleteInTx((Iterable<DbMobileConnectionEvent>) events);
     }
 }
