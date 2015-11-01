@@ -1,6 +1,9 @@
 package de.tudarmstadt.informatik.tk.android.kraken.provider.dao.sensing.event;
 
+import android.util.Log;
+
 import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 
 import de.tudarmstadt.informatik.tk.android.kraken.db.DaoSession;
@@ -23,12 +26,12 @@ public class CalendarReminderEventDaoImpl extends
 
     private static CalendarReminderEventDao INSTANCE;
 
-    private DbCalendarReminderEventDao calendarReminderEventDao;
+    private DbCalendarReminderEventDao dao;
 
     private CalendarReminderEventDaoImpl(DaoSession daoSession) {
 
-        if (calendarReminderEventDao == null) {
-            calendarReminderEventDao = daoSession.getDbCalendarReminderEventDao();
+        if (dao == null) {
+            dao = daoSession.getDbCalendarReminderEventDao();
         }
     }
 
@@ -43,7 +46,24 @@ public class CalendarReminderEventDaoImpl extends
 
     @Override
     public CalendarReminderEventDto convertObject(DbCalendarReminderEvent sensor) {
-        return null;
+
+        if (sensor == null) {
+            return null;
+        }
+
+        CalendarReminderEventDto result = new CalendarReminderEventDto();
+
+        result.setId(sensor.getId());
+        result.setReminderId(sensor.getReminderId());
+        result.setEventId(sensor.getEventId());
+        result.setMethod(sensor.getMethod());
+        result.setMinutes(sensor.getMinutes());
+        result.setIsNew(sensor.getIsNew());
+        result.setIsUpdated(sensor.getIsUpdated());
+        result.setIsDeleted(sensor.getIsDeleted());
+        result.setCreated(sensor.getCreated());
+
+        return result;
     }
 
     @Override
@@ -53,7 +73,7 @@ public class CalendarReminderEventDaoImpl extends
             return Collections.EMPTY_LIST;
         }
 
-        return calendarReminderEventDao
+        return dao
                 .queryBuilder()
                 .where(DbCalendarReminderEventDao.Properties.EventId.eq(eventId))
                 .build()
@@ -62,31 +82,79 @@ public class CalendarReminderEventDaoImpl extends
 
     @Override
     public List<? extends IDbSensor> getAll() {
-        return null;
+        return dao
+                .queryBuilder()
+                .build()
+                .list();
     }
 
     @Override
     public List<? extends IDbSensor> getFirstN(int amount) {
-        return null;
+
+        if (amount <= 0) {
+            return Collections.EMPTY_LIST;
+        }
+
+        return dao
+                .queryBuilder()
+                .limit(amount)
+                .build()
+                .list();
     }
 
     @Override
     public List<? extends IDbSensor> getLastN(int amount) {
-        return null;
+
+        if (amount <= 0) {
+            return Collections.EMPTY_LIST;
+        }
+
+        return dao
+                .queryBuilder()
+                .orderDesc(DbCalendarReminderEventDao.Properties.Id)
+                .limit(amount)
+                .build()
+                .list();
     }
 
     @Override
     public long insert(IDbSensor sensor) {
-        return 0;
+
+        if (sensor == null) {
+            return -1l;
+        }
+
+        Log.d(CalendarReminderEventDao.class.getSimpleName(), "Dumping data to db...");
+
+        long result = dao.insertOrReplace((DbCalendarReminderEvent) sensor);
+
+        Log.d(CalendarReminderEventDao.class.getSimpleName(), "Finished dumping data");
+
+        return result;
     }
 
     @Override
     public void delete(List<? extends IDbSensor> events) {
 
+        if (events == null || events.isEmpty()) {
+            return;
+        }
+
+        dao.deleteInTx((Iterable<DbCalendarReminderEvent>) events);
     }
 
     @Override
     public List<Sensor> convertObjects(List<? extends IDbSensor> dbSensors) {
-        return null;
+
+        List<Sensor> result = new LinkedList<>();
+
+        if (dbSensors != null && !dbSensors.isEmpty()) {
+
+            for (DbCalendarReminderEvent dbSensor : (List<DbCalendarReminderEvent>) dbSensors) {
+                result.add(convertObject(dbSensor));
+            }
+        }
+
+        return result;
     }
 }

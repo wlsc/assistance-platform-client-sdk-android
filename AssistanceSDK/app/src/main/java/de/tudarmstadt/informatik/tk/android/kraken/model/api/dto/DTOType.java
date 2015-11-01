@@ -86,11 +86,15 @@ public class DtoType {
             case LOUDNESS:
                 return res.getString(R.string.sensor_loudness);
             case FOREGROUND:
-                return res.getString(R.string.sensor_foreground_event);
+                return res.getString(R.string.event_foreground_event);
             case LIGHT:
                 return res.getString(R.string.sensor_light);
             case POWER_STATE:
                 return res.getString(R.string.event_power_state);
+            case CALENDAR:
+                return res.getString(R.string.event_calendar);
+            case CALENDAR_REMINDER:
+                return res.getString(R.string.event_calendar_reminder);
             default:
                 return "";
         }
@@ -129,6 +133,10 @@ public class DtoType {
                 return "light";
             case POWER_STATE:
                 return "powerstate";
+            case CALENDAR:
+                return "calendar";
+            case CALENDAR_REMINDER:
+                return "calendarreminder";
             default:
                 return "";
         }

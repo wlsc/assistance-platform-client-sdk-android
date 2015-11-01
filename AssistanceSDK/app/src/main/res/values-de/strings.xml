@@ -16,12 +16,12 @@
     <string name="one_time_sensor_running_services">Laufende Dienste</string>
     <string name="one_time_sensor_running_tasks">Laufende Tasks</string>
     <string name="sensor_contacts">Kontakte</string>
-    <string name="sensor_calendar">Kalender</string>
+    <string name="event_calendar">Kalender</string>
     <string name="sensor_loudness">Lautstärke</string>
-    <string name="sensor_calllog">Anrufliste</string>
-    <string name="sensor_browser_history">Browser Verlauf</string>
-    <string name="sensor_foreground_event">Benutzte Apps</string>
-    <string name="sensor_network_traffic">Datenverbrauch</string>
+    <string name="event_calllog">Anrufliste</string>
+    <string name="event_browser_history">Browser Verlauf</string>
+    <string name="event_foreground_event">Benutzte Apps</string>
+    <string name="event_network_traffic">Datenverbrauch</string>
 
     <!-- Service -->
     <string name="service_notfication_text">Kraken Service ist aktiv</string>

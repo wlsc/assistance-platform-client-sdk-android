@@ -94,7 +94,7 @@ public enum ESensorType {
             case MOTION_ACTIVITY_EVENT:
                 return context.getString(R.string.sensor_activity);
             case SENSOR_CALENDAR:
-                return context.getString(R.string.sensor_calendar);
+                return context.getString(R.string.event_calendar);
             case CONNECTION_EVENT:
                 return context.getString(R.string.sensor_connection);
             case SENSOR_CONTACTS:
@@ -108,13 +108,13 @@ public enum ESensorType {
             case SENSOR_LOUDNESS:
                 return context.getString(R.string.sensor_loudness);
             case SENSOR_CALL_LOG:
-                return context.getString(R.string.sensor_calllog);
+                return context.getString(R.string.event_calllog);
             case SENSOR_BROWSER_HISTORY:
-                return context.getString(R.string.sensor_browser_history);
+                return context.getString(R.string.event_browser_history);
             case SENSOR_FOREGROUND_EVENT:
-                return context.getString(R.string.sensor_foreground_event);
+                return context.getString(R.string.event_foreground_event);
             case SENSOR_NETWORK_TRAFFIC:
-                return context.getString(R.string.sensor_network_traffic);
+                return context.getString(R.string.event_network_traffic);
             case SENSOR_BACKGROUND_TRAFFIC:
                 return "Traffic usage by each app";
             default:

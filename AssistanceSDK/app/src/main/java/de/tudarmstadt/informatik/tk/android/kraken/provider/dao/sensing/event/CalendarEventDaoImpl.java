@@ -1,13 +1,20 @@
 package de.tudarmstadt.informatik.tk.android.kraken.provider.dao.sensing.event;
 
+import android.util.Log;
+
+import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 
 import de.tudarmstadt.informatik.tk.android.kraken.db.DaoSession;
 import de.tudarmstadt.informatik.tk.android.kraken.db.DbCalendarEvent;
 import de.tudarmstadt.informatik.tk.android.kraken.db.DbCalendarEventDao;
+import de.tudarmstadt.informatik.tk.android.kraken.db.DbForegroundEventDao;
 import de.tudarmstadt.informatik.tk.android.kraken.interfaces.IDbSensor;
+import de.tudarmstadt.informatik.tk.android.kraken.model.api.dto.DtoType;
 import de.tudarmstadt.informatik.tk.android.kraken.model.api.dto.event.CalendarEventDto;
 import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.Sensor;
+import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.impl.triggered.ForegroundEvent;
 import de.tudarmstadt.informatik.tk.android.kraken.provider.dao.sensing.CommonEventDaoImpl;
 
 /**
@@ -22,12 +29,12 @@ public class CalendarEventDaoImpl extends
 
     private static CalendarEventDao INSTANCE;
 
-    private DbCalendarEventDao calendarEventDao;
+    private DbCalendarEventDao dao;
 
     private CalendarEventDaoImpl(DaoSession daoSession) {
 
-        if (calendarEventDao == null) {
-            calendarEventDao = daoSession.getDbCalendarEventDao();
+        if (dao == null) {
+            dao = daoSession.getDbCalendarEventDao();
         }
     }
 
@@ -42,12 +49,49 @@ public class CalendarEventDaoImpl extends
 
     @Override
     public CalendarEventDto convertObject(DbCalendarEvent sensor) {
-        return null;
+
+        if (sensor == null) {
+            return null;
+        }
+
+        CalendarEventDto result = new CalendarEventDto();
+
+        result.setId(sensor.getId());
+        result.setEventId(sensor.getEventId());
+        result.setCalendarId(sensor.getCalendarId());
+        result.setAllDay(sensor.getAllDay());
+        result.setAvailability(sensor.getAvailability());
+        result.setDescription(sensor.getDescription());
+        result.setTimestampStart(sensor.getTimestampStart());
+        result.setTimestampEnd(sensor.getTimestampEnd());
+        result.setDuration(sensor.getDuration());
+        result.setLocation(sensor.getLocation());
+        result.setTimezoneStart(sensor.getTimezoneStart());
+        result.setTimezoneEnd(sensor.getTimezoneEnd());
+        result.setRecurrenceExceptionDate(sensor.getRecurrenceExceptionDate());
+        result.setRecurrenceExceptionRule(sensor.getRecurrenceExceptionRule());
+        result.setHasAlarm(sensor.getHasAlarm());
+        result.setLastDate(sensor.getLastDate());
+        result.setOriginalAllDay(sensor.getOriginalAllDay());
+        result.setOriginalId(sensor.getOriginalId());
+        result.setOriginalInstanceTime(sensor.getOriginalInstanceTime());
+        result.setRecurrenceDate(sensor.getRecurrenceDate());
+        result.setRecurrenceRule(sensor.getRecurrenceRule());
+        result.setStatus(sensor.getStatus());
+        result.setTitle(sensor.getTitle());
+        result.setIsNew(sensor.getIsNew());
+        result.setIsUpdated(sensor.getIsUpdated());
+        result.setIsDeleted(sensor.getIsDeleted());
+        result.setType(DtoType.CALENDAR);
+        result.setTypeStr(DtoType.getApiName(DtoType.CALENDAR));
+        result.setCreated(sensor.getCreated());
+
+        return result;
     }
 
     @Override
     public List<? extends IDbSensor> getAll() {
-        return calendarEventDao
+        return dao
                 .queryBuilder()
                 .build()
                 .list();
@@ -55,26 +99,71 @@ public class CalendarEventDaoImpl extends
 
     @Override
     public List<? extends IDbSensor> getFirstN(int amount) {
-        return null;
+
+        if (amount <= 0) {
+            return Collections.EMPTY_LIST;
+        }
+
+        return dao
+                .queryBuilder()
+                .limit(amount)
+                .build()
+                .list();
     }
 
     @Override
     public List<? extends IDbSensor> getLastN(int amount) {
-        return null;
+
+        if (amount <= 0) {
+            return Collections.EMPTY_LIST;
+        }
+
+        return dao
+                .queryBuilder()
+                .orderDesc(DbForegroundEventDao.Properties.Id)
+                .limit(amount)
+                .build()
+                .list();
     }
 
     @Override
     public long insert(IDbSensor sensor) {
-        return 0;
+
+        if (sensor == null) {
+            return -1l;
+        }
+
+        Log.d(ForegroundEvent.class.getSimpleName(), "Dumping data to db...");
+
+        long result = dao.insertOrReplace((DbCalendarEvent) sensor);
+
+        Log.d(ForegroundEvent.class.getSimpleName(), "Finished dumping data");
+
+        return result;
     }
 
     @Override
     public void delete(List<? extends IDbSensor> events) {
 
+        if (events == null || events.isEmpty()) {
+            return;
+        }
+
+        dao.deleteInTx((Iterable<DbCalendarEvent>) events);
     }
 
     @Override
     public List<Sensor> convertObjects(List<? extends IDbSensor> dbSensors) {
-        return null;
+
+        List<Sensor> result = new LinkedList<>();
+
+        if (dbSensors != null && !dbSensors.isEmpty()) {
+
+            for (DbCalendarEvent dbSensor : (List<DbCalendarEvent>) dbSensors) {
+                result.add(convertObject(dbSensor));
+            }
+        }
+
+        return result;
     }
 }
