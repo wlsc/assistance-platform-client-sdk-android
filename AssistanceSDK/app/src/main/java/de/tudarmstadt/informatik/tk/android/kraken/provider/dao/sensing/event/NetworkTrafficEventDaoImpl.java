@@ -2,12 +2,15 @@ package de.tudarmstadt.informatik.tk.android.kraken.provider.dao.sensing.event;
 
 import android.util.Log;
 
+import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 
 import de.tudarmstadt.informatik.tk.android.kraken.db.DaoSession;
 import de.tudarmstadt.informatik.tk.android.kraken.db.DbNetworkTrafficEvent;
 import de.tudarmstadt.informatik.tk.android.kraken.db.DbNetworkTrafficEventDao;
 import de.tudarmstadt.informatik.tk.android.kraken.interfaces.IDbSensor;
+import de.tudarmstadt.informatik.tk.android.kraken.model.api.dto.DtoType;
 import de.tudarmstadt.informatik.tk.android.kraken.model.api.dto.event.NetworkTrafficEventDto;
 import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.Sensor;
 import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.impl.triggered.ForegroundTrafficEvent;
@@ -25,12 +28,12 @@ public class NetworkTrafficEventDaoImpl extends
 
     private static NetworkTrafficEventDao INSTANCE;
 
-    private DbNetworkTrafficEventDao networkTrafficEventDao;
+    private DbNetworkTrafficEventDao dao;
 
     private NetworkTrafficEventDaoImpl(DaoSession daoSession) {
 
-        if (networkTrafficEventDao == null) {
-            networkTrafficEventDao = daoSession.getDbNetworkTrafficEventDao();
+        if (dao == null) {
+            dao = daoSession.getDbNetworkTrafficEventDao();
         }
     }
 
@@ -44,23 +47,63 @@ public class NetworkTrafficEventDaoImpl extends
     }
 
     @Override
-    public NetworkTrafficEventDto convertObject(DbNetworkTrafficEvent dbSensor) {
-        return null;
+    public NetworkTrafficEventDto convertObject(DbNetworkTrafficEvent sensor) {
+
+        if (sensor == null) {
+            return null;
+        }
+
+        NetworkTrafficEventDto result = new NetworkTrafficEventDto();
+
+        result.setId(sensor.getId());
+        result.setAppName(sensor.getAppName());
+        result.setRxBytes(sensor.getRxBytes());
+        result.setTxBytes(sensor.getTxBytes());
+        result.setBackground(sensor.getBackground());
+        result.setLongitude(sensor.getLongitude());
+        result.setLatitude(sensor.getLatitude());
+        result.setType(DtoType.NETWORK_TRAFFIC);
+        result.setTypeStr(DtoType.getApiName(DtoType.NETWORK_TRAFFIC));
+        result.setCreated(sensor.getCreated());
+
+        return result;
     }
 
     @Override
     public List<? extends IDbSensor> getAll() {
-        return null;
+        return dao
+                .queryBuilder()
+                .build()
+                .list();
     }
 
     @Override
     public List<? extends IDbSensor> getFirstN(int amount) {
-        return null;
+
+        if (amount <= 0) {
+            return Collections.EMPTY_LIST;
+        }
+
+        return dao
+                .queryBuilder()
+                .limit(amount)
+                .build()
+                .list();
     }
 
     @Override
     public List<? extends IDbSensor> getLastN(int amount) {
-        return null;
+
+        if (amount <= 0) {
+            return Collections.EMPTY_LIST;
+        }
+
+        return dao
+                .queryBuilder()
+                .orderDesc(DbNetworkTrafficEventDao.Properties.Id)
+                .limit(amount)
+                .build()
+                .list();
     }
 
     @Override
@@ -70,9 +113,9 @@ public class NetworkTrafficEventDaoImpl extends
             return -1l;
         }
 
-        Log.d(ForegroundTrafficEvent.class.getSimpleName(), "Dumping NETWORK TRAFFIC data to db...");
+        Log.d(ForegroundTrafficEvent.class.getSimpleName(), "Dumping data to db...");
 
-        long result = networkTrafficEventDao.insertOrReplace((DbNetworkTrafficEvent) sensor);
+        long result = dao.insertOrReplace((DbNetworkTrafficEvent) sensor);
 
         Log.d(ForegroundTrafficEvent.class.getSimpleName(), "Finished dumping data");
 
@@ -82,10 +125,25 @@ public class NetworkTrafficEventDaoImpl extends
     @Override
     public void delete(List<? extends IDbSensor> events) {
 
+        if (events == null || events.isEmpty()) {
+            return;
+        }
+
+        dao.deleteInTx((Iterable<DbNetworkTrafficEvent>) events);
     }
 
     @Override
     public List<Sensor> convertObjects(List<? extends IDbSensor> dbSensors) {
-        return null;
+
+        List<Sensor> result = new LinkedList<>();
+
+        if (dbSensors != null && !dbSensors.isEmpty()) {
+
+            for (DbNetworkTrafficEvent dbSensor : (List<DbNetworkTrafficEvent>) dbSensors) {
+                result.add(convertObject(dbSensor));
+            }
+        }
+
+        return result;
     }
 }
