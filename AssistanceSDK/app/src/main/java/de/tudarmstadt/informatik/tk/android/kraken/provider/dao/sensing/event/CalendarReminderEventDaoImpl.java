@@ -127,11 +127,11 @@ public class CalendarReminderEventDaoImpl extends
             return -1l;
         }
 
-        Log.d(CalendarReminderEventDao.class.getSimpleName(), "Dumping data to db...");
+        Log.d(TAG, "Dumping data to db...");
 
         long result = dao.insertOrReplace((DbCalendarReminderEvent) sensor);
 
-        Log.d(CalendarReminderEventDao.class.getSimpleName(), "Finished dumping data");
+        Log.d(TAG, "Finished dumping data");
 
         return result;
     }

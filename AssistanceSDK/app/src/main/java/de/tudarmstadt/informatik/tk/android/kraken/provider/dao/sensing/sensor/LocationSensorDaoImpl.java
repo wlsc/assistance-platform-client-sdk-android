@@ -13,7 +13,6 @@ import de.tudarmstadt.informatik.tk.android.kraken.interfaces.IDbSensor;
 import de.tudarmstadt.informatik.tk.android.kraken.model.api.dto.DtoType;
 import de.tudarmstadt.informatik.tk.android.kraken.model.api.dto.sensor.LocationSensorDto;
 import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.Sensor;
-import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.impl.triggered.LocationSensor;
 import de.tudarmstadt.informatik.tk.android.kraken.provider.dao.sensing.CommonEventDaoImpl;
 
 /**
@@ -28,12 +27,12 @@ public class LocationSensorDaoImpl extends
 
     private static LocationSensorDao INSTANCE;
 
-    private DbPositionSensorDao locationSensorDao;
+    private DbPositionSensorDao dao;
 
     private LocationSensorDaoImpl(DaoSession daoSession) {
 
-        if (locationSensorDao == null) {
-            locationSensorDao = daoSession.getDbPositionSensorDao();
+        if (dao == null) {
+            dao = daoSession.getDbPositionSensorDao();
         }
     }
 
@@ -62,14 +61,14 @@ public class LocationSensorDaoImpl extends
         LocationSensorDto result = new LocationSensorDto();
 
         result.setId(sensor.getId());
-        result.setType(DtoType.LOCATION);
-        result.setTypeStr(DtoType.getApiName(DtoType.LOCATION));
         result.setLatitude(sensor.getLatitude());
         result.setLongitude(sensor.getLongitude());
         result.setAccuracyHorizontal(sensor.getAccuracyHorizontal());
         result.setAccuracyVertical(sensor.getAccuracyVertical());
         result.setAltitude(sensor.getAltitude());
         result.setSpeed(sensor.getSpeed());
+        result.setType(DtoType.LOCATION);
+        result.setTypeStr(DtoType.getApiName(DtoType.LOCATION));
         result.setCreated(sensor.getCreated());
 
         return result;
@@ -98,7 +97,7 @@ public class LocationSensorDaoImpl extends
 
     @Override
     public List<? extends IDbSensor> getAll() {
-        return locationSensorDao
+        return dao
                 .queryBuilder()
                 .build()
                 .list();
@@ -111,7 +110,7 @@ public class LocationSensorDaoImpl extends
             return Collections.EMPTY_LIST;
         }
 
-        return locationSensorDao
+        return dao
                 .queryBuilder()
                 .limit(amount)
                 .build()
@@ -125,7 +124,7 @@ public class LocationSensorDaoImpl extends
             return Collections.EMPTY_LIST;
         }
 
-        return locationSensorDao
+        return dao
                 .queryBuilder()
                 .orderDesc(DbPositionSensorDao.Properties.Id)
                 .limit(amount)
@@ -140,11 +139,11 @@ public class LocationSensorDaoImpl extends
             return -1l;
         }
 
-        Log.d(LocationSensor.class.getSimpleName(), "Dumping data to db...");
+        Log.d(TAG, "Dumping data to db...");
 
-        long result = locationSensorDao.insertOrReplace((DbPositionSensor) sensor);
+        long result = dao.insertOrReplace((DbPositionSensor) sensor);
 
-        Log.d(LocationSensor.class.getSimpleName(), "Finished dumping data");
+        Log.d(TAG, "Finished dumping data");
 
         return result;
     }
@@ -156,6 +155,6 @@ public class LocationSensorDaoImpl extends
             return;
         }
 
-        locationSensorDao.deleteInTx((Iterable<DbPositionSensor>) events);
+        dao.deleteInTx((Iterable<DbPositionSensor>) events);
     }
 }

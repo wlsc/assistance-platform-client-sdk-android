@@ -27,12 +27,12 @@ public class AccelerometerSensorDaoImpl extends
 
     private static AccelerometerSensorDao INSTANCE;
 
-    private DbAccelerometerSensorDao accelerometerSensorDao;
+    private DbAccelerometerSensorDao dao;
 
     private AccelerometerSensorDaoImpl(DaoSession daoSession) {
 
-        if (accelerometerSensorDao == null) {
-            accelerometerSensorDao = daoSession.getDbAccelerometerSensorDao();
+        if (dao == null) {
+            dao = daoSession.getDbAccelerometerSensorDao();
         }
     }
 
@@ -61,12 +61,12 @@ public class AccelerometerSensorDaoImpl extends
         AccelerometerSensorDto result = new AccelerometerSensorDto();
 
         result.setId(dbSensor.getId());
-        result.setType(DtoType.ACCELEROMETER);
-        result.setTypeStr(DtoType.getApiName(DtoType.ACCELEROMETER));
         result.setX(dbSensor.getX());
         result.setY(dbSensor.getY());
         result.setZ(dbSensor.getZ());
         result.setAccuracy(dbSensor.getAccuracy());
+        result.setType(DtoType.ACCELEROMETER);
+        result.setTypeStr(DtoType.getApiName(DtoType.ACCELEROMETER));
         result.setCreated(dbSensor.getCreated());
 
         return result;
@@ -95,7 +95,7 @@ public class AccelerometerSensorDaoImpl extends
 
     @Override
     public List<? extends IDbSensor> getAll() {
-        return accelerometerSensorDao
+        return dao
                 .queryBuilder()
                 .build()
                 .list();
@@ -108,7 +108,7 @@ public class AccelerometerSensorDaoImpl extends
             return Collections.EMPTY_LIST;
         }
 
-        return accelerometerSensorDao
+        return dao
                 .queryBuilder()
                 .limit(amount)
                 .build()
@@ -122,7 +122,7 @@ public class AccelerometerSensorDaoImpl extends
             return Collections.EMPTY_LIST;
         }
 
-        return accelerometerSensorDao
+        return dao
                 .queryBuilder()
                 .orderDesc(DbAccelerometerSensorDao.Properties.Id)
                 .limit(amount)
@@ -143,7 +143,7 @@ public class AccelerometerSensorDaoImpl extends
 
         Log.d(TAG, "Dumping data to db...");
 
-        long result = accelerometerSensorDao.insertOrReplace((DbAccelerometerSensor) sensor);
+        long result = dao.insertOrReplace((DbAccelerometerSensor) sensor);
 
         Log.d(TAG, "Finished dumping data");
 
@@ -157,6 +157,6 @@ public class AccelerometerSensorDaoImpl extends
             return;
         }
 
-        accelerometerSensorDao.deleteInTx((Iterable<DbAccelerometerSensor>) events);
+        dao.deleteInTx((Iterable<DbAccelerometerSensor>) events);
     }
 }

@@ -14,7 +14,6 @@ import de.tudarmstadt.informatik.tk.android.kraken.interfaces.IDbSensor;
 import de.tudarmstadt.informatik.tk.android.kraken.model.api.dto.DtoType;
 import de.tudarmstadt.informatik.tk.android.kraken.model.api.dto.event.CalendarEventDto;
 import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.Sensor;
-import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.impl.triggered.ForegroundEvent;
 import de.tudarmstadt.informatik.tk.android.kraken.provider.dao.sensing.CommonEventDaoImpl;
 
 /**
@@ -133,11 +132,11 @@ public class CalendarEventDaoImpl extends
             return -1l;
         }
 
-        Log.d(ForegroundEvent.class.getSimpleName(), "Dumping data to db...");
+        Log.d(TAG, "Dumping data to db...");
 
         long result = dao.insertOrReplace((DbCalendarEvent) sensor);
 
-        Log.d(ForegroundEvent.class.getSimpleName(), "Finished dumping data");
+        Log.d(TAG, "Finished dumping data");
 
         return result;
     }

@@ -130,11 +130,11 @@ public class MotionActivityEventDaoImpl extends
             return -1l;
         }
 
-        Log.d(MotionActivityEvent.class.getSimpleName(), "Dumping data to db...");
+        Log.d(TAG, "Dumping data to db...");
 
         long result = dao.insertOrReplace((DbMotionActivityEvent) sensor);
 
-        Log.d(MotionActivityEvent.class.getSimpleName(), "Finished dumping data");
+        Log.d(TAG, "Finished dumping data");
 
         return result;
     }

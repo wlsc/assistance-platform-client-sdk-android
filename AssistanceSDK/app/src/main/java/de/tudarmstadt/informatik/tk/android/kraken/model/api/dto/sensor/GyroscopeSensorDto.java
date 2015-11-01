@@ -29,27 +29,31 @@ public class GyroscopeSensorDto implements Sensor {
 
     @SerializedName("xUncalibratedNoDrift")
     @Expose
-    private float xUncalibratedNoDrift;
+    private Float xUncalibratedNoDrift;
 
     @SerializedName("yUncalibratedNoDrift")
     @Expose
-    private float yUncalibratedNoDrift;
+    private Float yUncalibratedNoDrift;
 
     @SerializedName("zUncalibratedNoDrift")
     @Expose
-    private float zUncalibratedNoDrift;
+    private Float zUncalibratedNoDrift;
 
     @SerializedName("xUncalibratedEstimatedDrift")
     @Expose
-    private float xUncalibratedEstimatedDrift;
+    private Float xUncalibratedEstimatedDrift;
 
     @SerializedName("yUncalibratedEstimatedDrift")
     @Expose
-    private float yUncalibratedEstimatedDrift;
+    private Float yUncalibratedEstimatedDrift;
 
     @SerializedName("zUncalibratedEstimatedDrift")
     @Expose
-    private float zUncalibratedEstimatedDrift;
+    private Float zUncalibratedEstimatedDrift;
+
+    @SerializedName("accuracy")
+    @Expose
+    private Integer accuracy;
 
     /**
      * Not-null value.
@@ -75,7 +79,7 @@ public class GyroscopeSensorDto implements Sensor {
         this.typeStr = DtoType.getApiName(this.type);
     }
 
-    public GyroscopeSensorDto(Long id, Double x, Double y, Double z, float xUncalibratedNoDrift, float yUncalibratedNoDrift, float zUncalibratedNoDrift, float xUncalibratedEstimatedDrift, float yUncalibratedEstimatedDrift, float zUncalibratedEstimatedDrift, String created) {
+    public GyroscopeSensorDto(Long id, Double x, Double y, Double z, Float xUncalibratedNoDrift, Float yUncalibratedNoDrift, Float zUncalibratedNoDrift, Float xUncalibratedEstimatedDrift, Float yUncalibratedEstimatedDrift, Float zUncalibratedEstimatedDrift, Integer accuracy, String created) {
         this.id = id;
         this.x = x;
         this.y = y;
@@ -86,6 +90,7 @@ public class GyroscopeSensorDto implements Sensor {
         this.xUncalibratedEstimatedDrift = xUncalibratedEstimatedDrift;
         this.yUncalibratedEstimatedDrift = yUncalibratedEstimatedDrift;
         this.zUncalibratedEstimatedDrift = zUncalibratedEstimatedDrift;
+        this.accuracy = accuracy;
         this.created = created;
         this.type = DtoType.GYROSCOPE;
         this.typeStr = DtoType.getApiName(this.type);
@@ -123,52 +128,60 @@ public class GyroscopeSensorDto implements Sensor {
         this.z = z;
     }
 
-    public float getxUncalibratedNoDrift() {
+    public Float getxUncalibratedNoDrift() {
         return this.xUncalibratedNoDrift;
     }
 
-    public void setxUncalibratedNoDrift(float xUncalibratedNoDrift) {
+    public void setxUncalibratedNoDrift(Float xUncalibratedNoDrift) {
         this.xUncalibratedNoDrift = xUncalibratedNoDrift;
     }
 
-    public float getyUncalibratedNoDrift() {
+    public Float getyUncalibratedNoDrift() {
         return this.yUncalibratedNoDrift;
     }
 
-    public void setyUncalibratedNoDrift(float yUncalibratedNoDrift) {
+    public void setyUncalibratedNoDrift(Float yUncalibratedNoDrift) {
         this.yUncalibratedNoDrift = yUncalibratedNoDrift;
     }
 
-    public float getzUncalibratedNoDrift() {
+    public Float getzUncalibratedNoDrift() {
         return this.zUncalibratedNoDrift;
     }
 
-    public void setzUncalibratedNoDrift(float zUncalibratedNoDrift) {
+    public void setzUncalibratedNoDrift(Float zUncalibratedNoDrift) {
         this.zUncalibratedNoDrift = zUncalibratedNoDrift;
     }
 
-    public float getxUncalibratedEstimatedDrift() {
+    public Float getxUncalibratedEstimatedDrift() {
         return this.xUncalibratedEstimatedDrift;
     }
 
-    public void setxUncalibratedEstimatedDrift(float xUncalibratedEstimatedDrift) {
+    public void setxUncalibratedEstimatedDrift(Float xUncalibratedEstimatedDrift) {
         this.xUncalibratedEstimatedDrift = xUncalibratedEstimatedDrift;
     }
 
-    public float getyUncalibratedEstimatedDrift() {
+    public Float getyUncalibratedEstimatedDrift() {
         return this.yUncalibratedEstimatedDrift;
     }
 
-    public void setyUncalibratedEstimatedDrift(float yUncalibratedEstimatedDrift) {
+    public void setyUncalibratedEstimatedDrift(Float yUncalibratedEstimatedDrift) {
         this.yUncalibratedEstimatedDrift = yUncalibratedEstimatedDrift;
     }
 
-    public float getzUncalibratedEstimatedDrift() {
+    public Float getzUncalibratedEstimatedDrift() {
         return this.zUncalibratedEstimatedDrift;
     }
 
-    public void setzUncalibratedEstimatedDrift(float zUncalibratedEstimatedDrift) {
+    public void setzUncalibratedEstimatedDrift(Float zUncalibratedEstimatedDrift) {
         this.zUncalibratedEstimatedDrift = zUncalibratedEstimatedDrift;
+    }
+
+    public Integer getAccuracy() {
+        return this.accuracy;
+    }
+
+    public void setAccuracy(Integer accuracy) {
+        this.accuracy = accuracy;
     }
 
     public String getCreated() {
@@ -199,7 +212,7 @@ public class GyroscopeSensorDto implements Sensor {
 
     @Override
     public String toString() {
-        return "GyroscopeSensorRequest{" +
+        return "GyroscopeSensorDto{" +
                 "id=" + id +
                 ", x=" + x +
                 ", y=" + y +
@@ -210,6 +223,7 @@ public class GyroscopeSensorDto implements Sensor {
                 ", xUncalibratedEstimatedDrift=" + xUncalibratedEstimatedDrift +
                 ", yUncalibratedEstimatedDrift=" + yUncalibratedEstimatedDrift +
                 ", zUncalibratedEstimatedDrift=" + zUncalibratedEstimatedDrift +
+                ", accuracy=" + accuracy +
                 ", created='" + created + '\'' +
                 ", typeStr='" + typeStr + '\'' +
                 ", type=" + type +

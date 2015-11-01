@@ -114,11 +114,11 @@ public class WifiConnectionEventDaoImpl extends
             return -1l;
         }
 
-        Log.d(ConnectionSensor.class.getSimpleName(), "Dumping WIFI CONNECTION data to db...");
+        Log.d(TAG, "Dumping WIFI CONNECTION data to db...");
 
         long result = dao.insertOrReplace((DbWifiConnectionEvent) sensor);
 
-        Log.d(ConnectionSensor.class.getSimpleName(), "Finished dumping data");
+        Log.d(TAG, "Finished dumping data");
 
         return result;
     }

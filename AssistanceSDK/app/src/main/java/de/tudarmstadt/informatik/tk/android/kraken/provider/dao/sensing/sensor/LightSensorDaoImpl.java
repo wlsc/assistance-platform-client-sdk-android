@@ -10,7 +10,6 @@ import de.tudarmstadt.informatik.tk.android.kraken.db.DbLightSensorDao;
 import de.tudarmstadt.informatik.tk.android.kraken.interfaces.IDbSensor;
 import de.tudarmstadt.informatik.tk.android.kraken.model.api.dto.sensor.LightSensorDto;
 import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.Sensor;
-import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.impl.triggered.LightSensor;
 import de.tudarmstadt.informatik.tk.android.kraken.provider.dao.sensing.CommonEventDaoImpl;
 
 /**
@@ -25,12 +24,12 @@ public class LightSensorDaoImpl extends
 
     private static LightSensorDao INSTANCE;
 
-    private DbLightSensorDao lightSensorDao;
+    private DbLightSensorDao dao;
 
     private LightSensorDaoImpl(DaoSession daoSession) {
 
-        if (lightSensorDao == null) {
-            lightSensorDao = daoSession.getDbLightSensorDao();
+        if (dao == null) {
+            dao = daoSession.getDbLightSensorDao();
         }
     }
 
@@ -75,11 +74,11 @@ public class LightSensorDaoImpl extends
             return -1l;
         }
 
-        Log.d(LightSensor.class.getSimpleName(), "Dumping data to db...");
+        Log.d(TAG, "Dumping data to db...");
 
-        long result = lightSensorDao.insertOrReplace((DbLightSensor) sensor);
+        long result = dao.insertOrReplace((DbLightSensor) sensor);
 
-        Log.d(LightSensor.class.getSimpleName(), "Finished dumping data");
+        Log.d(TAG, "Finished dumping data");
 
         return result;
     }

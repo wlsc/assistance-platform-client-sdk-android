@@ -13,7 +13,6 @@ import de.tudarmstadt.informatik.tk.android.kraken.interfaces.IDbSensor;
 import de.tudarmstadt.informatik.tk.android.kraken.model.api.dto.DtoType;
 import de.tudarmstadt.informatik.tk.android.kraken.model.api.dto.event.MobileConnectionEventDto;
 import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.Sensor;
-import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.impl.triggered.ConnectionSensor;
 import de.tudarmstadt.informatik.tk.android.kraken.provider.dao.sensing.CommonEventDaoImpl;
 
 /**
@@ -126,11 +125,11 @@ public class MobileConnectionEventDaoImpl extends
             return -1l;
         }
 
-        Log.d(ConnectionSensor.class.getSimpleName(), "Dumping MOBILE CONNECTION data to db...");
+        Log.d(TAG, "Dumping MOBILE CONNECTION data to db...");
 
         long result = dao.insertOrReplace((DbMobileConnectionEvent) sensor);
 
-        Log.d(ConnectionSensor.class.getSimpleName(), "Finished dumping data");
+        Log.d(TAG, "Finished dumping data");
 
         return result;
     }

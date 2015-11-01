@@ -113,11 +113,11 @@ public class NetworkTrafficEventDaoImpl extends
             return -1l;
         }
 
-        Log.d(ForegroundTrafficEvent.class.getSimpleName(), "Dumping data to db...");
+        Log.d(TAG, "Dumping data to db...");
 
         long result = dao.insertOrReplace((DbNetworkTrafficEvent) sensor);
 
-        Log.d(ForegroundTrafficEvent.class.getSimpleName(), "Finished dumping data");
+        Log.d(TAG, "Finished dumping data");
 
         return result;
     }

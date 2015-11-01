@@ -13,7 +13,6 @@ import de.tudarmstadt.informatik.tk.android.kraken.interfaces.IDbSensor;
 import de.tudarmstadt.informatik.tk.android.kraken.model.api.dto.DtoType;
 import de.tudarmstadt.informatik.tk.android.kraken.model.api.dto.event.PowerStateEventDto;
 import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.Sensor;
-import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.impl.triggered.ForegroundTrafficEvent;
 import de.tudarmstadt.informatik.tk.android.kraken.provider.dao.sensing.CommonEventDaoImpl;
 
 /**
@@ -110,11 +109,11 @@ public class PowerStateEventDaoImpl extends
             return -1l;
         }
 
-        Log.d(ForegroundTrafficEvent.class.getSimpleName(), "Dumping POWER STATE data to db...");
+        Log.d(TAG, "Dumping POWER STATE data to db...");
 
         long result = dao.insertOrReplace((DbPowerStateEvent) sensor);
 
-        Log.d(ForegroundTrafficEvent.class.getSimpleName(), "Finished dumping data");
+        Log.d(TAG, "Finished dumping data");
 
         return result;
     }
