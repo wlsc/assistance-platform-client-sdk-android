@@ -10,6 +10,7 @@ import de.tudarmstadt.informatik.tk.android.kraken.db.DaoSession;
 import de.tudarmstadt.informatik.tk.android.kraken.db.DbCalendarReminderEvent;
 import de.tudarmstadt.informatik.tk.android.kraken.db.DbCalendarReminderEventDao;
 import de.tudarmstadt.informatik.tk.android.kraken.interfaces.IDbSensor;
+import de.tudarmstadt.informatik.tk.android.kraken.model.api.dto.DtoType;
 import de.tudarmstadt.informatik.tk.android.kraken.model.api.dto.event.CalendarReminderEventDto;
 import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.Sensor;
 import de.tudarmstadt.informatik.tk.android.kraken.provider.dao.sensing.CommonEventDaoImpl;
@@ -61,6 +62,8 @@ public class CalendarReminderEventDaoImpl extends
         result.setIsNew(sensor.getIsNew());
         result.setIsUpdated(sensor.getIsUpdated());
         result.setIsDeleted(sensor.getIsDeleted());
+        result.setType(DtoType.CALENDAR_REMINDER);
+        result.setTypeStr(DtoType.getApiName(DtoType.CALENDAR_REMINDER));
         result.setCreated(sensor.getCreated());
 
         return result;

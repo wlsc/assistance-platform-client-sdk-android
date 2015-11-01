@@ -10,6 +10,7 @@ import de.tudarmstadt.informatik.tk.android.kraken.db.DaoSession;
 import de.tudarmstadt.informatik.tk.android.kraken.db.DbCallLogEvent;
 import de.tudarmstadt.informatik.tk.android.kraken.db.DbCallLogEventDao;
 import de.tudarmstadt.informatik.tk.android.kraken.interfaces.IDbSensor;
+import de.tudarmstadt.informatik.tk.android.kraken.model.api.dto.DtoType;
 import de.tudarmstadt.informatik.tk.android.kraken.model.api.dto.event.CallLogEventDto;
 import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.Sensor;
 import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.impl.contentobserver.CallLogEvent;
@@ -65,6 +66,8 @@ public class CallLogEventDaoImpl extends
         result.setIsUpdated(sensor.getIsUpdated());
         result.setIsDeleted(sensor.getIsDeleted());
         result.setCreated(sensor.getCreated());
+        result.setType(DtoType.CALL_LOG);
+        result.setTypeStr(DtoType.getApiName(DtoType.CALL_LOG));
 
         return result;
     }

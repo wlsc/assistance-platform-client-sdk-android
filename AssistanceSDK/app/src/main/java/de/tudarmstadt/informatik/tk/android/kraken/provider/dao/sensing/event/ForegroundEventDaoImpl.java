@@ -28,12 +28,12 @@ public class ForegroundEventDaoImpl extends
 
     private static ForegroundEventDao INSTANCE;
 
-    private DbForegroundEventDao foregroundEventDao;
+    private DbForegroundEventDao dao;
 
     private ForegroundEventDaoImpl(DaoSession daoSession) {
 
-        if (foregroundEventDao == null) {
-            foregroundEventDao = daoSession.getDbForegroundEventDao();
+        if (dao == null) {
+            dao = daoSession.getDbForegroundEventDao();
         }
     }
 
@@ -88,7 +88,7 @@ public class ForegroundEventDaoImpl extends
 
     @Override
     public List<? extends IDbSensor> getAll() {
-        return foregroundEventDao
+        return dao
                 .queryBuilder()
                 .build()
                 .list();
@@ -101,7 +101,7 @@ public class ForegroundEventDaoImpl extends
             return Collections.EMPTY_LIST;
         }
 
-        return foregroundEventDao
+        return dao
                 .queryBuilder()
                 .limit(amount)
                 .build()
@@ -115,7 +115,7 @@ public class ForegroundEventDaoImpl extends
             return Collections.EMPTY_LIST;
         }
 
-        return foregroundEventDao
+        return dao
                 .queryBuilder()
                 .orderDesc(DbForegroundEventDao.Properties.Id)
                 .limit(amount)
@@ -132,7 +132,7 @@ public class ForegroundEventDaoImpl extends
 
         Log.d(ForegroundEvent.class.getSimpleName(), "Dumping data to db...");
 
-        long result = foregroundEventDao.insertOrReplace((DbForegroundEvent) sensor);
+        long result = dao.insertOrReplace((DbForegroundEvent) sensor);
 
         Log.d(ForegroundEvent.class.getSimpleName(), "Finished dumping data");
 
@@ -146,6 +146,6 @@ public class ForegroundEventDaoImpl extends
             return;
         }
 
-        foregroundEventDao.deleteInTx((Iterable<DbForegroundEvent>) events);
+        dao.deleteInTx((Iterable<DbForegroundEvent>) events);
     }
 }
