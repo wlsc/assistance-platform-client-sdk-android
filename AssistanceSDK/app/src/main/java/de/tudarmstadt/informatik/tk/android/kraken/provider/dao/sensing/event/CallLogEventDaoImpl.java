@@ -2,6 +2,8 @@ package de.tudarmstadt.informatik.tk.android.kraken.provider.dao.sensing.event;
 
 import android.util.Log;
 
+import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 
 import de.tudarmstadt.informatik.tk.android.kraken.db.DaoSession;
@@ -25,12 +27,12 @@ public class CallLogEventDaoImpl extends
 
     private static CallLogEventDao INSTANCE;
 
-    private DbCallLogEventDao callLogEventDao;
+    private DbCallLogEventDao dao;
 
     private CallLogEventDaoImpl(DaoSession daoSession) {
 
-        if (callLogEventDao == null) {
-            callLogEventDao = daoSession.getDbCallLogEventDao();
+        if (dao == null) {
+            dao = daoSession.getDbCallLogEventDao();
         }
     }
 
@@ -45,22 +47,64 @@ public class CallLogEventDaoImpl extends
 
     @Override
     public CallLogEventDto convertObject(DbCallLogEvent sensor) {
-        return null;
+
+        if (sensor == null) {
+            return null;
+        }
+
+        CallLogEventDto result = new CallLogEventDto();
+
+        result.setId(sensor.getId());
+        result.setCallId(sensor.getCallId());
+        result.setType(sensor.getType());
+        result.setName(sensor.getName());
+        result.setNumber(sensor.getNumber());
+        result.setDate(sensor.getDate());
+        result.setDuration(sensor.getDuration());
+        result.setIsNew(sensor.getIsNew());
+        result.setIsUpdated(sensor.getIsUpdated());
+        result.setIsDeleted(sensor.getIsDeleted());
+        result.setCreated(sensor.getCreated());
+
+        return result;
     }
 
     @Override
     public List<? extends IDbSensor> getAll() {
-        return null;
+
+        return dao
+                .queryBuilder()
+                .build()
+                .list();
     }
 
     @Override
     public List<? extends IDbSensor> getFirstN(int amount) {
-        return null;
+
+        if (amount <= 0) {
+            return Collections.EMPTY_LIST;
+        }
+
+        return dao
+                .queryBuilder()
+                .limit(amount)
+                .build()
+                .list();
     }
 
     @Override
     public List<? extends IDbSensor> getLastN(int amount) {
-        return null;
+
+        if (amount <= 0) {
+            return Collections.EMPTY_LIST;
+        }
+
+        return dao
+                .queryBuilder()
+                .orderDesc(DbCallLogEventDao.Properties.Id)
+                .limit(amount)
+                .build()
+                .list();
     }
 
     @Override
@@ -70,9 +114,9 @@ public class CallLogEventDaoImpl extends
             return -1l;
         }
 
-        Log.d(CallLogEvent.class.getSimpleName(), "Dumping CALL LOG EVENT data to db...");
+        Log.d(CallLogEvent.class.getSimpleName(), "Dumping data to db...");
 
-        long result = callLogEventDao.insertOrReplace((DbCallLogEvent) sensor);
+        long result = dao.insertOrReplace((DbCallLogEvent) sensor);
 
         Log.d(CallLogEvent.class.getSimpleName(), "Finished dumping data");
 
@@ -82,11 +126,26 @@ public class CallLogEventDaoImpl extends
     @Override
     public void delete(List<? extends IDbSensor> events) {
 
+        if (events == null || events.isEmpty()) {
+            return;
+        }
+
+        dao.deleteInTx((Iterable<DbCallLogEvent>) events);
     }
 
     @Override
     public List<Sensor> convertObjects(List<? extends IDbSensor> dbSensors) {
-        return null;
+
+        List<Sensor> result = new LinkedList<>();
+
+        if (dbSensors != null && !dbSensors.isEmpty()) {
+
+            for (DbCallLogEvent dbSensor : (List<DbCallLogEvent>) dbSensors) {
+                result.add(convertObject(dbSensor));
+            }
+        }
+
+        return result;
     }
 
     /**
@@ -96,7 +155,7 @@ public class CallLogEventDaoImpl extends
      */
     @Override
     public DbCallLogEvent getLastCallLogEvent() {
-        return callLogEventDao
+        return dao
                 .queryBuilder()
                 .orderDesc(DbCallLogEventDao.Properties.Id)
                 .limit(1)

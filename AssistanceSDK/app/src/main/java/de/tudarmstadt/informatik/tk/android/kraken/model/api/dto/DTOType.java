@@ -95,6 +95,8 @@ public class DtoType {
                 return res.getString(R.string.event_calendar);
             case CALENDAR_REMINDER:
                 return res.getString(R.string.event_calendar_reminder);
+            case CALL_LOG:
+                return res.getString(R.string.event_calllog);
             default:
                 return "";
         }
@@ -137,6 +139,8 @@ public class DtoType {
                 return "calendar";
             case CALENDAR_REMINDER:
                 return "calendarreminder";
+            case CALL_LOG:
+                return "calllog";
             default:
                 return "";
         }
