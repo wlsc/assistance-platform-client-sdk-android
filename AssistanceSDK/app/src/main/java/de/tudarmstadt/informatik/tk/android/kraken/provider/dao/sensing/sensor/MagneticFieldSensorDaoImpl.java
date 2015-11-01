@@ -2,12 +2,15 @@ package de.tudarmstadt.informatik.tk.android.kraken.provider.dao.sensing.sensor;
 
 import android.util.Log;
 
+import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 
 import de.tudarmstadt.informatik.tk.android.kraken.db.DaoSession;
 import de.tudarmstadt.informatik.tk.android.kraken.db.DbMagneticFieldSensor;
 import de.tudarmstadt.informatik.tk.android.kraken.db.DbMagneticFieldSensorDao;
 import de.tudarmstadt.informatik.tk.android.kraken.interfaces.IDbSensor;
+import de.tudarmstadt.informatik.tk.android.kraken.model.api.dto.DtoType;
 import de.tudarmstadt.informatik.tk.android.kraken.model.api.dto.sensor.MagneticFieldSensorDto;
 import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.Sensor;
 import de.tudarmstadt.informatik.tk.android.kraken.provider.dao.sensing.CommonEventDaoImpl;
@@ -43,28 +46,83 @@ public class MagneticFieldSensorDaoImpl extends
     }
 
     @Override
-    public MagneticFieldSensorDto convertObject(DbMagneticFieldSensor dbSensor) {
-        return null;
+    public MagneticFieldSensorDto convertObject(DbMagneticFieldSensor sensor) {
+
+        if (sensor == null) {
+            return null;
+        }
+
+        MagneticFieldSensorDto result = new MagneticFieldSensorDto();
+
+        result.setId(sensor.getId());
+        result.setX(sensor.getX());
+        result.setY(sensor.getY());
+        result.setZ(sensor.getZ());
+        result.setAccuracy(sensor.getAccuracy());
+        result.setxUncalibratedNoHardIron(sensor.getXUncalibratedNoHardIron());
+        result.setyUncalibratedNoHardIron(sensor.getYUncalibratedNoHardIron());
+        result.setzUncalibratedNoHardIron(sensor.getZUncalibratedNoHardIron());
+        result.setxUncalibratedEstimatedIronBias(sensor.getXUncalibratedEstimatedIronBias());
+        result.setyUncalibratedEstimatedIronBias(sensor.getYUncalibratedEstimatedIronBias());
+        result.setzUncalibratedEstimatedIronBias(sensor.getZUncalibratedEstimatedIronBias());
+        result.setType(DtoType.MAGNETIC_FIELD);
+        result.setTypeStr(DtoType.getApiName(DtoType.MAGNETIC_FIELD));
+        result.setCreated(sensor.getCreated());
+
+        return result;
     }
 
     @Override
     public List<Sensor> convertObjects(List<? extends IDbSensor> dbSensors) {
-        return null;
+
+        List<Sensor> result = new LinkedList<>();
+
+        if (dbSensors != null && !dbSensors.isEmpty()) {
+
+            for (DbMagneticFieldSensor dbSensor : (List<DbMagneticFieldSensor>) dbSensors) {
+                result.add(convertObject(dbSensor));
+            }
+        }
+
+        return result;
+
     }
 
     @Override
     public List<? extends IDbSensor> getAll() {
-        return null;
+        return dao
+                .queryBuilder()
+                .build()
+                .list();
     }
 
     @Override
     public List<? extends IDbSensor> getFirstN(int amount) {
-        return null;
+
+        if (amount <= 0) {
+            return Collections.EMPTY_LIST;
+        }
+
+        return dao
+                .queryBuilder()
+                .limit(amount)
+                .build()
+                .list();
     }
 
     @Override
     public List<? extends IDbSensor> getLastN(int amount) {
-        return null;
+
+        if (amount <= 0) {
+            return Collections.EMPTY_LIST;
+        }
+
+        return dao
+                .queryBuilder()
+                .orderDesc(DbMagneticFieldSensorDao.Properties.Id)
+                .limit(amount)
+                .build()
+                .list();
     }
 
     @Override
@@ -86,5 +144,10 @@ public class MagneticFieldSensorDaoImpl extends
     @Override
     public void delete(List<? extends IDbSensor> events) {
 
+        if (events == null || events.isEmpty()) {
+            return;
+        }
+
+        dao.deleteInTx((Iterable<DbMagneticFieldSensor>) events);
     }
 }
