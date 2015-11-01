@@ -2,12 +2,15 @@ package de.tudarmstadt.informatik.tk.android.kraken.provider.dao.sensing.event;
 
 import android.util.Log;
 
+import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 
 import de.tudarmstadt.informatik.tk.android.kraken.db.DaoSession;
 import de.tudarmstadt.informatik.tk.android.kraken.db.DbWifiConnectionEvent;
 import de.tudarmstadt.informatik.tk.android.kraken.db.DbWifiConnectionEventDao;
 import de.tudarmstadt.informatik.tk.android.kraken.interfaces.IDbSensor;
+import de.tudarmstadt.informatik.tk.android.kraken.model.api.dto.DtoType;
 import de.tudarmstadt.informatik.tk.android.kraken.model.api.dto.event.WifiConnectionEventDto;
 import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.Sensor;
 import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.impl.triggered.ConnectionSensor;
@@ -25,12 +28,12 @@ public class WifiConnectionEventDaoImpl extends
 
     private static WifiConnectionEventDao INSTANCE;
 
-    private DbWifiConnectionEventDao wifiConnectionEventDao;
+    private DbWifiConnectionEventDao dao;
 
     private WifiConnectionEventDaoImpl(DaoSession daoSession) {
 
-        if (wifiConnectionEventDao == null) {
-            wifiConnectionEventDao = daoSession.getDbWifiConnectionEventDao();
+        if (dao == null) {
+            dao = daoSession.getDbWifiConnectionEventDao();
         }
     }
 
@@ -44,23 +47,64 @@ public class WifiConnectionEventDaoImpl extends
     }
 
     @Override
-    public WifiConnectionEventDto convertObject(DbWifiConnectionEvent dbSensor) {
-        return null;
+    public WifiConnectionEventDto convertObject(DbWifiConnectionEvent sensor) {
+
+        if (sensor == null) {
+            return null;
+        }
+
+        WifiConnectionEventDto result = new WifiConnectionEventDto();
+
+        result.setId(sensor.getId());
+        result.setSsid(sensor.getSsid());
+        result.setBssid(sensor.getBssid());
+        result.setChannel(sensor.getChannel());
+        result.setFrequency(sensor.getFrequency());
+        result.setLinkSpeed(sensor.getLinkSpeed());
+        result.setSignalStrength(sensor.getSignalStrength());
+        result.setNetworkId(sensor.getNetworkId());
+        result.setType(DtoType.WIFI_CONNECTION);
+        result.setTypeStr(DtoType.getApiName(DtoType.WIFI_CONNECTION));
+        result.setCreated(sensor.getCreated());
+
+        return result;
     }
 
     @Override
     public List<? extends IDbSensor> getAll() {
-        return null;
+        return dao
+                .queryBuilder()
+                .build()
+                .list();
     }
 
     @Override
     public List<? extends IDbSensor> getFirstN(int amount) {
-        return null;
+
+        if (amount <= 0) {
+            return Collections.EMPTY_LIST;
+        }
+
+        return dao
+                .queryBuilder()
+                .limit(amount)
+                .build()
+                .list();
     }
 
     @Override
     public List<? extends IDbSensor> getLastN(int amount) {
-        return null;
+
+        if (amount <= 0) {
+            return Collections.EMPTY_LIST;
+        }
+
+        return dao
+                .queryBuilder()
+                .orderDesc(DbWifiConnectionEventDao.Properties.Id)
+                .limit(amount)
+                .build()
+                .list();
     }
 
     @Override
@@ -72,7 +116,7 @@ public class WifiConnectionEventDaoImpl extends
 
         Log.d(ConnectionSensor.class.getSimpleName(), "Dumping WIFI CONNECTION data to db...");
 
-        long result = wifiConnectionEventDao.insertOrReplace((DbWifiConnectionEvent) sensor);
+        long result = dao.insertOrReplace((DbWifiConnectionEvent) sensor);
 
         Log.d(ConnectionSensor.class.getSimpleName(), "Finished dumping data");
 
@@ -82,10 +126,25 @@ public class WifiConnectionEventDaoImpl extends
     @Override
     public void delete(List<? extends IDbSensor> events) {
 
+        if (events == null || events.isEmpty()) {
+            return;
+        }
+
+        dao.deleteInTx((Iterable<DbWifiConnectionEvent>) events);
     }
 
     @Override
     public List<Sensor> convertObjects(List<? extends IDbSensor> dbSensors) {
-        return null;
+
+        List<Sensor> result = new LinkedList<>();
+
+        if (dbSensors != null && !dbSensors.isEmpty()) {
+
+            for (DbWifiConnectionEvent dbSensor : (List<DbWifiConnectionEvent>) dbSensors) {
+                result.add(convertObject(dbSensor));
+            }
+        }
+
+        return result;
     }
 }
