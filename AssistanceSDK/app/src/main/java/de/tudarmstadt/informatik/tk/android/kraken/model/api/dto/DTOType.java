@@ -97,6 +97,8 @@ public class DtoType {
                 return res.getString(R.string.event_calendar_reminder);
             case CALL_LOG:
                 return res.getString(R.string.event_calllog);
+            case NETWORK_TRAFFIC:
+                return res.getString(R.string.event_network_traffic);
             default:
                 return "";
         }
@@ -141,6 +143,8 @@ public class DtoType {
                 return "calendarreminder";
             case CALL_LOG:
                 return "calllog";
+            case NETWORK_TRAFFIC:
+                return "networktraffic";
             default:
                 return "";
         }
