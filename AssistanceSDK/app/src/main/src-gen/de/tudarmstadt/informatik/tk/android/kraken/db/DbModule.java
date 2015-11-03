@@ -19,6 +19,7 @@ public class DbModule {
     private String descriptionFull;
     private String copyright;
     private String supportEmail;
+    private boolean active;
     /** Not-null value. */
     private String created;
     private Long userId;
@@ -33,7 +34,6 @@ public class DbModule {
     private Long dbUser__resolvedKey;
 
     private List<DbModuleCapability> dbModuleCapabilityList;
-    private List<DbModuleInstallation> dbModuleInstallationList;
     private List<DbNews> dbNewsList;
 
     public DbModule() {
@@ -43,7 +43,7 @@ public class DbModule {
         this.id = id;
     }
 
-    public DbModule(Long id, String packageName, String title, String logoUrl, String descriptionShort, String descriptionFull, String copyright, String supportEmail, String created, Long userId) {
+    public DbModule(Long id, String packageName, String title, String logoUrl, String descriptionShort, String descriptionFull, String copyright, String supportEmail, boolean active, String created, Long userId) {
         this.id = id;
         this.packageName = packageName;
         this.title = title;
@@ -52,6 +52,7 @@ public class DbModule {
         this.descriptionFull = descriptionFull;
         this.copyright = copyright;
         this.supportEmail = supportEmail;
+        this.active = active;
         this.created = created;
         this.userId = userId;
     }
@@ -128,6 +129,14 @@ public class DbModule {
         this.supportEmail = supportEmail;
     }
 
+    public boolean getActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
+    }
+
     /** Not-null value. */
     public String getCreated() {
         return created;
@@ -191,28 +200,6 @@ public class DbModule {
     /** Resets a to-many relationship, making the next get call to query for a fresh result. */
     public synchronized void resetDbModuleCapabilityList() {
         dbModuleCapabilityList = null;
-    }
-
-    /** To-many relationship, resolved on first access (and after reset). Changes to to-many relations are not persisted, make changes to the target entity. */
-    public List<DbModuleInstallation> getDbModuleInstallationList() {
-        if (dbModuleInstallationList == null) {
-            if (daoSession == null) {
-                throw new DaoException("Entity is detached from DAO context");
-            }
-            DbModuleInstallationDao targetDao = daoSession.getDbModuleInstallationDao();
-            List<DbModuleInstallation> dbModuleInstallationListNew = targetDao._queryDbModule_DbModuleInstallationList(id);
-            synchronized (this) {
-                if(dbModuleInstallationList == null) {
-                    dbModuleInstallationList = dbModuleInstallationListNew;
-                }
-            }
-        }
-        return dbModuleInstallationList;
-    }
-
-    /** Resets a to-many relationship, making the next get call to query for a fresh result. */
-    public synchronized void resetDbModuleInstallationList() {
-        dbModuleInstallationList = null;
     }
 
     /** To-many relationship, resolved on first access (and after reset). Changes to to-many relations are not persisted, make changes to the target entity. */

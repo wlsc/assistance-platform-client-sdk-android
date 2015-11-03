@@ -1,9 +1,7 @@
 package de.tudarmstadt.informatik.tk.android.kraken.service;
 
-import android.app.NotificationManager;
 import android.app.Service;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Handler.Callback;
@@ -24,11 +22,11 @@ import de.tudarmstadt.informatik.tk.android.kraken.ActivityCommunicator;
 import de.tudarmstadt.informatik.tk.android.kraken.Config;
 import de.tudarmstadt.informatik.tk.android.kraken.R;
 import de.tudarmstadt.informatik.tk.android.kraken.db.DaoSession;
-import de.tudarmstadt.informatik.tk.android.kraken.db.DbModuleInstallation;
+import de.tudarmstadt.informatik.tk.android.kraken.db.DbModule;
+import de.tudarmstadt.informatik.tk.android.kraken.db.DbUser;
 import de.tudarmstadt.informatik.tk.android.kraken.model.enums.ECommandType;
 import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.ISensor;
 import de.tudarmstadt.informatik.tk.android.kraken.provider.DaoProvider;
-import de.tudarmstadt.informatik.tk.android.kraken.provider.HarvesterServiceProvider;
 import de.tudarmstadt.informatik.tk.android.kraken.provider.PreferenceProvider;
 import de.tudarmstadt.informatik.tk.android.kraken.provider.SensorProvider;
 
@@ -49,9 +47,9 @@ public class HarvesterService extends Service implements Callback {
 
     private DaoProvider daoProvider;
 
-    private NotificationManager mNotificationManager;
+//    private NotificationManager mNotificationManager;
 
-    private static boolean mSensorsStarted = false;
+    private static boolean mSensorsStarted;
 
     public HarvesterService() {
     }
@@ -101,15 +99,29 @@ public class HarvesterService extends Service implements Callback {
 
         Log.d(TAG, "Initializing service...");
 
-        SharedPreferences sharedPreferences = android.preference.PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        long userId = sharedPreferences.getLong("current_user_id", -1);
+        String userToken = PreferenceProvider.getInstance(getApplicationContext()).getUserToken();
 
-        List<DbModuleInstallation> dbModuleInstallations = daoProvider
-                .getModuleInstallationDao()
-                .getModuleInstallationsByUserId(userId);
+        if (userToken.isEmpty()) {
+            Log.d(TAG, "UserToken is empty. No point to continue");
+            return;
+        }
 
-        if (dbModuleInstallations != null && !dbModuleInstallations.isEmpty()) {
-            Log.d(TAG, "Found active modules -> starting monitoring activities...");
+        DbUser user = daoProvider
+                .getUserDao()
+                .getUserByToken(userToken);
+
+        if (user == null) {
+            Log.d(TAG, "User is null. No point to continue");
+            return;
+        }
+
+        List<DbModule> activeModules = daoProvider
+                .getModuleDao()
+                .getAllActiveModules(user.getId());
+
+        if (activeModules != null && !activeModules.isEmpty()) {
+
+            Log.d(TAG, "Found installed modules -> starting monitoring activities...");
 
             monitorStart();
 
@@ -117,8 +129,11 @@ public class HarvesterService extends Service implements Callback {
             startService(new Intent(this, EventUploaderService.class));
 
             startAccessibilityService();
+
         } else {
             Log.d(TAG, "No active module were found!");
+
+            mSensorsStarted = false;
         }
 
         if (mPreferenceProvider.getShowNotification()) {
@@ -149,8 +164,6 @@ public class HarvesterService extends Service implements Callback {
         Log.d(TAG, "Starting monitoring service...");
 
         mSensorsStarted = true;
-
-//		Handler handler = ActivityCommunicator.getHandler();
 
         mSensorProvider = SensorProvider.getInstance(this);
 
@@ -201,10 +214,6 @@ public class HarvesterService extends Service implements Callback {
 
         Log.d(TAG, "Showing icon...");
 
-        if (mNotificationManager == null) {
-            mNotificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-        }
-
         NotificationCompat.Builder mBuilder =
                 new NotificationCompat.Builder(this)
                         .setSmallIcon(R.drawable.ic_kraken_service)
@@ -213,7 +222,7 @@ public class HarvesterService extends Service implements Callback {
 //                        .setPriority(Notification.PRIORITY_MIN)
                         .setOngoing(true);
 
-        mNotificationManager.notify(Config.DEFAULT_NOTIFICATION_ID, mBuilder.build());
+        startForeground(Config.DEFAULT_NOTIFICATION_ID, mBuilder.build());
     }
 
     /**
@@ -223,11 +232,12 @@ public class HarvesterService extends Service implements Callback {
 
         Log.d(TAG, "Hiding icon...");
 
-        if (mNotificationManager == null) {
-            mNotificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-        }
+//        if (mNotificationManager == null) {
+//            mNotificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+//        }
 
-        mNotificationManager.cancel(Config.DEFAULT_NOTIFICATION_ID);
+        stopForeground(true);
+//        mNotificationManager.cancel(Config.DEFAULT_NOTIFICATION_ID);
     }
 
     @Override
@@ -237,7 +247,9 @@ public class HarvesterService extends Service implements Callback {
 
         if (intent != null && intent.hasExtra(Config.INTENT_EXTRA_SHOW_ICON)) {
 
-            boolean showIcon = intent.getBooleanExtra(Config.INTENT_EXTRA_SHOW_ICON, PreferenceProvider.DEFAULT_KRAKEN_SHOW_NOTIFICATION);
+            boolean showIcon = intent.getBooleanExtra(
+                    Config.INTENT_EXTRA_SHOW_ICON,
+                    PreferenceProvider.DEFAULT_KRAKEN_SHOW_NOTIFICATION);
 
             if (showIcon) {
                 showIcon();
@@ -251,21 +263,12 @@ public class HarvesterService extends Service implements Callback {
         if (userToken != null && !userToken.isEmpty()) {
             if (!mSensorsStarted) {
                 monitorStart();
-                HarvesterServiceProvider.getInstance(getApplicationContext()).startSensingService();
+            } else {
+                monitorStop();
             }
         } else {
             monitorStop();
         }
-
-        NotificationCompat.Builder mBuilder =
-                new NotificationCompat.Builder(this)
-                        .setSmallIcon(R.drawable.ic_kraken_service)
-                        .setContentTitle(getString(R.string.service_running_notification_title))
-                        .setContentText(getString(R.string.service_running_notification_text))
-//                        .setPriority(Notification.PRIORITY_MIN)
-                        .setOngoing(true);
-
-        startForeground(Config.DEFAULT_NOTIFICATION_ID, mBuilder.build());
 
         return Service.START_STICKY;
     }

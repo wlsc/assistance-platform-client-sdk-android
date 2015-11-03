@@ -75,10 +75,7 @@ public class HarvesterServiceProvider implements Handler.Callback {
      * Starts sensing service
      */
     public void startSensingService() {
-
-        mContext.startService(mSensingIntent);
-
-        showIcon(true);
+        startHarvestingWithIcon(true);
     }
 
     /**
@@ -91,7 +88,7 @@ public class HarvesterServiceProvider implements Handler.Callback {
         mContext.stopService(intent);
     }
 
-    public void showIcon(boolean show) {
+    public void startHarvestingWithIcon(boolean show) {
 
         Intent intent = new Intent(mContext, HarvesterService.class);
         intent.putExtra("showIcon", show);

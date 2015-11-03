@@ -86,13 +86,14 @@ public class AssistanceDatabaseGenerator {
     Entity module = schema.addEntity("DbModule");
     module.setTableName("module");
     module.addIdProperty().autoincrement().index();
-    module.addStringProperty("packageName").notNull().index();
+    module.addStringProperty("packageName").notNull().unique().index();
     module.addStringProperty("title");
     module.addStringProperty("logoUrl");
     module.addStringProperty("descriptionShort");
     module.addStringProperty("descriptionFull");
     module.addStringProperty("copyright");
     module.addStringProperty("supportEmail");
+    module.addBooleanProperty("active").notNull();
     module.addStringProperty("created").notNull();
 
     Property moduleFKUserProperty = module.addLongProperty("userId").index().getProperty();
@@ -116,20 +117,20 @@ public class AssistanceDatabaseGenerator {
     module.addToMany(moduleCapability, moduleCapabilityFKModuleProperty);
 
     // ----- Module installation scheme -----
-    Entity moduleInstallation = schema.addEntity("DbModuleInstallation");
-    moduleInstallation.setTableName("module_installation");
-    moduleInstallation.addIdProperty().autoincrement().index();
-    moduleInstallation.addBooleanProperty("active").notNull();
-    moduleInstallation.addStringProperty("created").notNull();
-
-    Property moduleInstallationFKModuleProperty =
-        moduleInstallation.addLongProperty("moduleId").index().getProperty();
-    Property moduleInstallationFKUserProperty =
-        moduleInstallation.addLongProperty("userId").index().getProperty();
-    moduleInstallation.addToOne(module, moduleInstallationFKModuleProperty);
-    module.addToMany(moduleInstallation, moduleInstallationFKModuleProperty);
-    moduleInstallation.addToOne(user, moduleInstallationFKUserProperty);
-    user.addToMany(moduleInstallation, moduleInstallationFKUserProperty);
+//    Entity moduleInstallation = schema.addEntity("DbModuleInstallation");
+//    moduleInstallation.setTableName("module_installation");
+//    moduleInstallation.addIdProperty().autoincrement().index();
+//    moduleInstallation.addBooleanProperty("active").notNull();
+//    moduleInstallation.addStringProperty("created").notNull();
+//
+//    Property moduleInstallationFKModuleProperty =
+//        moduleInstallation.addLongProperty("moduleId").index().getProperty();
+//    Property moduleInstallationFKUserProperty =
+//        moduleInstallation.addLongProperty("userId").index().getProperty();
+//    moduleInstallation.addToOne(module, moduleInstallationFKModuleProperty);
+//    module.addToMany(moduleInstallation, moduleInstallationFKModuleProperty);
+//    moduleInstallation.addToOne(user, moduleInstallationFKUserProperty);
+//    user.addToMany(moduleInstallation, moduleInstallationFKUserProperty);
     
     // ----- Assistance News scheme -----
     Entity assistanceNews = schema.addEntity("DbNews");

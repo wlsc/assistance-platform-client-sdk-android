@@ -14,8 +14,6 @@ import de.tudarmstadt.informatik.tk.android.kraken.provider.dao.module.ModuleCap
 import de.tudarmstadt.informatik.tk.android.kraken.provider.dao.module.ModuleCapabilityDaoImpl;
 import de.tudarmstadt.informatik.tk.android.kraken.provider.dao.module.ModuleDao;
 import de.tudarmstadt.informatik.tk.android.kraken.provider.dao.module.ModuleDaoImpl;
-import de.tudarmstadt.informatik.tk.android.kraken.provider.dao.module.ModuleInstallationDao;
-import de.tudarmstadt.informatik.tk.android.kraken.provider.dao.module.ModuleInstallationDaoImpl;
 import de.tudarmstadt.informatik.tk.android.kraken.provider.dao.news.NewsDao;
 import de.tudarmstadt.informatik.tk.android.kraken.provider.dao.news.NewsDaoImpl;
 import de.tudarmstadt.informatik.tk.android.kraken.provider.dao.sensing.event.CalendarEventDao;
@@ -122,15 +120,6 @@ public class DaoProvider {
      */
     public ModuleDao getModuleDao() {
         return ModuleDaoImpl.getInstance(mDaoSession);
-    }
-
-    /**
-     * ModuleInstallationDao
-     *
-     * @return
-     */
-    public ModuleInstallationDao getModuleInstallationDao() {
-        return ModuleInstallationDaoImpl.getInstance(mDaoSession);
     }
 
     /**

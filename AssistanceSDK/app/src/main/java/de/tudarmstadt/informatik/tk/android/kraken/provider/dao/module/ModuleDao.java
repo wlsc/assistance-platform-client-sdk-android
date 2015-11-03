@@ -1,5 +1,7 @@
 package de.tudarmstadt.informatik.tk.android.kraken.provider.dao.module;
 
+import java.util.List;
+
 import de.tudarmstadt.informatik.tk.android.kraken.db.DbModule;
 
 /**
@@ -9,6 +11,12 @@ import de.tudarmstadt.informatik.tk.android.kraken.db.DbModule;
 public interface ModuleDao {
 
     DbModule getModuleByPackageIdUserId(String modulePackageName, Long userId);
+
+    List<DbModule> getAllModules(Long userId);
+
+    List<DbModule> getAllActiveModules(Long userId);
+
+    List<DbModule> getAllModules();
 
     long insertModule(DbModule module);
 }

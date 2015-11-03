@@ -36,8 +36,9 @@ public class DbModuleDao extends AbstractDao<DbModule, Long> {
         public final static Property DescriptionFull = new Property(5, String.class, "descriptionFull", false, "DESCRIPTION_FULL");
         public final static Property Copyright = new Property(6, String.class, "copyright", false, "COPYRIGHT");
         public final static Property SupportEmail = new Property(7, String.class, "supportEmail", false, "SUPPORT_EMAIL");
-        public final static Property Created = new Property(8, String.class, "created", false, "CREATED");
-        public final static Property UserId = new Property(9, Long.class, "userId", false, "USER_ID");
+        public final static Property Active = new Property(8, boolean.class, "active", false, "ACTIVE");
+        public final static Property Created = new Property(9, String.class, "created", false, "CREATED");
+        public final static Property UserId = new Property(10, Long.class, "userId", false, "USER_ID");
     };
 
     private DaoSession daoSession;
@@ -58,15 +59,16 @@ public class DbModuleDao extends AbstractDao<DbModule, Long> {
         String constraint = ifNotExists? "IF NOT EXISTS ": "";
         db.execSQL("CREATE TABLE " + constraint + "\"module\" (" + //
                 "\"_id\" INTEGER PRIMARY KEY AUTOINCREMENT ," + // 0: id
-                "\"PACKAGE_NAME\" TEXT NOT NULL ," + // 1: packageName
+                "\"PACKAGE_NAME\" TEXT NOT NULL UNIQUE ," + // 1: packageName
                 "\"TITLE\" TEXT," + // 2: title
                 "\"LOGO_URL\" TEXT," + // 3: logoUrl
                 "\"DESCRIPTION_SHORT\" TEXT," + // 4: descriptionShort
                 "\"DESCRIPTION_FULL\" TEXT," + // 5: descriptionFull
                 "\"COPYRIGHT\" TEXT," + // 6: copyright
                 "\"SUPPORT_EMAIL\" TEXT," + // 7: supportEmail
-                "\"CREATED\" TEXT NOT NULL ," + // 8: created
-                "\"USER_ID\" INTEGER);"); // 9: userId
+                "\"ACTIVE\" INTEGER NOT NULL ," + // 8: active
+                "\"CREATED\" TEXT NOT NULL ," + // 9: created
+                "\"USER_ID\" INTEGER);"); // 10: userId
         // Add Indexes
         db.execSQL("CREATE INDEX " + constraint + "IDX_module__id ON module" +
                 " (\"_id\");");
@@ -122,11 +124,12 @@ public class DbModuleDao extends AbstractDao<DbModule, Long> {
         if (supportEmail != null) {
             stmt.bindString(8, supportEmail);
         }
-        stmt.bindString(9, entity.getCreated());
+        stmt.bindLong(9, entity.getActive() ? 1L: 0L);
+        stmt.bindString(10, entity.getCreated());
  
         Long userId = entity.getUserId();
         if (userId != null) {
-            stmt.bindLong(10, userId);
+            stmt.bindLong(11, userId);
         }
     }
 
@@ -154,8 +157,9 @@ public class DbModuleDao extends AbstractDao<DbModule, Long> {
             cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5), // descriptionFull
             cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6), // copyright
             cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7), // supportEmail
-            cursor.getString(offset + 8), // created
-            cursor.isNull(offset + 9) ? null : cursor.getLong(offset + 9) // userId
+            cursor.getShort(offset + 8) != 0, // active
+            cursor.getString(offset + 9), // created
+            cursor.isNull(offset + 10) ? null : cursor.getLong(offset + 10) // userId
         );
         return entity;
     }
@@ -171,8 +175,9 @@ public class DbModuleDao extends AbstractDao<DbModule, Long> {
         entity.setDescriptionFull(cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5));
         entity.setCopyright(cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6));
         entity.setSupportEmail(cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7));
-        entity.setCreated(cursor.getString(offset + 8));
-        entity.setUserId(cursor.isNull(offset + 9) ? null : cursor.getLong(offset + 9));
+        entity.setActive(cursor.getShort(offset + 8) != 0);
+        entity.setCreated(cursor.getString(offset + 9));
+        entity.setUserId(cursor.isNull(offset + 10) ? null : cursor.getLong(offset + 10));
      }
     
     /** @inheritdoc */

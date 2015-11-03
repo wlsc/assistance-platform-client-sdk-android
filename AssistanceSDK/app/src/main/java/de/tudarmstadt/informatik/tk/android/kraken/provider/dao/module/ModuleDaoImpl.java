@@ -1,5 +1,8 @@
 package de.tudarmstadt.informatik.tk.android.kraken.provider.dao.module;
 
+import java.util.Collections;
+import java.util.List;
+
 import de.tudarmstadt.informatik.tk.android.kraken.db.DaoSession;
 import de.tudarmstadt.informatik.tk.android.kraken.db.DbModule;
 import de.tudarmstadt.informatik.tk.android.kraken.db.DbModuleDao;
@@ -14,12 +17,12 @@ public class ModuleDaoImpl implements ModuleDao {
 
     private static ModuleDao INSTANCE;
 
-    private DbModuleDao moduleDao;
+    private DbModuleDao dao;
 
     private ModuleDaoImpl(DaoSession daoSession) {
 
-        if (moduleDao == null) {
-            moduleDao = daoSession.getDbModuleDao();
+        if (dao == null) {
+            dao = daoSession.getDbModuleDao();
         }
     }
 
@@ -46,13 +49,50 @@ public class ModuleDaoImpl implements ModuleDao {
             return null;
         }
 
-        return moduleDao
+        return dao
                 .queryBuilder()
                 .where(DbModuleDao.Properties.PackageName.eq(modulePackageName))
                 .where(DbModuleDao.Properties.UserId.eq(userId))
                 .limit(1)
                 .build()
                 .unique();
+    }
+
+    @Override
+    public List<DbModule> getAllModules(Long userId) {
+
+        if (userId == null || userId < 0) {
+            return Collections.EMPTY_LIST;
+        }
+
+        return dao
+                .queryBuilder()
+                .where(DbModuleDao.Properties.UserId.eq(userId))
+                .build()
+                .list();
+    }
+
+    @Override
+    public List<DbModule> getAllActiveModules(Long userId) {
+
+        if (userId == null || userId < 0) {
+            return Collections.EMPTY_LIST;
+        }
+
+        return dao
+                .queryBuilder()
+                .where(DbModuleDao.Properties.UserId.eq(userId))
+                .where(DbModuleDao.Properties.Active.eq(1))
+                .build()
+                .list();
+    }
+
+    @Override
+    public List<DbModule> getAllModules() {
+        return dao
+                .queryBuilder()
+                .build()
+                .list();
     }
 
     /**
@@ -68,6 +108,6 @@ public class ModuleDaoImpl implements ModuleDao {
             return -1L;
         }
 
-        return moduleDao.insertOrReplace(module);
+        return dao.insertOrReplace(module);
     }
 }

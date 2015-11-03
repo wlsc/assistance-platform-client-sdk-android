@@ -31,7 +31,6 @@ public class DbUser {
     private List<DbUserSocialProfile> dbUserSocialProfileList;
     private List<DbDevice> dbDeviceList;
     private List<DbModule> dbModuleList;
-    private List<DbModuleInstallation> dbModuleInstallationList;
     private List<DbNews> dbNewsList;
 
     public DbUser() {
@@ -199,28 +198,6 @@ public class DbUser {
     /** Resets a to-many relationship, making the next get call to query for a fresh result. */
     public synchronized void resetDbModuleList() {
         dbModuleList = null;
-    }
-
-    /** To-many relationship, resolved on first access (and after reset). Changes to to-many relations are not persisted, make changes to the target entity. */
-    public List<DbModuleInstallation> getDbModuleInstallationList() {
-        if (dbModuleInstallationList == null) {
-            if (daoSession == null) {
-                throw new DaoException("Entity is detached from DAO context");
-            }
-            DbModuleInstallationDao targetDao = daoSession.getDbModuleInstallationDao();
-            List<DbModuleInstallation> dbModuleInstallationListNew = targetDao._queryDbUser_DbModuleInstallationList(id);
-            synchronized (this) {
-                if(dbModuleInstallationList == null) {
-                    dbModuleInstallationList = dbModuleInstallationListNew;
-                }
-            }
-        }
-        return dbModuleInstallationList;
-    }
-
-    /** Resets a to-many relationship, making the next get call to query for a fresh result. */
-    public synchronized void resetDbModuleInstallationList() {
-        dbModuleInstallationList = null;
     }
 
     /** To-many relationship, resolved on first access (and after reset). Changes to to-many relations are not persisted, make changes to the target entity. */
