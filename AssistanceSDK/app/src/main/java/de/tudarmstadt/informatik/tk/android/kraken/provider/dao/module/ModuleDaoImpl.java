@@ -82,7 +82,7 @@ public class ModuleDaoImpl implements ModuleDao {
         return dao
                 .queryBuilder()
                 .where(DbModuleDao.Properties.UserId.eq(userId))
-                .where(DbModuleDao.Properties.Active.eq(1))
+                .where(DbModuleDao.Properties.Active.eq(Boolean.TRUE))
                 .build()
                 .list();
     }
