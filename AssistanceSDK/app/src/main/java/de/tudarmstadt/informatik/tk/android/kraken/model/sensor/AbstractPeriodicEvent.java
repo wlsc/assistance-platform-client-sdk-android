@@ -13,7 +13,7 @@ public abstract class AbstractPeriodicEvent extends AbstractSensor {
     private static final String TAG = AbstractPeriodicEvent.class.getSimpleName();
 
     private ScheduledExecutorService mScheduledTaskExecutor;
-    private Future<?> m_future;
+    private Future<?> mFuture;
     protected boolean m_bLooperPrepared;
 
     // ------------------- Configuration -------------------
@@ -28,8 +28,8 @@ public abstract class AbstractPeriodicEvent extends AbstractSensor {
     @Override
     public void startSensor() {
 
-        if (m_future == null) {
-            m_future = mScheduledTaskExecutor.scheduleAtFixedRate(new Runnable() {
+        if (mFuture == null) {
+            mFuture = mScheduledTaskExecutor.scheduleAtFixedRate(new Runnable() {
 
                 @Override
                 public void run() {
@@ -49,12 +49,12 @@ public abstract class AbstractPeriodicEvent extends AbstractSensor {
     public void stopSensor() {
 
         try {
-            if (m_future != null) {
-                m_future.cancel(true);
-                m_future = null;
+            if (mFuture != null && !mFuture.isCancelled()) {
+                mFuture.cancel(true);
             }
         } finally {
             setRunning(false);
+            mFuture = null;
         }
     }
 
@@ -66,7 +66,7 @@ public abstract class AbstractPeriodicEvent extends AbstractSensor {
 
     protected void setDataIntervallInSec(int sec) {
         DATA_INTERVAL_IN_SEC = sec;
-        if (m_future != null) {
+        if (mFuture != null) {
             stopSensor();
             startSensor();
         }
