@@ -4,6 +4,7 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.provider.CalendarContract.Events;
 import android.provider.CalendarContract.Reminders;
 import android.util.Log;
@@ -29,6 +30,8 @@ public class CalendarEvent extends AbstractContentObserverEvent {
 
     private static final Uri URI_CALENDAR = android.provider.CalendarContract.Events.CONTENT_URI;
     private static final Uri URI_REMINDER = android.provider.CalendarContract.Reminders.CONTENT_URI;
+
+    private AsyncTask<Void, Void, Void> syncingTask;
 
     public CalendarEvent(Context context) {
         super(context);
@@ -346,21 +349,27 @@ public class CalendarEvent extends AbstractContentObserverEvent {
     @Override
     public void startSensor() {
 
-        Thread thread = new Thread(new Runnable() {
+        syncingTask = new AsyncTask<Void, Void, Void>() {
 
             @Override
-            public void run() {
+            protected Void doInBackground(Void... params) {
 
                 syncData();
                 context.getContentResolver().registerContentObserver(URI_CALENDAR, true, mObserver);
                 context.getContentResolver().registerContentObserver(URI_REMINDER, true, mObserver);
-            }
-        });
 
-        thread.setName("CalendarSensorThread");
-        thread.start();
+                return null;
+            }
+        }.execute();
 
         setRunning(true);
+    }
+
+    @Override
+    public void stopSensor() {
+
+        syncingTask = null;
+        setRunning(false);
     }
 
     @Override

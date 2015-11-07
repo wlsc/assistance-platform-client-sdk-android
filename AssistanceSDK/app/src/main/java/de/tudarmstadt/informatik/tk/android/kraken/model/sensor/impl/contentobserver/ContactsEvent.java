@@ -3,6 +3,7 @@ package de.tudarmstadt.informatik.tk.android.kraken.model.sensor.impl.contentobs
 import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.provider.ContactsContract;
 import android.provider.ContactsContract.CommonDataKinds.Email;
 import android.provider.ContactsContract.CommonDataKinds.Note;
@@ -33,6 +34,8 @@ public class ContactsEvent extends AbstractContentObserverEvent {
     private Method m_methodForGEtAllExistingContacts;
 
     private boolean m_bFlushToServer;
+
+    private AsyncTask<Void, Void, Void> syncingTask;
 
     public ContactsEvent(Context context) {
         super(context);
@@ -334,17 +337,26 @@ public class ContactsEvent extends AbstractContentObserverEvent {
     @Override
     public void startSensor() {
 
-        setRunning(true);
+        syncingTask = new AsyncTask<Void, Void, Void>() {
 
-        Thread thread = new Thread(new Runnable() {
             @Override
-            public void run() {
+            protected Void doInBackground(Void... params) {
+
                 syncData();
                 context.getContentResolver().registerContentObserver(URI_CONTACTS, true, mObserver);
+
+                return null;
             }
-        });
-        thread.setName("ContactsSensorThread");
-        thread.start();
+        }.execute();
+
+        setRunning(true);
+    }
+
+    @Override
+    public void stopSensor() {
+
+        syncingTask = null;
+        setRunning(false);
     }
 
     @Override

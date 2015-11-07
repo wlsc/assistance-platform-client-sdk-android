@@ -4,6 +4,7 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.provider.CallLog;
 
 import de.tudarmstadt.informatik.tk.android.kraken.db.DbCallLogEvent;
@@ -18,6 +19,8 @@ import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.AbstractContentO
 public class CallLogEvent extends AbstractContentObserverEvent {
 
     protected static final Uri URI_CALL_LOG = android.provider.CallLog.Calls.CONTENT_URI;
+
+    private AsyncTask<Void, Void, Void> syncingTask;
 
     public CallLogEvent(Context context) {
         super(context);
@@ -41,20 +44,26 @@ public class CallLogEvent extends AbstractContentObserverEvent {
     @Override
     public void startSensor() {
 
-        setRunning(true);
-
-        Thread thread = new Thread(new Runnable() {
+        syncingTask = new AsyncTask<Void, Void, Void>() {
 
             @Override
-            public void run() {
+            protected Void doInBackground(Void... params) {
 
                 syncData();
                 context.getContentResolver().registerContentObserver(URI_CALL_LOG, true, mObserver);
-            }
-        });
 
-        thread.setName("CallLogSensorThread");
-        thread.start();
+                return null;
+            }
+        }.execute();
+
+        setRunning(true);
+    }
+
+    @Override
+    public void stopSensor() {
+
+        syncingTask = null;
+        setRunning(false);
     }
 
     @Override
