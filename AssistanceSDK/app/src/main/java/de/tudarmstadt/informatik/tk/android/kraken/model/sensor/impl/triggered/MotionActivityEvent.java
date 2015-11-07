@@ -246,11 +246,6 @@ public class MotionActivityEvent extends
     }
 
     @Override
-    public boolean isRunning() {
-        return isRunning();
-    }
-
-    @Override
     public void reset() {
 
     }
