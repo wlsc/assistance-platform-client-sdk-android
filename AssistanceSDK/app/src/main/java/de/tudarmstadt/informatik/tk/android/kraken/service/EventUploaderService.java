@@ -524,8 +524,13 @@ public class EventUploaderService extends GcmTaskService {
             }
         }
 
-        requestDbEvents.clear();
-        requestEvents.clear();
+        if (requestDbEvents != null) {
+            requestDbEvents.clear();
+        }
+
+        if (requestEvents != null) {
+            requestEvents.clear();
+        }
 
         Log.d(TAG, "Finished removing data from db");
     }
