@@ -4,7 +4,6 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.v4.util.SparseArrayCompat;
 import android.util.Log;
 
 import com.google.android.gms.gcm.GcmNetworkManager;
@@ -14,8 +13,10 @@ import com.google.android.gms.gcm.PeriodicTask;
 import com.google.android.gms.gcm.Task;
 import com.google.android.gms.gcm.TaskParams;
 
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import de.tudarmstadt.informatik.tk.android.kraken.interfaces.IDbSensor;
 import de.tudarmstadt.informatik.tk.android.kraken.model.api.EventUploadRequest;
@@ -70,8 +71,8 @@ public class EventUploaderService extends GcmTaskService {
 
     private static PreferenceProvider mPreferenceProvider;
 
-    private SparseArrayCompat<List<? extends IDbSensor>> requestDbEvents;
-    private SparseArrayCompat<List<Sensor>> requestEvents;
+    private Map<Integer, List<? extends IDbSensor>> requestDbEvents;
+    private Map<Integer, List<Sensor>> requestEvents;
 
     private static boolean isNeedInConnectionFallback;
 
@@ -156,15 +157,15 @@ public class EventUploaderService extends GcmTaskService {
                                 return;
                             }
 
-                            requestEvents = new SparseArrayCompat<>();
-                            requestDbEvents = new SparseArrayCompat<List<? extends IDbSensor>>();
+                            requestEvents = new HashMap<>();
+                            requestDbEvents = new HashMap<>();
                             requestEvents = getEntriesForUpload(0);
 
                             final List<Sensor> eventsAsList = new LinkedList<>();
 
-                            for (int i = 0; i < requestEvents.size(); i++) {
-                                int key = requestEvents.keyAt(i);
-                                eventsAsList.addAll(requestEvents.get(key));
+                            for (Map.Entry<Integer, List<Sensor>> entry : requestEvents.entrySet()) {
+
+                                eventsAsList.addAll(entry.getValue());
                             }
 
                             // partial upload
@@ -246,15 +247,15 @@ public class EventUploaderService extends GcmTaskService {
                         return;
                     }
 
-                    requestEvents = new SparseArrayCompat<>();
-                    requestDbEvents = new SparseArrayCompat<List<? extends IDbSensor>>();
+                    requestEvents = new HashMap<>();
+                    requestDbEvents = new HashMap<>();
                     requestEvents = getEntriesForUpload(PUSH_NUMBER_OF_EACH_ELEMENTS);
 
                     final List<Sensor> eventsAsList = new LinkedList<>();
 
-                    for (int i = 0; i < requestEvents.size(); i++) {
-                        int key = requestEvents.keyAt(i);
-                        eventsAsList.addAll(requestEvents.get(key));
+                    for (Map.Entry<Integer, List<Sensor>> entry : requestEvents.entrySet()) {
+
+                        eventsAsList.addAll(entry.getValue());
                     }
 
                     // partial upload
@@ -439,9 +440,9 @@ public class EventUploaderService extends GcmTaskService {
      * @param numberOfElements
      * @return
      */
-    public SparseArrayCompat<List<Sensor>> getEntriesForUpload(int numberOfElements) {
+    public Map<Integer, List<Sensor>> getEntriesForUpload(int numberOfElements) {
 
-        SparseArrayCompat<List<Sensor>> entries = new SparseArrayCompat<>();
+        Map<Integer, List<Sensor>> entries = new HashMap<>();
 
         DaoProvider daoProvider = DaoProvider.getInstance(getApplicationContext());
 
@@ -493,14 +494,14 @@ public class EventUploaderService extends GcmTaskService {
      *
      * @param dbEvents
      */
-    public void removeDbSentEvents(SparseArrayCompat<List<? extends IDbSensor>> dbEvents) {
+    public void removeDbSentEvents(Map<Integer, List<? extends IDbSensor>> dbEvents) {
 
         Log.d(TAG, "Removing sent events from db...");
 
-        for (int i = 0; i < dbEvents.size(); i++) {
+        for (Map.Entry<Integer, List<? extends IDbSensor>> entry : dbEvents.entrySet()) {
 
-            int sensorType = dbEvents.keyAt(i);
-            List<? extends IDbSensor> values = dbEvents.get(i);
+            int sensorType = entry.getKey();
+            List<? extends IDbSensor> values = entry.getValue();
 
             if (values == null || values.isEmpty()) {
                 continue;
