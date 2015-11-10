@@ -7,6 +7,8 @@ import android.util.Log;
 
 import de.tudarmstadt.informatik.tk.android.kraken.provider.HarvesterServiceProvider;
 import de.tudarmstadt.informatik.tk.android.kraken.provider.PreferenceProvider;
+import de.tudarmstadt.informatik.tk.android.kraken.service.HarvesterService;
+import de.tudarmstadt.informatik.tk.android.kraken.util.DeviceUtils;
 
 /**
  * @author Karsten Planz
@@ -30,8 +32,12 @@ public class BootReceiver extends BroadcastReceiver {
 
                 Log.d(TAG, "Start on boot activated -> starting service...");
 
-                final HarvesterServiceProvider service = HarvesterServiceProvider.getInstance(context);
-                service.startSensingService();
+                if (!DeviceUtils.isServiceRunning(
+                        context,
+                        HarvesterService.class)) {
+
+                    HarvesterServiceProvider.getInstance(context).startSensingService();
+                }
             }
         }
     }
