@@ -33,8 +33,6 @@ public class BootReceiver extends BroadcastReceiver {
                 final HarvesterServiceProvider service = HarvesterServiceProvider.getInstance(context);
                 service.startSensingService();
             }
-        } else {
-            Log.d(TAG, "Action was not " + Intent.ACTION_BOOT_COMPLETED);
         }
     }
 }

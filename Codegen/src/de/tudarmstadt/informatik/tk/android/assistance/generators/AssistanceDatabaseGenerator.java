@@ -514,9 +514,8 @@ public class AssistanceDatabaseGenerator {
     powerStatusEvent.addIdProperty().autoincrement().index();
     powerStatusEvent.implementsInterface(Config.KRAKEN_PACKAGE_SENSOR);
     powerStatusEvent.addIntProperty("state");
-    powerStatusEvent.addBooleanProperty("isLow");
-    powerStatusEvent.addBooleanProperty("isOkay");
-//    powerStatusEvent.addBooleanProperty("isCharged");
+    powerStatusEvent.addIntProperty("chargingStatus");
+    powerStatusEvent.addFloatProperty("percent");
     powerStatusEvent.addStringProperty("created").notNull();
 
     // **************************

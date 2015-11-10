@@ -14,17 +14,17 @@ public class PowerStateEventDto implements Sensor {
 
     private Long id;
 
-    @SerializedName("state")
+    @SerializedName("charging")
     @Expose
-    private Integer state;
+    private Integer typeState;
 
-    @SerializedName("isLow")
+    @SerializedName("status")
     @Expose
-    private Boolean isLow;
+    private Integer chargingStatus;
 
-    @SerializedName("isOkay")
+    @SerializedName("percent")
     @Expose
-    private Boolean isOkay;
+    private Float percent;
 
     @SerializedName("created")
     @Expose
@@ -47,11 +47,11 @@ public class PowerStateEventDto implements Sensor {
         this.typeStr = DtoType.getApiName(this.type);
     }
 
-    public PowerStateEventDto(Long id, Integer state, Boolean isLow, Boolean isOkay, String created) {
+    public PowerStateEventDto(Long id, Integer typeState, Integer chargingStatus, Float percent, String created) {
         this.id = id;
-        this.state = state;
-        this.isLow = isLow;
-        this.isOkay = isOkay;
+        this.typeState = typeState;
+        this.chargingStatus = chargingStatus;
+        this.percent = percent;
         this.created = created;
         this.type = DtoType.POWER_STATE;
         this.typeStr = DtoType.getApiName(this.type);
@@ -65,28 +65,28 @@ public class PowerStateEventDto implements Sensor {
         this.id = id;
     }
 
-    public Integer getState() {
-        return this.state;
+    public Integer getTypeState() {
+        return this.typeState;
     }
 
-    public void setState(Integer state) {
-        this.state = state;
+    public void setTypeState(Integer typeState) {
+        this.typeState = typeState;
     }
 
-    public Boolean getIsLow() {
-        return this.isLow;
+    public Integer getChargingStatus() {
+        return this.chargingStatus;
     }
 
-    public void setIsLow(Boolean isLow) {
-        this.isLow = isLow;
+    public void setChargingStatus(Integer chargingStatus) {
+        this.chargingStatus = chargingStatus;
     }
 
-    public Boolean getIsOkay() {
-        return this.isOkay;
+    public Float getPercent() {
+        return this.percent;
     }
 
-    public void setIsOkay(Boolean isOkay) {
-        this.isOkay = isOkay;
+    public void setPercent(Float percent) {
+        this.percent = percent;
     }
 
     public String getCreated() {
@@ -117,11 +117,11 @@ public class PowerStateEventDto implements Sensor {
 
     @Override
     public String toString() {
-        return "PowerStateDto{" +
+        return "PowerStateEventDto{" +
                 "id=" + id +
-                ", state=" + state +
-                ", isLow=" + isLow +
-                ", isOkay=" + isOkay +
+                ", typeState=" + typeState +
+                ", chargingStatus=" + chargingStatus +
+                ", percent=" + percent +
                 ", created='" + created + '\'' +
                 ", typeStr='" + typeStr + '\'' +
                 ", type=" + type +

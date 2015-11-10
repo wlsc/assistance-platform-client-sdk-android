@@ -25,8 +25,8 @@ public class DbPowerStateEventDao extends AbstractDao<DbPowerStateEvent, Long> {
     public static class Properties {
         public final static Property Id = new Property(0, Long.class, "id", true, "_id");
         public final static Property State = new Property(1, Integer.class, "state", false, "STATE");
-        public final static Property IsLow = new Property(2, Boolean.class, "isLow", false, "IS_LOW");
-        public final static Property IsOkay = new Property(3, Boolean.class, "isOkay", false, "IS_OKAY");
+        public final static Property ChargingStatus = new Property(2, Integer.class, "chargingStatus", false, "CHARGING_STATUS");
+        public final static Property Percent = new Property(3, Float.class, "percent", false, "PERCENT");
         public final static Property Created = new Property(4, String.class, "created", false, "CREATED");
     };
 
@@ -45,8 +45,8 @@ public class DbPowerStateEventDao extends AbstractDao<DbPowerStateEvent, Long> {
         db.execSQL("CREATE TABLE " + constraint + "\"power_state_event\" (" + //
                 "\"_id\" INTEGER PRIMARY KEY AUTOINCREMENT ," + // 0: id
                 "\"STATE\" INTEGER," + // 1: state
-                "\"IS_LOW\" INTEGER," + // 2: isLow
-                "\"IS_OKAY\" INTEGER," + // 3: isOkay
+                "\"CHARGING_STATUS\" INTEGER," + // 2: chargingStatus
+                "\"PERCENT\" REAL," + // 3: percent
                 "\"CREATED\" TEXT NOT NULL );"); // 4: created
         // Add Indexes
         db.execSQL("CREATE INDEX " + constraint + "IDX_power_state_event__id ON power_state_event" +
@@ -74,14 +74,14 @@ public class DbPowerStateEventDao extends AbstractDao<DbPowerStateEvent, Long> {
             stmt.bindLong(2, state);
         }
  
-        Boolean isLow = entity.getIsLow();
-        if (isLow != null) {
-            stmt.bindLong(3, isLow ? 1L: 0L);
+        Integer chargingStatus = entity.getChargingStatus();
+        if (chargingStatus != null) {
+            stmt.bindLong(3, chargingStatus);
         }
  
-        Boolean isOkay = entity.getIsOkay();
-        if (isOkay != null) {
-            stmt.bindLong(4, isOkay ? 1L: 0L);
+        Float percent = entity.getPercent();
+        if (percent != null) {
+            stmt.bindDouble(4, percent);
         }
         stmt.bindString(5, entity.getCreated());
     }
@@ -98,8 +98,8 @@ public class DbPowerStateEventDao extends AbstractDao<DbPowerStateEvent, Long> {
         DbPowerStateEvent entity = new DbPowerStateEvent( //
             cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0), // id
             cursor.isNull(offset + 1) ? null : cursor.getInt(offset + 1), // state
-            cursor.isNull(offset + 2) ? null : cursor.getShort(offset + 2) != 0, // isLow
-            cursor.isNull(offset + 3) ? null : cursor.getShort(offset + 3) != 0, // isOkay
+            cursor.isNull(offset + 2) ? null : cursor.getInt(offset + 2), // chargingStatus
+            cursor.isNull(offset + 3) ? null : cursor.getFloat(offset + 3), // percent
             cursor.getString(offset + 4) // created
         );
         return entity;
@@ -110,8 +110,8 @@ public class DbPowerStateEventDao extends AbstractDao<DbPowerStateEvent, Long> {
     public void readEntity(Cursor cursor, DbPowerStateEvent entity, int offset) {
         entity.setId(cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0));
         entity.setState(cursor.isNull(offset + 1) ? null : cursor.getInt(offset + 1));
-        entity.setIsLow(cursor.isNull(offset + 2) ? null : cursor.getShort(offset + 2) != 0);
-        entity.setIsOkay(cursor.isNull(offset + 3) ? null : cursor.getShort(offset + 3) != 0);
+        entity.setChargingStatus(cursor.isNull(offset + 2) ? null : cursor.getInt(offset + 2));
+        entity.setPercent(cursor.isNull(offset + 3) ? null : cursor.getFloat(offset + 3));
         entity.setCreated(cursor.getString(offset + 4));
      }
     

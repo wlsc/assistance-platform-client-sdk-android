@@ -8,8 +8,8 @@ public class DbPowerStateEvent implements de.tudarmstadt.informatik.tk.android.k
 
     private Long id;
     private Integer state;
-    private Boolean isLow;
-    private Boolean isOkay;
+    private Integer chargingStatus;
+    private Float percent;
     /** Not-null value. */
     private String created;
 
@@ -20,11 +20,11 @@ public class DbPowerStateEvent implements de.tudarmstadt.informatik.tk.android.k
         this.id = id;
     }
 
-    public DbPowerStateEvent(Long id, Integer state, Boolean isLow, Boolean isOkay, String created) {
+    public DbPowerStateEvent(Long id, Integer state, Integer chargingStatus, Float percent, String created) {
         this.id = id;
         this.state = state;
-        this.isLow = isLow;
-        this.isOkay = isOkay;
+        this.chargingStatus = chargingStatus;
+        this.percent = percent;
         this.created = created;
     }
 
@@ -44,20 +44,20 @@ public class DbPowerStateEvent implements de.tudarmstadt.informatik.tk.android.k
         this.state = state;
     }
 
-    public Boolean getIsLow() {
-        return isLow;
+    public Integer getChargingStatus() {
+        return chargingStatus;
     }
 
-    public void setIsLow(Boolean isLow) {
-        this.isLow = isLow;
+    public void setChargingStatus(Integer chargingStatus) {
+        this.chargingStatus = chargingStatus;
     }
 
-    public Boolean getIsOkay() {
-        return isOkay;
+    public Float getPercent() {
+        return percent;
     }
 
-    public void setIsOkay(Boolean isOkay) {
-        this.isOkay = isOkay;
+    public void setPercent(Float percent) {
+        this.percent = percent;
     }
 
     /** Not-null value. */

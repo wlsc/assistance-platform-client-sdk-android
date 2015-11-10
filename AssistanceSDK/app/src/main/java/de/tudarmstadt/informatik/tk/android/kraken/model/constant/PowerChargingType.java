@@ -4,7 +4,7 @@ package de.tudarmstadt.informatik.tk.android.kraken.model.constant;
  * @author Wladimir Schmidt (wlsc.dev@gmail.com)
  * @date 31.10.2015
  */
-public class PowerState {
+public class PowerChargingType {
 
     public static final int NONE = 0;
 
@@ -14,6 +14,6 @@ public class PowerState {
 
     public static final int WIRELESS = 3;
 
-    private PowerState() {
+    private PowerChargingType() {
     }
 }
