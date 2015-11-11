@@ -25,7 +25,7 @@ public class AccountsReaderEvent extends AbstractPeriodicEvent implements ISenso
 
     @Override
     public int getType() {
-        return DtoType.ONE_TIME_SENSOR_ACCOUNT_READER;
+        return DtoType.ACCOUNT_READER;
     }
 
     @Override

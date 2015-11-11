@@ -36,13 +36,13 @@ public enum ESensorType {
         switch (this) {
 //            case MEASUREMENT_LOG:
 //                return "Measurement Log";
-//            case ONE_TIME_SENSOR_ACCOUNT_READER:
+//            case ACCOUNT_READER:
 //                return "Account Reader";
-//            case ONE_TIME_SENSOR_RUNNING_PROCESSES:
+//            case RUNNING_PROCESSES:
 //                return "Running Processes";
-//            case ONE_TIME_SENSOR_RUNNING_SERVICES:
+//            case RUNNING_SERVICES:
 //                return "Running Services";
-//            case ONE_TIME_SENSOR_RUNNING_TASKS:
+//            case RUNNING_TASKS:
 //                return "Running Tasks";
             case ACCELEROMETER_SENSOR:
                 return DbAccelerometerSensor.class.getSimpleName();
@@ -82,13 +82,13 @@ public enum ESensorType {
             case MEASUREMENT_LOG:
                 return context.getString(R.string.measurement_log);
             case ONE_TIME_SENSOR_ACCOUNT_READER:
-                return context.getString(R.string.one_time_sensor_account_reader);
+                return context.getString(R.string.event_account_reader);
             case ONE_TIME_SENSOR_RUNNING_PROCESSES:
-                return context.getString(R.string.one_time_sensor_running_processes);
+                return context.getString(R.string.event_running_processes);
             case ONE_TIME_SENSOR_RUNNING_SERVICES:
-                return context.getString(R.string.one_time_sensor_running_services);
+                return context.getString(R.string.event_running_services);
             case ONE_TIME_SENSOR_RUNNING_TASKS:
-                return context.getString(R.string.one_time_sensor_running_tasks);
+                return context.getString(R.string.event_running_tasks);
             case ACCELEROMETER_SENSOR:
                 return context.getString(R.string.sensor_accelerometer);
             case MOTION_ACTIVITY_EVENT:
@@ -98,13 +98,13 @@ public enum ESensorType {
             case CONNECTION_EVENT:
                 return context.getString(R.string.sensor_connection);
             case SENSOR_CONTACTS:
-                return context.getString(R.string.sensor_contacts);
+                return context.getString(R.string.event_contacts);
             case SENSOR_LIGHT:
                 return context.getString(R.string.sensor_light);
             case SENSOR_LOCATION:
                 return context.getString(R.string.sensor_location);
             case SENSOR_RINGTONE:
-                return context.getString(R.string.sensor_ringtone);
+                return context.getString(R.string.event_ringtone);
             case SENSOR_LOUDNESS:
                 return context.getString(R.string.sensor_loudness);
             case SENSOR_CALL_LOG:

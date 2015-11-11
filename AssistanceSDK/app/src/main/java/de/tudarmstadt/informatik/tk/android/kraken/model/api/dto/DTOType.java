@@ -38,13 +38,13 @@ public class DtoType {
 
     public static final int LIGHT = 13;
 
-    public static final int ONE_TIME_SENSOR_RUNNING_SERVICES = 14;
+    public static final int RUNNING_SERVICES = 14;
 
-    public static final int ONE_TIME_SENSOR_ACCOUNT_READER = 15;
+    public static final int ACCOUNT_READER = 15;
 
-    public static final int ONE_TIME_SENSOR_RUNNING_TASKS = 16;
+    public static final int RUNNING_TASKS = 16;
 
-    public static final int ONE_TIME_SENSOR_RUNNING_PROCESSES = 17;
+    public static final int RUNNING_PROCESSES = 17;
 
     public static final int RINGTONE = 18;
 
@@ -89,6 +89,8 @@ public class DtoType {
                 return res.getString(R.string.event_foreground_event);
             case LIGHT:
                 return res.getString(R.string.sensor_light);
+            case RINGTONE:
+                return res.getString(R.string.event_ringtone);
             case POWER_STATE:
                 return res.getString(R.string.event_power_state);
             case CALENDAR:
@@ -99,6 +101,20 @@ public class DtoType {
                 return res.getString(R.string.event_calllog);
             case NETWORK_TRAFFIC:
                 return res.getString(R.string.event_network_traffic);
+            case BACKGROUND_TRAFFIC:
+                return res.getString(R.string.event_background_traffic);
+            case CONTACTS:
+                return res.getString(R.string.event_contacts);
+            case BROWSER_HISTORY:
+                return res.getString(R.string.event_browser_history);
+            case RUNNING_SERVICES:
+                return res.getString(R.string.event_running_services);
+            case ACCOUNT_READER:
+                return res.getString(R.string.event_account_reader);
+            case RUNNING_TASKS:
+                return res.getString(R.string.event_running_tasks);
+            case RUNNING_PROCESSES:
+                return res.getString(R.string.event_running_processes);
             default:
                 return "";
         }
@@ -135,6 +151,8 @@ public class DtoType {
                 return "foreground";
             case LIGHT:
                 return "light";
+            case RINGTONE:
+                return "ringtone";
             case POWER_STATE:
                 return "powerstate";
             case CALENDAR:
@@ -145,6 +163,18 @@ public class DtoType {
                 return "calllog";
             case NETWORK_TRAFFIC:
                 return "networktraffic";
+            case BACKGROUND_TRAFFIC:
+                return "backgroundtraffic";
+            case BROWSER_HISTORY:
+                return "browserhistory";
+            case RUNNING_SERVICES:
+                return "runningservices";
+            case ACCOUNT_READER:
+                return "accountreader";
+            case RUNNING_TASKS:
+                return "runningtasks";
+            case RUNNING_PROCESSES:
+                return "runningprocesses";
             default:
                 return "";
         }

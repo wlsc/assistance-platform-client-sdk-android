@@ -33,7 +33,7 @@ public class RunningAppsReaderEvent extends AbstractPeriodicEvent implements ISe
 
     @Override
     public int getType() {
-        return DtoType.ONE_TIME_SENSOR_RUNNING_SERVICES;
+        return DtoType.RUNNING_SERVICES;
     }
 
     @Override

@@ -34,7 +34,7 @@ public class RunningProcessesReaderEvent extends AbstractPeriodicEvent implement
 
     @Override
     public int getType() {
-        return DtoType.ONE_TIME_SENSOR_RUNNING_PROCESSES;
+        return DtoType.RUNNING_PROCESSES;
     }
 
     @Override

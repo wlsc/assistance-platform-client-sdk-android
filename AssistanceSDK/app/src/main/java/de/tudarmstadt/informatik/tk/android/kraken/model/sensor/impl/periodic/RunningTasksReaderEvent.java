@@ -33,7 +33,7 @@ public class RunningTasksReaderEvent extends
 
     @Override
     public int getType() {
-        return DtoType.ONE_TIME_SENSOR_RUNNING_TASKS;
+        return DtoType.RUNNING_TASKS;
     }
 
     @Override
