@@ -46,13 +46,16 @@ public class PermissionUtils {
      */
     @TargetApi(Build.VERSION_CODES.M)
     public boolean isPermissionGranted(String permission) {
+        return mContext.checkSelfPermission(permission) == PackageManager.PERMISSION_GRANTED;
+    }
 
-        int check = mContext.checkSelfPermission(permission);
-
-        if (check == PackageManager.PERMISSION_GRANTED) {
-            return true;
-        }
-
-        return false;
+    /**
+     * Handles user permission action
+     *
+     * @param grantResults
+     * @return
+     */
+    public boolean handlePermissionResult(int[] grantResults) {
+        return grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED;
     }
 }
