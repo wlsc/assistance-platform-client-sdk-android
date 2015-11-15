@@ -2,8 +2,8 @@ package de.tudarmstadt.informatik.tk.android.kraken.provider.dao.sensing.event;
 
 import android.util.Log;
 
+import java.util.ArrayList;
 import java.util.Collections;
-import java.util.LinkedList;
 import java.util.List;
 
 import de.tudarmstadt.informatik.tk.android.kraken.db.DaoSession;
@@ -67,7 +67,7 @@ public class ConnectionEventDaoImpl extends
     @Override
     public List<Sensor> convertObjects(List<? extends IDbSensor> dbSensors) {
 
-        List<Sensor> result = new LinkedList<>();
+        List<Sensor> result = new ArrayList<>();
 
         if (dbSensors != null && !dbSensors.isEmpty()) {
 

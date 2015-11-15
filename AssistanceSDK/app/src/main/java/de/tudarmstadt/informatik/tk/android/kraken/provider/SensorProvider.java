@@ -3,7 +3,7 @@ package de.tudarmstadt.informatik.tk.android.kraken.provider;
 import android.content.Context;
 import android.support.v4.util.SparseArrayCompat;
 
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 
 import de.tudarmstadt.informatik.tk.android.kraken.model.enums.EPushType;
@@ -23,7 +23,7 @@ public class SensorProvider {
 
     private SparseArrayCompat<ISensor> sensorByType = new SparseArrayCompat<>();
 
-    private List<ISensor> mAvailableSensors = new LinkedList<>();
+    private List<ISensor> mAvailableSensors = new ArrayList<>();
 
     private static SensorProvider INSTANCE;
 
@@ -133,7 +133,7 @@ public class SensorProvider {
      */
     public List<ISensor> getSensorsByPushType(EPushType pushType) {
 
-        List<ISensor> result = new LinkedList<>();
+        List<ISensor> result = new ArrayList<>();
 
         if (pushType == null) {
             return result;
@@ -169,7 +169,7 @@ public class SensorProvider {
      */
     public List<ISensor> getEnabledSensors() {
 
-        List<ISensor> result = new LinkedList<>();
+        List<ISensor> result = new ArrayList<>();
 
         for (ISensor sensor : mAvailableSensors) {
 

@@ -2,8 +2,8 @@ package de.tudarmstadt.informatik.tk.android.kraken.provider.dao.sensing.event;
 
 import android.util.Log;
 
+import java.util.ArrayList;
 import java.util.Collections;
-import java.util.LinkedList;
 import java.util.List;
 
 import de.tudarmstadt.informatik.tk.android.kraken.db.DaoSession;
@@ -13,7 +13,6 @@ import de.tudarmstadt.informatik.tk.android.kraken.interfaces.IDbSensor;
 import de.tudarmstadt.informatik.tk.android.kraken.model.api.dto.DtoType;
 import de.tudarmstadt.informatik.tk.android.kraken.model.api.dto.event.NetworkTrafficEventDto;
 import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.Sensor;
-import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.impl.triggered.ForegroundTrafficEvent;
 import de.tudarmstadt.informatik.tk.android.kraken.provider.dao.sensing.CommonEventDaoImpl;
 
 /**
@@ -135,7 +134,7 @@ public class NetworkTrafficEventDaoImpl extends
     @Override
     public List<Sensor> convertObjects(List<? extends IDbSensor> dbSensors) {
 
-        List<Sensor> result = new LinkedList<>();
+        List<Sensor> result = new ArrayList<>();
 
         if (dbSensors != null && !dbSensors.isEmpty()) {
 

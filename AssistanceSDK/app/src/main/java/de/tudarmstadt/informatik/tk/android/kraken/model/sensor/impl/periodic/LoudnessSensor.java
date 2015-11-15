@@ -10,8 +10,9 @@ import android.os.Message;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 
+import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.LinkedList;
+import java.util.List;
 
 import de.tudarmstadt.informatik.tk.android.kraken.model.api.dto.DtoType;
 import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.AbstractPeriodicEvent;
@@ -47,11 +48,12 @@ public class LoudnessSensor extends AbstractPeriodicEvent implements Callback {
 
     public class CalcLeq {
 
-        private LinkedList<RMSValue> sampleValues;
+        private List<RMSValue> sampleValues;
+
         public long m_startTimestamp;
 
         public CalcLeq() {
-            this.sampleValues = new LinkedList<RMSValue>();
+            this.sampleValues = new ArrayList<RMSValue>();
             m_startTimestamp = Calendar.getInstance().getTimeInMillis();
         }
 
@@ -64,7 +66,7 @@ public class LoudnessSensor extends AbstractPeriodicEvent implements Callback {
         public void resetValues() {
             m_startTimestamp = Calendar.getInstance().getTimeInMillis();
             synchronized (sampleValues) {
-                sampleValues = new LinkedList<RMSValue>();
+                sampleValues = new ArrayList<>();
             }
         }
 
@@ -77,11 +79,11 @@ public class LoudnessSensor extends AbstractPeriodicEvent implements Callback {
 
             synchronized (sampleValues) {
                 if (sampleValues.size() > 0) {
-                    RMSValue rms;
-                    for (int i = 0; i < sampleValues.size(); i++) {
-                        rms = sampleValues.get(i);
-                        sum += rms.summedSquaredSamples;
-                        sumSamples += rms.samples;
+
+                    for (RMSValue value : sampleValues) {
+
+                        sum += value.summedSquaredSamples;
+                        sumSamples += value.samples;
                     }
                     leq.value = (float) Math.sqrt((float) sum / sumSamples);
                     leq.samples = sumSamples;

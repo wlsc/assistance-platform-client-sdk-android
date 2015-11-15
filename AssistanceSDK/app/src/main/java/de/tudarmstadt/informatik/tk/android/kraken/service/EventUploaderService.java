@@ -13,8 +13,8 @@ import com.google.android.gms.gcm.PeriodicTask;
 import com.google.android.gms.gcm.Task;
 import com.google.android.gms.gcm.TaskParams;
 
+import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -161,7 +161,7 @@ public class EventUploaderService extends GcmTaskService {
                             requestDbEvents = new HashMap<>();
                             requestEvents = getEntriesForUpload(0);
 
-                            final List<Sensor> eventsAsList = new LinkedList<>();
+                            final List<Sensor> eventsAsList = new ArrayList<>();
 
                             for (Map.Entry<Integer, List<Sensor>> entry : requestEvents.entrySet()) {
 
@@ -251,7 +251,7 @@ public class EventUploaderService extends GcmTaskService {
                     requestDbEvents = new HashMap<>();
                     requestEvents = getEntriesForUpload(PUSH_NUMBER_OF_EACH_ELEMENTS);
 
-                    final List<Sensor> eventsAsList = new LinkedList<>();
+                    final List<Sensor> eventsAsList = new ArrayList<>();
 
                     for (Map.Entry<Integer, List<Sensor>> entry : requestEvents.entrySet()) {
 
