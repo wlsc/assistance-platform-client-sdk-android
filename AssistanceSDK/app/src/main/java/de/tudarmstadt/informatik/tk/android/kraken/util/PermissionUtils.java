@@ -9,6 +9,8 @@ import android.os.Build;
 import java.util.HashMap;
 import java.util.Map;
 
+import de.tudarmstadt.informatik.tk.android.kraken.model.api.dto.DtoType;
+
 /**
  * Provides permission checks on runtime
  *
@@ -25,6 +27,10 @@ public class PermissionUtils {
 
     // those permissions need special permission from user in runtime
     private static final Map<String, String[]> dangerousGroup;
+
+    // key: capability type of a module
+    // value: needed permissions for that
+    private static final Map<String, String[]> dangerousPermissionsToDtoMapping;
 
     static {
 
@@ -81,7 +87,31 @@ public class PermissionUtils {
                 Manifest.permission.WRITE_EXTERNAL_STORAGE
         });
 
+        // creating mapping between API definitions and permissions
+        dangerousPermissionsToDtoMapping = new HashMap<>();
 
+        dangerousPermissionsToDtoMapping.put(
+                DtoType.getApiName(DtoType.CALENDAR),
+                dangerousGroup.get(Manifest.permission_group.CALENDAR)
+        );
+
+        dangerousPermissionsToDtoMapping.put(
+                DtoType.getApiName(DtoType.CALL_LOG),
+                new String[]{
+                        Manifest.permission.READ_CALL_LOG,
+                        Manifest.permission.WRITE_CALL_LOG
+                }
+        );
+
+        dangerousPermissionsToDtoMapping.put(
+                DtoType.getApiName(DtoType.CONTACTS),
+                dangerousGroup.get(Manifest.permission_group.CONTACTS)
+        );
+
+        dangerousPermissionsToDtoMapping.put(
+                DtoType.getApiName(DtoType.LOCATION),
+                dangerousGroup.get(Manifest.permission_group.LOCATION)
+        );
     }
 
     private PermissionUtils(Context context) {
