@@ -3,7 +3,7 @@ package de.tudarmstadt.informatik.tk.android.kraken.provider.dao.sensing;
 import java.util.List;
 
 import de.tudarmstadt.informatik.tk.android.kraken.interfaces.IDbSensor;
-import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.Sensor;
+import de.tudarmstadt.informatik.tk.android.kraken.model.api.dto.SensorDto;
 
 /**
  * @author Wladimir Schmidt (wlsc.dev@gmail.com)
@@ -21,5 +21,5 @@ public interface CommonEventDao {
 
     void delete(List<? extends IDbSensor> events);
 
-    List<Sensor> convertObjects(List<? extends IDbSensor> dbSensors);
+    List<SensorDto> convertObjects(List<? extends IDbSensor> dbSensors);
 }

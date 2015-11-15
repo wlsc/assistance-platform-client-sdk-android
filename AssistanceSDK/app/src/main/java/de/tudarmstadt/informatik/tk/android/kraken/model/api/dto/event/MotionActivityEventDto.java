@@ -5,13 +5,13 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import de.tudarmstadt.informatik.tk.android.kraken.model.api.dto.DtoType;
-import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.Sensor;
+import de.tudarmstadt.informatik.tk.android.kraken.model.api.dto.SensorDto;
 
 /**
  * @author Wladimir Schmidt (wlsc.dev@gmail.com)
  * @date 30.08.2015
  */
-public class MotionActivityEventDto implements Sensor {
+public class MotionActivityEventDto implements SensorDto {
 
     private Long id;
 

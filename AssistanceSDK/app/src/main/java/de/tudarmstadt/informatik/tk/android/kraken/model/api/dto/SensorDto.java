@@ -1,4 +1,4 @@
-package de.tudarmstadt.informatik.tk.android.kraken.model.sensor;
+package de.tudarmstadt.informatik.tk.android.kraken.model.api.dto;
 
 /**
  * General sensor request interface
@@ -6,7 +6,7 @@ package de.tudarmstadt.informatik.tk.android.kraken.model.sensor;
  * @author Wladimir Schmidt (wlsc.dev@gmail.com)
  * @date 30.08.2015
  */
-public interface Sensor {
+public interface SensorDto {
 
     int getType();
 

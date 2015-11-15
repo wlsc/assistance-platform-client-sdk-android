@@ -4,13 +4,13 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import de.tudarmstadt.informatik.tk.android.kraken.model.api.dto.DtoType;
-import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.Sensor;
+import de.tudarmstadt.informatik.tk.android.kraken.model.api.dto.SensorDto;
 
 /**
  * @author Wladimir Schmidt (wlsc.dev@gmail.com)
  * @date 31.10.2015
  */
-public class PowerStateEventDto implements Sensor {
+public class PowerStateEventDto implements SensorDto {
 
     private Long id;
 

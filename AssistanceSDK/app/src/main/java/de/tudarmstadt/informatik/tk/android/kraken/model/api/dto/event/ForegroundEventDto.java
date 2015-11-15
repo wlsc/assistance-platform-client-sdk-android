@@ -4,7 +4,7 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import de.tudarmstadt.informatik.tk.android.kraken.model.api.dto.DtoType;
-import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.Sensor;
+import de.tudarmstadt.informatik.tk.android.kraken.model.api.dto.SensorDto;
 
 /**
  * Foreground event
@@ -12,7 +12,7 @@ import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.Sensor;
  * @author Wladimir Schmidt (wlsc.dev@gmail.com)
  * @date 08.10.2015
  */
-public class ForegroundEventDto implements Sensor {
+public class ForegroundEventDto implements SensorDto {
 
     private Long id;
 

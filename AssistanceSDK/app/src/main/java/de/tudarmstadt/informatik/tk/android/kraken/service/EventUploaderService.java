@@ -23,7 +23,7 @@ import de.tudarmstadt.informatik.tk.android.kraken.model.api.EventUploadRequest;
 import de.tudarmstadt.informatik.tk.android.kraken.model.api.dto.DtoType;
 import de.tudarmstadt.informatik.tk.android.kraken.model.api.endpoint.EndpointGenerator;
 import de.tudarmstadt.informatik.tk.android.kraken.model.api.endpoint.EventUploadEndpoint;
-import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.Sensor;
+import de.tudarmstadt.informatik.tk.android.kraken.model.api.dto.SensorDto;
 import de.tudarmstadt.informatik.tk.android.kraken.provider.DaoProvider;
 import de.tudarmstadt.informatik.tk.android.kraken.provider.PreferenceProvider;
 import de.tudarmstadt.informatik.tk.android.kraken.util.ConnectionUtils;
@@ -72,7 +72,7 @@ public class EventUploaderService extends GcmTaskService {
     private static PreferenceProvider mPreferenceProvider;
 
     private Map<Integer, List<? extends IDbSensor>> requestDbEvents;
-    private Map<Integer, List<Sensor>> requestEvents;
+    private Map<Integer, List<SensorDto>> requestEvents;
 
     private static boolean isNeedInConnectionFallback;
 
@@ -161,9 +161,9 @@ public class EventUploaderService extends GcmTaskService {
                             requestDbEvents = new HashMap<>();
                             requestEvents = getEntriesForUpload(0);
 
-                            final List<Sensor> eventsAsList = new ArrayList<>();
+                            final List<SensorDto> eventsAsList = new ArrayList<>();
 
-                            for (Map.Entry<Integer, List<Sensor>> entry : requestEvents.entrySet()) {
+                            for (Map.Entry<Integer, List<SensorDto>> entry : requestEvents.entrySet()) {
 
                                 eventsAsList.addAll(entry.getValue());
                             }
@@ -207,7 +207,7 @@ public class EventUploaderService extends GcmTaskService {
                                         @Override
                                         public void run() {
 
-                                            List<Sensor> tmpSensors = eventsAsList
+                                            List<SensorDto> tmpSensors = eventsAsList
                                                     .subList(finalCounter * EVENTS_NUMBER_TO_SPLIT_AFTER,
                                                             finalLastElementIndex);
 
@@ -251,9 +251,9 @@ public class EventUploaderService extends GcmTaskService {
                     requestDbEvents = new HashMap<>();
                     requestEvents = getEntriesForUpload(PUSH_NUMBER_OF_EACH_ELEMENTS);
 
-                    final List<Sensor> eventsAsList = new ArrayList<>();
+                    final List<SensorDto> eventsAsList = new ArrayList<>();
 
-                    for (Map.Entry<Integer, List<Sensor>> entry : requestEvents.entrySet()) {
+                    for (Map.Entry<Integer, List<SensorDto>> entry : requestEvents.entrySet()) {
 
                         eventsAsList.addAll(entry.getValue());
                     }
@@ -297,7 +297,7 @@ public class EventUploaderService extends GcmTaskService {
                                 @Override
                                 public void run() {
 
-                                    List<Sensor> tmpSensors = eventsAsList
+                                    List<SensorDto> tmpSensors = eventsAsList
                                             .subList(finalCounter * EVENTS_NUMBER_TO_SPLIT_AFTER,
                                                     finalLastElementIndex);
 
@@ -440,9 +440,9 @@ public class EventUploaderService extends GcmTaskService {
      * @param numberOfElements
      * @return
      */
-    public Map<Integer, List<Sensor>> getEntriesForUpload(int numberOfElements) {
+    public Map<Integer, List<SensorDto>> getEntriesForUpload(int numberOfElements) {
 
-        Map<Integer, List<Sensor>> entries = new HashMap<>();
+        Map<Integer, List<SensorDto>> entries = new HashMap<>();
 
         DaoProvider daoProvider = DaoProvider.getInstance(getApplicationContext());
 

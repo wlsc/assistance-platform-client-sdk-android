@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
-import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.Sensor;
+import de.tudarmstadt.informatik.tk.android.kraken.model.api.dto.SensorDto;
 
 /**
  * Request to assistance server with sensors / dataEvents data
@@ -21,12 +21,12 @@ public class EventUploadRequest {
 
     @SerializedName("sensorreadings")
     @Expose
-    private List<Sensor> dataEvents;
+    private List<SensorDto> dataEvents;
 
     public EventUploadRequest() {
     }
 
-    public EventUploadRequest(Long serverDeviceId, List<Sensor> dataEvents) {
+    public EventUploadRequest(Long serverDeviceId, List<SensorDto> dataEvents) {
         this.serverDeviceId = serverDeviceId;
         this.dataEvents = dataEvents;
     }
@@ -39,11 +39,11 @@ public class EventUploadRequest {
         this.serverDeviceId = serverDeviceId;
     }
 
-    public List<Sensor> getDataEvents() {
+    public List<SensorDto> getDataEvents() {
         return this.dataEvents;
     }
 
-    public void setDataEvents(List<Sensor> dataEvents) {
+    public void setDataEvents(List<SensorDto> dataEvents) {
         this.dataEvents = dataEvents;
     }
 

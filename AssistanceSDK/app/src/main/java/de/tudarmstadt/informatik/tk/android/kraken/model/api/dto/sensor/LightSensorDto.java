@@ -4,7 +4,7 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import de.tudarmstadt.informatik.tk.android.kraken.model.api.dto.DtoType;
-import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.Sensor;
+import de.tudarmstadt.informatik.tk.android.kraken.model.api.dto.SensorDto;
 
 /**
  * Light sensor request DTO
@@ -12,7 +12,7 @@ import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.Sensor;
  * @author Wladimir Schmidt (wlsc.dev@gmail.com)
  * @date 25.10.2015
  */
-public class LightSensorDto implements Sensor {
+public class LightSensorDto implements SensorDto {
 
     private Long id;
 

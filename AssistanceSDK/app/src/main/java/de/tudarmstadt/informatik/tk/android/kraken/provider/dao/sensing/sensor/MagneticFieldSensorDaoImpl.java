@@ -12,7 +12,7 @@ import de.tudarmstadt.informatik.tk.android.kraken.db.DbMagneticFieldSensorDao;
 import de.tudarmstadt.informatik.tk.android.kraken.interfaces.IDbSensor;
 import de.tudarmstadt.informatik.tk.android.kraken.model.api.dto.DtoType;
 import de.tudarmstadt.informatik.tk.android.kraken.model.api.dto.sensor.MagneticFieldSensorDto;
-import de.tudarmstadt.informatik.tk.android.kraken.model.sensor.Sensor;
+import de.tudarmstadt.informatik.tk.android.kraken.model.api.dto.SensorDto;
 import de.tudarmstadt.informatik.tk.android.kraken.provider.dao.sensing.CommonEventDaoImpl;
 
 /**
@@ -73,9 +73,9 @@ public class MagneticFieldSensorDaoImpl extends
     }
 
     @Override
-    public List<Sensor> convertObjects(List<? extends IDbSensor> dbSensors) {
+    public List<SensorDto> convertObjects(List<? extends IDbSensor> dbSensors) {
 
-        List<Sensor> result = new ArrayList<>();
+        List<SensorDto> result = new ArrayList<>();
 
         if (dbSensors != null && !dbSensors.isEmpty()) {
 
