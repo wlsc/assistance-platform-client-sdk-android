@@ -110,10 +110,10 @@ public class FileUtils {
      * @param text the contents
      * @throws IOException
      */
-    public static void writeFile(File f, String text) throws IOException {
-        final String content = new String(text);
+    public static void writeFile(File f, final String text) throws IOException {
+
         OutputStreamWriter osw = new OutputStreamWriter(new FileOutputStream(f), "UTF-8");
-        osw.write(content);
+        osw.write(text);
         osw.close();
     }
 
