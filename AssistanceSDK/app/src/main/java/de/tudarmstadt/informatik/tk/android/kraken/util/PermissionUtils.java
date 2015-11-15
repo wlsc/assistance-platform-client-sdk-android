@@ -133,6 +133,14 @@ public class PermissionUtils {
         return INSTANCE;
     }
 
+    public static Map<String, String[]> getDangerousGroup() {
+        return PermissionUtils.dangerousGroup;
+    }
+
+    public static Map<String, String[]> getDangerousPermissionsToDtoMapping() {
+        return PermissionUtils.dangerousPermissionsToDtoMapping;
+    }
+
     /**
      * Generic check for given permission (Android M version)
      *
