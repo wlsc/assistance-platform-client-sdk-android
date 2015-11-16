@@ -5,6 +5,7 @@ import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.Build;
+import android.support.annotation.NonNull;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -169,8 +170,12 @@ public class PermissionUtils {
      * @param grantResults
      * @return
      */
-    public boolean handlePermissionResult(int[] grantResults) {
-        return grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED;
-    }
+    public boolean handlePermissionResult(@NonNull int[] grantResults) {
 
+        if (grantResults == null || grantResults.length <= 0) {
+            return false;
+        }
+
+        return grantResults[0] == PackageManager.PERMISSION_GRANTED;
+    }
 }
