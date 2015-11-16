@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentSender.SendIntentException;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -61,11 +62,7 @@ public class MotionActivityEvent extends
     private MotionActivityEvent(Context context) {
         super(context);
 
-        mGoogleApiClient = new GoogleApiClient.Builder(context)
-                .addApi(ActivityRecognition.API)
-                .addConnectionCallbacks(this)
-                .addOnConnectionFailedListener(this)
-                .build();
+        mGoogleApiClient = getGoogleApiClient();
     }
 
     @Override
@@ -140,10 +137,11 @@ public class MotionActivityEvent extends
 
         // If a request is not already underway
         if (!isRunning()) {
-            // Indicate that a request is in progress
-            setRunning(true);
+
             // Request a connection to Location Services
-            mGoogleApiClient.connect();
+            if (!mGoogleApiClient.isConnected() && !mGoogleApiClient.isConnecting()) {
+                mGoogleApiClient.connect();
+            }
         }
     }
 
@@ -152,11 +150,14 @@ public class MotionActivityEvent extends
 
         if (mGoogleApiClient != null) {
             try {
-                if (mGoogleApiClient.isConnected()) {
+                if (mGoogleApiClient.isConnected() ||
+                        mGoogleApiClient.isConnecting()) {
+
                     ActivityRecognition.ActivityRecognitionApi
                             .removeActivityUpdates(
                                     mGoogleApiClient,
                                     mActivityRecognitionPendingIntent);
+
                     mGoogleApiClient.disconnect();
                 }
             } catch (IllegalStateException e) {
@@ -206,7 +207,7 @@ public class MotionActivityEvent extends
     @Override
     public void onConnected(Bundle arg0) {
 
-        Log.d(TAG, "Connection established.");
+        Log.d(TAG, "Connection to Google API has been established.");
 
         Intent intent = new Intent(context, ActivitySensorService.class);
         mActivityRecognitionPendingIntent = PendingIntent.getService(
@@ -216,18 +217,29 @@ public class MotionActivityEvent extends
                 PendingIntent.FLAG_UPDATE_CURRENT);
 
         if (mGoogleApiClient == null) {
-
-            mGoogleApiClient = new GoogleApiClient.Builder(context)
-                    .addApi(ActivityRecognition.API)
-                    .addConnectionCallbacks(this)
-                    .addOnConnectionFailedListener(this)
-                    .build();
+            mGoogleApiClient = getGoogleApiClient();
         }
 
-        ActivityRecognition.ActivityRecognitionApi.requestActivityUpdates(
-                mGoogleApiClient,
-                DETECTION_INTERVAL_IN_SEC * 1000,
-                mActivityRecognitionPendingIntent);
+        if (mGoogleApiClient.isConnected()) {
+
+            ActivityRecognition.ActivityRecognitionApi.requestActivityUpdates(
+                    mGoogleApiClient,
+                    DETECTION_INTERVAL_IN_SEC * 1000,
+                    mActivityRecognitionPendingIntent);
+
+            // Indicate that a request is in progress
+            setRunning(true);
+        }
+    }
+
+    @NonNull
+    public GoogleApiClient getGoogleApiClient() {
+
+        return new GoogleApiClient.Builder(context)
+                .addApi(ActivityRecognition.API)
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                .build();
     }
 
     @Override
