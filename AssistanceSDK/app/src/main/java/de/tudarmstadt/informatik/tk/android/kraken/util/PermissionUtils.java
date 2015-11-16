@@ -25,14 +25,37 @@ public class PermissionUtils {
 
     private final Context mContext;
 
-    // those permissions need special permission from user in runtime
-    private static final Map<String, String[]> dangerousGroup;
+    private Map<String, String[]> dangerousGroup;
 
-    // key: capability type of a module
-    // value: needed permissions for that
-    private static final Map<String, String[]> dangerousPermissionsToDtoMapping;
+    private Map<String, String[]> dangerousPermissionsToDtoMapping;
 
-    static {
+    private PermissionUtils(Context context) {
+        this.mContext = context;
+
+        // don't mess with the order of functions!
+        createDangerousGroupsPermissions();
+        createDangerousPermissionsToDtoMappings();
+    }
+
+    /**
+     * Initializes and returns an instance of this class
+     *
+     * @param context
+     * @return
+     */
+    public static PermissionUtils getInstance(Context context) {
+
+        if (INSTANCE == null) {
+            INSTANCE = new PermissionUtils(context);
+        }
+
+        return INSTANCE;
+    }
+
+    /**
+     * these permissions need special permission from user in runtime
+     */
+    private void createDangerousGroupsPermissions() {
 
         dangerousGroup = new HashMap<>();
 
@@ -86,8 +109,15 @@ public class PermissionUtils {
                 Manifest.permission.READ_EXTERNAL_STORAGE,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE
         });
+    }
 
-        // creating mapping between API definitions and permissions
+    /**
+     * creating mapping between API definitions and permissions
+     * key: capability type of a module
+     * value: needed permissions for that
+     */
+    private void createDangerousPermissionsToDtoMappings() {
+
         dangerousPermissionsToDtoMapping = new HashMap<>();
 
         dangerousPermissionsToDtoMapping.put(
@@ -114,31 +144,12 @@ public class PermissionUtils {
         );
     }
 
-    private PermissionUtils(Context context) {
-        this.mContext = context;
+    public Map<String, String[]> getDangerousGroup() {
+        return this.dangerousGroup;
     }
 
-    /**
-     * Initializes and returns an instance of this class
-     *
-     * @param context
-     * @return
-     */
-    public static PermissionUtils getInstance(Context context) {
-
-        if (INSTANCE == null) {
-            INSTANCE = new PermissionUtils(context);
-        }
-
-        return INSTANCE;
-    }
-
-    public static Map<String, String[]> getDangerousGroup() {
-        return PermissionUtils.dangerousGroup;
-    }
-
-    public static Map<String, String[]> getDangerousPermissionsToDtoMapping() {
-        return PermissionUtils.dangerousPermissionsToDtoMapping;
+    public Map<String, String[]> getDangerousPermissionsToDtoMapping() {
+        return this.dangerousPermissionsToDtoMapping;
     }
 
     /**
