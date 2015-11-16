@@ -19,4 +19,6 @@ public interface ModuleDao {
     List<DbModule> getAllModules();
 
     long insertModule(DbModule module);
+
+    void delete(List<DbModule> dbItems);
 }

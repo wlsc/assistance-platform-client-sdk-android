@@ -16,12 +16,12 @@ public class ModuleCapabilityDaoImpl implements ModuleCapabilityDao {
 
     private static ModuleCapabilityDao INSTANCE;
 
-    private DbModuleCapabilityDao moduleCapabilityDao;
+    private DbModuleCapabilityDao dao;
 
     private ModuleCapabilityDaoImpl(DaoSession daoSession) {
 
-        if (moduleCapabilityDao == null) {
-            moduleCapabilityDao = daoSession.getDbModuleCapabilityDao();
+        if (dao == null) {
+            dao = daoSession.getDbModuleCapabilityDao();
         }
     }
 
@@ -47,7 +47,7 @@ public class ModuleCapabilityDaoImpl implements ModuleCapabilityDao {
             return -1L;
         }
 
-        return moduleCapabilityDao.insertOrReplace(moduleCapability);
+        return dao.insertOrReplace(moduleCapability);
     }
 
     /**
@@ -63,6 +63,16 @@ public class ModuleCapabilityDaoImpl implements ModuleCapabilityDao {
             return;
         }
 
-        moduleCapabilityDao.insertInTx(moduleCapabilities);
+        dao.insertInTx(moduleCapabilities);
+    }
+
+    @Override
+    public void delete(List<DbModuleCapability> dbItems) {
+
+        if (dbItems == null || dbItems.isEmpty()) {
+            return;
+        }
+
+        dao.deleteInTx(dbItems);
     }
 }

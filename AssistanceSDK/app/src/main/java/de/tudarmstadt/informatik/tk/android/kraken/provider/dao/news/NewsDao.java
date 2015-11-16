@@ -11,5 +11,6 @@ import de.tudarmstadt.informatik.tk.android.kraken.db.DbNews;
 public interface NewsDao {
 
     List<DbNews> getNews(Long userId);
-    
+
+    void delete(List<DbNews> dbItems);
 }

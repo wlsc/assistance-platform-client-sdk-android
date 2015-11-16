@@ -1,5 +1,7 @@
 package de.tudarmstadt.informatik.tk.android.kraken.provider.dao.user;
 
+import java.util.List;
+
 import de.tudarmstadt.informatik.tk.android.kraken.db.DaoSession;
 import de.tudarmstadt.informatik.tk.android.kraken.db.DbUser;
 import de.tudarmstadt.informatik.tk.android.kraken.db.DbUserDao;
@@ -14,12 +16,12 @@ public class UserDaoImpl implements UserDao {
 
     private static UserDao INSTANCE;
 
-    private DbUserDao userDao;
+    private DbUserDao dao;
 
     private UserDaoImpl(DaoSession daoSession) {
-        
-        if (userDao == null) {
-            userDao = daoSession.getDbUserDao();
+
+        if (dao == null) {
+            dao = daoSession.getDbUserDao();
         }
     }
 
@@ -45,7 +47,7 @@ public class UserDaoImpl implements UserDao {
             return null;
         }
 
-        return userDao
+        return dao
                 .queryBuilder()
                 .where(DbUserDao.Properties.PrimaryEmail.eq(userEmail))
                 .limit(1)
@@ -66,7 +68,7 @@ public class UserDaoImpl implements UserDao {
             return null;
         }
 
-        return userDao
+        return dao
                 .queryBuilder()
                 .where(DbUserDao.Properties.Token.eq(userToken))
                 .limit(1)
@@ -86,7 +88,7 @@ public class UserDaoImpl implements UserDao {
             return -1L;
         }
 
-        return userDao.insertOrReplace(user);
+        return dao.insertOrReplace(user);
     }
 
     /**
@@ -101,7 +103,17 @@ public class UserDaoImpl implements UserDao {
             return;
         }
 
-        userDao.update(user);
+        dao.update(user);
+    }
+
+    @Override
+    public void delete(List<DbUser> dbItems) {
+
+        if (dbItems == null || dbItems.isEmpty()) {
+            return;
+        }
+
+        dao.deleteInTx(dbItems);
     }
 
 }

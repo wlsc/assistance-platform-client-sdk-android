@@ -17,12 +17,12 @@ public class NewsDaoImpl implements NewsDao {
 
     private static NewsDao INSTANCE;
 
-    private DbNewsDao newsDao;
+    private DbNewsDao dao;
 
     private NewsDaoImpl(DaoSession daoSession) {
 
-        if (newsDao == null) {
-            newsDao = daoSession.getDbNewsDao();
+        if (dao == null) {
+            dao = daoSession.getDbNewsDao();
         }
     }
 
@@ -48,10 +48,20 @@ public class NewsDaoImpl implements NewsDao {
             return Collections.EMPTY_LIST;
         }
 
-        return newsDao
+        return dao
                 .queryBuilder()
                 .where(DbNewsDao.Properties.UserId.eq(userId))
                 .build()
                 .list();
+    }
+
+    @Override
+    public void delete(List<DbNews> dbItems) {
+
+        if (dbItems == null || dbItems.isEmpty()) {
+            return;
+        }
+
+        dao.deleteInTx(dbItems);
     }
 }

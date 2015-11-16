@@ -1,5 +1,7 @@
 package de.tudarmstadt.informatik.tk.android.kraken.provider.dao.user;
 
+import java.util.List;
+
 import de.tudarmstadt.informatik.tk.android.kraken.db.DbUser;
 
 /**
@@ -15,4 +17,6 @@ public interface UserDao {
     long insertUser(DbUser user);
 
     void updateUser(DbUser user);
+
+    void delete(List<DbUser> dbItems);
 }

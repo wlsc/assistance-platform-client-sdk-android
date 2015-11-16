@@ -110,4 +110,14 @@ public class ModuleDaoImpl implements ModuleDao {
 
         return dao.insertOrReplace(module);
     }
+
+    @Override
+    public void delete(List<DbModule> dbItems) {
+
+        if (dbItems == null || dbItems.isEmpty()) {
+            return;
+        }
+
+        dao.deleteInTx(dbItems);
+    }
 }

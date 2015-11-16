@@ -12,4 +12,6 @@ public interface ModuleCapabilityDao {
     long insertModuleCapability(DbModuleCapability moduleCapability);
 
     void insertModuleCapabilities(List<DbModuleCapability> moduleCapabilities);
+
+    void delete(List<DbModuleCapability> dbItems);
 }
