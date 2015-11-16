@@ -150,8 +150,7 @@ public class MotionActivityEvent extends
 
         if (mGoogleApiClient != null) {
             try {
-                if (mGoogleApiClient.isConnected() ||
-                        mGoogleApiClient.isConnecting()) {
+                if (mGoogleApiClient.isConnected()) {
 
                     ActivityRecognition.ActivityRecognitionApi
                             .removeActivityUpdates(
