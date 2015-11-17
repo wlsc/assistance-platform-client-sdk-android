@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.support.annotation.NonNull;
+import android.support.v4.content.ContextCompat;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -161,7 +162,7 @@ public class PermissionUtils {
      */
     @TargetApi(Build.VERSION_CODES.M)
     public boolean isPermissionGranted(String permission) {
-        return mContext.checkSelfPermission(permission) == PackageManager.PERMISSION_GRANTED;
+        return ContextCompat.checkSelfPermission(mContext, permission) == PackageManager.PERMISSION_GRANTED;
     }
 
     /**
