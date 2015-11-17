@@ -154,15 +154,23 @@ public class LocationSensor extends
         // maybe this is not a good choice, because maybe the last location is
         // out-dated?
         // But let's give it a try...
-        Location loc = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+        try {
+            Location loc = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
 
-        if (loc != null) {
-            onLocationChanged(loc);
+            if (loc != null) {
+                onLocationChanged(loc);
+            }
+
+            LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient,
+                    mLocationRequest,
+                    this);
+
+        } catch (SecurityException ex) {
+            Log.d(TAG, "SecurityException: user disabled location permission!");
+            stopSensor();
+        } finally {
+
         }
-
-        LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient,
-                mLocationRequest,
-                this);
     }
 
     @Override
