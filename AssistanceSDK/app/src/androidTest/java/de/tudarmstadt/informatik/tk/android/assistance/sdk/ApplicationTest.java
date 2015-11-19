@@ -1,4 +1,4 @@
-package de.tudarmstadt.informatik.tk.android.kraken;
+package de.tudarmstadt.informatik.tk.android.assistance.sdk;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;
