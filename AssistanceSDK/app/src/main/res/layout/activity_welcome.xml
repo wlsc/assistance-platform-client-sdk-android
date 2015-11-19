@@ -10,7 +10,7 @@
         android:layout_height="3dp"
         android:layout_width="fill_parent"
         />
-    <de.tudarmstadt.informatik.tk.android.kraken.ui.views.NonSwipeableViewPager
+    <de.tudarmstadt.informatik.tk.android.assistance.sdk.ui.views.NonSwipeableViewPager
         android:id="@+id/pager"
         android:layout_width="fill_parent"
         android:layout_height="0dp"
