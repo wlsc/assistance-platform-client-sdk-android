@@ -138,8 +138,10 @@ public class MotionActivityEvent extends
         // If a request is not already underway
         if (!isRunning()) {
 
-            // Request a connection to Location Services
-            if (!mGoogleApiClient.isConnected() && !mGoogleApiClient.isConnecting()) {
+            // Request a connection to motion activity API
+            if (mGoogleApiClient != null &&
+                    !mGoogleApiClient.isConnected() &&
+                    !mGoogleApiClient.isConnecting()) {
                 mGoogleApiClient.connect();
             }
         }

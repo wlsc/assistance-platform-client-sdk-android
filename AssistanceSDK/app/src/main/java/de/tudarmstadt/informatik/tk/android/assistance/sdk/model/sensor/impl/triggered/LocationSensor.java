@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.IntentSender;
 import android.location.Location;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -60,6 +61,17 @@ public class LocationSensor extends
 
     public LocationSensor(Context context) {
         super(context);
+
+        mGoogleApiClient = getGoogleApiClient();
+    }
+
+    @NonNull
+    private GoogleApiClient getGoogleApiClient() {
+        return new GoogleApiClient.Builder(context)
+                .addApi(LocationServices.API)
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                .build();
     }
 
     @Override
@@ -84,24 +96,20 @@ public class LocationSensor extends
     @Override
     public void startSensor() {
 
-        mGoogleApiClient = new GoogleApiClient.Builder(context)
-                .addApi(LocationServices.API)
-                .addConnectionCallbacks(this)
-                .addOnConnectionFailedListener(this)
-                .build();
+        if (!isRunning()) {
+            mGoogleApiClient.connect();
 
-        mGoogleApiClient.connect();
+            // Create the LocationRequest object
+            mLocationRequest = LocationRequest.create();
+            // Use high accuracy
+            mLocationRequest.setPriority(ACCURACY);
+            // Set the update interval to x seconds
+            mLocationRequest.setInterval(UPDATE_INTERVAL * 1000);
+            // Set the fastest update interval to x seconds
+            mLocationRequest.setFastestInterval(FASTEST_INTERVAL_IN_SECONDS * 1000);
 
-        // Create the LocationRequest object
-        mLocationRequest = LocationRequest.create();
-        // Use high accuracy
-        mLocationRequest.setPriority(ACCURACY);
-        // Set the update interval to x seconds
-        mLocationRequest.setInterval(UPDATE_INTERVAL * 1000);
-        // Set the fastest update interval to x seconds
-        mLocationRequest.setFastestInterval(FASTEST_INTERVAL_IN_SECONDS * 1000);
-
-        setRunning(true);
+            setRunning(true);
+        }
     }
 
     @Override
@@ -155,15 +163,22 @@ public class LocationSensor extends
         // out-dated?
         // But let's give it a try...
         try {
+
+            if (mGoogleApiClient == null) {
+                mGoogleApiClient = getGoogleApiClient();
+            }
+
             Location loc = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
 
             if (loc != null) {
                 onLocationChanged(loc);
             }
 
-            LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient,
-                    mLocationRequest,
-                    this);
+            if (mGoogleApiClient.isConnected()) {
+                LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient,
+                        mLocationRequest,
+                        this);
+            }
 
         } catch (SecurityException ex) {
             Log.d(TAG, "SecurityException: user disabled location permission!");

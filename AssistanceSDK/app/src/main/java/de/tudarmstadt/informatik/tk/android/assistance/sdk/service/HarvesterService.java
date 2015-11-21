@@ -29,6 +29,7 @@ import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensor.ISensor;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.DaoProvider;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.PreferenceProvider;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.SensorProvider;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.util.DeviceUtils;
 
 /**
  * @edited by Wladimir Schmidt (wlsc.dev@gmail.com)
@@ -121,30 +122,35 @@ public class HarvesterService extends Service implements Callback {
 
         if (activeModules != null && !activeModules.isEmpty()) {
 
-            Log.d(TAG, "Found installed modules -> starting monitoring activities...");
+            if (!mSensorsStarted) {
 
-            monitorStart();
+                Log.d(TAG, "Found installed modules -> starting monitoring activities...");
+
+                monitorStart();
+            }
 
             // schedule uploader task
             startService(new Intent(this, EventUploaderService.class));
 
-            startAccessibilityService();
+            if (!DeviceUtils.isServiceRunning(getApplicationContext(),
+                    AssistanceAccessibilityService.class)) {
+
+                startAccessibilityService();
+            }
 
         } else {
+
             Log.d(TAG, "No active module were found!");
 
             mSensorsStarted = false;
         }
 
-        if (mPreferenceProvider.getShowNotification()) {
-            showIcon();
-        } else {
-            hideIcon();
-        }
-
         Log.d(TAG, "Service was initiated.");
     }
 
+    /**
+     * Stop the service
+     */
     private void stopService() {
 
         monitorStop();
@@ -177,6 +183,8 @@ public class HarvesterService extends Service implements Callback {
 
             sensor.startSensor();
         }
+
+        showIcon();
 
         Log.d(TAG, "All sensors are enabled!");
     }
@@ -232,12 +240,7 @@ public class HarvesterService extends Service implements Callback {
 
         Log.d(TAG, "Hiding icon...");
 
-//        if (mNotificationManager == null) {
-//            mNotificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-//        }
-
         stopForeground(true);
-//        mNotificationManager.cancel(Config.DEFAULT_NOTIFICATION_ID);
     }
 
     @Override
@@ -245,32 +248,37 @@ public class HarvesterService extends Service implements Callback {
 
         Log.d(TAG, "onStartCommand");
 
-        if (intent != null && intent.hasExtra(Config.INTENT_EXTRA_SHOW_ICON)) {
-
-            boolean showIcon = intent.getBooleanExtra(
-                    Config.INTENT_EXTRA_SHOW_ICON,
-                    PreferenceProvider.DEFAULT_KRAKEN_SHOW_NOTIFICATION);
-
-            if (showIcon) {
-                showIcon();
-            } else {
-                hideIcon();
-            }
-        }
-
         String userToken = mPreferenceProvider.getUserToken();
 
         if (userToken != null && !userToken.isEmpty()) {
-            if (!mSensorsStarted) {
-                monitorStart();
-            } else {
-                monitorStop();
+
+//            if (mSensorsStarted) {
+//                monitorStop();
+//            } else {
+//                monitorStart();
+//            }
+
+            if (mSensorsStarted) {
+
+                // show icon on command
+                if (intent != null && intent.hasExtra(Config.INTENT_EXTRA_SHOW_ICON)) {
+
+//                    boolean showIcon = intent.getBooleanExtra(
+//                            Config.INTENT_EXTRA_SHOW_ICON,
+//                            PreferenceProvider.DEFAULT_KRAKEN_SHOW_NOTIFICATION);
+//
+//                    if (showIcon) {
+//                        showIcon();
+//                    } else {
+//                        hideIcon();
+//                    }
+                }
+
+                return Service.START_STICKY;
             }
-        } else {
-            monitorStop();
         }
 
-        return Service.START_STICKY;
+        return Service.START_NOT_STICKY;
     }
 
     @Override

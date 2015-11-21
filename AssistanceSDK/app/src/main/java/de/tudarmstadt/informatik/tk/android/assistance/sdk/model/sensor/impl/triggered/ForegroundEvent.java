@@ -63,25 +63,27 @@ public class ForegroundEvent extends AbstractTriggeredEvent {
     @Override
     public void startSensor() {
 
-        if (mReceiver == null) {
-            mReceiver = new ScreenReceiver();
+        if (!isRunning()) {
+            setRunning(true);
+
+            if (mReceiver == null) {
+                mReceiver = new ScreenReceiver();
+            }
+
+            mEventFilter = new AccessibilityEventFilterUtils(context);
+
+            // register receiver that handles screen on and screen off logic
+            IntentFilter filter = new IntentFilter(Intent.ACTION_SCREEN_ON);
+            filter.addAction(Intent.ACTION_SCREEN_OFF);
+            context.registerReceiver(mReceiver, filter);
+
+            DbForegroundEvent dbForegroundEvent = new DbForegroundEvent();
+
+            dbForegroundEvent.setEventType(EVENT_ASSISTANCE_START);
+            dbForegroundEvent.setCreated(DateUtils.dateToISO8601String(new Date(), Locale.getDefault()));
+
+            daoProvider.getForegroundEventDao().insert(dbForegroundEvent);
         }
-
-        mEventFilter = new AccessibilityEventFilterUtils(context);
-
-        // register receiver that handles screen on and screen off logic
-        IntentFilter filter = new IntentFilter(Intent.ACTION_SCREEN_ON);
-        filter.addAction(Intent.ACTION_SCREEN_OFF);
-        context.registerReceiver(mReceiver, filter);
-
-        DbForegroundEvent dbForegroundEvent = new DbForegroundEvent();
-
-        dbForegroundEvent.setEventType(EVENT_ASSISTANCE_START);
-        dbForegroundEvent.setCreated(DateUtils.dateToISO8601String(new Date(), Locale.getDefault()));
-
-        daoProvider.getForegroundEventDao().insert(dbForegroundEvent);
-
-        setRunning(true);
     }
 
     @Override

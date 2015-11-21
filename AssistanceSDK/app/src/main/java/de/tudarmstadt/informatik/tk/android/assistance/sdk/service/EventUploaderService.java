@@ -349,7 +349,9 @@ public class EventUploaderService extends GcmTaskService {
                     @Override
                     public void success(Void aVoid, Response response) {
 
-                        if (response != null && (response.getStatus() == 200 || response.getStatus() == 204)) {
+                        if (response != null && (
+                                response.getStatus() == 200 ||
+                                        response.getStatus() == 204)) {
 
                             Log.d(TAG, "OK response from server received");
 
