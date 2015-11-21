@@ -25,7 +25,7 @@ import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensor.Abstract
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.DaoProvider;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.util.DateUtils;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.util.ImageUtils;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.util.sensors.AccessibilityEventFilterUtils;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.util.AccessibilityEventFilterUtils;
 
 /**
  * @author Karsten Planz

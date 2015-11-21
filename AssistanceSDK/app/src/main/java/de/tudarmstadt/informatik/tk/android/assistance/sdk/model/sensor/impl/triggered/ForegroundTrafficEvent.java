@@ -20,7 +20,7 @@ import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.enums.EPushType
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensor.AbstractTriggeredEvent;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.DaoProvider;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.PreferenceProvider;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.util.sensors.AccessibilityEventFilterUtils;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.util.AccessibilityEventFilterUtils;
 
 /**
  * This is a triggered sensor which collect the data of apps which are running in the foreground.

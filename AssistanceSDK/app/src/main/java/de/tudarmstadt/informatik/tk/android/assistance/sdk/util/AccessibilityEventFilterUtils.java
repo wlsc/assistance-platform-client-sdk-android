@@ -1,4 +1,4 @@
-package de.tudarmstadt.informatik.tk.android.assistance.sdk.util.sensors;
+package de.tudarmstadt.informatik.tk.android.assistance.sdk.util;
 
 import android.content.ComponentName;
 import android.content.Context;
