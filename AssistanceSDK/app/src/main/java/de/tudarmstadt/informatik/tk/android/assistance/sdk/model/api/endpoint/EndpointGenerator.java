@@ -6,6 +6,7 @@ import com.google.gson.GsonBuilder;
 
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.Config;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.httpclient.UntrustedOkHttpClient;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.PreferenceProvider;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.util.AppUtils;
 import retrofit.RestAdapter;
 import retrofit.android.AndroidLog;
@@ -59,12 +60,22 @@ public class EndpointGenerator {
             httpLogLevel = RestAdapter.LogLevel.FULL;
         }
 
+        // check for custom endpoint url
+        String endpointUrl = PreferenceProvider
+                .getInstance(context)
+                .getCustomEndpointUrl();
+
+        // custom endpoint settings is empty
+        if (endpointUrl.isEmpty()) {
+            endpointUrl = Config.ASSISTANCE_ENDPOINT;
+        }
+
         RestAdapter adapter = new RestAdapter.Builder()
 //                .setErrorHandler(new AssistanceErrorHandler())
                 .setLogLevel(httpLogLevel) // enabling log traces
                 .setLog(new AndroidLog(Config.HTTP_LOGGER_NAME))
                 .setConverter(new GsonConverter(gsonBuilder.create()))
-                .setEndpoint(Config.ASSISTANCE_ENDPOINT)
+                .setEndpoint(endpointUrl)
                 .setClient(new OkClient(new UntrustedOkHttpClient().getClient()))
                 .build();
 

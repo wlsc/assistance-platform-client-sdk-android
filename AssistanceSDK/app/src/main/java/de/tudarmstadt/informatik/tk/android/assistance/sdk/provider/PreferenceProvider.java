@@ -27,6 +27,9 @@ public class PreferenceProvider {
     private static final String ASSISTANCE_LAST_LATITUDE = "lastKnownLatitude";
     private static final String ASSISTANCE_LAST_LONGITUDE = "lastKnownLongitude";
 
+    // custom endpoint url
+    private static final String ASSISTANCE_CUSTOM_ENDPOINT_PREF = "custom_endpoint";
+
     // Default prefs
     public static final String KRAKEN_ACTIVATED = "KrakenActivated";
     public static final String KRAKEN_SHOW_NOTIFICATION = "KrakenShowNotification";
@@ -167,4 +170,11 @@ public class PreferenceProvider {
         return defaultPrefs;
     }
 
+    public String getCustomEndpointUrl() {
+        return this.defaultPrefs.getString(ASSISTANCE_CUSTOM_ENDPOINT_PREF, "");
+    }
+
+    public void setCustomEndpointUrl(String value) {
+        this.defaultPrefs.edit().putString(ASSISTANCE_CUSTOM_ENDPOINT_PREF, value).apply();
+    }
 }
