@@ -18,12 +18,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.interfaces.IDbSensor;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbAccelerometerSensor;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbForegroundEvent;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbMotionActivityEvent;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbPositionSensor;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.EventUploadRequest;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.DtoType;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.SensorDto;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.endpoint.EndpointGenerator;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.endpoint.EventUploadEndpoint;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.SensorDto;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.DaoProvider;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.PreferenceProvider;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.util.ConnectionUtils;
@@ -71,7 +74,11 @@ public class EventUploaderService extends GcmTaskService {
 
     private static PreferenceProvider mPreferenceProvider;
 
-    private Map<Integer, List<? extends IDbSensor>> requestDbEvents;
+    private List<DbAccelerometerSensor> dbAccelerometerSensors;
+    private List<DbMotionActivityEvent> dbMotionActivityEvents;
+    private List<DbPositionSensor> dbPositionSensors;
+    private List<DbForegroundEvent> dbForegroundEvents;
+
     private Map<Integer, List<SensorDto>> requestEvents;
 
     private static boolean isNeedInConnectionFallback;
@@ -158,7 +165,6 @@ public class EventUploaderService extends GcmTaskService {
                             }
 
                             requestEvents = new HashMap<>();
-                            requestDbEvents = new HashMap<>();
                             requestEvents = getEntriesForUpload(0);
 
                             final List<SensorDto> eventsAsList = new ArrayList<>();
@@ -248,7 +254,6 @@ public class EventUploaderService extends GcmTaskService {
                     }
 
                     requestEvents = new HashMap<>();
-                    requestDbEvents = new HashMap<>();
                     requestEvents = getEntriesForUpload(PUSH_NUMBER_OF_EACH_ELEMENTS);
 
                     final List<SensorDto> eventsAsList = new ArrayList<>();
@@ -356,7 +361,7 @@ public class EventUploaderService extends GcmTaskService {
                             Log.d(TAG, "OK response from server received");
 
                             // successful transmission of event data -> remove that data from db
-                            removeDbSentEvents(requestDbEvents);
+                            removeDbSentEvents();
 
                             // reschedule default periodic task
                             if (isNeedInConnectionFallback) {
@@ -448,88 +453,54 @@ public class EventUploaderService extends GcmTaskService {
 
         DaoProvider daoProvider = DaoProvider.getInstance(getApplicationContext());
 
-        List<? extends IDbSensor> dbAccelerometerList = daoProvider
+        dbAccelerometerSensors = daoProvider
                 .getAccelerometerSensorDao()
                 .getFirstN(numberOfElements);
-
-        requestDbEvents.put(DtoType.ACCELEROMETER, dbAccelerometerList);
 
         entries.put(DtoType.ACCELEROMETER, daoProvider
                 .getAccelerometerSensorDao()
-                .convertObjects(dbAccelerometerList));
+                .convertObjects(dbAccelerometerSensors));
 
-        List<? extends IDbSensor> dbLocationList = daoProvider
+        dbPositionSensors = daoProvider
                 .getLocationSensorDao()
                 .getFirstN(numberOfElements);
-
-        requestDbEvents.put(DtoType.LOCATION, dbLocationList);
 
         entries.put(DtoType.LOCATION, daoProvider
                 .getLocationSensorDao()
-                .convertObjects(dbLocationList));
+                .convertObjects(dbPositionSensors));
 
-        List<? extends IDbSensor> motionActivityList = daoProvider
+        dbMotionActivityEvents = daoProvider
                 .getMotionActivityEventDao()
                 .getFirstN(numberOfElements);
-
-        requestDbEvents.put(DtoType.MOTION_ACTIVITY, motionActivityList);
 
         entries.put(DtoType.MOTION_ACTIVITY, daoProvider
                 .getMotionActivityEventDao()
-                .convertObjects(motionActivityList));
+                .convertObjects(dbMotionActivityEvents));
 
-        List<? extends IDbSensor> foregroundEventList = daoProvider
+        dbForegroundEvents = daoProvider
                 .getForegroundEventDao()
                 .getFirstN(numberOfElements);
 
-        requestDbEvents.put(DtoType.FOREGROUND, foregroundEventList);
-
         entries.put(DtoType.FOREGROUND, daoProvider
                 .getForegroundEventDao()
-                .convertObjects(foregroundEventList));
+                .convertObjects(dbForegroundEvents));
 
         return entries;
     }
 
     /**
      * Removes successful transmitted entries from database
-     *
-     * @param dbEvents
      */
-    public void removeDbSentEvents(Map<Integer, List<? extends IDbSensor>> dbEvents) {
+    public void removeDbSentEvents() {
 
         Log.d(TAG, "Removing sent events from db...");
 
-        for (Map.Entry<Integer, List<? extends IDbSensor>> entry : dbEvents.entrySet()) {
+        DaoProvider daoProvider = DaoProvider.getInstance(getApplicationContext());
 
-            int sensorType = entry.getKey();
-            List<? extends IDbSensor> values = entry.getValue();
-
-            if (values == null || values.isEmpty()) {
-                continue;
-            }
-
-            DaoProvider daoProvider = DaoProvider.getInstance(getApplicationContext());
-
-            switch (sensorType) {
-                case DtoType.ACCELEROMETER:
-                    daoProvider.getAccelerometerSensorDao().delete(values);
-                    break;
-                case DtoType.LOCATION:
-                    daoProvider.getLocationSensorDao().delete(values);
-                    break;
-                case DtoType.MOTION_ACTIVITY:
-                    daoProvider.getMotionActivityEventDao().delete(values);
-                    break;
-                case DtoType.FOREGROUND:
-                    daoProvider.getForegroundEventDao().delete(values);
-                    break;
-            }
-        }
-
-        if (requestDbEvents != null) {
-            requestDbEvents.clear();
-        }
+        daoProvider.getAccelerometerSensorDao().delete(dbAccelerometerSensors);
+        daoProvider.getLocationSensorDao().delete(dbPositionSensors);
+        daoProvider.getMotionActivityEventDao().delete(dbMotionActivityEvents);
+        daoProvider.getForegroundEventDao().delete(dbForegroundEvents);
 
         if (requestEvents != null) {
             requestEvents.clear();
