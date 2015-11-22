@@ -109,6 +109,7 @@ public class AssistanceDatabaseGenerator {
     moduleCapability.addDoubleProperty("requiredUpdateFrequency");
     moduleCapability.addIntProperty("minRequiredReadingsOnUpdate");
     moduleCapability.addBooleanProperty("required").notNull();
+    moduleCapability.addBooleanProperty("active").notNull().index();
     moduleCapability.addStringProperty("created").notNull();
 
     Property moduleCapabilityFKModuleProperty =

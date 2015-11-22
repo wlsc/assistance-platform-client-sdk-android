@@ -34,8 +34,9 @@ public class DbModuleCapabilityDao extends AbstractDao<DbModuleCapability, Long>
         public final static Property RequiredUpdateFrequency = new Property(3, Double.class, "requiredUpdateFrequency", false, "REQUIRED_UPDATE_FREQUENCY");
         public final static Property MinRequiredReadingsOnUpdate = new Property(4, Integer.class, "minRequiredReadingsOnUpdate", false, "MIN_REQUIRED_READINGS_ON_UPDATE");
         public final static Property Required = new Property(5, boolean.class, "required", false, "REQUIRED");
-        public final static Property Created = new Property(6, String.class, "created", false, "CREATED");
-        public final static Property ModuleId = new Property(7, Long.class, "moduleId", false, "MODULE_ID");
+        public final static Property Active = new Property(6, boolean.class, "active", false, "ACTIVE");
+        public final static Property Created = new Property(7, String.class, "created", false, "CREATED");
+        public final static Property ModuleId = new Property(8, Long.class, "moduleId", false, "MODULE_ID");
     };
 
     private DaoSession daoSession;
@@ -61,13 +62,16 @@ public class DbModuleCapabilityDao extends AbstractDao<DbModuleCapability, Long>
                 "\"REQUIRED_UPDATE_FREQUENCY\" REAL," + // 3: requiredUpdateFrequency
                 "\"MIN_REQUIRED_READINGS_ON_UPDATE\" INTEGER," + // 4: minRequiredReadingsOnUpdate
                 "\"REQUIRED\" INTEGER NOT NULL ," + // 5: required
-                "\"CREATED\" TEXT NOT NULL ," + // 6: created
-                "\"MODULE_ID\" INTEGER);"); // 7: moduleId
+                "\"ACTIVE\" INTEGER NOT NULL ," + // 6: active
+                "\"CREATED\" TEXT NOT NULL ," + // 7: created
+                "\"MODULE_ID\" INTEGER);"); // 8: moduleId
         // Add Indexes
         db.execSQL("CREATE INDEX " + constraint + "IDX_module_capability__id ON module_capability" +
                 " (\"_id\");");
         db.execSQL("CREATE INDEX " + constraint + "IDX_module_capability_TYPE ON module_capability" +
                 " (\"TYPE\");");
+        db.execSQL("CREATE INDEX " + constraint + "IDX_module_capability_ACTIVE ON module_capability" +
+                " (\"ACTIVE\");");
         db.execSQL("CREATE INDEX " + constraint + "IDX_module_capability_MODULE_ID ON module_capability" +
                 " (\"MODULE_ID\");");
     }
@@ -104,11 +108,12 @@ public class DbModuleCapabilityDao extends AbstractDao<DbModuleCapability, Long>
             stmt.bindLong(5, minRequiredReadingsOnUpdate);
         }
         stmt.bindLong(6, entity.getRequired() ? 1L: 0L);
-        stmt.bindString(7, entity.getCreated());
+        stmt.bindLong(7, entity.getActive() ? 1L: 0L);
+        stmt.bindString(8, entity.getCreated());
  
         Long moduleId = entity.getModuleId();
         if (moduleId != null) {
-            stmt.bindLong(8, moduleId);
+            stmt.bindLong(9, moduleId);
         }
     }
 
@@ -134,8 +139,9 @@ public class DbModuleCapabilityDao extends AbstractDao<DbModuleCapability, Long>
             cursor.isNull(offset + 3) ? null : cursor.getDouble(offset + 3), // requiredUpdateFrequency
             cursor.isNull(offset + 4) ? null : cursor.getInt(offset + 4), // minRequiredReadingsOnUpdate
             cursor.getShort(offset + 5) != 0, // required
-            cursor.getString(offset + 6), // created
-            cursor.isNull(offset + 7) ? null : cursor.getLong(offset + 7) // moduleId
+            cursor.getShort(offset + 6) != 0, // active
+            cursor.getString(offset + 7), // created
+            cursor.isNull(offset + 8) ? null : cursor.getLong(offset + 8) // moduleId
         );
         return entity;
     }
@@ -149,8 +155,9 @@ public class DbModuleCapabilityDao extends AbstractDao<DbModuleCapability, Long>
         entity.setRequiredUpdateFrequency(cursor.isNull(offset + 3) ? null : cursor.getDouble(offset + 3));
         entity.setMinRequiredReadingsOnUpdate(cursor.isNull(offset + 4) ? null : cursor.getInt(offset + 4));
         entity.setRequired(cursor.getShort(offset + 5) != 0);
-        entity.setCreated(cursor.getString(offset + 6));
-        entity.setModuleId(cursor.isNull(offset + 7) ? null : cursor.getLong(offset + 7));
+        entity.setActive(cursor.getShort(offset + 6) != 0);
+        entity.setCreated(cursor.getString(offset + 7));
+        entity.setModuleId(cursor.isNull(offset + 8) ? null : cursor.getLong(offset + 8));
      }
     
     /** @inheritdoc */

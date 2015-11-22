@@ -16,6 +16,7 @@ public class DbModuleCapability {
     private Double requiredUpdateFrequency;
     private Integer minRequiredReadingsOnUpdate;
     private boolean required;
+    private boolean active;
     /** Not-null value. */
     private String created;
     private Long moduleId;
@@ -37,13 +38,14 @@ public class DbModuleCapability {
         this.id = id;
     }
 
-    public DbModuleCapability(Long id, String type, Double collectionFrequency, Double requiredUpdateFrequency, Integer minRequiredReadingsOnUpdate, boolean required, String created, Long moduleId) {
+    public DbModuleCapability(Long id, String type, Double collectionFrequency, Double requiredUpdateFrequency, Integer minRequiredReadingsOnUpdate, boolean required, boolean active, String created, Long moduleId) {
         this.id = id;
         this.type = type;
         this.collectionFrequency = collectionFrequency;
         this.requiredUpdateFrequency = requiredUpdateFrequency;
         this.minRequiredReadingsOnUpdate = minRequiredReadingsOnUpdate;
         this.required = required;
+        this.active = active;
         this.created = created;
         this.moduleId = moduleId;
     }
@@ -102,6 +104,14 @@ public class DbModuleCapability {
 
     public void setRequired(boolean required) {
         this.required = required;
+    }
+
+    public boolean getActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
     }
 
     /** Not-null value. */
