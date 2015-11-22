@@ -99,6 +99,10 @@ public class PowerStatusReceiver extends BroadcastReceiver {
             powerStateEvent.setChargingStatus(PowerChargingStatus.FULL);
         }
 
+        Log.d(TAG, "Insert entry");
+
         DaoProvider.getInstance(context).getPowerStateEventDao().insert(powerStateEvent);
+
+        Log.d(TAG, "Finished");
     }
 }

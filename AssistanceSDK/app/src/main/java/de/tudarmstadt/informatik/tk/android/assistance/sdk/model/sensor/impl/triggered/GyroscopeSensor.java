@@ -255,7 +255,11 @@ public class GyroscopeSensor extends AbstractTriggeredEvent implements SensorEve
         gyroscopeSensor.setAccuracy(accuracy);
         gyroscopeSensor.setCreated(DateUtils.dateToISO8601String(new Date(), Locale.getDefault()));
 
+        Log.d(TAG, "Insert entry");
+
         daoProvider.getGyroscopeSensorDao().insert(gyroscopeSensor);
+
+        Log.d(TAG, "Finished");
     }
 
     /**

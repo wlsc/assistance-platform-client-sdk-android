@@ -197,7 +197,11 @@ public class ForegroundTrafficEvent extends AbstractTriggeredEvent {
 
                 networkTrafficEvent.setBackground(false);
 
+                Log.d(TAG, "Insert entry");
+
                 daoProvider.getNetworkTrafficEventDao().insert(networkTrafficEvent);
+
+                Log.d(TAG, "Finished");
 
                 //found a match, don't need to search anymore
                 break;
@@ -246,7 +250,11 @@ public class ForegroundTrafficEvent extends AbstractTriggeredEvent {
 
             networkTrafficEvent.setBackground(false);
 
+            Log.d(TAG, "Insert entry");
+
             daoProvider.getNetworkTrafficEventDao().insert(networkTrafficEvent);
+
+            Log.d(TAG, "Finished");
         }
     }
 }

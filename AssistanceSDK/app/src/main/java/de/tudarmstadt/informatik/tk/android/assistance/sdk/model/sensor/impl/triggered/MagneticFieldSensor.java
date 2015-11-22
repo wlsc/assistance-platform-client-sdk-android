@@ -250,7 +250,11 @@ public class MagneticFieldSensor extends AbstractTriggeredEvent implements Senso
         magneticFieldSensor.setAccuracy(accuracy);
         magneticFieldSensor.setCreated(DateUtils.dateToISO8601String(new Date(), Locale.getDefault()));
 
+        Log.d(TAG, "Insert entry");
+
         daoProvider.getMagneticFieldSensorDao().insert(magneticFieldSensor);
+
+        Log.d(TAG, "Finished");
     }
 
     /**

@@ -82,7 +82,11 @@ public class ForegroundEvent extends AbstractTriggeredEvent {
             dbForegroundEvent.setEventType(EVENT_ASSISTANCE_START);
             dbForegroundEvent.setCreated(DateUtils.dateToISO8601String(new Date(), Locale.getDefault()));
 
+            Log.d(TAG, "Insert entry");
+
             daoProvider.getForegroundEventDao().insert(dbForegroundEvent);
+
+            Log.d(TAG, "Finished");
         }
     }
 
@@ -110,7 +114,11 @@ public class ForegroundEvent extends AbstractTriggeredEvent {
                 dbForegroundEvent.setEventType(EVENT_ASSISTANCE_STOP);
                 dbForegroundEvent.setCreated(DateUtils.dateToISO8601String(new Date(), Locale.getDefault()));
 
+                Log.d(TAG, "Insert entry");
+
                 daoProvider.getForegroundEventDao().insert(dbForegroundEvent);
+
+                Log.d(TAG, "Finished");
             }
         }
     }
@@ -130,7 +138,12 @@ public class ForegroundEvent extends AbstractTriggeredEvent {
                 String color = storeIcon(foregroundEvent.getPackageName());
                 foregroundEvent.setColor(color);
 
+                Log.d(TAG, "Insert entry");
+
                 daoProvider.getForegroundEventDao().insert(foregroundEvent);
+
+                Log.d(TAG, "Finished");
+
             } else {
                 Log.d(TAG, "Cannot save event: event filter gave NULL back");
             }
@@ -229,7 +242,11 @@ public class ForegroundEvent extends AbstractTriggeredEvent {
 
             foregroundEvent.setCreated(DateUtils.dateToISO8601String(new Date(), Locale.getDefault()));
 
+            Log.d(TAG, "Insert entry");
+
             daoProvider.getForegroundEventDao().insert(foregroundEvent);
+
+            Log.d(TAG, "Finished");
         }
     }
 

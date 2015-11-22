@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.provider.CallLog;
+import android.util.Log;
 
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbCallLogEvent;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.DtoType;
@@ -17,6 +18,8 @@ import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensor.Abstract
  * @date 27.10.2015
  */
 public class CallLogEvent extends AbstractContentObserverEvent {
+
+    private static final String TAG = CallLogEvent.class.getSimpleName();
 
     protected static final Uri URI_CALL_LOG = android.provider.CallLog.Calls.CONTENT_URI;
 
@@ -81,17 +84,13 @@ public class CallLogEvent extends AbstractContentObserverEvent {
             longLastKnownCallLogId = lastItem.getCallId();
         }
 
-        Cursor cur = null;
+        ContentResolver cr = context.getContentResolver();
 
-        try {
-
-            ContentResolver cr = context.getContentResolver();
-
-            cur = cr.query(android.provider.CallLog.Calls.CONTENT_URI,
-                    null,
-                    CallLog.Calls._ID + ">?",
-                    new String[]{String.valueOf(longLastKnownCallLogId)},
-                    null);
+        try (Cursor cur = cr.query(android.provider.CallLog.Calls.CONTENT_URI,
+                null,
+                CallLog.Calls._ID + ">?",
+                new String[]{String.valueOf(longLastKnownCallLogId)},
+                null);) {
 
             if (cur == null || cur.getCount() == 0) {
                 return;
@@ -112,10 +111,12 @@ public class CallLogEvent extends AbstractContentObserverEvent {
                 callLogEvent.setIsDeleted(false);
                 callLogEvent.setIsUpdated(false);
 
+                Log.d(TAG, "Insert entry");
+
                 daoProvider.getCallLogEventDao().insert(callLogEvent);
+
+                Log.d(TAG, "Finished");
             }
-        } finally {
-            cur.close();
         }
     }
 }

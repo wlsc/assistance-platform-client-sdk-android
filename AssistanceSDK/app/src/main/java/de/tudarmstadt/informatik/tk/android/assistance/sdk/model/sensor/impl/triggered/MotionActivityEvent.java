@@ -113,8 +113,11 @@ public class MotionActivityEvent extends
 
         motionActivityEvent.setCreated(DateUtils.dateToISO8601String(new Date(), Locale.getDefault()));
 
-        // insert db entry
+        Log.d(TAG, "Insert entry");
+
         daoProvider.getMotionActivityEventDao().insert(motionActivityEvent);
+
+        Log.d(TAG, "Finished");
     }
 
     /**

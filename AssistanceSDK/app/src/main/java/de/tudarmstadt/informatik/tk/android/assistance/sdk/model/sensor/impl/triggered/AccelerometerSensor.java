@@ -60,7 +60,11 @@ public class AccelerometerSensor extends
         dbAccelerometerSensor.setAccuracy(accuracy);
         dbAccelerometerSensor.setCreated(DateUtils.dateToISO8601String(new Date(), Locale.getDefault()));
 
+        Log.d(TAG, "Insert entry");
+
         daoProvider.getAccelerometerSensorDao().insert(dbAccelerometerSensor);
+
+        Log.d(TAG, "Finished");
     }
 
     @Override

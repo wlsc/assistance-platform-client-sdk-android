@@ -5,6 +5,7 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.util.Log;
 
 import java.util.Date;
 import java.util.Locale;
@@ -23,6 +24,8 @@ import de.tudarmstadt.informatik.tk.android.assistance.sdk.util.DateUtils;
 public class LightSensor
         extends AbstractTriggeredEvent
         implements SensorEventListener {
+
+    private static final String TAG = LightSensor.class.getSimpleName();
 
     // ------------------- Configuration -------------------
     private static final int SENSOR_DELAY_BETWEEN_TWO_EVENTS = SensorManager.SENSOR_DELAY_NORMAL;
@@ -57,7 +60,11 @@ public class LightSensor
         sensorLight.setAccuracy(accuracy);
         sensorLight.setCreated(DateUtils.dateToISO8601String(new Date(), Locale.getDefault()));
 
+        Log.d(TAG, "Insert entry");
+
         daoProvider.getLightSensorDao().insert(sensorLight);
+
+        Log.d(TAG, "Finished");
     }
 
     @Override
