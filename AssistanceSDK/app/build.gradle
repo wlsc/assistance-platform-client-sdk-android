@@ -50,7 +50,7 @@ dependencies {
     compile 'com.squareup.okhttp:okhttp-urlconnection:2.5.0'
     compile 'com.squareup.okhttp:okhttp:2.5.0'
     // database ORM
-    compile 'de.greenrobot:greendao:2.0.0'
+    compile 'de.greenrobot:greendao:2.1.0'
     // event bus system
     compile 'de.greenrobot:eventbus:2.4.0'
 }
