@@ -44,9 +44,11 @@ public class PowerStateEventDaoImpl extends
 
         PowerStateEventDto result = new PowerStateEventDto();
 
-        result.setId(dbSensor.getId());
-        result.setTypeState(dbSensor.getState());
-        result.setChargingStatus(dbSensor.getChargingStatus());
+        result.setIsCharging(dbSensor.getIsCharging());
+        result.setPercent(dbSensor.getPercent());
+        result.setChargingState(dbSensor.getChargingState());
+        result.setChargingMode(dbSensor.getChargingMode());
+        result.setPowerSaveMode(dbSensor.getPowerSaveMode());
         result.setType(DtoType.POWER_STATE);
         result.setTypeStr(DtoType.getApiName(DtoType.POWER_STATE));
         result.setCreated(dbSensor.getCreated());

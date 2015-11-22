@@ -14,6 +14,8 @@ public class PowerChargingStatus {
 
     public static final int FULL = 3;
 
+    public static final int MALFUNCTION = 4;
+
     private PowerChargingStatus() {
     }
 

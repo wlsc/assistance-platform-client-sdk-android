@@ -7,11 +7,13 @@ package de.tudarmstadt.informatik.tk.android.assistance.sdk.db;
 public class DbPowerStateEvent implements de.tudarmstadt.informatik.tk.android.assistance.sdk.interfaces.IDbSensor {
 
     private Long id;
-    private Integer state;
-    private Integer chargingStatus;
+    private Boolean isCharging;
     private Float percent;
     /** Not-null value. */
     private String created;
+    private Integer chargingState;
+    private Integer chargingMode;
+    private Boolean powerSaveMode;
 
     public DbPowerStateEvent() {
     }
@@ -20,12 +22,14 @@ public class DbPowerStateEvent implements de.tudarmstadt.informatik.tk.android.a
         this.id = id;
     }
 
-    public DbPowerStateEvent(Long id, Integer state, Integer chargingStatus, Float percent, String created) {
+    public DbPowerStateEvent(Long id, Boolean isCharging, Float percent, String created, Integer chargingState, Integer chargingMode, Boolean powerSaveMode) {
         this.id = id;
-        this.state = state;
-        this.chargingStatus = chargingStatus;
+        this.isCharging = isCharging;
         this.percent = percent;
         this.created = created;
+        this.chargingState = chargingState;
+        this.chargingMode = chargingMode;
+        this.powerSaveMode = powerSaveMode;
     }
 
     public Long getId() {
@@ -36,20 +40,12 @@ public class DbPowerStateEvent implements de.tudarmstadt.informatik.tk.android.a
         this.id = id;
     }
 
-    public Integer getState() {
-        return state;
+    public Boolean getIsCharging() {
+        return isCharging;
     }
 
-    public void setState(Integer state) {
-        this.state = state;
-    }
-
-    public Integer getChargingStatus() {
-        return chargingStatus;
-    }
-
-    public void setChargingStatus(Integer chargingStatus) {
-        this.chargingStatus = chargingStatus;
+    public void setIsCharging(Boolean isCharging) {
+        this.isCharging = isCharging;
     }
 
     public Float getPercent() {
@@ -68,6 +64,30 @@ public class DbPowerStateEvent implements de.tudarmstadt.informatik.tk.android.a
     /** Not-null value; ensure this value is available before it is saved to the database. */
     public void setCreated(String created) {
         this.created = created;
+    }
+
+    public Integer getChargingState() {
+        return chargingState;
+    }
+
+    public void setChargingState(Integer chargingState) {
+        this.chargingState = chargingState;
+    }
+
+    public Integer getChargingMode() {
+        return chargingMode;
+    }
+
+    public void setChargingMode(Integer chargingMode) {
+        this.chargingMode = chargingMode;
+    }
+
+    public Boolean getPowerSaveMode() {
+        return powerSaveMode;
+    }
+
+    public void setPowerSaveMode(Boolean powerSaveMode) {
+        this.powerSaveMode = powerSaveMode;
     }
 
 }

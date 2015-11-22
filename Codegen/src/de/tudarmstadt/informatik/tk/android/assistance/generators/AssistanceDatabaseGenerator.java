@@ -509,14 +509,18 @@ public class AssistanceDatabaseGenerator {
     contactEvent.addToMany(contactMailEvent, contactNumberfkContactEvent);
     
     // ----- Power State Event -----
+    // REQUIRED
     Entity powerStatusEvent = schema.addEntity("DbPowerStateEvent");
     powerStatusEvent.setTableName("power_state_event");
     powerStatusEvent.addIdProperty().autoincrement().index();
     powerStatusEvent.implementsInterface(Config.ASSISTANCE_PACKAGE_SENSOR);
-    powerStatusEvent.addIntProperty("state");
-    powerStatusEvent.addIntProperty("chargingStatus");
+    powerStatusEvent.addBooleanProperty("isCharging");
     powerStatusEvent.addFloatProperty("percent");
     powerStatusEvent.addStringProperty("created").notNull();
+    // OPTIONAL
+    powerStatusEvent.addIntProperty("chargingState");
+    powerStatusEvent.addIntProperty("chargingMode");
+    powerStatusEvent.addBooleanProperty("powerSaveMode");
 
     // **************************
     // **** GENERATE CLASSES ****

@@ -14,17 +14,25 @@ public class PowerStateEventDto implements SensorDto {
 
     private Long id;
 
-    @SerializedName("charging")
+    @SerializedName("isCharging")
     @Expose
-    private Integer typeState;
-
-    @SerializedName("status")
-    @Expose
-    private Integer chargingStatus;
+    private Boolean isCharging;
 
     @SerializedName("percent")
     @Expose
     private Float percent;
+
+    @SerializedName("chargingState")
+    @Expose
+    private Integer chargingState;
+
+    @SerializedName("chargingMode")
+    @Expose
+    private Integer chargingMode;
+
+    @SerializedName("powerSaveMode")
+    @Expose
+    private Boolean powerSaveMode;
 
     @SerializedName("created")
     @Expose
@@ -47,62 +55,72 @@ public class PowerStateEventDto implements SensorDto {
         this.typeStr = DtoType.getApiName(this.type);
     }
 
-    public PowerStateEventDto(Long id, Integer typeState, Integer chargingStatus, Float percent, String created) {
+    public PowerStateEventDto(Long id, Boolean isCharging, Float percent, Integer chargingState, Integer chargingMode, Boolean powerSaveMode, String created) {
         this.id = id;
-        this.typeState = typeState;
-        this.chargingStatus = chargingStatus;
+        this.isCharging = isCharging;
         this.percent = percent;
+        this.chargingState = chargingState;
+        this.chargingMode = chargingMode;
+        this.powerSaveMode = powerSaveMode;
         this.created = created;
         this.type = DtoType.POWER_STATE;
         this.typeStr = DtoType.getApiName(this.type);
     }
 
     public Long getId() {
-        return this.id;
+        return id;
     }
 
     public void setId(Long id) {
         this.id = id;
     }
 
-    public Integer getTypeState() {
-        return this.typeState;
+    public Boolean getIsCharging() {
+        return isCharging;
     }
 
-    public void setTypeState(Integer typeState) {
-        this.typeState = typeState;
-    }
-
-    public Integer getChargingStatus() {
-        return this.chargingStatus;
-    }
-
-    public void setChargingStatus(Integer chargingStatus) {
-        this.chargingStatus = chargingStatus;
+    public void setIsCharging(Boolean isCharging) {
+        this.isCharging = isCharging;
     }
 
     public Float getPercent() {
-        return this.percent;
+        return percent;
     }
 
     public void setPercent(Float percent) {
         this.percent = percent;
     }
 
+    public Integer getChargingState() {
+        return chargingState;
+    }
+
+    public void setChargingState(Integer chargingState) {
+        this.chargingState = chargingState;
+    }
+
+    public Integer getChargingMode() {
+        return chargingMode;
+    }
+
+    public void setChargingMode(Integer chargingMode) {
+        this.chargingMode = chargingMode;
+    }
+
+    public Boolean getPowerSaveMode() {
+        return powerSaveMode;
+    }
+
+    public void setPowerSaveMode(Boolean powerSaveMode) {
+        this.powerSaveMode = powerSaveMode;
+    }
+
     public String getCreated() {
-        return this.created;
+        return created;
     }
 
     public void setCreated(String created) {
         this.created = created;
-    }
-
-    public String getTypeStr() {
-        return this.typeStr;
-    }
-
-    public void setTypeStr(String typeStr) {
-        this.typeStr = typeStr;
     }
 
     @Override
@@ -115,13 +133,23 @@ public class PowerStateEventDto implements SensorDto {
         this.type = type;
     }
 
+    public String getTypeStr() {
+        return typeStr;
+    }
+
+    public void setTypeStr(String typeStr) {
+        this.typeStr = typeStr;
+    }
+
     @Override
     public String toString() {
         return "PowerStateEventDto{" +
                 "id=" + id +
-                ", typeState=" + typeState +
-                ", chargingStatus=" + chargingStatus +
+                ", isCharging=" + isCharging +
                 ", percent=" + percent +
+                ", chargingState=" + chargingState +
+                ", chargingMode=" + chargingMode +
+                ", powerSaveMode=" + powerSaveMode +
                 ", created='" + created + '\'' +
                 ", typeStr='" + typeStr + '\'' +
                 ", type=" + type +

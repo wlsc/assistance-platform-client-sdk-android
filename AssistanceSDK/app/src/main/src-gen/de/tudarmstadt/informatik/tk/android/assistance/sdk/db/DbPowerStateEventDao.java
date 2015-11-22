@@ -24,10 +24,12 @@ public class DbPowerStateEventDao extends AbstractDao<DbPowerStateEvent, Long> {
     */
     public static class Properties {
         public final static Property Id = new Property(0, Long.class, "id", true, "_id");
-        public final static Property State = new Property(1, Integer.class, "state", false, "STATE");
-        public final static Property ChargingStatus = new Property(2, Integer.class, "chargingStatus", false, "CHARGING_STATUS");
-        public final static Property Percent = new Property(3, Float.class, "percent", false, "PERCENT");
-        public final static Property Created = new Property(4, String.class, "created", false, "CREATED");
+        public final static Property IsCharging = new Property(1, Boolean.class, "isCharging", false, "IS_CHARGING");
+        public final static Property Percent = new Property(2, Float.class, "percent", false, "PERCENT");
+        public final static Property Created = new Property(3, String.class, "created", false, "CREATED");
+        public final static Property ChargingState = new Property(4, Integer.class, "chargingState", false, "CHARGING_STATE");
+        public final static Property ChargingMode = new Property(5, Integer.class, "chargingMode", false, "CHARGING_MODE");
+        public final static Property PowerSaveMode = new Property(6, Boolean.class, "powerSaveMode", false, "POWER_SAVE_MODE");
     };
 
 
@@ -44,10 +46,12 @@ public class DbPowerStateEventDao extends AbstractDao<DbPowerStateEvent, Long> {
         String constraint = ifNotExists? "IF NOT EXISTS ": "";
         db.execSQL("CREATE TABLE " + constraint + "\"power_state_event\" (" + //
                 "\"_id\" INTEGER PRIMARY KEY AUTOINCREMENT ," + // 0: id
-                "\"STATE\" INTEGER," + // 1: state
-                "\"CHARGING_STATUS\" INTEGER," + // 2: chargingStatus
-                "\"PERCENT\" REAL," + // 3: percent
-                "\"CREATED\" TEXT NOT NULL );"); // 4: created
+                "\"IS_CHARGING\" INTEGER," + // 1: isCharging
+                "\"PERCENT\" REAL," + // 2: percent
+                "\"CREATED\" TEXT NOT NULL ," + // 3: created
+                "\"CHARGING_STATE\" INTEGER," + // 4: chargingState
+                "\"CHARGING_MODE\" INTEGER," + // 5: chargingMode
+                "\"POWER_SAVE_MODE\" INTEGER);"); // 6: powerSaveMode
         // Add Indexes
         db.execSQL("CREATE INDEX " + constraint + "IDX_power_state_event__id ON power_state_event" +
                 " (\"_id\");");
@@ -69,21 +73,31 @@ public class DbPowerStateEventDao extends AbstractDao<DbPowerStateEvent, Long> {
             stmt.bindLong(1, id);
         }
  
-        Integer state = entity.getState();
-        if (state != null) {
-            stmt.bindLong(2, state);
-        }
- 
-        Integer chargingStatus = entity.getChargingStatus();
-        if (chargingStatus != null) {
-            stmt.bindLong(3, chargingStatus);
+        Boolean isCharging = entity.getIsCharging();
+        if (isCharging != null) {
+            stmt.bindLong(2, isCharging ? 1L: 0L);
         }
  
         Float percent = entity.getPercent();
         if (percent != null) {
-            stmt.bindDouble(4, percent);
+            stmt.bindDouble(3, percent);
         }
-        stmt.bindString(5, entity.getCreated());
+        stmt.bindString(4, entity.getCreated());
+ 
+        Integer chargingState = entity.getChargingState();
+        if (chargingState != null) {
+            stmt.bindLong(5, chargingState);
+        }
+ 
+        Integer chargingMode = entity.getChargingMode();
+        if (chargingMode != null) {
+            stmt.bindLong(6, chargingMode);
+        }
+ 
+        Boolean powerSaveMode = entity.getPowerSaveMode();
+        if (powerSaveMode != null) {
+            stmt.bindLong(7, powerSaveMode ? 1L: 0L);
+        }
     }
 
     /** @inheritdoc */
@@ -97,10 +111,12 @@ public class DbPowerStateEventDao extends AbstractDao<DbPowerStateEvent, Long> {
     public DbPowerStateEvent readEntity(Cursor cursor, int offset) {
         DbPowerStateEvent entity = new DbPowerStateEvent( //
             cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0), // id
-            cursor.isNull(offset + 1) ? null : cursor.getInt(offset + 1), // state
-            cursor.isNull(offset + 2) ? null : cursor.getInt(offset + 2), // chargingStatus
-            cursor.isNull(offset + 3) ? null : cursor.getFloat(offset + 3), // percent
-            cursor.getString(offset + 4) // created
+            cursor.isNull(offset + 1) ? null : cursor.getShort(offset + 1) != 0, // isCharging
+            cursor.isNull(offset + 2) ? null : cursor.getFloat(offset + 2), // percent
+            cursor.getString(offset + 3), // created
+            cursor.isNull(offset + 4) ? null : cursor.getInt(offset + 4), // chargingState
+            cursor.isNull(offset + 5) ? null : cursor.getInt(offset + 5), // chargingMode
+            cursor.isNull(offset + 6) ? null : cursor.getShort(offset + 6) != 0 // powerSaveMode
         );
         return entity;
     }
@@ -109,10 +125,12 @@ public class DbPowerStateEventDao extends AbstractDao<DbPowerStateEvent, Long> {
     @Override
     public void readEntity(Cursor cursor, DbPowerStateEvent entity, int offset) {
         entity.setId(cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0));
-        entity.setState(cursor.isNull(offset + 1) ? null : cursor.getInt(offset + 1));
-        entity.setChargingStatus(cursor.isNull(offset + 2) ? null : cursor.getInt(offset + 2));
-        entity.setPercent(cursor.isNull(offset + 3) ? null : cursor.getFloat(offset + 3));
-        entity.setCreated(cursor.getString(offset + 4));
+        entity.setIsCharging(cursor.isNull(offset + 1) ? null : cursor.getShort(offset + 1) != 0);
+        entity.setPercent(cursor.isNull(offset + 2) ? null : cursor.getFloat(offset + 2));
+        entity.setCreated(cursor.getString(offset + 3));
+        entity.setChargingState(cursor.isNull(offset + 4) ? null : cursor.getInt(offset + 4));
+        entity.setChargingMode(cursor.isNull(offset + 5) ? null : cursor.getInt(offset + 5));
+        entity.setPowerSaveMode(cursor.isNull(offset + 6) ? null : cursor.getShort(offset + 6) != 0);
      }
     
     /** @inheritdoc */

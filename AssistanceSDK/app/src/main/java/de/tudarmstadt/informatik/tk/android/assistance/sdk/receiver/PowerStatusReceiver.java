@@ -38,8 +38,7 @@ public class PowerStatusReceiver extends BroadcastReceiver {
         DbPowerStateEvent powerStateEvent = new DbPowerStateEvent();
 
         // default
-        powerStateEvent.setState(PowerChargingType.NONE);
-        powerStateEvent.setChargingStatus(PowerChargingStatus.NONE);
+        powerStateEvent.setChargingState(PowerChargingStatus.NONE);
         powerStateEvent.setPercent(BatteryUtils.getBatteryPercentage(context));
         powerStateEvent.setCreated(DateUtils.dateToISO8601String(new Date(), Locale.getDefault()));
 
@@ -48,15 +47,15 @@ public class PowerStatusReceiver extends BroadcastReceiver {
         boolean isWireless = BatteryUtils.isPluggedInWithWirelessCharger(context);
 
         if (isAc) {
-            powerStateEvent.setState(PowerChargingType.AC_ADAPTER);
+            powerStateEvent.setChargingMode(PowerChargingType.AC_ADAPTER);
         }
 
         if (isUsb) {
-            powerStateEvent.setState(PowerChargingType.USB);
+            powerStateEvent.setChargingMode(PowerChargingType.USB);
         }
 
         if (isWireless) {
-            powerStateEvent.setState(PowerChargingType.WIRELESS);
+            powerStateEvent.setChargingMode(PowerChargingType.WIRELESS);
         }
 
         if (Intent.ACTION_POWER_CONNECTED.equals(action)) {
@@ -65,12 +64,14 @@ public class PowerStatusReceiver extends BroadcastReceiver {
             if (!isServiceRunning) {
                 HarvesterServiceProvider.getInstance(context).startSensingService();
             }
+
+            // TODO: add cable malfunction state
         }
 
         if (Intent.ACTION_POWER_DISCONNECTED.equals(action)) {
             Log.d(TAG, "Power disconnected");
 
-            powerStateEvent.setState(PowerChargingType.NONE);
+            powerStateEvent.setChargingMode(null);
         }
 
         if (Intent.ACTION_BATTERY_LOW.equals(action)) {
@@ -80,7 +81,7 @@ public class PowerStatusReceiver extends BroadcastReceiver {
                 HarvesterServiceProvider.getInstance(context).stopSensingService();
             }
 
-            powerStateEvent.setChargingStatus(PowerChargingStatus.LOW);
+            powerStateEvent.setChargingState(PowerChargingStatus.LOW);
         }
 
         if (Intent.ACTION_BATTERY_OKAY.equals(action)) {
@@ -90,13 +91,13 @@ public class PowerStatusReceiver extends BroadcastReceiver {
                 HarvesterServiceProvider.getInstance(context).startSensingService();
             }
 
-            powerStateEvent.setChargingStatus(PowerChargingStatus.OKAY);
+            powerStateEvent.setChargingState(PowerChargingStatus.OKAY);
         }
 
         if (Intent.ACTION_BATTERY_CHANGED.equals(action)) {
             Log.d(TAG, "Remaining battery is FULL");
 
-            powerStateEvent.setChargingStatus(PowerChargingStatus.FULL);
+            powerStateEvent.setChargingState(PowerChargingStatus.FULL);
         }
 
         Log.d(TAG, "Insert entry");
