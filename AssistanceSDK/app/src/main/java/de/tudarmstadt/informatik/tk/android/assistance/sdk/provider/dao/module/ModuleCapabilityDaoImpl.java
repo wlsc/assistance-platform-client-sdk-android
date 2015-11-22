@@ -4,7 +4,6 @@ import java.util.Collections;
 import java.util.List;
 
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DaoSession;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbCalendarEventDao;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbModuleCapability;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbModuleCapabilityDao;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.CommonDaoImpl;
@@ -45,6 +44,21 @@ public class ModuleCapabilityDaoImpl extends
                 .queryBuilder()
                 .orderDesc(DbModuleCapabilityDao.Properties.Id)
                 .limit(amount)
+                .build()
+                .list();
+    }
+
+    @Override
+    public List<DbModuleCapability> getAllActive(Long moduleId) {
+
+        if (moduleId == null || moduleId < 0) {
+            return Collections.emptyList();
+        }
+
+        return dao
+                .queryBuilder()
+                .where(DbModuleCapabilityDao.Properties.ModuleId.eq(moduleId))
+                .where(DbModuleCapabilityDao.Properties.Active.eq(Boolean.TRUE))
                 .build()
                 .list();
     }
