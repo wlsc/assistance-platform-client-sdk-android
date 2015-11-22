@@ -162,6 +162,11 @@ public class PermissionUtils {
      */
     @TargetApi(Build.VERSION_CODES.M)
     public boolean isPermissionGranted(String permission) {
+
+        if (permission == null) {
+            return false;
+        }
+
         return ContextCompat.checkSelfPermission(mContext, permission) == PackageManager.PERMISSION_GRANTED;
     }
 

@@ -85,7 +85,7 @@ public class UserDaoImpl implements UserDao {
     public long insertUser(DbUser user) {
 
         if (user == null) {
-            return -1L;
+            return -1l;
         }
 
         return dao.insertOrReplace(user);

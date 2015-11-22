@@ -62,7 +62,7 @@ public class ModuleDaoImpl implements ModuleDao {
     public List<DbModule> getAllModules(Long userId) {
 
         if (userId == null || userId < 0) {
-            return Collections.EMPTY_LIST;
+            return Collections.emptyList();
         }
 
         return dao
@@ -76,7 +76,7 @@ public class ModuleDaoImpl implements ModuleDao {
     public List<DbModule> getAllActiveModules(Long userId) {
 
         if (userId == null || userId < 0) {
-            return Collections.EMPTY_LIST;
+            return Collections.emptyList();
         }
 
         return dao
@@ -105,7 +105,7 @@ public class ModuleDaoImpl implements ModuleDao {
     public long insertModule(DbModule module) {
 
         if (module == null) {
-            return -1L;
+            return -1l;
         }
 
         return dao.insertOrReplace(module);

@@ -76,7 +76,7 @@ public class PowerStateEventDaoImpl extends
     public List<? extends IDbSensor> getFirstN(int amount) {
 
         if (amount <= 0) {
-            return Collections.EMPTY_LIST;
+            return Collections.emptyList();
         }
 
         return dao
@@ -90,7 +90,7 @@ public class PowerStateEventDaoImpl extends
     public List<? extends IDbSensor> getLastN(int amount) {
 
         if (amount <= 0) {
-            return Collections.EMPTY_LIST;
+            return Collections.emptyList();
         }
 
         return dao

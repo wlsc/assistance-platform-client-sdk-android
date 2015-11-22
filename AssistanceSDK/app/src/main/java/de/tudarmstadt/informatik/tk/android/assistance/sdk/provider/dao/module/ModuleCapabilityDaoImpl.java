@@ -44,7 +44,7 @@ public class ModuleCapabilityDaoImpl implements ModuleCapabilityDao {
     public long insertModuleCapability(DbModuleCapability moduleCapability) {
 
         if (moduleCapability == null) {
-            return -1L;
+            return -1l;
         }
 
         return dao.insertOrReplace(moduleCapability);
