@@ -2,27 +2,28 @@ package de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.device;
 
 import android.util.Log;
 
+import java.util.Collections;
+import java.util.List;
+
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DaoSession;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbDevice;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbDeviceDao;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.CommonDaoImpl;
 
 /**
  * @author Wladimir Schmidt (wlsc.dev@gmail.com)
  * @date 30.10.2015
  */
-public class DeviceDaoImpl implements DeviceDao {
+public class DeviceDaoImpl extends
+        CommonDaoImpl<DbDevice> implements
+        DeviceDao {
 
     private static final String TAG = DeviceDaoImpl.class.getSimpleName();
 
     private static DeviceDao INSTANCE;
 
-    private DbDeviceDao deviceDao;
-
     private DeviceDaoImpl(DaoSession daoSession) {
-
-        if (deviceDao == null) {
-            deviceDao = daoSession.getDbDeviceDao();
-        }
+        super(daoSession.getDbDeviceDao());
     }
 
     public static DeviceDao getInstance(DaoSession mDaoSession) {
@@ -41,49 +42,18 @@ public class DeviceDaoImpl implements DeviceDao {
      * @return
      */
     @Override
-    public DbDevice getDeviceById(long deviceId) {
+    public DbDevice getById(long deviceId) {
 
         if (deviceId < 0) {
             return null;
         }
 
-        return deviceDao
+        return dao
                 .queryBuilder()
                 .where(DbDeviceDao.Properties.Id.eq(deviceId))
                 .limit(1)
                 .build()
                 .unique();
-    }
-
-    /**
-     * Inserts new device
-     *
-     * @param device
-     * @return
-     */
-    @Override
-    public long insertDevice(DbDevice device) {
-
-        if (device == null) {
-            return -1L;
-        }
-
-        return deviceDao.insertOrReplace(device);
-    }
-
-    /**
-     * Updates device
-     *
-     * @param device
-     */
-    @Override
-    public void updateDevice(DbDevice device) {
-
-        if (device == null) {
-            return;
-        }
-
-        deviceDao.update(device);
     }
 
     /**
@@ -101,7 +71,7 @@ public class DeviceDaoImpl implements DeviceDao {
             return false;
         }
 
-        DbDevice device = deviceDao
+        DbDevice device = dao
                 .queryBuilder()
                 .where(DbDeviceDao.Properties.UserId.eq(userId))
                 .where(DbDeviceDao.Properties.ServerDeviceId.eq(serverDeviceId))
@@ -109,13 +79,15 @@ public class DeviceDaoImpl implements DeviceDao {
                 .unique();
 
         if (device == null) {
+
             Log.d(TAG, "Not found any device with id: " + serverDeviceId);
             return false;
+
         } else {
 
             device.setGcmRegistrationToken(registrationToken);
 
-            deviceDao.update(device);
+            update(device);
 
             Log.d(TAG, "Finished saving GCM token");
 
@@ -123,4 +95,18 @@ public class DeviceDaoImpl implements DeviceDao {
         }
     }
 
+    @Override
+    public List<DbDevice> getLastN(int amount) {
+
+        if (amount <= 0) {
+            return Collections.emptyList();
+        }
+
+        return dao
+                .queryBuilder()
+                .orderDesc(DbDeviceDao.Properties.Id)
+                .limit(amount)
+                .build()
+                .list();
+    }
 }

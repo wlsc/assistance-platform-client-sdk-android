@@ -6,24 +6,22 @@ import java.util.List;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DaoSession;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbNews;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbNewsDao;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.CommonDaoImpl;
 
 /**
  * @author Wladimir Schmidt (wlsc.dev@gmail.com)
  * @date 30.10.2015
  */
-public class NewsDaoImpl implements NewsDao {
+public class NewsDaoImpl extends
+        CommonDaoImpl<DbNews> implements
+        NewsDao {
 
     private static final String TAG = NewsDaoImpl.class.getSimpleName();
 
     private static NewsDao INSTANCE;
 
-    private DbNewsDao dao;
-
     private NewsDaoImpl(DaoSession daoSession) {
-
-        if (dao == null) {
-            dao = daoSession.getDbNewsDao();
-        }
+        super(daoSession.getDbNewsDao());
     }
 
     public static NewsDao getInstance(DaoSession mDaoSession) {
@@ -42,10 +40,10 @@ public class NewsDaoImpl implements NewsDao {
      * @return
      */
     @Override
-    public List<DbNews> getNews(Long userId) {
+    public List<DbNews> get(Long userId) {
 
         if (userId == null) {
-            return Collections.EMPTY_LIST;
+            return Collections.emptyList();
         }
 
         return dao
@@ -56,12 +54,17 @@ public class NewsDaoImpl implements NewsDao {
     }
 
     @Override
-    public void delete(List<DbNews> dbItems) {
+    public List<DbNews> getLastN(int amount) {
 
-        if (dbItems == null || dbItems.isEmpty()) {
-            return;
+        if (amount <= 0) {
+            return Collections.emptyList();
         }
 
-        dao.deleteInTx(dbItems);
+        return dao
+                .queryBuilder()
+                .orderDesc(DbNewsDao.Properties.Id)
+                .limit(amount)
+                .build()
+                .list();
     }
 }

@@ -1,22 +1,15 @@
 package de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.user;
 
-import java.util.List;
-
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbUser;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.CommonDao;
 
 /**
  * @author Wladimir Schmidt (wlsc.dev@gmail.com)
  * @date 30.10.2015
  */
-public interface UserDao {
+public interface UserDao extends CommonDao<DbUser> {
 
-    DbUser getUserByEmail(String userEmail);
+    DbUser getByEmail(String email);
 
-    DbUser getUserByToken(String userToken);
-
-    long insertUser(DbUser user);
-
-    void updateUser(DbUser user);
-
-    void delete(List<DbUser> dbItems);
+    DbUser getByToken(String token);
 }

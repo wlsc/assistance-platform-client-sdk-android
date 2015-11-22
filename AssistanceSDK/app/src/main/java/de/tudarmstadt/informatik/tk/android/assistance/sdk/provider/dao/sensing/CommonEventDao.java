@@ -2,24 +2,16 @@ package de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing
 
 import java.util.List;
 
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.interfaces.IDbSensor;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.SensorDto;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.CommonDao;
 
 /**
  * @author Wladimir Schmidt (wlsc.dev@gmail.com)
  * @date 30.10.2015
  */
-public interface CommonEventDao {
+public interface CommonEventDao<T> extends CommonDao<T> {
 
-    List<? extends IDbSensor> getAll();
+    SensorDto convertObject(T sensor);
 
-    List<? extends IDbSensor> getFirstN(int amount);
-
-    List<? extends IDbSensor> getLastN(int amount);
-
-    long insert(IDbSensor sensor);
-
-    void delete(List<? extends IDbSensor> events);
-
-    List<SensorDto> convertObjects(List<? extends IDbSensor> dbSensors);
+    List<SensorDto> convertObjects(List<T> dbSensors);
 }

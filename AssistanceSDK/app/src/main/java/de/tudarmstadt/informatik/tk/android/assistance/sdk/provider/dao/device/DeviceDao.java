@@ -1,18 +1,16 @@
 package de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.device;
 
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbDevice;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.CommonDao;
 
 /**
  * @author Wladimir Schmidt (wlsc.dev@gmail.com)
  * @date 30.10.2015
  */
-public interface DeviceDao {
+public interface DeviceDao extends CommonDao<DbDevice> {
 
-    DbDevice getDeviceById(long deviceId);
-
-    long insertDevice(DbDevice device);
-
-    void updateDevice(DbDevice device);
+    DbDevice getById(long deviceId);
 
     boolean saveRegistrationTokenToDb(String registrationToken, long userId, long serverDeviceId);
+    
 }

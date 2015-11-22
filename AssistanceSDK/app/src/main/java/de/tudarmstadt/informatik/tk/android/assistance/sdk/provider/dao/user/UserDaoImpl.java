@@ -1,28 +1,27 @@
 package de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.user;
 
+import java.util.Collections;
 import java.util.List;
 
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DaoSession;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbUser;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbUserDao;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.CommonDaoImpl;
 
 /**
  * @author Wladimir Schmidt (wlsc.dev@gmail.com)
  * @date 29.10.2015
  */
-public class UserDaoImpl implements UserDao {
+public class UserDaoImpl extends
+        CommonDaoImpl<DbUser> implements
+        UserDao {
 
     private static final String TAG = UserDaoImpl.class.getSimpleName();
 
     private static UserDao INSTANCE;
 
-    private DbUserDao dao;
-
     private UserDaoImpl(DaoSession daoSession) {
-
-        if (dao == null) {
-            dao = daoSession.getDbUserDao();
-        }
+        super(daoSession.getDbUserDao());
     }
 
     public static UserDao getInstance(DaoSession mDaoSession) {
@@ -37,19 +36,19 @@ public class UserDaoImpl implements UserDao {
     /**
      * Returns db user by email
      *
-     * @param userEmail
+     * @param email
      * @return
      */
     @Override
-    public DbUser getUserByEmail(String userEmail) {
+    public DbUser getByEmail(String email) {
 
-        if (userEmail == null) {
+        if (email == null) {
             return null;
         }
 
         return dao
                 .queryBuilder()
-                .where(DbUserDao.Properties.PrimaryEmail.eq(userEmail))
+                .where(DbUserDao.Properties.PrimaryEmail.eq(email))
                 .limit(1)
                 .build()
                 .unique();
@@ -58,62 +57,36 @@ public class UserDaoImpl implements UserDao {
     /**
      * Returns db user by registered token
      *
-     * @param userToken
+     * @param token
      * @return
      */
     @Override
-    public DbUser getUserByToken(String userToken) {
+    public DbUser getByToken(String token) {
 
-        if (userToken == null) {
+        if (token == null) {
             return null;
         }
 
         return dao
                 .queryBuilder()
-                .where(DbUserDao.Properties.Token.eq(userToken))
+                .where(DbUserDao.Properties.Token.eq(token))
                 .limit(1)
                 .build()
                 .unique();
     }
 
-    /**
-     * Inserts new user
-     *
-     * @return
-     */
     @Override
-    public long insertUser(DbUser user) {
+    public List<DbUser> getLastN(int amount) {
 
-        if (user == null) {
-            return -1l;
+        if (amount <= 0) {
+            return Collections.emptyList();
         }
 
-        return dao.insertOrReplace(user);
+        return dao
+                .queryBuilder()
+                .orderDesc(DbUserDao.Properties.Id)
+                .limit(amount)
+                .build()
+                .list();
     }
-
-    /**
-     * Updates user
-     *
-     * @param user
-     */
-    @Override
-    public void updateUser(DbUser user) {
-
-        if (user == null) {
-            return;
-        }
-
-        dao.update(user);
-    }
-
-    @Override
-    public void delete(List<DbUser> dbItems) {
-
-        if (dbItems == null || dbItems.isEmpty()) {
-            return;
-        }
-
-        dao.deleteInTx(dbItems);
-    }
-
 }

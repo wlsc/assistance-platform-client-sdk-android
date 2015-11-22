@@ -77,7 +77,7 @@ public class ServerCommunicationProvider {
                     // persist registration
                     final String userToken = PreferenceProvider.getInstance(mContext).getUserToken();
 
-                    DbUser user = daoProvider.getUserDao().getUserByToken(userToken);
+                    DbUser user = daoProvider.getUserDao().getByToken(userToken);
 
                     if (user == null) {
                         Log.d(TAG, "No such user found! Token: " + userToken);

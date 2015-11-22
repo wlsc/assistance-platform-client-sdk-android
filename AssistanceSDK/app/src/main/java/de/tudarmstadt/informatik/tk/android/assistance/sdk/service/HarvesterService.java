@@ -109,7 +109,7 @@ public class HarvesterService extends Service implements Callback {
 
         DbUser user = daoProvider
                 .getUserDao()
-                .getUserByToken(userToken);
+                .getByToken(userToken);
 
         if (user == null) {
             Log.d(TAG, "User is null. No point to continue");
@@ -118,7 +118,7 @@ public class HarvesterService extends Service implements Callback {
 
         List<DbModule> activeModules = daoProvider
                 .getModuleDao()
-                .getAllActiveModules(user.getId());
+                .getAllActive(user.getId());
 
         if (activeModules != null && !activeModules.isEmpty()) {
 
