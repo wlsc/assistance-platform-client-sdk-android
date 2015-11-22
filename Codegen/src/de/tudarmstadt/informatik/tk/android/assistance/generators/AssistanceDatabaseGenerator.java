@@ -42,7 +42,7 @@ public class AssistanceDatabaseGenerator {
     user.addStringProperty("token").index();
     user.addStringProperty("firstname");
     user.addStringProperty("lastname");
-    user.addStringProperty("primaryEmail").notNull();
+    user.addStringProperty("primaryEmail").notNull().index();
     user.addStringProperty("userpicFilename");
     user.addStringProperty("lastLogin");
     user.addStringProperty("joinedSince");
@@ -82,7 +82,7 @@ public class AssistanceDatabaseGenerator {
     device.addToOne(user, deviceFKUserProperty);
     user.addToMany(device, deviceFKUserProperty);
 
-    // ----- Module availability scheme -----
+    // ----- Module installation scheme -----
     Entity module = schema.addEntity("DbModule");
     module.setTableName("module");
     module.addIdProperty().autoincrement().index();
@@ -93,7 +93,7 @@ public class AssistanceDatabaseGenerator {
     module.addStringProperty("descriptionFull");
     module.addStringProperty("copyright");
     module.addStringProperty("supportEmail");
-    module.addBooleanProperty("active").notNull();
+    module.addBooleanProperty("active").notNull().index();
     module.addStringProperty("created").notNull();
 
     Property moduleFKUserProperty = module.addLongProperty("userId").index().getProperty();
@@ -508,7 +508,7 @@ public class AssistanceDatabaseGenerator {
     contactMailEvent.addToOne(contactEvent, contactNumberfkContactEvent);
     contactEvent.addToMany(contactMailEvent, contactNumberfkContactEvent);
     
-    // ----- Power Status Event -----
+    // ----- Power State Event -----
     Entity powerStatusEvent = schema.addEntity("DbPowerStateEvent");
     powerStatusEvent.setTableName("power_state_event");
     powerStatusEvent.addIdProperty().autoincrement().index();

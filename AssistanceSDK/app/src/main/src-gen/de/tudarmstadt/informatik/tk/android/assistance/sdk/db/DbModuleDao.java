@@ -74,6 +74,8 @@ public class DbModuleDao extends AbstractDao<DbModule, Long> {
                 " (\"_id\");");
         db.execSQL("CREATE INDEX " + constraint + "IDX_module_PACKAGE_NAME ON module" +
                 " (\"PACKAGE_NAME\");");
+        db.execSQL("CREATE INDEX " + constraint + "IDX_module_ACTIVE ON module" +
+                " (\"ACTIVE\");");
         db.execSQL("CREATE INDEX " + constraint + "IDX_module_USER_ID ON module" +
                 " (\"USER_ID\");");
     }

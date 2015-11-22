@@ -64,6 +64,8 @@ public class DbUserDao extends AbstractDao<DbUser, Long> {
                 " (\"_id\");");
         db.execSQL("CREATE INDEX " + constraint + "IDX_user_TOKEN ON user" +
                 " (\"TOKEN\");");
+        db.execSQL("CREATE INDEX " + constraint + "IDX_user_PRIMARY_EMAIL ON user" +
+                " (\"PRIMARY_EMAIL\");");
     }
 
     /** Drops the underlying database table. */
