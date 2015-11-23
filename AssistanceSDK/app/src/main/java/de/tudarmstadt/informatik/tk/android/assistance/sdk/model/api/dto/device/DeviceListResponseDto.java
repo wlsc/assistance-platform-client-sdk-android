@@ -1,4 +1,4 @@
-package de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.device;
+package de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.device;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
@@ -7,7 +7,7 @@ import com.google.gson.annotations.SerializedName;
  * @author Wladimir Schmidt (wlsc.dev@gmail.com)
  * @date 13.09.2015
  */
-public class DeviceListResponse {
+public class DeviceListResponseDto {
 
     @SerializedName("id")
     @Expose
@@ -49,10 +49,10 @@ public class DeviceListResponse {
     @Expose
     private String deviceIdentifier;
 
-    public DeviceListResponse() {
+    public DeviceListResponseDto() {
     }
 
-    public DeviceListResponse(Long id, Long userId, String brand, String model, String messagingRegistrationId, String userDefinedName, Long lastUsage, String os, String osVersion, String deviceIdentifier) {
+    public DeviceListResponseDto(Long id, Long userId, String brand, String model, String messagingRegistrationId, String userDefinedName, Long lastUsage, String os, String osVersion, String deviceIdentifier) {
         this.id = id;
         this.userId = userId;
         this.brand = brand;
@@ -147,7 +147,7 @@ public class DeviceListResponse {
 
     @Override
     public String toString() {
-        return "DeviceListResponse{" +
+        return "DeviceListResponseDto{" +
                 "id=" + id +
                 ", userId=" + userId +
                 ", brand='" + brand + '\'' +

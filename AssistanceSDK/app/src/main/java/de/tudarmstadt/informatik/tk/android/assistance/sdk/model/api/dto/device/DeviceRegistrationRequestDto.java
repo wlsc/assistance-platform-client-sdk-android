@@ -1,4 +1,4 @@
-package de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.device;
+package de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.device;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
@@ -7,7 +7,7 @@ import com.google.gson.annotations.SerializedName;
  * @author Wladimir Schmidt (wlsc.dev@gmail.com)
  * @date 13.09.2015
  */
-public class DeviceRegistrationRequest {
+public class DeviceRegistrationRequestDto {
 
     @SerializedName("device_id")
     @Expose
@@ -17,10 +17,10 @@ public class DeviceRegistrationRequest {
     @Expose
     private String registrationToken;
 
-    public DeviceRegistrationRequest() {
+    public DeviceRegistrationRequestDto() {
     }
 
-    public DeviceRegistrationRequest(Long deviceId, String registrationToken) {
+    public DeviceRegistrationRequestDto(Long deviceId, String registrationToken) {
         this.deviceId = deviceId;
         this.registrationToken = registrationToken;
     }
@@ -43,7 +43,7 @@ public class DeviceRegistrationRequest {
 
     @Override
     public String toString() {
-        return "DeviceRegistrationRequest{" +
+        return "DeviceRegistrationRequestDto{" +
                 "deviceId=" + deviceId +
                 ", registrationToken='" + registrationToken + '\'' +
                 '}';

@@ -1,4 +1,4 @@
-package de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api;
+package de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.sensing;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
@@ -13,7 +13,7 @@ import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.SensorD
  * @author Wladimir Schmidt (wlsc.dev@gmail.com)
  * @date 18.09.2015
  */
-public class EventUploadRequest {
+public class EventUploadRequestDto {
 
     @SerializedName("device_id")
     @Expose
@@ -23,10 +23,10 @@ public class EventUploadRequest {
     @Expose
     private List<SensorDto> dataEvents;
 
-    public EventUploadRequest() {
+    public EventUploadRequestDto() {
     }
 
-    public EventUploadRequest(Long serverDeviceId, List<SensorDto> dataEvents) {
+    public EventUploadRequestDto(Long serverDeviceId, List<SensorDto> dataEvents) {
         this.serverDeviceId = serverDeviceId;
         this.dataEvents = dataEvents;
     }
@@ -49,7 +49,7 @@ public class EventUploadRequest {
 
     @Override
     public String toString() {
-        return "EventUploadRequest{" +
+        return "EventUploadRequestDto{" +
                 "serverDeviceId=" + serverDeviceId +
                 ", dataEvents=" + dataEvents +
                 '}';

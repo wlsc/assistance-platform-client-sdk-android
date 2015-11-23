@@ -4,7 +4,7 @@ import android.content.Context;
 import android.util.Log;
 
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbUser;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.device.DeviceRegistrationRequest;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.device.DeviceRegistrationRequestDto;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.endpoint.DeviceEndpoint;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.endpoint.EndpointGenerator;
 import retrofit.Callback;
@@ -61,7 +61,7 @@ public class ServerCommunicationProvider {
         final String userToken = PreferenceProvider.getInstance(mContext).getUserToken();
         final long serverDeviceId = PreferenceProvider.getInstance(mContext).getServerDeviceId();
 
-        DeviceRegistrationRequest deviceRegistrationRequest = new DeviceRegistrationRequest();
+        DeviceRegistrationRequestDto deviceRegistrationRequest = new DeviceRegistrationRequestDto();
 
         deviceRegistrationRequest.setDeviceId(serverDeviceId);
         deviceRegistrationRequest.setRegistrationToken(registrationToken);

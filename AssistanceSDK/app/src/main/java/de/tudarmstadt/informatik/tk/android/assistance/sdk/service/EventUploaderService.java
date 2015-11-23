@@ -22,7 +22,7 @@ import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbAccelerometerSen
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbForegroundEvent;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbMotionActivityEvent;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbPositionSensor;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.EventUploadRequest;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.sensing.EventUploadRequestDto;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.DtoType;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.SensorDto;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.endpoint.EndpointGenerator;
@@ -184,7 +184,7 @@ public class EventUploaderService extends GcmTaskService {
 
                                 Log.d(TAG, "Sending data in normal mode");
 
-                                EventUploadRequest eventUploadRequest = new EventUploadRequest();
+                                EventUploadRequestDto eventUploadRequest = new EventUploadRequestDto();
                                 eventUploadRequest.setDataEvents(eventsAsList);
                                 eventUploadRequest.setServerDeviceId(serverDeviceId);
 
@@ -217,7 +217,7 @@ public class EventUploaderService extends GcmTaskService {
                                                     .subList(finalCounter * EVENTS_NUMBER_TO_SPLIT_AFTER,
                                                             finalLastElementIndex);
 
-                                            EventUploadRequest eventUploadRequest = new EventUploadRequest();
+                                            EventUploadRequestDto eventUploadRequest = new EventUploadRequestDto();
                                             eventUploadRequest.setDataEvents(tmpSensors);
                                             eventUploadRequest.setServerDeviceId(serverDeviceId);
 
@@ -273,7 +273,7 @@ public class EventUploaderService extends GcmTaskService {
 
                         Log.d(TAG, "Sending data in normal mode");
 
-                        EventUploadRequest eventUploadRequest = new EventUploadRequest();
+                        EventUploadRequestDto eventUploadRequest = new EventUploadRequestDto();
                         eventUploadRequest.setDataEvents(eventsAsList);
                         eventUploadRequest.setServerDeviceId(serverDeviceId);
 
@@ -306,7 +306,7 @@ public class EventUploaderService extends GcmTaskService {
                                             .subList(finalCounter * EVENTS_NUMBER_TO_SPLIT_AFTER,
                                                     finalLastElementIndex);
 
-                                    EventUploadRequest eventUploadRequest = new EventUploadRequest();
+                                    EventUploadRequestDto eventUploadRequest = new EventUploadRequestDto();
                                     eventUploadRequest.setDataEvents(tmpSensors);
                                     eventUploadRequest.setServerDeviceId(serverDeviceId);
 
@@ -327,7 +327,7 @@ public class EventUploaderService extends GcmTaskService {
      *
      * @param eventUploadRequest
      */
-    private void doUploadEventData(final EventUploadRequest eventUploadRequest) {
+    private void doUploadEventData(final EventUploadRequestDto eventUploadRequest) {
 
         Log.d(TAG, "Uploading data...");
 
