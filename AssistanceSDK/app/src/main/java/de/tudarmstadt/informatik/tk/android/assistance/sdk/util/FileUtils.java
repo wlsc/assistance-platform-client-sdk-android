@@ -24,10 +24,7 @@ public class FileUtils {
      */
     public static boolean isExternalStorageWritable() {
         String state = Environment.getExternalStorageState();
-        if (Environment.MEDIA_MOUNTED.equals(state)) {
-            return true;
-        }
-        return false;
+        return Environment.MEDIA_MOUNTED.equals(state);
     }
 
     public static File getPrivateFilesDir(Context context) {
@@ -88,7 +85,7 @@ public class FileUtils {
         try {
 
             fileInputStream = new FileInputStream(file);
-            StringBuffer sb = new StringBuffer();
+            StringBuilder sb = new StringBuilder();
             int read = -1;
 
             while ((read = fileInputStream.read()) != -1) {
