@@ -7,7 +7,7 @@ import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DaoSession;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbWifiConnectionEvent;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbWifiConnectionEventDao;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.DtoType;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.event.WifiConnectionEventDto;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.sensing.event.WifiConnectionEventDto;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.CommonEventDaoImpl;
 
 /**

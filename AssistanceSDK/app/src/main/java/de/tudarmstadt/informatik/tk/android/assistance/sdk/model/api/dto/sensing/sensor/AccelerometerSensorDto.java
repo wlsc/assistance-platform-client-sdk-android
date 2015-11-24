@@ -1,4 +1,4 @@
-package de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.sensor;
+package de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.sensing.sensor;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;

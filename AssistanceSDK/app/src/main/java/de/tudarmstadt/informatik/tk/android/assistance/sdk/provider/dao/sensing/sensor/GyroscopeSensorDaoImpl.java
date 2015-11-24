@@ -7,7 +7,7 @@ import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DaoSession;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbGyroscopeSensor;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbGyroscopeSensorDao;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.DtoType;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.sensor.GyroscopeSensorDto;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.sensing.sensor.GyroscopeSensorDto;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.CommonEventDaoImpl;
 
 /**

@@ -1,4 +1,4 @@
-package de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.event;
+package de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.sensing.event;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
@@ -10,13 +10,17 @@ import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.SensorD
  * @author Wladimir Schmidt (wlsc.dev@gmail.com)
  * @date 30.08.2015
  */
-public class LoudnessEventDto implements SensorDto {
+public class ConnectionEventDto implements SensorDto {
 
     private Long id;
 
-    @SerializedName("loudness")
+    @SerializedName("isWifi")
     @Expose
-    private float loudness;
+    private boolean wifi;
+
+    @SerializedName("isMobile")
+    @Expose
+    private boolean mobile;
     /**
      * Not-null value.
      */
@@ -30,53 +34,64 @@ public class LoudnessEventDto implements SensorDto {
 
     private int type;
 
-    public LoudnessEventDto() {
-        this.type = DtoType.LOUDNESS;
+    public ConnectionEventDto() {
+        this.type = DtoType.CONNECTION;
         this.typeStr = DtoType.getApiName(this.type);
     }
 
-    public LoudnessEventDto(long id) {
+    public ConnectionEventDto(long id) {
         this.id = id;
-        this.type = DtoType.LOUDNESS;
+        this.type = DtoType.CONNECTION;
         this.typeStr = DtoType.getApiName(this.type);
     }
 
-    public LoudnessEventDto(long id, float loudness, String created) {
+    public ConnectionEventDto(long id, boolean isWifi, boolean isMobile, String created) {
         this.id = id;
-        this.loudness = loudness;
+        this.wifi = isWifi;
+        this.mobile = isMobile;
         this.created = created;
-        this.type = DtoType.LOUDNESS;
+        this.type = DtoType.CONNECTION;
         this.typeStr = DtoType.getApiName(this.type);
     }
 
     public Long getId() {
-        return id;
+        return this.id;
     }
 
     public void setId(Long id) {
         this.id = id;
     }
 
-    public float getLoudness() {
-        return loudness;
+    public boolean isWifi() {
+        return this.wifi;
     }
 
-    public void setLoudness(float loudness) {
-        this.loudness = loudness;
+    public void setIsWifi(boolean isWifi) {
+        this.wifi = isWifi;
     }
 
-    /**
-     * Not-null value.
-     */
+    public boolean isMobile() {
+        return this.mobile;
+    }
+
+    public void setIsMobile(boolean isMobile) {
+        this.mobile = isMobile;
+    }
+
     public String getCreated() {
-        return created;
+        return this.created;
     }
 
-    /**
-     * Not-null value; ensure this value is available before it is saved to the database.
-     */
     public void setCreated(String created) {
         this.created = created;
+    }
+
+    public String getTypeStr() {
+        return this.typeStr;
+    }
+
+    public void setTypeStr(String typeStr) {
+        this.typeStr = typeStr;
     }
 
     @Override
@@ -89,19 +104,12 @@ public class LoudnessEventDto implements SensorDto {
         this.type = type;
     }
 
-    public String getTypeStr() {
-        return this.typeStr;
-    }
-
-    public void setTypeStr(String typeStr) {
-        this.typeStr = typeStr;
-    }
-
     @Override
     public String toString() {
-        return "LoudnessEventRequest{" +
+        return "ConnectionEventRequest{" +
                 "id=" + id +
-                ", loudness=" + loudness +
+                ", wifi=" + wifi +
+                ", mobile=" + mobile +
                 ", created='" + created + '\'' +
                 ", typeStr='" + typeStr + '\'' +
                 ", type=" + type +

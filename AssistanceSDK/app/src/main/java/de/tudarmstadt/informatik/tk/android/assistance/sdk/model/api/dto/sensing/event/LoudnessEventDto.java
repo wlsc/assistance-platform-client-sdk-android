@@ -1,4 +1,4 @@
-package de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.event;
+package de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.sensing.event;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
@@ -8,16 +8,18 @@ import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.SensorD
 
 /**
  * @author Wladimir Schmidt (wlsc.dev@gmail.com)
- * @date 24.11.2015
+ * @date 30.08.2015
  */
-public class AccountReaderEventDto implements SensorDto {
+public class LoudnessEventDto implements SensorDto {
 
     private Long id;
 
-    @SerializedName("types")
+    @SerializedName("loudness")
     @Expose
-    private String types;
-
+    private float loudness;
+    /**
+     * Not-null value.
+     */
     @SerializedName("created")
     @Expose
     private String created;
@@ -28,22 +30,22 @@ public class AccountReaderEventDto implements SensorDto {
 
     private int type;
 
-    public AccountReaderEventDto() {
-        this.type = DtoType.ACCOUNT_READER;
+    public LoudnessEventDto() {
+        this.type = DtoType.LOUDNESS;
         this.typeStr = DtoType.getApiName(this.type);
     }
 
-    public AccountReaderEventDto(Long id) {
+    public LoudnessEventDto(long id) {
         this.id = id;
-        this.type = DtoType.ACCOUNT_READER;
+        this.type = DtoType.LOUDNESS;
         this.typeStr = DtoType.getApiName(this.type);
     }
 
-    public AccountReaderEventDto(Long id, String types, String created) {
+    public LoudnessEventDto(long id, float loudness, String created) {
         this.id = id;
-        this.types = types;
+        this.loudness = loudness;
         this.created = created;
-        this.type = DtoType.ACCOUNT_READER;
+        this.type = DtoType.LOUDNESS;
         this.typeStr = DtoType.getApiName(this.type);
     }
 
@@ -55,33 +57,31 @@ public class AccountReaderEventDto implements SensorDto {
         this.id = id;
     }
 
-    public String getTypes() {
-        return types;
+    public float getLoudness() {
+        return loudness;
     }
 
-    public void setTypes(String types) {
-        this.types = types;
+    public void setLoudness(float loudness) {
+        this.loudness = loudness;
     }
 
+    /**
+     * Not-null value.
+     */
     public String getCreated() {
         return created;
     }
 
+    /**
+     * Not-null value; ensure this value is available before it is saved to the database.
+     */
     public void setCreated(String created) {
         this.created = created;
     }
 
-    public String getTypeStr() {
-        return typeStr;
-    }
-
-    public void setTypeStr(String typeStr) {
-        this.typeStr = typeStr;
-    }
-
     @Override
     public int getType() {
-        return this.type;
+        return type;
     }
 
     @Override
@@ -89,11 +89,19 @@ public class AccountReaderEventDto implements SensorDto {
         this.type = type;
     }
 
+    public String getTypeStr() {
+        return this.typeStr;
+    }
+
+    public void setTypeStr(String typeStr) {
+        this.typeStr = typeStr;
+    }
+
     @Override
     public String toString() {
-        return "AccountReaderEventDto{" +
+        return "LoudnessEventRequest{" +
                 "id=" + id +
-                ", types='" + types + '\'' +
+                ", loudness=" + loudness +
                 ", created='" + created + '\'' +
                 ", typeStr='" + typeStr + '\'' +
                 ", type=" + type +

@@ -7,7 +7,7 @@ import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DaoSession;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbLightSensor;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbLightSensorDao;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.DtoType;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.sensor.LightSensorDto;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.sensing.sensor.LightSensorDto;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.CommonEventDaoImpl;
 
 /**

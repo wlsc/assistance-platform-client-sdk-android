@@ -1,4 +1,4 @@
-package de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.event;
+package de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.sensing.sensor;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
@@ -7,23 +7,23 @@ import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.DtoType
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.SensorDto;
 
 /**
+ * Light sensor request DTO
+ *
  * @author Wladimir Schmidt (wlsc.dev@gmail.com)
- * @date 30.08.2015
+ * @date 25.10.2015
  */
-public class ConnectionEventDto implements SensorDto {
+public class LightSensorDto implements SensorDto {
 
     private Long id;
 
-    @SerializedName("isWifi")
+    @SerializedName("value")
     @Expose
-    private boolean wifi;
+    private Float value;
 
-    @SerializedName("isMobile")
+    @SerializedName("accuracy")
     @Expose
-    private boolean mobile;
-    /**
-     * Not-null value.
-     */
+    private Integer accuracy;
+
     @SerializedName("created")
     @Expose
     private String created;
@@ -34,23 +34,25 @@ public class ConnectionEventDto implements SensorDto {
 
     private int type;
 
-    public ConnectionEventDto() {
-        this.type = DtoType.CONNECTION;
+    public LightSensorDto() {
+        this.type = DtoType.LIGHT;
         this.typeStr = DtoType.getApiName(this.type);
     }
 
-    public ConnectionEventDto(long id) {
+    public LightSensorDto(Long id) {
         this.id = id;
-        this.type = DtoType.CONNECTION;
+        this.type = DtoType.LIGHT;
         this.typeStr = DtoType.getApiName(this.type);
     }
 
-    public ConnectionEventDto(long id, boolean isWifi, boolean isMobile, String created) {
+    public LightSensorDto(Long id, Float value, Integer accuracy, String created, String typeStr, int type) {
         this.id = id;
-        this.wifi = isWifi;
-        this.mobile = isMobile;
+        this.value = value;
+        this.accuracy = accuracy;
         this.created = created;
-        this.type = DtoType.CONNECTION;
+        this.typeStr = typeStr;
+        this.type = type;
+        this.type = DtoType.LIGHT;
         this.typeStr = DtoType.getApiName(this.type);
     }
 
@@ -62,20 +64,20 @@ public class ConnectionEventDto implements SensorDto {
         this.id = id;
     }
 
-    public boolean isWifi() {
-        return this.wifi;
+    public Float getValue() {
+        return this.value;
     }
 
-    public void setIsWifi(boolean isWifi) {
-        this.wifi = isWifi;
+    public void setValue(Float value) {
+        this.value = value;
     }
 
-    public boolean isMobile() {
-        return this.mobile;
+    public Integer getAccuracy() {
+        return this.accuracy;
     }
 
-    public void setIsMobile(boolean isMobile) {
-        this.mobile = isMobile;
+    public void setAccuracy(Integer accuracy) {
+        this.accuracy = accuracy;
     }
 
     public String getCreated() {
@@ -96,7 +98,7 @@ public class ConnectionEventDto implements SensorDto {
 
     @Override
     public int getType() {
-        return type;
+        return this.type;
     }
 
     @Override
@@ -106,10 +108,10 @@ public class ConnectionEventDto implements SensorDto {
 
     @Override
     public String toString() {
-        return "ConnectionEventRequest{" +
+        return "LightSensorRequest{" +
                 "id=" + id +
-                ", wifi=" + wifi +
-                ", mobile=" + mobile +
+                ", value=" + value +
+                ", accuracy=" + accuracy +
                 ", created='" + created + '\'' +
                 ", typeStr='" + typeStr + '\'' +
                 ", type=" + type +

@@ -1,4 +1,4 @@
-package de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.sensor;
+package de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.sensing.event;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
@@ -7,22 +7,16 @@ import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.DtoType
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.SensorDto;
 
 /**
- * Light sensor request DTO
- *
  * @author Wladimir Schmidt (wlsc.dev@gmail.com)
- * @date 25.10.2015
+ * @date 24.11.2015
  */
-public class LightSensorDto implements SensorDto {
+public class AccountReaderEventDto implements SensorDto {
 
     private Long id;
 
-    @SerializedName("value")
+    @SerializedName("types")
     @Expose
-    private Float value;
-
-    @SerializedName("accuracy")
-    @Expose
-    private Integer accuracy;
+    private String types;
 
     @SerializedName("created")
     @Expose
@@ -34,54 +28,43 @@ public class LightSensorDto implements SensorDto {
 
     private int type;
 
-    public LightSensorDto() {
-        this.type = DtoType.LIGHT;
+    public AccountReaderEventDto() {
+        this.type = DtoType.ACCOUNT_READER;
         this.typeStr = DtoType.getApiName(this.type);
     }
 
-    public LightSensorDto(Long id) {
+    public AccountReaderEventDto(Long id) {
         this.id = id;
-        this.type = DtoType.LIGHT;
+        this.type = DtoType.ACCOUNT_READER;
         this.typeStr = DtoType.getApiName(this.type);
     }
 
-    public LightSensorDto(Long id, Float value, Integer accuracy, String created, String typeStr, int type) {
+    public AccountReaderEventDto(Long id, String types, String created) {
         this.id = id;
-        this.value = value;
-        this.accuracy = accuracy;
+        this.types = types;
         this.created = created;
-        this.typeStr = typeStr;
-        this.type = type;
-        this.type = DtoType.LIGHT;
+        this.type = DtoType.ACCOUNT_READER;
         this.typeStr = DtoType.getApiName(this.type);
     }
 
     public Long getId() {
-        return this.id;
+        return id;
     }
 
     public void setId(Long id) {
         this.id = id;
     }
 
-    public Float getValue() {
-        return this.value;
+    public String getTypes() {
+        return types;
     }
 
-    public void setValue(Float value) {
-        this.value = value;
-    }
-
-    public Integer getAccuracy() {
-        return this.accuracy;
-    }
-
-    public void setAccuracy(Integer accuracy) {
-        this.accuracy = accuracy;
+    public void setTypes(String types) {
+        this.types = types;
     }
 
     public String getCreated() {
-        return this.created;
+        return created;
     }
 
     public void setCreated(String created) {
@@ -89,7 +72,7 @@ public class LightSensorDto implements SensorDto {
     }
 
     public String getTypeStr() {
-        return this.typeStr;
+        return typeStr;
     }
 
     public void setTypeStr(String typeStr) {
@@ -108,10 +91,9 @@ public class LightSensorDto implements SensorDto {
 
     @Override
     public String toString() {
-        return "LightSensorRequest{" +
+        return "AccountReaderEventDto{" +
                 "id=" + id +
-                ", value=" + value +
-                ", accuracy=" + accuracy +
+                ", types='" + types + '\'' +
                 ", created='" + created + '\'' +
                 ", typeStr='" + typeStr + '\'' +
                 ", type=" + type +

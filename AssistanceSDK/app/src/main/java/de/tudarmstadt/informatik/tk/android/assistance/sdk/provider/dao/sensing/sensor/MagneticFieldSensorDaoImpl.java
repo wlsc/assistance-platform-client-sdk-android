@@ -7,7 +7,7 @@ import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DaoSession;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbMagneticFieldSensor;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbMagneticFieldSensorDao;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.DtoType;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.sensor.MagneticFieldSensorDto;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.sensing.sensor.MagneticFieldSensorDto;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.CommonEventDaoImpl;
 
 /**

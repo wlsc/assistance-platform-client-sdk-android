@@ -1,4 +1,4 @@
-package de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.event;
+package de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.sensing.event;
 
 
 import com.google.gson.annotations.Expose;

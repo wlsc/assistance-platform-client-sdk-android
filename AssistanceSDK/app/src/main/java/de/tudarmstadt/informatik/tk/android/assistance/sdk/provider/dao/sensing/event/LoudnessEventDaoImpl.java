@@ -8,7 +8,7 @@ import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbLoudnessEvent;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbLoudnessEventDao;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.DtoType;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.SensorDto;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.event.LoudnessEventDto;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.sensing.event.LoudnessEventDto;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.CommonEventDaoImpl;
 
 /**

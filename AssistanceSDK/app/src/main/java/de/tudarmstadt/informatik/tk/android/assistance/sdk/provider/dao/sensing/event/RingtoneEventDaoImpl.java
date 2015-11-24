@@ -8,7 +8,7 @@ import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbRingtoneEvent;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbRingtoneEventDao;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.DtoType;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.SensorDto;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.event.RingtoneEventDto;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.sensing.event.RingtoneEventDto;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.CommonEventDaoImpl;
 
 /**
