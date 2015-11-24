@@ -19,7 +19,7 @@ public class BrowserHistoryEventDaoImpl extends
         CommonEventDaoImpl<DbBrowserHistoryEvent> implements
         BrowserHistoryEventDao {
 
-    private static final String TAG = AccountReaderEventDaoImpl.class.getSimpleName();
+    private static final String TAG = BrowserHistoryEventDaoImpl.class.getSimpleName();
 
     private static BrowserHistoryEventDao INSTANCE;
 
