@@ -46,6 +46,7 @@ public class ContactNumberEventDaoImpl extends
         ContactNumberEventDto result = new ContactNumberEventDto();
 
         result.setId(sensor.getId());
+        result.setNumberId(sensor.getNumberId());
         result.setEventType(sensor.getType());
         result.setNumber(sensor.getNumber());
         result.setIsNew(sensor.getIsNew());

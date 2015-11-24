@@ -480,6 +480,7 @@ public class AssistanceDatabaseGenerator {
     contactNumbersEvent.setTableName("contact_number_event");
     contactNumbersEvent.addIdProperty().autoincrement().index();
     contactNumbersEvent.implementsInterface(Config.ASSISTANCE_PACKAGE_UPDATABLE_SENSOR);
+    contactNumbersEvent.addLongProperty("numberId");
     contactNumbersEvent.addStringProperty("type");
     contactNumbersEvent.addStringProperty("number");
     contactNumbersEvent.addBooleanProperty("isNew");
@@ -497,6 +498,7 @@ public class AssistanceDatabaseGenerator {
     contactMailEvent.setTableName("contact_email_event");
     contactMailEvent.addIdProperty().autoincrement().index();
     contactMailEvent.implementsInterface(Config.ASSISTANCE_PACKAGE_UPDATABLE_SENSOR);
+    contactMailEvent.addLongProperty("mailId");
     contactMailEvent.addStringProperty("address");
     contactMailEvent.addStringProperty("type");
     contactMailEvent.addBooleanProperty("isNew");

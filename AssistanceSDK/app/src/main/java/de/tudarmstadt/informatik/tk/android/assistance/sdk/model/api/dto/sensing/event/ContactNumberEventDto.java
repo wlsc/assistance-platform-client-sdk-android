@@ -18,6 +18,10 @@ public class ContactNumberEventDto implements SensorDto {
     @Expose
     private Long contactId;
 
+    @SerializedName("numberId")
+    @Expose
+    private Long numberId;
+
     @SerializedName("eventType")
     @Expose
     private String eventType;
@@ -59,9 +63,10 @@ public class ContactNumberEventDto implements SensorDto {
         this.typeStr = DtoType.getApiName(this.type);
     }
 
-    public ContactNumberEventDto(Long id, Long contactId, String eventType, String number, Boolean isNew, Boolean isUpdated, Boolean isDeleted, String created) {
+    public ContactNumberEventDto(Long id, Long contactId, Long numberId, String eventType, String number, Boolean isNew, Boolean isUpdated, Boolean isDeleted, String created) {
         this.id = id;
         this.contactId = contactId;
+        this.numberId = numberId;
         this.eventType = eventType;
         this.number = number;
         this.isNew = isNew;
@@ -86,6 +91,14 @@ public class ContactNumberEventDto implements SensorDto {
 
     public void setContactId(Long contactId) {
         this.contactId = contactId;
+    }
+
+    public Long getNumberId() {
+        return numberId;
+    }
+
+    public void setNumberId(Long numberId) {
+        this.numberId = numberId;
     }
 
     public String getEventType() {
@@ -159,6 +172,7 @@ public class ContactNumberEventDto implements SensorDto {
         return "ContactNumberEventDto{" +
                 "id=" + id +
                 ", contactId=" + contactId +
+                ", numberId=" + numberId +
                 ", eventType='" + eventType + '\'' +
                 ", number='" + number + '\'' +
                 ", isNew=" + isNew +

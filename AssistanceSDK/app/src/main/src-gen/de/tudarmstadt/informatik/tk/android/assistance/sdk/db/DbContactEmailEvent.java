@@ -10,6 +10,7 @@ import de.greenrobot.dao.DaoException;
 public class DbContactEmailEvent implements de.tudarmstadt.informatik.tk.android.assistance.sdk.interfaces.IDbUpdatableSensor {
 
     private Long id;
+    private Long mailId;
     private String address;
     private String type;
     private Boolean isNew;
@@ -36,8 +37,9 @@ public class DbContactEmailEvent implements de.tudarmstadt.informatik.tk.android
         this.id = id;
     }
 
-    public DbContactEmailEvent(Long id, String address, String type, Boolean isNew, Boolean isUpdated, Boolean isDeleted, String created, Long contactId) {
+    public DbContactEmailEvent(Long id, Long mailId, String address, String type, Boolean isNew, Boolean isUpdated, Boolean isDeleted, String created, Long contactId) {
         this.id = id;
+        this.mailId = mailId;
         this.address = address;
         this.type = type;
         this.isNew = isNew;
@@ -59,6 +61,14 @@ public class DbContactEmailEvent implements de.tudarmstadt.informatik.tk.android
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Long getMailId() {
+        return mailId;
+    }
+
+    public void setMailId(Long mailId) {
+        this.mailId = mailId;
     }
 
     public String getAddress() {

@@ -29,13 +29,14 @@ public class DbContactEmailEventDao extends AbstractDao<DbContactEmailEvent, Lon
     */
     public static class Properties {
         public final static Property Id = new Property(0, Long.class, "id", true, "_id");
-        public final static Property Address = new Property(1, String.class, "address", false, "ADDRESS");
-        public final static Property Type = new Property(2, String.class, "type", false, "TYPE");
-        public final static Property IsNew = new Property(3, Boolean.class, "isNew", false, "IS_NEW");
-        public final static Property IsUpdated = new Property(4, Boolean.class, "isUpdated", false, "IS_UPDATED");
-        public final static Property IsDeleted = new Property(5, Boolean.class, "isDeleted", false, "IS_DELETED");
-        public final static Property Created = new Property(6, String.class, "created", false, "CREATED");
-        public final static Property ContactId = new Property(7, Long.class, "contactId", false, "CONTACT_ID");
+        public final static Property MailId = new Property(1, Long.class, "mailId", false, "MAIL_ID");
+        public final static Property Address = new Property(2, String.class, "address", false, "ADDRESS");
+        public final static Property Type = new Property(3, String.class, "type", false, "TYPE");
+        public final static Property IsNew = new Property(4, Boolean.class, "isNew", false, "IS_NEW");
+        public final static Property IsUpdated = new Property(5, Boolean.class, "isUpdated", false, "IS_UPDATED");
+        public final static Property IsDeleted = new Property(6, Boolean.class, "isDeleted", false, "IS_DELETED");
+        public final static Property Created = new Property(7, String.class, "created", false, "CREATED");
+        public final static Property ContactId = new Property(8, Long.class, "contactId", false, "CONTACT_ID");
     };
 
     private DaoSession daoSession;
@@ -56,13 +57,14 @@ public class DbContactEmailEventDao extends AbstractDao<DbContactEmailEvent, Lon
         String constraint = ifNotExists? "IF NOT EXISTS ": "";
         db.execSQL("CREATE TABLE " + constraint + "\"contact_email_event\" (" + //
                 "\"_id\" INTEGER PRIMARY KEY AUTOINCREMENT ," + // 0: id
-                "\"ADDRESS\" TEXT," + // 1: address
-                "\"TYPE\" TEXT," + // 2: type
-                "\"IS_NEW\" INTEGER," + // 3: isNew
-                "\"IS_UPDATED\" INTEGER," + // 4: isUpdated
-                "\"IS_DELETED\" INTEGER," + // 5: isDeleted
-                "\"CREATED\" TEXT NOT NULL ," + // 6: created
-                "\"CONTACT_ID\" INTEGER);"); // 7: contactId
+                "\"MAIL_ID\" INTEGER," + // 1: mailId
+                "\"ADDRESS\" TEXT," + // 2: address
+                "\"TYPE\" TEXT," + // 3: type
+                "\"IS_NEW\" INTEGER," + // 4: isNew
+                "\"IS_UPDATED\" INTEGER," + // 5: isUpdated
+                "\"IS_DELETED\" INTEGER," + // 6: isDeleted
+                "\"CREATED\" TEXT NOT NULL ," + // 7: created
+                "\"CONTACT_ID\" INTEGER);"); // 8: contactId
         // Add Indexes
         db.execSQL("CREATE INDEX " + constraint + "IDX_contact_email_event__id ON contact_email_event" +
                 " (\"_id\");");
@@ -86,35 +88,40 @@ public class DbContactEmailEventDao extends AbstractDao<DbContactEmailEvent, Lon
             stmt.bindLong(1, id);
         }
  
+        Long mailId = entity.getMailId();
+        if (mailId != null) {
+            stmt.bindLong(2, mailId);
+        }
+ 
         String address = entity.getAddress();
         if (address != null) {
-            stmt.bindString(2, address);
+            stmt.bindString(3, address);
         }
  
         String type = entity.getType();
         if (type != null) {
-            stmt.bindString(3, type);
+            stmt.bindString(4, type);
         }
  
         Boolean isNew = entity.getIsNew();
         if (isNew != null) {
-            stmt.bindLong(4, isNew ? 1L: 0L);
+            stmt.bindLong(5, isNew ? 1L: 0L);
         }
  
         Boolean isUpdated = entity.getIsUpdated();
         if (isUpdated != null) {
-            stmt.bindLong(5, isUpdated ? 1L: 0L);
+            stmt.bindLong(6, isUpdated ? 1L: 0L);
         }
  
         Boolean isDeleted = entity.getIsDeleted();
         if (isDeleted != null) {
-            stmt.bindLong(6, isDeleted ? 1L: 0L);
+            stmt.bindLong(7, isDeleted ? 1L: 0L);
         }
-        stmt.bindString(7, entity.getCreated());
+        stmt.bindString(8, entity.getCreated());
  
         Long contactId = entity.getContactId();
         if (contactId != null) {
-            stmt.bindLong(8, contactId);
+            stmt.bindLong(9, contactId);
         }
     }
 
@@ -135,13 +142,14 @@ public class DbContactEmailEventDao extends AbstractDao<DbContactEmailEvent, Lon
     public DbContactEmailEvent readEntity(Cursor cursor, int offset) {
         DbContactEmailEvent entity = new DbContactEmailEvent( //
             cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0), // id
-            cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1), // address
-            cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // type
-            cursor.isNull(offset + 3) ? null : cursor.getShort(offset + 3) != 0, // isNew
-            cursor.isNull(offset + 4) ? null : cursor.getShort(offset + 4) != 0, // isUpdated
-            cursor.isNull(offset + 5) ? null : cursor.getShort(offset + 5) != 0, // isDeleted
-            cursor.getString(offset + 6), // created
-            cursor.isNull(offset + 7) ? null : cursor.getLong(offset + 7) // contactId
+            cursor.isNull(offset + 1) ? null : cursor.getLong(offset + 1), // mailId
+            cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // address
+            cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // type
+            cursor.isNull(offset + 4) ? null : cursor.getShort(offset + 4) != 0, // isNew
+            cursor.isNull(offset + 5) ? null : cursor.getShort(offset + 5) != 0, // isUpdated
+            cursor.isNull(offset + 6) ? null : cursor.getShort(offset + 6) != 0, // isDeleted
+            cursor.getString(offset + 7), // created
+            cursor.isNull(offset + 8) ? null : cursor.getLong(offset + 8) // contactId
         );
         return entity;
     }
@@ -150,13 +158,14 @@ public class DbContactEmailEventDao extends AbstractDao<DbContactEmailEvent, Lon
     @Override
     public void readEntity(Cursor cursor, DbContactEmailEvent entity, int offset) {
         entity.setId(cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0));
-        entity.setAddress(cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1));
-        entity.setType(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
-        entity.setIsNew(cursor.isNull(offset + 3) ? null : cursor.getShort(offset + 3) != 0);
-        entity.setIsUpdated(cursor.isNull(offset + 4) ? null : cursor.getShort(offset + 4) != 0);
-        entity.setIsDeleted(cursor.isNull(offset + 5) ? null : cursor.getShort(offset + 5) != 0);
-        entity.setCreated(cursor.getString(offset + 6));
-        entity.setContactId(cursor.isNull(offset + 7) ? null : cursor.getLong(offset + 7));
+        entity.setMailId(cursor.isNull(offset + 1) ? null : cursor.getLong(offset + 1));
+        entity.setAddress(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
+        entity.setType(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
+        entity.setIsNew(cursor.isNull(offset + 4) ? null : cursor.getShort(offset + 4) != 0);
+        entity.setIsUpdated(cursor.isNull(offset + 5) ? null : cursor.getShort(offset + 5) != 0);
+        entity.setIsDeleted(cursor.isNull(offset + 6) ? null : cursor.getShort(offset + 6) != 0);
+        entity.setCreated(cursor.getString(offset + 7));
+        entity.setContactId(cursor.isNull(offset + 8) ? null : cursor.getLong(offset + 8));
      }
     
     /** @inheritdoc */

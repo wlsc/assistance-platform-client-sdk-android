@@ -14,6 +14,14 @@ public class ContactEmailEventDto implements SensorDto {
 
     private Long id;
 
+    @SerializedName("contactId")
+    @Expose
+    private Long contactId;
+
+    @SerializedName("mailId")
+    @Expose
+    private Long mailId;
+
     @SerializedName("address")
     @Expose
     private String address;
@@ -33,10 +41,6 @@ public class ContactEmailEventDto implements SensorDto {
     @SerializedName("isDeleted")
     @Expose
     private Boolean isDeleted;
-
-    @SerializedName("contactId")
-    @Expose
-    private Long contactId;
 
     @SerializedName("created")
     @Expose
@@ -59,8 +63,9 @@ public class ContactEmailEventDto implements SensorDto {
         this.typeStr = DtoType.getApiName(this.type);
     }
 
-    public ContactEmailEventDto(Long id, String address, String eventType, Boolean isNew, Boolean isUpdated, Boolean isDeleted, Long contactId, String created) {
+    public ContactEmailEventDto(Long id, Long mailId, String address, String eventType, Boolean isNew, Boolean isUpdated, Boolean isDeleted, Long contactId, String created) {
         this.id = id;
+        this.mailId = mailId;
         this.address = address;
         this.eventType = eventType;
         this.isNew = isNew;
@@ -78,6 +83,14 @@ public class ContactEmailEventDto implements SensorDto {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Long getMailId() {
+        return mailId;
+    }
+
+    public void setMailId(Long mailId) {
+        this.mailId = mailId;
     }
 
     public String getAddress() {
@@ -158,12 +171,13 @@ public class ContactEmailEventDto implements SensorDto {
     public String toString() {
         return "ContactEmailEventDto{" +
                 "id=" + id +
+                ", contactId=" + contactId +
+                ", mailId=" + mailId +
                 ", address='" + address + '\'' +
                 ", eventType='" + eventType + '\'' +
                 ", isNew=" + isNew +
                 ", isUpdated=" + isUpdated +
                 ", isDeleted=" + isDeleted +
-                ", contactId=" + contactId +
                 ", created='" + created + '\'' +
                 ", typeStr='" + typeStr + '\'' +
                 ", type=" + type +
