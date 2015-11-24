@@ -26,6 +26,8 @@ import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.event.ConnectionEventDaoImpl;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.event.ForegroundEventDao;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.event.ForegroundEventDaoImpl;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.event.LoudnessEventDao;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.event.LoudnessEventDaoImpl;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.event.MobileConnectionEventDao;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.event.MobileConnectionEventDaoImpl;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.event.MotionActivityEventDao;
@@ -191,6 +193,11 @@ public class DaoProvider {
         return LightSensorDaoImpl.getInstance(mDaoSession);
     }
 
+    /**
+     * MagneticFieldSensorDao
+     *
+     * @return
+     */
     public MagneticFieldSensorDao getMagneticFieldSensorDao() {
         return MagneticFieldSensorDaoImpl.getInstance(mDaoSession);
     }
@@ -274,6 +281,15 @@ public class DaoProvider {
      */
     public PowerStateEventDao getPowerStateEventDao() {
         return PowerStateEventDaoImpl.getInstance(mDaoSession);
+    }
+
+    /**
+     * LoudnessEventDao
+     *
+     * @return
+     */
+    public LoudnessEventDao getLoudnessEventDao() {
+        return LoudnessEventDaoImpl.getInstance(mDaoSession);
     }
 
     /**

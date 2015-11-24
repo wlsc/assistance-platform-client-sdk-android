@@ -17,7 +17,11 @@ import java.util.List;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.DtoType;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensing.AbstractPeriodicEvent;
 
-
+/**
+ * @author Unknown
+ * @edited by Wladimir Schmidt (wlsc.dev@gmail.com)
+ * @date 24.11.2015
+ */
 public class LoudnessSensor extends AbstractPeriodicEvent implements Callback {
 
     private static final int INIT_DATA_INTERVALL = 120;
