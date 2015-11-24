@@ -36,13 +36,13 @@ public class ForegroundTrafficEvent extends AbstractTriggeredEvent {
 
     private static String EVENT_SCREEN_OFF = "0";
     private static String EVENT_SCREEN_ON = "1";
-    public static String EVENT_START_KRAKEN = "2";
+    public static String EVENT_START_ASSISTANCE = "2";
 
     private ScreenReceiver mReceiver;
     private AccessibilityEventFilterUtils mEventFilter;
 
-    private ActivityManager m_ActivityManager;
-    private PackageManager m_PackageManager;
+    private ActivityManager mActivityManager;
+    private PackageManager mPackageManager;
 
     private DbForegroundEvent oldEvent;
 
@@ -54,10 +54,13 @@ public class ForegroundTrafficEvent extends AbstractTriggeredEvent {
     public ForegroundTrafficEvent(Context context) {
         super(context);
 
-        mReceiver = new ScreenReceiver();
-        m_ActivityManager = (ActivityManager) this.context.getSystemService(Context.ACTIVITY_SERVICE);
-        m_PackageManager = context.getPackageManager();
-        mEventFilter = new AccessibilityEventFilterUtils(this.context);
+        if (context != null) {
+
+            mReceiver = new ScreenReceiver();
+            mActivityManager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+            mPackageManager = context.getPackageManager();
+            mEventFilter = new AccessibilityEventFilterUtils(context);
+        }
     }
 
     /**
@@ -66,16 +69,29 @@ public class ForegroundTrafficEvent extends AbstractTriggeredEvent {
     @Override
     public void startSensor() {
 
-        IntentFilter filter = new IntentFilter(Intent.ACTION_SCREEN_OFF);
-        filter.addAction(Intent.ACTION_SCREEN_ON);
+        if (!isRunning()) {
 
-        context.registerReceiver(mReceiver, filter);
+            IntentFilter filter = new IntentFilter(Intent.ACTION_SCREEN_OFF);
+            filter.addAction(Intent.ACTION_SCREEN_ON);
 
-        setRunning(true);
+            try {
+
+                if (context != null && mReceiver != null) {
+
+                    context.registerReceiver(mReceiver, filter);
+
+                    setRunning(true);
+                }
+
+            } catch (Exception e) {
+                Log.e(TAG, "Some error: ", e);
+                setRunning(false);
+            }
+        }
     }
 
     /**
-     * Stop the sensor if kraken service is stopping
+     * Stop the sensor if sensing service is stopping
      */
     @Override
     public void stopSensor() {
@@ -173,7 +189,7 @@ public class ForegroundTrafficEvent extends AbstractTriggeredEvent {
 
         networkTrafficEvent.setAppName(event.getPackageName());
 
-        List<ApplicationInfo> packages = m_PackageManager
+        List<ApplicationInfo> packages = mPackageManager
                 .getInstalledApplications(PackageManager.GET_META_DATA);
 
         //find app at installed apps to get uid for TrafficStats
