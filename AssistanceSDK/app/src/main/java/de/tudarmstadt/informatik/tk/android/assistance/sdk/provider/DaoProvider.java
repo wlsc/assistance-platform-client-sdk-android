@@ -52,6 +52,8 @@ import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.event.RunningProcessesEventDaoImpl;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.event.RunningServicesEventDao;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.event.RunningServicesEventDaoImpl;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.event.RunningTasksEventDao;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.event.RunningTasksEventDaoImpl;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.event.WifiConnectionEventDao;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.event.WifiConnectionEventDaoImpl;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.sensor.AccelerometerSensorDao;
@@ -378,6 +380,15 @@ public class DaoProvider {
      */
     public RunningServicesEventDao getRunningServicesEventDao() {
         return RunningServicesEventDaoImpl.getInstance(mDaoSession);
+    }
+
+    /**
+     * RunningTasksEventDao
+     *
+     * @return
+     */
+    public RunningTasksEventDao getRunningTasksEventDao() {
+        return RunningTasksEventDaoImpl.getInstance(mDaoSession);
     }
 
     /**
