@@ -62,6 +62,10 @@ public class DtoType {
 
     public static final int CALENDAR_REMINDER = 25;
 
+    public static final int CONTACT_EMAIL = 26;
+
+    public static final int CONTACT_NUMBER = 27;
+
     private DtoType() {
     }
 
@@ -115,6 +119,10 @@ public class DtoType {
                 return res.getString(R.string.event_running_tasks);
             case RUNNING_PROCESSES:
                 return res.getString(R.string.event_running_processes);
+            case CONTACT_EMAIL:
+                return res.getString(R.string.event_contact_email);
+            case CONTACT_NUMBER:
+                return res.getString(R.string.event_contact_number);
             default:
                 return "";
         }
@@ -160,7 +168,7 @@ public class DtoType {
             case CALENDAR_REMINDER:
                 return "calendarreminder";
             case CALL_LOG:
-                return "calllog";
+                return "call_log";
             case NETWORK_TRAFFIC:
                 return "networktraffic";
             case BACKGROUND_TRAFFIC:
@@ -175,6 +183,10 @@ public class DtoType {
                 return "runningtasks";
             case RUNNING_PROCESSES:
                 return "runningprocesses";
+            case CONTACT_EMAIL:
+                return "contactemail";
+            case CONTACT_NUMBER:
+                return "contactnumber";
             default:
                 return "";
         }

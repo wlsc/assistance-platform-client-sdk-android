@@ -28,6 +28,8 @@
     <string name="event_running_services">Running services</string>
     <string name="event_running_tasks">Running tasks</string>
     <string name="event_contacts">Contacts</string>
+    <string name="event_contact_email">Contact email</string>
+    <string name="event_contact_number">Contact number</string>
     <string name="event_calendar">Calendar</string>
     <string name="event_calendar_reminder">Calendar reminders</string>
     <string name="event_calllog">Call log</string>
