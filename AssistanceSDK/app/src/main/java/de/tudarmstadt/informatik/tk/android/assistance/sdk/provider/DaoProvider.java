@@ -32,6 +32,8 @@ import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.event.ContactEmailEventDaoImpl;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.event.ContactEventDao;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.event.ContactEventDaoImpl;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.event.ContactNumberEventDao;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.event.ContactNumberEventDaoImpl;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.event.ForegroundEventDao;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.event.ForegroundEventDaoImpl;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.event.LoudnessEventDao;
@@ -345,6 +347,15 @@ public class DaoProvider {
      */
     public ContactEmailEventDao getContactEmailEventDao() {
         return ContactEmailEventDaoImpl.getInstance(mDaoSession);
+    }
+
+    /**
+     * ContactNumberEventDao
+     *
+     * @return
+     */
+    public ContactNumberEventDao getContactNumberEventDao() {
+        return ContactNumberEventDaoImpl.getInstance(mDaoSession);
     }
 
     /**
