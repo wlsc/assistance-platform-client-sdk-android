@@ -5,6 +5,7 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.os.Build;
 import android.util.Log;
 
 import java.util.Date;
@@ -51,10 +52,14 @@ public class MagneticFieldSensor extends AbstractTriggeredEvent implements Senso
 
         mSensorManager = (SensorManager) context
                 .getSystemService(Context.SENSOR_SERVICE);
+
         mMagneticFieldSensor = mSensorManager
                 .getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
-        mMagneticFieldUncalibratedSensor = mSensorManager
-                .getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD_UNCALIBRATED);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
+            mMagneticFieldUncalibratedSensor = mSensorManager
+                    .getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD_UNCALIBRATED);
+        }
     }
 
     /**
@@ -126,20 +131,6 @@ public class MagneticFieldSensor extends AbstractTriggeredEvent implements Senso
             // checks for saving new data
             if (isTimeToSaveData(System.nanoTime())) {
 
-                // accuracy has changed faster than sensor itself
-                // ignore that accuracy
-                if (x == 0 &&
-                        y == 0 &&
-                        z == 0 &&
-                        xUncalibratedNoHardIron == 0 &&
-                        yUncalibratedNoHardIron == 0 &&
-                        zUncalibratedNoHardIron == 0 &&
-                        xUncalibratedEstimatedIronBias == 0 &&
-                        yUncalibratedEstimatedIronBias == 0 &&
-                        zUncalibratedEstimatedIronBias == 0) {
-                    return;
-                }
-
                 mLastEventDumpingTimestamp = System.nanoTime();
 
                 dumpData();
@@ -152,14 +143,21 @@ public class MagneticFieldSensor extends AbstractTriggeredEvent implements Senso
 
         if (mSensorManager != null) {
 
-            mSensorManager.registerListener(this,
-                    mMagneticFieldSensor,
-                    SENSOR_DELAY_BETWEEN_TWO_EVENTS);
-            mSensorManager.registerListener(this,
-                    mMagneticFieldUncalibratedSensor,
-                    SENSOR_DELAY_BETWEEN_TWO_EVENTS);
+            if (mMagneticFieldSensor != null) {
+                mSensorManager.registerListener(this,
+                        mMagneticFieldSensor,
+                        SENSOR_DELAY_BETWEEN_TWO_EVENTS);
+            }
 
-            setRunning(true);
+            if (mMagneticFieldUncalibratedSensor != null) {
+                mSensorManager.registerListener(this,
+                        mMagneticFieldUncalibratedSensor,
+                        SENSOR_DELAY_BETWEEN_TWO_EVENTS);
+            }
+
+            if (mMagneticFieldSensor != null || mMagneticFieldUncalibratedSensor != null) {
+                setRunning(true);
+            }
         }
     }
 
@@ -168,12 +166,17 @@ public class MagneticFieldSensor extends AbstractTriggeredEvent implements Senso
 
         try {
             if (mSensorManager != null) {
-                mSensorManager.unregisterListener(this, mMagneticFieldSensor);
-                mSensorManager.unregisterListener(this, mMagneticFieldUncalibratedSensor);
+
+                if (mMagneticFieldSensor != null) {
+                    mSensorManager.unregisterListener(this, mMagneticFieldSensor);
+                }
+
+                if (mMagneticFieldUncalibratedSensor != null) {
+                    mSensorManager.unregisterListener(this, mMagneticFieldUncalibratedSensor);
+                }
             }
         } finally {
             setRunning(false);
-            mSensorManager = null;
         }
     }
 

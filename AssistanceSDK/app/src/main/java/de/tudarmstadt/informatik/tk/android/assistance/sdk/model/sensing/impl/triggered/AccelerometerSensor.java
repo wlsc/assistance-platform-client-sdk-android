@@ -32,7 +32,7 @@ public class AccelerometerSensor extends
     // -----------------------------------------------------
 
     private SensorManager mSensorManager;
-    private Sensor mAccelerometerSensor;
+    private Sensor mSensor;
 
     private long mLastEventDumpingTimestamp;    // in nanoseconds
 
@@ -45,7 +45,7 @@ public class AccelerometerSensor extends
         super(context);
 
         mSensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
-        mAccelerometerSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+        mSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
     }
 
     @Override
@@ -69,10 +69,19 @@ public class AccelerometerSensor extends
     @Override
     public void startSensor() {
 
-        if (mSensorManager != null) {
+        try {
 
-            mSensorManager.registerListener(this, mAccelerometerSensor, SENSOR_DELAY_BETWEEN_TWO_EVENTS);
-            setRunning(true);
+            if (mSensorManager != null) {
+
+                if (mSensor != null) {
+
+                    mSensorManager.registerListener(this, mSensor, SENSOR_DELAY_BETWEEN_TWO_EVENTS);
+                    setRunning(true);
+
+                }
+            }
+        } catch (Exception e) {
+            Log.e(TAG, "Some error: ", e);
         }
     }
 
@@ -82,11 +91,10 @@ public class AccelerometerSensor extends
         try {
 
             if (mSensorManager != null) {
-                mSensorManager.unregisterListener(this, mAccelerometerSensor);
+                mSensorManager.unregisterListener(this, mSensor);
             }
         } finally {
             setRunning(false);
-            mSensorManager = null;
         }
     }
 

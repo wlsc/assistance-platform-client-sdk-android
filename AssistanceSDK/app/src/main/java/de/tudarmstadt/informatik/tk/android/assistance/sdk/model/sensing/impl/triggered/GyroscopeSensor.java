@@ -5,6 +5,7 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.os.Build;
 import android.util.Log;
 
 import java.util.Date;
@@ -53,10 +54,14 @@ public class GyroscopeSensor extends AbstractTriggeredEvent implements SensorEve
 
         mSensorManager = (SensorManager) context
                 .getSystemService(Context.SENSOR_SERVICE);
+
         mGyroscopeSensor = mSensorManager
                 .getDefaultSensor(Sensor.TYPE_GYROSCOPE);
-        mGyroscopeUncalibratedSensor = mSensorManager
-                .getDefaultSensor(Sensor.TYPE_GYROSCOPE_UNCALIBRATED);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
+            mGyroscopeUncalibratedSensor = mSensorManager
+                    .getDefaultSensor(Sensor.TYPE_GYROSCOPE_UNCALIBRATED);
+        }
     }
 
     /**
@@ -130,20 +135,6 @@ public class GyroscopeSensor extends AbstractTriggeredEvent implements SensorEve
             // checks for saving new data
             if (isTimeToSaveData(System.nanoTime())) {
 
-                // accuracy has changed faster than sensor itself
-                // ignore that accuracy
-                if (x == 0 &&
-                        y == 0 &&
-                        z == 0 &&
-                        xUncalibratedNoDrift == 0 &&
-                        yUncalibratedNoDrift == 0 &&
-                        zUncalibratedNoDrift == 0 &&
-                        xUncalibratedEstimatedDrift == 0 &&
-                        yUncalibratedEstimatedDrift == 0 &&
-                        zUncalibratedEstimatedDrift == 0) {
-                    return;
-                }
-
                 mLastEventDumpingTimestamp = System.nanoTime();
 
                 dumpData();
@@ -156,14 +147,21 @@ public class GyroscopeSensor extends AbstractTriggeredEvent implements SensorEve
 
         if (mSensorManager != null) {
 
-            mSensorManager.registerListener(this,
-                    mGyroscopeSensor,
-                    SENSOR_DELAY_BETWEEN_TWO_EVENTS);
-            mSensorManager.registerListener(this,
-                    mGyroscopeUncalibratedSensor,
-                    SENSOR_DELAY_BETWEEN_TWO_EVENTS);
+            if (mGyroscopeSensor != null) {
+                mSensorManager.registerListener(this,
+                        mGyroscopeSensor,
+                        SENSOR_DELAY_BETWEEN_TWO_EVENTS);
+            }
 
-            setRunning(true);
+            if (mGyroscopeUncalibratedSensor != null) {
+                mSensorManager.registerListener(this,
+                        mGyroscopeUncalibratedSensor,
+                        SENSOR_DELAY_BETWEEN_TWO_EVENTS);
+            }
+
+            if (mGyroscopeSensor != null || mGyroscopeUncalibratedSensor != null) {
+                setRunning(true);
+            }
         }
     }
 
@@ -172,12 +170,15 @@ public class GyroscopeSensor extends AbstractTriggeredEvent implements SensorEve
 
         try {
             if (mSensorManager != null) {
-                mSensorManager.unregisterListener(this, mGyroscopeSensor);
-                mSensorManager.unregisterListener(this, mGyroscopeUncalibratedSensor);
+                if (mGyroscopeSensor != null) {
+                    mSensorManager.unregisterListener(this, mGyroscopeSensor);
+                }
+                if (mGyroscopeUncalibratedSensor != null) {
+                    mSensorManager.unregisterListener(this, mGyroscopeUncalibratedSensor);
+                }
             }
         } finally {
             setRunning(false);
-            mSensorManager = null;
         }
     }
 

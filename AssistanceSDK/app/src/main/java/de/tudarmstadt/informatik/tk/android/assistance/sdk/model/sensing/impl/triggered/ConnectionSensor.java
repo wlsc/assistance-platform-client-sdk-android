@@ -122,12 +122,24 @@ public class ConnectionSensor extends AbstractTriggeredEvent {
     @Override
     public void startSensor() {
 
-        IntentFilter filter = new IntentFilter();
-        filter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
+        if (!isRunning()) {
 
-        context.registerReceiver(mReceiver, filter);
+            try {
 
-        setRunning(true);
+                IntentFilter filter = new IntentFilter();
+                filter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
+
+                if (context != null && mReceiver != null) {
+
+                    context.registerReceiver(mReceiver, filter);
+
+                    setRunning(true);
+                }
+
+            } catch (Exception e) {
+                Log.e(TAG, "Some error: ", e);
+            }
+        }
     }
 
     @Override

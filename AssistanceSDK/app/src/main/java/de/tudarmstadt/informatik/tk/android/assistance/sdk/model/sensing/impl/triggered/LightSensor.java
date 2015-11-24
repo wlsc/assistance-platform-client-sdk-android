@@ -35,7 +35,7 @@ public class LightSensor
     private DaoProvider daoProvider;
 
     private SensorManager mSensorManager;
-    private Sensor mAccelerometerSensor;
+    private Sensor mSensor;
 
     private int accuracy;
     private float mLastValue;
@@ -48,7 +48,7 @@ public class LightSensor
         }
 
         mSensorManager = (SensorManager) this.context.getSystemService(Context.SENSOR_SERVICE);
-        mAccelerometerSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_LIGHT);
+        mSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_LIGHT);
     }
 
     @Override
@@ -72,11 +72,13 @@ public class LightSensor
 
         if (mSensorManager != null) {
 
-            mSensorManager.registerListener(this,
-                    mAccelerometerSensor,
-                    SENSOR_DELAY_BETWEEN_TWO_EVENTS);
+            if (mSensor != null) {
+                mSensorManager.registerListener(this,
+                        mSensor,
+                        SENSOR_DELAY_BETWEEN_TWO_EVENTS);
 
-            setRunning(true);
+                setRunning(true);
+            }
         }
     }
 
@@ -85,11 +87,13 @@ public class LightSensor
 
         try {
             if (mSensorManager != null) {
-                mSensorManager.unregisterListener(this, mAccelerometerSensor);
+
+                if (mSensor != null) {
+                    mSensorManager.unregisterListener(this, mSensor);
+                }
             }
         } finally {
             setRunning(false);
-            mSensorManager = null;
         }
     }
 
