@@ -20,7 +20,6 @@ import de.tudarmstadt.informatik.tk.android.assistance.sdk.util.DateUtils;
  * @edited by Wladimir Schmidt (wlsc.dev@gmail.com)
  * @date 08.10.2015
  */
-
 public class AccelerometerSensor extends
         AbstractTriggeredEvent implements
         SensorEventListener {
