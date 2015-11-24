@@ -2,27 +2,51 @@ package de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensing.impl.p
 
 import android.content.Context;
 import android.media.AudioManager;
+import android.util.Log;
 
+import java.util.Date;
+import java.util.Locale;
+
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbRingtoneEvent;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.DtoType;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensing.AbstractPeriodicEvent;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensing.ISensor;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.event.RingtoneEventDao;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.util.DateUtils;
 
-
+/**
+ * @author Unknown
+ * @edited by Wladimir Schmidt (wlsc.dev@gmail.com)
+ * @date 24.11.2015
+ */
 public class RingtoneEvent extends AbstractPeriodicEvent implements ISensor {
 
+    private static final String TAG = RingtoneEventDao.class.getSimpleName();
+
     private static final int INIT_DATA_INTERVALL = 60;
-    private AudioManager m_audioManager;
-    private int m_intLastRingerMode = -1;
+    private AudioManager audioManager;
+    private int lastRingerMode = -1;
 
     public RingtoneEvent(Context context) {
         super(context);
+
         setDataIntervallInSec(INIT_DATA_INTERVALL);
-        m_audioManager = (AudioManager) this.context.getSystemService(Context.AUDIO_SERVICE);
+        audioManager = (AudioManager) this.context.getSystemService(Context.AUDIO_SERVICE);
     }
 
     @Override
     public void dumpData() {
 
+        DbRingtoneEvent ringtoneEvent = new DbRingtoneEvent();
+
+        ringtoneEvent.setMode(lastRingerMode);
+        ringtoneEvent.setCreated(DateUtils.dateToISO8601String(new Date(), Locale.getDefault()));
+
+        Log.d(TAG, "Insert entry");
+
+        daoProvider.getRingtoneEventDao().insert(ringtoneEvent);
+
+        Log.d(TAG, "Finished");
     }
 
     @Override
@@ -33,8 +57,10 @@ public class RingtoneEvent extends AbstractPeriodicEvent implements ISensor {
     @Override
     public void reset() {
 
+        lastRingerMode = -1;
     }
 
+    @Deprecated
     public void handleDatabaseObject(int ringMode) {
 //		SensorRingtone sensorRingtone = new SensorRingtone();
 //		sensorRingtone.setRingtoneMode(ringMode);
@@ -43,13 +69,17 @@ public class RingtoneEvent extends AbstractPeriodicEvent implements ISensor {
 
     @Override
     protected void getData() {
-//		System.out.println("invoked");
-//		int intRingerMode = m_audioManager.getRingerMode();
-//		if (intRingerMode != m_intLastRingerMode) {
-//			SensorRingtone sensorRingtone = new SensorRingtone();
-//			sensorRingtone.setRingtoneMode(m_audioManager.getRingerMode());
-//			handleDBEntry(sensorRingtone);
-//		}
+
+        Log.d(TAG, "getData invoked");
+
+        int intRingerMode = audioManager.getRingerMode();
+
+        if (intRingerMode != lastRingerMode) {
+
+            lastRingerMode = intRingerMode;
+
+            dumpData();
+        }
     }
 
 }

@@ -36,6 +36,8 @@ import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.event.NetworkTrafficEventDaoImpl;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.event.PowerStateEventDao;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.event.PowerStateEventDaoImpl;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.event.RingtoneEventDao;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.event.RingtoneEventDaoImpl;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.event.WifiConnectionEventDao;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.event.WifiConnectionEventDaoImpl;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.sensor.AccelerometerSensorDao;
@@ -290,6 +292,15 @@ public class DaoProvider {
      */
     public LoudnessEventDao getLoudnessEventDao() {
         return LoudnessEventDaoImpl.getInstance(mDaoSession);
+    }
+
+    /**
+     * RingtoneEventDao
+     *
+     * @return
+     */
+    public RingtoneEventDao getRingtoneEventDao() {
+        return RingtoneEventDaoImpl.getInstance(mDaoSession);
     }
 
     /**
