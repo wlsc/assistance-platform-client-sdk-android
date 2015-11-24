@@ -21,7 +21,7 @@ public class RunningProcessesReaderEvent extends AbstractPeriodicEvent implement
 
     public RunningProcessesReaderEvent(Context context) {
         super(context);
-        setDataIntervallInSec(30);
+        setDataIntervalInSec(30);
         m_activityManager = (ActivityManager) this.context.getSystemService(Context.ACTIVITY_SERVICE);
         // m_query =
         // mDaoSession.getSensorRunningProcessesDao().queryBuilder().where(Properties.RunningProcesses.eq("")).build();

@@ -8,13 +8,18 @@ import java.util.concurrent.Future;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * @author Unknown
+ * @edited by Wladimir Schmidt (wlsc.dev@gmail.com)
+ * @date 24.11.2015
+ */
 public abstract class AbstractPeriodicEvent extends AbstractSensor {
 
     private static final String TAG = AbstractPeriodicEvent.class.getSimpleName();
 
     private ScheduledExecutorService mScheduledTaskExecutor;
     private Future<?> mFuture;
-    protected boolean m_bLooperPrepared;
+    protected boolean mLooperPrepared;
 
     // ------------------- Configuration -------------------
     private int DATA_INTERVAL_IN_SEC = 600;
@@ -28,21 +33,24 @@ public abstract class AbstractPeriodicEvent extends AbstractSensor {
     @Override
     public void startSensor() {
 
-        if (mFuture == null) {
-            mFuture = mScheduledTaskExecutor.scheduleAtFixedRate(new Runnable() {
+        if (!isRunning()) {
 
-                @Override
-                public void run() {
-                    try {
-                        getData();
-                    } catch (Exception e) {
-                        Log.e(TAG, "Cannot get data for sensor! Error: ", e);
+            if (mFuture == null) {
+                mFuture = mScheduledTaskExecutor.scheduleAtFixedRate(new Runnable() {
+
+                    @Override
+                    public void run() {
+                        try {
+                            getData();
+                        } catch (Exception e) {
+                            Log.e(TAG, "Cannot get data for sensor! Error: ", e);
+                        }
                     }
-                }
-            }, 0, getDataIntervallInSec(), TimeUnit.SECONDS);
-        }
+                }, 0, getDataIntervalInSec(), TimeUnit.SECONDS);
+            }
 
-        setRunning(true);
+            setRunning(true);
+        }
     }
 
     @Override
@@ -60,12 +68,14 @@ public abstract class AbstractPeriodicEvent extends AbstractSensor {
 
     abstract protected void getData();
 
-    protected int getDataIntervallInSec() {
+    protected int getDataIntervalInSec() {
         return DATA_INTERVAL_IN_SEC;
     }
 
-    protected void setDataIntervallInSec(int sec) {
+    protected void setDataIntervalInSec(int sec) {
+
         DATA_INTERVAL_IN_SEC = sec;
+        
         if (mFuture != null) {
             stopSensor();
             startSensor();

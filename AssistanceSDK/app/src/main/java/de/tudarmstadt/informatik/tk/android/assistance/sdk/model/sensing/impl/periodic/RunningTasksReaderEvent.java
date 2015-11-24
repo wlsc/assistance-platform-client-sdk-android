@@ -22,7 +22,7 @@ public class RunningTasksReaderEvent extends
 
     public RunningTasksReaderEvent(Context context) {
         super(context);
-        setDataIntervallInSec(30);
+        setDataIntervalInSec(30);
         m_activityManager = (ActivityManager) this.context.getSystemService(Context.ACTIVITY_SERVICE);
     }
 

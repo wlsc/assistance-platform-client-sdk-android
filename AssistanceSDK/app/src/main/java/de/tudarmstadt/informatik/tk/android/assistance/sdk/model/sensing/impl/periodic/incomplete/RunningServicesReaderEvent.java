@@ -71,7 +71,7 @@ public class RunningServicesReaderEvent extends
     }
 
     @Override
-    protected int getDataIntervallInSec() {
+    protected int getDataIntervalInSec() {
         return 3600;
     }
 

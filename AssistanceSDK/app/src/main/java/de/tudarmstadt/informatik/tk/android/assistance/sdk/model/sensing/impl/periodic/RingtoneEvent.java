@@ -30,7 +30,7 @@ public class RingtoneEvent extends AbstractPeriodicEvent implements ISensor {
     public RingtoneEvent(Context context) {
         super(context);
 
-        setDataIntervallInSec(INIT_DATA_INTERVALL);
+        setDataIntervalInSec(INIT_DATA_INTERVALL);
         audioManager = (AudioManager) this.context.getSystemService(Context.AUDIO_SERVICE);
     }
 

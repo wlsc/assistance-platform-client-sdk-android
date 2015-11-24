@@ -9,13 +9,17 @@ import android.os.Handler.Callback;
 import android.os.Message;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
+import android.util.Log;
 
 import java.util.ArrayList;
-import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbLoudnessEvent;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.DtoType;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensing.AbstractPeriodicEvent;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.util.DateUtils;
 
 /**
  * @author Unknown
@@ -24,16 +28,21 @@ import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensing.Abstrac
  */
 public class LoudnessSensor extends AbstractPeriodicEvent implements Callback {
 
-    private static final int INIT_DATA_INTERVALL = 120;
+    private static final String TAG = LoudnessSensor.class.getSimpleName();
+
+    private static final int INIT_DATA_INTERVAL = 120;
     public static final int AUDIO_BLOCK = 0;
     public static final int PHONE_STATUS = 1;
+    public static final int COMMON_AUDIO_FREQUENCY = 44100;
 
-    private PhoneListener m_phoneListener;
+    private PhoneListener mPhoneListener;
 
-    private AudioRecorder m_audioRecorder;
-    private CalcLeq m_leqCalc = new CalcLeq();
+    private AudioRecorder mAudioRecorder;
+    private CalcLeq mLeqCalc = new CalcLeq();
 
-    private boolean m_isPaused;
+    private boolean isPaused;
+
+    private float currentValue;
 
     public class LeqValue {
 
@@ -54,11 +63,8 @@ public class LoudnessSensor extends AbstractPeriodicEvent implements Callback {
 
         private List<RMSValue> sampleValues;
 
-        public long m_startTimestamp;
-
         public CalcLeq() {
-            this.sampleValues = new ArrayList<RMSValue>();
-            m_startTimestamp = Calendar.getInstance().getTimeInMillis();
+            sampleValues = new ArrayList<>();
         }
 
         public void addRMS(RMSValue rms) {
@@ -68,7 +74,6 @@ public class LoudnessSensor extends AbstractPeriodicEvent implements Callback {
         }
 
         public void resetValues() {
-            m_startTimestamp = Calendar.getInstance().getTimeInMillis();
             synchronized (sampleValues) {
                 sampleValues = new ArrayList<>();
             }
@@ -82,6 +87,7 @@ public class LoudnessSensor extends AbstractPeriodicEvent implements Callback {
             int sumSamples = 0;
 
             synchronized (sampleValues) {
+
                 if (sampleValues.size() > 0) {
 
                     for (RMSValue value : sampleValues) {
@@ -89,6 +95,7 @@ public class LoudnessSensor extends AbstractPeriodicEvent implements Callback {
                         sum += value.summedSquaredSamples;
                         sumSamples += value.samples;
                     }
+
                     leq.value = (float) Math.sqrt((float) sum / sumSamples);
                     leq.samples = sumSamples;
                 }
@@ -100,27 +107,46 @@ public class LoudnessSensor extends AbstractPeriodicEvent implements Callback {
 
     public LoudnessSensor(Context context) {
         super(context);
-        setDataIntervallInSec(INIT_DATA_INTERVALL);
-        TelephonyManager tManager = (TelephonyManager) this.context.getSystemService(Context.TELEPHONY_SERVICE);
-        m_phoneListener = new PhoneListener(this);
-        tManager.listen(m_phoneListener, PhoneListener.LISTEN_CALL_STATE);
+
+        setDataIntervalInSec(INIT_DATA_INTERVAL);
+        TelephonyManager tManager = (TelephonyManager) context
+                .getSystemService(Context.TELEPHONY_SERVICE);
+
+        mPhoneListener = new PhoneListener(this);
+
+        if (tManager != null) {
+            tManager.listen(mPhoneListener, PhoneListener.LISTEN_CALL_STATE);
+        }
     }
 
     @Override
     public void dumpData() {
 
+        DbLoudnessEvent loudnessSensor = new DbLoudnessEvent();
+
+        loudnessSensor.setLoudness(currentValue);
+        loudnessSensor.setCreated(DateUtils.dateToISO8601String(new Date(), Locale.getDefault()));
+
+        Log.d(TAG, "Insert entry");
+
+        daoProvider.getLoudnessEventDao().insert(loudnessSensor);
+
+        Log.d(TAG, "Finished");
     }
 
     @Override
     public boolean handleMessage(Message msg) {
+
         Bundle data = msg.getData();
         if (data.containsKey("type")) {
             if (data.getInt("type") == AUDIO_BLOCK) {
                 getAudioBlock(data);
                 return false;
-            } else if (data.getInt("type") == PHONE_STATUS) {
-                phoneStateChanged(data);
-                return false;
+            } else {
+                if (data.getInt("type") == PHONE_STATUS) {
+                    phoneStateChanged(data);
+                    return false;
+                }
             }
         }
         return false;
@@ -128,28 +154,42 @@ public class LoudnessSensor extends AbstractPeriodicEvent implements Callback {
 
     private void getAudioBlock(Bundle data) {
 
+        if (data == null) {
+            return;
+        }
+
         short[] audioData = data.getShortArray("audioBlock");
 
         RMSValue rms = calcRMS(audioData);
 
-        // add RMS to LEQ calculation
-        synchronized (m_leqCalc) {
-            m_leqCalc.addRMS(rms);
-        }
+        if (rms != null) {
 
+            // add RMS to LEQ calculation
+            synchronized (mLeqCalc) {
+                mLeqCalc.addRMS(rms);
+            }
+        }
     }
 
     private void phoneStateChanged(Bundle data) {
+
         int status = data.getInt("status");
 
-        if ((status == TelephonyManager.CALL_STATE_RINGING || status == TelephonyManager.CALL_STATE_OFFHOOK) && !m_isPaused) {
-            m_isPaused = true;
-            m_audioRecorder.killThread();
-        } else if (status == TelephonyManager.CALL_STATE_IDLE && m_isPaused) {
-            m_isPaused = false;
-            m_audioRecorder = new AudioRecorder(this);
-            m_audioRecorder.setName("AudioRecorderThread");
-            m_audioRecorder.start();
+        if ((status == TelephonyManager.CALL_STATE_RINGING ||
+                status == TelephonyManager.CALL_STATE_OFFHOOK) &&
+                !isPaused) {
+
+            isPaused = true;
+            mAudioRecorder.killThread();
+
+        } else {
+            if (status == TelephonyManager.CALL_STATE_IDLE && isPaused) {
+
+                isPaused = false;
+                mAudioRecorder = new AudioRecorder(this);
+                mAudioRecorder.setName("AudioRecorderThread");
+                mAudioRecorder.start();
+            }
         }
     }
 
@@ -161,25 +201,40 @@ public class LoudnessSensor extends AbstractPeriodicEvent implements Callback {
     @Override
     public void reset() {
 
+        this.currentValue = 0f;
     }
 
     @Override
     public void startSensor() {
-        m_isPaused = true;
-        m_audioRecorder = new AudioRecorder(this);
-        m_audioRecorder.start();
-        super.startSensor();
+
+        try {
+
+            isPaused = true;
+            mAudioRecorder = new AudioRecorder(this);
+            mAudioRecorder.start();
+
+            super.startSensor();
+
+        } catch (Exception e) {
+            Log.e(TAG, "Some error:", e);
+        }
     }
 
     @Override
     public void stopSensor() {
-        m_isPaused = false;
+
+        isPaused = false;
         super.stopSensor();
     }
 
     public RMSValue calcRMS(short[] data) {
 
+        if (data == null) {
+            return null;
+        }
+
         long rms = 0;
+
         for (short value : data) {
             rms += value * value;
         }
@@ -194,24 +249,32 @@ public class LoudnessSensor extends AbstractPeriodicEvent implements Callback {
 
     public class AudioRecorder extends Thread {
 
-        private LoudnessSensor m_sensor;
+        private LoudnessSensor mSensor;
         private AudioRecord audioInput = null;
-        private int bufferSize = (int) (44100 * (float) 0.5);
+        private int bufferSize = (int) (COMMON_AUDIO_FREQUENCY * (float) 0.5);
         private boolean threadKilled = false;
 
         public AudioRecorder(LoudnessSensor sensor) {
 
-            this.m_sensor = sensor;
+            this.mSensor = sensor;
 
             int channel = AudioFormat.CHANNEL_IN_MONO;
             int mic = MediaRecorder.AudioSource.MIC;
 
             // Berechne den Puffer
-            int minAudioBuffer = AudioRecord.getMinBufferSize(44100, channel, AudioFormat.ENCODING_PCM_16BIT);
+            int minAudioBuffer = AudioRecord.getMinBufferSize(
+                    COMMON_AUDIO_FREQUENCY,
+                    channel,
+                    AudioFormat.ENCODING_PCM_16BIT);
             int audioBuffer = minAudioBuffer * 6;
 
             // Erstelle den Recorder
-            audioInput = new AudioRecord(mic, 44100, channel, AudioFormat.ENCODING_PCM_16BIT, audioBuffer);
+            audioInput = new AudioRecord(
+                    mic,
+                    COMMON_AUDIO_FREQUENCY,
+                    channel,
+                    AudioFormat.ENCODING_PCM_16BIT,
+                    audioBuffer);
         }
 
         @Override
@@ -220,13 +283,14 @@ public class LoudnessSensor extends AbstractPeriodicEvent implements Callback {
             // Warten bis Recorder bereit ist.
             int maxTimeout = 2000;
             int checkTime = 100;
+
             try {
                 while (audioInput.getState() != AudioRecord.STATE_INITIALIZED && maxTimeout > 0) {
                     Thread.sleep(checkTime);
                     maxTimeout -= checkTime;
                 }
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                Log.e(TAG, "Thread was interrupted: ", e);
             }
 
             // Prüfen, ob Recorder bereit ist
@@ -257,13 +321,15 @@ public class LoudnessSensor extends AbstractPeriodicEvent implements Callback {
                         return;
 
                         // Buffer wurde ein Stück weiter vollgeschrieben
-                    } else if (read + offset < bufferSize) {
-                        offset += read;
-
-                        // Buffer ist voll!
                     } else {
-                        offset = 0;
-                        flushBuffer = true;
+                        if (read + offset < bufferSize) {
+                            offset += read;
+
+                            // Buffer ist voll!
+                        } else {
+                            offset = 0;
+                            flushBuffer = true;
+                        }
                     }
 
                     // Notify Listener!
@@ -274,12 +340,13 @@ public class LoudnessSensor extends AbstractPeriodicEvent implements Callback {
                             bundle.putInt("type", LoudnessSensor.AUDIO_BLOCK);
                             bundle.putShortArray("audioBlock", audioData.clone());
                         }
-                        m_sensor.handleData(bundle);
+
+                        mSensor.handleData(bundle);
                     }
                 }
 
             } catch (Exception e) {
-                e.printStackTrace();
+                Log.e(TAG, "Some error: ", e);
             } finally {
                 audioInput.stop();
             }
@@ -292,25 +359,27 @@ public class LoudnessSensor extends AbstractPeriodicEvent implements Callback {
 
     @Override
     protected void getData() {
-        if (!m_isPaused) {
+
+        if (!isPaused) {
+
             LeqValue leq = new LeqValue();
-            leq = m_leqCalc.calcLeq();
-            long startTimestamp = m_leqCalc.m_startTimestamp;
-            m_leqCalc.resetValues();
+            leq = mLeqCalc.calcLeq();
+            mLeqCalc.resetValues();
 
             if (leq.samples > 0) {
-//				SensorLoudness sensorLoudness = new SensorLoudness();
-//				sensorLoudness.setStartTimestamp(startTimestamp);
-//				sensorLoudness.setLoudness(calcDB(leq.value));
-//				handleDBEntry(sensorLoudness);
+
+                currentValue = calcDB(leq.value);
+
+                dumpData();
             }
         }
     }
 
     public static float calcDB(float input) {
-        if (input == 0)
+
+        if (input == 0) {
             return 0;
-        else {
+        } else {
             return 20 * (float) Math.log10((input / 32767));
         }
     }
@@ -325,14 +394,21 @@ public class LoudnessSensor extends AbstractPeriodicEvent implements Callback {
 
         @Override
         public void onCallStateChanged(int state, String incomingNumber) {
+
+            if (sensor == null) {
+                return;
+            }
+
             Bundle bundle = new Bundle(2);
             bundle.putInt("type", LoudnessSensor.PHONE_STATUS);
             bundle.putInt("status", state);
+
             sensor.handleData(bundle);
         }
     }
 
     public void handleData(Bundle data) {
+
         if (data.containsKey("type")) {
             if (data.getInt("type") == AUDIO_BLOCK) {
                 getAudioBlock(data);

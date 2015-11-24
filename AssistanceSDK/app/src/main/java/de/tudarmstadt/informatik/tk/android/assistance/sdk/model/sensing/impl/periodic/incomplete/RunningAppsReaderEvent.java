@@ -69,7 +69,7 @@ public class RunningAppsReaderEvent extends AbstractPeriodicEvent implements ISe
     }
 
     @Override
-    protected int getDataIntervallInSec() {
+    protected int getDataIntervalInSec() {
         return 3600;
     }
 

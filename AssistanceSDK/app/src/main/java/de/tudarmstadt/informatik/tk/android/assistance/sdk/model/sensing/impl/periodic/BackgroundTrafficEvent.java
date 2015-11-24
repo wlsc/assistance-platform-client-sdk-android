@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.net.TrafficStats;
+import android.util.Log;
 
 import java.util.List;
 
@@ -29,6 +30,8 @@ public class BackgroundTrafficEvent extends
         AbstractPeriodicEvent implements
         ISensor {
 
+    private static final String TAG = BackgroundTrafficEvent.class.getSimpleName();
+
     private static final int INIT_DATA_INTERVAL = 5 * 60;
     private PackageManager packageManager;
 
@@ -40,7 +43,7 @@ public class BackgroundTrafficEvent extends
     public BackgroundTrafficEvent(Context context) {
         super(context);
 
-        setDataIntervallInSec(INIT_DATA_INTERVAL);
+        setDataIntervalInSec(INIT_DATA_INTERVAL);
         packageManager = context.getPackageManager();
 
         //initial Data
@@ -100,7 +103,11 @@ public class BackgroundTrafficEvent extends
             networkTrafficEvent.setLatitude(lastLatitude);
             networkTrafficEvent.setLongitude(lastLongitude);
 
+            Log.d(TAG, "Insert entry");
+
             daoProvider.getNetworkTrafficEventDao().insert(networkTrafficEvent);
+
+            Log.d(TAG, "Finished");
         }
     }
 

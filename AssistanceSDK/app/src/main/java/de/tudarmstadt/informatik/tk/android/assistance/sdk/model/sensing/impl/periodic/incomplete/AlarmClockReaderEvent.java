@@ -37,7 +37,7 @@ public class AlarmClockReaderEvent extends AbstractPeriodicEvent implements ISen
     }
 
     @Override
-    protected int getDataIntervallInSec() {
+    protected int getDataIntervalInSec() {
         return 3600;
     }
 

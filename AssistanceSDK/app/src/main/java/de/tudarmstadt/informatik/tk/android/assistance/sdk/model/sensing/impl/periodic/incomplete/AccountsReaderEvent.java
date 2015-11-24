@@ -64,7 +64,7 @@ public class AccountsReaderEvent extends AbstractPeriodicEvent implements ISenso
     }
 
     @Override
-    protected int getDataIntervallInSec() {
+    protected int getDataIntervalInSec() {
         return 3600;
     }
 
