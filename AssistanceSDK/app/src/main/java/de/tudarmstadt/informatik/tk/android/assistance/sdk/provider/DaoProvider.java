@@ -28,6 +28,8 @@ import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.event.CallLogEventDaoImpl;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.event.ConnectionEventDao;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.event.ConnectionEventDaoImpl;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.event.ContactEmailEventDao;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.event.ContactEmailEventDaoImpl;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.event.ContactEventDao;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.event.ContactEventDaoImpl;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.event.ForegroundEventDao;
@@ -327,8 +329,22 @@ public class DaoProvider {
         return BrowserHistoryEventDaoImpl.getInstance(mDaoSession);
     }
 
+    /**
+     * ContactEventDao
+     *
+     * @return
+     */
     public ContactEventDao getContactEventDao() {
         return ContactEventDaoImpl.getInstance(mDaoSession);
+    }
+
+    /**
+     * ContactEmailEventDao
+     *
+     * @return
+     */
+    public ContactEmailEventDao getContactEmailEventDao() {
+        return ContactEmailEventDaoImpl.getInstance(mDaoSession);
     }
 
     /**
