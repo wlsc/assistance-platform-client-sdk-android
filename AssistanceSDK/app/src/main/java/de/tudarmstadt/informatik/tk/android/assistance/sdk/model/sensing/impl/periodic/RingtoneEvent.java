@@ -60,17 +60,15 @@ public class RingtoneEvent extends AbstractPeriodicEvent implements ISensor {
         lastRingerMode = -1;
     }
 
-    @Deprecated
-    public void handleDatabaseObject(int ringMode) {
-//		SensorRingtone sensorRingtone = new SensorRingtone();
-//		sensorRingtone.setRingtoneMode(ringMode);
-//		handleDBEntry(sensorRingtone);
-    }
-
     @Override
     protected void getData() {
 
         Log.d(TAG, "getData invoked");
+
+        if (audioManager == null) {
+            Log.e(TAG, "audioManager is NULL!");
+            return;
+        }
 
         int intRingerMode = audioManager.getRingerMode();
 
