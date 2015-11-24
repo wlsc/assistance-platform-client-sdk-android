@@ -45,6 +45,7 @@ public class BrowserHistoryEventDaoImpl extends
 
         BrowserHistoryEventDto result = new BrowserHistoryEventDto();
 
+        result.setId(sensor.getId());
         result.setUrl(sensor.getUrl());
         result.setTitle(sensor.getTitle());
         result.setLastVisited(sensor.getLastVisited());

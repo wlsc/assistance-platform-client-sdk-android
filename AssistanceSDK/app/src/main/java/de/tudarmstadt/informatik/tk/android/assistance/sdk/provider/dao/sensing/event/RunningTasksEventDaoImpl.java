@@ -45,6 +45,7 @@ public class RunningTasksEventDaoImpl extends
 
         RunningTasksEventDto result = new RunningTasksEventDto();
 
+        result.setId(sensor.getId());
         result.setRunningTasks(sensor.getRunningTasks());
         result.setStackPosition(sensor.getStackPosition());
         result.setType(DtoType.RUNNING_TASKS);

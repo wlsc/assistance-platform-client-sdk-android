@@ -45,6 +45,7 @@ public class ContactEmailEventDaoImpl extends
 
         ContactEmailEventDto result = new ContactEmailEventDto();
 
+        result.setId(sensor.getId());
         result.setAddress(sensor.getAddress());
         result.setContactId(sensor.getContactId());
         result.setEventType(sensor.getType());

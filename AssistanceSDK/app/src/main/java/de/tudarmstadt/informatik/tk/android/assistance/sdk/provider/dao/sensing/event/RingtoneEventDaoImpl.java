@@ -45,6 +45,7 @@ public class RingtoneEventDaoImpl extends
 
         RingtoneEventDto result = new RingtoneEventDto();
 
+        result.setId(sensor.getId());
         result.setMode(sensor.getMode());
         result.setType(DtoType.RINGTONE);
         result.setTypeStr(DtoType.getApiName(DtoType.RINGTONE));

@@ -45,6 +45,7 @@ public class LoudnessEventDaoImpl extends
 
         LoudnessEventDto result = new LoudnessEventDto();
 
+        result.setId(sensor.getId());
         result.setLoudness(sensor.getLoudness());
         result.setCreated(sensor.getCreated());
         result.setType(DtoType.LOUDNESS);

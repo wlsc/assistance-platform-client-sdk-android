@@ -45,6 +45,7 @@ public class AccountReaderEventDaoImpl extends
 
         AccountReaderEventDto result = new AccountReaderEventDto();
 
+        result.setId(sensor.getId());
         result.setTypes(sensor.getTypes());
         result.setCreated(sensor.getCreated());
         result.setType(DtoType.ACCOUNT_READER);

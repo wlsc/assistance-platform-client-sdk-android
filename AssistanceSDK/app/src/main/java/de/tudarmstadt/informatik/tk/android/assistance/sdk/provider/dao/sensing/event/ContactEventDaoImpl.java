@@ -45,6 +45,7 @@ public class ContactEventDaoImpl extends
 
         ContactEventDto result = new ContactEventDto();
 
+        result.setId(sensor.getId());
         result.setGlobalContactId(sensor.getGlobalContactId());
         result.setDisplayName(sensor.getDisplayName());
         result.setGivenName(sensor.getGivenName());

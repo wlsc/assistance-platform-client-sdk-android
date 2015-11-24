@@ -36,22 +36,23 @@ public class PowerStateEventDaoImpl extends
     }
 
     @Override
-    public PowerStateEventDto convertObject(DbPowerStateEvent dbSensor) {
+    public PowerStateEventDto convertObject(DbPowerStateEvent sensor) {
 
-        if (dbSensor == null) {
+        if (sensor == null) {
             return null;
         }
 
         PowerStateEventDto result = new PowerStateEventDto();
 
-        result.setIsCharging(dbSensor.getIsCharging());
-        result.setPercent(dbSensor.getPercent());
-        result.setChargingState(dbSensor.getChargingState());
-        result.setChargingMode(dbSensor.getChargingMode());
-        result.setPowerSaveMode(dbSensor.getPowerSaveMode());
+        result.setId(sensor.getId());
+        result.setIsCharging(sensor.getIsCharging());
+        result.setPercent(sensor.getPercent());
+        result.setChargingState(sensor.getChargingState());
+        result.setChargingMode(sensor.getChargingMode());
+        result.setPowerSaveMode(sensor.getPowerSaveMode());
         result.setType(DtoType.POWER_STATE);
         result.setTypeStr(DtoType.getApiName(DtoType.POWER_STATE));
-        result.setCreated(dbSensor.getCreated());
+        result.setCreated(sensor.getCreated());
 
         return result;
     }

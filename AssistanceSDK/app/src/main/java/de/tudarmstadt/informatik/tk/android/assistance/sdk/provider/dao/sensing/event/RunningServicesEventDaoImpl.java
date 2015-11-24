@@ -45,6 +45,7 @@ public class RunningServicesEventDaoImpl extends
 
         RunningServicesEventDto result = new RunningServicesEventDto();
 
+        result.setId(sensor.getId());
         result.setRunningServices(sensor.getRunningServices());
         result.setType(DtoType.RUNNING_SERVICES);
         result.setTypeStr(DtoType.getApiName(DtoType.RUNNING_SERVICES));
