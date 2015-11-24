@@ -25,7 +25,7 @@ import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DaoSession;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbModule;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbUser;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.enums.ECommandType;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensor.ISensor;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensing.ISensor;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.DaoProvider;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.PreferenceProvider;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.SensorProvider;

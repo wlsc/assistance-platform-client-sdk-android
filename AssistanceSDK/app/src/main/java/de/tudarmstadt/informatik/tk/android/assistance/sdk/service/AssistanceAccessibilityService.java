@@ -6,8 +6,8 @@ import android.util.Log;
 import android.view.accessibility.AccessibilityEvent;
 
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.DtoType;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensor.impl.triggered.ForegroundEvent;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensor.impl.triggered.ForegroundTrafficEvent;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensing.impl.triggered.ForegroundEvent;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensing.impl.triggered.ForegroundTrafficEvent;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.PreferenceProvider;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.SensorProvider;
 

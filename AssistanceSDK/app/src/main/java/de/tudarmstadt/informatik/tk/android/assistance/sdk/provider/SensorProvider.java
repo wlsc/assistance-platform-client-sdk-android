@@ -7,11 +7,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.enums.EPushType;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensor.ISensor;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensor.impl.triggered.AccelerometerSensor;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensor.impl.triggered.ForegroundEvent;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensor.impl.triggered.LocationSensor;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensor.impl.triggered.MotionActivityEvent;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensing.ISensor;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensing.impl.triggered.AccelerometerSensor;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensing.impl.triggered.ForegroundEvent;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensing.impl.triggered.LocationSensor;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensing.impl.triggered.MotionActivityEvent;
 
 /**
  * Main sensor provider
