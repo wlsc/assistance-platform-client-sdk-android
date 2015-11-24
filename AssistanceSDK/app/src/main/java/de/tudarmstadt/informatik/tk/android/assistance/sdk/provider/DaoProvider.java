@@ -18,6 +18,8 @@ import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.news.New
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.news.NewsDaoImpl;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.event.AccountReaderEventDao;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.event.AccountReaderEventDaoImpl;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.event.BrowserHistoryEventDao;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.event.BrowserHistoryEventDaoImpl;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.event.CalendarEventDao;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.event.CalendarEventDaoImpl;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.event.CalendarReminderEventDao;
@@ -312,6 +314,15 @@ public class DaoProvider {
      */
     public AccountReaderEventDao getAccountReaderEventDao() {
         return AccountReaderEventDaoImpl.getInstance(mDaoSession);
+    }
+
+    /**
+     * BrowserHistoryEventDao
+     *
+     * @return
+     */
+    public BrowserHistoryEventDao getBrowserHistoryEventDao() {
+        return BrowserHistoryEventDaoImpl.getInstance(mDaoSession);
     }
 
     /**
