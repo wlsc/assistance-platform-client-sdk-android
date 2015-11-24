@@ -16,6 +16,8 @@ import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.module.M
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.module.ModuleDaoImpl;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.news.NewsDao;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.news.NewsDaoImpl;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.event.AccountReaderEventDao;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.event.AccountReaderEventDaoImpl;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.event.CalendarEventDao;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.event.CalendarEventDaoImpl;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.event.CalendarReminderEventDao;
@@ -301,6 +303,15 @@ public class DaoProvider {
      */
     public RingtoneEventDao getRingtoneEventDao() {
         return RingtoneEventDaoImpl.getInstance(mDaoSession);
+    }
+
+    /**
+     * AccountReaderEventDao
+     *
+     * @return
+     */
+    public AccountReaderEventDao getAccountReaderEventDao() {
+        return AccountReaderEventDaoImpl.getInstance(mDaoSession);
     }
 
     /**
