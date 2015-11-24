@@ -3,6 +3,7 @@ package de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensing.impl.p
 import android.app.ActivityManager;
 import android.app.ActivityManager.RunningAppProcessInfo;
 import android.content.Context;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -21,6 +22,8 @@ import de.tudarmstadt.informatik.tk.android.assistance.sdk.util.DateUtils;
  * @date 24.11.2015
  */
 public class RunningProcessesReaderEvent extends AbstractPeriodicEvent implements ISensor {
+
+    private static final String TAG = RunningProcessesReaderEvent.class.getSimpleName();
 
     private ActivityManager mActivityManager;
     // private Query<SensorRunningProcesses> m_query;
@@ -43,7 +46,11 @@ public class RunningProcessesReaderEvent extends AbstractPeriodicEvent implement
         runningProcessesEvent.setRunningProcesses(currentProcessName);
         runningProcessesEvent.setCreated(DateUtils.dateToISO8601String(new Date(), Locale.getDefault()));
 
+        Log.d(TAG, "Insert entry");
+
         daoProvider.getRunningProcessesEventDao().insert(runningProcessesEvent);
+
+        Log.d(TAG, "Finished");
     }
 
     @Override

@@ -51,7 +51,11 @@ public class RunningTasksReaderEvent extends
         runningTasksEvent.setStackPosition(currentStackPosition);
         runningTasksEvent.setCreated(DateUtils.dateToISO8601String(new Date(), Locale.getDefault()));
 
+        Log.d(TAG, "Insert entry");
+
         daoProvider.getRunningTasksEventDao().insert(runningTasksEvent);
+
+        Log.d(TAG, "Finished");
     }
 
     @Override

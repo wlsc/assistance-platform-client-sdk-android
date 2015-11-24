@@ -3,24 +3,55 @@ package de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensing.impl.p
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.content.Context;
+import android.util.Log;
 
+import java.util.Date;
+import java.util.Locale;
+
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbAccountReaderEvent;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.DtoType;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensing.AbstractPeriodicEvent;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensing.ISensor;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.util.DateUtils;
 
-
+/**
+ * @author Unknown
+ * @edited by Wladimir Schmidt (wlsc.dev@gmail.com)
+ * @date 24.11.2015
+ */
 public class AccountsReaderEvent extends AbstractPeriodicEvent implements ISensor {
 
-    private AccountManager m_accountManager;
+    private static final String TAG = AccountsReaderEvent.class.getSimpleName();
+
+    public static final int INTERVAL_IN_SEC = 3600;
+
+    private AccountManager mAccountManager;
+
+    private String currentAccountValue;
 
     public AccountsReaderEvent(Context context) {
         super(context);
-        m_accountManager = AccountManager.get(this.context);
+
+        mAccountManager = AccountManager.get(context);
     }
 
     @Override
     public void dumpData() {
 
+        if (currentAccountValue == null || currentAccountValue.isEmpty()) {
+            return;
+        }
+
+        DbAccountReaderEvent accountReaderEvent = new DbAccountReaderEvent();
+
+        accountReaderEvent.setTypes(currentAccountValue);
+        accountReaderEvent.setCreated(DateUtils.dateToISO8601String(new Date(), Locale.getDefault()));
+
+        Log.d(TAG, "Insert entry");
+
+        daoProvider.getAccountReaderEventDao().insert(accountReaderEvent);
+
+        Log.d(TAG, "Finished");
     }
 
     @Override
@@ -31,46 +62,60 @@ public class AccountsReaderEvent extends AbstractPeriodicEvent implements ISenso
     @Override
     public void reset() {
 
+        currentAccountValue = "";
     }
 
     @Override
     protected void getData() {
-        Account[] accounts = m_accountManager.getAccounts();
-        String[] strAccountTypes = new String[accounts.length];
 
-        for (int i = 0; i < accounts.length; i++) {
+        if (mAccountManager == null) {
+            return;
+        }
+
+        Account[] accounts = mAccountManager.getAccounts();
+
+        if (accounts == null) {
+            return;
+        }
+
+        int accountsLength = accounts.length;
+
+        String[] strAccountTypes = new String[accountsLength];
+
+        for (int i = 0; i < accountsLength; i++) {
             strAccountTypes[i] = accounts[i].type;
         }
 
         // for (Account acc : accounts) {
         // System.out.println("Account-Type: " + acc.type);
         // try {
-        // String pass = m_accountManager.getPassword(acc);
+        // String pass = mAccountManager.getPassword(acc);
         // } catch (Exception e) {
         // e.printStackTrace();
         // }
         // }
 
-        if (accounts.length > 0) {
-            StringBuilder sb = new StringBuilder();
-            for (int i = 0; i < accounts.length - 1; i++)
-                sb.append(accounts[i].type + ";");
-            sb.append(accounts[accounts.length - 1]);
+        if (accountsLength > 0) {
 
-//			SensorAccountsReader sensor = new SensorAccountsReader();
-//			sensor.setAccountTypes(sb.toString());
-//			handleDBEntry(sensor);
+            StringBuilder sb = new StringBuilder();
+
+            int accountsLengthMinusOne = accountsLength - 1;
+
+            for (int i = 0; i < accountsLengthMinusOne; i++) {
+                sb.append(accounts[i].type).append(";");
+            }
+
+            sb.append(accounts[accountsLengthMinusOne]);
+
+            currentAccountValue = sb.toString();
+
+            dumpData();
         }
     }
 
     @Override
     protected int getDataIntervalInSec() {
-        return 3600;
+        return INTERVAL_IN_SEC;
     }
 
-//	@Override
-//	public MessageType getMessageType() {
-//		// TODO Auto-generated method stub
-//		return null;
-//	}
 }
