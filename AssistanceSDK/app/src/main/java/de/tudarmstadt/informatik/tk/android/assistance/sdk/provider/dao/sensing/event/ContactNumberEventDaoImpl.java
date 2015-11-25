@@ -74,4 +74,18 @@ public class ContactNumberEventDaoImpl extends
                 .build()
                 .list();
     }
+
+    @Override
+    public List<DbContactNumberEvent> get(Long contactId) {
+
+        if (contactId == null) {
+            return Collections.emptyList();
+        }
+
+        return dao
+                .queryBuilder()
+                .where(DbContactNumberEventDao.Properties.ContactId.eq(contactId))
+                .build()
+                .list();
+    }
 }

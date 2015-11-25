@@ -16,7 +16,7 @@ public abstract class AbstractContentObserverEvent extends AbstractSensor {
     private static final String TAG = AbstractContentObserverEvent.class.getSimpleName();
 
     // ------------------- Configuration -------------------
-    private int TIME_TO_WAIT_BEFORE_SYNCING_IN_SEC = 120;
+    private static final int TIME_TO_WAIT_BEFORE_SYNCING_IN_SEC = 120;
     // -----------------------------------------------------
 
     private SyncTimer mTimerTask = null;
