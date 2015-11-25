@@ -1,11 +1,14 @@
 package de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensing.impl.contentobserver;
 
+import android.Manifest;
 import android.content.ContentResolver;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.provider.CallLog;
+import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbCallLogEvent;
@@ -78,6 +81,19 @@ public class CallLogEvent extends AbstractContentObserverEvent {
 
         long longLastKnownCallLogId = -1;
 
+        if (ActivityCompat.checkSelfPermission(
+                context,
+                Manifest.permission.READ_CALL_LOG) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
+
         DbCallLogEvent lastItem = daoProvider.getCallLogEventDao().getLastCallLogEvent();
 
         if (lastItem != null) {
@@ -85,12 +101,15 @@ public class CallLogEvent extends AbstractContentObserverEvent {
         }
 
         ContentResolver cr = context.getContentResolver();
+        Cursor cur = null;
 
-        try (Cursor cur = cr.query(android.provider.CallLog.Calls.CONTENT_URI,
-                null,
-                CallLog.Calls._ID + ">?",
-                new String[]{String.valueOf(longLastKnownCallLogId)},
-                null);) {
+        try {
+
+            cur = cr.query(android.provider.CallLog.Calls.CONTENT_URI,
+                    null,
+                    CallLog.Calls._ID + ">?",
+                    new String[]{String.valueOf(longLastKnownCallLogId)},
+                    null);
 
             if (cur == null || cur.getCount() == 0) {
                 return;
@@ -116,6 +135,10 @@ public class CallLogEvent extends AbstractContentObserverEvent {
                 daoProvider.getCallLogEventDao().insert(callLogEvent);
 
                 Log.d(TAG, "Finished");
+            }
+        } finally {
+            if (cur != null) {
+                cur.close();
             }
         }
     }
