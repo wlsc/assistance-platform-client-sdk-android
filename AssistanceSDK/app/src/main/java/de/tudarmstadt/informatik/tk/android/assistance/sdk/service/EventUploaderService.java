@@ -47,11 +47,11 @@ public class EventUploaderService extends GcmTaskService {
 
     // task identifier
     private static final long taskID = 999;
-    // the task should be executed every 30 seconds
+    // the task should be executed every N seconds
     private static final long periodSecs = 60L;
     // fallback for period in case of server is not available
     private static final long periodServerNotAvailableFallbackSecs = 300L;
-    // the task can run as early as -15 seconds from the scheduled time
+    // the task can run as early as N seconds from the scheduled time
     private static final long flexSecs = 15L;
     // fallback for flexibility in case of server not available
     private static final long flexServerNotAvailableFallbackSecs = 100L;
