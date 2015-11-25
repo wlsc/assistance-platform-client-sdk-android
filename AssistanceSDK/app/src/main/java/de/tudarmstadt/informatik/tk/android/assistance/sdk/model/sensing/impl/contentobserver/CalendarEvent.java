@@ -15,7 +15,6 @@ import java.util.Map;
 
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbCalendarEvent;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbCalendarReminderEvent;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.interfaces.IDbSensor;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.DtoType;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensing.AbstractContentObserverEvent;
 
@@ -89,14 +88,18 @@ public class CalendarEvent extends AbstractContentObserverEvent {
         ContentResolver cr = context.getContentResolver();
         Cursor cur = cr.query(URI_CALENDAR, PROJECTION_EVENTS, "deleted=?", new String[]{"0"}, null);
 
+        if (cur == null) {
+            return;
+        }
+
         Map<Long, DbCalendarEvent> allExistingEvents = new HashMap<>();
+
         try {
 
-            List<? extends IDbSensor> dbEvents = daoProvider.getCalendarEventDao().getAll();
+            List<DbCalendarEvent> events = daoProvider.getCalendarEventDao().getAll();
 
-            for (IDbSensor dbSensor : dbEvents) {
-                DbCalendarEvent sensor = (DbCalendarEvent) dbSensor;
-                allExistingEvents.put(sensor.getEventId(), sensor);
+            for (DbCalendarEvent event : events) {
+                allExistingEvents.put(event.getEventId(), event);
             }
 
             // Iterate over event
@@ -132,8 +135,7 @@ public class CalendarEvent extends AbstractContentObserverEvent {
 
                 try {
                     if (checkForChange(allExistingEvents, event)) {
-
-                        dumpData();
+                        daoProvider.getCalendarEventDao().insert(event);
                     }
                 } catch (Exception e) {
                     Log.e(TAG, "Cannot check calendar event for change", e);
@@ -141,6 +143,7 @@ public class CalendarEvent extends AbstractContentObserverEvent {
 
                 syncReminders(event);
             }
+
             cur.close();
 
         } catch (Exception e) {
@@ -173,7 +176,16 @@ public class CalendarEvent extends AbstractContentObserverEvent {
             // Submit the query
             ContentResolver cr = context.getContentResolver();
 
-            try (Cursor cur = cr.query(URI_REMINDER, PROJECTION_REMINDERS, selection, selectionArgs, null)) {
+            Cursor cur = null;
+
+            try {
+
+                cur = cr.query(URI_REMINDER, PROJECTION_REMINDERS, selection, selectionArgs, null);
+
+                if (cur == null) {
+                    return;
+                }
+
                 // Iterate over event
                 while (cur.moveToNext() && isRunning()) {
 
@@ -189,12 +201,16 @@ public class CalendarEvent extends AbstractContentObserverEvent {
 
                     try {
                         if (checkForReminderChange(mapExistingReminders, reminder)) {
-                            dumpData();
+                            daoProvider.getCalendarReminderEventDao().insert(reminder);
                         }
                     } catch (Exception e) {
                         Log.e(TAG, "Cannot check calendar reminder event for change", e);
                     }
 
+                }
+            } finally {
+                if (cur != null) {
+                    cur.close();
                 }
             }
 
