@@ -9,31 +9,33 @@ import android.provider.ContactsContract.CommonDataKinds.Email;
 import android.provider.ContactsContract.CommonDataKinds.Note;
 import android.provider.ContactsContract.CommonDataKinds.Phone;
 import android.provider.ContactsContract.Data;
+import android.util.Log;
 
-import java.lang.reflect.Method;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbContactEmailEvent;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbContactEvent;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbContactNumberEvent;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.DtoType;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.enums.EPushType;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensing.AbstractContentObserverEvent;
 
+/**
+ * @author Unknown
+ * @edited by Wladimir Schmidt (wlsc.dev@gmail.com)
+ * @date 24.11.2015
+ */
 public class ContactsEvent extends AbstractContentObserverEvent {
+
+    private static final String TAG = ContactsEvent.class.getSimpleName();
 
     private static final Uri URI_EMAIL = Email.CONTENT_URI;
     private static final Uri URI_DATA = Data.CONTENT_URI;
     private static final Uri URI_PHONE = Phone.CONTENT_URI;
     private static final Uri URI_RAW_CONTACTS = ContactsContract.RawContacts.CONTENT_URI;
     private static final Uri URI_CONTACTS = ContactsContract.Contacts.CONTENT_URI;
-
-    // cache
-    private Method m_checkDifferenceMethodForContactMailChange;
-    private Method m_getKeyMethodForSensorContactMail;
-    private Method m_checkDifferenceMethodForContactNumberChange;
-    private Method m_getKeyMethodForSensorContactNumber;
-    private Method m_checkDifferenceMethodForContactChange;
-    private Method m_getKeyMethodForSensorContact;
-    private Method m_methodForGEtAllExistingContacts;
-
-    private boolean m_bFlushToServer;
 
     private AsyncTask<Void, Void, Void> syncingTask;
 
@@ -49,288 +51,514 @@ public class ContactsEvent extends AbstractContentObserverEvent {
     @Override
     protected void syncData() {
 
-        m_bFlushToServer = false;
+        if (context == null) {
+            return;
+        }
 
         //ContactsContract.CommonDataKinds.StructuredName.
 
         //Cursor cursor = context.getContentResolver().query(URI_RAW_CONTACTS, null, "deleted=?", new String[] { "0" }, null);
-        Cursor cursor = context.getContentResolver().query(URI_CONTACTS, null, Data.IN_VISIBLE_GROUP + " = 1", null, null);
-        cursor.moveToFirst();
 
-//		HashMap<Long, SensorContact> allExistingContacts;
-//		try {
-//			allExistingContacts = getAllExistingContacts();
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//			return;
-//		}
-//
-//		while (cursor.moveToNext() && isRunning) {
-//
-//			String strContactId = getStringByColumnName(cursor, ContactsContract.Contacts._ID);
-//
-//			System.out.println("sync Contact Id: " + strContactId);
-//
-//			String strGivenName = null;
-//			String strFamilyName = null;
-//
-//			String[] projectionNameParams = new String[] { StructuredName.GIVEN_NAME, StructuredName.FAMILY_NAME };
-//			String whereName = ContactsContract.Data.MIMETYPE + " = ? AND " + Data.CONTACT_ID + " = ?";
-//			String[] whereNameParams = new String[] { StructuredName.CONTENT_ITEM_TYPE, strContactId };
-//			Cursor nameCur = context.getContentResolver().query(URI_DATA, projectionNameParams, whereName, whereNameParams, null);
-//			if (nameCur.moveToFirst()) {
-//				strGivenName = getStringByColumnName(nameCur, StructuredName.GIVEN_NAME);
-//				strFamilyName = getStringByColumnName(nameCur, StructuredName.FAMILY_NAME);
-//			}
-//			nameCur.close();
-//
-//			// Fill database object
-//			SensorContact sensorContact = new SensorContact();
-//			sensorContact.setContactId(Long.valueOf(strContactId));
-//			sensorContact.setGlobalContactId(KrakenUtils.getGlobalId(context, Long.valueOf(strContactId)));
-//			sensorContact.setDisplayName(getStringByColumnName(cursor, Data.DISPLAY_NAME_PRIMARY));
-//			sensorContact.setGivenName(strGivenName);
-//			sensorContact.setFamilyName(strFamilyName);
-//			sensorContact.setStarred(getIntByColumnName(cursor, Data.STARRED));
-//			sensorContact.setLastTimeContacted(getIntByColumnName(cursor, Data.LAST_TIME_CONTACTED));
-//			sensorContact.setTimesContacted(getIntByColumnName(cursor, Data.TIMES_CONTACTED));
-//			sensorContact.setNote(getNote(strContactId));
-//			sensorContact.setIsNew(true);
-//			sensorContact.setIsDeleted(false);
-//			sensorContact.setIsUpdated(false);
-//
-//            try {
-//				if (checkForContactChange(allExistingContacts, sensorContact))
-//				{
-//					handleDBEntry(sensorContact, !sensorContact.getIsNew());
-//					m_bFlushToServer = true;
-//				}
-//			} catch (Exception e) {
-//				e.printStackTrace();
-//			}
-//
-//			// get extra data
-//			syncNumbers(sensorContact);
-//			syncMails(sensorContact);
-//
-//		}
-//		cursor.close();
-//
-//		// this deletes implicitly all numbers and mails which have no contact anymore
-//		for (SensorContact contact : allExistingContacts.values()) {
-//			if (!isRunning)
-//				return;
-//			syncNumbers(contact);
-//			syncMails(contact);
-//		}
-//		// remaining contacts are deleted
-//		if (deleteRemainingEntries(allExistingContacts, true))
-//			m_bFlushToServer = true;
-//
-//
-//		if (m_bFlushToServer) {
-//            String strFullqualifiedDatabaseClassName = getType().getFullqualifiedDatabaseClassName();
-//            ApiMessage.DataWrapper dataContact = flushDataRetro(strFullqualifiedDatabaseClassName);
-//            ApiMessage.DataWrapper dataMail = flushDataRetro(strFullqualifiedDatabaseClassName + "Mail");
-//            ApiMessage.DataWrapper dataNumber = flushDataRetro(strFullqualifiedDatabaseClassName + "Number");
-//            RetroServerPushManager.getInstance(context).flushManually(getPushType(), dataContact, dataMail, dataNumber);
-//        }
+        Map<Long, DbContactEvent> allExistingContacts = new HashMap<>();
+
+        Cursor cursor = null;
+
+        try {
+
+            cursor = context
+                    .getContentResolver()
+                    .query(URI_CONTACTS, null, Data.IN_VISIBLE_GROUP + " = 1", null, null);
+
+            if (cursor == null) {
+                return;
+            }
+
+            cursor.moveToFirst();
+
+            try {
+                allExistingContacts = getAllExistingContacts();
+
+            } catch (Exception e) {
+                Log.e(TAG, "Some error: ", e);
+                return;
+            }
+
+            while (cursor.moveToNext() && isRunning()) {
+
+                String strContactId = getStringByColumnName(cursor, ContactsContract.Contacts._ID);
+
+                System.out.println("sync Contact Id: " + strContactId);
+
+                String strGivenName = null;
+                String strFamilyName = null;
+
+                String[] projectionNameParams = new String[]{
+                        ContactsContract.CommonDataKinds.StructuredName.GIVEN_NAME,
+                        ContactsContract.CommonDataKinds.StructuredName.FAMILY_NAME};
+                String whereName = ContactsContract.Data.MIMETYPE + " = ? AND " + Data.CONTACT_ID + " = ?";
+                String[] whereNameParams = new String[]{
+                        ContactsContract.CommonDataKinds.StructuredName.CONTENT_ITEM_TYPE,
+                        strContactId};
+
+                Cursor nameCur = null;
+
+                try {
+
+                    nameCur = context.getContentResolver().query(URI_DATA, projectionNameParams, whereName, whereNameParams, null);
+
+                    if (nameCur != null) {
+
+                        if (nameCur.moveToFirst()) {
+
+                            strGivenName = getStringByColumnName(
+                                    nameCur,
+                                    ContactsContract.CommonDataKinds.StructuredName.GIVEN_NAME);
+                            strFamilyName = getStringByColumnName(
+                                    nameCur,
+                                    ContactsContract.CommonDataKinds.StructuredName.FAMILY_NAME);
+                        }
+                    }
+
+                } catch (Exception e) {
+                    Log.e(TAG, "Some error: ", e);
+                } finally {
+                    if (nameCur != null) {
+                        nameCur.close();
+                    }
+                }
+
+                // Fill database object
+                DbContactEvent sensorContact = new DbContactEvent();
+
+                sensorContact.setContactId(Long.valueOf(strContactId));
+//                sensorContact.setGlobalContactId(KrakenUtils.getGlobalId(context, Long.valueOf(strContactId)));
+                sensorContact.setDisplayName(getStringByColumnName(cursor, Data.DISPLAY_NAME_PRIMARY));
+                sensorContact.setGivenName(strGivenName);
+                sensorContact.setFamilyName(strFamilyName);
+                sensorContact.setStarred(getIntByColumnName(cursor, Data.STARRED));
+                sensorContact.setLastTimeContacted(getIntByColumnName(cursor, Data.LAST_TIME_CONTACTED));
+                sensorContact.setTimesContacted(getIntByColumnName(cursor, Data.TIMES_CONTACTED));
+                sensorContact.setNote(getNote(strContactId));
+                sensorContact.setIsNew(true);
+                sensorContact.setIsDeleted(false);
+                sensorContact.setIsUpdated(false);
+
+                try {
+                    if (checkForContactChange(allExistingContacts, sensorContact)) {
+                        daoProvider.getContactEventDao().insert(sensorContact);
+                    }
+                } catch (Exception e) {
+                    Log.e(TAG, "Some error: ", e);
+                }
+
+                // get extra data
+                syncNumbers(sensorContact);
+                syncMails(sensorContact);
+
+            }
+        } catch (NullPointerException npe) {
+            Log.d(TAG, "NPE in cursor");
+        } catch (Exception e) {
+            Log.e(TAG, "Some error:", e);
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+
+        // this deletes implicitly all numbers and mails which have no contact anymore
+        for (DbContactEvent contact : allExistingContacts.values()) {
+
+            if (!isRunning()) {
+                return;
+            }
+
+            syncNumbers(contact);
+            syncMails(contact);
+        }
+        // remaining contacts are deleted
+        deleteRemainingEntries(allExistingContacts, true);
     }
 
-//	private void syncMails(SensorContact sensorContact) {
-//		long longContactId = sensorContact.getContactId();
-//		HashMap<String, SensorContactMail> mapExistingMails = getExistingMails(longContactId);
-//
-//		String[] columns = new String[] { Email.ADDRESS, Email.TYPE };
-//		Cursor emails = context.getContentResolver().query(URI_EMAIL, columns, Email.CONTACT_ID + " = " + longContactId, null, null);
-//		while (emails.moveToNext()) {
-//			SensorContactMail sensorContactMail = new SensorContactMail();
-////			sensorContactMail.setMailId(getLongByColumnName(emails, Email._ID));
-//			sensorContactMail.setFkContact(sensorContact.getId());
-//			sensorContactMail.setAddress(getStringByColumnName(emails, Email.ADDRESS));
-//			sensorContactMail.setType(getStringByColumnName(emails, Email.TYPE));
-//			sensorContactMail.setIsNew(true);
-//			sensorContactMail.setIsDeleted(false);
-//			sensorContactMail.setIsUpdated(false);
-//
-//			try {
-//				if (checkForContactMailChange(mapExistingMails, sensorContactMail))
-//				{
-//					handleDBEntry(sensorContactMail, !sensorContactMail.getIsNew(), true, false);
-//					m_bFlushToServer = true;
-//				}
-//			} catch (Exception e) {
-//				e.printStackTrace();
-//			}
-//		}
-//		emails.close();
-//
-//		// remaining mails are deleted
-//		if (deleteRemainingEntries(mapExistingMails, false))
-//			m_bFlushToServer = true;
-//	}
+    private boolean deleteRemainingEntries(Map<Long, DbContactEvent> allExistingContacts, boolean b) {
 
-//	private boolean checkForContactMailChange(HashMap<String, SensorContactMail> map, SensorContactMail newSensorContactMail) throws Exception {
-//		try {
-//			if (m_checkDifferenceMethodForContactMailChange == null || m_getKeyMethodForSensorContactMail == null)
-//			{
-//				m_getKeyMethodForSensorContactMail = SensorContactMail.class.getDeclaredMethod("getMailId", new Class[]{});
-//				m_getKeyMethodForSensorContactMail.setAccessible(true);
-//				m_checkDifferenceMethodForContactMailChange = getClass().getDeclaredMethod("hasContactMailDifference", new Class[]{SensorContactMail.class, SensorContactMail.class});
-//				m_checkDifferenceMethodForContactMailChange.setAccessible(true);
-//			}
-//			return checkForChange(map, newSensorContactMail, m_getKeyMethodForSensorContactMail, m_checkDifferenceMethodForContactMailChange);
-//		} catch (Exception e) {
-//			throw new Exception(e);
-//		}
-//	}
+        boolean bSomethingDeleted = false;
 
-//	private boolean hasContactMailDifference(SensorContactMail existingMail, SensorContactMail newSensorContactMail) {
-//		if (checkForDifference(existingMail.getAddress(), newSensorContactMail.getAddress()))
-//			return true;
-//		if (checkForDifference(existingMail.getType(), newSensorContactMail.getType()))
-//			return true;
-//		return false;
-//	}
+        for (DbContactEvent entry : allExistingContacts.values()) {
 
-//	private void syncNumbers(SensorContact sensorContact) {
-//		long longContactId = sensorContact.getContactId();
-//		HashMap<Long, SensorContactNumber> mapExistingNumbers = getExistingNumbers(longContactId);
-//
-//		Cursor curPhones = context.getContentResolver().query(URI_PHONE, null, Phone.CONTACT_ID + " = " + longContactId, null, null);
-//		while (curPhones.moveToNext()) {
-//			SensorContactNumber sensorContactNumber = new SensorContactNumber();
-//			sensorContactNumber.setNumberId(getLongByColumnName(curPhones, Phone._ID));
-//			sensorContactNumber.setFkContact(sensorContact.getId());
-//			sensorContactNumber.setNumber(getStringByColumnName(curPhones, Phone.NUMBER));
-//			sensorContactNumber.setType(getStringByColumnName(curPhones, Phone.TYPE));
-//			sensorContactNumber.setIsNew(true);
-//			sensorContactNumber.setIsDeleted(false);
-//			sensorContactNumber.setIsUpdated(false);
-//
-//			try {
-//				if (checkForContactNumberChange(mapExistingNumbers, sensorContactNumber)) {
-//					handleDBEntry(sensorContactNumber, !sensorContactNumber.getIsNew(), true, false);
-//					m_bFlushToServer = true;
-//				}
-//			} catch (Exception e) {
-//				e.printStackTrace();
-//			}
-//		}
-//		curPhones.close();
-//
-//		// remaining numbers are deleted
-//		if (deleteRemainingEntries(mapExistingNumbers, false))
-//			m_bFlushToServer = true;
-//	}
+            if (b && !isRunning()) {
+                return bSomethingDeleted;
+            }
 
-//	private boolean checkForContactNumberChange(HashMap<Long, SensorContactNumber> map, SensorContactNumber newSensorContactNumber) throws Exception {
-//		try {
-//			if (m_checkDifferenceMethodForContactNumberChange  == null || m_getKeyMethodForSensorContactNumber == null)
-//			{
-//				m_getKeyMethodForSensorContactNumber = SensorContactNumber.class.getDeclaredMethod("getNumberId", new Class[]{});
-//				m_getKeyMethodForSensorContactNumber.setAccessible(true);
-//				m_checkDifferenceMethodForContactNumberChange = getClass().getDeclaredMethod("hasContactNumberDifference", new Class[]{SensorContactNumber.class, SensorContactNumber.class});
-//				m_checkDifferenceMethodForContactNumberChange.setAccessible(true);
-//			}
-//			return checkForChange(map, newSensorContactNumber, m_getKeyMethodForSensorContactNumber, m_checkDifferenceMethodForContactNumberChange);
-//		} catch (Exception e) {
-//			throw new Exception(e);
-//		}
-//	}
+            entry.setIsDeleted(true);
+            entry.setIsNew(false);
+            entry.setIsUpdated(false);
 
-//	private boolean hasContactNumberDifference(SensorContactNumber existingNumber, SensorContactNumber newSensorContactNumber) {
-//		if (checkForDifference(existingNumber.getNumber(), newSensorContactNumber.getNumber()))
-//			return true;
-//		if (checkForDifference(existingNumber.getType(), newSensorContactNumber.getType()))
-//			return true;
-//
-//		return false;
-//	}
+            daoProvider.getContactEventDao().delete(entry);
 
-//	private boolean checkForContactChange(HashMap<Long, SensorContact> map, SensorContact newSensorContact) throws Exception {
-//		try {
-//			long id = newSensorContact.getContactId();
-//			SensorContact existingReminder = map.get(id);
-//
-//			if (m_checkDifferenceMethodForContactChange == null || m_getKeyMethodForSensorContact == null)
-//			{
-//				m_getKeyMethodForSensorContact = SensorContact.class.getDeclaredMethod("getContactId", new Class[]{});
-//				m_getKeyMethodForSensorContact.setAccessible(true);
-//				m_checkDifferenceMethodForContactChange = getClass().getDeclaredMethod("hasContactDifference", new Class[]{SensorContact.class, SensorContact.class});
-//				m_checkDifferenceMethodForContactChange.setAccessible(true);
-//			}
-//			boolean result = checkForChange(map, newSensorContact, m_getKeyMethodForSensorContact, m_checkDifferenceMethodForContactChange);
-//			if (!result)
-//			{
-//				newSensorContact.setId(existingReminder.getId());
-//			}
-//			return result;
-//		} catch (Exception e) {
-//			throw new Exception(e);
-//		}
-//	}
+            if (!bSomethingDeleted) {
+                bSomethingDeleted = true;
+            }
+        }
 
-//	private boolean hasContactDifference(SensorContact existingReminder, SensorContact newSensorContact) {
-//		if (checkForDifference(existingReminder.getDisplayName(), newSensorContact.getDisplayName()))
-//			return true;
-//		if (checkForDifference(existingReminder.getGivenName(), newSensorContact.getGivenName()))
-//			return true;
-//		if (checkForDifference(existingReminder.getFamilyName(), newSensorContact.getFamilyName()))
-//			return true;
-//		if (checkForDifference(existingReminder.getStarred(), newSensorContact.getStarred()))
-//			return true;
-//		if (checkForDifference(existingReminder.getLastTimeContacted(), newSensorContact.getLastTimeContacted()))
-//			return true;
-//		if (checkForDifference(existingReminder.getTimesContacted(), newSensorContact.getTimesContacted()))
-//			return true;
-//		if (checkForDifference(existingReminder.getNote(), newSensorContact.getNote()))
-//			return true;
-//		return false;
-//	}
+        return bSomethingDeleted;
+    }
 
-//	private HashMap<Long, SensorContact> getAllExistingContacts() throws NoSuchMethodException, NoSuchFieldException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
-//
-//		if (m_methodForGEtAllExistingContacts == null)
-//		{
-//			m_methodForGEtAllExistingContacts = SensorContact.class.getDeclaredMethod("getContactId", new Class[]{});
-//			m_methodForGEtAllExistingContacts.setAccessible(true);
-//		}
-//		return getAllExistingEntries(SensorContact.class, m_methodForGEtAllExistingContacts);
-//	}
+    private boolean deleteRemainingEmailEntries(Map<String, DbContactEmailEvent> allExistingContactsEmail, boolean b) {
 
-//	private HashMap<Long, SensorContactNumber> getExistingNumbers(long contactId) {
-//		List<SensorContactNumber> list = mDaoSession.getSensorContactNumberDao().queryBuilder().where(Properties.ContactId.eq(contactId))
-//				.list();
-//
-//		HashMap<Long, SensorContactNumber> map = new HashMap<Long, SensorContactNumber>();
-//		for (SensorContactNumber number : list)
-//			map.put(number.getNumberId(), number);
-//
-//		return map;
-//	}
+        boolean bSomethingDeleted = false;
 
-//	private HashMap<String, SensorContactMail> getExistingMails(long contactId) {
-//		List<SensorContactMail> list = mDaoSession.getSensorContactMailDao().queryBuilder()
-//				.where(SensorContactMailDao.Properties.ContactId.eq(contactId)).list();
-//
-//		HashMap<String, SensorContactMail> map = new HashMap<String, SensorContactMail>();
-//		for (SensorContactMail mail : list)
-//			map.put(mail.getAddress(), mail);
-//
-//		return map;
-//	}
+        for (DbContactEmailEvent entry : allExistingContactsEmail.values()) {
+
+            if (b && !isRunning()) {
+                return bSomethingDeleted;
+            }
+
+            entry.setIsDeleted(true);
+            entry.setIsNew(false);
+            entry.setIsUpdated(false);
+
+            daoProvider.getContactEmailEventDao().delete(entry);
+
+            if (!bSomethingDeleted) {
+                bSomethingDeleted = true;
+            }
+        }
+
+        return bSomethingDeleted;
+    }
+
+    private boolean deleteRemainingNumberEntries(Map<String, DbContactNumberEvent> allExistingContactsNumber, boolean b) {
+
+        boolean bSomethingDeleted = false;
+
+        for (DbContactNumberEvent entry : allExistingContactsNumber.values()) {
+
+            if (b && !isRunning()) {
+                return bSomethingDeleted;
+            }
+
+            entry.setIsDeleted(true);
+            entry.setIsNew(false);
+            entry.setIsUpdated(false);
+
+            daoProvider.getContactNumberEventDao().delete(entry);
+
+            if (!bSomethingDeleted) {
+                bSomethingDeleted = true;
+            }
+        }
+
+        return bSomethingDeleted;
+    }
+
+    private void syncMails(DbContactEvent sensorContact) {
+
+        long longContactId = sensorContact.getContactId();
+        Map<String, DbContactEmailEvent> mapExistingMails = getExistingMails(longContactId);
+
+        String[] columns = new String[]{Email.ADDRESS, Email.TYPE};
+
+        Cursor emails = null;
+
+        try {
+
+            emails = context
+                    .getContentResolver()
+                    .query(URI_EMAIL, columns, Email.CONTACT_ID + " = " + longContactId, null, null);
+
+            if (emails == null) {
+                return;
+            }
+
+            while (emails.moveToNext()) {
+
+                DbContactEmailEvent sensorContactMail = new DbContactEmailEvent();
+
+                sensorContactMail.setMailId(getLongByColumnName(emails, Email._ID));
+                sensorContactMail.setContactId(sensorContact.getId());
+                sensorContactMail.setAddress(getStringByColumnName(emails, Email.ADDRESS));
+                sensorContactMail.setType(getStringByColumnName(emails, Email.TYPE));
+                sensorContactMail.setIsNew(true);
+                sensorContactMail.setIsDeleted(false);
+                sensorContactMail.setIsUpdated(false);
+
+                try {
+                    if (checkForContactMailChange(mapExistingMails, sensorContactMail)) {
+                        daoProvider.getContactEmailEventDao().insert(sensorContactMail);
+                    }
+
+                } catch (Exception e) {
+                    Log.e(TAG, "Some error: ", e);
+                }
+            }
+        } finally {
+            if (emails != null) {
+                emails.close();
+            }
+        }
+
+        // remaining mails are deleted
+        deleteRemainingEmailEntries(mapExistingMails, false);
+    }
+
+    private boolean checkForContactMailChange(
+            Map<String, DbContactEmailEvent> map,
+            DbContactEmailEvent newItem) {
+
+        String id = newItem.getAddress();
+
+        DbContactEmailEvent existingItem = map.remove(id);
+
+        if (existingItem == null) {
+
+            newItem.setIsNew(true);
+            newItem.setIsUpdated(false);
+            newItem.setIsDeleted(false);
+
+            return true;
+
+        } else {
+            if (hasContactMailDifference(existingItem, newItem)) {
+
+                newItem.setIsNew(false);
+                newItem.setIsUpdated(true);
+                newItem.setIsDeleted(false);
+                newItem.setId(existingItem.getId());
+
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private boolean hasContactMailDifference(
+            DbContactEmailEvent existingMail,
+            DbContactEmailEvent newMail) {
+
+        return checkForDifference(existingMail.getAddress(), newMail.getAddress()) ||
+                checkForDifference(existingMail.getType(), newMail.getType());
+    }
+
+    private void syncNumbers(DbContactEvent sensorContact) {
+
+        long longContactId = sensorContact.getGlobalContactId();
+        Map<String, DbContactNumberEvent> mapExistingNumbers = getExistingNumbers(longContactId);
+
+        Cursor curPhones = null;
+
+        try {
+
+            curPhones = context
+                    .getContentResolver()
+                    .query(URI_PHONE, null, Phone.CONTACT_ID + " = " + longContactId, null, null);
+
+            if (curPhones == null) {
+                return;
+            }
+
+            while (curPhones.moveToNext()) {
+
+                DbContactNumberEvent sensorContactNumber = new DbContactNumberEvent();
+
+                sensorContactNumber.setNumberId(getLongByColumnName(curPhones, Phone._ID));
+                sensorContactNumber.setContactId(sensorContact.getId());
+                sensorContactNumber.setNumber(getStringByColumnName(curPhones, Phone.NUMBER));
+                sensorContactNumber.setType(getStringByColumnName(curPhones, Phone.TYPE));
+                sensorContactNumber.setIsNew(true);
+                sensorContactNumber.setIsDeleted(false);
+                sensorContactNumber.setIsUpdated(false);
+
+                try {
+                    if (checkForContactNumberChange(mapExistingNumbers, sensorContactNumber)) {
+                        daoProvider.getContactNumberEventDao().insert(sensorContactNumber);
+                    }
+                } catch (Exception e) {
+                    Log.e(TAG, "Some error: ", e);
+                }
+            }
+        } catch (NullPointerException npe) {
+            Log.d(TAG, "");
+        } finally {
+            if (curPhones != null) {
+                curPhones.close();
+            }
+        }
+
+        // remaining numbers are deleted
+        deleteRemainingNumberEntries(mapExistingNumbers, false);
+    }
+
+    private boolean checkForContactNumberChange(
+            Map<String, DbContactNumberEvent> map,
+            DbContactNumberEvent newItem) {
+
+        String id = newItem.getNumber();
+
+        DbContactNumberEvent existingItem = map.remove(id);
+
+        if (existingItem == null) {
+
+            newItem.setIsNew(true);
+            newItem.setIsUpdated(false);
+            newItem.setIsDeleted(false);
+
+            return true;
+
+        } else {
+            if (hasContactNumberDifference(existingItem, newItem)) {
+
+                newItem.setIsNew(false);
+                newItem.setIsUpdated(true);
+                newItem.setIsDeleted(false);
+                newItem.setId(existingItem.getId());
+
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private boolean hasContactNumberDifference(DbContactNumberEvent existingNumber,
+                                               DbContactNumberEvent newSensorContactNumber) {
+
+        return checkForDifference(existingNumber.getNumber(), newSensorContactNumber.getNumber()) ||
+                checkForDifference(existingNumber.getType(), newSensorContactNumber.getType());
+
+    }
+
+    private boolean checkForContactChange(Map<Long, DbContactEvent> map, DbContactEvent newItem) {
+
+
+        long id = newItem.getContactId();
+        DbContactEvent existingReminder = map.get(id);
+
+        boolean result = false;
+
+        DbContactEvent existingItem = map.remove(id);
+
+        if (existingItem == null) {
+
+            newItem.setIsNew(true);
+            newItem.setIsUpdated(false);
+            newItem.setIsDeleted(false);
+
+            result = true;
+
+        } else {
+            if (hasContactDifference(existingItem, newItem)) {
+
+                newItem.setIsNew(false);
+                newItem.setIsUpdated(true);
+                newItem.setIsDeleted(false);
+                newItem.setId(existingItem.getId());
+
+                result = true;
+            }
+        }
+
+        if (!result) {
+            newItem.setId(existingReminder.getId());
+        }
+
+        return result;
+    }
+
+    private boolean hasContactDifference(DbContactEvent existingReminder, DbContactEvent newSensorContact) {
+
+        if (checkForDifference(existingReminder.getDisplayName(), newSensorContact.getDisplayName()))
+            return true;
+        if (checkForDifference(existingReminder.getGivenName(), newSensorContact.getGivenName()))
+            return true;
+        if (checkForDifference(existingReminder.getFamilyName(), newSensorContact.getFamilyName()))
+            return true;
+        if (checkForDifference(existingReminder.getStarred(), newSensorContact.getStarred()))
+            return true;
+        if (checkForDifference(existingReminder.getLastTimeContacted(), newSensorContact.getLastTimeContacted()))
+            return true;
+        if (checkForDifference(existingReminder.getTimesContacted(), newSensorContact.getTimesContacted()))
+            return true;
+        if (checkForDifference(existingReminder.getNote(), newSensorContact.getNote()))
+            return true;
+        return false;
+    }
+
+    private Map<Long, DbContactEvent> getAllExistingContacts() {
+
+        Map<Long, DbContactEvent> result = new HashMap<>();
+
+        List<DbContactEvent> allContacts = daoProvider.getContactEventDao().getAll();
+
+        for (DbContactEvent event : allContacts) {
+            result.put(event.getGlobalContactId(), event);
+        }
+
+        return result;
+    }
+
+    private Map<String, DbContactNumberEvent> getExistingNumbers(long contactId) {
+
+        List<DbContactNumberEvent> list = daoProvider
+                .getContactNumberEventDao()
+                .get(contactId);
+
+        Map<String, DbContactNumberEvent> map = new HashMap<>();
+
+        for (DbContactNumberEvent number : list) {
+            map.put(number.getNumber(), number);
+        }
+
+        return map;
+    }
+
+    private Map<String, DbContactEmailEvent> getExistingMails(long contactId) {
+
+        List<DbContactEmailEvent> contactMails = daoProvider
+                .getContactEmailEventDao()
+                .get(contactId);
+
+        Map<String, DbContactEmailEvent> map = new HashMap<>();
+
+        for (DbContactEmailEvent mail : contactMails) {
+            map.put(mail.getAddress(), mail);
+        }
+
+        return map;
+    }
 
     private String getNote(String contactId) {
+
+        if (context == null) {
+            return null;
+        }
+
         String note = null;
         String[] columns = new String[]{Note.NOTE};
         String where = Data.RAW_CONTACT_ID + " = ? AND " + Data.MIMETYPE + " = ?";
         String[] whereParameters = new String[]{contactId, Note.CONTENT_ITEM_TYPE};
-        Cursor contacts = context.getContentResolver().query(URI_DATA, columns, where, whereParameters, null);
-        if (contacts.moveToFirst()) {
-            note = getStringByColumnName(contacts, Note.NOTE);
+
+        Cursor contacts = null;
+
+        try {
+
+            contacts = context
+                    .getContentResolver()
+                    .query(URI_DATA, columns, where, whereParameters, null);
+
+            if (contacts != null) {
+                if (contacts.moveToFirst()) {
+                    note = getStringByColumnName(contacts, Note.NOTE);
+                }
+            }
+
+        } finally {
+            if (contacts != null) {
+                contacts.close();
+            }
         }
-        contacts.close();
+
         return note;
     }
 
