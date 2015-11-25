@@ -74,4 +74,18 @@ public class ContactEmailEventDaoImpl extends
                 .build()
                 .list();
     }
+
+    @Override
+    public List<DbContactEmailEvent> get(Long contactId) {
+
+        if (contactId == null) {
+            return Collections.emptyList();
+        }
+
+        return dao
+                .queryBuilder()
+                .where(DbContactEmailEventDao.Properties.ContactId.eq(contactId))
+                .build()
+                .list();
+    }
 }

@@ -11,6 +11,7 @@ import de.greenrobot.dao.DaoException;
 public class DbContactEvent implements de.tudarmstadt.informatik.tk.android.assistance.sdk.interfaces.IDbUpdatableSensor {
 
     private Long id;
+    private Long contactId;
     private Long globalContactId;
     private String displayName;
     private String givenName;
@@ -41,8 +42,9 @@ public class DbContactEvent implements de.tudarmstadt.informatik.tk.android.assi
         this.id = id;
     }
 
-    public DbContactEvent(Long id, Long globalContactId, String displayName, String givenName, String familyName, Integer starred, Integer lastTimeContacted, Integer timesContacted, String note, Boolean isNew, Boolean isUpdated, Boolean isDeleted, String created) {
+    public DbContactEvent(Long id, Long contactId, Long globalContactId, String displayName, String givenName, String familyName, Integer starred, Integer lastTimeContacted, Integer timesContacted, String note, Boolean isNew, Boolean isUpdated, Boolean isDeleted, String created) {
         this.id = id;
+        this.contactId = contactId;
         this.globalContactId = globalContactId;
         this.displayName = displayName;
         this.givenName = givenName;
@@ -69,6 +71,14 @@ public class DbContactEvent implements de.tudarmstadt.informatik.tk.android.assi
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Long getContactId() {
+        return contactId;
+    }
+
+    public void setContactId(Long contactId) {
+        this.contactId = contactId;
     }
 
     public Long getGlobalContactId() {

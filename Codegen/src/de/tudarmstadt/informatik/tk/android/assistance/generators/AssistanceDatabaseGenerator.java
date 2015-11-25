@@ -462,6 +462,7 @@ public class AssistanceDatabaseGenerator {
     contactEvent.setTableName("contact_event");
     contactEvent.addIdProperty().autoincrement().index();
     contactEvent.implementsInterface(Config.ASSISTANCE_PACKAGE_UPDATABLE_SENSOR);
+    contactEvent.addLongProperty("contactId");
     contactEvent.addLongProperty("globalContactId");
     contactEvent.addStringProperty("displayName");
     contactEvent.addStringProperty("givenName");

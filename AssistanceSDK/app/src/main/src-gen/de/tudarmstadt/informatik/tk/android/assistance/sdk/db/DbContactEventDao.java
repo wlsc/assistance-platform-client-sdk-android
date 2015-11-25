@@ -24,18 +24,19 @@ public class DbContactEventDao extends AbstractDao<DbContactEvent, Long> {
     */
     public static class Properties {
         public final static Property Id = new Property(0, Long.class, "id", true, "_id");
-        public final static Property GlobalContactId = new Property(1, Long.class, "globalContactId", false, "GLOBAL_CONTACT_ID");
-        public final static Property DisplayName = new Property(2, String.class, "displayName", false, "DISPLAY_NAME");
-        public final static Property GivenName = new Property(3, String.class, "givenName", false, "GIVEN_NAME");
-        public final static Property FamilyName = new Property(4, String.class, "familyName", false, "FAMILY_NAME");
-        public final static Property Starred = new Property(5, Integer.class, "starred", false, "STARRED");
-        public final static Property LastTimeContacted = new Property(6, Integer.class, "lastTimeContacted", false, "LAST_TIME_CONTACTED");
-        public final static Property TimesContacted = new Property(7, Integer.class, "timesContacted", false, "TIMES_CONTACTED");
-        public final static Property Note = new Property(8, String.class, "note", false, "NOTE");
-        public final static Property IsNew = new Property(9, Boolean.class, "isNew", false, "IS_NEW");
-        public final static Property IsUpdated = new Property(10, Boolean.class, "isUpdated", false, "IS_UPDATED");
-        public final static Property IsDeleted = new Property(11, Boolean.class, "isDeleted", false, "IS_DELETED");
-        public final static Property Created = new Property(12, String.class, "created", false, "CREATED");
+        public final static Property ContactId = new Property(1, Long.class, "contactId", false, "CONTACT_ID");
+        public final static Property GlobalContactId = new Property(2, Long.class, "globalContactId", false, "GLOBAL_CONTACT_ID");
+        public final static Property DisplayName = new Property(3, String.class, "displayName", false, "DISPLAY_NAME");
+        public final static Property GivenName = new Property(4, String.class, "givenName", false, "GIVEN_NAME");
+        public final static Property FamilyName = new Property(5, String.class, "familyName", false, "FAMILY_NAME");
+        public final static Property Starred = new Property(6, Integer.class, "starred", false, "STARRED");
+        public final static Property LastTimeContacted = new Property(7, Integer.class, "lastTimeContacted", false, "LAST_TIME_CONTACTED");
+        public final static Property TimesContacted = new Property(8, Integer.class, "timesContacted", false, "TIMES_CONTACTED");
+        public final static Property Note = new Property(9, String.class, "note", false, "NOTE");
+        public final static Property IsNew = new Property(10, Boolean.class, "isNew", false, "IS_NEW");
+        public final static Property IsUpdated = new Property(11, Boolean.class, "isUpdated", false, "IS_UPDATED");
+        public final static Property IsDeleted = new Property(12, Boolean.class, "isDeleted", false, "IS_DELETED");
+        public final static Property Created = new Property(13, String.class, "created", false, "CREATED");
     };
 
     private DaoSession daoSession;
@@ -55,18 +56,19 @@ public class DbContactEventDao extends AbstractDao<DbContactEvent, Long> {
         String constraint = ifNotExists? "IF NOT EXISTS ": "";
         db.execSQL("CREATE TABLE " + constraint + "\"contact_event\" (" + //
                 "\"_id\" INTEGER PRIMARY KEY AUTOINCREMENT ," + // 0: id
-                "\"GLOBAL_CONTACT_ID\" INTEGER," + // 1: globalContactId
-                "\"DISPLAY_NAME\" TEXT," + // 2: displayName
-                "\"GIVEN_NAME\" TEXT," + // 3: givenName
-                "\"FAMILY_NAME\" TEXT," + // 4: familyName
-                "\"STARRED\" INTEGER," + // 5: starred
-                "\"LAST_TIME_CONTACTED\" INTEGER," + // 6: lastTimeContacted
-                "\"TIMES_CONTACTED\" INTEGER," + // 7: timesContacted
-                "\"NOTE\" TEXT," + // 8: note
-                "\"IS_NEW\" INTEGER," + // 9: isNew
-                "\"IS_UPDATED\" INTEGER," + // 10: isUpdated
-                "\"IS_DELETED\" INTEGER," + // 11: isDeleted
-                "\"CREATED\" TEXT NOT NULL );"); // 12: created
+                "\"CONTACT_ID\" INTEGER," + // 1: contactId
+                "\"GLOBAL_CONTACT_ID\" INTEGER," + // 2: globalContactId
+                "\"DISPLAY_NAME\" TEXT," + // 3: displayName
+                "\"GIVEN_NAME\" TEXT," + // 4: givenName
+                "\"FAMILY_NAME\" TEXT," + // 5: familyName
+                "\"STARRED\" INTEGER," + // 6: starred
+                "\"LAST_TIME_CONTACTED\" INTEGER," + // 7: lastTimeContacted
+                "\"TIMES_CONTACTED\" INTEGER," + // 8: timesContacted
+                "\"NOTE\" TEXT," + // 9: note
+                "\"IS_NEW\" INTEGER," + // 10: isNew
+                "\"IS_UPDATED\" INTEGER," + // 11: isUpdated
+                "\"IS_DELETED\" INTEGER," + // 12: isDeleted
+                "\"CREATED\" TEXT NOT NULL );"); // 13: created
         // Add Indexes
         db.execSQL("CREATE INDEX " + constraint + "IDX_contact_event__id ON contact_event" +
                 " (\"_id\");");
@@ -88,61 +90,66 @@ public class DbContactEventDao extends AbstractDao<DbContactEvent, Long> {
             stmt.bindLong(1, id);
         }
  
+        Long contactId = entity.getContactId();
+        if (contactId != null) {
+            stmt.bindLong(2, contactId);
+        }
+ 
         Long globalContactId = entity.getGlobalContactId();
         if (globalContactId != null) {
-            stmt.bindLong(2, globalContactId);
+            stmt.bindLong(3, globalContactId);
         }
  
         String displayName = entity.getDisplayName();
         if (displayName != null) {
-            stmt.bindString(3, displayName);
+            stmt.bindString(4, displayName);
         }
  
         String givenName = entity.getGivenName();
         if (givenName != null) {
-            stmt.bindString(4, givenName);
+            stmt.bindString(5, givenName);
         }
  
         String familyName = entity.getFamilyName();
         if (familyName != null) {
-            stmt.bindString(5, familyName);
+            stmt.bindString(6, familyName);
         }
  
         Integer starred = entity.getStarred();
         if (starred != null) {
-            stmt.bindLong(6, starred);
+            stmt.bindLong(7, starred);
         }
  
         Integer lastTimeContacted = entity.getLastTimeContacted();
         if (lastTimeContacted != null) {
-            stmt.bindLong(7, lastTimeContacted);
+            stmt.bindLong(8, lastTimeContacted);
         }
  
         Integer timesContacted = entity.getTimesContacted();
         if (timesContacted != null) {
-            stmt.bindLong(8, timesContacted);
+            stmt.bindLong(9, timesContacted);
         }
  
         String note = entity.getNote();
         if (note != null) {
-            stmt.bindString(9, note);
+            stmt.bindString(10, note);
         }
  
         Boolean isNew = entity.getIsNew();
         if (isNew != null) {
-            stmt.bindLong(10, isNew ? 1L: 0L);
+            stmt.bindLong(11, isNew ? 1L: 0L);
         }
  
         Boolean isUpdated = entity.getIsUpdated();
         if (isUpdated != null) {
-            stmt.bindLong(11, isUpdated ? 1L: 0L);
+            stmt.bindLong(12, isUpdated ? 1L: 0L);
         }
  
         Boolean isDeleted = entity.getIsDeleted();
         if (isDeleted != null) {
-            stmt.bindLong(12, isDeleted ? 1L: 0L);
+            stmt.bindLong(13, isDeleted ? 1L: 0L);
         }
-        stmt.bindString(13, entity.getCreated());
+        stmt.bindString(14, entity.getCreated());
     }
 
     @Override
@@ -162,18 +169,19 @@ public class DbContactEventDao extends AbstractDao<DbContactEvent, Long> {
     public DbContactEvent readEntity(Cursor cursor, int offset) {
         DbContactEvent entity = new DbContactEvent( //
             cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0), // id
-            cursor.isNull(offset + 1) ? null : cursor.getLong(offset + 1), // globalContactId
-            cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // displayName
-            cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // givenName
-            cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4), // familyName
-            cursor.isNull(offset + 5) ? null : cursor.getInt(offset + 5), // starred
-            cursor.isNull(offset + 6) ? null : cursor.getInt(offset + 6), // lastTimeContacted
-            cursor.isNull(offset + 7) ? null : cursor.getInt(offset + 7), // timesContacted
-            cursor.isNull(offset + 8) ? null : cursor.getString(offset + 8), // note
-            cursor.isNull(offset + 9) ? null : cursor.getShort(offset + 9) != 0, // isNew
-            cursor.isNull(offset + 10) ? null : cursor.getShort(offset + 10) != 0, // isUpdated
-            cursor.isNull(offset + 11) ? null : cursor.getShort(offset + 11) != 0, // isDeleted
-            cursor.getString(offset + 12) // created
+            cursor.isNull(offset + 1) ? null : cursor.getLong(offset + 1), // contactId
+            cursor.isNull(offset + 2) ? null : cursor.getLong(offset + 2), // globalContactId
+            cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // displayName
+            cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4), // givenName
+            cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5), // familyName
+            cursor.isNull(offset + 6) ? null : cursor.getInt(offset + 6), // starred
+            cursor.isNull(offset + 7) ? null : cursor.getInt(offset + 7), // lastTimeContacted
+            cursor.isNull(offset + 8) ? null : cursor.getInt(offset + 8), // timesContacted
+            cursor.isNull(offset + 9) ? null : cursor.getString(offset + 9), // note
+            cursor.isNull(offset + 10) ? null : cursor.getShort(offset + 10) != 0, // isNew
+            cursor.isNull(offset + 11) ? null : cursor.getShort(offset + 11) != 0, // isUpdated
+            cursor.isNull(offset + 12) ? null : cursor.getShort(offset + 12) != 0, // isDeleted
+            cursor.getString(offset + 13) // created
         );
         return entity;
     }
@@ -182,18 +190,19 @@ public class DbContactEventDao extends AbstractDao<DbContactEvent, Long> {
     @Override
     public void readEntity(Cursor cursor, DbContactEvent entity, int offset) {
         entity.setId(cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0));
-        entity.setGlobalContactId(cursor.isNull(offset + 1) ? null : cursor.getLong(offset + 1));
-        entity.setDisplayName(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
-        entity.setGivenName(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
-        entity.setFamilyName(cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4));
-        entity.setStarred(cursor.isNull(offset + 5) ? null : cursor.getInt(offset + 5));
-        entity.setLastTimeContacted(cursor.isNull(offset + 6) ? null : cursor.getInt(offset + 6));
-        entity.setTimesContacted(cursor.isNull(offset + 7) ? null : cursor.getInt(offset + 7));
-        entity.setNote(cursor.isNull(offset + 8) ? null : cursor.getString(offset + 8));
-        entity.setIsNew(cursor.isNull(offset + 9) ? null : cursor.getShort(offset + 9) != 0);
-        entity.setIsUpdated(cursor.isNull(offset + 10) ? null : cursor.getShort(offset + 10) != 0);
-        entity.setIsDeleted(cursor.isNull(offset + 11) ? null : cursor.getShort(offset + 11) != 0);
-        entity.setCreated(cursor.getString(offset + 12));
+        entity.setContactId(cursor.isNull(offset + 1) ? null : cursor.getLong(offset + 1));
+        entity.setGlobalContactId(cursor.isNull(offset + 2) ? null : cursor.getLong(offset + 2));
+        entity.setDisplayName(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
+        entity.setGivenName(cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4));
+        entity.setFamilyName(cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5));
+        entity.setStarred(cursor.isNull(offset + 6) ? null : cursor.getInt(offset + 6));
+        entity.setLastTimeContacted(cursor.isNull(offset + 7) ? null : cursor.getInt(offset + 7));
+        entity.setTimesContacted(cursor.isNull(offset + 8) ? null : cursor.getInt(offset + 8));
+        entity.setNote(cursor.isNull(offset + 9) ? null : cursor.getString(offset + 9));
+        entity.setIsNew(cursor.isNull(offset + 10) ? null : cursor.getShort(offset + 10) != 0);
+        entity.setIsUpdated(cursor.isNull(offset + 11) ? null : cursor.getShort(offset + 11) != 0);
+        entity.setIsDeleted(cursor.isNull(offset + 12) ? null : cursor.getShort(offset + 12) != 0);
+        entity.setCreated(cursor.getString(offset + 13));
      }
     
     /** @inheritdoc */

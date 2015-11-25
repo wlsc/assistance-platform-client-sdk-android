@@ -74,17 +74,11 @@ public abstract class AbstractContentObserverEvent extends AbstractSensor {
 
     protected boolean getBoolByColumnName(Cursor cur, String strColumnName) {
         int index = cur.getColumnIndex(strColumnName);
-        return (index == -1) ? false : (cur.getInt(cur.getColumnIndex(strColumnName)) == 1);
+        return (index != -1) && (cur.getInt(cur.getColumnIndex(strColumnName)) == 1);
     }
 
     protected boolean checkForDifference(Object obj1, Object obj2) {
-        if (obj1 == null && obj2 == null)
-            return false;
-
-        if (obj1 == null || obj2 == null)
-            return true;
-
-        return !obj1.equals(obj2);
+        return !(obj1 == null && obj2 == null) && (obj1 == null || obj2 == null || !obj1.equals(obj2));
     }
 
     @Override
@@ -120,7 +114,7 @@ public abstract class AbstractContentObserverEvent extends AbstractSensor {
                 mTimer = new Timer(true);
             }
 
-            mTimer.schedule(mTimerTask, TIME_TO_WAIT_BEFORE_SYNCING_IN_SEC * 1000);
+            mTimer.schedule(mTimerTask, TIME_TO_WAIT_BEFORE_SYNCING_IN_SEC * 1_000);
         }
     }
 
