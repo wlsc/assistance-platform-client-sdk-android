@@ -6,7 +6,9 @@ import android.content.pm.PackageManager;
 import android.net.TrafficStats;
 import android.util.Log;
 
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbNetworkTrafficEvent;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.DtoType;
@@ -15,6 +17,7 @@ import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensing.Abstrac
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensing.ISensor;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensing.impl.triggered.ForegroundTrafficEvent;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.PreferenceProvider;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.util.DateUtils;
 
 /**
  * This is a Periodic Sensor class which collect the mobile traffic data produced by the apps in the
@@ -50,6 +53,7 @@ public class BackgroundTrafficEvent extends
         DbNetworkTrafficEvent networkTrafficEvent = new DbNetworkTrafficEvent();
         networkTrafficEvent.setAppName(ForegroundTrafficEvent.EVENT_START_ASSISTANCE);
         networkTrafficEvent.setBackground(true);
+        networkTrafficEvent.setCreated(DateUtils.dateToISO8601String(new Date(), Locale.getDefault()));
 
         daoProvider.getNetworkTrafficEventDao().insert(networkTrafficEvent);
 
@@ -102,6 +106,7 @@ public class BackgroundTrafficEvent extends
 
             networkTrafficEvent.setLatitude(lastLatitude);
             networkTrafficEvent.setLongitude(lastLongitude);
+            networkTrafficEvent.setCreated(DateUtils.dateToISO8601String(new Date(), Locale.getDefault()));
 
             Log.d(TAG, "Insert entry");
 

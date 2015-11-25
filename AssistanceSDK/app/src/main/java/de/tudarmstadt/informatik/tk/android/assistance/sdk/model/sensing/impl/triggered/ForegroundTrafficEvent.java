@@ -11,7 +11,9 @@ import android.net.TrafficStats;
 import android.util.Log;
 import android.view.accessibility.AccessibilityEvent;
 
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbForegroundEvent;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbNetworkTrafficEvent;
@@ -21,6 +23,7 @@ import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensing.Abstrac
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.DaoProvider;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.PreferenceProvider;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.util.AccessibilityEventFilterUtils;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.util.DateUtils;
 
 /**
  * This is a triggered sensor which collect the data of apps which are running in the foreground.
@@ -212,6 +215,7 @@ public class ForegroundTrafficEvent extends AbstractTriggeredEvent {
                 }
 
                 networkTrafficEvent.setBackground(false);
+                networkTrafficEvent.setCreated(DateUtils.dateToISO8601String(new Date(), Locale.getDefault()));
 
                 Log.d(TAG, "Insert entry");
 
@@ -265,6 +269,7 @@ public class ForegroundTrafficEvent extends AbstractTriggeredEvent {
             }
 
             networkTrafficEvent.setBackground(false);
+            networkTrafficEvent.setCreated(DateUtils.dateToISO8601String(new Date(), Locale.getDefault()));
 
             Log.d(TAG, "Insert entry");
 
