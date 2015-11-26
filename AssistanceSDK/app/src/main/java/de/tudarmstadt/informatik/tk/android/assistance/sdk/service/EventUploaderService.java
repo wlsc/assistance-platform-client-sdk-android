@@ -713,6 +713,30 @@ public class EventUploaderService extends GcmTaskService {
                 case DtoType.FOREGROUND:
                     daoProvider.getForegroundEventDao().delete((List<DbForegroundEvent>) values);
                     break;
+
+                case DtoType.FOREGROUND_TRAFFIC:
+                    daoProvider.getNetworkTrafficEventDao().delete((List<DbNetworkTrafficEvent>) values);
+                    break;
+
+                case DtoType.BACKGROUND_TRAFFIC:
+                    daoProvider.getNetworkTrafficEventDao().delete((List<DbNetworkTrafficEvent>) values);
+                    break;
+
+                case DtoType.CONNECTION:
+                    daoProvider.getConnectionEventDao().delete((List<DbConnectionEvent>) values);
+                    break;
+
+                case DtoType.MOBILE_DATA_CONNECTION:
+                    daoProvider.getMobileConnectionEventDao().delete((List<DbMobileConnectionEvent>) values);
+                    break;
+
+                case DtoType.WIFI_CONNECTION:
+                    daoProvider.getWifiConnectionEventDao().delete((List<DbWifiConnectionEvent>) values);
+                    break;
+
+                case DtoType.LIGHT:
+                    daoProvider.getLightSensorDao().delete((List<DbLightSensor>) values);
+                    break;
             }
         }
 
