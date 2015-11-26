@@ -13,6 +13,7 @@ import android.view.accessibility.AccessibilityManager;
 import java.util.List;
 
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.R;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.service.AssistanceAccessibilityService;
 
 /**
  * ServiceUtils
@@ -30,12 +31,12 @@ public class AccessibilityUtils {
             builder.setMessage(R.string.alert_accessibility);
             builder.setPositiveButton(R.string.alert_accessibility_button,
                     new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    openAccessibiliySettings(context);
-                }
-            });
-            if(!((Activity)context).isFinishing()) {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            openAccessibiliySettings(context);
+                        }
+                    });
+            if (!((Activity) context).isFinishing()) {
                 builder.create().show();
             }
         }
@@ -45,7 +46,7 @@ public class AccessibilityUtils {
 
         //logInstalledAccessiblityServices(context);
 
-        final String id = "de.tudarmstadt.informatik.tk.android/.sdk.services.KrakenAccessibilityService";
+        final String id = AssistanceAccessibilityService.class.getCanonicalName();
 
         AccessibilityManager am = (AccessibilityManager) context
                 .getSystemService(Context.ACCESSIBILITY_SERVICE);
