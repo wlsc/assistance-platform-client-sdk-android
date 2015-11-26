@@ -21,6 +21,7 @@ import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.DtoType
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensing.AbstractTriggeredEvent;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.util.ConnectionUtils;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.util.DateUtils;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.util.StringUtils;
 
 /**
  * @author Unknown
@@ -82,41 +83,55 @@ public class ConnectionSensor extends AbstractTriggeredEvent {
 
         Log.d(TAG, "Finished");
 
-        /**
-         * Mobile data information
-         */
-        DbMobileConnectionEvent mobileConnectionEvent = new DbMobileConnectionEvent();
+        // only insert data when something is available
+        if (StringUtils.isNotNullAndEmpty(mobileCarrierName) ||
+                StringUtils.isNotNullAndEmpty(mobileCarrierCode) ||
+                StringUtils.isNotNullAndEmpty(mobileNetworkCode)) {
 
-        mobileConnectionEvent.setCarrierName(mobileCarrierName);
-        mobileConnectionEvent.setMobileCarrierCode(mobileCarrierCode);
-        mobileConnectionEvent.setMobileNetworkCode(mobileNetworkCode);
-        mobileConnectionEvent.setCreated(created);
+            /**
+             * Mobile data information
+             */
+            DbMobileConnectionEvent mobileConnectionEvent = new DbMobileConnectionEvent();
 
-        Log.d(TAG, "MOBILE: Insert entry");
+            mobileConnectionEvent.setCarrierName(mobileCarrierName);
+            mobileConnectionEvent.setMobileCarrierCode(mobileCarrierCode);
+            mobileConnectionEvent.setMobileNetworkCode(mobileNetworkCode);
+            mobileConnectionEvent.setCreated(created);
 
-        daoProvider.getMobileConnectionEventDao().insert(mobileConnectionEvent);
+            Log.d(TAG, "MOBILE: Insert entry");
 
-        Log.d(TAG, "MOBILE: Finished");
+            daoProvider.getMobileConnectionEventDao().insert(mobileConnectionEvent);
 
-        /**
-         * WIFI data information
-         */
-        DbWifiConnectionEvent wifiConnectionEvent = new DbWifiConnectionEvent();
+            Log.d(TAG, "MOBILE: Finished");
+        }
 
-        wifiConnectionEvent.setSsid(ssid);
-        wifiConnectionEvent.setBssid(bssid);
-        wifiConnectionEvent.setChannel(channel);
-        wifiConnectionEvent.setFrequency(frequency);
-        wifiConnectionEvent.setLinkSpeed(linkSpeed);
-        wifiConnectionEvent.setSignalStrength(signalStrength);
-        wifiConnectionEvent.setNetworkId(networkId);
-        wifiConnectionEvent.setCreated(created);
+        if (StringUtils.isNotNullAndEmpty(ssid) ||
+                StringUtils.isNotNullAndEmpty(bssid) ||
+                frequency != 0 ||
+                linkSpeed != 0 ||
+                signalStrength != 0 ||
+                networkId != 0) {
 
-        Log.d(TAG, "WIFI: Insert entry");
+            /**
+             * WIFI data information
+             */
+            DbWifiConnectionEvent wifiConnectionEvent = new DbWifiConnectionEvent();
 
-        daoProvider.getWifiConnectionEventDao().insert(wifiConnectionEvent);
+            wifiConnectionEvent.setSsid(ssid);
+            wifiConnectionEvent.setBssid(bssid);
+            wifiConnectionEvent.setChannel(channel);
+            wifiConnectionEvent.setFrequency(frequency);
+            wifiConnectionEvent.setLinkSpeed(linkSpeed);
+            wifiConnectionEvent.setSignalStrength(signalStrength);
+            wifiConnectionEvent.setNetworkId(networkId);
+            wifiConnectionEvent.setCreated(created);
 
-        Log.d(TAG, "WIFI: Finished");
+            Log.d(TAG, "WIFI: Insert entry");
+
+            daoProvider.getWifiConnectionEventDao().insert(wifiConnectionEvent);
+
+            Log.d(TAG, "WIFI: Finished");
+        }
     }
 
     @Override
