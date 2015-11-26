@@ -1,5 +1,9 @@
 apply plugin: 'com.android.library'
 
+ext {
+    playServicesLibVersion = '8.3.0'
+}
+
 android {
     compileSdkVersion 23
     buildToolsVersion "23.0.2"
@@ -11,6 +15,7 @@ android {
     buildTypes {
         release {
             minifyEnabled false
+            shrinkResources false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
         debug {
@@ -31,6 +36,7 @@ android {
 }
 
 dependencies {
+
     compile fileTree(include: ['*.jar'], dir: 'libs')
     compile project(':LiveSDK')
     compile 'com.facebook.android:facebook-android-sdk:3.23.1'
@@ -39,10 +45,10 @@ dependencies {
     // support library
     compile 'com.android.support:appcompat-v7:23.1.1'
     // google play library
-    compile 'com.google.android.gms:play-services-base:8.3.0'
-    compile 'com.google.android.gms:play-services-gcm:8.3.0'
-    compile 'com.google.android.gms:play-services-location:8.3.0'
-    compile 'com.google.android.gms:play-services-analytics:8.3.0'
+    compile 'com.google.android.gms:play-services-base:' + playServicesLibVersion
+    compile 'com.google.android.gms:play-services-gcm:' + playServicesLibVersion
+    compile 'com.google.android.gms:play-services-location:' + playServicesLibVersion
+    compile 'com.google.android.gms:play-services-analytics:' + playServicesLibVersion
     // a type-safe HTTP client
     compile 'com.squareup.retrofit:retrofit:1.9.0'
     compile 'com.squareup.retrofit:retrofit-mock:1.9.0'
