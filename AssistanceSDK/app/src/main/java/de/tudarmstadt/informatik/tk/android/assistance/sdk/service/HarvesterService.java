@@ -1,5 +1,6 @@
 package de.tudarmstadt.informatik.tk.android.assistance.sdk.service;
 
+import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
 import android.os.Bundle;
@@ -222,11 +223,26 @@ public class HarvesterService extends Service implements Callback {
 
         Log.d(TAG, "Showing icon...");
 
+        Class mainClass = null;
+
+        try {
+            mainClass = Class.forName("de.tudarmstadt.informatik.tk.android.assistance.activity.MainActivity");
+        } catch (ClassNotFoundException e) {
+            Log.e(TAG, "Not found main activity");
+        }
+
+        Intent notificationIntent = new Intent(getApplicationContext(), mainClass);
+        PendingIntent pendingIntent = PendingIntent.getActivity(
+                getApplicationContext(),
+                0, notificationIntent,
+                PendingIntent.FLAG_UPDATE_CURRENT);
+
         NotificationCompat.Builder mBuilder =
                 new NotificationCompat.Builder(this)
                         .setSmallIcon(R.drawable.ic_kraken_service)
                         .setContentTitle(getString(R.string.service_running_notification_title))
                         .setContentText(getString(R.string.service_running_notification_text))
+                        .setContentIntent(pendingIntent)
 //                        .setPriority(Notification.PRIORITY_MIN)
                         .setOngoing(true);
 
