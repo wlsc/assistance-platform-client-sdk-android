@@ -36,7 +36,7 @@ public class AssistanceAccessibilityService extends AccessibilityService {
 
         mForegroundTrafficEvent = (ForegroundTrafficEvent) SensorProvider
                 .getInstance(getApplicationContext())
-                .getSensor(DtoType.NETWORK_TRAFFIC);
+                .getSensor(DtoType.FOREGROUND_TRAFFIC);
 
         Log.d(TAG, "Successfully started.");
     }

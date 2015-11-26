@@ -76,9 +76,6 @@ public class SensorProvider {
         LocationSensor locationSensor = new LocationSensor(mContext);
         mAvailableSensors.add(locationSensor);
 
-//        MeasurementEvent measurementEvent = new MeasurementEvent(mContext);
-//        mAvailableSensors.add(measurementEvent);
-
         // works
 //        ConnectionSensor connectionSensor = new ConnectionSensor(mContext);
 //        mAvailableSensors.add(connectionSensor);

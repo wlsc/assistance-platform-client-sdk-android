@@ -58,7 +58,7 @@ public class DtoType {
 
     public static final int BROWSER_HISTORY = 23;
 
-    public static final int NETWORK_TRAFFIC = 24;
+    public static final int FOREGROUND_TRAFFIC = 24;
 
     public static final int CALENDAR_REMINDER = 25;
 
@@ -103,7 +103,7 @@ public class DtoType {
                 return res.getString(R.string.event_calendar_reminder);
             case CALL_LOG:
                 return res.getString(R.string.event_calllog);
-            case NETWORK_TRAFFIC:
+            case FOREGROUND_TRAFFIC:
                 return res.getString(R.string.event_network_traffic);
             case BACKGROUND_TRAFFIC:
                 return res.getString(R.string.event_background_traffic);
@@ -169,7 +169,7 @@ public class DtoType {
                 return "calendarreminder";
             case CALL_LOG:
                 return "call_log";
-            case NETWORK_TRAFFIC:
+            case FOREGROUND_TRAFFIC:
                 return "networktraffic";
             case BACKGROUND_TRAFFIC:
                 return "backgroundtraffic";

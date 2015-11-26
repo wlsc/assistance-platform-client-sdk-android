@@ -19,9 +19,14 @@ import java.util.List;
 import java.util.Map;
 
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbAccelerometerSensor;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbConnectionEvent;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbForegroundEvent;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbLightSensor;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbMobileConnectionEvent;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbMotionActivityEvent;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbNetworkTrafficEvent;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbPositionSensor;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbWifiConnectionEvent;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.interfaces.IDbSensor;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.DtoType;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.SensorDto;
@@ -541,6 +546,133 @@ public class EventUploaderService extends GcmTaskService {
                     requestEvents.put(type, daoProvider
                             .getForegroundEventDao()
                             .convertObjects(feList));
+
+                    break;
+
+                case DtoType.CONNECTION:
+
+                    // connection
+                    List<DbConnectionEvent> conList;
+
+                    // give all
+                    if (numberOfElements == 0) {
+                        conList = daoProvider
+                                .getConnectionEventDao()
+                                .getAll();
+                    } else {
+                        conList = daoProvider
+                                .getConnectionEventDao()
+                                .getFirstN(numberOfElements);
+                    }
+
+                    dbEvents.put(type, conList);
+                    requestEvents.put(type, daoProvider
+                            .getConnectionEventDao()
+                            .convertObjects(conList));
+
+                    // mobile connection
+                    List<DbMobileConnectionEvent> mobConList;
+
+                    // give all
+                    if (numberOfElements == 0) {
+                        mobConList = daoProvider
+                                .getMobileConnectionEventDao()
+                                .getAll();
+                    } else {
+                        mobConList = daoProvider
+                                .getMobileConnectionEventDao()
+                                .getFirstN(numberOfElements);
+                    }
+
+                    dbEvents.put(type, mobConList);
+                    requestEvents.put(type, daoProvider
+                            .getMobileConnectionEventDao()
+                            .convertObjects(mobConList));
+
+                    // wifi connection
+                    List<DbWifiConnectionEvent> wifiConList;
+
+                    // give all
+                    if (numberOfElements == 0) {
+                        wifiConList = daoProvider
+                                .getWifiConnectionEventDao()
+                                .getAll();
+                    } else {
+                        wifiConList = daoProvider
+                                .getWifiConnectionEventDao()
+                                .getFirstN(numberOfElements);
+                    }
+
+                    dbEvents.put(type, wifiConList);
+                    requestEvents.put(type, daoProvider
+                            .getWifiConnectionEventDao()
+                            .convertObjects(wifiConList));
+
+                    break;
+
+                case DtoType.FOREGROUND_TRAFFIC:
+
+                    List<DbNetworkTrafficEvent> fteList;
+
+                    // give all
+                    if (numberOfElements == 0) {
+                        fteList = daoProvider
+                                .getNetworkTrafficEventDao()
+                                .getAllForeground();
+                    } else {
+                        fteList = daoProvider
+                                .getNetworkTrafficEventDao()
+                                .getFirstNForeground(numberOfElements);
+                    }
+
+                    dbEvents.put(type, fteList);
+                    requestEvents.put(type, daoProvider
+                            .getNetworkTrafficEventDao()
+                            .convertObjects(fteList));
+
+                    break;
+
+                case DtoType.BACKGROUND_TRAFFIC:
+
+                    List<DbNetworkTrafficEvent> bteList;
+
+                    // give all
+                    if (numberOfElements == 0) {
+                        bteList = daoProvider
+                                .getNetworkTrafficEventDao()
+                                .getAllBackground();
+                    } else {
+                        bteList = daoProvider
+                                .getNetworkTrafficEventDao()
+                                .getFirstNBackground(numberOfElements);
+                    }
+
+                    dbEvents.put(type, bteList);
+                    requestEvents.put(type, daoProvider
+                            .getNetworkTrafficEventDao()
+                            .convertObjects(bteList));
+
+                    break;
+
+                case DtoType.LIGHT:
+
+                    List<DbLightSensor> lightList;
+
+                    // give all
+                    if (numberOfElements == 0) {
+                        lightList = daoProvider
+                                .getLightSensorDao()
+                                .getAll();
+                    } else {
+                        lightList = daoProvider
+                                .getLightSensorDao()
+                                .getFirstN(numberOfElements);
+                    }
+
+                    dbEvents.put(type, lightList);
+                    requestEvents.put(type, daoProvider
+                            .getLightSensorDao()
+                            .convertObjects(lightList));
 
                     break;
             }

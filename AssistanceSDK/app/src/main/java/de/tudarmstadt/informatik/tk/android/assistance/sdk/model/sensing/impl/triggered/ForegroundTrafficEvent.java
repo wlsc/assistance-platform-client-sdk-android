@@ -130,7 +130,7 @@ public class ForegroundTrafficEvent extends AbstractTriggeredEvent {
      */
     @Override
     public int getType() {
-        return DtoType.NETWORK_TRAFFIC;
+        return DtoType.FOREGROUND_TRAFFIC;
     }
 
     /**

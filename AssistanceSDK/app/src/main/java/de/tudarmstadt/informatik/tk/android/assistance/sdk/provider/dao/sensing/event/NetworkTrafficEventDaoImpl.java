@@ -51,8 +51,15 @@ public class NetworkTrafficEventDaoImpl extends
         result.setBackground(sensor.getBackground());
         result.setLongitude(sensor.getLongitude());
         result.setLatitude(sensor.getLatitude());
-        result.setType(DtoType.NETWORK_TRAFFIC);
-        result.setTypeStr(DtoType.getApiName(DtoType.NETWORK_TRAFFIC));
+
+        if (sensor.getBackground()) {
+            result.setType(DtoType.BACKGROUND_TRAFFIC);
+            result.setTypeStr(DtoType.getApiName(DtoType.BACKGROUND_TRAFFIC));
+        } else {
+            result.setType(DtoType.FOREGROUND_TRAFFIC);
+            result.setTypeStr(DtoType.getApiName(DtoType.FOREGROUND_TRAFFIC));
+        }
+
         result.setCreated(sensor.getCreated());
 
         return result;
@@ -68,6 +75,54 @@ public class NetworkTrafficEventDaoImpl extends
         return dao
                 .queryBuilder()
                 .orderDesc(DbNetworkTrafficEventDao.Properties.Id)
+                .limit(amount)
+                .build()
+                .list();
+    }
+
+    @Override
+    public List<DbNetworkTrafficEvent> getAllBackground() {
+        return dao
+                .queryBuilder()
+                .where(DbNetworkTrafficEventDao.Properties.Background.eq(Boolean.TRUE))
+                .build()
+                .list();
+    }
+
+    @Override
+    public List<DbNetworkTrafficEvent> getAllForeground() {
+        return dao
+                .queryBuilder()
+                .where(DbNetworkTrafficEventDao.Properties.Background.eq(Boolean.FALSE))
+                .build()
+                .list();
+    }
+
+    @Override
+    public List<DbNetworkTrafficEvent> getFirstNBackground(int amount) {
+
+        if (amount <= 0) {
+            return Collections.emptyList();
+        }
+
+        return dao
+                .queryBuilder()
+                .where(DbNetworkTrafficEventDao.Properties.Background.eq(Boolean.TRUE))
+                .limit(amount)
+                .build()
+                .list();
+    }
+
+    @Override
+    public List<DbNetworkTrafficEvent> getFirstNForeground(int amount) {
+
+        if (amount <= 0) {
+            return Collections.emptyList();
+        }
+
+        return dao
+                .queryBuilder()
+                .where(DbNetworkTrafficEventDao.Properties.Background.eq(Boolean.FALSE))
                 .limit(amount)
                 .build()
                 .list();

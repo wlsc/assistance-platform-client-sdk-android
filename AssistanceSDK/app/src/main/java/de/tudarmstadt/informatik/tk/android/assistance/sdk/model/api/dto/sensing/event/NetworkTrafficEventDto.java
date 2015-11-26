@@ -49,13 +49,13 @@ public class NetworkTrafficEventDto implements SensorDto {
     private int type;
 
     public NetworkTrafficEventDto() {
-        this.type = DtoType.NETWORK_TRAFFIC;
+        this.type = DtoType.FOREGROUND_TRAFFIC;
         this.typeStr = DtoType.getApiName(this.type);
     }
 
     public NetworkTrafficEventDto(Long id) {
         this.id = id;
-        this.type = DtoType.NETWORK_TRAFFIC;
+        this.type = DtoType.FOREGROUND_TRAFFIC;
         this.typeStr = DtoType.getApiName(this.type);
     }
 
@@ -68,7 +68,7 @@ public class NetworkTrafficEventDto implements SensorDto {
         this.longitude = longitude;
         this.latitude = latitude;
         this.created = created;
-        this.type = DtoType.NETWORK_TRAFFIC;
+        this.type = DtoType.FOREGROUND_TRAFFIC;
         this.typeStr = DtoType.getApiName(this.type);
     }
 
