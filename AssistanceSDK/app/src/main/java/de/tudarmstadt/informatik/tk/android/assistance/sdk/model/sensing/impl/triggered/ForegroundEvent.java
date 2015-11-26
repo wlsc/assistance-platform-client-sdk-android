@@ -23,9 +23,9 @@ import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.DtoType
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.enums.EPushType;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensing.AbstractTriggeredEvent;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.DaoProvider;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.util.AccessibilityEventFilterUtils;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.util.DateUtils;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.util.ImageUtils;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.util.AccessibilityEventFilterUtils;
 
 /**
  * @author Karsten Planz
@@ -63,7 +63,8 @@ public class ForegroundEvent extends AbstractTriggeredEvent {
     @Override
     public void startSensor() {
 
-        if (!isRunning()) {
+        try {
+
             setRunning(true);
 
             if (mReceiver == null) {
@@ -75,7 +76,15 @@ public class ForegroundEvent extends AbstractTriggeredEvent {
             // register receiver that handles screen on and screen off logic
             IntentFilter filter = new IntentFilter(Intent.ACTION_SCREEN_ON);
             filter.addAction(Intent.ACTION_SCREEN_OFF);
-            context.registerReceiver(mReceiver, filter);
+
+            if (context != null) {
+                context.registerReceiver(mReceiver, filter);
+            }
+
+        } catch (Exception e) {
+            Log.e(TAG, "Some exception happened: " + e);
+            setRunning(false);
+        } finally {
 
             DbForegroundEvent dbForegroundEvent = new DbForegroundEvent();
 
@@ -93,33 +102,31 @@ public class ForegroundEvent extends AbstractTriggeredEvent {
     @Override
     public void stopSensor() {
 
-        if (isRunning()) {
-            try {
-                if (context != null && mReceiver != null) {
-                    context.unregisterReceiver(mReceiver);
-                }
-            } catch (IllegalArgumentException e) {
-                Log.e(TAG, "Cannot unregister receiver", e);
-            } finally {
-
-                mReceiver = null;
-                setRunning(false);
-
-                if (daoProvider == null) {
-                    daoProvider = DaoProvider.getInstance(context);
-                }
-
-                DbForegroundEvent dbForegroundEvent = new DbForegroundEvent();
-
-                dbForegroundEvent.setEventType(EVENT_ASSISTANCE_STOP);
-                dbForegroundEvent.setCreated(DateUtils.dateToISO8601String(new Date(), Locale.getDefault()));
-
-                Log.d(TAG, "Insert entry");
-
-                daoProvider.getForegroundEventDao().insert(dbForegroundEvent);
-
-                Log.d(TAG, "Finished");
+        try {
+            if (context != null && mReceiver != null) {
+                context.unregisterReceiver(mReceiver);
             }
+        } catch (IllegalArgumentException e) {
+            Log.e(TAG, "Cannot unregister receiver", e);
+        } finally {
+
+            mReceiver = null;
+            setRunning(false);
+
+            if (daoProvider == null) {
+                daoProvider = DaoProvider.getInstance(context);
+            }
+
+            DbForegroundEvent dbForegroundEvent = new DbForegroundEvent();
+
+            dbForegroundEvent.setEventType(EVENT_ASSISTANCE_STOP);
+            dbForegroundEvent.setCreated(DateUtils.dateToISO8601String(new Date(), Locale.getDefault()));
+
+            Log.d(TAG, "Insert entry");
+
+            daoProvider.getForegroundEventDao().insert(dbForegroundEvent);
+
+            Log.d(TAG, "Finished");
         }
     }
 
@@ -166,14 +173,34 @@ public class ForegroundEvent extends AbstractTriggeredEvent {
         Bitmap icon = getAppIcon(packageName);
         String color = getIconColor(packageName, icon);
 
-        File path = new File(context.getExternalFilesDir(null).getPath()
-                + File.separator + ICONS_DIR);
-        path.mkdirs();
-        File file = new File(path, packageName + ".png");
+        try {
 
-        if (!file.exists()) {
-            storeIconFile(file, icon);
+            File externalFilesDir = context.getExternalFilesDir(null);
+
+            File path = null;
+
+            if (externalFilesDir != null) {
+                path = new File(externalFilesDir.getPath()
+                        + File.separator + ICONS_DIR);
+            }
+
+            if (path != null) {
+
+                path.mkdirs();
+
+                File file = new File(path, packageName + ".png");
+
+                if (!file.exists()) {
+                    storeIconFile(file, icon);
+                }
+            }
+
+        } catch (NullPointerException npe) {
+            Log.e(TAG, "NPE in storeIcon");
+        } catch (Exception e) {
+            Log.e(TAG, "Some error: " + e);
         }
+
         return color;
     }
 
@@ -183,14 +210,14 @@ public class ForegroundEvent extends AbstractTriggeredEvent {
             stream = new FileOutputStream(file);
             icon.compress(Bitmap.CompressFormat.PNG, 100, stream);
         } catch (IOException e) {
-            Log.d(TAG, "Cannot find file", e);
+            Log.e(TAG, "Cannot find file", e);
         } finally {
             try {
                 if (stream != null) {
                     stream.close();
                 }
             } catch (IOException e) {
-                Log.d(TAG, "Cannot close file output stream!", e);
+                Log.e(TAG, "Cannot close file output stream!", e);
             }
         }
     }
@@ -202,7 +229,7 @@ public class ForegroundEvent extends AbstractTriggeredEvent {
             Drawable icon = pm.getApplicationIcon(packageName);
             return ImageUtils.drawableToBitmap(icon);
         } catch (PackageManager.NameNotFoundException e) {
-            Log.d(TAG, "Cannot get app icon", e);
+            Log.e(TAG, "Cannot get app icon", e);
             return null;
         }
     }
@@ -236,8 +263,10 @@ public class ForegroundEvent extends AbstractTriggeredEvent {
 
             if (intent.getAction().equals(Intent.ACTION_SCREEN_OFF)) {
                 foregroundEvent.setEventType(EVENT_SCREEN_OFF);
-            } else if (intent.getAction().equals(Intent.ACTION_SCREEN_ON)) {
-                foregroundEvent.setEventType(EVENT_SCREEN_ON);
+            } else {
+                if (intent.getAction().equals(Intent.ACTION_SCREEN_ON)) {
+                    foregroundEvent.setEventType(EVENT_SCREEN_ON);
+                }
             }
 
             foregroundEvent.setCreated(DateUtils.dateToISO8601String(new Date(), Locale.getDefault()));

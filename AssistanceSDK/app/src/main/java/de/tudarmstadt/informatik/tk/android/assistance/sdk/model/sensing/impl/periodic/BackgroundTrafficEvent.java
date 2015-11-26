@@ -6,6 +6,7 @@ import android.content.pm.PackageManager;
 import android.net.TrafficStats;
 import android.util.Log;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -55,7 +56,11 @@ public class BackgroundTrafficEvent extends
         networkTrafficEvent.setBackground(true);
         networkTrafficEvent.setCreated(DateUtils.dateToISO8601String(new Date(), Locale.getDefault()));
 
+        Log.d(TAG, "Insert entry");
+
         daoProvider.getNetworkTrafficEventDao().insert(networkTrafficEvent);
+
+        Log.d(TAG, "Finished");
 
         getData();
     }
@@ -74,46 +79,41 @@ public class BackgroundTrafficEvent extends
             return;
         }
 
+        List<DbNetworkTrafficEvent> insertList = new ArrayList<>();
+
         for (ApplicationInfo packageInfo : packages) {
 
             if (packageInfo == null) {
                 continue;
             }
 
-            insertData(packageInfo);
+            DbNetworkTrafficEvent networkTrafficEvent = new DbNetworkTrafficEvent();
+
+            if (TrafficStats.getUidTxPackets(packageInfo.uid) != 0 ||
+                    TrafficStats.getUidRxPackets(packageInfo.uid) != 0) {
+
+                networkTrafficEvent.setAppName(packageInfo.packageName);
+                networkTrafficEvent.setTxBytes(TrafficStats.getUidTxPackets(packageInfo.uid));
+                networkTrafficEvent.setRxBytes(TrafficStats.getUidRxPackets(packageInfo.uid));
+                networkTrafficEvent.setBackground(true);
+
+                Double lastLatitude = PreferenceProvider.getInstance(context).getLastLatitude();
+                Double lastLongitude = PreferenceProvider.getInstance(context).getLastLongitude();
+
+                networkTrafficEvent.setLatitude(lastLatitude);
+                networkTrafficEvent.setLongitude(lastLongitude);
+                networkTrafficEvent.setCreated(DateUtils.dateToISO8601String(new Date(), Locale.getDefault()));
+
+                // speed optimization
+                insertList.add(networkTrafficEvent);
+            }
         }
-    }
 
-    /**
-     * Insert data of app in database
-     *
-     * @param packageInfo app which will insert in Database
-     */
-    private void insertData(ApplicationInfo packageInfo) {
+        Log.d(TAG, "Insert entry");
 
-        DbNetworkTrafficEvent networkTrafficEvent = new DbNetworkTrafficEvent();
+        daoProvider.getNetworkTrafficEventDao().insert(insertList);
 
-        if (TrafficStats.getUidTxPackets(packageInfo.uid) != 0 ||
-                TrafficStats.getUidRxPackets(packageInfo.uid) != 0) {
-
-            networkTrafficEvent.setAppName(packageInfo.packageName);
-            networkTrafficEvent.setTxBytes(TrafficStats.getUidTxPackets(packageInfo.uid));
-            networkTrafficEvent.setRxBytes(TrafficStats.getUidRxPackets(packageInfo.uid));
-            networkTrafficEvent.setBackground(true);
-
-            Double lastLatitude = PreferenceProvider.getInstance(context).getLastLatitude();
-            Double lastLongitude = PreferenceProvider.getInstance(context).getLastLongitude();
-
-            networkTrafficEvent.setLatitude(lastLatitude);
-            networkTrafficEvent.setLongitude(lastLongitude);
-            networkTrafficEvent.setCreated(DateUtils.dateToISO8601String(new Date(), Locale.getDefault()));
-
-            Log.d(TAG, "Insert entry");
-
-            daoProvider.getNetworkTrafficEventDao().insert(networkTrafficEvent);
-
-            Log.d(TAG, "Finished");
-        }
+        Log.d(TAG, "Finished");
     }
 
     /**
