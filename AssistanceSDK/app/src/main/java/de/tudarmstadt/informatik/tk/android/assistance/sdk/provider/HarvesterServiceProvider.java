@@ -7,6 +7,7 @@ import android.os.Message;
 import android.os.Messenger;
 
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.enums.ECommandType;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.service.AssistanceAccessibilityService;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.service.HarvesterService;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.util.DeviceUtils;
 
@@ -72,10 +73,26 @@ public class HarvesterServiceProvider implements Handler.Callback {
     }
 
     /**
+     * Checks if Accessibility Service is running
+     *
+     * @return
+     */
+    public boolean isAccessibilityServiceRunning() {
+        return DeviceUtils.isServiceRunning(mContext, AssistanceAccessibilityService.class);
+    }
+
+    /**
      * Starts sensing service
      */
     public void startSensingService() {
         startHarvestingWithIcon(true);
+    }
+
+    public void startHarvestingWithIcon(boolean show) {
+
+        Intent intent = new Intent(mContext, HarvesterService.class);
+        intent.putExtra("showIcon", show);
+        mContext.startService(intent);
     }
 
     /**
@@ -88,11 +105,22 @@ public class HarvesterServiceProvider implements Handler.Callback {
         mContext.stopService(intent);
     }
 
-    public void startHarvestingWithIcon(boolean show) {
+    /**
+     * Starts Accessibility Service
+     */
+    public void startAccessibilityService() {
 
-        Intent intent = new Intent(mContext, HarvesterService.class);
-        intent.putExtra("showIcon", show);
+        Intent intent = new Intent(mContext, AssistanceAccessibilityService.class);
         mContext.startService(intent);
+    }
+
+    /**
+     * Stops Accessibility Service
+     */
+    public void stopAccessibilityService() {
+
+        Intent intent = new Intent(mContext, AssistanceAccessibilityService.class);
+        mContext.stopService(intent);
     }
 
     public boolean isServiceBound() {
