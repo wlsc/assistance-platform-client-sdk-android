@@ -1,9 +1,10 @@
 package de.tudarmstadt.informatik.tk.android.assistance.sdk.service;
 
 import android.content.Intent;
-import android.util.Log;
 
 import com.google.android.gms.iid.InstanceIDListenerService;
+
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.util.logger.Log;
 
 /**
  * The service is called by a server when access token to GCM was compromised

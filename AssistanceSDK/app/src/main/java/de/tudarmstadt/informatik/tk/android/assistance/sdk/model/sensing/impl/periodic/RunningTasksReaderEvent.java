@@ -3,7 +3,7 @@ package de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensing.impl.p
 import android.app.ActivityManager;
 import android.app.ActivityManager.RunningTaskInfo;
 import android.content.Context;
-import android.util.Log;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.util.logger.Log;
 
 import java.util.ArrayList;
 import java.util.Date;

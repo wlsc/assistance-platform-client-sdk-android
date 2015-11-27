@@ -1,7 +1,7 @@
 package de.tudarmstadt.informatik.tk.android.assistance.sdk.provider;
 
 import android.content.Context;
-import android.util.Log;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.util.logger.Log;
 
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbUser;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.device.DeviceRegistrationRequestDto;

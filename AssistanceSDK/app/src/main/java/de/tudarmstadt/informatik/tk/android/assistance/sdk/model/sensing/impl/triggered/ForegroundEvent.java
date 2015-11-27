@@ -7,7 +7,7 @@ import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
-import android.util.Log;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.util.logger.Log;
 import android.view.accessibility.AccessibilityEvent;
 
 import java.io.File;

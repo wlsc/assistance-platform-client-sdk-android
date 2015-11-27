@@ -2,11 +2,11 @@ package de.tudarmstadt.informatik.tk.android.assistance.sdk.service;
 
 import android.app.IntentService;
 import android.content.Intent;
-import android.util.Log;
 
 import com.google.android.gms.location.ActivityRecognitionResult;
 
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensing.impl.triggered.MotionActivityEvent;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.util.logger.Log;
 
 public class ActivitySensorService extends IntentService {
 

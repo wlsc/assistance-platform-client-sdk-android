@@ -2,9 +2,9 @@ package de.tudarmstadt.informatik.tk.android.assistance.sdk.util.db;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
-import android.util.Log;
 
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DaoMaster;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.util.logger.Log;
 
 /**
  * @author Karsten Planz

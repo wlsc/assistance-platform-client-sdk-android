@@ -6,7 +6,6 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.util.Log;
 import android.view.accessibility.AccessibilityEvent;
 import android.view.accessibility.AccessibilityManager;
 
@@ -14,6 +13,7 @@ import java.util.List;
 
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.R;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.service.AssistanceAccessibilityService;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.util.logger.Log;
 
 /**
  * ServiceUtils

@@ -3,7 +3,6 @@ package de.tudarmstadt.informatik.tk.android.assistance.sdk.receiver;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
 
 import java.util.Date;
 import java.util.Locale;
@@ -17,6 +16,7 @@ import de.tudarmstadt.informatik.tk.android.assistance.sdk.service.HarvesterServ
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.util.BatteryUtils;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.util.DateUtils;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.util.DeviceUtils;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.util.logger.Log;
 
 /**
  * @author Wladimir Schmidt (wlsc.dev@gmail.com)

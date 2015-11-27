@@ -1,7 +1,7 @@
 package de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensing;
 
 import android.content.Context;
-import android.util.Log;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.util.logger.Log;
 
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;

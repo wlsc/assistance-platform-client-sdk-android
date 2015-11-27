@@ -1,12 +1,12 @@
 package de.tudarmstadt.informatik.tk.android.assistance.sdk.util;
 
 import android.app.Activity;
-import android.util.Log;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.Config;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.util.logger.Log;
 
 /**
  * @author Wladimir Schmidt (wlsc.dev@gmail.com)

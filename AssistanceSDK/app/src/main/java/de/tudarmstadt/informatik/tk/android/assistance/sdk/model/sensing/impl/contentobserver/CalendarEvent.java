@@ -7,7 +7,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.provider.CalendarContract.Events;
 import android.provider.CalendarContract.Reminders;
-import android.util.Log;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.util.logger.Log;
 
 import java.util.HashMap;
 import java.util.List;

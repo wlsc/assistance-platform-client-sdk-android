@@ -9,7 +9,7 @@ import android.os.Handler.Callback;
 import android.os.Message;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
-import android.util.Log;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.util.logger.Log;
 
 import java.util.ArrayList;
 import java.util.Date;

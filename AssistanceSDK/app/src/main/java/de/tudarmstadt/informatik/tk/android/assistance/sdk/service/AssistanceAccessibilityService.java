@@ -2,7 +2,6 @@ package de.tudarmstadt.informatik.tk.android.assistance.sdk.service;
 
 import android.accessibilityservice.AccessibilityService;
 import android.content.Intent;
-import android.util.Log;
 import android.view.accessibility.AccessibilityEvent;
 
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.DtoType;
@@ -10,6 +9,7 @@ import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensing.impl.tr
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensing.impl.triggered.ForegroundTrafficEvent;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.PreferenceProvider;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.SensorProvider;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.util.logger.Log;
 
 /**
  * Assistance Accessibility Service implementation

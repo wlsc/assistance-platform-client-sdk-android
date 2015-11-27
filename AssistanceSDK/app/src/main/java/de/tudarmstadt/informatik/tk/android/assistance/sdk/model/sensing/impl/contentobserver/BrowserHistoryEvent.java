@@ -2,7 +2,7 @@ package de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensing.impl.c
 
 import android.content.Context;
 import android.net.Uri;
-import android.util.Log;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.util.logger.Log;
 
 import java.lang.reflect.Method;
 

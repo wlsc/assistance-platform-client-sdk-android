@@ -1,6 +1,6 @@
 package de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.device;
 
-import android.util.Log;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.util.logger.Log;
 
 import java.util.Collections;
 import java.util.List;
