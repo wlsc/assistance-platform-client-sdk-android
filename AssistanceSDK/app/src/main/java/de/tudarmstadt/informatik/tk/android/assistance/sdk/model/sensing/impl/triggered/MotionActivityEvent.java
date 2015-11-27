@@ -228,7 +228,7 @@ public class MotionActivityEvent extends
 
             ActivityRecognition.ActivityRecognitionApi.requestActivityUpdates(
                     mGoogleApiClient,
-                    DETECTION_INTERVAL_IN_SEC * 1000,
+                    DETECTION_INTERVAL_IN_SEC * 1_000,
                     mActivityRecognitionPendingIntent);
 
             // Indicate that a request is in progress

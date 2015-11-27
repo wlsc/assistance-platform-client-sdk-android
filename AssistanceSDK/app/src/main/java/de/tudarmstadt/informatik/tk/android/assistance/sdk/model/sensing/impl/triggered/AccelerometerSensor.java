@@ -89,8 +89,7 @@ public class AccelerometerSensor extends
     public void stopSensor() {
 
         try {
-
-            if (mSensorManager != null) {
+            if (mSensorManager != null && mSensor != null) {
                 mSensorManager.unregisterListener(this, mSensor);
             }
         } finally {

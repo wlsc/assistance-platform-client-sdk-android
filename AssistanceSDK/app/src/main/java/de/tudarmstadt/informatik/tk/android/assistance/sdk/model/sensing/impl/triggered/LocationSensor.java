@@ -50,7 +50,7 @@ public class LocationSensor extends
     private GoogleApiClient mGoogleApiClient;
     private LocationRequest mLocationRequest;
 
-    private final static int CONNECTION_FAILURE_RESOLUTION_REQUEST = 9000;
+    private final static int CONNECTION_FAILURE_RESOLUTION_REQUEST = 9_000;
 
     private Double latitude;
     private Double longitude;
@@ -101,18 +101,28 @@ public class LocationSensor extends
     public void startSensor() {
 
         if (!isRunning()) {
-            mGoogleApiClient.connect();
 
-            // Create the LocationRequest object
-            mLocationRequest = LocationRequest.create();
-            // Use high accuracy
-            mLocationRequest.setPriority(ACCURACY);
-            // Set the update interval to x seconds
-            mLocationRequest.setInterval(UPDATE_INTERVAL_IN_SECONDS * 1000);
-            // Set the fastest update interval to x seconds
-            mLocationRequest.setFastestInterval(FASTEST_INTERVAL_IN_SECONDS * 1000);
+            try {
 
-            setRunning(true);
+                if (!mGoogleApiClient.isConnected() && !mGoogleApiClient.isConnecting()) {
+                    mGoogleApiClient.connect();
+                }
+
+                // Create the LocationRequest object
+                mLocationRequest = LocationRequest.create();
+                // Use high accuracy
+                mLocationRequest.setPriority(ACCURACY);
+                // Set the update interval to x seconds
+                mLocationRequest.setInterval(UPDATE_INTERVAL_IN_SECONDS * 1_000);
+                // Set the fastest update interval to x seconds
+                mLocationRequest.setFastestInterval(FASTEST_INTERVAL_IN_SECONDS * 1_000);
+
+                setRunning(true);
+
+            } catch (Exception e) {
+                Log.e(TAG, "Some exception: ", e);
+                setRunning(false);
+            }
         }
     }
 
@@ -206,8 +216,8 @@ public class LocationSensor extends
 
         latitude = location.getLatitude();
         longitude = location.getLongitude();
-        accuracyHorizontal = Double.valueOf(location.getAccuracy());
-        accuracyVertical = Double.valueOf(location.getAccuracy());
+        accuracyHorizontal = (double) location.getAccuracy();
+        accuracyVertical = (double) location.getAccuracy();
         speed = location.getSpeed();
         altitude = location.getAltitude();
 
@@ -237,7 +247,7 @@ public class LocationSensor extends
             return true;
         } else {
             // the time has come -> save data into db
-            if ((timestamp - mLastEventDumpingTimestamp) / 1000000000 > UPDATE_INTERVAL_IN_SECONDS) {
+            if ((timestamp - mLastEventDumpingTimestamp) / 1_000_000_000 > UPDATE_INTERVAL_IN_SECONDS) {
                 return true;
             }
         }

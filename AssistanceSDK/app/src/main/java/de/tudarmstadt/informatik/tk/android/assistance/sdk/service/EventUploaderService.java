@@ -584,8 +584,8 @@ public class EventUploaderService extends GcmTaskService {
                                 .getFirstN(numberOfElements);
                     }
 
-                    dbEvents.put(type, mobConList);
-                    requestEvents.put(type, daoProvider
+                    dbEvents.put(DtoType.MOBILE_DATA_CONNECTION, mobConList);
+                    requestEvents.put(DtoType.MOBILE_DATA_CONNECTION, daoProvider
                             .getMobileConnectionEventDao()
                             .convertObjects(mobConList));
 
@@ -603,8 +603,8 @@ public class EventUploaderService extends GcmTaskService {
                                 .getFirstN(numberOfElements);
                     }
 
-                    dbEvents.put(type, wifiConList);
-                    requestEvents.put(type, daoProvider
+                    dbEvents.put(DtoType.WIFI_CONNECTION, wifiConList);
+                    requestEvents.put(DtoType.WIFI_CONNECTION, daoProvider
                             .getWifiConnectionEventDao()
                             .convertObjects(wifiConList));
 
@@ -696,6 +696,10 @@ public class EventUploaderService extends GcmTaskService {
 
             int type = entry.getKey();
             List<? extends IDbSensor> values = entry.getValue();
+
+            if (values == null || values.isEmpty()) {
+                continue;
+            }
 
             switch (type) {
                 case DtoType.ACCELEROMETER:
