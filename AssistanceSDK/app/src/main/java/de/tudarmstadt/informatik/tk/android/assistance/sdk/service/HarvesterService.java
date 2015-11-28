@@ -51,7 +51,7 @@ public class HarvesterService extends Service implements Callback {
 
 //    private NotificationManager mNotificationManager;
 
-    private static boolean mSensorsStarted;
+    private boolean mSensorsStarted;
 
     public HarvesterService() {
     }
@@ -276,6 +276,8 @@ public class HarvesterService extends Service implements Callback {
 
             if (mSensorsStarted) {
 
+                Log.d(TAG, "OK: sensors are started");
+
                 // show icon on command
                 if (intent != null && intent.hasExtra(Config.INTENT_EXTRA_SHOW_ICON)) {
 
@@ -291,7 +293,12 @@ public class HarvesterService extends Service implements Callback {
                 }
 
                 return Service.START_STICKY;
+            } else {
+                Log.d(TAG, "WARNING: sensors were NOT started!");
+                initService();
             }
+        } else {
+            Log.d(TAG, "User token is NULL or EMPTY");
         }
 
         return Service.START_NOT_STICKY;
@@ -356,7 +363,9 @@ public class HarvesterService extends Service implements Callback {
                 break;
             case SHOW_ICON:
                 Log.d(TAG, "Command: SHOW_ICON received");
-                showIcon();
+                if (mSensorsStarted) {
+                    showIcon();
+                }
                 break;
             default:
                 Log.e(TAG, "Unknown Command!");
