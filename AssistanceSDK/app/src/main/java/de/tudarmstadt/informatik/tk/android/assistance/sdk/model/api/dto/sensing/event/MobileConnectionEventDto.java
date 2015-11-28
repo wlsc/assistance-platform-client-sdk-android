@@ -19,11 +19,11 @@ public class MobileConnectionEventDto implements SensorDto {
     @Expose
     private String carrierName;
 
-    @SerializedName("mcc")
+    @SerializedName("mobileCountryCode")
     @Expose
     private String mobileCountryCode;
 
-    @SerializedName("mnc")
+    @SerializedName("mobileNetworkCode")
     @Expose
     private String mobileNetworkCode;
     /**
