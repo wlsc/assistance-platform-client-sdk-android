@@ -1,22 +1,23 @@
 package de.tudarmstadt.informatik.tk.android.assistance.sdk.model.social.impl;
 
+import android.app.Activity;
+import android.app.ProgressDialog;
+import android.content.Intent;
+import android.net.Uri;
+
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.R;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.enums.SocialNetworkEnum;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.social.AbstractSocialLogin;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.social.SocialLogin;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.SocialAuthProvider;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.ui.activities.accounts.AccountsAdapter;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.util.logger.Log;
 import twitter4j.Twitter;
 import twitter4j.TwitterFactory;
 import twitter4j.auth.AccessToken;
 import twitter4j.auth.RequestToken;
 import twitter4j.conf.Configuration;
 import twitter4j.conf.ConfigurationBuilder;
-import android.app.Activity;
-import android.app.ProgressDialog;
-import android.content.Intent;
-import android.net.Uri;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.util.logger.Log;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.R;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.ui.activities.accounts.AccountsAdapter;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.SocialAuthProvider;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.enums.SocialNetworkEnum;
 
 public class TwitterSocialLogin extends AbstractSocialLogin implements SocialLogin {
 

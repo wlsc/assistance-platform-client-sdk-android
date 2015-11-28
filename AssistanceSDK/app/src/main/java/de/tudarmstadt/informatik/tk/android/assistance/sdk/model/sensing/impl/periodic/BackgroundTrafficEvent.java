@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.net.TrafficStats;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.util.logger.Log;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -19,6 +18,7 @@ import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensing.ISensor
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensing.impl.triggered.ForegroundTrafficEvent;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.PreferenceProvider;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.util.DateUtils;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.util.logger.Log;
 
 /**
  * This is a Periodic Sensor class which collect the mobile traffic data produced by the apps in the
@@ -52,9 +52,21 @@ public class BackgroundTrafficEvent extends
 
         //initial Data
         DbNetworkTrafficEvent networkTrafficEvent = new DbNetworkTrafficEvent();
+
         networkTrafficEvent.setAppName(ForegroundTrafficEvent.EVENT_START_ASSISTANCE);
         networkTrafficEvent.setBackground(true);
         networkTrafficEvent.setCreated(DateUtils.dateToISO8601String(new Date(), Locale.getDefault()));
+
+        double lastLatitude = PreferenceProvider.getInstance(context).getLastLatitude();
+        double lastLongitude = PreferenceProvider.getInstance(context).getLastLongitude();
+
+        if (lastLatitude != 0) {
+            networkTrafficEvent.setLatitude(lastLatitude);
+        }
+
+        if (lastLongitude != 0) {
+            networkTrafficEvent.setLongitude(lastLongitude);
+        }
 
         Log.d(TAG, "Insert entry");
 
@@ -96,13 +108,18 @@ public class BackgroundTrafficEvent extends
                 networkTrafficEvent.setTxBytes(TrafficStats.getUidTxPackets(packageInfo.uid));
                 networkTrafficEvent.setRxBytes(TrafficStats.getUidRxPackets(packageInfo.uid));
                 networkTrafficEvent.setBackground(true);
-
-                Double lastLatitude = PreferenceProvider.getInstance(context).getLastLatitude();
-                Double lastLongitude = PreferenceProvider.getInstance(context).getLastLongitude();
-
-                networkTrafficEvent.setLatitude(lastLatitude);
-                networkTrafficEvent.setLongitude(lastLongitude);
                 networkTrafficEvent.setCreated(DateUtils.dateToISO8601String(new Date(), Locale.getDefault()));
+
+                double lastLatitude = PreferenceProvider.getInstance(context).getLastLatitude();
+                double lastLongitude = PreferenceProvider.getInstance(context).getLastLongitude();
+
+                if (lastLatitude != 0) {
+                    networkTrafficEvent.setLatitude(lastLatitude);
+                }
+
+                if (lastLongitude != 0) {
+                    networkTrafficEvent.setLongitude(lastLongitude);
+                }
 
                 // speed optimization
                 insertList.add(networkTrafficEvent);

@@ -141,28 +141,28 @@ public class PreferenceProvider {
     /**
      * Returns last known location latitude
      */
-    public Double getLastLatitude() {
+    public double getLastLatitude() {
         return Double.longBitsToDouble(prefs.getLong(ASSISTANCE_LAST_LATITUDE, 0));
     }
 
     /**
      * Saves last known location latitude
      */
-    public void setLastLatitude(Double latitude) {
+    public void setLastLatitude(double latitude) {
         prefs.edit().putLong(ASSISTANCE_LAST_LATITUDE, Double.doubleToLongBits(latitude)).apply();
     }
 
     /**
      * Returns last known location longitude
      */
-    public Double getLastLongitude() {
+    public double getLastLongitude() {
         return Double.longBitsToDouble(prefs.getLong(ASSISTANCE_LAST_LONGITUDE, 0));
     }
 
     /**
      * Saves last known location longitude
      */
-    public void setLastLongitude(Double longitude) {
+    public void setLastLongitude(double longitude) {
         prefs.edit().putLong(ASSISTANCE_LAST_LONGITUDE, Double.doubleToLongBits(longitude)).apply();
     }
 

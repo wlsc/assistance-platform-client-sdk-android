@@ -5,7 +5,6 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.util.logger.Log;
 
 import java.util.Date;
 import java.util.Locale;
@@ -14,6 +13,7 @@ import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbAccelerometerSen
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.DtoType;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensing.AbstractTriggeredEvent;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.util.DateUtils;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.util.logger.Log;
 
 /**
  * @author Unknown

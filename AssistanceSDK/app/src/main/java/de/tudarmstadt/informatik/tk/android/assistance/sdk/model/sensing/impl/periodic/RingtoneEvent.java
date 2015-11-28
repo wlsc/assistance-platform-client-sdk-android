@@ -2,7 +2,6 @@ package de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensing.impl.p
 
 import android.content.Context;
 import android.media.AudioManager;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.util.logger.Log;
 
 import java.util.Date;
 import java.util.Locale;
@@ -13,6 +12,7 @@ import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensing.Abstrac
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensing.ISensor;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.event.RingtoneEventDao;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.util.DateUtils;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.util.logger.Log;
 
 /**
  * @author Unknown

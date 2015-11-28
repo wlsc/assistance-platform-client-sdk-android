@@ -1,13 +1,12 @@
 package de.tudarmstadt.informatik.tk.android.assistance.sdk.handler;
 
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.util.logger.Log;
-
 import java.net.HttpURLConnection;
 
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.error.ErrorResponse;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.exception.BadRequestException;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.exception.ServiceNotAvailableException;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.exception.ServiceTemporaryNotAvailableException;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.util.logger.Log;
 import retrofit.ErrorHandler;
 import retrofit.RetrofitError;
 import retrofit.client.Response;

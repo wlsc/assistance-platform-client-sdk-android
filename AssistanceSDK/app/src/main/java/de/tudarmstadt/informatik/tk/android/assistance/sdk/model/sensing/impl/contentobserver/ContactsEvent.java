@@ -9,7 +9,6 @@ import android.provider.ContactsContract.CommonDataKinds.Email;
 import android.provider.ContactsContract.CommonDataKinds.Note;
 import android.provider.ContactsContract.CommonDataKinds.Phone;
 import android.provider.ContactsContract.Data;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.util.logger.Log;
 
 import java.util.HashMap;
 import java.util.List;
@@ -21,6 +20,7 @@ import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbContactNumberEve
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.DtoType;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.enums.EPushType;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensing.AbstractContentObserverEvent;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.util.logger.Log;
 
 /**
  * @author Unknown

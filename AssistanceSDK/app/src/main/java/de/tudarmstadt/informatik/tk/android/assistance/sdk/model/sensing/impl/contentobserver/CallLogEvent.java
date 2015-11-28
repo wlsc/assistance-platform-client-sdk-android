@@ -9,11 +9,11 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.provider.CallLog;
 import android.support.v4.app.ActivityCompat;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.util.logger.Log;
 
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbCallLogEvent;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.DtoType;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensing.AbstractContentObserverEvent;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.util.logger.Log;
 
 /**
  * @author Unknown

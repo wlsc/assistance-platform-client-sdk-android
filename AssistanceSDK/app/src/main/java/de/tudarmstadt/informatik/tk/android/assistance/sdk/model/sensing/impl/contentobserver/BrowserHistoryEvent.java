@@ -2,12 +2,12 @@ package de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensing.impl.c
 
 import android.content.Context;
 import android.net.Uri;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.util.logger.Log;
 
 import java.lang.reflect.Method;
 
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.DtoType;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensing.AbstractContentObserverEvent;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.util.logger.Log;
 
 
 /**

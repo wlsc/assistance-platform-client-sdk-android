@@ -8,7 +8,6 @@ import android.content.IntentFilter;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.net.TrafficStats;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.util.logger.Log;
 import android.view.accessibility.AccessibilityEvent;
 
 import java.util.Date;
@@ -24,6 +23,7 @@ import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.DaoProvider;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.PreferenceProvider;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.util.AccessibilityEventFilterUtils;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.util.DateUtils;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.util.logger.Log;
 
 /**
  * This is a triggered sensor which collect the data of apps which are running in the foreground.
@@ -200,11 +200,11 @@ public class ForegroundTrafficEvent extends AbstractTriggeredEvent {
 
             if (packageInfo.packageName.equals(event.getPackageName())) {
 
-                Double lastLatitude = PreferenceProvider.getInstance(context).getLastLatitude();
-                Double lastLongitude = PreferenceProvider.getInstance(context).getLastLongitude();
-
                 networkTrafficEvent.setTxBytes(TrafficStats.getUidTxPackets(packageInfo.uid));
                 networkTrafficEvent.setRxBytes(TrafficStats.getUidRxPackets(packageInfo.uid));
+
+                double lastLatitude = PreferenceProvider.getInstance(context).getLastLatitude();
+                double lastLongitude = PreferenceProvider.getInstance(context).getLastLongitude();
 
                 if (lastLatitude != 0) {
                     networkTrafficEvent.setLatitude(lastLatitude);
@@ -257,8 +257,8 @@ public class ForegroundTrafficEvent extends AbstractTriggeredEvent {
                 networkTrafficEvent.setAppName(EVENT_SCREEN_ON);
             }
 
-            Double lastLatitude = PreferenceProvider.getInstance(context).getLastLatitude();
-            Double lastLongitude = PreferenceProvider.getInstance(context).getLastLongitude();
+            double lastLatitude = PreferenceProvider.getInstance(context).getLastLatitude();
+            double lastLongitude = PreferenceProvider.getInstance(context).getLastLongitude();
 
             if (lastLatitude != 0) {
                 networkTrafficEvent.setLatitude(lastLatitude);

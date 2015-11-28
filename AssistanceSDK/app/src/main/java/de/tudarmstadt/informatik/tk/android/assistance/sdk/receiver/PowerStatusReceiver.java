@@ -48,14 +48,17 @@ public class PowerStatusReceiver extends BroadcastReceiver {
 
         if (isAc) {
             powerStateEvent.setChargingMode(PowerChargingType.AC_ADAPTER);
+            powerStateEvent.setIsCharging(true);
         }
 
         if (isUsb) {
             powerStateEvent.setChargingMode(PowerChargingType.USB);
+            powerStateEvent.setIsCharging(true);
         }
 
         if (isWireless) {
             powerStateEvent.setChargingMode(PowerChargingType.WIRELESS);
+            powerStateEvent.setIsCharging(true);
         }
 
         if (Intent.ACTION_POWER_CONNECTED.equals(action)) {

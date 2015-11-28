@@ -4,6 +4,8 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import com.google.android.gms.gcm.GcmNetworkManager;
 import com.google.android.gms.gcm.GcmTaskService;
@@ -66,12 +68,14 @@ public class EventUploadService extends GcmTaskService {
     private static final long flexServerNotAvailableFallbackSecs = 100l;
 
     // an unique default task identifier
+    @NonNull
     private static String taskTagDefault = "periodic | " +
             taskID + ": " +
             periodSecs + "s, f:" +
             flexSecs;
 
     // an unique connection fallback task identifier
+    @NonNull
     private static String taskTagFallback = "periodic | " +
             taskID + ": " +
             periodServerNotAvailableFallbackSecs +
@@ -83,7 +87,9 @@ public class EventUploadService extends GcmTaskService {
 
     private static PreferenceProvider mPreferenceProvider;
 
+    @NonNull
     private Map<Integer, List<? extends IDbSensor>> dbEvents = new HashMap<>();
+    @NonNull
     private Map<Integer, List<? extends SensorDto>> requestEvents = new HashMap<>();
 
     private static boolean isNeedInConnectionFallback;
@@ -120,7 +126,7 @@ public class EventUploadService extends GcmTaskService {
     }
 
     @Override
-    public int onRunTask(TaskParams taskParams) {
+    public int onRunTask(@Nullable TaskParams taskParams) {
 
         Log.d(TAG, "Task uploader has started");
 
@@ -238,6 +244,9 @@ public class EventUploadService extends GcmTaskService {
         // do periodic upload task
         if (isPeriodic) {
 
+            // cancel ghost task
+            cancelByTag(getApplicationContext(), "periodic | 999: 60s, f:15");
+
             Handler handler = new Handler(getMainLooper());
             handler.post(new Runnable() {
 
@@ -328,7 +337,7 @@ public class EventUploadService extends GcmTaskService {
      *
      * @param eventUploadRequest
      */
-    private void doUploadEventData(final EventUploadRequestDto eventUploadRequest) {
+    private void doUploadEventData(@Nullable final EventUploadRequestDto eventUploadRequest) {
 
         Log.d(TAG, "Uploading data...");
 
@@ -353,7 +362,7 @@ public class EventUploadService extends GcmTaskService {
                 new Callback<Void>() {
 
                     @Override
-                    public void success(Void aVoid, Response response) {
+                    public void success(Void aVoid, @Nullable Response response) {
 
                         if (response != null && (
                                 response.getStatus() == 200 ||
@@ -374,7 +383,7 @@ public class EventUploadService extends GcmTaskService {
                     }
 
                     @Override
-                    public void failure(RetrofitError error) {
+                    public void failure(@NonNull RetrofitError error) {
                         // TODO process error
                         Log.d(TAG, "Server returned error! Kind: " + error.getKind().name());
 
@@ -676,30 +685,29 @@ public class EventUploadService extends GcmTaskService {
                             .convertObjects(lightList));
 
                     break;
-
-                case DtoType.POWER_STATE:
-
-                    List<DbPowerStateEvent> powerStateList;
-
-                    // give all
-                    if (numberOfElements == 0) {
-                        powerStateList = daoProvider
-                                .getPowerStateEventDao()
-                                .getAll();
-                    } else {
-                        powerStateList = daoProvider
-                                .getPowerStateEventDao()
-                                .getFirstN(numberOfElements);
-                    }
-
-                    dbEvents.put(type, powerStateList);
-                    requestEvents.put(type, daoProvider
-                            .getPowerStateEventDao()
-                            .convertObjects(powerStateList));
-
-                    break;
             }
         }
+
+        /**
+         * BATTERY STATUS
+         */
+        List<DbPowerStateEvent> powerStateList;
+
+        // give all
+        if (numberOfElements == 0) {
+            powerStateList = daoProvider
+                    .getPowerStateEventDao()
+                    .getAll();
+        } else {
+            powerStateList = daoProvider
+                    .getPowerStateEventDao()
+                    .getFirstN(numberOfElements);
+        }
+
+        dbEvents.put(DtoType.POWER_STATE, powerStateList);
+        requestEvents.put(DtoType.POWER_STATE, daoProvider
+                .getPowerStateEventDao()
+                .convertObjects(powerStateList));
     }
 
     /**
@@ -771,9 +779,7 @@ public class EventUploadService extends GcmTaskService {
             }
         }
 
-        if (requestEvents != null) {
-            requestEvents.clear();
-        }
+        requestEvents.clear();
 
         Log.d(TAG, "Finished removing data from db");
     }
@@ -795,7 +801,7 @@ public class EventUploadService extends GcmTaskService {
     /**
      * Cancels GCM Network Manager periodic task
      */
-    public static void cancelByTag(Context context, String tag) {
+    public static void cancelByTag(Context context, @NonNull String tag) {
         GcmNetworkManager.getInstance(context).cancelTask(tag, EventUploadService.class);
     }
 

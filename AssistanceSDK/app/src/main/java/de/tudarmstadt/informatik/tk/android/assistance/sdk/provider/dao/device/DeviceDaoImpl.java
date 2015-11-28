@@ -1,7 +1,5 @@
 package de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.device;
 
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.util.logger.Log;
-
 import java.util.Collections;
 import java.util.List;
 
@@ -9,6 +7,7 @@ import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DaoSession;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbDevice;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbDeviceDao;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.CommonDaoImpl;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.util.logger.Log;
 
 /**
  * @author Wladimir Schmidt (wlsc.dev@gmail.com)

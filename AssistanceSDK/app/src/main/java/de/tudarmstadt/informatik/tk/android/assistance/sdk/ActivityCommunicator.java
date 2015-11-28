@@ -5,11 +5,11 @@ import android.os.Bundle;
 import android.os.Message;
 import android.os.Messenger;
 import android.os.RemoteException;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.util.logger.Log;
 
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbAccelerometerSensor;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.interfaces.IDbSensor;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.enums.ESensorType;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.util.logger.Log;
 
 public class ActivityCommunicator {
 

@@ -22,7 +22,10 @@ import de.tudarmstadt.informatik.tk.android.assistance.sdk.util.logger.Log;
  */
 public class AccessibilityUtils {
 
-    private static final String TAG = "AccessibilityUtils";
+    private static final String TAG = AccessibilityUtils.class.getSimpleName();
+
+    private AccessibilityUtils() {
+    }
 
     public static void checkAccessibilityService(final Context context) {
 

@@ -19,6 +19,9 @@ import java.nio.channels.FileChannel;
 
 public class FileUtils {
 
+    private FileUtils() {
+    }
+
     /**
      * Checks if external storage is available for read and write.
      */

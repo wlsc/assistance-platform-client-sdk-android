@@ -17,9 +17,12 @@ import java.util.Map;
  */
 public class ImageUtils {
 
+    private ImageUtils() {
+    }
+
     public static Bitmap drawableToBitmap(Drawable drawable) {
         if (drawable instanceof BitmapDrawable) {
-            return ((BitmapDrawable)drawable).getBitmap();
+            return ((BitmapDrawable) drawable).getBitmap();
         }
 
         Bitmap bitmap = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
@@ -36,8 +39,8 @@ public class ImageUtils {
         int height = bitmap.getHeight();
 
         Map<Integer, Integer> m = new HashMap<>();
-        for(int i=0; i < width ; i++) {
-            for(int j=0; j < height ; j++) {
+        for (int i = 0; i < width; i++) {
+            for (int j = 0; j < height; j++) {
                 int rgb = bitmap.getPixel(i, j);
                 int[] rgbArr = getRGBArr(rgb);
                 if (!isGray(rgbArr)) {
@@ -49,7 +52,7 @@ public class ImageUtils {
                 }
             }
         }
-        if(m.size() == 0) {
+        if (m.size() == 0) {
             return null;
         }
         return getMostCommonColour(m);
@@ -63,8 +66,8 @@ public class ImageUtils {
                 return lhs.getValue().compareTo(rhs.getValue());
             }
         });
-        Map.Entry me = (Map.Entry) list.get(list.size()-1);
-        int[] rgb = getRGBArr((Integer)me.getKey());
+        Map.Entry me = (Map.Entry) list.get(list.size() - 1);
+        int[] rgb = getRGBArr((Integer) me.getKey());
 
         return String.format("#%02x%02x%02x", rgb[0], rgb[1], rgb[2]);
     }
@@ -74,7 +77,7 @@ public class ImageUtils {
         int red = (pixel >> 16) & 0xff;
         int green = (pixel >> 8) & 0xff;
         int blue = (pixel) & 0xff;
-        return new int[]{red,green,blue};
+        return new int[]{red, green, blue};
 
     }
 

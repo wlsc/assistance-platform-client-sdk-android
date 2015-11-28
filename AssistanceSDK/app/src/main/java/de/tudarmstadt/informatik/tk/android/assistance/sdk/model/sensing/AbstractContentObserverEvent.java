@@ -4,12 +4,12 @@ import android.content.Context;
 import android.database.ContentObserver;
 import android.database.Cursor;
 import android.net.Uri;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.util.logger.Log;
 
 import java.util.Timer;
 import java.util.TimerTask;
 
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.enums.EPushType;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.util.logger.Log;
 
 public abstract class AbstractContentObserverEvent extends AbstractSensor {
 

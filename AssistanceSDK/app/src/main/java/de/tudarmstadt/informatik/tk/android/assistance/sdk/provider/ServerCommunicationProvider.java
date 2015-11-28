@@ -1,12 +1,12 @@
 package de.tudarmstadt.informatik.tk.android.assistance.sdk.provider;
 
 import android.content.Context;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.util.logger.Log;
 
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbUser;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.device.DeviceRegistrationRequestDto;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.endpoint.DeviceEndpoint;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.endpoint.EndpointGenerator;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.util.logger.Log;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;

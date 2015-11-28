@@ -52,13 +52,13 @@ public class NetworkTrafficEventDaoImpl extends
         result.setLongitude(sensor.getLongitude());
         result.setLatitude(sensor.getLatitude());
 
-        if (sensor.getBackground()) {
-            result.setType(DtoType.BACKGROUND_TRAFFIC);
-            result.setTypeStr(DtoType.getApiName(DtoType.BACKGROUND_TRAFFIC));
-        } else {
-            result.setType(DtoType.FOREGROUND_TRAFFIC);
-            result.setTypeStr(DtoType.getApiName(DtoType.FOREGROUND_TRAFFIC));
-        }
+//        if (sensor.getBackground()) {
+//            result.setType(DtoType.BACKGROUND_TRAFFIC);
+//            result.setTypeStr(DtoType.getApiName(DtoType.BACKGROUND_TRAFFIC));
+//        } else {
+        result.setType(DtoType.FOREGROUND_TRAFFIC);
+        result.setTypeStr(DtoType.getApiName(DtoType.FOREGROUND_TRAFFIC));
+//        }
 
         result.setCreated(sensor.getCreated());
 

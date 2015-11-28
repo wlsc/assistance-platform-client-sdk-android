@@ -3,7 +3,6 @@ package de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensing.impl.p
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.content.Context;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.util.logger.Log;
 
 import java.util.Date;
 import java.util.Locale;
@@ -13,6 +12,7 @@ import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.DtoType
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensing.AbstractPeriodicEvent;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensing.ISensor;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.util.DateUtils;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.util.logger.Log;
 
 /**
  * @author Unknown
