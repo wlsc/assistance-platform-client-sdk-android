@@ -25,7 +25,7 @@ public class DbMobileConnectionEventDao extends AbstractDao<DbMobileConnectionEv
     public static class Properties {
         public final static Property Id = new Property(0, Long.class, "id", true, "_id");
         public final static Property CarrierName = new Property(1, String.class, "carrierName", false, "CARRIER_NAME");
-        public final static Property MobileCarrierCode = new Property(2, String.class, "mobileCarrierCode", false, "MOBILE_CARRIER_CODE");
+        public final static Property MobileCountryCode = new Property(2, String.class, "mobileCountryCode", false, "MOBILE_COUNTRY_CODE");
         public final static Property MobileNetworkCode = new Property(3, String.class, "mobileNetworkCode", false, "MOBILE_NETWORK_CODE");
         public final static Property Created = new Property(4, String.class, "created", false, "CREATED");
         public final static Property VoipAvailable = new Property(5, Boolean.class, "voipAvailable", false, "VOIP_AVAILABLE");
@@ -46,7 +46,7 @@ public class DbMobileConnectionEventDao extends AbstractDao<DbMobileConnectionEv
         db.execSQL("CREATE TABLE " + constraint + "\"mobile_connection_event\" (" + //
                 "\"_id\" INTEGER PRIMARY KEY AUTOINCREMENT ," + // 0: id
                 "\"CARRIER_NAME\" TEXT," + // 1: carrierName
-                "\"MOBILE_CARRIER_CODE\" TEXT," + // 2: mobileCarrierCode
+                "\"MOBILE_COUNTRY_CODE\" TEXT," + // 2: mobileCountryCode
                 "\"MOBILE_NETWORK_CODE\" TEXT," + // 3: mobileNetworkCode
                 "\"CREATED\" TEXT NOT NULL ," + // 4: created
                 "\"VOIP_AVAILABLE\" INTEGER);"); // 5: voipAvailable
@@ -76,9 +76,9 @@ public class DbMobileConnectionEventDao extends AbstractDao<DbMobileConnectionEv
             stmt.bindString(2, carrierName);
         }
  
-        String mobileCarrierCode = entity.getMobileCarrierCode();
-        if (mobileCarrierCode != null) {
-            stmt.bindString(3, mobileCarrierCode);
+        String mobileCountryCode = entity.getMobileCountryCode();
+        if (mobileCountryCode != null) {
+            stmt.bindString(3, mobileCountryCode);
         }
  
         String mobileNetworkCode = entity.getMobileNetworkCode();
@@ -105,7 +105,7 @@ public class DbMobileConnectionEventDao extends AbstractDao<DbMobileConnectionEv
         DbMobileConnectionEvent entity = new DbMobileConnectionEvent( //
             cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0), // id
             cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1), // carrierName
-            cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // mobileCarrierCode
+            cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // mobileCountryCode
             cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // mobileNetworkCode
             cursor.getString(offset + 4), // created
             cursor.isNull(offset + 5) ? null : cursor.getShort(offset + 5) != 0 // voipAvailable
@@ -118,7 +118,7 @@ public class DbMobileConnectionEventDao extends AbstractDao<DbMobileConnectionEv
     public void readEntity(Cursor cursor, DbMobileConnectionEvent entity, int offset) {
         entity.setId(cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0));
         entity.setCarrierName(cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1));
-        entity.setMobileCarrierCode(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
+        entity.setMobileCountryCode(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
         entity.setMobileNetworkCode(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
         entity.setCreated(cursor.getString(offset + 4));
         entity.setVoipAvailable(cursor.isNull(offset + 5) ? null : cursor.getShort(offset + 5) != 0);

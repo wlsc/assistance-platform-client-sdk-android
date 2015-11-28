@@ -19,11 +19,11 @@ public class MobileConnectionEventDto implements SensorDto {
     @Expose
     private String carrierName;
 
-    @SerializedName("mobileCarrierCode")
+    @SerializedName("mcc")
     @Expose
-    private String mobileCarrierCode;
+    private String mobileCountryCode;
 
-    @SerializedName("mobileNetworkCode")
+    @SerializedName("mnc")
     @Expose
     private String mobileNetworkCode;
     /**
@@ -55,10 +55,10 @@ public class MobileConnectionEventDto implements SensorDto {
         this.typeStr = DtoType.getApiName(this.type);
     }
 
-    public MobileConnectionEventDto(long id, String carrierName, String mobileCarrierCode, String mobileNetworkCode, String created, Boolean voipAvailable) {
+    public MobileConnectionEventDto(long id, String carrierName, String mobileCountryCode, String mobileNetworkCode, String created, Boolean voipAvailable) {
         this.id = id;
         this.carrierName = carrierName;
-        this.mobileCarrierCode = mobileCarrierCode;
+        this.mobileCountryCode = mobileCountryCode;
         this.mobileNetworkCode = mobileNetworkCode;
         this.created = created;
         this.voipAvailable = voipAvailable;
@@ -82,12 +82,12 @@ public class MobileConnectionEventDto implements SensorDto {
         this.carrierName = carrierName;
     }
 
-    public String getMobileCarrierCode() {
-        return mobileCarrierCode;
+    public String getMobileCountryCode() {
+        return mobileCountryCode;
     }
 
-    public void setMobileCarrierCode(String mobileCarrierCode) {
-        this.mobileCarrierCode = mobileCarrierCode;
+    public void setMobileCountryCode(String mobileCountryCode) {
+        this.mobileCountryCode = mobileCountryCode;
     }
 
     public String getMobileNetworkCode() {
@@ -143,7 +143,7 @@ public class MobileConnectionEventDto implements SensorDto {
         return "MobileConnectionEventRequest{" +
                 "id=" + id +
                 ", carrierName='" + carrierName + '\'' +
-                ", mobileCarrierCode='" + mobileCarrierCode + '\'' +
+                ", mobileCountryCode='" + mobileCountryCode + '\'' +
                 ", mobileNetworkCode='" + mobileNetworkCode + '\'' +
                 ", created='" + created + '\'' +
                 ", voipAvailable=" + voipAvailable +

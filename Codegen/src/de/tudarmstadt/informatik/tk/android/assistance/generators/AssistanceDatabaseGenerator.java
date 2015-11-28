@@ -277,7 +277,7 @@ public class AssistanceDatabaseGenerator {
     mobileConnectionEvent.addIdProperty().autoincrement().index();
     mobileConnectionEvent.implementsInterface(Config.ASSISTANCE_PACKAGE_SENSOR);
     mobileConnectionEvent.addStringProperty("carrierName");
-    mobileConnectionEvent.addStringProperty("mobileCarrierCode");
+    mobileConnectionEvent.addStringProperty("mobileCountryCode");
     mobileConnectionEvent.addStringProperty("mobileNetworkCode");
     mobileConnectionEvent.addStringProperty("created").notNull();
     // OPTIONAL

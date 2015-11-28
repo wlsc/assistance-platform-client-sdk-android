@@ -46,7 +46,7 @@ public class MobileConnectionEventDaoImpl extends
 
         result.setId(sensor.getId());
         result.setCarrierName(sensor.getCarrierName());
-        result.setMobileCarrierCode(sensor.getMobileCarrierCode());
+        result.setMobileCountryCode(sensor.getMobileCountryCode());
         result.setMobileNetworkCode(sensor.getMobileNetworkCode());
         result.setVoipAvailable(sensor.getVoipAvailable());
         result.setType(DtoType.MOBILE_DATA_CONNECTION);

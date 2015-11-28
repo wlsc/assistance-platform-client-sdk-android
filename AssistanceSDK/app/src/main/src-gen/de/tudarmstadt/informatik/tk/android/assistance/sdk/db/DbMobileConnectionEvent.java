@@ -8,7 +8,7 @@ public class DbMobileConnectionEvent implements de.tudarmstadt.informatik.tk.and
 
     private Long id;
     private String carrierName;
-    private String mobileCarrierCode;
+    private String mobileCountryCode;
     private String mobileNetworkCode;
     /** Not-null value. */
     private String created;
@@ -21,10 +21,10 @@ public class DbMobileConnectionEvent implements de.tudarmstadt.informatik.tk.and
         this.id = id;
     }
 
-    public DbMobileConnectionEvent(Long id, String carrierName, String mobileCarrierCode, String mobileNetworkCode, String created, Boolean voipAvailable) {
+    public DbMobileConnectionEvent(Long id, String carrierName, String mobileCountryCode, String mobileNetworkCode, String created, Boolean voipAvailable) {
         this.id = id;
         this.carrierName = carrierName;
-        this.mobileCarrierCode = mobileCarrierCode;
+        this.mobileCountryCode = mobileCountryCode;
         this.mobileNetworkCode = mobileNetworkCode;
         this.created = created;
         this.voipAvailable = voipAvailable;
@@ -46,12 +46,12 @@ public class DbMobileConnectionEvent implements de.tudarmstadt.informatik.tk.and
         this.carrierName = carrierName;
     }
 
-    public String getMobileCarrierCode() {
-        return mobileCarrierCode;
+    public String getMobileCountryCode() {
+        return mobileCountryCode;
     }
 
-    public void setMobileCarrierCode(String mobileCarrierCode) {
-        this.mobileCarrierCode = mobileCarrierCode;
+    public void setMobileCountryCode(String mobileCountryCode) {
+        this.mobileCountryCode = mobileCountryCode;
     }
 
     public String getMobileNetworkCode() {

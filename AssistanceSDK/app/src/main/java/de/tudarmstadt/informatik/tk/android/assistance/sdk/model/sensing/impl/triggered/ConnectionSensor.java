@@ -94,7 +94,7 @@ public class ConnectionSensor extends AbstractTriggeredEvent {
             DbMobileConnectionEvent mobileConnectionEvent = new DbMobileConnectionEvent();
 
             mobileConnectionEvent.setCarrierName(mobileCarrierName);
-            mobileConnectionEvent.setMobileCarrierCode(mobileCarrierCode);
+            mobileConnectionEvent.setMobileCountryCode(mobileCarrierCode);
             mobileConnectionEvent.setMobileNetworkCode(mobileNetworkCode);
             mobileConnectionEvent.setCreated(created);
 
