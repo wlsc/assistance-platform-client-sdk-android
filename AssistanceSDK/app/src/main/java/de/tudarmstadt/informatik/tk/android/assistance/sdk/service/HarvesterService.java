@@ -365,6 +365,8 @@ public class HarvesterService extends Service implements Callback {
                 Log.d(TAG, "Command: SHOW_ICON received");
                 if (mSensorsStarted) {
                     showIcon();
+                } else {
+                    initService();
                 }
                 break;
             default:
