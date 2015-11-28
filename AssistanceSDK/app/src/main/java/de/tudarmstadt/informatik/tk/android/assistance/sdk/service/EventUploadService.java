@@ -25,6 +25,7 @@ import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbMobileConnection
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbMotionActivityEvent;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbNetworkTrafficEvent;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbPositionSensor;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbPowerStateEvent;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbWifiConnectionEvent;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.interfaces.IDbSensor;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.DtoType;
@@ -46,15 +47,15 @@ import retrofit.client.Response;
  * @author Wladimir Schmidt (wlsc.dev@gmail.com)
  * @date 07.10.2015
  */
-public class EventUploaderService extends GcmTaskService {
+public class EventUploadService extends GcmTaskService {
 
-    private static final String TAG = EventUploaderService.class.getSimpleName();
+    private static final String TAG = EventUploadService.class.getSimpleName();
 
     private static final int EVENTS_NUMBER_TO_SPLIT_AFTER = 500;
     private static final int PUSH_NUMBER_OF_EACH_ELEMENTS = 80;
 
     // task identifier
-    private static final long taskID = 999;
+    private static final long taskID = 998;
     // the task should be executed every N seconds
     private static final long periodSecs = 60l;
     // fallback for period in case of server is not available
@@ -164,7 +165,7 @@ public class EventUploaderService extends GcmTaskService {
                             if (serverDeviceId == -1) {
                                 Log.d(TAG, "User logged out -- all tasks has been canceled!");
                                 GcmNetworkManager.getInstance(getApplicationContext())
-                                        .cancelAllTasks(EventUploaderService.class);
+                                        .cancelAllTasks(EventUploadService.class);
                                 return;
                             }
 
@@ -251,7 +252,7 @@ public class EventUploaderService extends GcmTaskService {
                     if (serverDeviceId == -1) {
                         Log.d(TAG, "User logged out -- all tasks has been canceled!");
                         GcmNetworkManager.getInstance(getApplicationContext())
-                                .cancelAllTasks(EventUploaderService.class);
+                                .cancelAllTasks(EventUploadService.class);
                         return;
                     }
 
@@ -675,6 +676,28 @@ public class EventUploaderService extends GcmTaskService {
                             .convertObjects(lightList));
 
                     break;
+
+                case DtoType.POWER_STATE:
+
+                    List<DbPowerStateEvent> powerStateList;
+
+                    // give all
+                    if (numberOfElements == 0) {
+                        powerStateList = daoProvider
+                                .getPowerStateEventDao()
+                                .getAll();
+                    } else {
+                        powerStateList = daoProvider
+                                .getPowerStateEventDao()
+                                .getFirstN(numberOfElements);
+                    }
+
+                    dbEvents.put(type, powerStateList);
+                    requestEvents.put(type, daoProvider
+                            .getPowerStateEventDao()
+                            .convertObjects(powerStateList));
+
+                    break;
             }
         }
     }
@@ -741,6 +764,10 @@ public class EventUploaderService extends GcmTaskService {
                 case DtoType.LIGHT:
                     daoProvider.getLightSensorDao().delete((List<DbLightSensor>) values);
                     break;
+
+                case DtoType.POWER_STATE:
+                    daoProvider.getPowerStateEventDao().delete((List<DbPowerStateEvent>) values);
+                    break;
             }
         }
 
@@ -755,21 +782,21 @@ public class EventUploaderService extends GcmTaskService {
      * Cancels all GCM Network Manager tasks
      */
     public static void cancelAllTasks(Context context) {
-        GcmNetworkManager.getInstance(context).cancelAllTasks(EventUploaderService.class);
+        GcmNetworkManager.getInstance(context).cancelAllTasks(EventUploadService.class);
     }
 
     /**
      * Cancels default periodic task
      */
     public static void cancel(Context context) {
-        GcmNetworkManager.getInstance(context).cancelTask(taskTagDefault, EventUploaderService.class);
+        GcmNetworkManager.getInstance(context).cancelTask(taskTagDefault, EventUploadService.class);
     }
 
     /**
      * Cancels GCM Network Manager periodic task
      */
     public static void cancelByTag(Context context, String tag) {
-        GcmNetworkManager.getInstance(context).cancelTask(tag, EventUploaderService.class);
+        GcmNetworkManager.getInstance(context).cancelTask(tag, EventUploadService.class);
     }
 
     /**
@@ -780,7 +807,7 @@ public class EventUploaderService extends GcmTaskService {
         Log.d(TAG, "Scheduling periodic task...");
 
         PeriodicTask periodicTask = new PeriodicTask.Builder()
-                .setService(EventUploaderService.class)
+                .setService(EventUploadService.class)
                 .setPeriod(paramPeriodSecs)
                 .setFlex(paramFlexSecs)
                 .setTag(tag)
@@ -806,7 +833,7 @@ public class EventUploaderService extends GcmTaskService {
         bundle.putInt(UPLOAD_ALL_FLAG_NAME, UPLOAD_ALL_FLAG);
 
         OneoffTask oneTimeTask = new OneoffTask.Builder()
-                .setService(EventUploaderService.class)
+                .setService(EventUploadService.class)
                 .setExecutionWindow(startSecs, endSecs)
                 .setTag(tag)
                 .setPersisted(true)

@@ -42,7 +42,7 @@
             android:value="@string/app_id"/>
 
         <service
-            android:name="de.tudarmstadt.informatik.tk.android.assistance.sdk.service.EventUploaderService"
+            android:name=".service.EventUploadService"
             android:exported="true"
             android:permission="com.google.android.gms.permission.BIND_NETWORK_TASK_SERVICE">
             <intent-filter>

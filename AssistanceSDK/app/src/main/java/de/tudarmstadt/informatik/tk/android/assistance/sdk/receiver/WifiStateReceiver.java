@@ -6,7 +6,7 @@ import android.content.Intent;
 import android.os.AsyncTask;
 
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.PreferenceProvider;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.service.EventUploaderService;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.service.EventUploadService;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.util.ConnectionUtils;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.util.logger.Log;
 
@@ -94,7 +94,7 @@ public class WifiStateReceiver extends BroadcastReceiver {
      */
     private void scheduleTask(Context context) {
 
-        EventUploaderService.scheduleOneTimeTask(context,
+        EventUploadService.scheduleOneTimeTask(context,
                 UPLOAD_ALL_TASKS_START_SECS,
                 UPLOAD_ALL_TASKS_END_SECS,
                 "onetimetag | 1");
