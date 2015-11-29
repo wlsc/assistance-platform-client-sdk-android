@@ -19,7 +19,6 @@ import java.util.List;
 import java.util.Locale;
 
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbMotionActivityEvent;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.DtoType;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensing.AbstractTriggeredEvent;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.service.ActivitySensorService;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.util.DateUtils;
@@ -38,7 +37,7 @@ public class MotionActivityEvent extends
     private static final String TAG = MotionActivityEvent.class.getSimpleName();
 
     // ------------------- Configuration -------------------
-    private static final int DETECTION_INTERVAL_IN_SEC = 120;
+    private static final int DETECTION_INTERVAL_IN_SEC = 5;
     // -----------------------------------------------------
 
     private GoogleApiClient mGoogleApiClient;
@@ -258,7 +257,7 @@ public class MotionActivityEvent extends
 
     @Override
     public int getType() {
-        return DtoType.MOTION_ACTIVITY;
+        return -1;
     }
 
     @Override

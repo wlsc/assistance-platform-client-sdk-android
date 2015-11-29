@@ -51,7 +51,7 @@ public class RingtoneEvent extends AbstractPeriodicEvent implements ISensor {
 
     @Override
     public int getType() {
-        return DtoType.RINGTONE;
+        return -1;
     }
 
     @Override

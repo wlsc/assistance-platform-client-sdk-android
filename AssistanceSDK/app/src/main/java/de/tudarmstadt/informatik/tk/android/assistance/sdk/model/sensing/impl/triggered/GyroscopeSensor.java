@@ -11,7 +11,6 @@ import java.util.Date;
 import java.util.Locale;
 
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbGyroscopeSensor;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.DtoType;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensing.AbstractTriggeredEvent;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.util.DateUtils;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.util.logger.Log;
@@ -22,7 +21,9 @@ import de.tudarmstadt.informatik.tk.android.assistance.sdk.util.logger.Log;
  * @author Wladimir Schmidt (wlsc.dev@gmail.com)
  * @date 27.10.2015
  */
-public class GyroscopeSensor extends AbstractTriggeredEvent implements SensorEventListener {
+public class GyroscopeSensor extends
+        AbstractTriggeredEvent implements
+        SensorEventListener {
 
     private static final String TAG = GyroscopeSensor.class.getSimpleName();
 
@@ -184,7 +185,7 @@ public class GyroscopeSensor extends AbstractTriggeredEvent implements SensorEve
 
     @Override
     public int getType() {
-        return DtoType.GYROSCOPE;
+        return Sensor.TYPE_GYROSCOPE;
     }
 
     @Override

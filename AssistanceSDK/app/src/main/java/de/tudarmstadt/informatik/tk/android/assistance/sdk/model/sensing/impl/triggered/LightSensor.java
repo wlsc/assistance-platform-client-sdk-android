@@ -10,7 +10,6 @@ import java.util.Date;
 import java.util.Locale;
 
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbLightSensor;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.DtoType;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensing.AbstractTriggeredEvent;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.DaoProvider;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.util.DateUtils;
@@ -100,14 +99,14 @@ public class LightSensor
     @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
 
-        if (sensor.getType() == getType()) {
+        if (sensor.getType() == Sensor.TYPE_LIGHT) {
             this.accuracy = accuracy;
         }
     }
 
     @Override
     public int getType() {
-        return DtoType.LIGHT;
+        return Sensor.TYPE_LIGHT;
     }
 
     @Override
@@ -118,7 +117,7 @@ public class LightSensor
     @Override
     public void onSensorChanged(SensorEvent event) {
 
-        if (event.sensor.getType() == getType()) {
+        if (event.sensor.getType() == Sensor.TYPE_LIGHT) {
 
             float currentValue = event.values[0];
 

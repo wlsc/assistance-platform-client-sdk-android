@@ -17,7 +17,6 @@ import java.util.Date;
 import java.util.Locale;
 
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbPositionSensor;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.DtoType;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensing.AbstractTriggeredEvent;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.PreferenceProvider;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.util.DateUtils;
@@ -40,9 +39,9 @@ public class LocationSensor extends
     // Accuracy
     private static final int ACCURACY = LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY;
     // Update frequency in seconds
-    private static final int UPDATE_INTERVAL_IN_SECONDS = 40;
+    private static final int UPDATE_INTERVAL_IN_SECONDS = 20;
     // The fastest update frequency, in seconds
-    private static final int FASTEST_INTERVAL_IN_SECONDS = 20;
+    private static final int FASTEST_INTERVAL_IN_SECONDS = 15;
     //-----------------------------------------------------
 
     private long mLastEventDumpingTimestamp;    // in nanoseconds
@@ -197,8 +196,6 @@ public class LocationSensor extends
         } catch (SecurityException ex) {
             Log.d(TAG, "SecurityException: user disabled location permission!");
             stopSensor();
-        } finally {
-
         }
     }
 
@@ -257,7 +254,7 @@ public class LocationSensor extends
 
     @Override
     public int getType() {
-        return DtoType.LOCATION;
+        return -1;
     }
 
     @Override

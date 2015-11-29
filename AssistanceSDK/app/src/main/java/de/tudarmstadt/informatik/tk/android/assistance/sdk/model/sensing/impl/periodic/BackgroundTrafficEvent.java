@@ -140,7 +140,7 @@ public class BackgroundTrafficEvent extends
      */
     @Override
     public int getType() {
-        return DtoType.BACKGROUND_TRAFFIC;
+        return -1;
     }
 
     /**

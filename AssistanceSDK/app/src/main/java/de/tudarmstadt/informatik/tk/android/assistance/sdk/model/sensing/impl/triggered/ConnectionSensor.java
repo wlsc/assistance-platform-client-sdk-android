@@ -16,7 +16,6 @@ import java.util.Locale;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbConnectionEvent;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbMobileConnectionEvent;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbWifiConnectionEvent;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.DtoType;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensing.AbstractTriggeredEvent;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.util.ConnectionUtils;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.util.DateUtils;
@@ -179,7 +178,7 @@ public class ConnectionSensor extends AbstractTriggeredEvent {
 
     @Override
     public int getType() {
-        return DtoType.CONNECTION;
+        return -1;
     }
 
     @Override
