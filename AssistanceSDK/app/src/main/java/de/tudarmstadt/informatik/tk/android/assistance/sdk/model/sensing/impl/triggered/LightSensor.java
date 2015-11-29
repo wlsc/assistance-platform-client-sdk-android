@@ -29,7 +29,7 @@ public class LightSensor
 
     // ------------------- Configuration -------------------
     private static final int SENSOR_DELAY_BETWEEN_TWO_EVENTS = SensorManager.SENSOR_DELAY_NORMAL;
-    private static final int SENSOR_MIN_DIFFERENCE = 5;
+    private static final int UPDATE_INTERVAL = 5;    // in seconds
     // -----------------------------------------------------
 
     private DaoProvider daoProvider;
@@ -37,8 +37,10 @@ public class LightSensor
     private SensorManager mSensorManager;
     private Sensor mSensor;
 
-    private int accuracy;
+    private long startTimestamp;
     private float mLastValue;
+    private int accuracy;
+    private int numValues;
 
     public LightSensor(Context context) {
         super(context);
@@ -54,17 +56,20 @@ public class LightSensor
     @Override
     public void dumpData() {
 
-        DbLightSensor sensorLight = new DbLightSensor();
+        if (numValues > 0) {
 
-        sensorLight.setValue(mLastValue);
-        sensorLight.setAccuracy(accuracy);
-        sensorLight.setCreated(DateUtils.dateToISO8601String(new Date(), Locale.getDefault()));
+            DbLightSensor sensorLight = new DbLightSensor();
 
-        Log.d(TAG, "Insert entry");
+            sensorLight.setValue(mLastValue / numValues);
+            sensorLight.setAccuracy(accuracy);
+            sensorLight.setCreated(DateUtils.dateToISO8601String(new Date(), Locale.getDefault()));
 
-        daoProvider.getLightSensorDao().insert(sensorLight);
+            Log.d(TAG, "Insert entry");
 
-        Log.d(TAG, "Finished");
+            daoProvider.getLightSensorDao().insert(sensorLight);
+
+            Log.d(TAG, "Finished");
+        }
     }
 
     @Override
@@ -101,6 +106,7 @@ public class LightSensor
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
 
         if (sensor.getType() == Sensor.TYPE_LIGHT) {
+
             this.accuracy = accuracy;
         }
     }
@@ -112,7 +118,11 @@ public class LightSensor
 
     @Override
     public void reset() {
+
         mLastValue = 0;
+        accuracy = 0;
+        numValues = 0;
+        startTimestamp = 0;
     }
 
     @Override
@@ -120,15 +130,42 @@ public class LightSensor
 
         if (event.sensor.getType() == Sensor.TYPE_LIGHT) {
 
-            float currentValue = event.values[0];
+            boolean isValueAdded = addNewValueToAverage(event, false);
 
-            if (currentValue < mLastValue - SENSOR_MIN_DIFFERENCE ||
-                    (currentValue > (mLastValue + SENSOR_MIN_DIFFERENCE))) {
-
-                mLastValue = currentValue;
+            if (!isValueAdded) {
 
                 dumpData();
+                addNewValueToAverage(event, true);
             }
         }
+    }
+
+    /**
+     * Adds new value after summation old ones
+     *
+     * @param event
+     * @param newSeries
+     * @return
+     */
+    private boolean addNewValueToAverage(SensorEvent event, boolean newSeries) {
+
+        if (newSeries) {
+
+            startTimestamp = event.timestamp;
+            mLastValue = Math.abs(event.values[0]);
+            numValues = 1;
+
+            return true;
+        } else {
+            if (event.timestamp < (startTimestamp + UPDATE_INTERVAL * 1_000_000_000l)) {
+
+                mLastValue += Math.abs(event.values[0]);
+                numValues++;
+
+                return true;
+            }
+        }
+
+        return false;
     }
 }

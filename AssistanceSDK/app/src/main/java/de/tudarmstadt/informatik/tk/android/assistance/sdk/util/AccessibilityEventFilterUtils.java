@@ -20,7 +20,7 @@ import static android.content.pm.PackageManager.NameNotFoundException;
 
 public class AccessibilityEventFilterUtils {
 
-    private static final String TAG = "KrakenAccessibility";
+    private static final String TAG = AccessibilityEventFilterUtils.class.getSimpleName();
 
     private static final long ONE_SECOND = 1000;
 
