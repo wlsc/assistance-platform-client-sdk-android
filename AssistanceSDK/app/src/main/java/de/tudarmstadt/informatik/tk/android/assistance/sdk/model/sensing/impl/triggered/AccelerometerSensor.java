@@ -10,7 +10,6 @@ import java.util.Date;
 import java.util.Locale;
 
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbAccelerometerSensor;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.DtoType;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensing.AbstractTriggeredEvent;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.util.DateUtils;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.util.logger.Log;
@@ -28,18 +27,18 @@ public class AccelerometerSensor extends
 
     // ------------------- Configuration -------------------
     private static final int SENSOR_DELAY_BETWEEN_TWO_EVENTS = SensorManager.SENSOR_DELAY_NORMAL;
-    private static final int UPDATE_INTERVAL = 10;    // in seconds
+    private static final int UPDATE_INTERVAL = 5;    // in seconds
     // -----------------------------------------------------
 
     private SensorManager mSensorManager;
     private Sensor mSensor;
 
-    private long mLastEventDumpingTimestamp;    // in nanoseconds
-
-    private double x;
-    private double y;
-    private double z;
+    private long startTimestamp;
+    private float sumAccelerationX;
+    private float sumAccelerationY;
+    private float sumAccelerationZ;
     private int accuracy;
+    private int numValues;
 
     public AccelerometerSensor(Context context) {
         super(context);
@@ -51,29 +50,32 @@ public class AccelerometerSensor extends
     @Override
     public void dumpData() {
 
-        DbAccelerometerSensor dbAccelerometerSensor = new DbAccelerometerSensor();
+        if (numValues > 0) {
 
-        dbAccelerometerSensor.setX(x);
-        dbAccelerometerSensor.setY(y);
-        dbAccelerometerSensor.setZ(z);
-        dbAccelerometerSensor.setAccuracy(accuracy);
-        dbAccelerometerSensor.setCreated(DateUtils.dateToISO8601String(new Date(), Locale.getDefault()));
+            DbAccelerometerSensor dbAccelerometerSensor = new DbAccelerometerSensor();
 
-        Log.d(TAG, "Insert entry");
+            dbAccelerometerSensor.setX((double) (sumAccelerationX / numValues));
+            dbAccelerometerSensor.setY((double) (sumAccelerationY / numValues));
+            dbAccelerometerSensor.setZ((double) (sumAccelerationZ / numValues));
+            dbAccelerometerSensor.setAccuracy(accuracy);
+            dbAccelerometerSensor.setCreated(DateUtils.dateToISO8601String(new Date(), Locale.getDefault()));
 
-        daoProvider.getAccelerometerSensorDao().insert(dbAccelerometerSensor);
+            Log.d(TAG, "Insert entry");
 
-        Log.d(TAG, "Finished");
+            daoProvider.getAccelerometerSensorDao().insert(dbAccelerometerSensor);
+
+            Log.d(TAG, "Finished");
+        }
     }
 
     @Override
     public void startSensor() {
 
         try {
-
             if (mSensorManager != null) {
-
                 if (mSensor != null) {
+
+                    reset();
 
                     mSensorManager.registerListener(this, mSensor, SENSOR_DELAY_BETWEEN_TWO_EVENTS);
                     setRunning(true);
@@ -100,25 +102,14 @@ public class AccelerometerSensor extends
     @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
 
-        if (sensor.getType() == getType()) {
+        // serve only this type
+        if (sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
 
             Log.d(TAG, "Accuracy has changed. Old: " + this.accuracy + " new: " + accuracy);
 
+            dumpData();
+            reset();
             this.accuracy = accuracy;
-
-            // checks for saving new data
-            if (isTimeToSaveData(System.nanoTime())) {
-
-                // accuracy has changed faster than accelerometer itself
-                // ignore that accuracy
-                if (x == 0 && y == 0 && z == 0) {
-                    return;
-                }
-
-                mLastEventDumpingTimestamp = System.nanoTime();
-
-                dumpData();
-            }
         }
     }
 
@@ -128,37 +119,42 @@ public class AccelerometerSensor extends
         // serve only this type
         if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
 
-            // updating values
-            x = event.values[0];
-            y = event.values[1];
-            z = event.values[2];
+            boolean isValueAdded = addNewValueToAverage(event, false);
 
-            // checks for saving new data
-            if (isTimeToSaveData(event.timestamp)) {
+            if (!isValueAdded) {
 
-                mLastEventDumpingTimestamp = event.timestamp;
-
-                // time to dump/save data into db
                 dumpData();
+                addNewValueToAverage(event, true);
             }
         }
     }
 
     /**
-     * Checks for the time to save new sensor reading into db
+     * Adds new value after summation old ones
      *
-     * @param timestamp
+     * @param event
+     * @param newSeries
      * @return
      */
-    private boolean isTimeToSaveData(long timestamp) {
+    private boolean addNewValueToAverage(SensorEvent event, boolean newSeries) {
 
-        // save the first sensor data
-        if (mLastEventDumpingTimestamp == 0) {
+        if (newSeries) {
+
+            startTimestamp = event.timestamp;
+            sumAccelerationX = Math.abs(event.values[0]);
+            sumAccelerationY = Math.abs(event.values[1]);
+            sumAccelerationZ = Math.abs(event.values[2]);
+            numValues = 1;
+
             return true;
         } else {
+            if (event.timestamp < (startTimestamp + UPDATE_INTERVAL * 1_000_000_000l)) {
 
-            // the time has come -> save data into db
-            if ((timestamp - mLastEventDumpingTimestamp) / 1_000_000_000 > UPDATE_INTERVAL) {
+                sumAccelerationX += Math.abs(event.values[0]);
+                sumAccelerationY += Math.abs(event.values[1]);
+                sumAccelerationZ += Math.abs(event.values[2]);
+                numValues++;
+
                 return true;
             }
         }
@@ -166,69 +162,20 @@ public class AccelerometerSensor extends
         return false;
     }
 
-//    private boolean addNewValueToAverage(SensorEvent event, boolean newSeries) {
-//        if (newSeries) {
-//            mCurrentEventTimestamp = event.timestamp;
-//            m_floatSumAccelerationX = Math.abs(event.values[0]);
-//            m_floatSumAccelerationY = Math.abs(event.values[1]);
-//            m_floatSumAccelerationZ = Math.abs(event.values[2]);
-//            m_intNumValues = 1;
-//            return true;
-//        } else if (event.timestamp < mCurrentEventTimestamp + UPDATE_INTERVAL * 1000000000L) {
-//            m_floatSumAccelerationX += Math.abs(event.values[0]);
-//            m_floatSumAccelerationY += Math.abs(event.values[1]);
-//            m_floatSumAccelerationZ += Math.abs(event.values[2]);
-//            m_intNumValues++;
-//            return true;
-//        }
-//        return false;
-//    }
-
     @Override
     public void reset() {
 
-        mLastEventDumpingTimestamp = 0;
-        x = 0;
-        y = 0;
-        z = 0;
-        accuracy = 0;
-    }
-
-    public double getX() {
-        return this.x;
-    }
-
-    public void setX(double x) {
-        this.x = x;
-    }
-
-    public double getY() {
-        return this.y;
-    }
-
-    public void setY(double y) {
-        this.y = y;
-    }
-
-    public double getZ() {
-        return this.z;
-    }
-
-    public void setZ(double z) {
-        this.z = z;
-    }
-
-    public int getAccuracy() {
-        return this.accuracy;
-    }
-
-    public void setAccuracy(int accuracy) {
-        this.accuracy = accuracy;
+        this.startTimestamp = 0;
+        this.sumAccelerationX = 0;
+        this.sumAccelerationY = 0;
+        this.sumAccelerationZ = 0;
+        this.accuracy = 0;
+        this.numValues = 0;
     }
 
     @Override
     public int getType() {
-        return DtoType.ACCELEROMETER;
+        return Sensor.TYPE_ACCELEROMETER;
     }
 
 }

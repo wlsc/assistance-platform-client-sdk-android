@@ -142,6 +142,13 @@ public class EventUploadService extends GcmTaskService {
             return GcmNetworkManager.RESULT_FAILURE;
         }
 
+        String userToken = mPreferenceProvider.getUserToken();
+
+        if (userToken.isEmpty()) {
+            Log.d(TAG, "User is not logged in. Upload request ignored");
+            return GcmNetworkManager.RESULT_FAILURE;
+        }
+
         boolean isPeriodic = true;
 
         if (taskParams != null) {
