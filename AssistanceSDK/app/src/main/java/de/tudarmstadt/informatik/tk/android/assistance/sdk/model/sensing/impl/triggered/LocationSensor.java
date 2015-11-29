@@ -17,6 +17,7 @@ import java.util.Date;
 import java.util.Locale;
 
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbPositionSensor;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.DtoType;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensing.AbstractTriggeredEvent;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.PreferenceProvider;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.util.DateUtils;
@@ -222,39 +223,32 @@ public class LocationSensor extends
         PreferenceProvider.getInstance(context).setLastLatitude(latitude);
         PreferenceProvider.getInstance(context).setLastLongitude(longitude);
 
-        // checks for saving new data
-        if (isTimeToSaveData(System.nanoTime())) {
-
-            mLastEventDumpingTimestamp = System.nanoTime();
-
-            dumpData();
-        }
+        dumpData();
     }
 
     /**
      * Checks for the time to save new sensor reading into db
      *
-     * @param timestamp
+//     * @param timestamp
      * @return
      */
-    private boolean isTimeToSaveData(long timestamp) {
-
-        // save the first sensor data
-        if (mLastEventDumpingTimestamp == 0) {
-            return true;
-        } else {
-            // the time has come -> save data into db
-            if ((timestamp - mLastEventDumpingTimestamp) / 1_000_000_000 > UPDATE_INTERVAL_IN_SECONDS) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
+//    private boolean isTimeToSaveData(long timestamp) {
+//
+//        // save the first sensor data
+//        if (mLastEventDumpingTimestamp == 0) {
+//            return true;
+//        } else {
+//            // the time has come -> save data into db
+//            if ((timestamp - mLastEventDumpingTimestamp) / 1_000_000_000 > UPDATE_INTERVAL_IN_SECONDS) {
+//                return true;
+//            }
+//        }
+//
+//        return false;
+//    }
     @Override
     public int getType() {
-        return -1;
+        return DtoType.LOCATION;
     }
 
     @Override
