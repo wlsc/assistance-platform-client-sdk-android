@@ -10,6 +10,7 @@ import java.util.Date;
 import java.util.Locale;
 
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbAccelerometerSensor;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.DtoType;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensing.AbstractTriggeredEvent;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.util.DateUtils;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.util.logger.Log;
@@ -175,7 +176,7 @@ public class AccelerometerSensor extends
 
     @Override
     public int getType() {
-        return Sensor.TYPE_ACCELEROMETER;
+        return DtoType.ACCELEROMETER;
     }
 
 }

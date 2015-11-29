@@ -10,6 +10,7 @@ import java.util.Date;
 import java.util.Locale;
 
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbLightSensor;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.DtoType;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensing.AbstractTriggeredEvent;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.DaoProvider;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.util.DateUtils;
@@ -106,7 +107,7 @@ public class LightSensor
 
     @Override
     public int getType() {
-        return Sensor.TYPE_LIGHT;
+        return DtoType.LIGHT;
     }
 
     @Override

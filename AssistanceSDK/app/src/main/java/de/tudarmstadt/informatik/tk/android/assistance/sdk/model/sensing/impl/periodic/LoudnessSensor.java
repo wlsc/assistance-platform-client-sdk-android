@@ -195,7 +195,7 @@ public class LoudnessSensor extends AbstractPeriodicEvent implements Callback {
 
     @Override
     public int getType() {
-        return -1;
+        return DtoType.LOUDNESS;
     }
 
     @Override

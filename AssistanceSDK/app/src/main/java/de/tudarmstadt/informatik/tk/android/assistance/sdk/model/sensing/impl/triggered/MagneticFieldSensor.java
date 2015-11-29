@@ -11,6 +11,7 @@ import java.util.Date;
 import java.util.Locale;
 
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbMagneticFieldSensor;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.DtoType;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensing.AbstractTriggeredEvent;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.util.DateUtils;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.util.logger.Log;
@@ -181,7 +182,7 @@ public class MagneticFieldSensor extends AbstractTriggeredEvent implements Senso
 
     @Override
     public int getType() {
-        return Sensor.TYPE_MAGNETIC_FIELD;
+        return DtoType.MAGNETIC_FIELD;
     }
 
     @Override

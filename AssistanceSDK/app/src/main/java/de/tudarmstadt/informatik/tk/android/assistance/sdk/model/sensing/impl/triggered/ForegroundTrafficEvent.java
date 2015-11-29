@@ -16,6 +16,7 @@ import java.util.Locale;
 
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbForegroundEvent;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbNetworkTrafficEvent;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.DtoType;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.enums.EPushType;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensing.AbstractTriggeredEvent;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.DaoProvider;
@@ -129,7 +130,7 @@ public class ForegroundTrafficEvent extends AbstractTriggeredEvent {
      */
     @Override
     public int getType() {
-        return -1;
+        return DtoType.FOREGROUND_TRAFFIC;
     }
 
     /**
