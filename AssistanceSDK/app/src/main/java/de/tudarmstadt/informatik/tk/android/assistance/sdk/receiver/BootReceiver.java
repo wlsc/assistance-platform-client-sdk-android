@@ -21,10 +21,16 @@ public class BootReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
 
+        if (context == null) {
+            return;
+        }
+
         // check for proper action
         if (Intent.ACTION_BOOT_COMPLETED.equals(intent.getAction())) {
 
-            boolean activated = PreferenceProvider.getInstance(context).getActivated();
+            boolean activated = PreferenceProvider
+                    .getInstance(context.getApplicationContext())
+                    .getActivated();
 
             Log.d(TAG, "BootReceiver onReceive " + activated);
 
@@ -33,10 +39,12 @@ public class BootReceiver extends BroadcastReceiver {
                 Log.d(TAG, "Start on boot activated -> starting service...");
 
                 if (!DeviceUtils.isServiceRunning(
-                        context,
+                        context.getApplicationContext(),
                         HarvesterService.class)) {
 
-                    HarvesterServiceProvider.getInstance(context).startSensingService();
+                    HarvesterServiceProvider
+                            .getInstance(context.getApplicationContext())
+                            .startSensingService();
                 }
             }
         }

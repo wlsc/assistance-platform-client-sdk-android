@@ -20,25 +20,32 @@ public class WifiStateReceiver extends BroadcastReceiver {
 
     // Earliest point in time in the future
     // from which your task might start executing
-    private long UPLOAD_ALL_TASKS_START_SECS = 0L;
+    private long UPLOAD_ALL_TASKS_START_SECS = 0l;
 
     // latest point in time in the future
     // at which your task must have executed
-    private long UPLOAD_ALL_TASKS_END_SECS = 3600L;
+    private long UPLOAD_ALL_TASKS_END_SECS = 3600l;
 
     @Override
     public void onReceive(final Context context, Intent intent) {
+
+        if (context == null) {
+            return;
+        }
+
         Log.d(TAG, "Connectivity has changed");
 
-        if (ConnectionUtils.isConnectedWifi(context)) {
+        if (ConnectionUtils.isConnectedWifi(context.getApplicationContext())) {
             Log.d(TAG, "WI-FI is connected");
 
             // check for internet connection
-            if (ConnectionUtils.isOnline(context)) {
+            if (ConnectionUtils.isOnline(context.getApplicationContext())) {
                 Log.d(TAG, "Internet is ONLINE");
 
                 // checking that user is logged in the app
-                String userToken = PreferenceProvider.getInstance(context).getUserToken();
+                String userToken = PreferenceProvider
+                        .getInstance(context.getApplicationContext())
+                        .getUserToken();
 
                 if (userToken.isEmpty()) {
                     // do nothing. do not start upload
@@ -50,7 +57,7 @@ public class WifiStateReceiver extends BroadcastReceiver {
                     @Override
                     protected Void doInBackground(Void... params) {
                         Log.d(TAG, "Starting background uploader task...");
-                        uploadAllEvents(context);
+                        uploadAllEvents(context.getApplicationContext());
                         return null;
                     }
 
