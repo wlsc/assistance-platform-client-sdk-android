@@ -25,6 +25,8 @@ public class RunningProcessesReaderEvent extends AbstractPeriodicEvent implement
 
     private static final String TAG = RunningProcessesReaderEvent.class.getSimpleName();
 
+    private static final int INIT_DATA_INTERVAL_IN_SEC = 30;
+
     private ActivityManager mActivityManager;
     // private Query<SensorRunningProcesses> m_query;
     private List<String> mLastProcesses = new ArrayList<>();
@@ -34,7 +36,7 @@ public class RunningProcessesReaderEvent extends AbstractPeriodicEvent implement
     public RunningProcessesReaderEvent(Context context) {
         super(context);
 
-        setDataIntervalInSec(30);
+        setDataIntervalInSec(INIT_DATA_INTERVAL_IN_SEC);
         mActivityManager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
     }
 
@@ -67,12 +69,12 @@ public class RunningProcessesReaderEvent extends AbstractPeriodicEvent implement
     @Override
     protected void getData() {
 
-        List<RunningAppProcessInfo> liProcesses = mActivityManager.getRunningAppProcesses();
+        List<RunningAppProcessInfo> processes = mActivityManager.getRunningAppProcesses();
 
-        List<String> processNames = new ArrayList<>(liProcesses.size());
-        boolean bProcessesChanged = liProcesses.size() != mLastProcesses.size();
+        List<String> processNames = new ArrayList<>(processes.size());
+        boolean bProcessesChanged = processes.size() != mLastProcesses.size();
 
-        for (RunningAppProcessInfo process : liProcesses) {
+        for (RunningAppProcessInfo process : processes) {
             processNames.add(process.processName);
             if (!bProcessesChanged && !mLastProcesses.contains(process.processName))
                 bProcessesChanged = true;

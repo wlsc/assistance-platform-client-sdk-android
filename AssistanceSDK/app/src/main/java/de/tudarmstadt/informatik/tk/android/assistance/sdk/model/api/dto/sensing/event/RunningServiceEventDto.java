@@ -10,17 +10,13 @@ import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.SensorD
  * @author Wladimir Schmidt (wlsc.dev@gmail.com)
  * @date 24.11.2015
  */
-public class RunningTasksEventDto implements SensorDto {
+public class RunningServiceEventDto implements SensorDto {
 
     private Long id;
 
-    @SerializedName("runningTasks")
+    @SerializedName("name")
     @Expose
-    private String runningTasks;
-
-    @SerializedName("stackPosition")
-    @Expose
-    private Integer stackPosition;
+    private String name;
 
     @SerializedName("created")
     @Expose
@@ -32,23 +28,22 @@ public class RunningTasksEventDto implements SensorDto {
 
     private int type;
 
-    public RunningTasksEventDto() {
-        this.type = DtoType.RUNNING_TASKS;
+    public RunningServiceEventDto() {
+        this.type = DtoType.RUNNING_SERVICES;
         this.typeStr = DtoType.getApiName(this.type);
     }
 
-    public RunningTasksEventDto(Long id) {
+    public RunningServiceEventDto(Long id) {
         this.id = id;
-        this.type = DtoType.RUNNING_TASKS;
+        this.type = DtoType.RUNNING_SERVICES;
         this.typeStr = DtoType.getApiName(this.type);
     }
 
-    public RunningTasksEventDto(Long id, String runningTasks, Integer stackPosition, String created) {
+    public RunningServiceEventDto(Long id, String name, String created) {
         this.id = id;
-        this.runningTasks = runningTasks;
-        this.stackPosition = stackPosition;
+        this.name = name;
         this.created = created;
-        this.type = DtoType.RUNNING_TASKS;
+        this.type = DtoType.RUNNING_SERVICES;
         this.typeStr = DtoType.getApiName(this.type);
     }
 
@@ -60,20 +55,12 @@ public class RunningTasksEventDto implements SensorDto {
         this.id = id;
     }
 
-    public String getRunningTasks() {
-        return runningTasks;
+    public String getName() {
+        return name;
     }
 
-    public void setRunningTasks(String runningTasks) {
-        this.runningTasks = runningTasks;
-    }
-
-    public Integer getStackPosition() {
-        return stackPosition;
-    }
-
-    public void setStackPosition(Integer stackPosition) {
-        this.stackPosition = stackPosition;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getCreated() {
@@ -104,10 +91,9 @@ public class RunningTasksEventDto implements SensorDto {
 
     @Override
     public String toString() {
-        return "RunningTasksEventDto{" +
+        return "RunningServiceEventDto{" +
                 "id=" + id +
-                ", runningTasks='" + runningTasks + '\'' +
-                ", stackPosition=" + stackPosition +
+                ", name='" + name + '\'' +
                 ", created='" + created + '\'' +
                 ", typeStr='" + typeStr + '\'' +
                 ", type=" + type +

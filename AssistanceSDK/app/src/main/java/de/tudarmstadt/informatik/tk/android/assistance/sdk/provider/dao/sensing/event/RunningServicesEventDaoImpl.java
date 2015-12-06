@@ -8,7 +8,7 @@ import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbRunningServicesE
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbRunningServicesEventDao;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.DtoType;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.SensorDto;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.sensing.event.RunningServicesEventDto;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.sensing.event.RunningServiceEventDto;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.CommonEventDaoImpl;
 
 /**
@@ -43,10 +43,10 @@ public class RunningServicesEventDaoImpl extends
             return null;
         }
 
-        RunningServicesEventDto result = new RunningServicesEventDto();
+        RunningServiceEventDto result = new RunningServiceEventDto();
 
         result.setId(sensor.getId());
-        result.setRunningServices(sensor.getRunningServices());
+        result.setName(sensor.getRunningServices());
         result.setType(DtoType.RUNNING_SERVICES);
         result.setTypeStr(DtoType.getApiName(DtoType.RUNNING_SERVICES));
         result.setCreated(sensor.getCreated());

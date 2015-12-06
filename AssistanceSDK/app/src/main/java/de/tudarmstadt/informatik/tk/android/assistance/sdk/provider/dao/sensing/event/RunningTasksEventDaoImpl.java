@@ -8,7 +8,7 @@ import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbRunningTasksEven
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbRunningTasksEventDao;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.DtoType;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.SensorDto;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.sensing.event.RunningTasksEventDto;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.sensing.event.RunningTaskEventDto;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.CommonEventDaoImpl;
 
 /**
@@ -43,10 +43,10 @@ public class RunningTasksEventDaoImpl extends
             return null;
         }
 
-        RunningTasksEventDto result = new RunningTasksEventDto();
+        RunningTaskEventDto result = new RunningTaskEventDto();
 
         result.setId(sensor.getId());
-        result.setRunningTasks(sensor.getRunningTasks());
+        result.setName(sensor.getRunningTasks());
         result.setStackPosition(sensor.getStackPosition());
         result.setType(DtoType.RUNNING_TASKS);
         result.setTypeStr(DtoType.getApiName(DtoType.RUNNING_TASKS));

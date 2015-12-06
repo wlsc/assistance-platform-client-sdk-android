@@ -10,13 +10,13 @@ import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.SensorD
  * @author Wladimir Schmidt (wlsc.dev@gmail.com)
  * @date 24.11.2015
  */
-public class RunningServicesEventDto implements SensorDto {
+public class RunningProcessEventDto implements SensorDto {
 
     private Long id;
 
-    @SerializedName("runningServices")
+    @SerializedName("name")
     @Expose
-    private String runningServices;
+    private String name;
 
     @SerializedName("created")
     @Expose
@@ -28,22 +28,22 @@ public class RunningServicesEventDto implements SensorDto {
 
     private int type;
 
-    public RunningServicesEventDto() {
-        this.type = DtoType.RUNNING_SERVICES;
+    public RunningProcessEventDto() {
+        this.type = DtoType.RUNNING_PROCESSES;
         this.typeStr = DtoType.getApiName(this.type);
     }
 
-    public RunningServicesEventDto(Long id) {
+    public RunningProcessEventDto(Long id) {
         this.id = id;
-        this.type = DtoType.RUNNING_SERVICES;
+        this.type = DtoType.RUNNING_PROCESSES;
         this.typeStr = DtoType.getApiName(this.type);
     }
 
-    public RunningServicesEventDto(Long id, String runningServices, String created) {
+    public RunningProcessEventDto(Long id, String name, String created) {
         this.id = id;
-        this.runningServices = runningServices;
+        this.name = name;
         this.created = created;
-        this.type = DtoType.RUNNING_SERVICES;
+        this.type = DtoType.RUNNING_PROCESSES;
         this.typeStr = DtoType.getApiName(this.type);
     }
 
@@ -55,12 +55,12 @@ public class RunningServicesEventDto implements SensorDto {
         this.id = id;
     }
 
-    public String getRunningServices() {
-        return runningServices;
+    public String getName() {
+        return name;
     }
 
-    public void setRunningServices(String runningServices) {
-        this.runningServices = runningServices;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getCreated() {
@@ -91,9 +91,9 @@ public class RunningServicesEventDto implements SensorDto {
 
     @Override
     public String toString() {
-        return "RunningServicesEventDto{" +
+        return "RunningProcessEventDto{" +
                 "id=" + id +
-                ", runningServices='" + runningServices + '\'' +
+                ", name='" + name + '\'' +
                 ", created='" + created + '\'' +
                 ", typeStr='" + typeStr + '\'' +
                 ", type=" + type +

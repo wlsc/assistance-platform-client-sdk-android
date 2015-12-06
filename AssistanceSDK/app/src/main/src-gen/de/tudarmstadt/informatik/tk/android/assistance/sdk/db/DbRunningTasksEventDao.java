@@ -24,7 +24,7 @@ public class DbRunningTasksEventDao extends AbstractDao<DbRunningTasksEvent, Lon
     */
     public static class Properties {
         public final static Property Id = new Property(0, Long.class, "id", true, "_id");
-        public final static Property RunningTasks = new Property(1, String.class, "runningTasks", false, "RUNNING_TASKS");
+        public final static Property Name = new Property(1, String.class, "name", false, "NAME");
         public final static Property StackPosition = new Property(2, Integer.class, "stackPosition", false, "STACK_POSITION");
         public final static Property Created = new Property(3, String.class, "created", false, "CREATED");
     };
@@ -43,7 +43,7 @@ public class DbRunningTasksEventDao extends AbstractDao<DbRunningTasksEvent, Lon
         String constraint = ifNotExists? "IF NOT EXISTS ": "";
         db.execSQL("CREATE TABLE " + constraint + "\"running_tasks_event\" (" + //
                 "\"_id\" INTEGER PRIMARY KEY AUTOINCREMENT ," + // 0: id
-                "\"RUNNING_TASKS\" TEXT," + // 1: runningTasks
+                "\"NAME\" TEXT," + // 1: name
                 "\"STACK_POSITION\" INTEGER," + // 2: stackPosition
                 "\"CREATED\" TEXT NOT NULL );"); // 3: created
         // Add Indexes
@@ -67,9 +67,9 @@ public class DbRunningTasksEventDao extends AbstractDao<DbRunningTasksEvent, Lon
             stmt.bindLong(1, id);
         }
  
-        String runningTasks = entity.getRunningTasks();
-        if (runningTasks != null) {
-            stmt.bindString(2, runningTasks);
+        String name = entity.getName();
+        if (name != null) {
+            stmt.bindString(2, name);
         }
  
         Integer stackPosition = entity.getStackPosition();
@@ -90,7 +90,7 @@ public class DbRunningTasksEventDao extends AbstractDao<DbRunningTasksEvent, Lon
     public DbRunningTasksEvent readEntity(Cursor cursor, int offset) {
         DbRunningTasksEvent entity = new DbRunningTasksEvent( //
             cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0), // id
-            cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1), // runningTasks
+            cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1), // name
             cursor.isNull(offset + 2) ? null : cursor.getInt(offset + 2), // stackPosition
             cursor.getString(offset + 3) // created
         );
@@ -101,7 +101,7 @@ public class DbRunningTasksEventDao extends AbstractDao<DbRunningTasksEvent, Lon
     @Override
     public void readEntity(Cursor cursor, DbRunningTasksEvent entity, int offset) {
         entity.setId(cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0));
-        entity.setRunningTasks(cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1));
+        entity.setName(cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1));
         entity.setStackPosition(cursor.isNull(offset + 2) ? null : cursor.getInt(offset + 2));
         entity.setCreated(cursor.getString(offset + 3));
      }

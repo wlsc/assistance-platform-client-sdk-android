@@ -339,7 +339,7 @@ public class AssistanceDatabaseGenerator {
     runningProcessesEvent.setTableName("running_processes_event");
     runningProcessesEvent.addIdProperty().autoincrement().index();
     runningProcessesEvent.implementsInterface(Config.ASSISTANCE_PACKAGE_SENSOR);
-    runningProcessesEvent.addStringProperty("runningProcesses");
+    runningProcessesEvent.addStringProperty("name");
     runningProcessesEvent.addStringProperty("created").notNull();
 
     // ----- Running Services Event -----
@@ -347,7 +347,7 @@ public class AssistanceDatabaseGenerator {
     runningServicesEvent.setTableName("running_services_event");
     runningServicesEvent.addIdProperty().autoincrement().index();
     runningServicesEvent.implementsInterface(Config.ASSISTANCE_PACKAGE_SENSOR);
-    runningServicesEvent.addStringProperty("runningServices");
+    runningServicesEvent.addStringProperty("name");
     runningServicesEvent.addStringProperty("created").notNull();
 
     // ----- Running Tasks Event -----
@@ -355,7 +355,7 @@ public class AssistanceDatabaseGenerator {
     runningTasksEvent.setTableName("running_tasks_event");
     runningTasksEvent.addIdProperty().autoincrement().index();
     runningTasksEvent.implementsInterface(Config.ASSISTANCE_PACKAGE_SENSOR);
-    runningTasksEvent.addStringProperty("runningTasks");
+    runningTasksEvent.addStringProperty("name");
     runningTasksEvent.addIntProperty("stackPosition");
     runningTasksEvent.addStringProperty("created").notNull();
 

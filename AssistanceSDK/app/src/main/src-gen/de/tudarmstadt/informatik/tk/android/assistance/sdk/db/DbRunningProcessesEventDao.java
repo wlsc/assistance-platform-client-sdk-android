@@ -24,7 +24,7 @@ public class DbRunningProcessesEventDao extends AbstractDao<DbRunningProcessesEv
     */
     public static class Properties {
         public final static Property Id = new Property(0, Long.class, "id", true, "_id");
-        public final static Property RunningProcesses = new Property(1, String.class, "runningProcesses", false, "RUNNING_PROCESSES");
+        public final static Property Name = new Property(1, String.class, "name", false, "NAME");
         public final static Property Created = new Property(2, String.class, "created", false, "CREATED");
     };
 
@@ -42,7 +42,7 @@ public class DbRunningProcessesEventDao extends AbstractDao<DbRunningProcessesEv
         String constraint = ifNotExists? "IF NOT EXISTS ": "";
         db.execSQL("CREATE TABLE " + constraint + "\"running_processes_event\" (" + //
                 "\"_id\" INTEGER PRIMARY KEY AUTOINCREMENT ," + // 0: id
-                "\"RUNNING_PROCESSES\" TEXT," + // 1: runningProcesses
+                "\"NAME\" TEXT," + // 1: name
                 "\"CREATED\" TEXT NOT NULL );"); // 2: created
         // Add Indexes
         db.execSQL("CREATE INDEX " + constraint + "IDX_running_processes_event__id ON running_processes_event" +
@@ -65,9 +65,9 @@ public class DbRunningProcessesEventDao extends AbstractDao<DbRunningProcessesEv
             stmt.bindLong(1, id);
         }
  
-        String runningProcesses = entity.getRunningProcesses();
-        if (runningProcesses != null) {
-            stmt.bindString(2, runningProcesses);
+        String name = entity.getName();
+        if (name != null) {
+            stmt.bindString(2, name);
         }
         stmt.bindString(3, entity.getCreated());
     }
@@ -83,7 +83,7 @@ public class DbRunningProcessesEventDao extends AbstractDao<DbRunningProcessesEv
     public DbRunningProcessesEvent readEntity(Cursor cursor, int offset) {
         DbRunningProcessesEvent entity = new DbRunningProcessesEvent( //
             cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0), // id
-            cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1), // runningProcesses
+            cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1), // name
             cursor.getString(offset + 2) // created
         );
         return entity;
@@ -93,7 +93,7 @@ public class DbRunningProcessesEventDao extends AbstractDao<DbRunningProcessesEv
     @Override
     public void readEntity(Cursor cursor, DbRunningProcessesEvent entity, int offset) {
         entity.setId(cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0));
-        entity.setRunningProcesses(cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1));
+        entity.setName(cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1));
         entity.setCreated(cursor.getString(offset + 2));
      }
     

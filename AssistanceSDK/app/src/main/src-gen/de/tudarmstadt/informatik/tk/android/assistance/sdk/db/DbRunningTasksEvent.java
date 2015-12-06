@@ -7,7 +7,7 @@ package de.tudarmstadt.informatik.tk.android.assistance.sdk.db;
 public class DbRunningTasksEvent implements de.tudarmstadt.informatik.tk.android.assistance.sdk.interfaces.IDbSensor {
 
     private Long id;
-    private String runningTasks;
+    private String name;
     private Integer stackPosition;
     /** Not-null value. */
     private String created;
@@ -19,9 +19,9 @@ public class DbRunningTasksEvent implements de.tudarmstadt.informatik.tk.android
         this.id = id;
     }
 
-    public DbRunningTasksEvent(Long id, String runningTasks, Integer stackPosition, String created) {
+    public DbRunningTasksEvent(Long id, String name, Integer stackPosition, String created) {
         this.id = id;
-        this.runningTasks = runningTasks;
+        this.name = name;
         this.stackPosition = stackPosition;
         this.created = created;
     }
@@ -34,12 +34,12 @@ public class DbRunningTasksEvent implements de.tudarmstadt.informatik.tk.android
         this.id = id;
     }
 
-    public String getRunningTasks() {
-        return runningTasks;
+    public String getName() {
+        return name;
     }
 
-    public void setRunningTasks(String runningTasks) {
-        this.runningTasks = runningTasks;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public Integer getStackPosition() {
