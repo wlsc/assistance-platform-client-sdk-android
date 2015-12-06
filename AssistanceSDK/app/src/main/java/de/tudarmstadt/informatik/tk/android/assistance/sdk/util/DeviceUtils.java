@@ -59,9 +59,11 @@ public class DeviceUtils {
      * @param context
      * @return
      */
-    public static List<ActivityManager.RunningServiceInfo> getRunningServices(final Context context) {
+    public static List<ActivityManager.RunningServiceInfo> getRunningServices(
+            final Context context,
+            final int maxAmount) {
 
-        if (context == null) {
+        if (context == null || maxAmount <= 0) {
             return Collections.emptyList();
         }
 
@@ -72,7 +74,6 @@ public class DeviceUtils {
             return Collections.emptyList();
         }
 
-        return activityManager.getRunningServices(Integer.MAX_VALUE);
+        return activityManager.getRunningServices(maxAmount);
     }
-
 }

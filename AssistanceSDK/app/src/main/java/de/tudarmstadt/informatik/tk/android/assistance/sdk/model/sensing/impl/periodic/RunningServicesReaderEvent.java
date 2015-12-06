@@ -27,15 +27,13 @@ public class RunningServicesReaderEvent extends AbstractPeriodicEvent {
 
     private static final int INIT_DATA_INTERVAL_IN_SEC = 30;
 
-    private static final int MAXIMUM_SERVICES = 20;
-    private ActivityManager activityManager;
+    private static final int MAXIMUM_SERVICES = Integer.MAX_VALUE;
 
     private List<String> lastServicePackageNames = new ArrayList<>();
     private List<String> lastServiceClassNames = new ArrayList<>();
 
     public RunningServicesReaderEvent(Context context) {
         super(context);
-        activityManager = (ActivityManager) this.context.getSystemService(Context.ACTIVITY_SERVICE);
     }
 
     @Override
@@ -71,11 +69,11 @@ public class RunningServicesReaderEvent extends AbstractPeriodicEvent {
         lastServiceClassNames.clear();
     }
 
-    @SuppressWarnings("unused")
     @Override
     protected void getData() {
 
-        List<RunningServiceInfo> services = DeviceUtils.getRunningServices(context);
+        List<RunningServiceInfo> services = DeviceUtils
+                .getRunningServices(context, MAXIMUM_SERVICES);
 
         List<String> servicesPackageNames = new ArrayList<>(services.size());
         List<String> servicesClassNames = new ArrayList<>(services.size());
