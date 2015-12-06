@@ -18,7 +18,7 @@ public class CallLogEventDto implements SensorDto {
     @Expose
     private Long callId;
 
-    @SerializedName("type")
+    @SerializedName("callType")
     @Expose
     private Integer callType;
 
@@ -38,15 +38,15 @@ public class CallLogEventDto implements SensorDto {
     @Expose
     private Long duration;
 
-    @SerializedName("new")
+    @SerializedName("isNew")
     @Expose
     private Boolean isNew;
 
-    @SerializedName("updated")
+    @SerializedName("isUpdated")
     @Expose
     private Boolean isUpdated;
 
-    @SerializedName("deleted")
+    @SerializedName("isDeleted")
     @Expose
     private Boolean isDeleted;
 
