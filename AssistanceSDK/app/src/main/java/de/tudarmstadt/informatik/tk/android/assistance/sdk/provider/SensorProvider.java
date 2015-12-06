@@ -8,10 +8,7 @@ import java.util.List;
 
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.enums.EPushType;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensing.ISensor;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensing.impl.triggered.AccelerometerSensor;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensing.impl.triggered.ForegroundEvent;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensing.impl.triggered.LocationSensor;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensing.impl.triggered.MotionActivityEvent;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensing.impl.contentobserver.CallLogEvent;
 
 /**
  * Main sensor provider
@@ -62,19 +59,19 @@ public class SensorProvider {
          */
 
         // works
-        AccelerometerSensor accelerometerSensor = new AccelerometerSensor(mContext);
-        mAvailableSensors.add(accelerometerSensor);
+//        AccelerometerSensor accelerometerSensor = new AccelerometerSensor(mContext);
+//        mAvailableSensors.add(accelerometerSensor);
 
-        MotionActivityEvent motionActivityEvent = MotionActivityEvent.getInstance(mContext);
-        mAvailableSensors.add(motionActivityEvent);
+//        MotionActivityEvent motionActivityEvent = MotionActivityEvent.getInstance(mContext);
+//        mAvailableSensors.add(motionActivityEvent);
 
         // works
 //        LightSensor lightSensor = new LightSensor(mContext);
 //        mAvailableSensors.add(lightSensor);
 
         // works
-        LocationSensor locationSensor = new LocationSensor(mContext);
-        mAvailableSensors.add(locationSensor);
+//        LocationSensor locationSensor = new LocationSensor(mContext);
+//        mAvailableSensors.add(locationSensor);
 
         // works
 //        ConnectionSensor connectionSensor = new ConnectionSensor(mContext);
@@ -89,8 +86,8 @@ public class SensorProvider {
 //        mAvailableSensors.add(backgroundTrafficEvent);
 
         // loudness sensor is blocking microphone and consuming too much battery
-        // LoudnessSensor loudnessSensor = new LoudnessSensor(mContext);
-        // mAvailableSensors.add(loudnessSensor);
+//         LoudnessSensor loudnessSensor = new LoudnessSensor(mContext);
+//         mAvailableSensors.add(loudnessSensor);
 
         /**
          * Periodic events / sensors
@@ -105,14 +102,23 @@ public class SensorProvider {
 //        ContactsEvent contactsEvent = new ContactsEvent(mContext);
 //        mAvailableSensors.add(contactsEvent);
 
-//        CallLogEvent callLogEvent = new CallLogEvent(mContext);
-//        mAvailableSensors.add(callLogEvent);
+        CallLogEvent callLogEvent = new CallLogEvent(mContext);
+        mAvailableSensors.add(callLogEvent);
 
 //        BrowserHistoryEvent browserHistoryEvent = new BrowserHistoryEvent(mContext);
 //        mAvailableSensors.add(browserHistoryEvent);
 
-        ForegroundEvent foregroundEvent = new ForegroundEvent(mContext);
-        mAvailableSensors.add(foregroundEvent);
+//        ForegroundEvent foregroundEvent = new ForegroundEvent(mContext);
+//        mAvailableSensors.add(foregroundEvent);
+
+//        RunningProcessesReaderEvent runningProcessesReaderEvent = new RunningProcessesReaderEvent(mContext);
+//        mAvailableSensors.add(runningProcessesReaderEvent);
+//
+//        RunningTasksReaderEvent runningTasksReaderEvent = new RunningTasksReaderEvent(mContext);
+//        mAvailableSensors.add(runningTasksReaderEvent);
+//
+//        RunningServicesReaderEvent runningServicesReaderEvent = new RunningServicesReaderEvent(mContext);
+//        mAvailableSensors.add(runningServicesReaderEvent);
 
         /**
          * Save them in map for further fast access
