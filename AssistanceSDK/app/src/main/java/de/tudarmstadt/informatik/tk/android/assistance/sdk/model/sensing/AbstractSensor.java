@@ -14,8 +14,6 @@ import de.tudarmstadt.informatik.tk.android.assistance.sdk.service.HarvesterServ
  */
 public abstract class AbstractSensor implements ISensor {
 
-    private static final String TAG = AbstractSensor.class.getSimpleName();
-
     protected Context context;
 
     private boolean isRunning;
@@ -25,8 +23,6 @@ public abstract class AbstractSensor implements ISensor {
 
     private boolean isDisabledByUser;
     private boolean isDisabledBySystem;
-    protected long lastDataFlushTimestamp;
-    protected int pushIntervallInMin;
 
     public AbstractSensor(Context context) {
         setContext(context);
@@ -73,16 +69,6 @@ public abstract class AbstractSensor implements ISensor {
     @Override
     public EPushType getPushType() {
         return EPushType.WLAN_ONLY;
-    }
-
-    @Override
-    public int getPushIntervalInMin() {
-        return pushIntervallInMin;
-    }
-
-    @Override
-    public void setPushIntervalInMin(int intInterval) {
-        pushIntervallInMin = intInterval;
     }
 
     @Override

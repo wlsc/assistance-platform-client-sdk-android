@@ -26,10 +26,6 @@ public interface ISensor {
 
     EPushType getPushType();
 
-    int getPushIntervalInMin();
-
-    void setPushIntervalInMin(int value);
-
     boolean isRunning();
 
     void setRunning(boolean isRunning);
