@@ -20,14 +20,25 @@ import java.util.List;
 import java.util.Map;
 
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbAccelerometerSensor;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbBrowserHistoryEvent;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbCalendarEvent;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbCallLogEvent;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbConnectionEvent;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbContactEvent;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbForegroundEvent;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbGyroscopeSensor;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbLightSensor;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbLoudnessEvent;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbMagneticFieldSensor;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbMobileConnectionEvent;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbMotionActivityEvent;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbNetworkTrafficEvent;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbPositionSensor;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbPowerStateEvent;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbRingtoneEvent;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbRunningProcessesEvent;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbRunningServicesEvent;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbRunningTasksEvent;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbWifiConnectionEvent;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.interfaces.IDbSensor;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.DtoType;
@@ -692,6 +703,248 @@ public class EventUploadService extends GcmTaskService {
                             .convertObjects(lightList));
 
                     break;
+
+                case DtoType.LOUDNESS:
+
+                    List<DbLoudnessEvent> loudnessList;
+
+                    // give all
+                    if (numberOfElements == 0) {
+                        loudnessList = daoProvider
+                                .getLoudnessEventDao()
+                                .getAll();
+                    } else {
+                        loudnessList = daoProvider
+                                .getLoudnessEventDao()
+                                .getFirstN(numberOfElements);
+                    }
+
+                    dbEvents.put(type, loudnessList);
+                    requestEvents.put(type, daoProvider
+                            .getLoudnessEventDao()
+                            .convertObjects(loudnessList));
+
+                    break;
+
+                case DtoType.RUNNING_PROCESSES:
+
+                    List<DbRunningProcessesEvent> runProccessList;
+
+                    // give all
+                    if (numberOfElements == 0) {
+                        runProccessList = daoProvider
+                                .getRunningProcessesEventDao()
+                                .getAll();
+                    } else {
+                        runProccessList = daoProvider
+                                .getRunningProcessesEventDao()
+                                .getFirstN(numberOfElements);
+                    }
+
+                    dbEvents.put(type, runProccessList);
+                    requestEvents.put(type, daoProvider
+                            .getRunningProcessesEventDao()
+                            .convertObjects(runProccessList));
+
+                    break;
+
+                case DtoType.RUNNING_SERVICES:
+
+                    List<DbRunningServicesEvent> runServiceList;
+
+                    // give all
+                    if (numberOfElements == 0) {
+                        runServiceList = daoProvider
+                                .getRunningServicesEventDao()
+                                .getAll();
+                    } else {
+                        runServiceList = daoProvider
+                                .getRunningServicesEventDao()
+                                .getFirstN(numberOfElements);
+                    }
+
+                    dbEvents.put(type, runServiceList);
+                    requestEvents.put(type, daoProvider
+                            .getRunningServicesEventDao()
+                            .convertObjects(runServiceList));
+
+                    break;
+
+                case DtoType.RUNNING_TASKS:
+
+                    List<DbRunningTasksEvent> runTaskList;
+
+                    // give all
+                    if (numberOfElements == 0) {
+                        runTaskList = daoProvider
+                                .getRunningTasksEventDao()
+                                .getAll();
+                    } else {
+                        runTaskList = daoProvider
+                                .getRunningTasksEventDao()
+                                .getFirstN(numberOfElements);
+                    }
+
+                    dbEvents.put(type, runTaskList);
+                    requestEvents.put(type, daoProvider
+                            .getRunningTasksEventDao()
+                            .convertObjects(runTaskList));
+
+                    break;
+
+                case DtoType.RINGTONE:
+
+                    List<DbRingtoneEvent> ringtoneList;
+
+                    // give all
+                    if (numberOfElements == 0) {
+                        ringtoneList = daoProvider
+                                .getRingtoneEventDao()
+                                .getAll();
+                    } else {
+                        ringtoneList = daoProvider
+                                .getRingtoneEventDao()
+                                .getFirstN(numberOfElements);
+                    }
+
+                    dbEvents.put(type, ringtoneList);
+                    requestEvents.put(type, daoProvider
+                            .getRingtoneEventDao()
+                            .convertObjects(ringtoneList));
+
+                    break;
+
+                case DtoType.CALL_LOG:
+
+                    List<DbCallLogEvent> callLogList;
+
+                    // give all
+                    if (numberOfElements == 0) {
+                        callLogList = daoProvider
+                                .getCallLogEventDao()
+                                .getAll();
+                    } else {
+                        callLogList = daoProvider
+                                .getCallLogEventDao()
+                                .getFirstN(numberOfElements);
+                    }
+
+                    dbEvents.put(type, callLogList);
+                    requestEvents.put(type, daoProvider
+                            .getCallLogEventDao()
+                            .convertObjects(callLogList));
+
+                    break;
+
+                case DtoType.GYROSCOPE:
+
+                    List<DbGyroscopeSensor> gyroList;
+
+                    // give all
+                    if (numberOfElements == 0) {
+                        gyroList = daoProvider
+                                .getGyroscopeSensorDao()
+                                .getAll();
+                    } else {
+                        gyroList = daoProvider
+                                .getGyroscopeSensorDao()
+                                .getFirstN(numberOfElements);
+                    }
+
+                    dbEvents.put(type, gyroList);
+                    requestEvents.put(type, daoProvider
+                            .getGyroscopeSensorDao()
+                            .convertObjects(gyroList));
+
+                    break;
+
+                case DtoType.MAGNETIC_FIELD:
+
+                    List<DbMagneticFieldSensor> mfList;
+
+                    // give all
+                    if (numberOfElements == 0) {
+                        mfList = daoProvider
+                                .getMagneticFieldSensorDao()
+                                .getAll();
+                    } else {
+                        mfList = daoProvider
+                                .getMagneticFieldSensorDao()
+                                .getFirstN(numberOfElements);
+                    }
+
+                    dbEvents.put(type, mfList);
+                    requestEvents.put(type, daoProvider
+                            .getMagneticFieldSensorDao()
+                            .convertObjects(mfList));
+
+                    break;
+
+                case DtoType.BROWSER_HISTORY:
+
+                    List<DbBrowserHistoryEvent> bhList;
+
+                    // give all
+                    if (numberOfElements == 0) {
+                        bhList = daoProvider
+                                .getBrowserHistoryEventDao()
+                                .getAll();
+                    } else {
+                        bhList = daoProvider
+                                .getBrowserHistoryEventDao()
+                                .getFirstN(numberOfElements);
+                    }
+
+                    dbEvents.put(type, bhList);
+                    requestEvents.put(type, daoProvider
+                            .getBrowserHistoryEventDao()
+                            .convertObjects(bhList));
+
+                    break;
+
+                case DtoType.CALENDAR:
+
+                    List<DbCalendarEvent> calendarList;
+
+                    // give all
+                    if (numberOfElements == 0) {
+                        calendarList = daoProvider
+                                .getCalendarEventDao()
+                                .getAll();
+                    } else {
+                        calendarList = daoProvider
+                                .getCalendarEventDao()
+                                .getFirstN(numberOfElements);
+                    }
+
+                    dbEvents.put(type, calendarList);
+                    requestEvents.put(type, daoProvider
+                            .getCalendarEventDao()
+                            .convertObjects(calendarList));
+
+                    break;
+
+                case DtoType.CONTACTS:
+
+                    List<DbContactEvent> contactsList;
+
+                    // give all
+                    if (numberOfElements == 0) {
+                        contactsList = daoProvider
+                                .getContactEventDao()
+                                .getAll();
+                    } else {
+                        contactsList = daoProvider
+                                .getContactEventDao()
+                                .getFirstN(numberOfElements);
+                    }
+
+                    dbEvents.put(type, contactsList);
+                    requestEvents.put(type, daoProvider
+                            .getContactEventDao()
+                            .convertObjects(contactsList));
+
+                    break;
             }
         }
 
@@ -778,6 +1031,50 @@ public class EventUploadService extends GcmTaskService {
 
                 case DtoType.LIGHT:
                     daoProvider.getLightSensorDao().delete((List<DbLightSensor>) values);
+                    break;
+
+                case DtoType.LOUDNESS:
+                    daoProvider.getLoudnessEventDao().delete((List<DbLoudnessEvent>) values);
+                    break;
+
+                case DtoType.RUNNING_PROCESSES:
+                    daoProvider.getRunningProcessesEventDao().delete((List<DbRunningProcessesEvent>) values);
+                    break;
+
+                case DtoType.RUNNING_SERVICES:
+                    daoProvider.getRunningServicesEventDao().delete((List<DbRunningServicesEvent>) values);
+                    break;
+
+                case DtoType.RUNNING_TASKS:
+                    daoProvider.getRunningTasksEventDao().delete((List<DbRunningTasksEvent>) values);
+                    break;
+
+                case DtoType.RINGTONE:
+                    daoProvider.getRingtoneEventDao().delete((List<DbRingtoneEvent>) values);
+                    break;
+
+                case DtoType.CALL_LOG:
+                    daoProvider.getCallLogEventDao().delete((List<DbCallLogEvent>) values);
+                    break;
+
+                case DtoType.GYROSCOPE:
+                    daoProvider.getGyroscopeSensorDao().delete((List<DbGyroscopeSensor>) values);
+                    break;
+
+                case DtoType.MAGNETIC_FIELD:
+                    daoProvider.getMagneticFieldSensorDao().delete((List<DbMagneticFieldSensor>) values);
+                    break;
+
+                case DtoType.BROWSER_HISTORY:
+                    daoProvider.getBrowserHistoryEventDao().delete((List<DbBrowserHistoryEvent>) values);
+                    break;
+
+                case DtoType.CALENDAR:
+                    daoProvider.getCalendarEventDao().delete((List<DbCalendarEvent>) values);
+                    break;
+
+                case DtoType.CONTACTS:
+                    daoProvider.getContactEventDao().delete((List<DbContactEvent>) values);
                     break;
 
                 case DtoType.POWER_STATE:
