@@ -14,7 +14,6 @@ import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbNetworkTrafficEv
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.DtoType;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.enums.EPushType;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensing.AbstractPeriodicEvent;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensing.ISensor;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensing.impl.triggered.ForegroundTrafficEvent;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.PreferenceProvider;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.util.DateUtils;
@@ -24,15 +23,13 @@ import de.tudarmstadt.informatik.tk.android.assistance.sdk.util.logger.Log;
  * This is a Periodic Sensor class which collect the mobile traffic data produced by the apps in the
  * background in periodic intervals. This is important to get the traffic from apps which runs
  * services in background.
- * <p/>
+ * <p>
  * Created by Stefan Hacker on 09.12.14
  *
  * @edited by Wladimir Schmidt (wlsc.dev@gmail.com)
  * @date 24.11.2015
  */
-public class BackgroundTrafficEvent extends
-        AbstractPeriodicEvent implements
-        ISensor {
+public class BackgroundTrafficEvent extends AbstractPeriodicEvent {
 
     private static final String TAG = BackgroundTrafficEvent.class.getSimpleName();
 

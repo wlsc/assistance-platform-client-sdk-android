@@ -9,7 +9,6 @@ import java.util.Locale;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbRingtoneEvent;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.DtoType;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensing.AbstractPeriodicEvent;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensing.ISensor;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.event.RingtoneEventDao;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.util.DateUtils;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.util.logger.Log;
@@ -19,7 +18,7 @@ import de.tudarmstadt.informatik.tk.android.assistance.sdk.util.logger.Log;
  * @edited by Wladimir Schmidt (wlsc.dev@gmail.com)
  * @date 24.11.2015
  */
-public class RingtoneEvent extends AbstractPeriodicEvent implements ISensor {
+public class RingtoneEvent extends AbstractPeriodicEvent {
 
     private static final String TAG = RingtoneEventDao.class.getSimpleName();
 

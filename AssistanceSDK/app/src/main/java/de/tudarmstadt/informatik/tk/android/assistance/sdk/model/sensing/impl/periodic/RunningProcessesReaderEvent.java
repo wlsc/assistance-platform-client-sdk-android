@@ -12,7 +12,6 @@ import java.util.Locale;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbRunningProcessesEvent;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.DtoType;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensing.AbstractPeriodicEvent;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensing.ISensor;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.util.DateUtils;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.util.logger.Log;
 
@@ -21,7 +20,7 @@ import de.tudarmstadt.informatik.tk.android.assistance.sdk.util.logger.Log;
  * @edited by Wladimir Schmidt (wlsc.dev@gmail.com)
  * @date 24.11.2015
  */
-public class RunningProcessesReaderEvent extends AbstractPeriodicEvent implements ISensor {
+public class RunningProcessesReaderEvent extends AbstractPeriodicEvent {
 
     private static final String TAG = RunningProcessesReaderEvent.class.getSimpleName();
 

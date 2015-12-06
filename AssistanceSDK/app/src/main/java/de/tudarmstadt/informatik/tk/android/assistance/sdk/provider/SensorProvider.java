@@ -9,6 +9,7 @@ import java.util.List;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.enums.EPushType;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensing.ISensor;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensing.impl.contentobserver.CallLogEvent;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensing.impl.periodic.LoudnessSensor;
 
 /**
  * Main sensor provider
@@ -86,8 +87,8 @@ public class SensorProvider {
 //        mAvailableSensors.add(backgroundTrafficEvent);
 
         // loudness sensor is blocking microphone and consuming too much battery
-//         LoudnessSensor loudnessSensor = new LoudnessSensor(mContext);
-//         mAvailableSensors.add(loudnessSensor);
+         LoudnessSensor loudnessSensor = new LoudnessSensor(mContext);
+         mAvailableSensors.add(loudnessSensor);
 
         /**
          * Periodic events / sensors
@@ -102,8 +103,8 @@ public class SensorProvider {
 //        ContactsEvent contactsEvent = new ContactsEvent(mContext);
 //        mAvailableSensors.add(contactsEvent);
 
-        CallLogEvent callLogEvent = new CallLogEvent(mContext);
-        mAvailableSensors.add(callLogEvent);
+//        CallLogEvent callLogEvent = new CallLogEvent(mContext);
+//        mAvailableSensors.add(callLogEvent);
 
 //        BrowserHistoryEvent browserHistoryEvent = new BrowserHistoryEvent(mContext);
 //        mAvailableSensors.add(browserHistoryEvent);

@@ -209,7 +209,7 @@ public class LoudnessSensor extends AbstractPeriodicEvent implements Callback {
 
         try {
 
-            isPaused = true;
+            isPaused = false;
             mAudioRecorder = new AudioRecorder(this);
             mAudioRecorder.start();
 
@@ -223,7 +223,7 @@ public class LoudnessSensor extends AbstractPeriodicEvent implements Callback {
     @Override
     public void stopSensor() {
 
-        isPaused = false;
+        isPaused = true;
         super.stopSensor();
     }
 
