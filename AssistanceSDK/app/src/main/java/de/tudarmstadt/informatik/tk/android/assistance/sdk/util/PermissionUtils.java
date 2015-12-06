@@ -1,10 +1,8 @@
 package de.tudarmstadt.informatik.tk.android.assistance.sdk.util;
 
 import android.Manifest;
-import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.pm.PackageManager;
-import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 
@@ -160,7 +158,6 @@ public class PermissionUtils {
      * @param permission
      * @return
      */
-    @TargetApi(Build.VERSION_CODES.M)
     public boolean isPermissionGranted(String permission) {
 
         if (permission == null) {

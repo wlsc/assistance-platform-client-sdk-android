@@ -143,7 +143,10 @@ public class ForegroundEvent extends AbstractTriggeredEvent {
             if (foregroundEvent != null) {
 
                 String color = storeIcon(foregroundEvent.getPackageName());
-                foregroundEvent.setColor(color);
+
+                if (color != null) {
+                    foregroundEvent.setColor(color);
+                }
 
                 Log.d(TAG, "Insert entry");
 

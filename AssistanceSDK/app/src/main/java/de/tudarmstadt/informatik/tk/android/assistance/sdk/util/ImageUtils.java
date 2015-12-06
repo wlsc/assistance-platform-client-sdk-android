@@ -35,6 +35,10 @@ public class ImageUtils {
 
     public static String getMainColor(Bitmap bitmap) {
 
+        if (bitmap == null) {
+            return null;
+        }
+
         int width = bitmap.getWidth();
         int height = bitmap.getHeight();
 
@@ -44,7 +48,7 @@ public class ImageUtils {
                 int rgb = bitmap.getPixel(i, j);
                 int[] rgbArr = getRGBArr(rgb);
                 if (!isGray(rgbArr)) {
-                    Integer counter = (Integer) m.get(rgb);
+                    Integer counter = m.get(rgb);
                     if (counter == null)
                         counter = 0;
                     counter++;
