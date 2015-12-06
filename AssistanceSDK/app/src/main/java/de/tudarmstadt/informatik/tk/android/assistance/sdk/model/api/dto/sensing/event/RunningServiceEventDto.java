@@ -14,9 +14,13 @@ public class RunningServiceEventDto implements SensorDto {
 
     private Long id;
 
-    @SerializedName("name")
+    @SerializedName("packageName")
     @Expose
-    private String name;
+    private String packageName;
+
+    @SerializedName("className")
+    @Expose
+    private String className;
 
     @SerializedName("created")
     @Expose
@@ -39,32 +43,39 @@ public class RunningServiceEventDto implements SensorDto {
         this.typeStr = DtoType.getApiName(this.type);
     }
 
-    public RunningServiceEventDto(Long id, String name, String created) {
+    public RunningServiceEventDto(Long id, String packageName, String className, String created) {
         this.id = id;
-        this.name = name;
+        this.packageName = packageName;
+        this.className = className;
         this.created = created;
-        this.type = DtoType.RUNNING_SERVICES;
-        this.typeStr = DtoType.getApiName(this.type);
     }
 
     public Long getId() {
-        return id;
+        return this.id;
     }
 
     public void setId(Long id) {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getPackageName() {
+        return this.packageName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setPackageName(String packageName) {
+        this.packageName = packageName;
+    }
+
+    public String getClassName() {
+        return this.className;
+    }
+
+    public void setClassName(String className) {
+        this.className = className;
     }
 
     public String getCreated() {
-        return created;
+        return this.created;
     }
 
     public void setCreated(String created) {
@@ -72,7 +83,7 @@ public class RunningServiceEventDto implements SensorDto {
     }
 
     public String getTypeStr() {
-        return typeStr;
+        return this.typeStr;
     }
 
     public void setTypeStr(String typeStr) {
@@ -93,7 +104,8 @@ public class RunningServiceEventDto implements SensorDto {
     public String toString() {
         return "RunningServiceEventDto{" +
                 "id=" + id +
-                ", name='" + name + '\'' +
+                ", packageName='" + packageName + '\'' +
+                ", className='" + className + '\'' +
                 ", created='" + created + '\'' +
                 ", typeStr='" + typeStr + '\'' +
                 ", type=" + type +

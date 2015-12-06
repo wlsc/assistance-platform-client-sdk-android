@@ -7,7 +7,8 @@ package de.tudarmstadt.informatik.tk.android.assistance.sdk.db;
 public class DbRunningServicesEvent implements de.tudarmstadt.informatik.tk.android.assistance.sdk.interfaces.IDbSensor {
 
     private Long id;
-    private String name;
+    private String packageName;
+    private String className;
     /** Not-null value. */
     private String created;
 
@@ -18,9 +19,10 @@ public class DbRunningServicesEvent implements de.tudarmstadt.informatik.tk.andr
         this.id = id;
     }
 
-    public DbRunningServicesEvent(Long id, String name, String created) {
+    public DbRunningServicesEvent(Long id, String packageName, String className, String created) {
         this.id = id;
-        this.name = name;
+        this.packageName = packageName;
+        this.className = className;
         this.created = created;
     }
 
@@ -32,12 +34,20 @@ public class DbRunningServicesEvent implements de.tudarmstadt.informatik.tk.andr
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getPackageName() {
+        return packageName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setPackageName(String packageName) {
+        this.packageName = packageName;
+    }
+
+    public String getClassName() {
+        return className;
+    }
+
+    public void setClassName(String className) {
+        this.className = className;
     }
 
     /** Not-null value. */

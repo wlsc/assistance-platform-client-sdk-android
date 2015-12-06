@@ -347,7 +347,8 @@ public class AssistanceDatabaseGenerator {
     runningServicesEvent.setTableName("running_services_event");
     runningServicesEvent.addIdProperty().autoincrement().index();
     runningServicesEvent.implementsInterface(Config.ASSISTANCE_PACKAGE_SENSOR);
-    runningServicesEvent.addStringProperty("name");
+    runningServicesEvent.addStringProperty("packageName");
+    runningServicesEvent.addStringProperty("className");
     runningServicesEvent.addStringProperty("created").notNull();
 
     // ----- Running Tasks Event -----

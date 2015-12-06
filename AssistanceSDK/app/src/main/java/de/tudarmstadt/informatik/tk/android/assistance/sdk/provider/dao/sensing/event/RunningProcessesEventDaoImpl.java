@@ -46,7 +46,7 @@ public class RunningProcessesEventDaoImpl extends
         RunningProcessEventDto result = new RunningProcessEventDto();
 
         result.setId(sensor.getId());
-        result.setName(sensor.getRunningProcesses());
+        result.setName(sensor.getName());
         result.setType(DtoType.RUNNING_PROCESSES);
         result.setTypeStr(DtoType.getApiName(DtoType.RUNNING_PROCESSES));
         result.setCreated(sensor.getCreated());

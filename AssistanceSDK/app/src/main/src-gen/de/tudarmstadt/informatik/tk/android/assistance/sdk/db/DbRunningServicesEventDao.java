@@ -24,8 +24,9 @@ public class DbRunningServicesEventDao extends AbstractDao<DbRunningServicesEven
     */
     public static class Properties {
         public final static Property Id = new Property(0, Long.class, "id", true, "_id");
-        public final static Property Name = new Property(1, String.class, "name", false, "NAME");
-        public final static Property Created = new Property(2, String.class, "created", false, "CREATED");
+        public final static Property PackageName = new Property(1, String.class, "packageName", false, "PACKAGE_NAME");
+        public final static Property ClassName = new Property(2, String.class, "className", false, "CLASS_NAME");
+        public final static Property Created = new Property(3, String.class, "created", false, "CREATED");
     };
 
 
@@ -42,8 +43,9 @@ public class DbRunningServicesEventDao extends AbstractDao<DbRunningServicesEven
         String constraint = ifNotExists? "IF NOT EXISTS ": "";
         db.execSQL("CREATE TABLE " + constraint + "\"running_services_event\" (" + //
                 "\"_id\" INTEGER PRIMARY KEY AUTOINCREMENT ," + // 0: id
-                "\"NAME\" TEXT," + // 1: name
-                "\"CREATED\" TEXT NOT NULL );"); // 2: created
+                "\"PACKAGE_NAME\" TEXT," + // 1: packageName
+                "\"CLASS_NAME\" TEXT," + // 2: className
+                "\"CREATED\" TEXT NOT NULL );"); // 3: created
         // Add Indexes
         db.execSQL("CREATE INDEX " + constraint + "IDX_running_services_event__id ON running_services_event" +
                 " (\"_id\");");
@@ -65,11 +67,16 @@ public class DbRunningServicesEventDao extends AbstractDao<DbRunningServicesEven
             stmt.bindLong(1, id);
         }
  
-        String name = entity.getName();
-        if (name != null) {
-            stmt.bindString(2, name);
+        String packageName = entity.getPackageName();
+        if (packageName != null) {
+            stmt.bindString(2, packageName);
         }
-        stmt.bindString(3, entity.getCreated());
+ 
+        String className = entity.getClassName();
+        if (className != null) {
+            stmt.bindString(3, className);
+        }
+        stmt.bindString(4, entity.getCreated());
     }
 
     /** @inheritdoc */
@@ -83,8 +90,9 @@ public class DbRunningServicesEventDao extends AbstractDao<DbRunningServicesEven
     public DbRunningServicesEvent readEntity(Cursor cursor, int offset) {
         DbRunningServicesEvent entity = new DbRunningServicesEvent( //
             cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0), // id
-            cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1), // name
-            cursor.getString(offset + 2) // created
+            cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1), // packageName
+            cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // className
+            cursor.getString(offset + 3) // created
         );
         return entity;
     }
@@ -93,8 +101,9 @@ public class DbRunningServicesEventDao extends AbstractDao<DbRunningServicesEven
     @Override
     public void readEntity(Cursor cursor, DbRunningServicesEvent entity, int offset) {
         entity.setId(cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0));
-        entity.setName(cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1));
-        entity.setCreated(cursor.getString(offset + 2));
+        entity.setPackageName(cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1));
+        entity.setClassName(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
+        entity.setCreated(cursor.getString(offset + 3));
      }
     
     /** @inheritdoc */

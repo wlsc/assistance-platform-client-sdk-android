@@ -47,7 +47,7 @@ public class RunningTasksReaderEvent extends
 
         DbRunningTasksEvent runningTasksEvent = new DbRunningTasksEvent();
 
-        runningTasksEvent.setRunningTasks(currentTaskName);
+        runningTasksEvent.setName(currentTaskName);
         runningTasksEvent.setStackPosition(currentStackPosition);
         runningTasksEvent.setCreated(DateUtils.dateToISO8601String(new Date(), Locale.getDefault()));
 

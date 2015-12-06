@@ -28,10 +28,9 @@ public class RunningProcessesReaderEvent extends AbstractPeriodicEvent implement
     private static final int INIT_DATA_INTERVAL_IN_SEC = 30;
 
     private ActivityManager mActivityManager;
-    // private Query<SensorRunningProcesses> m_query;
     private List<String> mLastProcesses = new ArrayList<>();
 
-    private String currentProcessName;
+    private String currentProcessName = "";
 
     public RunningProcessesReaderEvent(Context context) {
         super(context);
@@ -45,7 +44,7 @@ public class RunningProcessesReaderEvent extends AbstractPeriodicEvent implement
 
         DbRunningProcessesEvent runningProcessesEvent = new DbRunningProcessesEvent();
 
-        runningProcessesEvent.setRunningProcesses(currentProcessName);
+        runningProcessesEvent.setName(currentProcessName);
         runningProcessesEvent.setCreated(DateUtils.dateToISO8601String(new Date(), Locale.getDefault()));
 
         Log.d(TAG, "Insert entry");
@@ -64,6 +63,7 @@ public class RunningProcessesReaderEvent extends AbstractPeriodicEvent implement
     public void reset() {
 
         currentProcessName = "";
+        mLastProcesses.clear();
     }
 
     @Override
@@ -72,26 +72,25 @@ public class RunningProcessesReaderEvent extends AbstractPeriodicEvent implement
         List<RunningAppProcessInfo> processes = mActivityManager.getRunningAppProcesses();
 
         List<String> processNames = new ArrayList<>(processes.size());
-        boolean bProcessesChanged = processes.size() != mLastProcesses.size();
+
+        boolean processesChanged = processes.size() != mLastProcesses.size();
 
         for (RunningAppProcessInfo process : processes) {
+
             processNames.add(process.processName);
-            if (!bProcessesChanged && !mLastProcesses.contains(process.processName))
-                bProcessesChanged = true;
+
+            if (!processesChanged && !mLastProcesses.contains(process.processName)) {
+                processesChanged = true;
+            }
         }
 
-        if (bProcessesChanged) {
+        if (processesChanged) {
 
             mLastProcesses = processNames;
 
             for (String processName : processNames) {
-                // m_query.setParameter(0, processName);
-                // List<SensorRunningProcesses> li = m_query.list();
-                // if (li == null || li.size() == 0)
-                // {
                 currentProcessName = processName;
                 dumpData();
-                // }
             }
         }
     }
