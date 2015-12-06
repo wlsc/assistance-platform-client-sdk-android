@@ -34,6 +34,8 @@ public class DtoType {
 
     public static final int POWER_STATE = 10;
 
+    public static final int POWER_LEVEL = 11;
+
     public static final int FOREGROUND = 12;
 
     public static final int LIGHT = 13;
@@ -97,6 +99,8 @@ public class DtoType {
                 return res.getString(R.string.event_ringtone);
             case POWER_STATE:
                 return res.getString(R.string.event_power_state);
+            case POWER_LEVEL:
+                return res.getString(R.string.event_power_level);
             case CALENDAR:
                 return res.getString(R.string.event_calendar);
             case CALENDAR_REMINDER:
@@ -163,6 +167,8 @@ public class DtoType {
                 return "ringtone";
             case POWER_STATE:
                 return "powerstate";
+            case POWER_LEVEL:
+                return "powerlevel";
             case CALENDAR:
                 return "calendar";
             case CALENDAR_REMINDER:
