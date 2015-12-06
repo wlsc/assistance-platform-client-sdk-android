@@ -5,6 +5,9 @@ import android.content.Context;
 import android.hardware.Sensor;
 import android.hardware.SensorManager;
 
+import java.util.Collections;
+import java.util.List;
+
 /**
  * @author Wladimir Schmidt (wlsc.dev@gmail.com)
  * @date 12.10.2015
@@ -48,6 +51,28 @@ public class DeviceUtils {
         }
 
         return false;
+    }
+
+    /**
+     * Returns list of running services
+     *
+     * @param context
+     * @return
+     */
+    public static List<ActivityManager.RunningServiceInfo> getRunningServices(final Context context) {
+
+        if (context == null) {
+            return Collections.emptyList();
+        }
+
+        ActivityManager activityManager = (ActivityManager) context
+                .getSystemService(Context.ACTIVITY_SERVICE);
+
+        if (activityManager == null) {
+            return Collections.emptyList();
+        }
+
+        return activityManager.getRunningServices(Integer.MAX_VALUE);
     }
 
 }
