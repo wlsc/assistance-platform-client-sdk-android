@@ -226,8 +226,14 @@ public class ConnectionSensor extends AbstractTriggeredEvent {
                 String networkOperator = manager.getNetworkOperator();
 
                 if (networkOperator != null) {
-                    mobileCarrierCode = networkOperator.substring(0, 3);
-                    mobileNetworkCode = networkOperator.substring(3);
+                    try {
+                        mobileCarrierCode = networkOperator.substring(0, 3);
+                        mobileNetworkCode = networkOperator.substring(3);
+                    } catch (Exception e) {
+                        Log.d(TAG, "Some error.", e);
+                        mobileCarrierCode = null;
+                        mobileNetworkCode = null;
+                    }
                 }
 
             } else {
