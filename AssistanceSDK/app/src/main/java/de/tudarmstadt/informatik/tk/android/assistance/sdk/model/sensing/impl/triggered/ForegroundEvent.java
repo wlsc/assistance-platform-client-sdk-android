@@ -234,6 +234,9 @@ public class ForegroundEvent extends AbstractTriggeredEvent {
         } catch (PackageManager.NameNotFoundException e) {
             Log.e(TAG, "Cannot get app icon", e);
             return null;
+        } catch (Exception e) {
+            Log.e(TAG, "Some error: ", e);
+            return null;
         }
     }
 

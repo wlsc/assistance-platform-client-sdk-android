@@ -87,8 +87,8 @@ public class SensorProvider {
 //        mAvailableSensors.add(backgroundTrafficEvent);
 
         // loudness sensor is blocking microphone and consuming too much battery
-         LoudnessSensor loudnessSensor = new LoudnessSensor(mContext);
-         mAvailableSensors.add(loudnessSensor);
+//         LoudnessSensor loudnessSensor = new LoudnessSensor(mContext);
+//         mAvailableSensors.add(loudnessSensor);
 
         /**
          * Periodic events / sensors
