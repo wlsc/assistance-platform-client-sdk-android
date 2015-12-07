@@ -182,13 +182,13 @@ public class DtoType {
             case BROWSER_HISTORY:
                 return "browserhistory";
             case RUNNING_SERVICES:
-                return "runningservices";
+                return "runningservice";
             case ACCOUNT_READER:
                 return "accountreader";
             case RUNNING_TASKS:
-                return "runningtasks";
+                return "runningtask";
             case RUNNING_PROCESSES:
-                return "runningprocesses";
+                return "runningprocess";
             case CONTACT_EMAIL:
                 return "contactemail";
             case CONTACT_NUMBER:
