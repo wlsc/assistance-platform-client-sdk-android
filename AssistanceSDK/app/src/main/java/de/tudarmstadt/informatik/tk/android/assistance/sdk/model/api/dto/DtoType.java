@@ -94,12 +94,12 @@ public class DtoType {
         mappings.put(getApiName(RUNNING_PROCESSES), RUNNING_PROCESSES);
         mappings.put(getApiName(RINGTONE), RINGTONE);
         mappings.put(getApiName(BACKGROUND_TRAFFIC), BACKGROUND_TRAFFIC);
-        mappings.put(getApiName(CONTACT), CONTACT);
         mappings.put(getApiName(CALL_LOG), CALL_LOG);
-        mappings.put(getApiName(CALENDAR), CALENDAR);
         mappings.put(getApiName(BROWSER_HISTORY), BROWSER_HISTORY);
         mappings.put(getApiName(FOREGROUND_TRAFFIC), FOREGROUND_TRAFFIC);
+        mappings.put(getApiName(CALENDAR), CALENDAR);
         mappings.put(getApiName(CALENDAR_REMINDER), CALENDAR_REMINDER);
+        mappings.put(getApiName(CONTACT), CONTACT);
         mappings.put(getApiName(CONTACT_EMAIL), CONTACT_EMAIL);
         mappings.put(getApiName(CONTACT_NUMBER), CONTACT_NUMBER);
     }
