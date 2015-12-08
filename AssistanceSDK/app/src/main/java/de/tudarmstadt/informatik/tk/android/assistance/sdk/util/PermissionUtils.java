@@ -134,7 +134,7 @@ public class PermissionUtils {
         );
 
         dangerousPermissionsToDtoMapping.put(
-                DtoType.getApiName(DtoType.CONTACTS),
+                DtoType.getApiName(DtoType.CONTACT),
                 dangerousGroup.get(Manifest.permission_group.CONTACTS)
         );
 

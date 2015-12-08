@@ -73,13 +73,13 @@ public class ContactEventDto implements SensorDto {
     private int type;
 
     public ContactEventDto() {
-        this.type = DtoType.CONTACTS;
+        this.type = DtoType.CONTACT;
         this.typeStr = DtoType.getApiName(this.type);
     }
 
     public ContactEventDto(Long id) {
         this.id = id;
-        this.type = DtoType.CONTACTS;
+        this.type = DtoType.CONTACT;
         this.typeStr = DtoType.getApiName(this.type);
     }
 
@@ -98,7 +98,7 @@ public class ContactEventDto implements SensorDto {
         this.isUpdated = isUpdated;
         this.isDeleted = isDeleted;
         this.created = created;
-        this.type = DtoType.CONTACTS;
+        this.type = DtoType.CONTACT;
         this.typeStr = DtoType.getApiName(this.type);
     }
 

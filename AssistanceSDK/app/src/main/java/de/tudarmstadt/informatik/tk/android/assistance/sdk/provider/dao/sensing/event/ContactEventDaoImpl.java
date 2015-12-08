@@ -58,8 +58,8 @@ public class ContactEventDaoImpl extends
         result.setIsNew(sensor.getIsNew());
         result.setIsUpdated(sensor.getIsUpdated());
         result.setIsDeleted(sensor.getIsDeleted());
-        result.setType(DtoType.CONTACTS);
-        result.setTypeStr(DtoType.getApiName(DtoType.CONTACTS));
+        result.setType(DtoType.CONTACT);
+        result.setTypeStr(DtoType.getApiName(DtoType.CONTACT));
         result.setCreated(sensor.getCreated());
 
         return result;

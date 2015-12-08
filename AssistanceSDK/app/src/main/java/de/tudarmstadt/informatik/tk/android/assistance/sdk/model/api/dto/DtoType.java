@@ -58,7 +58,7 @@ public class DtoType {
 
     public static final int BACKGROUND_TRAFFIC = 19;
 
-    public static final int CONTACTS = 20;
+    public static final int CONTACT = 20;
 
     public static final int CALL_LOG = 21;
 
@@ -94,7 +94,7 @@ public class DtoType {
         mappings.put(getApiName(RUNNING_PROCESSES), RUNNING_PROCESSES);
         mappings.put(getApiName(RINGTONE), RINGTONE);
         mappings.put(getApiName(BACKGROUND_TRAFFIC), BACKGROUND_TRAFFIC);
-        mappings.put(getApiName(CONTACTS), CONTACTS);
+        mappings.put(getApiName(CONTACT), CONTACT);
         mappings.put(getApiName(CALL_LOG), CALL_LOG);
         mappings.put(getApiName(CALENDAR), CALENDAR);
         mappings.put(getApiName(BROWSER_HISTORY), BROWSER_HISTORY);
@@ -147,7 +147,7 @@ public class DtoType {
                 return res.getString(R.string.event_network_traffic);
             case BACKGROUND_TRAFFIC:
                 return res.getString(R.string.event_background_traffic);
-            case CONTACTS:
+            case CONTACT:
                 return res.getString(R.string.event_contacts);
             case BROWSER_HISTORY:
                 return res.getString(R.string.event_browser_history);

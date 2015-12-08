@@ -45,7 +45,7 @@ public class ContactsEvent extends AbstractContentObserverEvent {
 
     @Override
     public int getType() {
-        return DtoType.CONTACTS;
+        return DtoType.CONTACT;
     }
 
     @Override

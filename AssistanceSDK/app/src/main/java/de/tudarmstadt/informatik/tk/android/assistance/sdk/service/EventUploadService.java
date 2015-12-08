@@ -23,9 +23,12 @@ import de.tudarmstadt.informatik.tk.android.assistance.sdk.Config;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbAccelerometerSensor;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbBrowserHistoryEvent;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbCalendarEvent;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbCalendarReminderEvent;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbCallLogEvent;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbConnectionEvent;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbContactEmailEvent;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbContactEvent;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbContactNumberEvent;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbForegroundEvent;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbGyroscopeSensor;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbLightSensor;
@@ -35,6 +38,7 @@ import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbMobileConnection
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbMotionActivityEvent;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbNetworkTrafficEvent;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbPositionSensor;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbPowerLevelEvent;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbPowerStateEvent;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbRingtoneEvent;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbRunningProcessesEvent;
@@ -991,9 +995,31 @@ public class EventUploadService extends GcmTaskService {
                             .getCalendarEventDao()
                             .convertObjects(calendarList));
 
+                    /**
+                     * Calendar reminder events
+                     */
+
+                    List<DbCalendarReminderEvent> calendarReminderList;
+
+                    // give all
+                    if (numberOfElements == 0) {
+                        calendarReminderList = daoProvider
+                                .getCalendarReminderEventDao()
+                                .getAll();
+                    } else {
+                        calendarReminderList = daoProvider
+                                .getCalendarReminderEventDao()
+                                .getFirstN(numberOfElements);
+                    }
+
+                    dbEvents.put(DtoType.CALENDAR_REMINDER, calendarReminderList);
+                    requestEvents.put(DtoType.CALENDAR_REMINDER, daoProvider
+                            .getCalendarReminderEventDao()
+                            .convertObjects(calendarReminderList));
+
                     break;
 
-                case DtoType.CONTACTS:
+                case DtoType.CONTACT:
 
                     List<DbContactEvent> contactsList;
 
@@ -1012,6 +1038,72 @@ public class EventUploadService extends GcmTaskService {
                     requestEvents.put(type, daoProvider
                             .getContactEventDao()
                             .convertObjects(contactsList));
+
+                    /**
+                     * Contacts email
+                     */
+
+                    List<DbContactEmailEvent> contactsEmailList;
+
+                    // give all
+                    if (numberOfElements == 0) {
+                        contactsEmailList = daoProvider
+                                .getContactEmailEventDao()
+                                .getAll();
+                    } else {
+                        contactsEmailList = daoProvider
+                                .getContactEmailEventDao()
+                                .getFirstN(numberOfElements);
+                    }
+
+                    dbEvents.put(DtoType.CONTACT_EMAIL, contactsEmailList);
+                    requestEvents.put(DtoType.CONTACT_EMAIL, daoProvider
+                            .getContactEmailEventDao()
+                            .convertObjects(contactsEmailList));
+
+                    /**
+                     * Contacts number
+                     */
+
+                    List<DbContactNumberEvent> contactsNumberList;
+
+                    // give all
+                    if (numberOfElements == 0) {
+                        contactsNumberList = daoProvider
+                                .getContactNumberEventDao()
+                                .getAll();
+                    } else {
+                        contactsNumberList = daoProvider
+                                .getContactNumberEventDao()
+                                .getFirstN(numberOfElements);
+                    }
+
+                    dbEvents.put(DtoType.CONTACT_NUMBER, contactsNumberList);
+                    requestEvents.put(DtoType.CONTACT_NUMBER, daoProvider
+                            .getContactNumberEventDao()
+                            .convertObjects(contactsNumberList));
+
+                    break;
+
+                case DtoType.POWER_LEVEL:
+
+                    List<DbPowerLevelEvent> powerLevelList;
+
+                    // give all
+                    if (numberOfElements == 0) {
+                        powerLevelList = daoProvider
+                                .getPowerLevelEventDao()
+                                .getAll();
+                    } else {
+                        powerLevelList = daoProvider
+                                .getPowerLevelEventDao()
+                                .getFirstN(numberOfElements);
+                    }
+
+                    dbEvents.put(type, powerLevelList);
+                    requestEvents.put(type, daoProvider
+                            .getPowerLevelEventDao()
+                            .convertObjects(powerLevelList));
 
                     break;
             }
@@ -1142,12 +1234,28 @@ public class EventUploadService extends GcmTaskService {
                     daoProvider.getCalendarEventDao().delete((List<DbCalendarEvent>) values);
                     break;
 
-                case DtoType.CONTACTS:
+                case DtoType.CALENDAR_REMINDER:
+                    daoProvider.getCalendarReminderEventDao().delete((List<DbCalendarReminderEvent>) values);
+                    break;
+
+                case DtoType.CONTACT:
                     daoProvider.getContactEventDao().delete((List<DbContactEvent>) values);
+                    break;
+
+                case DtoType.CONTACT_EMAIL:
+                    daoProvider.getContactEmailEventDao().delete((List<DbContactEmailEvent>) values);
+                    break;
+
+                case DtoType.CONTACT_NUMBER:
+                    daoProvider.getContactNumberEventDao().delete((List<DbContactNumberEvent>) values);
                     break;
 
                 case DtoType.POWER_STATE:
                     daoProvider.getPowerStateEventDao().delete((List<DbPowerStateEvent>) values);
+                    break;
+
+                case DtoType.POWER_LEVEL:
+                    daoProvider.getPowerLevelEventDao().delete((List<DbPowerLevelEvent>) values);
                     break;
             }
         }
