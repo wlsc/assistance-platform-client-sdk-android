@@ -6,6 +6,10 @@ import android.support.v4.util.SparseArrayCompat;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbModule;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbModuleCapability;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbUser;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.DtoType;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.enums.EPushType;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensing.ISensor;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensing.impl.contentobserver.BrowserHistoryEvent;
@@ -27,6 +31,7 @@ import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensing.impl.tr
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensing.impl.triggered.LocationSensor;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensing.impl.triggered.MagneticFieldSensor;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensing.impl.triggered.MotionActivityEvent;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.util.logger.Log;
 
 /**
  * Main sensor provider
@@ -35,6 +40,8 @@ import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensing.impl.tr
  * @date 08.10.2015
  */
 public class SensorProvider {
+
+    private static final String TAG = SensorProvider.class.getSimpleName();
 
     // general availability of sensors
     private List<ISensor> availableSensors = new ArrayList<>();
@@ -48,16 +55,24 @@ public class SensorProvider {
 
     private Context mContext;
 
+    private DaoProvider daoProvider;
+
     /**
      * Constructs this class
      *
      * @param context
      */
     private SensorProvider(Context context) {
-
         this.mContext = context;
 
+        daoProvider = DaoProvider.getInstance(context);
+
+        initSensors();
+    }
+
+    private void initSensors() {
         initAvailableSensors();
+        initEnabledSensors();
     }
 
     public static SensorProvider getInstance(Context ctx) {
@@ -75,6 +90,8 @@ public class SensorProvider {
      * Initializes available sensors
      */
     private void initAvailableSensors() {
+
+        Log.d(TAG, "Initializing available sensors...");
 
         /**
          * Triggered events / sensors
@@ -131,7 +148,7 @@ public class SensorProvider {
         availableSensors.add(runningServicesReaderEvent);
 
         /*
-         *  Content observer
+         *  Content observers
          */
 
         BrowserHistoryEvent browserHistoryEvent = new BrowserHistoryEvent(mContext);
@@ -153,6 +170,8 @@ public class SensorProvider {
         for (ISensor sensor : availableSensors) {
             availableSensorByType.put(sensor.getType(), sensor);
         }
+
+        Log.d(TAG, "Finished. Number of sensors: " + availableSensors.size());
     }
 
     /**
@@ -160,7 +179,32 @@ public class SensorProvider {
      */
     private void initEnabledSensors() {
 
-        // TODO: query db for enabled events
+        Log.d(TAG, "Initializing available sensors...");
+
+        String userToken = PreferenceProvider.getInstance(mContext).getUserToken();
+        DbUser user = daoProvider.getUserDao().getByToken(userToken);
+
+        if (userToken.isEmpty() || user == null) {
+            Log.d(TAG, "user token or user is NULL!");
+            return;
+        }
+
+        List<DbModule> userActiveModules = daoProvider.getModuleDao().getAllActive(user.getId());
+
+        if (userActiveModules == null || userActiveModules.isEmpty()) {
+            Log.d(TAG, "User has no active modules!");
+            return;
+        }
+
+        List<DbModuleCapability> moduleCapabilities = new ArrayList<>();
+
+        for (DbModule module : userActiveModules) {
+
+            moduleCapabilities.addAll(daoProvider.getModuleCapabilityDao()
+                    .getAllActive(module.getId()));
+        }
+
+        enabledSensors.addAll(mapModuleCapabilitiesToSensors(moduleCapabilities));
 
         /*
          * Save them in map for further fast access
@@ -168,6 +212,25 @@ public class SensorProvider {
         for (ISensor sensor : enabledSensors) {
             enabledSensorByType.put(sensor.getType(), sensor);
         }
+
+        Log.d(TAG, "Finished. Number of sensors: " + enabledSensors.size());
+    }
+
+    /**
+     * Returns list of user's active sensors/events
+     *
+     * @param moduleCapabilities
+     * @return
+     */
+    private List<ISensor> mapModuleCapabilitiesToSensors(List<DbModuleCapability> moduleCapabilities) {
+
+        List<ISensor> result = new ArrayList<>();
+
+        for (DbModuleCapability capability : moduleCapabilities) {
+            result.add(getSensorByDtoType(capability.getType()));
+        }
+
+        return result;
     }
 
     /**
@@ -252,5 +315,32 @@ public class SensorProvider {
         for (ISensor sensor : availableSensors) {
             sensor.setContext(context);
         }
+    }
+
+    /**
+     * Returns a sensor/event by its DTO type
+     *
+     * @param apiDtoType
+     * @return
+     */
+    public ISensor getSensorByDtoType(String apiDtoType) {
+
+        if (apiDtoType == null || apiDtoType.isEmpty()) {
+            return null;
+        }
+
+        ISensor result = null;
+
+        int dtoType = DtoType.getDtoType(apiDtoType);
+
+        for (ISensor sensor : availableSensors) {
+
+            if (sensor.getType() == dtoType) {
+                result = sensor;
+                break;
+            }
+        }
+
+        return result;
     }
 }

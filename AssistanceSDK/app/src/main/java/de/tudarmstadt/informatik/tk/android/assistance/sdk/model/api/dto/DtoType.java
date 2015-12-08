@@ -2,6 +2,9 @@ package de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto;
 
 import android.content.res.Resources;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.R;
 
 /**
@@ -9,6 +12,9 @@ import de.tudarmstadt.informatik.tk.android.assistance.sdk.R;
  * @date 30.08.2015
  */
 public class DtoType {
+
+    // holder of API string to DTO type mappings
+    private static final Map<String, Integer> mappings = new HashMap<>();
 
     /**
      * Type of sensors and events
@@ -68,10 +74,40 @@ public class DtoType {
 
     public static final int CONTACT_NUMBER = 27;
 
+    static {
+        mappings.put(getApiName(LOCATION), LOCATION);
+        mappings.put(getApiName(GYROSCOPE), GYROSCOPE);
+        mappings.put(getApiName(ACCELEROMETER), ACCELEROMETER);
+        mappings.put(getApiName(MAGNETIC_FIELD), MAGNETIC_FIELD);
+        mappings.put(getApiName(MOTION_ACTIVITY), MOTION_ACTIVITY);
+        mappings.put(getApiName(CONNECTION), CONNECTION);
+        mappings.put(getApiName(WIFI_CONNECTION), WIFI_CONNECTION);
+        mappings.put(getApiName(MOBILE_DATA_CONNECTION), MOBILE_DATA_CONNECTION);
+        mappings.put(getApiName(LOUDNESS), LOUDNESS);
+        mappings.put(getApiName(POWER_STATE), POWER_STATE);
+        mappings.put(getApiName(POWER_LEVEL), POWER_LEVEL);
+        mappings.put(getApiName(FOREGROUND), FOREGROUND);
+        mappings.put(getApiName(LIGHT), LIGHT);
+        mappings.put(getApiName(RUNNING_SERVICES), RUNNING_SERVICES);
+        mappings.put(getApiName(ACCOUNT_READER), ACCOUNT_READER);
+        mappings.put(getApiName(RUNNING_TASKS), RUNNING_TASKS);
+        mappings.put(getApiName(RUNNING_PROCESSES), RUNNING_PROCESSES);
+        mappings.put(getApiName(RINGTONE), RINGTONE);
+        mappings.put(getApiName(BACKGROUND_TRAFFIC), BACKGROUND_TRAFFIC);
+        mappings.put(getApiName(CONTACTS), CONTACTS);
+        mappings.put(getApiName(CALL_LOG), CALL_LOG);
+        mappings.put(getApiName(CALENDAR), CALENDAR);
+        mappings.put(getApiName(BROWSER_HISTORY), BROWSER_HISTORY);
+        mappings.put(getApiName(FOREGROUND_TRAFFIC), FOREGROUND_TRAFFIC);
+        mappings.put(getApiName(CALENDAR_REMINDER), CALENDAR_REMINDER);
+        mappings.put(getApiName(CONTACT_EMAIL), CONTACT_EMAIL);
+        mappings.put(getApiName(CONTACT_NUMBER), CONTACT_NUMBER);
+    }
+
     private DtoType() {
     }
 
-    public static final String getName(int type, Resources res) {
+    public static String getName(int type, Resources res) {
         switch (type) {
             case LOCATION:
                 return res.getString(R.string.sensor_position);
@@ -138,7 +174,7 @@ public class DtoType {
      * @param type
      * @return
      */
-    public static final String getApiName(int type) {
+    public static String getApiName(int type) {
 
         switch (type) {
             case LOCATION:
@@ -196,5 +232,20 @@ public class DtoType {
             default:
                 return "";
         }
+    }
+
+    /**
+     * Returns DTO type bei its api name
+     *
+     * @param apiName
+     * @return
+     */
+    public static int getDtoType(String apiName) {
+
+        if (apiName == null || apiName.isEmpty()) {
+            return -1;
+        }
+
+        return DtoType.mappings.get(apiName).intValue();
     }
 }
