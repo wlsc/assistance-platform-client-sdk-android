@@ -189,9 +189,9 @@ public class MagneticFieldSensor extends AbstractTriggeredEvent implements Senso
     public void reset() {
 
         mLastEventDumpingTimestamp = 0;
-        x = 0;
-        y = 0;
-        z = 0;
+        x = 0.0;
+        y = 0.0;
+        z = 0.0;
         accuracy = 0;
 
         xUncalibratedNoHardIron = 0.0f;
@@ -211,42 +211,42 @@ public class MagneticFieldSensor extends AbstractTriggeredEvent implements Senso
          * Calibrated data
          */
 
-        if (x != 0) {
+        if (x != 0.0) {
             magneticFieldSensor.setX(x);
         }
 
-        if (y != 0) {
+        if (y != 0.0) {
             magneticFieldSensor.setY(y);
         }
 
-        if (z != 0) {
+        if (z != 0.0) {
             magneticFieldSensor.setZ(z);
         }
 
         /**
          * Uncalibrated data
          */
-        if (xUncalibratedNoHardIron != 0) {
+        if (xUncalibratedNoHardIron != 0.0) {
             magneticFieldSensor.setXUncalibratedNoHardIron(xUncalibratedNoHardIron);
         }
 
-        if (yUncalibratedNoHardIron != 0) {
+        if (yUncalibratedNoHardIron != 0.0) {
             magneticFieldSensor.setYUncalibratedNoHardIron(yUncalibratedNoHardIron);
         }
 
-        if (zUncalibratedNoHardIron != 0) {
+        if (zUncalibratedNoHardIron != 0.0) {
             magneticFieldSensor.setZUncalibratedNoHardIron(zUncalibratedNoHardIron);
         }
 
-        if (xUncalibratedEstimatedIronBias != 0) {
+        if (xUncalibratedEstimatedIronBias != 0.0) {
             magneticFieldSensor.setXUncalibratedEstimatedIronBias(xUncalibratedEstimatedIronBias);
         }
 
-        if (yUncalibratedEstimatedIronBias != 0) {
+        if (yUncalibratedEstimatedIronBias != 0.0) {
             magneticFieldSensor.setYUncalibratedEstimatedIronBias(yUncalibratedEstimatedIronBias);
         }
 
-        if (zUncalibratedEstimatedIronBias != 0) {
+        if (zUncalibratedEstimatedIronBias != 0.0) {
             magneticFieldSensor.setZUncalibratedEstimatedIronBias(zUncalibratedEstimatedIronBias);
         }
 

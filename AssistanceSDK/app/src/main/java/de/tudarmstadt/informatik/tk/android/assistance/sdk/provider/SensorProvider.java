@@ -8,8 +8,25 @@ import java.util.List;
 
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.enums.EPushType;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensing.ISensor;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensing.impl.contentobserver.BrowserHistoryEvent;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensing.impl.contentobserver.CalendarEvent;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensing.impl.contentobserver.CallLogEvent;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensing.impl.contentobserver.ContactsEvent;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensing.impl.periodic.BackgroundTrafficEvent;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensing.impl.periodic.LoudnessSensor;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensing.impl.periodic.RingtoneEvent;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensing.impl.periodic.RunningProcessesReaderEvent;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensing.impl.periodic.RunningServicesReaderEvent;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensing.impl.periodic.RunningTasksReaderEvent;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensing.impl.triggered.AccelerometerSensor;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensing.impl.triggered.ConnectionSensor;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensing.impl.triggered.ForegroundEvent;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensing.impl.triggered.ForegroundTrafficEvent;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensing.impl.triggered.GyroscopeSensor;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensing.impl.triggered.LightSensor;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensing.impl.triggered.LocationSensor;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensing.impl.triggered.MagneticFieldSensor;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensing.impl.triggered.MotionActivityEvent;
 
 /**
  * Main sensor provider
@@ -19,9 +36,13 @@ import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensing.impl.pe
  */
 public class SensorProvider {
 
-    private SparseArrayCompat<ISensor> sensorByType = new SparseArrayCompat<>();
+    // general availability of sensors
+    private List<ISensor> availableSensors = new ArrayList<>();
+    private SparseArrayCompat<ISensor> availableSensorByType = new SparseArrayCompat<>();
 
-    private List<ISensor> mAvailableSensors = new ArrayList<>();
+    // running sensors
+    private List<ISensor> enabledSensors = new ArrayList<>();
+    private SparseArrayCompat<ISensor> enabledSensorByType = new SparseArrayCompat<>();
 
     private static SensorProvider INSTANCE;
 
@@ -36,7 +57,7 @@ public class SensorProvider {
 
         this.mContext = context;
 
-        initSensors();
+        initAvailableSensors();
     }
 
     public static SensorProvider getInstance(Context ctx) {
@@ -53,79 +74,99 @@ public class SensorProvider {
     /**
      * Initializes available sensors
      */
-    private void initSensors() {
+    private void initAvailableSensors() {
 
         /**
          * Triggered events / sensors
          */
 
-        // works
-//        AccelerometerSensor accelerometerSensor = new AccelerometerSensor(mContext);
-//        mAvailableSensors.add(accelerometerSensor);
+        AccelerometerSensor accelerometerSensor = new AccelerometerSensor(mContext);
+        availableSensors.add(accelerometerSensor);
 
-//        MotionActivityEvent motionActivityEvent = MotionActivityEvent.getInstance(mContext);
-//        mAvailableSensors.add(motionActivityEvent);
+        ConnectionSensor connectionSensor = new ConnectionSensor(mContext);
+        availableSensors.add(connectionSensor);
 
-        // works
-//        LightSensor lightSensor = new LightSensor(mContext);
-//        mAvailableSensors.add(lightSensor);
+        ForegroundEvent foregroundEvent = new ForegroundEvent(mContext);
+        availableSensors.add(foregroundEvent);
 
-        // works
-//        LocationSensor locationSensor = new LocationSensor(mContext);
-//        mAvailableSensors.add(locationSensor);
+        ForegroundTrafficEvent foregroundTrafficEvent = new ForegroundTrafficEvent(mContext);
+        availableSensors.add(foregroundTrafficEvent);
 
-        // works
-//        ConnectionSensor connectionSensor = new ConnectionSensor(mContext);
-//        mAvailableSensors.add(connectionSensor);
+        GyroscopeSensor gyroscopeSensor = new GyroscopeSensor(mContext);
+        availableSensors.add(gyroscopeSensor);
 
-        //new foreground traffic
-//        ForegroundTrafficEvent foregroundTrafficEvent = new ForegroundTrafficEvent(mContext);
-//        mAvailableSensors.add(foregroundTrafficEvent);
+        LightSensor lightSensor = new LightSensor(mContext);
+        availableSensors.add(lightSensor);
 
-        //new periodic background traffic
-//        BackgroundTrafficEvent backgroundTrafficEvent = new BackgroundTrafficEvent(mContext);
-//        mAvailableSensors.add(backgroundTrafficEvent);
+        LocationSensor locationSensor = new LocationSensor(mContext);
+        availableSensors.add(locationSensor);
 
-        // loudness sensor is blocking microphone and consuming too much battery
-//         LoudnessSensor loudnessSensor = new LoudnessSensor(mContext);
-//         mAvailableSensors.add(loudnessSensor);
+        MagneticFieldSensor magneticFieldSensor = new MagneticFieldSensor(mContext);
+        availableSensors.add(magneticFieldSensor);
 
-        /**
+        MotionActivityEvent motionActivityEvent = MotionActivityEvent.getInstance(mContext);
+        availableSensors.add(motionActivityEvent);
+
+        /*
          * Periodic events / sensors
          */
 
-//        RingtoneEvent ringtoneEvent = new RingtoneEvent(mContext);
-//        mAvailableSensors.add(ringtoneEvent);
+        BackgroundTrafficEvent backgroundTrafficEvent = new BackgroundTrafficEvent(mContext);
+        availableSensors.add(backgroundTrafficEvent);
 
-//        CalendarEvent calendarEvent = new CalendarEvent(mContext);
-//        mAvailableSensors.add(calendarEvent);
+        RingtoneEvent ringtoneEvent = new RingtoneEvent(mContext);
+        availableSensors.add(ringtoneEvent);
 
-//        ContactsEvent contactsEvent = new ContactsEvent(mContext);
-//        mAvailableSensors.add(contactsEvent);
+        // loudness sensor is blocking microphone and consuming too much battery
+        LoudnessSensor loudnessSensor = new LoudnessSensor(mContext);
+        availableSensors.add(loudnessSensor);
 
-//        CallLogEvent callLogEvent = new CallLogEvent(mContext);
-//        mAvailableSensors.add(callLogEvent);
+        RunningProcessesReaderEvent runningProcessesReaderEvent = new RunningProcessesReaderEvent(mContext);
+        availableSensors.add(runningProcessesReaderEvent);
 
-//        BrowserHistoryEvent browserHistoryEvent = new BrowserHistoryEvent(mContext);
-//        mAvailableSensors.add(browserHistoryEvent);
+        RunningTasksReaderEvent runningTasksReaderEvent = new RunningTasksReaderEvent(mContext);
+        availableSensors.add(runningTasksReaderEvent);
 
-//        ForegroundEvent foregroundEvent = new ForegroundEvent(mContext);
-//        mAvailableSensors.add(foregroundEvent);
+        RunningServicesReaderEvent runningServicesReaderEvent = new RunningServicesReaderEvent(mContext);
+        availableSensors.add(runningServicesReaderEvent);
 
-//        RunningProcessesReaderEvent runningProcessesReaderEvent = new RunningProcessesReaderEvent(mContext);
-//        mAvailableSensors.add(runningProcessesReaderEvent);
-//
-//        RunningTasksReaderEvent runningTasksReaderEvent = new RunningTasksReaderEvent(mContext);
-//        mAvailableSensors.add(runningTasksReaderEvent);
-//
-//        RunningServicesReaderEvent runningServicesReaderEvent = new RunningServicesReaderEvent(mContext);
-//        mAvailableSensors.add(runningServicesReaderEvent);
+        /*
+         *  Content observer
+         */
 
-        /**
+        BrowserHistoryEvent browserHistoryEvent = new BrowserHistoryEvent(mContext);
+        availableSensors.add(browserHistoryEvent);
+
+        CalendarEvent calendarEvent = new CalendarEvent(mContext);
+        availableSensors.add(calendarEvent);
+
+        ContactsEvent contactsEvent = new ContactsEvent(mContext);
+        availableSensors.add(contactsEvent);
+
+        CallLogEvent callLogEvent = new CallLogEvent(mContext);
+        availableSensors.add(callLogEvent);
+
+
+        /*
          * Save them in map for further fast access
          */
-        for (ISensor sensor : mAvailableSensors) {
-            sensorByType.put(sensor.getType(), sensor);
+        for (ISensor sensor : availableSensors) {
+            availableSensorByType.put(sensor.getType(), sensor);
+        }
+    }
+
+    /**
+     * Initializes enabled events
+     */
+    private void initEnabledSensors() {
+
+        // TODO: query db for enabled events
+
+        /*
+         * Save them in map for further fast access
+         */
+        for (ISensor sensor : enabledSensors) {
+            enabledSensorByType.put(sensor.getType(), sensor);
         }
     }
 
@@ -135,7 +176,7 @@ public class SensorProvider {
      * @param pushType
      * @return
      */
-    public List<ISensor> getSensorsByPushType(EPushType pushType) {
+    public List<ISensor> getAvailableSensorsByPushType(EPushType pushType) {
 
         List<ISensor> result = new ArrayList<>();
 
@@ -143,7 +184,8 @@ public class SensorProvider {
             return result;
         }
 
-        for (ISensor sensor : mAvailableSensors) {
+        for (ISensor sensor : availableSensors) {
+
             if (sensor.getPushType().equals(pushType)) {
                 result.add(sensor);
             }
@@ -152,18 +194,21 @@ public class SensorProvider {
         return result;
     }
 
+    /**
+     * Returns all available sensors in the system
+     */
     public List<ISensor> getAvailableSensors() {
-        return mAvailableSensors;
+        return availableSensors;
     }
 
     /**
-     * Returns a sensor by it given type
+     * Returns available a sensor by it given type
      *
      * @param type
      * @return
      */
-    public ISensor getSensor(int type) {
-        return sensorByType.get(type);
+    public ISensor getAvailableSensor(int type) {
+        return availableSensorByType.get(type);
     }
 
     /**
@@ -175,11 +220,11 @@ public class SensorProvider {
 
         List<ISensor> result = new ArrayList<>();
 
-        for (ISensor sensor : mAvailableSensors) {
+        for (ISensor sensor : enabledSensors) {
 
-            if (sensor.isDisabledBySystem() || sensor.isDisabledByUser()) {
-                continue;
-            }
+//            if (sensor.isDisabledBySystem() || sensor.isDisabledByUser()) {
+//                continue;
+//            }
 
             result.add(sensor);
         }
@@ -188,13 +233,24 @@ public class SensorProvider {
     }
 
     /**
+     * Returns enabled a sensor by it given type
+     *
+     * @param type
+     * @return
+     */
+    public ISensor getEnabledSensor(int type) {
+        return availableSensorByType.get(type);
+    }
+
+    /**
      * Assigns given context to available sensors
      *
-     * @param ctx
+     * @param context
      */
-    public void setContextToSensors(Context ctx) {
-        for (ISensor sensor : mAvailableSensors) {
-            sensor.setContext(ctx);
+    public void setContextToSensors(Context context) {
+
+        for (ISensor sensor : availableSensors) {
+            sensor.setContext(context);
         }
     }
 }
