@@ -19,6 +19,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.Config;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbAccelerometerSensor;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbBrowserHistoryEvent;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbCalendarEvent;
@@ -43,14 +44,19 @@ import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbWifiConnectionEv
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.interfaces.IDbSensor;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.DtoType;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.SensorDto;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.login.LoginRequestDto;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.login.LoginResponseDto;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.login.UserDeviceDto;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.sensing.EventUploadRequestDto;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.endpoint.EndpointGenerator;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.endpoint.EventUploadEndpoint;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.endpoint.LoginEndpoint;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensing.ISensor;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.DaoProvider;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.PreferenceProvider;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.SensorProvider;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.util.ConnectionUtils;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.util.HardwareUtils;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.util.logger.Log;
 import retrofit.Callback;
 import retrofit.RetrofitError;
@@ -402,8 +408,18 @@ public class EventUploadService extends GcmTaskService {
 
                     @Override
                     public void failure(@NonNull RetrofitError error) {
-                        // TODO process error
+
                         Log.d(TAG, "Server returned error! Kind: " + error.getKind().name());
+
+                        Response response = error.getResponse();
+
+                        if (response != null) {
+
+                            // user need relogin
+                            if (response.getStatus() == 401) {
+                                doRelogin();
+                            }
+                        }
 
                         // fallbacking periodic request
                         if (!isNeedInConnectionFallback) {
@@ -413,6 +429,59 @@ public class EventUploadService extends GcmTaskService {
                         }
                     }
                 });
+    }
+
+    /**
+     * Does user token refresh
+     */
+    private void doRelogin() {
+
+        final PreferenceProvider preferenceProvider = PreferenceProvider.getInstance(getApplicationContext());
+
+        String email = preferenceProvider.getUserEmail();
+        String password = preferenceProvider.getUserPassword();
+        long serverDeviceId = preferenceProvider.getServerDeviceId();
+
+        LoginRequestDto loginRequest = new LoginRequestDto();
+
+        loginRequest.setUserEmail(email);
+        loginRequest.setPassword(password);
+
+        UserDeviceDto userDevice = new UserDeviceDto();
+
+        if (serverDeviceId != -1) {
+            userDevice.setServerId(serverDeviceId);
+        } else {
+            userDevice.setOs(Config.PLATFORM_NAME);
+            userDevice.setOsVersion(HardwareUtils.getAndroidVersion());
+            userDevice.setBrand(HardwareUtils.getDeviceBrandName());
+            userDevice.setModel(HardwareUtils.getDeviceModelName());
+            userDevice.setDeviceId(HardwareUtils.getAndroidId(this));
+        }
+
+        loginRequest.setDevice(userDevice);
+
+        LoginEndpoint userEndpoint = EndpointGenerator.getInstance(getApplicationContext()).create(LoginEndpoint.class);
+        userEndpoint.loginUser(loginRequest, new Callback<LoginResponseDto>() {
+
+            @Override
+            public void success(LoginResponseDto apiResponse, Response response) {
+
+                if (apiResponse != null) {
+                    Log.d(TAG, "User token received: " + apiResponse.getUserToken());
+
+                    preferenceProvider.setUserToken(apiResponse.getUserToken());
+                } else {
+                    Log.d(TAG, "apiResponse is NULL");
+                }
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+                // ignore by now
+                Log.d(TAG, "login function failed. server status: " + error.getResponse().getStatus());
+            }
+        });
     }
 
     /**

@@ -30,13 +30,17 @@ public class PreferenceProvider {
     // custom endpoint url
     private static final String ASSISTANCE_CUSTOM_ENDPOINT_PREF = "custom_endpoint";
 
+    // user settings
+    public static final String KRAKEN_CURRENT_DEVICE_ID = "current_device_id";
+    public static final String KRAKEN_SERVER_DEVICE_ID = "server_device_id";
+    public static final String KRAKEN_USER_TOKEN = "user_token";
+    public static final String KRAKEN_USER_EMAIL = "user_email";
+    public static final String KRAKEN_USER_PASSWORD = "user_password";
+
     // Default prefs
     public static final String KRAKEN_ACTIVATED = "KrakenActivated";
     public static final String KRAKEN_SHOW_NOTIFICATION = "KrakenShowNotification";
     public static final String KRAKEN_DATA_PROFILE = "KrakenDataProfile";
-    public static final String KRAKEN_CURRENT_DEVICE_ID = "current_device_id";
-    public static final String KRAKEN_SERVER_DEVICE_ID = "server_device_id";
-    public static final String KRAKEN_USER_TOKEN = "user_token";
 
     public static final String KRAKEN_DATA_PROFILE_BASIC = "KrakenDataProfileBasic";
     public static final String KRAKEN_DATA_PROFILE_FULL = "KrakenDataProfileFull";
@@ -176,5 +180,41 @@ public class PreferenceProvider {
 
     public void setCustomEndpointUrl(String value) {
         this.defaultPrefs.edit().putString(ASSISTANCE_CUSTOM_ENDPOINT_PREF, value).apply();
+    }
+
+    /**
+     * Returns user email saved in SharedPreferences
+     *
+     * @return
+     */
+    public String getUserEmail() {
+        return this.defaultPrefs.getString(KRAKEN_USER_EMAIL, "");
+    }
+
+    /**
+     * Saves user email to preferences
+     *
+     * @param value
+     */
+    public void setUserEmail(String value) {
+        this.defaultPrefs.edit().putString(KRAKEN_USER_EMAIL, value).apply();
+    }
+
+    /**
+     * Returns user password saved in SharedPreferences
+     *
+     * @return
+     */
+    public String getUserPassword() {
+        return this.defaultPrefs.getString(KRAKEN_USER_PASSWORD, "");
+    }
+
+    /**
+     * Saves user password to preferences
+     *
+     * @param value
+     */
+    public void setUserPassword(String value) {
+        this.defaultPrefs.edit().putString(KRAKEN_USER_PASSWORD, value).apply();
     }
 }
