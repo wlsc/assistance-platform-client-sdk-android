@@ -526,6 +526,16 @@ public class AssistanceDatabaseGenerator {
     powerStatusEvent.addIntProperty("chargingState");
     powerStatusEvent.addIntProperty("chargingMode");
     powerStatusEvent.addBooleanProperty("powerSaveMode");
+    
+    // ----- Power Level Event -----
+    // REQUIRED
+    Entity powerLevelEvent = schema.addEntity("DbPowerLevelEvent");
+    powerLevelEvent.setTableName("power_level_event");
+    powerLevelEvent.addIdProperty().autoincrement().index();
+    powerLevelEvent.implementsInterface(Config.ASSISTANCE_PACKAGE_SENSOR);
+    powerLevelEvent.addFloatProperty("percent");
+    powerLevelEvent.addStringProperty("created").notNull();
+   
 
     // **************************
     // **** GENERATE CLASSES ****
