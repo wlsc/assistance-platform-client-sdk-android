@@ -44,6 +44,8 @@ import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.event.MotionActivityEventDaoImpl;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.event.NetworkTrafficEventDao;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.event.NetworkTrafficEventDaoImpl;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.event.PowerLevelEventDao;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.event.PowerLevelEventDaoImpl;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.event.PowerStateEventDao;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.event.PowerStateEventDaoImpl;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.event.RingtoneEventDao;
@@ -299,6 +301,15 @@ public class DaoProvider {
      */
     public PowerStateEventDao getPowerStateEventDao() {
         return PowerStateEventDaoImpl.getInstance(mDaoSession);
+    }
+
+    /**
+     * PowerLevelEventDao
+     *
+     * @return
+     */
+    public PowerLevelEventDao getPowerLevelEventDao() {
+        return PowerLevelEventDaoImpl.getInstance(mDaoSession);
     }
 
     /**

@@ -22,14 +22,15 @@ public class RingtoneEvent extends AbstractPeriodicEvent {
 
     private static final String TAG = RingtoneEventDao.class.getSimpleName();
 
-    private static final int INIT_DATA_INTERVALL = 60;
+    private static final int INIT_DATA_INTERVAL_IN_SEC = 60;
+
     private AudioManager audioManager;
     private int lastRingerMode = -1;
 
     public RingtoneEvent(Context context) {
         super(context);
 
-        setDataIntervalInSec(INIT_DATA_INTERVALL);
+        setDataIntervalInSec(INIT_DATA_INTERVAL_IN_SEC);
         audioManager = (AudioManager) this.context.getSystemService(Context.AUDIO_SERVICE);
     }
 

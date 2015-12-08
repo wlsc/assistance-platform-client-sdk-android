@@ -82,7 +82,7 @@ public class BatteryUtils {
     }
 
     /**
-     * Returns battery percentage status
+     * Returns battery percentage status (0.0-1.0)
      *
      * @param context
      * @return
