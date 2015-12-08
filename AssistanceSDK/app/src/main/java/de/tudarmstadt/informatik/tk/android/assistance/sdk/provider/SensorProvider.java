@@ -18,6 +18,7 @@ import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensing.impl.co
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensing.impl.contentobserver.ContactsEvent;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensing.impl.periodic.BackgroundTrafficEvent;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensing.impl.periodic.LoudnessSensor;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensing.impl.periodic.PowerLevelEvent;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensing.impl.periodic.RingtoneEvent;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensing.impl.periodic.RunningProcessesReaderEvent;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensing.impl.periodic.RunningServicesReaderEvent;
@@ -127,6 +128,9 @@ public class SensorProvider {
         /*
          * Periodic events / sensors
          */
+
+        PowerLevelEvent powerLevelEvent = new PowerLevelEvent(mContext);
+        availableSensors.add(powerLevelEvent);
 
         BackgroundTrafficEvent backgroundTrafficEvent = new BackgroundTrafficEvent(mContext);
         availableSensors.add(backgroundTrafficEvent);
