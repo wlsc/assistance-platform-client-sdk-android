@@ -183,7 +183,7 @@ public class SensorProvider {
      */
     private void initEnabledSensors() {
 
-        Log.d(TAG, "Initializing available sensors...");
+        Log.d(TAG, "Initializing ENABLED sensors...");
 
         String userToken = PreferenceProvider.getInstance(mContext).getUserToken();
         DbUser user = daoProvider.getUserDao().getByToken(userToken);
