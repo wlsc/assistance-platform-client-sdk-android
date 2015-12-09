@@ -319,6 +319,12 @@ public class SensorProvider {
         for (ISensor sensor : availableSensors) {
             sensor.setContext(context);
         }
+
+        for (ISensor sensor : enabledSensors) {
+            sensor.setContext(context);
+        }
+
+        mContext = context;
     }
 
     /**

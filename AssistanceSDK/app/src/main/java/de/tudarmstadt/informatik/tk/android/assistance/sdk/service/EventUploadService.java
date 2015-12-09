@@ -217,8 +217,6 @@ public class EventUploadService extends GcmTaskService {
                             List<List<SensorDto>> eventParts = Lists
                                     .partition(eventsAsList, EVENTS_NUMBER_TO_SPLIT_AFTER);
 
-                            Log.d(TAG, "Sending partial data with " + eventParts.size() + " requests");
-
                             for (final List<SensorDto> partEvent : eventParts) {
 
                                 AsyncTask.execute(new Runnable() {
@@ -275,8 +273,6 @@ public class EventUploadService extends GcmTaskService {
                     // send partial with many requests
                     List<List<SensorDto>> eventParts = Lists
                             .partition(eventsAsList, EVENTS_NUMBER_TO_SPLIT_AFTER);
-
-                    Log.d(TAG, "Sending partial data with " + eventParts.size() + " requests");
 
                     for (final List<SensorDto> eventPart : eventParts) {
 
