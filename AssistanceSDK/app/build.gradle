@@ -59,4 +59,6 @@ dependencies {
     compile 'de.greenrobot:greendao:2.1.0'
     // event bus system
     compile 'de.greenrobot:eventbus:2.4.0'
+    // google's guava
+    compile 'com.google.guava:guava:18.0'
 }

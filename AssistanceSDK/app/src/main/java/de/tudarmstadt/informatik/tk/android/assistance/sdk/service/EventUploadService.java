@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.util.SparseArrayCompat;
 
 import com.google.android.gms.gcm.GcmNetworkManager;
 import com.google.android.gms.gcm.GcmTaskService;
@@ -13,11 +14,10 @@ import com.google.android.gms.gcm.OneoffTask;
 import com.google.android.gms.gcm.PeriodicTask;
 import com.google.android.gms.gcm.Task;
 import com.google.android.gms.gcm.TaskParams;
+import com.google.common.collect.Lists;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.Config;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbAccelerometerSensor;
@@ -109,9 +109,9 @@ public class EventUploadService extends GcmTaskService {
     private static PreferenceProvider mPreferenceProvider;
 
     @NonNull
-    private Map<Integer, List<? extends IDbSensor>> dbEvents = new HashMap<>();
+    private SparseArrayCompat<List<? extends IDbSensor>> dbEvents = new SparseArrayCompat<>();
     @NonNull
-    private Map<Integer, List<? extends SensorDto>> requestEvents = new HashMap<>();
+    private SparseArrayCompat<List<? extends SensorDto>> requestEvents = new SparseArrayCompat<>();
 
     private static boolean isNeedInConnectionFallback;
 
@@ -207,61 +207,33 @@ public class EventUploadService extends GcmTaskService {
 
                             final List<SensorDto> eventsAsList = new ArrayList<>();
 
-                            for (Map.Entry<Integer, List<? extends SensorDto>> entry : requestEvents.entrySet()) {
-                                eventsAsList.addAll(entry.getValue());
+                            for (int i = 0, eventsSize = requestEvents.size(); i < eventsSize; i++) {
+                                eventsAsList.addAll(requestEvents.valueAt(i));
                             }
 
-                            // partial upload
-                            int eventsSize = eventsAsList.size();
+                            Log.d(TAG, "There are " + eventsAsList.size() + " events to upload");
 
-                            Log.d(TAG, "There are " + eventsSize + " events to upload");
+                            // send partial data with many requests
+                            List<List<SensorDto>> eventParts = Lists
+                                    .partition(eventsAsList, EVENTS_NUMBER_TO_SPLIT_AFTER);
 
-                            if (eventsSize < EVENTS_NUMBER_TO_SPLIT_AFTER) {
-                                // send as usual
+                            Log.d(TAG, "Sending partial data with " + eventParts.size() + " requests");
 
-                                Log.d(TAG, "Sending data in normal mode");
+                            for (final List<SensorDto> partEvent : eventParts) {
 
-                                EventUploadRequestDto eventUploadRequest = new EventUploadRequestDto();
-                                eventUploadRequest.setDataEvents(eventsAsList);
-                                eventUploadRequest.setServerDeviceId(serverDeviceId);
+                                AsyncTask.execute(new Runnable() {
 
-                                doUploadEventData(eventUploadRequest);
+                                    @Override
+                                    public void run() {
 
-                            } else {
-                                // send partial with many requests
-                                int howMuchToSend = eventsSize / EVENTS_NUMBER_TO_SPLIT_AFTER;
+                                        EventUploadRequestDto eventUploadRequest = new EventUploadRequestDto();
 
-                                Log.d(TAG, "Sending partial data with " + (howMuchToSend + 1) + " requests");
+                                        eventUploadRequest.setDataEvents(partEvent);
+                                        eventUploadRequest.setServerDeviceId(serverDeviceId);
 
-                                for (int i = 0; i <= howMuchToSend; i++) {
-
-                                    final int finalCounter = i;
-                                    int lastElementIndex = (finalCounter + 1) * EVENTS_NUMBER_TO_SPLIT_AFTER;
-
-                                    // assign last element index
-                                    if (i == howMuchToSend) {
-                                        lastElementIndex = eventsSize - 1;
+                                        doUploadEventData(eventUploadRequest);
                                     }
-
-                                    final int finalLastElementIndex = lastElementIndex;
-
-                                    AsyncTask.execute(new Runnable() {
-
-                                        @Override
-                                        public void run() {
-
-                                            List<SensorDto> tmpSensors = eventsAsList
-                                                    .subList(finalCounter * EVENTS_NUMBER_TO_SPLIT_AFTER,
-                                                            finalLastElementIndex);
-
-                                            EventUploadRequestDto eventUploadRequest = new EventUploadRequestDto();
-                                            eventUploadRequest.setDataEvents(tmpSensors);
-                                            eventUploadRequest.setServerDeviceId(serverDeviceId);
-
-                                            doUploadEventData(eventUploadRequest);
-                                        }
-                                    });
-                                }
+                                });
                             }
                         }
                     });
@@ -271,9 +243,6 @@ public class EventUploadService extends GcmTaskService {
 
         // do periodic upload task
         if (isPeriodic) {
-
-            // cancel ghost task
-            cancelByTag(getApplicationContext(), "periodic | 999: 60s, f:15");
 
             Handler handler = new Handler(getMainLooper());
             handler.post(new Runnable() {
@@ -297,61 +266,33 @@ public class EventUploadService extends GcmTaskService {
 
                     final List<SensorDto> eventsAsList = new ArrayList<>();
 
-                    for (Map.Entry<Integer, List<? extends SensorDto>> entry : requestEvents.entrySet()) {
-                        eventsAsList.addAll(entry.getValue());
+                    for (int i = 0, eventsSize = requestEvents.size(); i < eventsSize; i++) {
+                        eventsAsList.addAll(requestEvents.valueAt(i));
                     }
 
-                    // partial upload
-                    int eventsSize = eventsAsList.size();
+                    Log.d(TAG, "There are " + eventsAsList.size() + " events to upload");
 
-                    Log.d(TAG, "There are " + eventsSize + " events to upload");
+                    // send partial with many requests
+                    List<List<SensorDto>> eventParts = Lists
+                            .partition(eventsAsList, EVENTS_NUMBER_TO_SPLIT_AFTER);
 
-                    if (eventsSize < EVENTS_NUMBER_TO_SPLIT_AFTER) {
-                        // send as usual
+                    Log.d(TAG, "Sending partial data with " + eventParts.size() + " requests");
 
-                        Log.d(TAG, "Sending data in normal mode");
+                    for (final List<SensorDto> eventPart : eventParts) {
 
-                        EventUploadRequestDto eventUploadRequest = new EventUploadRequestDto();
-                        eventUploadRequest.setDataEvents(eventsAsList);
-                        eventUploadRequest.setServerDeviceId(serverDeviceId);
+                        AsyncTask.execute(new Runnable() {
 
-                        doUploadEventData(eventUploadRequest);
+                            @Override
+                            public void run() {
 
-                    } else {
-                        // send partial with many requests
-                        int howMuchToSend = eventsSize / EVENTS_NUMBER_TO_SPLIT_AFTER;
+                                EventUploadRequestDto eventUploadRequest = new EventUploadRequestDto();
 
-                        Log.d(TAG, "Sending partial data with " + (howMuchToSend + 1) + " requests");
+                                eventUploadRequest.setDataEvents(eventPart);
+                                eventUploadRequest.setServerDeviceId(serverDeviceId);
 
-                        for (int i = 0; i <= howMuchToSend; i++) {
-
-                            final int finalCounter = i;
-                            int lastElementIndex = (finalCounter + 1) * EVENTS_NUMBER_TO_SPLIT_AFTER;
-
-                            // assign last element index
-                            if (i == howMuchToSend) {
-                                lastElementIndex = eventsSize - 1;
+                                doUploadEventData(eventUploadRequest);
                             }
-
-                            final int finalLastElementIndex = lastElementIndex;
-
-                            AsyncTask.execute(new Runnable() {
-
-                                @Override
-                                public void run() {
-
-                                    List<SensorDto> tmpSensors = eventsAsList
-                                            .subList(finalCounter * EVENTS_NUMBER_TO_SPLIT_AFTER,
-                                                    finalLastElementIndex);
-
-                                    EventUploadRequestDto eventUploadRequest = new EventUploadRequestDto();
-                                    eventUploadRequest.setDataEvents(tmpSensors);
-                                    eventUploadRequest.setServerDeviceId(serverDeviceId);
-
-                                    doUploadEventData(eventUploadRequest);
-                                }
-                            });
-                        }
+                        });
                     }
                 }
             });
@@ -1140,14 +1081,10 @@ public class EventUploadService extends GcmTaskService {
 
         DaoProvider daoProvider = DaoProvider.getInstance(getApplicationContext());
 
-        for (Map.Entry<Integer, List<? extends IDbSensor>> entry : dbEvents.entrySet()) {
+        for (int i = 0, dbEventsSize = dbEvents.size(); i < dbEventsSize; i++) {
 
-            if (entry == null) {
-                continue;
-            }
-
-            int type = entry.getKey();
-            List<? extends IDbSensor> values = entry.getValue();
+            int type = dbEvents.keyAt(i);
+            List<? extends IDbSensor> values = dbEvents.valueAt(i);
 
             if (values == null || values.isEmpty()) {
                 continue;
