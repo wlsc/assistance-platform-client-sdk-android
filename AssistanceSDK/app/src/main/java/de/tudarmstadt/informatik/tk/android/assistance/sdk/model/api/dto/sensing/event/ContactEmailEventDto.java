@@ -18,10 +18,6 @@ public class ContactEmailEventDto implements SensorDto {
     @Expose
     private Long contactId;
 
-    @SerializedName("globalContactId")
-    @Expose
-    private Long globalContactId;
-
     @SerializedName("mailId")
     @Expose
     private Long mailId;
@@ -67,9 +63,8 @@ public class ContactEmailEventDto implements SensorDto {
         this.typeStr = DtoType.getApiName(this.type);
     }
 
-    public ContactEmailEventDto(Long id, Long globalContactId, Long mailId, String address, String eventType, Boolean isNew, Boolean isUpdated, Boolean isDeleted, Long contactId, String created) {
+    public ContactEmailEventDto(Long id, Long mailId, String address, String eventType, Boolean isNew, Boolean isUpdated, Boolean isDeleted, Long contactId, String created) {
         this.id = id;
-        this.globalContactId = globalContactId;
         this.mailId = mailId;
         this.address = address;
         this.eventType = eventType;
@@ -88,14 +83,6 @@ public class ContactEmailEventDto implements SensorDto {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public Long getGlobalContactId() {
-        return globalContactId;
-    }
-
-    public void setGlobalContactId(Long globalContactId) {
-        this.globalContactId = globalContactId;
     }
 
     public Long getMailId() {
@@ -185,7 +172,6 @@ public class ContactEmailEventDto implements SensorDto {
         return "ContactEmailEventDto{" +
                 "id=" + id +
                 ", contactId=" + contactId +
-                ", globalContactId=" + globalContactId +
                 ", mailId=" + mailId +
                 ", address='" + address + '\'' +
                 ", eventType='" + eventType + '\'' +
