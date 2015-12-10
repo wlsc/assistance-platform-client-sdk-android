@@ -5,10 +5,9 @@ import android.os.Bundle;
 
 import org.json.JSONObject;
 
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.SocialAuthProvider;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.enums.MessageType;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.enums.SocialNetworkEnum;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.handler.IServerCommunicationResponseHandler;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.enums.SocialNetworkEnum;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.SocialAuthProvider;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.ui.activities.accounts.AccountsAdapter;
 
 
@@ -89,7 +88,7 @@ public abstract class AbstractSocialLogin implements SocialLogin {
                     boolean bSucc = jsonResponse.getBoolean("succ");
                     if (bSucc) {
                         JSONObject jsonData = jsonResponse.getJSONObject("data");
-                        String strKroken = jsonData.getString(MessageType.KEY_KRAKEN_TOKEN);
+//                        String strKroken = jsonData.getString(MessageType.KEY_KRAKEN_TOKEN);
 //                        SdkAuthentication.getInstance(m_ctxActivity).setKroken(strKroken);
 
                         JSONObject jsonAccount = jsonData.getJSONObject("account");

@@ -15,16 +15,14 @@ import android.support.v4.app.NotificationCompat;
 
 import com.google.android.gms.gcm.GcmNetworkManager;
 
-import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.ActivityCommunicator;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.Config;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.R;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DaoSession;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbModule;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbUser;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.enums.ECommandType;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensing.ISensor;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.DaoProvider;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.PreferenceProvider;
@@ -40,16 +38,27 @@ public class HarvesterService extends Service implements Callback {
 
     private static final String TAG = HarvesterService.class.getSimpleName();
 
+    /**
+     * Messenger incoming commands
+     */
+    public static final int MSG_CMD_REGISTER_CLIENT = 1;
+    public static final int MSG_CMD_UNREGISTER_CLIENT = 2;
+    public static final int MSG_CMD_START_SERVICE = 3;
+    public static final int MSG_CMD_STOP_SERVICE = 4;
+    public static final int MSG_CMD_SHOW_ICON = 5;
+    public static final int MSG_CMD_HIDE_ICON = 6;
+
     private static HarvesterService INSTANCE;
 
     private final Messenger messenger = new Messenger(new Handler(this));
+
+    // clients that wants to communicate with this service
+    private List<Messenger> mClients = new ArrayList<>();
 
     private SensorProvider mSensorProvider;
     private PreferenceProvider mPreferenceProvider;
 
     private DaoProvider daoProvider;
-
-//    private NotificationManager mNotificationManager;
 
     private boolean mSensorsStarted;
 
@@ -133,16 +142,10 @@ public class HarvesterService extends Service implements Callback {
             // schedule uploader task
             startService(new Intent(this, EventUploadService.class));
 
-            if (!DeviceUtils.isServiceRunning(getApplicationContext(),
-                    AssistanceAccessibilityService.class)) {
-
-                startAccessibilityService();
-            }
+            startAccessibilityService();
 
         } else {
-
             Log.d(TAG, "No active module were found!");
-
             mSensorsStarted = false;
         }
 
@@ -158,7 +161,6 @@ public class HarvesterService extends Service implements Callback {
 
         GcmNetworkManager.getInstance(getApplicationContext()).cancelAllTasks(EventUploadService.class);
 
-        setActivityHandler(null);
         stopForeground(true);
         stopSelf();
     }
@@ -268,29 +270,8 @@ public class HarvesterService extends Service implements Callback {
 
         if (userToken != null && !userToken.isEmpty()) {
 
-//            if (mSensorsStarted) {
-//                monitorStop();
-//            } else {
-//                monitorStart();
-//            }
-
             if (mSensorsStarted) {
-
                 Log.d(TAG, "OK: sensors are started");
-
-                // show icon on command
-                if (intent != null && intent.hasExtra(Config.INTENT_EXTRA_SHOW_ICON)) {
-
-//                    boolean showIcon = intent.getBooleanExtra(
-//                            Config.INTENT_EXTRA_SHOW_ICON,
-//                            PreferenceProvider.DEFAULT_KRAKEN_SHOW_NOTIFICATION);
-//
-//                    if (showIcon) {
-//                        showIcon();
-//                    } else {
-//                        hideIcon();
-//                    }
-                }
 
                 return Service.START_STICKY;
             } else {
@@ -314,7 +295,6 @@ public class HarvesterService extends Service implements Callback {
     @Override
     public boolean onUnbind(Intent intent) {
         Log.d(TAG, "Unbinding...");
-        setActivityHandler(null);
         return super.onUnbind(intent);
     }
 
@@ -324,61 +304,59 @@ public class HarvesterService extends Service implements Callback {
         return messenger.getBinder();
     }
 
-    private void setActivityHandler(Messenger messenger) {
-        ActivityCommunicator.setMessenger(messenger, this);
-    }
-
     @Override
     public boolean handleMessage(Message msg) {
 
-        Bundle data = msg.getData();
-        Serializable obj = data.getSerializable("command");
-        if (obj == null || !(obj instanceof ECommandType)) {
-            return false;
-        }
+        Log.d(TAG, "Processing incoming message for command " + msg.what + "...");
 
-        ECommandType command = (ECommandType) obj;
-
-        switch (command) {
-            case SET_HANDLER:
-                Log.d(TAG, "Command: SET_HANDLER received");
-                Messenger messenger = (Messenger) data.getParcelable("value");
-                setActivityHandler(messenger);
+        switch (msg.what) {
+            case MSG_CMD_REGISTER_CLIENT:
+                Log.d(TAG, "Command: REGISTER_CLIENT received");
+                mClients.add(msg.replyTo);
                 break;
-            case START_SERVICE:
+
+            case MSG_CMD_UNREGISTER_CLIENT:
+                Log.d(TAG, "Command: UNREGISTER_CLIENT received");
+                mClients.remove(msg.replyTo);
+                break;
+
+            case MSG_CMD_START_SERVICE:
                 Log.d(TAG, "Command: START_SERVICE received");
                 initService();
                 break;
-            case STOP_SERVICE:
+
+            case MSG_CMD_STOP_SERVICE:
                 Log.d(TAG, "Command: STOP_SERVICE received");
                 stopService();
                 break;
-            case REMOVE_HANDLER:
-                Log.d(TAG, "Command: REMOVE_HANDLER received");
-                setActivityHandler(null);
-                break;
-            case HIDE_ICON:
+
+            case MSG_CMD_HIDE_ICON:
                 Log.d(TAG, "Command: HIDE_ICON received");
                 hideIcon();
                 break;
-            case SHOW_ICON:
+
+            case MSG_CMD_SHOW_ICON:
                 Log.d(TAG, "Command: SHOW_ICON received");
+
                 if (mSensorsStarted) {
                     showIcon();
                 } else {
                     initService();
                 }
                 break;
+
             default:
-                Log.e(TAG, "Unknown Command!");
+                Log.d(TAG, "Unknown service command!");
                 return false;
         }
+
+        Log.d(TAG, "Done processing.");
         return true;
     }
 
-    public static void sendCommand(Messenger messenger, ECommandType command, Object value) {
+    public static void sendCommand(Messenger messenger, int command, Object value) {
 
-        if (messenger == null || command == null) {
+        if (messenger == null || command <= 0) {
             return;
         }
 
@@ -406,14 +384,18 @@ public class HarvesterService extends Service implements Callback {
     }
 
     /**
-     * Starts AccessibilityService
+     * Starts accessibility service
      */
     private void startAccessibilityService() {
 
-        Log.d(TAG, "Starting accessibility service...");
+        if (!DeviceUtils.isServiceRunning(getApplicationContext(),
+                AssistanceAccessibilityService.class)) {
 
-        Intent intent = new Intent(this, AssistanceAccessibilityService.class);
-        startService(intent);
+            Log.d(TAG, "Starting accessibility service...");
+
+            Intent intent = new Intent(this, AssistanceAccessibilityService.class);
+            startService(intent);
+        }
     }
 
 }

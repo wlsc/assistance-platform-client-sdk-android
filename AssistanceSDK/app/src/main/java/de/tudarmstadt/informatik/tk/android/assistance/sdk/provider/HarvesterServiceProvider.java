@@ -1,62 +1,49 @@
 package de.tudarmstadt.informatik.tk.android.assistance.sdk.provider;
 
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.os.Handler;
+import android.os.IBinder;
 import android.os.Message;
 import android.os.Messenger;
+import android.os.RemoteException;
 
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.enums.ECommandType;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.service.AssistanceAccessibilityService;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.service.HarvesterService;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.util.DeviceUtils;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.util.logger.Log;
 
 /**
  * @author Karsten Planz
  * @author Wladimir Schmidt (wlsc.dev@gmail.com)
  * @date 28.06.2015
  */
-public class HarvesterServiceProvider implements Handler.Callback {
+public class HarvesterServiceProvider implements ServiceConnection {
 
     private static final String TAG = HarvesterServiceProvider.class.getSimpleName();
 
     private static HarvesterServiceProvider INSTANCE;
 
     private final Context mContext;
-    private final Intent mSensingIntent;
-    private Messenger mMessenger;
 
-    private boolean isServiceBound = false;
+    private Messenger mMessengerOutgoing = null;
+    private Messenger mMessengerIncoming = new Messenger(new IncomingMessageHandler());
 
-//    protected ServiceConnection mServiceConnection = new ServiceConnection() {
-//
-//        private final String TAG = ServiceConnection.class.getSimpleName();
-//
-//        @Override
-//        public void onServiceDisconnected(ComponentName name) {
-//            isServiceBound = false;
-//        }
-//
-//        @Override
-//        public void onServiceConnected(ComponentName name, IBinder service) {
-//
-//            Log.d(TAG, "Service was connected to binder");
-//
-//            mMessenger = new Messenger(service);
-//
-//            KrakenService.sendCommand(
-//                    mMessenger,
-//                    ECommandType.SET_HANDLER,
-//                    new Messenger(new Handler(KrakenServiceManager.this)));
-//
-//            isServiceBound = true;
-//
-//        }
-//    };
+    private boolean isServiceBound;
+
+    // connection to sensing service
+    private ServiceConnection mServiceConnection;
 
     private HarvesterServiceProvider(Context context) {
+
         mContext = context;
-        mSensingIntent = new Intent(mContext, HarvesterService.class);
+        mServiceConnection = this;
+
+        if (isServiceRunning()) {
+            bindService();
+        }
     }
 
     public static HarvesterServiceProvider getInstance(Context context) {
@@ -85,14 +72,29 @@ public class HarvesterServiceProvider implements Handler.Callback {
      * Starts sensing service
      */
     public void startSensingService() {
-        startHarvestingWithIcon(true);
+
+        if (!isServiceRunning()) {
+
+            Intent intent = new Intent(mContext, HarvesterService.class);
+            mContext.startService(intent);
+        }
+
+        showHarvestIcon(true);
+        bindService();
     }
 
-    public void startHarvestingWithIcon(boolean show) {
+    /**
+     * Shows harvester icon or not
+     *
+     * @param showIcon
+     */
+    public void showHarvestIcon(boolean showIcon) {
 
-        Intent intent = new Intent(mContext, HarvesterService.class);
-        intent.putExtra("showIcon", show);
-        mContext.startService(intent);
+        if (showIcon) {
+            sendMessageToService(HarvesterService.MSG_CMD_SHOW_ICON);
+        } else {
+            sendMessageToService(HarvesterService.MSG_CMD_HIDE_ICON);
+        }
     }
 
     /**
@@ -100,9 +102,8 @@ public class HarvesterServiceProvider implements Handler.Callback {
      */
     public void stopSensingService() {
 
-        Intent intent = new Intent(mContext, HarvesterService.class);
-        intent.putExtra("command", ECommandType.STOP_SERVICE);
-        mContext.stopService(intent);
+        sendMessageToService(HarvesterService.MSG_CMD_STOP_SERVICE);
+        unbindService();
     }
 
     /**
@@ -128,7 +129,116 @@ public class HarvesterServiceProvider implements Handler.Callback {
     }
 
     @Override
-    public boolean handleMessage(Message msg) {
-        return false;
+    public void onServiceConnected(ComponentName name, IBinder service) {
+
+        Log.d(TAG, "Service is connected to binder");
+
+        mMessengerOutgoing = new Messenger(service);
+
+        isServiceBound = true;
+
+        try {
+
+            Message msg = Message.obtain(null, HarvesterService.MSG_CMD_REGISTER_CLIENT);
+
+            msg.replyTo = mMessengerIncoming;
+            mMessengerOutgoing.send(msg);
+
+        } catch (RemoteException e) {
+            Log.e(TAG, "Service has crashed");
+        }
+    }
+
+    @Override
+    public void onServiceDisconnected(ComponentName name) {
+
+        isServiceBound = false;
+        mMessengerOutgoing = null;
+
+        Log.d(TAG, "Sensing service has been disconnected.");
+    }
+
+    /**
+     * Sends command to sensing service
+     *
+     * @param command
+     */
+    public void sendMessageToService(int command) {
+
+        if (isServiceBound()) {
+            if (mMessengerOutgoing != null) {
+
+                try {
+
+                    Message msg = Message.obtain(null, command);
+
+                    msg.replyTo = mMessengerIncoming;
+                    mMessengerOutgoing.send(msg);
+
+                } catch (RemoteException e) {
+                    Log.e(TAG, "Cannot send message to service!");
+                }
+            }
+        } else {
+            Log.d(TAG, "Service is not bound. Cannot send command");
+        }
+    }
+
+    /**
+     * Binds this provider to sensing service
+     */
+    private void bindService() {
+
+        try {
+
+            mContext.bindService(new Intent(mContext, HarvesterService.class),
+                    mServiceConnection,
+                    Context.BIND_AUTO_CREATE);
+
+            isServiceBound = true;
+
+        } catch (Exception e) {
+            Log.e(TAG, "Some error.");
+        }
+    }
+
+    /**
+     * Unbinds this provider from sensing service
+     */
+    private void unbindService() {
+
+        if (isServiceBound()) {
+
+            if (mMessengerOutgoing != null) {
+
+                try {
+
+                    Message msg = Message.obtain(null, HarvesterService.MSG_CMD_UNREGISTER_CLIENT);
+
+                    msg.replyTo = mMessengerIncoming;
+                    mMessengerOutgoing.send(msg);
+
+                } catch (RemoteException e) {
+                    Log.e(TAG, "Sensing service crashed!");
+                }
+            }
+
+            // disconnecting...
+            this.mContext.unbindService(mServiceConnection);
+            this.isServiceBound = false;
+
+            Log.d(TAG, "The service provider was unbound from sensing service");
+        }
+    }
+
+    /**
+     * Handle incoming messages
+     */
+    private class IncomingMessageHandler extends Handler {
+
+        @Override
+        public void handleMessage(Message msg) {
+            // empty
+        }
     }
 }
