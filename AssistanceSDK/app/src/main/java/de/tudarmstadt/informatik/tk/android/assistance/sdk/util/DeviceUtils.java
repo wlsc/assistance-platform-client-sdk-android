@@ -7,6 +7,7 @@ import android.hardware.SensorManager;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * @author Wladimir Schmidt (wlsc.dev@gmail.com)
@@ -75,5 +76,14 @@ public class DeviceUtils {
         }
 
         return activityManager.getRunningServices(maxAmount);
+    }
+
+    /**
+     * Generates new random UUID string
+     *
+     * @return
+     */
+    public static String generateUUID() {
+        return UUID.randomUUID().toString();
     }
 }
