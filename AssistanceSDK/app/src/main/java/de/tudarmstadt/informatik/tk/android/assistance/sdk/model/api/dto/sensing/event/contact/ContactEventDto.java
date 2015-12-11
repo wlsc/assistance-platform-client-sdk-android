@@ -3,6 +3,8 @@ package de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.sensin
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.util.Set;
+
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.DtoType;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.SensorDto;
 
@@ -48,11 +50,11 @@ public class ContactEventDto implements SensorDto {
 
     @SerializedName("phoneNumbers")
     @Expose
-    private ContactArrayDto phoneNumbers;
+    private Set<ContactArrayDto> phoneNumbers;
 
     @SerializedName("emailAddresses")
     @Expose
-    private ContactArrayDto emailAddresses;
+    private Set<ContactArrayDto> emailAddresses;
 
     @SerializedName("isDeleted")
     @Expose
@@ -79,7 +81,7 @@ public class ContactEventDto implements SensorDto {
         this.typeStr = DtoType.getApiName(this.type);
     }
 
-    public ContactEventDto(Long id, Long globalContactId, String displayName, String givenName, String familyName, Integer starred, Integer lastTimeContacted, Integer timesContacted, String note, ContactArrayDto phoneNumbers, ContactArrayDto emailAddresses, Boolean isDeleted, String created) {
+    public ContactEventDto(Long id, Long globalContactId, String displayName, String givenName, String familyName, Integer starred, Integer lastTimeContacted, Integer timesContacted, String note, Set<ContactArrayDto> phoneNumbers, Set<ContactArrayDto> emailAddresses, Boolean isDeleted, String created) {
         this.id = id;
         this.globalContactId = globalContactId;
         this.displayName = displayName;
@@ -167,19 +169,19 @@ public class ContactEventDto implements SensorDto {
         this.note = note;
     }
 
-    public ContactArrayDto getPhoneNumbers() {
+    public Set<ContactArrayDto> getPhoneNumbers() {
         return phoneNumbers;
     }
 
-    public void setPhoneNumbers(ContactArrayDto phoneNumbers) {
+    public void setPhoneNumbers(Set<ContactArrayDto> phoneNumbers) {
         this.phoneNumbers = phoneNumbers;
     }
 
-    public ContactArrayDto getEmailAddresses() {
+    public Set<ContactArrayDto> getEmailAddresses() {
         return emailAddresses;
     }
 
-    public void setEmailAddresses(ContactArrayDto emailAddresses) {
+    public void setEmailAddresses(Set<ContactArrayDto> emailAddresses) {
         this.emailAddresses = emailAddresses;
     }
 

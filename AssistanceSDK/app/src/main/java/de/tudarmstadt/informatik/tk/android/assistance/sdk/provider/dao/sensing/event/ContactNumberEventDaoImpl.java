@@ -6,9 +6,7 @@ import java.util.List;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DaoSession;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbContactNumberEvent;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbContactNumberEventDao;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.DtoType;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.SensorDto;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.sensing.event.ContactNumberEventDto;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.CommonEventDaoImpl;
 
 /**
@@ -43,21 +41,21 @@ public class ContactNumberEventDaoImpl extends
             return null;
         }
 
-        ContactNumberEventDto result = new ContactNumberEventDto();
+//        ContactNumberEventDto result = new ContactNumberEventDto();
+//
+//        result.setId(sensor.getId());
+//        result.setNumberId(sensor.getNumberId());
+//        result.setEventType(sensor.getType());
+//        result.setNumber(sensor.getNumber());
+//        result.setIsNew(sensor.getIsNew());
+//        result.setIsUpdated(sensor.getIsUpdated());
+//        result.setIsDeleted(sensor.getIsDeleted());
+//        result.setContactId(sensor.getContactId());
+//        result.setType(DtoType.CONTACT_NUMBER);
+//        result.setTypeStr(DtoType.getApiName(DtoType.CONTACT_NUMBER));
+//        result.setCreated(sensor.getCreated());
 
-        result.setId(sensor.getId());
-        result.setNumberId(sensor.getNumberId());
-        result.setEventType(sensor.getType());
-        result.setNumber(sensor.getNumber());
-        result.setIsNew(sensor.getIsNew());
-        result.setIsUpdated(sensor.getIsUpdated());
-        result.setIsDeleted(sensor.getIsDeleted());
-        result.setContactId(sensor.getContactId());
-        result.setType(DtoType.CONTACT_NUMBER);
-        result.setTypeStr(DtoType.getApiName(DtoType.CONTACT_NUMBER));
-        result.setCreated(sensor.getCreated());
-
-        return result;
+        return null;
     }
 
     @Override

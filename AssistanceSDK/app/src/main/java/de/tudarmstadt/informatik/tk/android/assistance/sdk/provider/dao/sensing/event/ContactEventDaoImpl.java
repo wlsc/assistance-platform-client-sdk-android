@@ -1,14 +1,19 @@
 package de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.event;
 
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DaoSession;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbContactEmailEvent;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbContactEvent;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbContactEventDao;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbContactNumberEvent;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.DtoType;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.SensorDto;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.sensing.event.ContactEventDto;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.sensing.event.contact.ContactArrayDto;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.sensing.event.contact.ContactEventDto;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.CommonEventDaoImpl;
 
 /**
@@ -46,7 +51,6 @@ public class ContactEventDaoImpl extends
         ContactEventDto result = new ContactEventDto();
 
         result.setId(sensor.getId());
-        result.setContactId(sensor.getContactId());
         result.setGlobalContactId(sensor.getGlobalContactId());
         result.setDisplayName(sensor.getDisplayName());
         result.setGivenName(sensor.getGivenName());
@@ -55,12 +59,45 @@ public class ContactEventDaoImpl extends
         result.setLastTimeContacted(sensor.getLastTimeContacted());
         result.setTimesContacted(sensor.getTimesContacted());
         result.setNote(sensor.getNote());
-        result.setIsNew(sensor.getIsNew());
-        result.setIsUpdated(sensor.getIsUpdated());
         result.setIsDeleted(sensor.getIsDeleted());
+        result.setCreated(sensor.getCreated());
         result.setType(DtoType.CONTACT);
         result.setTypeStr(DtoType.getApiName(DtoType.CONTACT));
-        result.setCreated(sensor.getCreated());
+
+        List<DbContactEmailEvent> dbEmails = sensor.getDbContactEmailEventList();
+        List<DbContactNumberEvent> dbNumbers = sensor.getDbContactNumberEventList();
+
+        if (dbEmails != null && !dbEmails.isEmpty()) {
+
+            Set<ContactArrayDto> emailsDto = new HashSet<>(dbEmails.size());
+
+            for (DbContactEmailEvent emailEvent : dbEmails) {
+
+                ContactArrayDto emailDto = new ContactArrayDto(
+                        emailEvent.getType(),
+                        emailEvent.getAddress());
+
+                emailsDto.add(emailDto);
+            }
+
+            result.setEmailAddresses(emailsDto);
+        }
+
+        if (dbNumbers != null && !dbNumbers.isEmpty()) {
+
+            Set<ContactArrayDto> numbersDto = new HashSet<>(dbNumbers.size());
+
+            for (DbContactNumberEvent numberEvent : dbNumbers) {
+
+                ContactArrayDto emailDto = new ContactArrayDto(
+                        numberEvent.getType(),
+                        numberEvent.getNumber());
+
+                numbersDto.add(emailDto);
+            }
+
+            result.setPhoneNumbers(numbersDto);
+        }
 
         return result;
     }

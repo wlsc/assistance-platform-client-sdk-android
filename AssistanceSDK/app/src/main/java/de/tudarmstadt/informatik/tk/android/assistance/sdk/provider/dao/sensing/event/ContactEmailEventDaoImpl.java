@@ -6,9 +6,7 @@ import java.util.List;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DaoSession;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbContactEmailEvent;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbContactEmailEventDao;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.DtoType;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.SensorDto;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.sensing.event.ContactEmailEventDto;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.CommonEventDaoImpl;
 
 /**
@@ -43,21 +41,21 @@ public class ContactEmailEventDaoImpl extends
             return null;
         }
 
-        ContactEmailEventDto result = new ContactEmailEventDto();
+//        ContactEmailEventDto result = new ContactEmailEventDto();
+//
+//        result.setId(sensor.getId());
+//        result.setContactId(sensor.getContactId());
+//        result.setMailId(sensor.getMailId());
+//        result.setAddress(sensor.getAddress());
+//        result.setEventType(sensor.getType());
+//        result.setIsNew(sensor.getIsNew());
+//        result.setIsUpdated(sensor.getIsUpdated());
+//        result.setIsDeleted(sensor.getIsDeleted());
+//        result.setType(DtoType.CONTACT_EMAIL);
+//        result.setTypeStr(DtoType.getApiName(DtoType.CONTACT_EMAIL));
+//        result.setCreated(sensor.getCreated());
 
-        result.setId(sensor.getId());
-        result.setContactId(sensor.getContactId());
-        result.setMailId(sensor.getMailId());
-        result.setAddress(sensor.getAddress());
-        result.setEventType(sensor.getType());
-        result.setIsNew(sensor.getIsNew());
-        result.setIsUpdated(sensor.getIsUpdated());
-        result.setIsDeleted(sensor.getIsDeleted());
-        result.setType(DtoType.CONTACT_EMAIL);
-        result.setTypeStr(DtoType.getApiName(DtoType.CONTACT_EMAIL));
-        result.setCreated(sensor.getCreated());
-
-        return result;
+        return null;
     }
 
     @Override
