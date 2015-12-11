@@ -50,11 +50,11 @@ public class ContactEventDto implements SensorDto {
 
     @SerializedName("phoneNumbers")
     @Expose
-    private Set<ContactArrayDto> phoneNumbers;
+    private Set<ContactEmailNumberItemDto> phoneNumbers;
 
     @SerializedName("emailAddresses")
     @Expose
-    private Set<ContactArrayDto> emailAddresses;
+    private Set<ContactEmailNumberItemDto> emailAddresses;
 
     @SerializedName("isDeleted")
     @Expose
@@ -81,7 +81,7 @@ public class ContactEventDto implements SensorDto {
         this.typeStr = DtoType.getApiName(this.type);
     }
 
-    public ContactEventDto(Long id, Long globalContactId, String displayName, String givenName, String familyName, Integer starred, Integer lastTimeContacted, Integer timesContacted, String note, Set<ContactArrayDto> phoneNumbers, Set<ContactArrayDto> emailAddresses, Boolean isDeleted, String created) {
+    public ContactEventDto(Long id, Long globalContactId, String displayName, String givenName, String familyName, Integer starred, Integer lastTimeContacted, Integer timesContacted, String note, Set<ContactEmailNumberItemDto> phoneNumbers, Set<ContactEmailNumberItemDto> emailAddresses, Boolean isDeleted, String created) {
         this.id = id;
         this.globalContactId = globalContactId;
         this.displayName = displayName;
@@ -169,19 +169,19 @@ public class ContactEventDto implements SensorDto {
         this.note = note;
     }
 
-    public Set<ContactArrayDto> getPhoneNumbers() {
+    public Set<ContactEmailNumberItemDto> getPhoneNumbers() {
         return phoneNumbers;
     }
 
-    public void setPhoneNumbers(Set<ContactArrayDto> phoneNumbers) {
+    public void setPhoneNumbers(Set<ContactEmailNumberItemDto> phoneNumbers) {
         this.phoneNumbers = phoneNumbers;
     }
 
-    public Set<ContactArrayDto> getEmailAddresses() {
+    public Set<ContactEmailNumberItemDto> getEmailAddresses() {
         return emailAddresses;
     }
 
-    public void setEmailAddresses(Set<ContactArrayDto> emailAddresses) {
+    public void setEmailAddresses(Set<ContactEmailNumberItemDto> emailAddresses) {
         this.emailAddresses = emailAddresses;
     }
 

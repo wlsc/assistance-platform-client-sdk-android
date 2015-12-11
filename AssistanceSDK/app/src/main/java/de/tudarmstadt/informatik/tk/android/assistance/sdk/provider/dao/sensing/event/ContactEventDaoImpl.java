@@ -12,7 +12,7 @@ import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbContactEventDao;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbContactNumberEvent;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.DtoType;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.SensorDto;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.sensing.event.contact.ContactArrayDto;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.sensing.event.contact.ContactEmailNumberItemDto;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.sensing.event.contact.ContactEventDto;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.CommonEventDaoImpl;
 
@@ -69,11 +69,11 @@ public class ContactEventDaoImpl extends
 
         if (dbEmails != null && !dbEmails.isEmpty()) {
 
-            Set<ContactArrayDto> emailsDto = new HashSet<>(dbEmails.size());
+            Set<ContactEmailNumberItemDto> emailsDto = new HashSet<>(dbEmails.size());
 
             for (DbContactEmailEvent emailEvent : dbEmails) {
 
-                ContactArrayDto emailDto = new ContactArrayDto(
+                ContactEmailNumberItemDto emailDto = new ContactEmailNumberItemDto(
                         emailEvent.getType(),
                         emailEvent.getAddress());
 
@@ -85,11 +85,11 @@ public class ContactEventDaoImpl extends
 
         if (dbNumbers != null && !dbNumbers.isEmpty()) {
 
-            Set<ContactArrayDto> numbersDto = new HashSet<>(dbNumbers.size());
+            Set<ContactEmailNumberItemDto> numbersDto = new HashSet<>(dbNumbers.size());
 
             for (DbContactNumberEvent numberEvent : dbNumbers) {
 
-                ContactArrayDto emailDto = new ContactArrayDto(
+                ContactEmailNumberItemDto emailDto = new ContactEmailNumberItemDto(
                         numberEvent.getType(),
                         numberEvent.getNumber());
 
