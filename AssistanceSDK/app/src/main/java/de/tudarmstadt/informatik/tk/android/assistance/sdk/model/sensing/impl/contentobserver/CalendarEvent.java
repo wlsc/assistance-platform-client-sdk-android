@@ -37,7 +37,7 @@ public class CalendarEvent extends AbstractContentObserverEvent {
     }
 
     private static final String[] PROJECTION_EVENTS =
-            new String[]{
+            {
                     Events._ID,
                     Events.ALL_DAY,
                     Events.AVAILABILITY,
@@ -59,10 +59,11 @@ public class CalendarEvent extends AbstractContentObserverEvent {
                     Events.RDATE,
                     Events.RRULE,
                     Events.STATUS,
-                    Events.TITLE};
+                    Events.TITLE
+            };
 
     private static final String[] PROJECTION_REMINDERS =
-            new String[]{
+            {
                     Reminders._ID,
                     Reminders.METHOD,
                     Reminders.MINUTES};

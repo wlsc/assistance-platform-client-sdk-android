@@ -70,10 +70,6 @@ public class DtoType {
 
     public static final int CALENDAR_REMINDER = 25;
 
-    public static final int CONTACT_EMAIL = 26;
-
-    public static final int CONTACT_NUMBER = 27;
-
     static {
         mappings.put(getApiName(LOCATION), LOCATION);
         mappings.put(getApiName(GYROSCOPE), GYROSCOPE);
@@ -100,8 +96,6 @@ public class DtoType {
         mappings.put(getApiName(CALENDAR), CALENDAR);
         mappings.put(getApiName(CALENDAR_REMINDER), CALENDAR_REMINDER);
         mappings.put(getApiName(CONTACT), CONTACT);
-        mappings.put(getApiName(CONTACT_EMAIL), CONTACT_EMAIL);
-        mappings.put(getApiName(CONTACT_NUMBER), CONTACT_NUMBER);
     }
 
     private DtoType() {
@@ -159,10 +153,6 @@ public class DtoType {
                 return res.getString(R.string.event_running_tasks);
             case RUNNING_PROCESSES:
                 return res.getString(R.string.event_running_processes);
-            case CONTACT_EMAIL:
-                return res.getString(R.string.event_contact_email);
-            case CONTACT_NUMBER:
-                return res.getString(R.string.event_contact_number);
             default:
                 return "";
         }
@@ -215,6 +205,8 @@ public class DtoType {
                 return "networktraffic";
             case BACKGROUND_TRAFFIC:
                 return "backgroundtraffic";
+            case CONTACT:
+                return "contact";
             case BROWSER_HISTORY:
                 return "browserhistory";
             case RUNNING_SERVICES:
@@ -225,10 +217,6 @@ public class DtoType {
                 return "runningtask";
             case RUNNING_PROCESSES:
                 return "runningprocess";
-            case CONTACT_EMAIL:
-                return "contactemail";
-            case CONTACT_NUMBER:
-                return "contactnumber";
             default:
                 return "";
         }

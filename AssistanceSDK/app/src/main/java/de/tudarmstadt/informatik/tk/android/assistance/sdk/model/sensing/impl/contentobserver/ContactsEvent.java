@@ -430,8 +430,7 @@ public class ContactsEvent extends AbstractContentObserverEvent {
     }
 
     private boolean checkForContactChange(Map<Long, DbContactEvent> map, DbContactEvent newItem) {
-
-
+        
         long id = newItem.getContactId();
         DbContactEvent existingReminder = map.get(id);
 

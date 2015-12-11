@@ -26,9 +26,7 @@ import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbCalendarEvent;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbCalendarReminderEvent;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbCallLogEvent;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbConnectionEvent;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbContactEmailEvent;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbContactEvent;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbContactNumberEvent;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbForegroundEvent;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbGyroscopeSensor;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbLightSensor;
@@ -976,50 +974,6 @@ public class EventUploadService extends GcmTaskService {
                             .getContactEventDao()
                             .convertObjects(contactsList));
 
-                    /**
-                     * Contacts email
-                     */
-
-                    List<DbContactEmailEvent> contactsEmailList;
-
-                    // give all
-                    if (numberOfElements == 0) {
-                        contactsEmailList = daoProvider
-                                .getContactEmailEventDao()
-                                .getAll();
-                    } else {
-                        contactsEmailList = daoProvider
-                                .getContactEmailEventDao()
-                                .getFirstN(numberOfElements);
-                    }
-
-                    dbEvents.put(DtoType.CONTACT_EMAIL, contactsEmailList);
-                    requestEvents.put(DtoType.CONTACT_EMAIL, daoProvider
-                            .getContactEmailEventDao()
-                            .convertObjects(contactsEmailList));
-
-                    /**
-                     * Contacts number
-                     */
-
-                    List<DbContactNumberEvent> contactsNumberList;
-
-                    // give all
-                    if (numberOfElements == 0) {
-                        contactsNumberList = daoProvider
-                                .getContactNumberEventDao()
-                                .getAll();
-                    } else {
-                        contactsNumberList = daoProvider
-                                .getContactNumberEventDao()
-                                .getFirstN(numberOfElements);
-                    }
-
-                    dbEvents.put(DtoType.CONTACT_NUMBER, contactsNumberList);
-                    requestEvents.put(DtoType.CONTACT_NUMBER, daoProvider
-                            .getContactNumberEventDao()
-                            .convertObjects(contactsNumberList));
-
                     break;
 
                 case DtoType.POWER_LEVEL:
@@ -1173,14 +1127,6 @@ public class EventUploadService extends GcmTaskService {
 
                 case DtoType.CONTACT:
                     daoProvider.getContactEventDao().delete((List<DbContactEvent>) values);
-                    break;
-
-                case DtoType.CONTACT_EMAIL:
-                    daoProvider.getContactEmailEventDao().delete((List<DbContactEmailEvent>) values);
-                    break;
-
-                case DtoType.CONTACT_NUMBER:
-                    daoProvider.getContactNumberEventDao().delete((List<DbContactNumberEvent>) values);
                     break;
 
                 case DtoType.POWER_STATE:
