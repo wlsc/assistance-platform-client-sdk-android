@@ -30,6 +30,8 @@ public class DbAssistanceOpenHelper extends DaoMaster.OpenHelper {
 
         Log.d(TAG, "onUpgrade from version " + oldVersion + " to" + newVersion);
 
+        // TODO: exchange drop table with reasonable update logic
+        DaoMaster.dropAllTables(db, true);
         DaoMaster.createAllTables(db, true);
 
         switch (oldVersion) {
