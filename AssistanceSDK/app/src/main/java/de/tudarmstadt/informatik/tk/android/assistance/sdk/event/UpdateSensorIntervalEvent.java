@@ -6,10 +6,17 @@ package de.tudarmstadt.informatik.tk.android.assistance.sdk.event;
  */
 public class UpdateSensorIntervalEvent {
 
+    private final int topic;
+
     private final double collectionFrequency;
 
-    public UpdateSensorIntervalEvent(double collectionFrequency) {
+    public UpdateSensorIntervalEvent(int topic, double collectionFrequency) {
+        this.topic = topic;
         this.collectionFrequency = collectionFrequency;
+    }
+
+    public int getTopic() {
+        return this.topic;
     }
 
     public double getCollectionFrequency() {

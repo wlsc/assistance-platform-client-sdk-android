@@ -3,6 +3,7 @@ package de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensing;
 import android.content.Context;
 
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DaoSession;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.event.UpdateSensorIntervalEvent;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.enums.EPushType;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.DaoProvider;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.service.HarvesterService;
@@ -84,5 +85,10 @@ public abstract class AbstractSensor implements ISensor {
     @Override
     public void setRunning(boolean isRunning) {
         this.isRunning = isRunning;
+    }
+
+    @Override
+    public void onEvent(UpdateSensorIntervalEvent event) {
+        // do default things
     }
 }
