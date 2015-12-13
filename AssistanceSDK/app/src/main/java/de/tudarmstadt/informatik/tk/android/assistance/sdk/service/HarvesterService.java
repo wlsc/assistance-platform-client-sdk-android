@@ -12,6 +12,7 @@ import android.os.Messenger;
 import android.os.Parcelable;
 import android.os.RemoteException;
 import android.support.v4.app.NotificationCompat;
+import android.util.SparseArray;
 
 import com.google.android.gms.gcm.GcmNetworkManager;
 
@@ -177,9 +178,11 @@ public class HarvesterService extends Service implements Callback {
 
         mSensorProvider = SensorProvider.getInstance(this);
 
-        List<ISensor> enabledSensors = mSensorProvider.getEnabledSensors();
+        SparseArray<ISensor> enabledSensors = mSensorProvider.getEnabledSensors();
 
-        for (ISensor sensor : enabledSensors) {
+        for (int i = 0, availableSize = enabledSensors.size(); i < availableSize; i++) {
+
+            ISensor sensor = enabledSensors.valueAt(i);
 
             if (sensor == null) {
                 continue;
@@ -206,7 +209,11 @@ public class HarvesterService extends Service implements Callback {
             mSensorProvider = SensorProvider.getInstance(this);
         }
 
-        for (ISensor sensor : mSensorProvider.getEnabledSensors()) {
+        SparseArray<ISensor> enabledSensors = mSensorProvider.getEnabledSensors();
+
+        for (int i = 0, availableSize = enabledSensors.size(); i < availableSize; i++) {
+
+            ISensor sensor = enabledSensors.valueAt(i);
 
             if (sensor == null) {
                 continue;

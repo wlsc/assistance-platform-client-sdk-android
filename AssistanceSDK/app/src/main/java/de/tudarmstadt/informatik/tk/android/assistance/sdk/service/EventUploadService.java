@@ -7,6 +7,7 @@ import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.util.SparseArrayCompat;
+import android.util.SparseArray;
 
 import com.google.android.gms.gcm.GcmNetworkManager;
 import com.google.android.gms.gcm.GcmTaskService;
@@ -486,9 +487,11 @@ public class EventUploadService extends GcmTaskService {
     public void getEntriesForUpload(int numberOfElements) {
 
         DaoProvider daoProvider = DaoProvider.getInstance(getApplicationContext());
-        List<ISensor> sensors = SensorProvider.getInstance(getApplicationContext()).getEnabledSensors();
+        SparseArray<ISensor> sensors = SensorProvider.getInstance(getApplicationContext()).getEnabledSensors();
 
-        for (ISensor sensor : sensors) {
+        for (int i = 0, availableSize = sensors.size(); i < availableSize; i++) {
+
+            ISensor sensor = sensors.valueAt(i);
 
             if (sensor == null) {
                 continue;

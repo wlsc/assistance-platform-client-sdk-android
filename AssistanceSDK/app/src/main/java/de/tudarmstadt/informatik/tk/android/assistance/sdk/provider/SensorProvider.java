@@ -1,7 +1,7 @@
 package de.tudarmstadt.informatik.tk.android.assistance.sdk.provider;
 
 import android.content.Context;
-import android.support.v4.util.SparseArrayCompat;
+import android.util.SparseArray;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,12 +46,10 @@ public class SensorProvider {
     private static final String TAG = SensorProvider.class.getSimpleName();
 
     // general availability of sensors
-    private List<ISensor> availableSensors = new ArrayList<>();
-    private SparseArrayCompat<ISensor> availableSensorByType = new SparseArrayCompat<>();
+    private SparseArray<ISensor> availableSensors = new SparseArray<>();
 
     // running sensors
-    private List<ISensor> enabledSensors = new ArrayList<>();
-    private SparseArrayCompat<ISensor> enabledSensorByType = new SparseArrayCompat<>();
+    private SparseArray<ISensor> enabledSensors = new SparseArray<>();
 
     private static SensorProvider INSTANCE;
 
@@ -100,81 +98,73 @@ public class SensorProvider {
          */
 
         AccelerometerSensor accelerometerSensor = AccelerometerSensor.getInstance(mContext);
-        availableSensors.add(accelerometerSensor);
+        availableSensors.put(accelerometerSensor.getType(), accelerometerSensor);
 
         ConnectionSensor connectionSensor = ConnectionSensor.getInstance(mContext);
-        availableSensors.add(connectionSensor);
+        availableSensors.put(connectionSensor.getType(), connectionSensor);
 
         ForegroundEvent foregroundEvent = ForegroundEvent.getInstance(mContext);
-        availableSensors.add(foregroundEvent);
+        availableSensors.put(foregroundEvent.getType(), foregroundEvent);
 
         ForegroundTrafficEvent foregroundTrafficEvent = ForegroundTrafficEvent.getInstance(mContext);
-        availableSensors.add(foregroundTrafficEvent);
+        availableSensors.put(foregroundTrafficEvent.getType(), foregroundTrafficEvent);
 
         GyroscopeSensor gyroscopeSensor = GyroscopeSensor.getInstance(mContext);
-        availableSensors.add(gyroscopeSensor);
+        availableSensors.put(gyroscopeSensor.getType(), gyroscopeSensor);
 
         LightSensor lightSensor = LightSensor.getInstance(mContext);
-        availableSensors.add(lightSensor);
+        availableSensors.put(lightSensor.getType(), lightSensor);
 
         LocationSensor locationSensor = LocationSensor.getInstance(mContext);
-        availableSensors.add(locationSensor);
+        availableSensors.put(locationSensor.getType(), locationSensor);
 
         MagneticFieldSensor magneticFieldSensor = MagneticFieldSensor.getInstance(mContext);
-        availableSensors.add(magneticFieldSensor);
+        availableSensors.put(magneticFieldSensor.getType(), magneticFieldSensor);
 
         MotionActivityEvent motionActivityEvent = MotionActivityEvent.getInstance(mContext);
-        availableSensors.add(motionActivityEvent);
+        availableSensors.put(motionActivityEvent.getType(), motionActivityEvent);
 
         /*
          * Periodic events / sensors
          */
 
         PowerLevelEvent powerLevelEvent = PowerLevelEvent.getInstance(mContext);
-        availableSensors.add(powerLevelEvent);
+        availableSensors.put(powerLevelEvent.getType(), powerLevelEvent);
 
         BackgroundTrafficEvent backgroundTrafficEvent = BackgroundTrafficEvent.getInstance(mContext);
-        availableSensors.add(backgroundTrafficEvent);
+        availableSensors.put(backgroundTrafficEvent.getType(), backgroundTrafficEvent);
 
         RingtoneEvent ringtoneEvent = RingtoneEvent.getInstance(mContext);
-        availableSensors.add(ringtoneEvent);
+        availableSensors.put(ringtoneEvent.getType(), ringtoneEvent);
 
         // loudness sensor is blocking microphone and consuming too much battery
         LoudnessSensor loudnessSensor = LoudnessSensor.getInstance(mContext);
-        availableSensors.add(loudnessSensor);
+        availableSensors.put(loudnessSensor.getType(), loudnessSensor);
 
         RunningProcessesReaderEvent runningProcessesReaderEvent = RunningProcessesReaderEvent.getInstance(mContext);
-        availableSensors.add(runningProcessesReaderEvent);
+        availableSensors.put(runningProcessesReaderEvent.getType(), runningProcessesReaderEvent);
 
         RunningTasksReaderEvent runningTasksReaderEvent = RunningTasksReaderEvent.getInstance(mContext);
-        availableSensors.add(runningTasksReaderEvent);
+        availableSensors.put(runningTasksReaderEvent.getType(), runningTasksReaderEvent);
 
         RunningServicesReaderEvent runningServicesReaderEvent = RunningServicesReaderEvent.getInstance(mContext);
-        availableSensors.add(runningServicesReaderEvent);
+        availableSensors.put(runningServicesReaderEvent.getType(), runningServicesReaderEvent);
 
         /*
          *  Content observers
          */
 
         BrowserHistoryEvent browserHistoryEvent = BrowserHistoryEvent.getInstance(mContext);
-        availableSensors.add(browserHistoryEvent);
+        availableSensors.put(browserHistoryEvent.getType(), browserHistoryEvent);
 
         CalendarEvent calendarEvent = CalendarEvent.getInstance(mContext);
-        availableSensors.add(calendarEvent);
+        availableSensors.put(calendarEvent.getType(), calendarEvent);
 
         ContactsEvent contactsEvent = ContactsEvent.getInstance(mContext);
-        availableSensors.add(contactsEvent);
+        availableSensors.put(contactsEvent.getType(), contactsEvent);
 
         CallLogEvent callLogEvent = CallLogEvent.getInstance(mContext);
-        availableSensors.add(callLogEvent);
-
-
-        /*
-         * Save them in map for further fast access
-         */
-        for (ISensor sensor : availableSensors) {
-            availableSensorByType.put(sensor.getType(), sensor);
-        }
+        availableSensors.put(callLogEvent.getType(), callLogEvent);
 
         Log.d(TAG, "Finished. Number of sensors: " + availableSensors.size());
     }
@@ -209,14 +199,15 @@ public class SensorProvider {
                     .getAllActive(module.getId()));
         }
 
-        enabledSensors.addAll(mapModuleCapabilitiesToSensors(moduleCapabilities));
-
         /*
          * Save them in map for further fast access
          */
-        for (ISensor sensor : enabledSensors) {
+        for (DbModuleCapability dbCap : moduleCapabilities) {
 
-            enabledSensorByType.put(sensor.getType(), sensor);
+            int capType = DtoType.getDtoType(dbCap.getType());
+            ISensor sensor = availableSensors.get(capType);
+
+            enabledSensors.put(sensor.getType(), sensor);
 
             if (!EventBus.getDefault().isRegistered(sensor)) {
                 EventBus.getDefault().register(sensor);
@@ -257,7 +248,9 @@ public class SensorProvider {
             return result;
         }
 
-        for (ISensor sensor : availableSensors) {
+        for (int i = 0, availableSize = availableSensors.size(); i < availableSize; i++) {
+
+            ISensor sensor = availableSensors.valueAt(i);
 
             if (sensor.getPushType().equals(pushType)) {
                 result.add(sensor);
@@ -270,7 +263,7 @@ public class SensorProvider {
     /**
      * Returns all available sensors in the system
      */
-    public List<ISensor> getAvailableSensors() {
+    public SparseArray<ISensor> getAvailableSensors() {
         return availableSensors;
     }
 
@@ -281,7 +274,7 @@ public class SensorProvider {
      * @return
      */
     public ISensor getAvailableSensor(int type) {
-        return availableSensorByType.get(type);
+        return availableSensors.get(type);
     }
 
     /**
@@ -289,20 +282,8 @@ public class SensorProvider {
      *
      * @return
      */
-    public List<ISensor> getEnabledSensors() {
-
-        List<ISensor> result = new ArrayList<>();
-
-        for (ISensor sensor : enabledSensors) {
-
-//            if (sensor.isDisabledBySystem() || sensor.isDisabledByUser()) {
-//                continue;
-//            }
-
-            result.add(sensor);
-        }
-
-        return result;
+    public SparseArray<ISensor> getEnabledSensors() {
+        return enabledSensors;
     }
 
     /**
@@ -312,7 +293,7 @@ public class SensorProvider {
      * @return
      */
     public ISensor getEnabledSensor(int type) {
-        return enabledSensorByType.get(type);
+        return enabledSensors.get(type);
     }
 
     /**
@@ -332,12 +313,12 @@ public class SensorProvider {
      */
     public void setContextToSensors(Context context) {
 
-        for (ISensor sensor : availableSensors) {
-            sensor.setContext(context);
+        for (int i = 0, availableSize = availableSensors.size(); i < availableSize; i++) {
+            availableSensors.valueAt(i).setContext(context);
         }
 
-        for (ISensor sensor : enabledSensors) {
-            sensor.setContext(context);
+        for (int i = 0, availableSize = enabledSensors.size(); i < availableSize; i++) {
+            enabledSensors.valueAt(i).setContext(context);
         }
 
         mContext = context;
@@ -359,7 +340,9 @@ public class SensorProvider {
 
         int dtoType = DtoType.getDtoType(apiDtoType);
 
-        for (ISensor sensor : availableSensors) {
+        for (int i = 0, availableSize = availableSensors.size(); i < availableSize; i++) {
+
+            ISensor sensor = availableSensors.valueAt(i);
 
             if (sensor.getType() == dtoType) {
                 result = sensor;
