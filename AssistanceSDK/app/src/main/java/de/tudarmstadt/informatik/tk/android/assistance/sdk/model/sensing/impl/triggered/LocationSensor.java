@@ -17,6 +17,7 @@ import java.util.Date;
 import java.util.Locale;
 
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbPositionSensor;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.event.UpdateSensorIntervalEvent;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.DtoType;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensing.AbstractTriggeredEvent;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.PreferenceProvider;
@@ -40,15 +41,12 @@ public class LocationSensor extends
     // Accuracy
     private static final int ACCURACY = LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY;
     // Update frequency in seconds
-    private static final int UPDATE_INTERVAL_IN_SECONDS = 20;
+    private static int UPDATE_INTERVAL_IN_SEC = 20;
     // The fastest update frequency, in seconds
-    private static final int FASTEST_INTERVAL_IN_SECONDS = 15;
+    private static int FASTEST_INTERVAL_IN_SEC = 15;
     //-----------------------------------------------------
 
-    private long mLastEventDumpingTimestamp;    // in nanoseconds
-
     private GoogleApiClient mGoogleApiClient;
-    private LocationRequest mLocationRequest;
 
     private final static int CONNECTION_FAILURE_RESOLUTION_REQUEST = 9_000;
 
@@ -95,6 +93,56 @@ public class LocationSensor extends
     }
 
     /**
+     * Update intervals
+     *
+     * @param event
+     */
+    @Override
+    public void onEvent(UpdateSensorIntervalEvent event) {
+
+        Log.d(TAG, "onUpdate interval");
+        Log.d(TAG, "Old fastest interval: " + FASTEST_INTERVAL_IN_SEC + " sec");
+
+        int newFastestUpdateIntervalInSec = (int) Math.round(1.0 / event.getCollectionFrequency());
+
+        Log.d(TAG, "New fastest interval: " + newFastestUpdateIntervalInSec + " sec");
+
+        setFastestIntervalInSec(newFastestUpdateIntervalInSec);
+
+        // calc +10% to new normal update interval
+        int newNormalUpdateIntervalInSec = newFastestUpdateIntervalInSec +
+                ((int) Math.round(newFastestUpdateIntervalInSec * 0.1));
+
+        Log.d(TAG, "Old normal interval: " + UPDATE_INTERVAL_IN_SEC + " sec");
+
+        setUpdateIntervalInSec(newNormalUpdateIntervalInSec);
+
+        Log.d(TAG, "New normal interval: " + newNormalUpdateIntervalInSec + " sec");
+
+        if (mGoogleApiClient.isConnected()) {
+            LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient,
+                    getNewLocationRequest(),
+                    this);
+        }
+    }
+
+    public int getUpdateIntervalInSec() {
+        return UPDATE_INTERVAL_IN_SEC;
+    }
+
+    public void setUpdateIntervalInSec(int updateIntervalInSec) {
+        UPDATE_INTERVAL_IN_SEC = updateIntervalInSec;
+    }
+
+    public int getFastestIntervalInSec() {
+        return FASTEST_INTERVAL_IN_SEC;
+    }
+
+    public void setFastestIntervalInSec(int fastestIntervalInSec) {
+        FASTEST_INTERVAL_IN_SEC = fastestIntervalInSec;
+    }
+
+    /**
      * Starts sensing
      */
     @Override
@@ -108,15 +156,6 @@ public class LocationSensor extends
                     mGoogleApiClient.connect();
                 }
 
-                // Create the LocationRequest object
-                mLocationRequest = LocationRequest.create();
-                // Use high accuracy
-                mLocationRequest.setPriority(ACCURACY);
-                // Set the update interval to x seconds
-                mLocationRequest.setInterval(UPDATE_INTERVAL_IN_SECONDS * 1_000);
-                // Set the fastest update interval to x seconds
-                mLocationRequest.setFastestInterval(FASTEST_INTERVAL_IN_SECONDS * 1_000);
-
                 setRunning(true);
 
             } catch (Exception e) {
@@ -124,6 +163,25 @@ public class LocationSensor extends
                 setRunning(false);
             }
         }
+    }
+
+    /**
+     * Returns new location request for Google API client
+     *
+     * @return
+     */
+    private LocationRequest getNewLocationRequest() {
+
+        // Create the LocationRequest object
+        LocationRequest locationRequest = LocationRequest.create();
+        // Use high accuracy
+        locationRequest.setPriority(ACCURACY);
+        // Set the update interval to x seconds
+        locationRequest.setInterval(UPDATE_INTERVAL_IN_SEC * 1_000);
+        // Set the fastest update interval to x seconds
+        locationRequest.setFastestInterval(FASTEST_INTERVAL_IN_SEC * 1_000);
+
+        return locationRequest;
     }
 
     @Override
@@ -190,7 +248,7 @@ public class LocationSensor extends
 
             if (mGoogleApiClient.isConnected()) {
                 LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient,
-                        mLocationRequest,
+                        getNewLocationRequest(),
                         this);
             }
 
@@ -226,26 +284,6 @@ public class LocationSensor extends
         dumpData();
     }
 
-    /**
-     * Checks for the time to save new sensor reading into db
-     *
-//     * @param timestamp
-     * @return
-     */
-//    private boolean isTimeToSaveData(long timestamp) {
-//
-//        // save the first sensor data
-//        if (mLastEventDumpingTimestamp == 0) {
-//            return true;
-//        } else {
-//            // the time has come -> save data into db
-//            if ((timestamp - mLastEventDumpingTimestamp) / 1_000_000_000 > UPDATE_INTERVAL_IN_SECONDS) {
-//                return true;
-//            }
-//        }
-//
-//        return false;
-//    }
     @Override
     public int getType() {
         return DtoType.LOCATION;
