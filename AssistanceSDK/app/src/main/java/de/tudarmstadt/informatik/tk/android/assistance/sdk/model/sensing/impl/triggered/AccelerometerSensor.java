@@ -10,6 +10,7 @@ import java.util.Date;
 import java.util.Locale;
 
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbAccelerometerSensor;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.event.UpdateSensorIntervalEvent;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.DtoType;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensing.AbstractTriggeredEvent;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.util.DateUtils;
@@ -27,8 +28,8 @@ public class AccelerometerSensor extends
     private static final String TAG = AccelerometerSensor.class.getSimpleName();
 
     // ------------------- Configuration -------------------
-    private static final int SENSOR_DELAY_BETWEEN_TWO_EVENTS = SensorManager.SENSOR_DELAY_NORMAL;
-    private static final int UPDATE_INTERVAL = 5;    // in seconds
+    private static final int DELAY_BETWEEN_TWO_EVENTS = SensorManager.SENSOR_DELAY_NORMAL;
+    private int UPDATE_INTERVAL_IN_SEC = 5;
     // -----------------------------------------------------
 
     private SensorManager mSensorManager;
@@ -78,7 +79,7 @@ public class AccelerometerSensor extends
 
                     reset();
 
-                    mSensorManager.registerListener(this, mSensor, SENSOR_DELAY_BETWEEN_TWO_EVENTS);
+                    mSensorManager.registerListener(this, mSensor, DELAY_BETWEEN_TWO_EVENTS);
                     setRunning(true);
 
                 }
@@ -149,7 +150,7 @@ public class AccelerometerSensor extends
 
             return true;
         } else {
-            if (event.timestamp < (startTimestamp + UPDATE_INTERVAL * 1_000_000_000l)) {
+            if (event.timestamp < (startTimestamp + UPDATE_INTERVAL_IN_SEC * 1_000_000_000l)) {
 
                 sumAccelerationX += Math.abs(event.values[0]);
                 sumAccelerationY += Math.abs(event.values[1]);
@@ -163,13 +164,44 @@ public class AccelerometerSensor extends
         return false;
     }
 
+    /**
+     * Update intervals
+     *
+     * @param event
+     */
+    @Override
+    public void onEvent(UpdateSensorIntervalEvent event) {
+
+        // only accept this sensor topic type
+        if (event.getTopic() != getType()) {
+            return;
+        }
+
+        Log.d(TAG, "onUpdate interval");
+        Log.d(TAG, "Old update interval: " + UPDATE_INTERVAL_IN_SEC + " sec");
+
+        int newUpdateIntervalInSec = (int) Math.round(1.0 / event.getCollectionFrequency());
+
+        Log.d(TAG, "New update interval: " + newUpdateIntervalInSec + " sec");
+
+        setUpdateIntervalInSec(newUpdateIntervalInSec);
+    }
+
+    public int getUpdateIntervalInSec() {
+        return UPDATE_INTERVAL_IN_SEC;
+    }
+
+    public void setUpdateIntervalInSec(int updateIntervalInSec) {
+        UPDATE_INTERVAL_IN_SEC = updateIntervalInSec;
+    }
+
     @Override
     public void reset() {
 
         this.startTimestamp = 0;
-        this.sumAccelerationX = 0;
-        this.sumAccelerationY = 0;
-        this.sumAccelerationZ = 0;
+        this.sumAccelerationX = 0.0f;
+        this.sumAccelerationY = 0.0f;
+        this.sumAccelerationZ = 0.0f;
         this.accuracy = 0;
         this.numValues = 0;
     }

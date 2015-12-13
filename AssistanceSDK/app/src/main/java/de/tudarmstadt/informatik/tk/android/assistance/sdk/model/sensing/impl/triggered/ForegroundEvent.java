@@ -44,9 +44,9 @@ public class ForegroundEvent extends AbstractTriggeredEvent {
     public static final int EVENT_ASSISTANCE_START = 5;
     public static final int EVENT_ASSISTANCE_STOP = 6;
 
-    public final static Integer[] SYSTEM_EVENTS = new Integer[]{
-            ForegroundEvent.EVENT_SCREEN_OFF,
-            ForegroundEvent.EVENT_ASSISTANCE_STOP
+    public final static Integer[] SYSTEM_EVENTS = {
+            EVENT_SCREEN_OFF,
+            EVENT_ASSISTANCE_STOP
     };
 
     public static final String ICONS_DIR = "icons";

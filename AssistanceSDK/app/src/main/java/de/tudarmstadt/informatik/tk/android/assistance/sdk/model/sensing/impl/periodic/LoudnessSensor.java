@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.Locale;
 
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbLoudnessEvent;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.event.UpdateSensorIntervalEvent;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.DtoType;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensing.AbstractPeriodicEvent;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.util.DateUtils;
@@ -30,7 +31,8 @@ public class LoudnessSensor extends AbstractPeriodicEvent implements Callback {
 
     private static final String TAG = LoudnessSensor.class.getSimpleName();
 
-    private static final int INIT_DATA_INTERVAL = 120;
+    private int UPDATE_INTERVAL_IN_SEC = 120;
+
     public static final int AUDIO_BLOCK = 0;
     public static final int PHONE_STATUS = 1;
     public static final int COMMON_AUDIO_FREQUENCY = 44100;
@@ -108,7 +110,7 @@ public class LoudnessSensor extends AbstractPeriodicEvent implements Callback {
     public LoudnessSensor(Context context) {
         super(context);
 
-        setDataIntervalInSec(INIT_DATA_INTERVAL);
+        setDataIntervalInSec(UPDATE_INTERVAL_IN_SEC);
         TelephonyManager tManager = (TelephonyManager) context
                 .getSystemService(Context.TELEPHONY_SERVICE);
 
@@ -416,5 +418,29 @@ public class LoudnessSensor extends AbstractPeriodicEvent implements Callback {
                 phoneStateChanged(data);
             }
         }
+    }
+
+    /**
+     * Update intervals
+     *
+     * @param event
+     */
+    @Override
+    public void onEvent(UpdateSensorIntervalEvent event) {
+
+        // only accept this sensor topic type
+        if (event.getTopic() != getType()) {
+            return;
+        }
+
+        Log.d(TAG, "onUpdate interval");
+        Log.d(TAG, "Old update interval: " + UPDATE_INTERVAL_IN_SEC + " sec");
+
+        int newUpdateIntervalInSec = (int) Math.round(1.0 / event.getCollectionFrequency());
+
+        Log.d(TAG, "New update interval: " + newUpdateIntervalInSec + " sec");
+
+        this.UPDATE_INTERVAL_IN_SEC = newUpdateIntervalInSec;
+        setDataIntervalInSec(newUpdateIntervalInSec);
     }
 }

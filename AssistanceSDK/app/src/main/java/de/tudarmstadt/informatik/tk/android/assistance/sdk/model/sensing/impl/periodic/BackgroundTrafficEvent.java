@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Locale;
 
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbNetworkTrafficEvent;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.event.UpdateSensorIntervalEvent;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.DtoType;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.enums.EPushType;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensing.AbstractPeriodicEvent;
@@ -23,7 +24,7 @@ import de.tudarmstadt.informatik.tk.android.assistance.sdk.util.logger.Log;
  * This is a Periodic Sensor class which collect the mobile traffic data produced by the apps in the
  * background in periodic intervals. This is important to get the traffic from apps which runs
  * services in background.
- * <p>
+ * <p/>
  * Created by Stefan Hacker on 09.12.14
  *
  * @edited by Wladimir Schmidt (wlsc.dev@gmail.com)
@@ -33,7 +34,8 @@ public class BackgroundTrafficEvent extends AbstractPeriodicEvent {
 
     private static final String TAG = BackgroundTrafficEvent.class.getSimpleName();
 
-    private static final int INIT_DATA_INTERVAL = 5 * 60;
+    private int UPDATE_INTERVAL_IN_SEC = 5 * 60;
+
     private PackageManager packageManager;
 
     /**
@@ -44,7 +46,8 @@ public class BackgroundTrafficEvent extends AbstractPeriodicEvent {
     public BackgroundTrafficEvent(Context context) {
         super(context);
 
-        setDataIntervalInSec(INIT_DATA_INTERVAL);
+        setDataIntervalInSec(UPDATE_INTERVAL_IN_SEC);
+
         packageManager = context.getPackageManager();
 
         //initial Data
@@ -158,5 +161,29 @@ public class BackgroundTrafficEvent extends AbstractPeriodicEvent {
     @Override
     public void reset() {
 
+    }
+
+    /**
+     * Update intervals
+     *
+     * @param event
+     */
+    @Override
+    public void onEvent(UpdateSensorIntervalEvent event) {
+
+        // only accept this sensor topic type
+        if (event.getTopic() != getType()) {
+            return;
+        }
+
+        Log.d(TAG, "onUpdate interval");
+        Log.d(TAG, "Old update interval: " + UPDATE_INTERVAL_IN_SEC + " sec");
+
+        int newUpdateIntervalInSec = (int) Math.round(1.0 / event.getCollectionFrequency());
+
+        Log.d(TAG, "New update interval: " + newUpdateIntervalInSec + " sec");
+
+        this.UPDATE_INTERVAL_IN_SEC = newUpdateIntervalInSec;
+        setDataIntervalInSec(newUpdateIntervalInSec);
     }
 }

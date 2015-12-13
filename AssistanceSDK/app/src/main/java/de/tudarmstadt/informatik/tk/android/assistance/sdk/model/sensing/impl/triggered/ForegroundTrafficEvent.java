@@ -214,7 +214,7 @@ public class ForegroundTrafficEvent extends AbstractTriggeredEvent {
                     networkTrafficEvent.setLongitude(lastLongitude);
                 }
 
-                networkTrafficEvent.setBackground(false);
+                networkTrafficEvent.setBackground(Boolean.FALSE);
                 networkTrafficEvent.setCreated(DateUtils.dateToISO8601String(new Date(), Locale.getDefault()));
 
                 Log.d(TAG, "Insert entry");
@@ -268,7 +268,7 @@ public class ForegroundTrafficEvent extends AbstractTriggeredEvent {
                 networkTrafficEvent.setLongitude(lastLongitude);
             }
 
-            networkTrafficEvent.setBackground(false);
+            networkTrafficEvent.setBackground(Boolean.FALSE);
             networkTrafficEvent.setCreated(DateUtils.dateToISO8601String(new Date(), Locale.getDefault()));
 
             Log.d(TAG, "Insert entry");

@@ -6,4 +6,6 @@ public abstract class AbstractTriggeredEvent extends AbstractSensor {
     public AbstractTriggeredEvent(Context context) {
         super(context);
     }
+
+
 }

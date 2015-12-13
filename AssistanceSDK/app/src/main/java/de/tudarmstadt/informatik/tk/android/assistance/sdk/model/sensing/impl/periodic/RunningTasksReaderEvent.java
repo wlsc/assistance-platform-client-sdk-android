@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Locale;
 
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbRunningTasksEvent;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.event.UpdateSensorIntervalEvent;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.DtoType;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensing.AbstractPeriodicEvent;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.util.DateUtils;
@@ -25,6 +26,9 @@ public class RunningTasksReaderEvent extends AbstractPeriodicEvent {
     private static final String TAG = RunningTasksReaderEvent.class.getSimpleName();
 
     private static final int MAXIMUM_TASKS = 10;
+
+    public int UPDATE_INTERVAL_IN_SEC = 30;
+
     private ActivityManager mActivityManager;
     private List<String> mLastTasks = new ArrayList<>();
 
@@ -34,7 +38,8 @@ public class RunningTasksReaderEvent extends AbstractPeriodicEvent {
     public RunningTasksReaderEvent(Context context) {
         super(context);
 
-        setDataIntervalInSec(30);
+        setDataIntervalInSec(UPDATE_INTERVAL_IN_SEC);
+
         mActivityManager = (ActivityManager) context
                 .getSystemService(Context.ACTIVITY_SERVICE);
     }
@@ -114,5 +119,29 @@ public class RunningTasksReaderEvent extends AbstractPeriodicEvent {
         } catch (SecurityException se) {
             Log.e(TAG, "No access to task permission!", se);
         }
+    }
+
+    /**
+     * Update intervals
+     *
+     * @param event
+     */
+    @Override
+    public void onEvent(UpdateSensorIntervalEvent event) {
+
+        // only accept this sensor topic type
+        if (event.getTopic() != getType()) {
+            return;
+        }
+
+        Log.d(TAG, "onUpdate interval");
+        Log.d(TAG, "Old update interval: " + UPDATE_INTERVAL_IN_SEC + " sec");
+
+        int newUpdateIntervalInSec = (int) Math.round(1.0 / event.getCollectionFrequency());
+
+        Log.d(TAG, "New update interval: " + newUpdateIntervalInSec + " sec");
+
+        this.UPDATE_INTERVAL_IN_SEC = newUpdateIntervalInSec;
+        setDataIntervalInSec(newUpdateIntervalInSec);
     }
 }

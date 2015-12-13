@@ -11,6 +11,7 @@ import java.util.Date;
 import java.util.Locale;
 
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbGyroscopeSensor;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.event.UpdateSensorIntervalEvent;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.DtoType;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensing.AbstractTriggeredEvent;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.util.DateUtils;
@@ -29,8 +30,8 @@ public class GyroscopeSensor extends
     private static final String TAG = GyroscopeSensor.class.getSimpleName();
 
     // ------------------- Configuration -------------------
-    private static final int SENSOR_DELAY_BETWEEN_TWO_EVENTS = SensorManager.SENSOR_DELAY_NORMAL;
-    private static final int UPDATE_INTERVAL = 10;    // in seconds
+    private static final int DELAY_BETWEEN_TWO_EVENTS = SensorManager.SENSOR_DELAY_NORMAL;
+    private int UPDATE_INTERVAL_IN_SEC = 10;
     // -----------------------------------------------------
 
     private long mLastEventDumpingTimestamp;    // in nanoseconds
@@ -152,13 +153,13 @@ public class GyroscopeSensor extends
             if (mGyroscopeSensor != null) {
                 mSensorManager.registerListener(this,
                         mGyroscopeSensor,
-                        SENSOR_DELAY_BETWEEN_TWO_EVENTS);
+                        DELAY_BETWEEN_TWO_EVENTS);
             }
 
             if (mGyroscopeUncalibratedSensor != null) {
                 mSensorManager.registerListener(this,
                         mGyroscopeUncalibratedSensor,
-                        SENSOR_DELAY_BETWEEN_TWO_EVENTS);
+                        DELAY_BETWEEN_TWO_EVENTS);
             }
 
             if (mGyroscopeSensor != null || mGyroscopeUncalibratedSensor != null) {
@@ -198,12 +199,12 @@ public class GyroscopeSensor extends
         z = 0;
         accuracy = 0;
 
-        xUncalibratedNoDrift = 0;
-        yUncalibratedNoDrift = 0;
-        zUncalibratedNoDrift = 0;
-        xUncalibratedEstimatedDrift = 0;
-        yUncalibratedEstimatedDrift = 0;
-        zUncalibratedEstimatedDrift = 0;
+        xUncalibratedNoDrift = 0.0f;
+        yUncalibratedNoDrift = 0.0f;
+        zUncalibratedNoDrift = 0.0f;
+        xUncalibratedEstimatedDrift = 0.0f;
+        yUncalibratedEstimatedDrift = 0.0f;
+        zUncalibratedEstimatedDrift = 0.0f;
     }
 
     @Override
@@ -231,27 +232,27 @@ public class GyroscopeSensor extends
          * Uncalibrated data
          */
 
-        if (xUncalibratedNoDrift != 0) {
+        if (xUncalibratedNoDrift != 0.0f) {
             gyroscopeSensor.setXUncalibratedNoDrift(xUncalibratedNoDrift);
         }
 
-        if (yUncalibratedNoDrift != 0) {
+        if (yUncalibratedNoDrift != 0.0f) {
             gyroscopeSensor.setYUncalibratedNoDrift(yUncalibratedNoDrift);
         }
 
-        if (zUncalibratedNoDrift != 0) {
+        if (zUncalibratedNoDrift != 0.0f) {
             gyroscopeSensor.setZUncalibratedNoDrift(zUncalibratedNoDrift);
         }
 
-        if (xUncalibratedEstimatedDrift != 0) {
+        if (xUncalibratedEstimatedDrift != 0.0f) {
             gyroscopeSensor.setXUncalibratedEstimatedDrift(xUncalibratedEstimatedDrift);
         }
 
-        if (yUncalibratedEstimatedDrift != 0) {
+        if (yUncalibratedEstimatedDrift != 0.0f) {
             gyroscopeSensor.setYUncalibratedEstimatedDrift(yUncalibratedEstimatedDrift);
         }
 
-        if (zUncalibratedEstimatedDrift != 0) {
+        if (zUncalibratedEstimatedDrift != 0.0f) {
             gyroscopeSensor.setZUncalibratedEstimatedDrift(zUncalibratedEstimatedDrift);
         }
 
@@ -263,6 +264,37 @@ public class GyroscopeSensor extends
         daoProvider.getGyroscopeSensorDao().insert(gyroscopeSensor);
 
         Log.d(TAG, "Finished");
+    }
+
+    /**
+     * Update intervals
+     *
+     * @param event
+     */
+    @Override
+    public void onEvent(UpdateSensorIntervalEvent event) {
+
+        // only accept this sensor topic type
+        if (event.getTopic() != getType()) {
+            return;
+        }
+
+        Log.d(TAG, "onUpdate interval");
+        Log.d(TAG, "Old update interval: " + UPDATE_INTERVAL_IN_SEC + " sec");
+
+        int newUpdateIntervalInSec = (int) Math.round(1.0 / event.getCollectionFrequency());
+
+        Log.d(TAG, "New update interval: " + newUpdateIntervalInSec + " sec");
+
+        setUpdateIntervalInSec(newUpdateIntervalInSec);
+    }
+
+    public int getUpdateIntervalInSec() {
+        return this.UPDATE_INTERVAL_IN_SEC;
+    }
+
+    public void setUpdateIntervalInSec(int updateIntervalInSec) {
+        this.UPDATE_INTERVAL_IN_SEC = updateIntervalInSec;
     }
 
     /**
@@ -279,7 +311,7 @@ public class GyroscopeSensor extends
         } else {
 
             // the time has come -> save data into db
-            if ((timestamp - mLastEventDumpingTimestamp) / 1_000_000_000 > UPDATE_INTERVAL) {
+            if ((timestamp - mLastEventDumpingTimestamp) / 1_000_000_000 > UPDATE_INTERVAL_IN_SEC) {
                 return true;
             }
         }

@@ -10,6 +10,7 @@ import java.util.Date;
 import java.util.Locale;
 
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbLightSensor;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.event.UpdateSensorIntervalEvent;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.DtoType;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensing.AbstractTriggeredEvent;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.DaoProvider;
@@ -28,8 +29,8 @@ public class LightSensor
     private static final String TAG = LightSensor.class.getSimpleName();
 
     // ------------------- Configuration -------------------
-    private static final int SENSOR_DELAY_BETWEEN_TWO_EVENTS = SensorManager.SENSOR_DELAY_NORMAL;
-    private static final int UPDATE_INTERVAL = 5;    // in seconds
+    private static final int DELAY_BETWEEN_TWO_EVENTS = SensorManager.SENSOR_DELAY_NORMAL;
+    private static int UPDATE_INTERVAL_IN_SEC = 5;
     // -----------------------------------------------------
 
     private DaoProvider daoProvider;
@@ -80,7 +81,7 @@ public class LightSensor
             if (mSensor != null) {
                 mSensorManager.registerListener(this,
                         mSensor,
-                        SENSOR_DELAY_BETWEEN_TWO_EVENTS);
+                        DELAY_BETWEEN_TWO_EVENTS);
 
                 setRunning(true);
             }
@@ -141,6 +142,37 @@ public class LightSensor
     }
 
     /**
+     * Update intervals
+     *
+     * @param event
+     */
+    @Override
+    public void onEvent(UpdateSensorIntervalEvent event) {
+
+        // only accept this sensor topic type
+        if (event.getTopic() != getType()) {
+            return;
+        }
+
+        Log.d(TAG, "onUpdate interval");
+        Log.d(TAG, "Old update interval: " + UPDATE_INTERVAL_IN_SEC + " sec");
+
+        int newUpdateIntervalInSec = (int) Math.round(1.0 / event.getCollectionFrequency());
+
+        Log.d(TAG, "New update interval: " + newUpdateIntervalInSec + " sec");
+
+        setUpdateIntervalInSec(newUpdateIntervalInSec);
+    }
+
+    public int getUpdateIntervalInSec() {
+        return UPDATE_INTERVAL_IN_SEC;
+    }
+
+    public void setUpdateIntervalInSec(int updateIntervalInSec) {
+        UPDATE_INTERVAL_IN_SEC = updateIntervalInSec;
+    }
+
+    /**
      * Adds new value after summation old ones
      *
      * @param event
@@ -157,7 +189,7 @@ public class LightSensor
 
             return true;
         } else {
-            if (event.timestamp < (startTimestamp + UPDATE_INTERVAL * 1_000_000_000l)) {
+            if (event.timestamp < (startTimestamp + UPDATE_INTERVAL_IN_SEC * 1_000_000_000l)) {
 
                 mLastValue += Math.abs(event.values[0]);
                 numValues++;

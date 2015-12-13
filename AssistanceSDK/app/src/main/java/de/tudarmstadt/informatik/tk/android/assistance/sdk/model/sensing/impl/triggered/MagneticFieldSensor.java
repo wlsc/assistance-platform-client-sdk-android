@@ -11,6 +11,7 @@ import java.util.Date;
 import java.util.Locale;
 
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbMagneticFieldSensor;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.event.UpdateSensorIntervalEvent;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.DtoType;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensing.AbstractTriggeredEvent;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.util.DateUtils;
@@ -25,8 +26,8 @@ public class MagneticFieldSensor extends AbstractTriggeredEvent implements Senso
     private static final String TAG = MagneticFieldSensor.class.getSimpleName();
 
     // ------------------- Configuration -------------------
-    private static final int SENSOR_DELAY_BETWEEN_TWO_EVENTS = SensorManager.SENSOR_DELAY_NORMAL;
-    private static final int UPDATE_INTERVAL = 10;    // in seconds
+    private static final int DELAY_BETWEEN_TWO_EVENTS = SensorManager.SENSOR_DELAY_NORMAL;
+    private int UPDATE_INTERVAL_IN_SEC = 10;
     // -----------------------------------------------------
 
     private long mLastEventDumpingTimestamp;    // in nanoseconds
@@ -146,13 +147,13 @@ public class MagneticFieldSensor extends AbstractTriggeredEvent implements Senso
             if (mMagneticFieldSensor != null) {
                 mSensorManager.registerListener(this,
                         mMagneticFieldSensor,
-                        SENSOR_DELAY_BETWEEN_TWO_EVENTS);
+                        DELAY_BETWEEN_TWO_EVENTS);
             }
 
             if (mMagneticFieldUncalibratedSensor != null) {
                 mSensorManager.registerListener(this,
                         mMagneticFieldUncalibratedSensor,
-                        SENSOR_DELAY_BETWEEN_TWO_EVENTS);
+                        DELAY_BETWEEN_TWO_EVENTS);
             }
 
             if (mMagneticFieldSensor != null || mMagneticFieldUncalibratedSensor != null) {
@@ -226,27 +227,27 @@ public class MagneticFieldSensor extends AbstractTriggeredEvent implements Senso
         /**
          * Uncalibrated data
          */
-        if (xUncalibratedNoHardIron != 0.0) {
+        if (xUncalibratedNoHardIron != 0.0f) {
             magneticFieldSensor.setXUncalibratedNoHardIron(xUncalibratedNoHardIron);
         }
 
-        if (yUncalibratedNoHardIron != 0.0) {
+        if (yUncalibratedNoHardIron != 0.0f) {
             magneticFieldSensor.setYUncalibratedNoHardIron(yUncalibratedNoHardIron);
         }
 
-        if (zUncalibratedNoHardIron != 0.0) {
+        if (zUncalibratedNoHardIron != 0.0f) {
             magneticFieldSensor.setZUncalibratedNoHardIron(zUncalibratedNoHardIron);
         }
 
-        if (xUncalibratedEstimatedIronBias != 0.0) {
+        if (xUncalibratedEstimatedIronBias != 0.0f) {
             magneticFieldSensor.setXUncalibratedEstimatedIronBias(xUncalibratedEstimatedIronBias);
         }
 
-        if (yUncalibratedEstimatedIronBias != 0.0) {
+        if (yUncalibratedEstimatedIronBias != 0.0f) {
             magneticFieldSensor.setYUncalibratedEstimatedIronBias(yUncalibratedEstimatedIronBias);
         }
 
-        if (zUncalibratedEstimatedIronBias != 0.0) {
+        if (zUncalibratedEstimatedIronBias != 0.0f) {
             magneticFieldSensor.setZUncalibratedEstimatedIronBias(zUncalibratedEstimatedIronBias);
         }
 
@@ -258,6 +259,37 @@ public class MagneticFieldSensor extends AbstractTriggeredEvent implements Senso
         daoProvider.getMagneticFieldSensorDao().insert(magneticFieldSensor);
 
         Log.d(TAG, "Finished");
+    }
+
+    /**
+     * Update intervals
+     *
+     * @param event
+     */
+    @Override
+    public void onEvent(UpdateSensorIntervalEvent event) {
+
+        // only accept this sensor topic type
+        if (event.getTopic() != getType()) {
+            return;
+        }
+
+        Log.d(TAG, "onUpdate interval");
+        Log.d(TAG, "Old update interval: " + UPDATE_INTERVAL_IN_SEC + " sec");
+
+        int newUpdateIntervalInSec = (int) Math.round(1.0 / event.getCollectionFrequency());
+
+        Log.d(TAG, "New update interval: " + newUpdateIntervalInSec + " sec");
+
+        setUpdateIntervalInSec(newUpdateIntervalInSec);
+    }
+
+    public int getUpdateIntervalInSec() {
+        return UPDATE_INTERVAL_IN_SEC;
+    }
+
+    public void setUpdateIntervalInSec(int updateIntervalInSec) {
+        UPDATE_INTERVAL_IN_SEC = updateIntervalInSec;
     }
 
     /**
@@ -274,7 +306,7 @@ public class MagneticFieldSensor extends AbstractTriggeredEvent implements Senso
         } else {
 
             // the time has come -> save data into db
-            if ((timestamp - mLastEventDumpingTimestamp) / 1_000_000_000 > UPDATE_INTERVAL) {
+            if ((timestamp - mLastEventDumpingTimestamp) / 1_000_000_000 > UPDATE_INTERVAL_IN_SEC) {
                 return true;
             }
         }

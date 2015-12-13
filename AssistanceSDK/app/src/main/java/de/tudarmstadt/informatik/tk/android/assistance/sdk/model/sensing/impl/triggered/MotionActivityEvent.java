@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.Locale;
 
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbMotionActivityEvent;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.event.UpdateSensorIntervalEvent;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.DtoType;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensing.AbstractTriggeredEvent;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.service.ActivitySensorService;
@@ -38,14 +39,14 @@ public class MotionActivityEvent extends
     private static final String TAG = MotionActivityEvent.class.getSimpleName();
 
     // ------------------- Configuration -------------------
-    private static final int DETECTION_INTERVAL_IN_SEC = 5;
+    private int UPDATE_INTERVAL_IN_SEC = 5;
     // -----------------------------------------------------
 
     private GoogleApiClient mGoogleApiClient;
 
     private PendingIntent mActivityRecognitionPendingIntent;
 
-    private static final int CONNECTION_FAILURE_RESOLUTION_REQUEST = 9000;
+    private static final int CONNECTION_FAILURE_RESOLUTION_REQUEST = 9_000;
 
     private static MotionActivityEvent INSTANCE;
 
@@ -228,7 +229,7 @@ public class MotionActivityEvent extends
 
             ActivityRecognition.ActivityRecognitionApi.requestActivityUpdates(
                     mGoogleApiClient,
-                    DETECTION_INTERVAL_IN_SEC * 1_000,
+                    UPDATE_INTERVAL_IN_SEC * 1_000,
                     mActivityRecognitionPendingIntent);
 
             // Indicate that a request is in progress
@@ -244,6 +245,45 @@ public class MotionActivityEvent extends
                 .addConnectionCallbacks(this)
                 .addOnConnectionFailedListener(this)
                 .build();
+    }
+
+    public int getUpdateIntervalInSec() {
+        return UPDATE_INTERVAL_IN_SEC;
+    }
+
+    public void setUpdateIntervalInSec(int updateIntervalInSec) {
+        UPDATE_INTERVAL_IN_SEC = updateIntervalInSec;
+    }
+
+    /**
+     * Update intervals
+     *
+     * @param event
+     */
+    @Override
+    public void onEvent(UpdateSensorIntervalEvent event) {
+
+        // only accept this sensor topic type
+        if (event.getTopic() != getType()) {
+            return;
+        }
+
+        Log.d(TAG, "onUpdate interval");
+        Log.d(TAG, "Old update interval: " + UPDATE_INTERVAL_IN_SEC + " sec");
+
+        int newUpdateIntervalInSec = (int) Math.round(1.0 / event.getCollectionFrequency());
+
+        Log.d(TAG, "New update interval: " + newUpdateIntervalInSec + " sec");
+
+        setUpdateIntervalInSec(newUpdateIntervalInSec);
+
+        if (mGoogleApiClient.isConnected()) {
+
+            ActivityRecognition.ActivityRecognitionApi.requestActivityUpdates(
+                    mGoogleApiClient,
+                    UPDATE_INTERVAL_IN_SEC * 1_000,
+                    mActivityRecognitionPendingIntent);
+        }
     }
 
     @Override

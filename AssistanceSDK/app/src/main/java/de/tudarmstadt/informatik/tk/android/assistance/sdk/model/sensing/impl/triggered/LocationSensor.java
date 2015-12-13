@@ -41,14 +41,14 @@ public class LocationSensor extends
     // Accuracy
     private static final int ACCURACY = LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY;
     // Update frequency in seconds
-    private static int UPDATE_INTERVAL_IN_SEC = 20;
+    private int UPDATE_INTERVAL_IN_SEC = 20;
     // The fastest update frequency, in seconds
-    private static int FASTEST_INTERVAL_IN_SEC = 15;
+    private int FASTEST_INTERVAL_IN_SEC = 15;
     //-----------------------------------------------------
 
     private GoogleApiClient mGoogleApiClient;
 
-    private final static int CONNECTION_FAILURE_RESOLUTION_REQUEST = 9_000;
+    private static final int CONNECTION_FAILURE_RESOLUTION_REQUEST = 9_000;
 
     private Double latitude;
     private Double longitude;
@@ -99,6 +99,11 @@ public class LocationSensor extends
      */
     @Override
     public void onEvent(UpdateSensorIntervalEvent event) {
+
+        // only accept this sensor topic type
+        if (event.getTopic() != getType()) {
+            return;
+        }
 
         Log.d(TAG, "onUpdate interval");
         Log.d(TAG, "Old fastest interval: " + FASTEST_INTERVAL_IN_SEC + " sec");

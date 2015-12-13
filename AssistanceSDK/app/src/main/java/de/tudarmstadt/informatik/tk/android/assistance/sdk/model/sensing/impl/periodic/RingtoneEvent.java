@@ -7,6 +7,7 @@ import java.util.Date;
 import java.util.Locale;
 
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbRingtoneEvent;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.event.UpdateSensorIntervalEvent;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.DtoType;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensing.AbstractPeriodicEvent;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.event.RingtoneEventDao;
@@ -22,7 +23,7 @@ public class RingtoneEvent extends AbstractPeriodicEvent {
 
     private static final String TAG = RingtoneEventDao.class.getSimpleName();
 
-    private static final int INIT_DATA_INTERVAL_IN_SEC = 60;
+    private int UPDATE_INTERVAL_IN_SEC = 60;
 
     private AudioManager audioManager;
     private int lastRingerMode = -1;
@@ -30,7 +31,7 @@ public class RingtoneEvent extends AbstractPeriodicEvent {
     public RingtoneEvent(Context context) {
         super(context);
 
-        setDataIntervalInSec(INIT_DATA_INTERVAL_IN_SEC);
+        setDataIntervalInSec(UPDATE_INTERVAL_IN_SEC);
         audioManager = (AudioManager) this.context.getSystemService(Context.AUDIO_SERVICE);
     }
 
@@ -80,4 +81,27 @@ public class RingtoneEvent extends AbstractPeriodicEvent {
         }
     }
 
+    /**
+     * Update intervals
+     *
+     * @param event
+     */
+    @Override
+    public void onEvent(UpdateSensorIntervalEvent event) {
+
+        // only accept this sensor topic type
+        if (event.getTopic() != getType()) {
+            return;
+        }
+
+        Log.d(TAG, "onUpdate interval");
+        Log.d(TAG, "Old update interval: " + UPDATE_INTERVAL_IN_SEC + " sec");
+
+        int newUpdateIntervalInSec = (int) Math.round(1.0 / event.getCollectionFrequency());
+
+        Log.d(TAG, "New update interval: " + newUpdateIntervalInSec + " sec");
+
+        this.UPDATE_INTERVAL_IN_SEC = newUpdateIntervalInSec;
+        setDataIntervalInSec(newUpdateIntervalInSec);
+    }
 }

@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Locale;
 
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbRunningServicesEvent;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.event.UpdateSensorIntervalEvent;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.DtoType;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensing.AbstractPeriodicEvent;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.util.DateUtils;
@@ -25,7 +26,7 @@ public class RunningServicesReaderEvent extends AbstractPeriodicEvent {
 
     private static final String TAG = RunningServicesReaderEvent.class.getSimpleName();
 
-    private static final int INIT_DATA_INTERVAL_IN_SEC = 30;
+    private int UPDATE_INTERVAL_IN_SEC = 30;
 
     private static final int MAXIMUM_SERVICES = Integer.MAX_VALUE;
 
@@ -34,6 +35,7 @@ public class RunningServicesReaderEvent extends AbstractPeriodicEvent {
 
     public RunningServicesReaderEvent(Context context) {
         super(context);
+        setDataIntervalInSec(UPDATE_INTERVAL_IN_SEC);
     }
 
     @Override
@@ -104,6 +106,30 @@ public class RunningServicesReaderEvent extends AbstractPeriodicEvent {
 
     @Override
     protected int getDataIntervalInSec() {
-        return INIT_DATA_INTERVAL_IN_SEC;
+        return UPDATE_INTERVAL_IN_SEC;
+    }
+
+    /**
+     * Update intervals
+     *
+     * @param event
+     */
+    @Override
+    public void onEvent(UpdateSensorIntervalEvent event) {
+
+        // only accept this sensor topic type
+        if (event.getTopic() != getType()) {
+            return;
+        }
+
+        Log.d(TAG, "onUpdate interval");
+        Log.d(TAG, "Old update interval: " + UPDATE_INTERVAL_IN_SEC + " sec");
+
+        int newUpdateIntervalInSec = (int) Math.round(1.0 / event.getCollectionFrequency());
+
+        Log.d(TAG, "New update interval: " + newUpdateIntervalInSec + " sec");
+
+        this.UPDATE_INTERVAL_IN_SEC = newUpdateIntervalInSec;
+        setDataIntervalInSec(newUpdateIntervalInSec);
     }
 }

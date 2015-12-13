@@ -194,7 +194,7 @@ public class ConnectionSensor extends AbstractTriggeredEvent {
 
         ssid = null;
         bssid = null;
-        channel = -0;
+        channel = 0;
         frequency = 0;
         linkSpeed = 0;
         signalStrength = 0;
