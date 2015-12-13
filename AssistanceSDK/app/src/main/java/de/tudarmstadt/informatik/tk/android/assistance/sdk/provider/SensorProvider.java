@@ -156,16 +156,16 @@ public class SensorProvider {
          *  Content observers
          */
 
-        BrowserHistoryEvent browserHistoryEvent = new BrowserHistoryEvent(mContext);
+        BrowserHistoryEvent browserHistoryEvent = BrowserHistoryEvent.getInstance(mContext);
         availableSensors.add(browserHistoryEvent);
 
-        CalendarEvent calendarEvent = new CalendarEvent(mContext);
+        CalendarEvent calendarEvent = CalendarEvent.getInstance(mContext);
         availableSensors.add(calendarEvent);
 
-        ContactsEvent contactsEvent = new ContactsEvent(mContext);
+        ContactsEvent contactsEvent = ContactsEvent.getInstance(mContext);
         availableSensors.add(contactsEvent);
 
-        CallLogEvent callLogEvent = new CallLogEvent(mContext);
+        CallLogEvent callLogEvent = CallLogEvent.getInstance(mContext);
         availableSensors.add(callLogEvent);
 
 

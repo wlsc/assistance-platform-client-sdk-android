@@ -17,6 +17,8 @@ public class BrowserHistoryEvent extends AbstractContentObserverEvent {
 
     private static final String TAG = BrowserHistoryEvent.class.getSimpleName();
 
+    private static BrowserHistoryEvent INSTANCE;
+
     // this one was deleted in SDK 23
     //        protected static final Uri URI_BROWSER_HISTORY = Browser.BOOKMARKS_URI;
     private static final Uri URI_CHROME_BOOKMARKS = Uri.parse("content://com.android.chrome.browser/bookmarks");
@@ -29,8 +31,23 @@ public class BrowserHistoryEvent extends AbstractContentObserverEvent {
     private Method m_checkDifferenceMethodForHistoryChange;
     private Method m_getKeyMethodForSensorContact;
 
-    public BrowserHistoryEvent(Context context) {
+    private BrowserHistoryEvent(Context context) {
         super(context);
+    }
+
+    /**
+     * Gives singleton of this class
+     *
+     * @param context
+     * @return
+     */
+    public static BrowserHistoryEvent getInstance(Context context) {
+
+        if (INSTANCE == null) {
+            INSTANCE = new BrowserHistoryEvent(context);
+        }
+
+        return INSTANCE;
     }
 
     @Override

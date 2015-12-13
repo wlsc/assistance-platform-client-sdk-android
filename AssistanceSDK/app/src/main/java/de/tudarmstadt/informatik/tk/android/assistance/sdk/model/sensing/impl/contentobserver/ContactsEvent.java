@@ -31,6 +31,8 @@ public class ContactsEvent extends AbstractContentObserverEvent {
 
     private static final String TAG = ContactsEvent.class.getSimpleName();
 
+    private static ContactsEvent INSTANCE;
+
     private static final Uri URI_EMAIL = Email.CONTENT_URI;
     private static final Uri URI_DATA = Data.CONTENT_URI;
     private static final Uri URI_PHONE = Phone.CONTENT_URI;
@@ -39,8 +41,23 @@ public class ContactsEvent extends AbstractContentObserverEvent {
 
     private AsyncTask<Void, Void, Void> syncingTask;
 
-    public ContactsEvent(Context context) {
+    private ContactsEvent(Context context) {
         super(context);
+    }
+
+    /**
+     * Gives singleton of this class
+     *
+     * @param context
+     * @return
+     */
+    public static ContactsEvent getInstance(Context context) {
+
+        if (INSTANCE == null) {
+            INSTANCE = new ContactsEvent(context);
+        }
+
+        return INSTANCE;
     }
 
     @Override
@@ -430,7 +447,7 @@ public class ContactsEvent extends AbstractContentObserverEvent {
     }
 
     private boolean checkForContactChange(Map<Long, DbContactEvent> map, DbContactEvent newItem) {
-        
+
         long id = newItem.getContactId();
         DbContactEvent existingReminder = map.get(id);
 

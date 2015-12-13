@@ -30,14 +30,31 @@ public class CallLogEvent extends AbstractContentObserverEvent {
 
     private static final String TAG = CallLogEvent.class.getSimpleName();
 
+    private static CallLogEvent INSTANCE;
+
     protected static final Uri URI_CALL_LOG = android.provider.CallLog.Calls.CONTENT_URI;
 
     private AsyncTask<Void, Void, Void> syncingTask;
 
     private List<DbCallLogEvent> events = new ArrayList<>();
 
-    public CallLogEvent(Context context) {
+    private CallLogEvent(Context context) {
         super(context);
+    }
+
+    /**
+     * Gives singleton of this class
+     *
+     * @param context
+     * @return
+     */
+    public static CallLogEvent getInstance(Context context) {
+
+        if (INSTANCE == null) {
+            INSTANCE = new CallLogEvent(context);
+        }
+
+        return INSTANCE;
     }
 
     @Override

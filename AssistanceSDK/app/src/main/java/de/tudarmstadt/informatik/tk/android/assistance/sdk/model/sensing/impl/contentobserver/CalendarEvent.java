@@ -27,14 +27,12 @@ public class CalendarEvent extends AbstractContentObserverEvent {
 
     private static final String TAG = CalendarEvent.class.getSimpleName();
 
+    private static CalendarEvent INSTANCE;
+
     private static final Uri URI_CALENDAR = android.provider.CalendarContract.Events.CONTENT_URI;
     private static final Uri URI_REMINDER = android.provider.CalendarContract.Reminders.CONTENT_URI;
 
     private AsyncTask<Void, Void, Void> syncingTask;
-
-    public CalendarEvent(Context context) {
-        super(context);
-    }
 
     private static final String[] PROJECTION_EVENTS =
             {
@@ -67,6 +65,25 @@ public class CalendarEvent extends AbstractContentObserverEvent {
                     Reminders._ID,
                     Reminders.METHOD,
                     Reminders.MINUTES};
+
+    private CalendarEvent(Context context) {
+        super(context);
+    }
+
+    /**
+     * Gives singleton of this class
+     *
+     * @param context
+     * @return
+     */
+    public static CalendarEvent getInstance(Context context) {
+
+        if (INSTANCE == null) {
+            INSTANCE = new CalendarEvent(context);
+        }
+
+        return INSTANCE;
+    }
 
     @Override
     public int getType() {
