@@ -215,7 +215,7 @@ public class SensorProvider {
          * Save them in map for further fast access
          */
         for (ISensor sensor : enabledSensors) {
-            
+
             enabledSensorByType.put(sensor.getType(), sensor);
 
             if (!EventBus.getDefault().isRegistered(sensor)) {
@@ -312,7 +312,7 @@ public class SensorProvider {
      * @return
      */
     public ISensor getEnabledSensor(int type) {
-        return availableSensorByType.get(type);
+        return enabledSensorByType.get(type);
     }
 
     /**
