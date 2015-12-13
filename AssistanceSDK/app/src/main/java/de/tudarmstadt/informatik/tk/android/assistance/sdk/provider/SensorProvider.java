@@ -130,26 +130,26 @@ public class SensorProvider {
          * Periodic events / sensors
          */
 
-        PowerLevelEvent powerLevelEvent = new PowerLevelEvent(mContext);
+        PowerLevelEvent powerLevelEvent = PowerLevelEvent.getInstance(mContext);
         availableSensors.add(powerLevelEvent);
 
-        BackgroundTrafficEvent backgroundTrafficEvent = new BackgroundTrafficEvent(mContext);
+        BackgroundTrafficEvent backgroundTrafficEvent = BackgroundTrafficEvent.getInstance(mContext);
         availableSensors.add(backgroundTrafficEvent);
 
-        RingtoneEvent ringtoneEvent = new RingtoneEvent(mContext);
+        RingtoneEvent ringtoneEvent = RingtoneEvent.getInstance(mContext);
         availableSensors.add(ringtoneEvent);
 
         // loudness sensor is blocking microphone and consuming too much battery
-        LoudnessSensor loudnessSensor = new LoudnessSensor(mContext);
+        LoudnessSensor loudnessSensor = LoudnessSensor.getInstance(mContext);
         availableSensors.add(loudnessSensor);
 
-        RunningProcessesReaderEvent runningProcessesReaderEvent = new RunningProcessesReaderEvent(mContext);
+        RunningProcessesReaderEvent runningProcessesReaderEvent = RunningProcessesReaderEvent.getInstance(mContext);
         availableSensors.add(runningProcessesReaderEvent);
 
-        RunningTasksReaderEvent runningTasksReaderEvent = new RunningTasksReaderEvent(mContext);
+        RunningTasksReaderEvent runningTasksReaderEvent = RunningTasksReaderEvent.getInstance(mContext);
         availableSensors.add(runningTasksReaderEvent);
 
-        RunningServicesReaderEvent runningServicesReaderEvent = new RunningServicesReaderEvent(mContext);
+        RunningServicesReaderEvent runningServicesReaderEvent = RunningServicesReaderEvent.getInstance(mContext);
         availableSensors.add(runningServicesReaderEvent);
 
         /*

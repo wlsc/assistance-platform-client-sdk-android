@@ -25,6 +25,8 @@ public class RunningTasksReaderEvent extends AbstractPeriodicEvent {
 
     private static final String TAG = RunningTasksReaderEvent.class.getSimpleName();
 
+    private static RunningTasksReaderEvent INSTANCE;
+
     private static final int MAXIMUM_TASKS = 10;
 
     public int UPDATE_INTERVAL_IN_SEC = 30;
@@ -35,13 +37,28 @@ public class RunningTasksReaderEvent extends AbstractPeriodicEvent {
     private String currentTaskName;
     private int currentStackPosition;
 
-    public RunningTasksReaderEvent(Context context) {
+    private RunningTasksReaderEvent(Context context) {
         super(context);
 
         setDataIntervalInSec(UPDATE_INTERVAL_IN_SEC);
 
         mActivityManager = (ActivityManager) context
                 .getSystemService(Context.ACTIVITY_SERVICE);
+    }
+
+    /**
+     * Gives singleton of this class
+     *
+     * @param context
+     * @return
+     */
+    public static RunningTasksReaderEvent getInstance(Context context) {
+
+        if (INSTANCE == null) {
+            INSTANCE = new RunningTasksReaderEvent(context);
+        }
+
+        return INSTANCE;
     }
 
     @Override

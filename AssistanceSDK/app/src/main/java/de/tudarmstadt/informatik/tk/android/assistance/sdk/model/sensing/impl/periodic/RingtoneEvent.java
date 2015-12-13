@@ -23,16 +23,33 @@ public class RingtoneEvent extends AbstractPeriodicEvent {
 
     private static final String TAG = RingtoneEventDao.class.getSimpleName();
 
+    private static RingtoneEvent INSTANCE;
+
     private int UPDATE_INTERVAL_IN_SEC = 60;
 
     private AudioManager audioManager;
     private int lastRingerMode = -1;
 
-    public RingtoneEvent(Context context) {
+    private RingtoneEvent(Context context) {
         super(context);
 
         setDataIntervalInSec(UPDATE_INTERVAL_IN_SEC);
         audioManager = (AudioManager) this.context.getSystemService(Context.AUDIO_SERVICE);
+    }
+
+    /**
+     * Gives singleton of this class
+     *
+     * @param context
+     * @return
+     */
+    public static RingtoneEvent getInstance(Context context) {
+
+        if (INSTANCE == null) {
+            INSTANCE = new RingtoneEvent(context);
+        }
+
+        return INSTANCE;
     }
 
     @Override

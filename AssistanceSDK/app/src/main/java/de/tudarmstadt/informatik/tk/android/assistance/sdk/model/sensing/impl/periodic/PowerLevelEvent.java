@@ -21,14 +21,31 @@ public class PowerLevelEvent extends AbstractPeriodicEvent {
 
     private static final String TAG = PowerLevelEvent.class.getSimpleName();
 
+    private static PowerLevelEvent INSTANCE;
+
     private int UPDATE_INTERVAL_IN_SEC = 900;
 
     private float lastPercentValue;
 
-    public PowerLevelEvent(Context context) {
+    private PowerLevelEvent(Context context) {
         super(context);
 
         setDataIntervalInSec(UPDATE_INTERVAL_IN_SEC);
+    }
+
+    /**
+     * Gives singleton of this class
+     *
+     * @param context
+     * @return
+     */
+    public static PowerLevelEvent getInstance(Context context) {
+
+        if (INSTANCE == null) {
+            INSTANCE = new PowerLevelEvent(context);
+        }
+
+        return INSTANCE;
     }
 
     @Override

@@ -34,6 +34,8 @@ public class BackgroundTrafficEvent extends AbstractPeriodicEvent {
 
     private static final String TAG = BackgroundTrafficEvent.class.getSimpleName();
 
+    private static BackgroundTrafficEvent INSTANCE;
+
     private int UPDATE_INTERVAL_IN_SEC = 5 * 60;
 
     private PackageManager packageManager;
@@ -43,7 +45,7 @@ public class BackgroundTrafficEvent extends AbstractPeriodicEvent {
      *
      * @param context global information about assistance app
      */
-    public BackgroundTrafficEvent(Context context) {
+    private BackgroundTrafficEvent(Context context) {
         super(context);
 
         setDataIntervalInSec(UPDATE_INTERVAL_IN_SEC);
@@ -75,6 +77,21 @@ public class BackgroundTrafficEvent extends AbstractPeriodicEvent {
         Log.d(TAG, "Finished");
 
         getData();
+    }
+
+    /**
+     * Gives singleton of this class
+     *
+     * @param context
+     * @return
+     */
+    public static BackgroundTrafficEvent getInstance(Context context) {
+
+        if (INSTANCE == null) {
+            INSTANCE = new BackgroundTrafficEvent(context);
+        }
+
+        return INSTANCE;
     }
 
     /**

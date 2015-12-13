@@ -31,6 +31,8 @@ public class LoudnessSensor extends AbstractPeriodicEvent implements Callback {
 
     private static final String TAG = LoudnessSensor.class.getSimpleName();
 
+    private static LoudnessSensor INSTANCE;
+
     private int UPDATE_INTERVAL_IN_SEC = 120;
 
     public static final int AUDIO_BLOCK = 0;
@@ -107,7 +109,7 @@ public class LoudnessSensor extends AbstractPeriodicEvent implements Callback {
         }
     }
 
-    public LoudnessSensor(Context context) {
+    private LoudnessSensor(Context context) {
         super(context);
 
         setDataIntervalInSec(UPDATE_INTERVAL_IN_SEC);
@@ -119,6 +121,21 @@ public class LoudnessSensor extends AbstractPeriodicEvent implements Callback {
         if (tManager != null) {
             tManager.listen(mPhoneListener, PhoneListener.LISTEN_CALL_STATE);
         }
+    }
+
+    /**
+     * Gives singleton of this class
+     *
+     * @param context
+     * @return
+     */
+    public static LoudnessSensor getInstance(Context context) {
+
+        if (INSTANCE == null) {
+            INSTANCE = new LoudnessSensor(context);
+        }
+
+        return INSTANCE;
     }
 
     @Override

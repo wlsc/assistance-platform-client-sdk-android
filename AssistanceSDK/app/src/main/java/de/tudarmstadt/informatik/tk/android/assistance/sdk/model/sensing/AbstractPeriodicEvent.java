@@ -23,7 +23,7 @@ public abstract class AbstractPeriodicEvent extends AbstractSensor {
     protected boolean mLooperPrepared;
 
     // ------------------- Configuration -------------------
-    private int DATA_INTERVAL_IN_SEC = 600;
+    private int UPDATE_INTERVAL_IN_SEC = 600;
     // -----------------------------------------------------
 
     public AbstractPeriodicEvent(Context context) {
@@ -70,12 +70,12 @@ public abstract class AbstractPeriodicEvent extends AbstractSensor {
     abstract protected void getData();
 
     protected int getDataIntervalInSec() {
-        return DATA_INTERVAL_IN_SEC;
+        return UPDATE_INTERVAL_IN_SEC;
     }
 
     protected void setDataIntervalInSec(int sec) {
 
-        DATA_INTERVAL_IN_SEC = sec;
+        UPDATE_INTERVAL_IN_SEC = sec;
         
         if (mFuture != null) {
             stopSensor();

@@ -26,6 +26,8 @@ public class RunningServicesReaderEvent extends AbstractPeriodicEvent {
 
     private static final String TAG = RunningServicesReaderEvent.class.getSimpleName();
 
+    private static RunningServicesReaderEvent INSTANCE;
+
     private int UPDATE_INTERVAL_IN_SEC = 30;
 
     private static final int MAXIMUM_SERVICES = Integer.MAX_VALUE;
@@ -33,9 +35,25 @@ public class RunningServicesReaderEvent extends AbstractPeriodicEvent {
     private List<String> lastServicePackageNames = new ArrayList<>();
     private List<String> lastServiceClassNames = new ArrayList<>();
 
-    public RunningServicesReaderEvent(Context context) {
+    private RunningServicesReaderEvent(Context context) {
         super(context);
+
         setDataIntervalInSec(UPDATE_INTERVAL_IN_SEC);
+    }
+
+    /**
+     * Gives singleton of this class
+     *
+     * @param context
+     * @return
+     */
+    public static RunningServicesReaderEvent getInstance(Context context) {
+
+        if (INSTANCE == null) {
+            INSTANCE = new RunningServicesReaderEvent(context);
+        }
+
+        return INSTANCE;
     }
 
     @Override

@@ -25,6 +25,8 @@ public class RunningProcessesReaderEvent extends AbstractPeriodicEvent {
 
     private static final String TAG = RunningProcessesReaderEvent.class.getSimpleName();
 
+    private static RunningProcessesReaderEvent INSTANCE;
+
     private int UPDATE_INTERVAL_IN_SEC = 30;
 
     private ActivityManager mActivityManager;
@@ -32,11 +34,26 @@ public class RunningProcessesReaderEvent extends AbstractPeriodicEvent {
 
     private String currentProcessName = "";
 
-    public RunningProcessesReaderEvent(Context context) {
+    private RunningProcessesReaderEvent(Context context) {
         super(context);
 
         setDataIntervalInSec(UPDATE_INTERVAL_IN_SEC);
         mActivityManager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+    }
+
+    /**
+     * Gives singleton of this class
+     *
+     * @param context
+     * @return
+     */
+    public static RunningProcessesReaderEvent getInstance(Context context) {
+
+        if (INSTANCE == null) {
+            INSTANCE = new RunningProcessesReaderEvent(context);
+        }
+
+        return INSTANCE;
     }
 
     @Override
