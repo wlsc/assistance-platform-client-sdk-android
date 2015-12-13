@@ -6,6 +6,7 @@ import android.support.v4.util.SparseArrayCompat;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.greenrobot.event.EventBus;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbModule;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbModuleCapability;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbUser;
@@ -214,7 +215,12 @@ public class SensorProvider {
          * Save them in map for further fast access
          */
         for (ISensor sensor : enabledSensors) {
+            
             enabledSensorByType.put(sensor.getType(), sensor);
+
+            if (!EventBus.getDefault().isRegistered(sensor)) {
+                EventBus.getDefault().register(sensor);
+            }
         }
 
         Log.d(TAG, "Finished. Number of sensors: " + enabledSensors.size());
