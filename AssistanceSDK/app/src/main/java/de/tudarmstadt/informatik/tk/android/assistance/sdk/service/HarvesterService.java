@@ -15,8 +15,9 @@ import android.support.v4.app.NotificationCompat;
 
 import com.google.android.gms.gcm.GcmNetworkManager;
 
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.Config;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.R;
@@ -53,7 +54,7 @@ public class HarvesterService extends Service implements Callback {
     private final Messenger messenger = new Messenger(new Handler(this));
 
     // clients that wants to communicate with this service
-    private List<Messenger> mClients = new ArrayList<>();
+    private Set<Messenger> mClients = new HashSet<>();
 
     private SensorProvider mSensorProvider;
     private PreferenceProvider mPreferenceProvider;
