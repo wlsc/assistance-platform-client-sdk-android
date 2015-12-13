@@ -34,6 +34,8 @@ public class GyroscopeSensor extends
     private int UPDATE_INTERVAL_IN_SEC = 10;
     // -----------------------------------------------------
 
+    private static GyroscopeSensor INSTANCE;
+
     private long mLastEventDumpingTimestamp;    // in nanoseconds
 
     private SensorManager mSensorManager;
@@ -52,7 +54,7 @@ public class GyroscopeSensor extends
     private float yUncalibratedEstimatedDrift;
     private float zUncalibratedEstimatedDrift;
 
-    public GyroscopeSensor(Context context) {
+    private GyroscopeSensor(Context context) {
         super(context);
 
         mSensorManager = (SensorManager) context
@@ -65,6 +67,21 @@ public class GyroscopeSensor extends
             mGyroscopeUncalibratedSensor = mSensorManager
                     .getDefaultSensor(Sensor.TYPE_GYROSCOPE_UNCALIBRATED);
         }
+    }
+
+    /**
+     * Returns singleton of this class
+     *
+     * @param context
+     * @return
+     */
+    public static GyroscopeSensor getInstance(Context context) {
+
+        if (INSTANCE == null) {
+            INSTANCE = new GyroscopeSensor(context);
+        }
+
+        return INSTANCE;
     }
 
     /**

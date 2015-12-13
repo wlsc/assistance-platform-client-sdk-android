@@ -32,6 +32,8 @@ public class AccelerometerSensor extends
     private int UPDATE_INTERVAL_IN_SEC = 5;
     // -----------------------------------------------------
 
+    private static AccelerometerSensor INSTANCE;
+
     private SensorManager mSensorManager;
     private Sensor mSensor;
 
@@ -42,14 +44,30 @@ public class AccelerometerSensor extends
     private int accuracy;
     private int numValues;
 
-    public AccelerometerSensor(Context context) {
+    private AccelerometerSensor(Context context) {
         super(context);
 
         mSensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
         mSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
     }
 
+    /**
+     * Returns singleton of this class
+     *
+     * @param context
+     * @return
+     */
+    public static AccelerometerSensor getInstance(Context context) {
+
+        if (INSTANCE == null) {
+            INSTANCE = new AccelerometerSensor(context);
+        }
+
+        return INSTANCE;
+    }
+
     @Override
+
     public void dumpData() {
 
         if (numValues > 0) {

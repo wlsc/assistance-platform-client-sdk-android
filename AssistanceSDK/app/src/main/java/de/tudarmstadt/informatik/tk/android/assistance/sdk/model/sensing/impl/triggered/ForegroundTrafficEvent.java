@@ -37,6 +37,8 @@ public class ForegroundTrafficEvent extends AbstractTriggeredEvent {
 
     private static final String TAG = ForegroundTrafficEvent.class.getSimpleName();
 
+    private static ForegroundTrafficEvent INSTANCE;
+
     private static String EVENT_SCREEN_OFF = "0";
     private static String EVENT_SCREEN_ON = "1";
     public static String EVENT_START_ASSISTANCE = "2";
@@ -54,7 +56,7 @@ public class ForegroundTrafficEvent extends AbstractTriggeredEvent {
      *
      * @param context
      */
-    public ForegroundTrafficEvent(Context context) {
+    private ForegroundTrafficEvent(Context context) {
         super(context);
 
         if (context != null) {
@@ -64,6 +66,21 @@ public class ForegroundTrafficEvent extends AbstractTriggeredEvent {
             mPackageManager = context.getPackageManager();
             mEventFilter = new AccessibilityEventFilterUtils(context);
         }
+    }
+
+    /**
+     * Returns singleton of this class
+     *
+     * @param context
+     * @return
+     */
+    public static ForegroundTrafficEvent getInstance(Context context) {
+
+        if (INSTANCE == null) {
+            INSTANCE = new ForegroundTrafficEvent(context);
+        }
+
+        return INSTANCE;
     }
 
     /**

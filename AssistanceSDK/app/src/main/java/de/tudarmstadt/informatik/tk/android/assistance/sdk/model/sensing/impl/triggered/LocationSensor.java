@@ -46,6 +46,8 @@ public class LocationSensor extends
     private int FASTEST_INTERVAL_IN_SEC = 15;
     //-----------------------------------------------------
 
+    private static LocationSensor INSTANCE;
+
     private GoogleApiClient mGoogleApiClient;
 
     private static final int CONNECTION_FAILURE_RESOLUTION_REQUEST = 9_000;
@@ -57,10 +59,25 @@ public class LocationSensor extends
     private Float speed;
     private Double altitude;
 
-    public LocationSensor(Context context) {
+    private LocationSensor(Context context) {
         super(context);
 
         mGoogleApiClient = getGoogleApiClient();
+    }
+
+    /**
+     * Returns singleton of this class
+     *
+     * @param context
+     * @return
+     */
+    public static LocationSensor getInstance(Context context) {
+
+        if (INSTANCE == null) {
+            INSTANCE = new LocationSensor(context);
+        }
+
+        return INSTANCE;
     }
 
     @NonNull

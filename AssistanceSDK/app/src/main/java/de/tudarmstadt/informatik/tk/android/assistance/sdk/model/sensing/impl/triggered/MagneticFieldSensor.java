@@ -30,6 +30,8 @@ public class MagneticFieldSensor extends AbstractTriggeredEvent implements Senso
     private int UPDATE_INTERVAL_IN_SEC = 10;
     // -----------------------------------------------------
 
+    private static MagneticFieldSensor INSTANCE;
+
     private long mLastEventDumpingTimestamp;    // in nanoseconds
 
     private SensorManager mSensorManager;
@@ -48,7 +50,7 @@ public class MagneticFieldSensor extends AbstractTriggeredEvent implements Senso
     private float yUncalibratedEstimatedIronBias;
     private float zUncalibratedEstimatedIronBias;
 
-    public MagneticFieldSensor(Context context) {
+    private MagneticFieldSensor(Context context) {
         super(context);
 
         mSensorManager = (SensorManager) context
@@ -61,6 +63,21 @@ public class MagneticFieldSensor extends AbstractTriggeredEvent implements Senso
             mMagneticFieldUncalibratedSensor = mSensorManager
                     .getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD_UNCALIBRATED);
         }
+    }
+
+    /**
+     * Returns singleton of this class
+     *
+     * @param context
+     * @return
+     */
+    public static MagneticFieldSensor getInstance(Context context) {
+
+        if (INSTANCE == null) {
+            INSTANCE = new MagneticFieldSensor(context);
+        }
+
+        return INSTANCE;
     }
 
     /**

@@ -32,6 +32,8 @@ public class ConnectionSensor extends AbstractTriggeredEvent {
 
     private static final String TAG = ConnectionReceiver.class.getSimpleName();
 
+    private static ConnectionSensor INSTANCE;
+
     private static ConnectionReceiver mReceiver;
 
     private boolean isMobileDataAvailable;
@@ -55,12 +57,27 @@ public class ConnectionSensor extends AbstractTriggeredEvent {
     private String mobileCarrierCode;
     private String mobileNetworkCode;
 
-    public ConnectionSensor(Context context) {
+    private ConnectionSensor(Context context) {
         super(context);
 
         if (mReceiver == null) {
             mReceiver = new ConnectionReceiver();
         }
+    }
+
+    /**
+     * Returns singleton of this class
+     *
+     * @param context
+     * @return
+     */
+    public static ConnectionSensor getInstance(Context context) {
+
+        if (INSTANCE == null) {
+            INSTANCE = new ConnectionSensor(context);
+        }
+
+        return INSTANCE;
     }
 
     @Override

@@ -66,6 +66,21 @@ public class MotionActivityEvent extends
         mGoogleApiClient = getGoogleApiClient();
     }
 
+    /**
+     * Gives singleton of this class
+     *
+     * @param context
+     * @return
+     */
+    public static MotionActivityEvent getInstance(Context context) {
+
+        if (INSTANCE == null) {
+            INSTANCE = new MotionActivityEvent(context);
+        }
+
+        return INSTANCE;
+    }
+
     @Override
     public void dumpData() {
 
@@ -119,21 +134,6 @@ public class MotionActivityEvent extends
         daoProvider.getMotionActivityEventDao().insert(motionActivityEvent);
 
         Log.d(TAG, "Finished");
-    }
-
-    /**
-     * Gives singleton of this class
-     *
-     * @param context
-     * @return
-     */
-    public static MotionActivityEvent getInstance(Context context) {
-
-        if (INSTANCE == null) {
-            INSTANCE = new MotionActivityEvent(context);
-        }
-
-        return INSTANCE;
     }
 
     @Override

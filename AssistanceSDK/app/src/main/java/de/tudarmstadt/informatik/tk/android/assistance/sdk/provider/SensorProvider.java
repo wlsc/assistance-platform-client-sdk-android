@@ -99,28 +99,28 @@ public class SensorProvider {
          * Triggered events / sensors
          */
 
-        AccelerometerSensor accelerometerSensor = new AccelerometerSensor(mContext);
+        AccelerometerSensor accelerometerSensor = AccelerometerSensor.getInstance(mContext);
         availableSensors.add(accelerometerSensor);
 
-        ConnectionSensor connectionSensor = new ConnectionSensor(mContext);
+        ConnectionSensor connectionSensor = ConnectionSensor.getInstance(mContext);
         availableSensors.add(connectionSensor);
 
-        ForegroundEvent foregroundEvent = new ForegroundEvent(mContext);
+        ForegroundEvent foregroundEvent = ForegroundEvent.getInstance(mContext);
         availableSensors.add(foregroundEvent);
 
-        ForegroundTrafficEvent foregroundTrafficEvent = new ForegroundTrafficEvent(mContext);
+        ForegroundTrafficEvent foregroundTrafficEvent = ForegroundTrafficEvent.getInstance(mContext);
         availableSensors.add(foregroundTrafficEvent);
 
-        GyroscopeSensor gyroscopeSensor = new GyroscopeSensor(mContext);
+        GyroscopeSensor gyroscopeSensor = GyroscopeSensor.getInstance(mContext);
         availableSensors.add(gyroscopeSensor);
 
-        LightSensor lightSensor = new LightSensor(mContext);
+        LightSensor lightSensor = LightSensor.getInstance(mContext);
         availableSensors.add(lightSensor);
 
-        LocationSensor locationSensor = new LocationSensor(mContext);
+        LocationSensor locationSensor = LocationSensor.getInstance(mContext);
         availableSensors.add(locationSensor);
 
-        MagneticFieldSensor magneticFieldSensor = new MagneticFieldSensor(mContext);
+        MagneticFieldSensor magneticFieldSensor = MagneticFieldSensor.getInstance(mContext);
         availableSensors.add(magneticFieldSensor);
 
         MotionActivityEvent motionActivityEvent = MotionActivityEvent.getInstance(mContext);
@@ -313,6 +313,16 @@ public class SensorProvider {
      */
     public ISensor getEnabledSensor(int type) {
         return enabledSensorByType.get(type);
+    }
+
+    /**
+     * Disables an active sensor
+     *
+     * @param type
+     */
+    public void disableSensor(int type) {
+        // TODO
+//        enab
     }
 
     /**

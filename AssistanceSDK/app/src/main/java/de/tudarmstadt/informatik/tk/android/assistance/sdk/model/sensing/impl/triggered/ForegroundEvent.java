@@ -36,6 +36,8 @@ public class ForegroundEvent extends AbstractTriggeredEvent {
 
     private static final String TAG = ForegroundEvent.class.getSimpleName();
 
+    private static ForegroundEvent INSTANCE;
+
     public static final int EVENT_APP = 0;
     public static final int EVENT_ACTIVITY = 1;
     public static final int EVENT_SCREEN_ON = 2;
@@ -56,8 +58,23 @@ public class ForegroundEvent extends AbstractTriggeredEvent {
     private AccessibilityEventFilterUtils mEventFilter;
     private ScreenReceiver mReceiver;
 
-    public ForegroundEvent(Context context) {
+    private ForegroundEvent(Context context) {
         super(context);
+    }
+
+    /**
+     * Returns singleton of this class
+     *
+     * @param context
+     * @return
+     */
+    public static ForegroundEvent getInstance(Context context) {
+
+        if (INSTANCE == null) {
+            INSTANCE = new ForegroundEvent(context);
+        }
+
+        return INSTANCE;
     }
 
     @Override
