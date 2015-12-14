@@ -274,7 +274,7 @@ public class SensorProvider {
      * @return
      */
     public ISensor getAvailableSensor(int type) {
-        return availableSensors.get(type);
+        return availableSensors.valueAt(type);
     }
 
     /**
@@ -293,7 +293,7 @@ public class SensorProvider {
      * @return
      */
     public ISensor getEnabledSensor(int type) {
-        return enabledSensors.get(type);
+        return enabledSensors.valueAt(type);
     }
 
     /**
@@ -302,8 +302,15 @@ public class SensorProvider {
      * @param type
      */
     public void disableSensor(int type) {
-        // TODO
-//        enab
+
+        ISensor sensor = enabledSensors.valueAt(type);
+
+        if (sensor == null) {
+            return;
+        }
+
+        sensor.stopSensor();
+        enabledSensors.removeAt(type);
     }
 
     /**
