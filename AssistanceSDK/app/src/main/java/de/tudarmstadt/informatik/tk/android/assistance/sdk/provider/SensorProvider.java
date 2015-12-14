@@ -1,10 +1,11 @@
 package de.tudarmstadt.informatik.tk.android.assistance.sdk.provider;
 
 import android.content.Context;
-import android.util.SparseArray;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import de.greenrobot.event.EventBus;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbModule;
@@ -46,10 +47,10 @@ public class SensorProvider {
     private static final String TAG = SensorProvider.class.getSimpleName();
 
     // general availability of sensors
-    private SparseArray<ISensor> availableSensors = new SparseArray<>();
+    private Map<Integer, ISensor> availableSensors = new HashMap<>();
 
     // running sensors
-    private SparseArray<ISensor> enabledSensors = new SparseArray<>();
+    private Map<Integer, ISensor> enabledSensors = new HashMap<>();
 
     private static SensorProvider INSTANCE;
 
@@ -248,9 +249,9 @@ public class SensorProvider {
             return result;
         }
 
-        for (int i = 0, availableSize = availableSensors.size(); i < availableSize; i++) {
+        for (Map.Entry<Integer, ISensor> entry : availableSensors.entrySet()) {
 
-            ISensor sensor = availableSensors.valueAt(i);
+            ISensor sensor = entry.getValue();
 
             if (sensor.getPushType().equals(pushType)) {
                 result.add(sensor);
@@ -263,7 +264,7 @@ public class SensorProvider {
     /**
      * Returns all available sensors in the system
      */
-    public SparseArray<ISensor> getAvailableSensors() {
+    public Map<Integer, ISensor> getAvailableSensors() {
         return availableSensors;
     }
 
@@ -274,7 +275,7 @@ public class SensorProvider {
      * @return
      */
     public ISensor getAvailableSensor(int type) {
-        return availableSensors.valueAt(type);
+        return availableSensors.get(type);
     }
 
     /**
@@ -282,7 +283,7 @@ public class SensorProvider {
      *
      * @return
      */
-    public SparseArray<ISensor> getEnabledSensors() {
+    public Map<Integer, ISensor> getEnabledSensors() {
         return enabledSensors;
     }
 
@@ -293,7 +294,7 @@ public class SensorProvider {
      * @return
      */
     public ISensor getEnabledSensor(int type) {
-        return enabledSensors.valueAt(type);
+        return enabledSensors.get(type);
     }
 
     /**
@@ -303,14 +304,14 @@ public class SensorProvider {
      */
     public void disableSensor(int type) {
 
-        ISensor sensor = enabledSensors.valueAt(type);
+        ISensor sensor = enabledSensors.get(type);
 
         if (sensor == null) {
             return;
         }
 
         sensor.stopSensor();
-        enabledSensors.removeAt(type);
+        enabledSensors.remove(type);
     }
 
     /**
@@ -320,12 +321,12 @@ public class SensorProvider {
      */
     public void setContextToSensors(Context context) {
 
-        for (int i = 0, availableSize = availableSensors.size(); i < availableSize; i++) {
-            availableSensors.valueAt(i).setContext(context);
+        for (Map.Entry<Integer, ISensor> entry : availableSensors.entrySet()) {
+            entry.getValue().setContext(context);
         }
 
-        for (int i = 0, availableSize = enabledSensors.size(); i < availableSize; i++) {
-            enabledSensors.valueAt(i).setContext(context);
+        for (Map.Entry<Integer, ISensor> entry : enabledSensors.entrySet()) {
+            entry.getValue().setContext(context);
         }
 
         mContext = context;
@@ -347,9 +348,9 @@ public class SensorProvider {
 
         int dtoType = DtoType.getDtoType(apiDtoType);
 
-        for (int i = 0, availableSize = availableSensors.size(); i < availableSize; i++) {
+        for (Map.Entry<Integer, ISensor> entry : availableSensors.entrySet()) {
 
-            ISensor sensor = availableSensors.valueAt(i);
+            ISensor sensor = entry.getValue();
 
             if (sensor.getType() == dtoType) {
                 result = sensor;

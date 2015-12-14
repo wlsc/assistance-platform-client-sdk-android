@@ -12,19 +12,16 @@ import android.os.Messenger;
 import android.os.Parcelable;
 import android.os.RemoteException;
 import android.support.v4.app.NotificationCompat;
-import android.util.SparseArray;
 
 import com.google.android.gms.gcm.GcmNetworkManager;
 
 import java.util.HashSet;
-import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.Config;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.R;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DaoSession;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbModule;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbUser;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensing.ISensor;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.DaoProvider;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.PreferenceProvider;
@@ -112,27 +109,11 @@ public class HarvesterService extends Service implements Callback {
 
         Log.d(TAG, "Initializing service...");
 
-        String userToken = PreferenceProvider.getInstance(getApplicationContext()).getUserToken();
+        Map<Integer, ISensor> enabledSensors = SensorProvider
+                .getInstance(getApplicationContext())
+                .getEnabledSensors();
 
-        if (userToken.isEmpty()) {
-            Log.d(TAG, "UserToken is empty. No point to continue");
-            return;
-        }
-
-        DbUser user = daoProvider
-                .getUserDao()
-                .getByToken(userToken);
-
-        if (user == null) {
-            Log.d(TAG, "User is null. No point to continue");
-            return;
-        }
-
-        List<DbModule> activeModules = daoProvider
-                .getModuleDao()
-                .getAllActive(user.getId());
-
-        if (activeModules != null && !activeModules.isEmpty()) {
+        if (enabledSensors != null && enabledSensors.size() > 0) {
 
             if (!mSensorsStarted) {
 
@@ -178,11 +159,11 @@ public class HarvesterService extends Service implements Callback {
 
         mSensorProvider = SensorProvider.getInstance(this);
 
-        SparseArray<ISensor> enabledSensors = mSensorProvider.getEnabledSensors();
+        Map<Integer, ISensor> enabledSensors = mSensorProvider.getEnabledSensors();
 
-        for (int i = 0, availableSize = enabledSensors.size(); i < availableSize; i++) {
+        for (Map.Entry<Integer, ISensor> entry : enabledSensors.entrySet()) {
 
-            ISensor sensor = enabledSensors.valueAt(i);
+            ISensor sensor = entry.getValue();
 
             if (sensor == null) {
                 continue;
@@ -209,11 +190,11 @@ public class HarvesterService extends Service implements Callback {
             mSensorProvider = SensorProvider.getInstance(this);
         }
 
-        SparseArray<ISensor> enabledSensors = mSensorProvider.getEnabledSensors();
+        Map<Integer, ISensor> enabledSensors = mSensorProvider.getEnabledSensors();
 
-        for (int i = 0, availableSize = enabledSensors.size(); i < availableSize; i++) {
+        for (Map.Entry<Integer, ISensor> entry : enabledSensors.entrySet()) {
 
-            ISensor sensor = enabledSensors.valueAt(i);
+            ISensor sensor = entry.getValue();
 
             if (sensor == null) {
                 continue;

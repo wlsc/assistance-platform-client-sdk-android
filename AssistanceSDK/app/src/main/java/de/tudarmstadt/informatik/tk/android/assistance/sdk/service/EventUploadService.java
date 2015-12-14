@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.util.SparseArrayCompat;
 import android.util.SparseArray;
 
 import com.google.android.gms.gcm.GcmNetworkManager;
@@ -19,6 +18,7 @@ import com.google.common.collect.Lists;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.Config;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbAccelerometerSensor;
@@ -108,9 +108,9 @@ public class EventUploadService extends GcmTaskService {
     private static PreferenceProvider mPreferenceProvider;
 
     @NonNull
-    private SparseArrayCompat<List<? extends IDbSensor>> dbEvents = new SparseArrayCompat<>();
+    private SparseArray<List<? extends IDbSensor>> dbEvents = new SparseArray<>();
     @NonNull
-    private SparseArrayCompat<List<? extends SensorDto>> requestEvents = new SparseArrayCompat<>();
+    private SparseArray<List<? extends SensorDto>> requestEvents = new SparseArray<>();
 
     private static boolean isNeedInConnectionFallback;
 
@@ -487,11 +487,11 @@ public class EventUploadService extends GcmTaskService {
     public void getEntriesForUpload(int numberOfElements) {
 
         DaoProvider daoProvider = DaoProvider.getInstance(getApplicationContext());
-        SparseArray<ISensor> sensors = SensorProvider.getInstance(getApplicationContext()).getEnabledSensors();
+        Map<Integer, ISensor> sensors = SensorProvider.getInstance(getApplicationContext()).getEnabledSensors();
 
-        for (int i = 0, availableSize = sensors.size(); i < availableSize; i++) {
+        for (Map.Entry<Integer, ISensor> entry : sensors.entrySet()) {
 
-            ISensor sensor = sensors.valueAt(i);
+            ISensor sensor = entry.getValue();
 
             if (sensor == null) {
                 continue;
