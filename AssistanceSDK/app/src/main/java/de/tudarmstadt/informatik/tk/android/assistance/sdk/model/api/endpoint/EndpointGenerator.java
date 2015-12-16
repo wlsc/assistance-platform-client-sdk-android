@@ -49,8 +49,9 @@ public class EndpointGenerator {
 
         // JSON parser
         GsonBuilder gsonBuilder = new GsonBuilder().excludeFieldsWithoutExposeAnnotation();
+        GsonConverter jsonConverter = new GsonConverter(gsonBuilder.create());
 
-        // magic checking if debuggable is enabled/disabled
+        // magic check for debug ON/OFF
         boolean isDebuggable = AppUtils.isDebug(context);
 
         RestAdapter.LogLevel httpLogLevel = RestAdapter.LogLevel.NONE;
@@ -59,6 +60,8 @@ public class EndpointGenerator {
         if (isDebuggable) {
             httpLogLevel = RestAdapter.LogLevel.FULL;
         }
+
+        AndroidLog logger = new AndroidLog(Config.HTTP_LOGGER_NAME);
 
         // check for custom endpoint url
         String endpointUrl = PreferenceProvider
@@ -73,8 +76,8 @@ public class EndpointGenerator {
         RestAdapter adapter = new RestAdapter.Builder()
 //                .setErrorHandler(new AssistanceErrorHandler())
                 .setLogLevel(httpLogLevel) // enabling log traces
-                .setLog(new AndroidLog(Config.HTTP_LOGGER_NAME))
-                .setConverter(new GsonConverter(gsonBuilder.create()))
+                .setLog(logger)
+                .setConverter(jsonConverter)
                 .setEndpoint(endpointUrl)
                 .setClient(new OkClient(new UntrustedOkHttpClient().getClient()))
                 .build();
