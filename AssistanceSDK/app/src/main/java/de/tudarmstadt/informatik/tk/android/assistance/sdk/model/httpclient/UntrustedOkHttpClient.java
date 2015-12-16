@@ -21,6 +21,8 @@ import javax.net.ssl.X509TrustManager;
  */
 public class UntrustedOkHttpClient {
 
+    private static OkHttpClient okHttpClient;
+
     public UntrustedOkHttpClient() {
     }
 
@@ -30,11 +32,14 @@ public class UntrustedOkHttpClient {
      * @return
      */
     public OkHttpClient getClient() {
+
         try {
 
             // no validation of certification
             TrustManager[] trustAllCerts = {
+
                     new X509TrustManager() {
+
                         @Override
                         public void checkClientTrusted(X509Certificate[] chain, String authType) throws CertificateException {
                         }
@@ -50,22 +55,26 @@ public class UntrustedOkHttpClient {
                     }
             };
 
-            SSLContext sslContext = SSLContext.getInstance("SSL");
-            sslContext.init(null, trustAllCerts, new SecureRandom());
+            if (okHttpClient == null) {
 
-            SSLSocketFactory sslSocketFactory = sslContext.getSocketFactory();
+                SSLContext sslContext = SSLContext.getInstance("SSL");
+                sslContext.init(null, trustAllCerts, new SecureRandom());
 
-            OkHttpClient okHttpClient = new OkHttpClient();
-            okHttpClient.setSslSocketFactory(sslSocketFactory);
-            okHttpClient.setHostnameVerifier(new HostnameVerifier() {
+                SSLSocketFactory sslSocketFactory = sslContext.getSocketFactory();
 
-                @Override
-                public boolean verify(String hostname, SSLSession session) {
-                    return true;
-                }
-            });
+                okHttpClient = new OkHttpClient();
+                okHttpClient.setSslSocketFactory(sslSocketFactory);
+                okHttpClient.setHostnameVerifier(new HostnameVerifier() {
+
+                    @Override
+                    public boolean verify(String hostname, SSLSession session) {
+                        return true;
+                    }
+                });
+            }
 
             return okHttpClient;
+
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
