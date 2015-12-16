@@ -379,8 +379,5 @@ public class SensorProvider {
         for (Map.Entry<Integer, ISensor> entry : runningSensors.entrySet()) {
             entry.getValue().stopSensor();
         }
-
-        // finally clear the mappings
-        runningSensors.clear();
     }
 }

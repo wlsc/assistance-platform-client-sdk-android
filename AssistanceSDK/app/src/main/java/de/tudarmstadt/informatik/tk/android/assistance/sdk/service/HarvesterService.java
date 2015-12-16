@@ -16,13 +16,11 @@ import android.support.v4.app.NotificationCompat;
 import com.google.android.gms.gcm.GcmNetworkManager;
 
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
 
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.Config;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.R;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DaoSession;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensing.ISensor;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.DaoProvider;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.PreferenceProvider;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.SensorProvider;
@@ -54,12 +52,12 @@ public class HarvesterService extends Service implements Callback {
     // clients that wants to communicate with this service
     private Set<Messenger> mClients = new HashSet<>();
 
-    private SensorProvider mSensorProvider;
     private PreferenceProvider mPreferenceProvider;
 
     private DaoProvider daoProvider;
 
     private boolean mSensorsStarted;
+    private SensorProvider sensorProvider;
 
     public HarvesterService() {
     }
@@ -73,6 +71,7 @@ public class HarvesterService extends Service implements Callback {
         if (daoProvider == null) {
             daoProvider = DaoProvider.getInstance(getApplicationContext());
         }
+
         return daoProvider.getDaoSession();
     }
 
@@ -86,6 +85,9 @@ public class HarvesterService extends Service implements Callback {
 
         Log.d(TAG, "Service starting...");
 
+        // just init it here (for EventBus events)
+        this.sensorProvider = SensorProvider.getInstance(getApplicationContext());
+        // init settings
         mPreferenceProvider = PreferenceProvider.getInstance(getApplicationContext());
 
         String userToken = mPreferenceProvider.getUserToken();
@@ -109,28 +111,28 @@ public class HarvesterService extends Service implements Callback {
 
         Log.d(TAG, "Initializing service...");
 
-        Map<Integer, ISensor> enabledSensors = SensorProvider
-                .getInstance(getApplicationContext())
-                .getRunningSensors();
+//        Map<Integer, ISensor> enabledSensors = SensorProvider
+//                .getInstance(getApplicationContext())
+//                .getRunningSensors();
+//
+//        if (enabledSensors != null && enabledSensors.size() > 0) {
 
-        if (enabledSensors != null && enabledSensors.size() > 0) {
+        if (!mSensorsStarted) {
 
-            if (!mSensorsStarted) {
+            Log.d(TAG, "Found installed modules -> starting monitoring activities...");
 
-                Log.d(TAG, "Found installed modules -> starting monitoring activities...");
-
-                monitorStart();
-            }
-
-            // schedule uploader task
-            startService(new Intent(this, EventUploadService.class));
-
-            startAccessibilityService();
-
-        } else {
-            Log.d(TAG, "No active module were found!");
-            mSensorsStarted = false;
+            monitorStart();
         }
+
+        // schedule uploader task
+        startService(new Intent(this, EventUploadService.class));
+
+        startAccessibilityService();
+
+//        } else {
+//            Log.d(TAG, "No active module were found!");
+//            mSensorsStarted = false;
+//        }
 
         Log.d(TAG, "Service was initiated.");
     }
@@ -157,11 +159,7 @@ public class HarvesterService extends Service implements Callback {
 
         mSensorsStarted = true;
 
-        if (mSensorProvider == null) {
-            mSensorProvider = SensorProvider.getInstance(getApplicationContext());
-        }
-
-        mSensorProvider.startAllStoppedSensors();
+        SensorProvider.getInstance(getApplicationContext()).startAllStoppedSensors();
 
         showIcon();
 
@@ -177,11 +175,7 @@ public class HarvesterService extends Service implements Callback {
 
         mSensorsStarted = false;
 
-        if (mSensorProvider == null) {
-            mSensorProvider = SensorProvider.getInstance(getApplicationContext());
-        }
-
-        mSensorProvider.stopAllRunningSensors();
+        SensorProvider.getInstance(getApplicationContext()).stopAllRunningSensors();
 
         Log.d(TAG, "All sensors were stopped.");
         Log.d(TAG, "Service was stopped.");
