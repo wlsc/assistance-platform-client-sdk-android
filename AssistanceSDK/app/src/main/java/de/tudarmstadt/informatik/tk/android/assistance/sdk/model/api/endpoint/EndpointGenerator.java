@@ -3,6 +3,8 @@ package de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.endpoint;
 import android.content.Context;
 
 import com.google.gson.GsonBuilder;
+import com.squareup.okhttp.Cache;
+import com.squareup.okhttp.OkHttpClient;
 
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.Config;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.httpclient.UntrustedOkHttpClient;
@@ -73,13 +75,22 @@ public class EndpointGenerator {
             endpointUrl = Config.ASSISTANCE_ENDPOINT;
         }
 
+        // HTTP client setup
+        OkHttpClient okHttpClient = new UntrustedOkHttpClient().getClient();
+
+        Cache cache = new Cache(context.getCacheDir(), 1024l * 1024l * 10l);
+        okHttpClient.setCache(cache);
+        
+        OkClient httpClient = new OkClient(okHttpClient);
+
+        // setup actual endpoint adapter
         RestAdapter adapter = new RestAdapter.Builder()
 //                .setErrorHandler(new AssistanceErrorHandler())
                 .setLogLevel(httpLogLevel) // enabling log traces
                 .setLog(logger)
                 .setConverter(jsonConverter)
                 .setEndpoint(endpointUrl)
-                .setClient(new OkClient(new UntrustedOkHttpClient().getClient()))
+                .setClient(httpClient)
                 .build();
 
         return adapter.create(clazz);
