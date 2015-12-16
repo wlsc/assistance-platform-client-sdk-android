@@ -50,7 +50,7 @@ public class SensorProvider {
     private Map<Integer, ISensor> availableSensors = new HashMap<>();
 
     // running sensors
-    private Map<Integer, ISensor> enabledSensors = new HashMap<>();
+    private Map<Integer, ISensor> runningSensors = new HashMap<>();
 
     private static SensorProvider INSTANCE;
 
@@ -208,14 +208,14 @@ public class SensorProvider {
             int capType = DtoType.getDtoType(dbCap.getType());
             ISensor sensor = availableSensors.get(capType);
 
-            enabledSensors.put(sensor.getType(), sensor);
+            runningSensors.put(sensor.getType(), sensor);
 
             if (!EventBus.getDefault().isRegistered(sensor)) {
                 EventBus.getDefault().register(sensor);
             }
         }
 
-        Log.d(TAG, "Finished. Number of sensors: " + enabledSensors.size());
+        Log.d(TAG, "Finished. Number of sensors: " + runningSensors.size());
     }
 
     /**
@@ -283,8 +283,8 @@ public class SensorProvider {
      *
      * @return
      */
-    public Map<Integer, ISensor> getEnabledSensors() {
-        return enabledSensors;
+    public Map<Integer, ISensor> getRunningSensors() {
+        return runningSensors;
     }
 
     /**
@@ -294,7 +294,7 @@ public class SensorProvider {
      * @return
      */
     public ISensor getEnabledSensor(int type) {
-        return enabledSensors.get(type);
+        return runningSensors.get(type);
     }
 
     /**
@@ -304,14 +304,14 @@ public class SensorProvider {
      */
     public void disableSensor(int type) {
 
-        ISensor sensor = enabledSensors.get(type);
+        ISensor sensor = runningSensors.get(type);
 
         if (sensor == null) {
             return;
         }
 
         sensor.stopSensor();
-        enabledSensors.remove(type);
+        runningSensors.remove(type);
     }
 
     /**
@@ -325,7 +325,7 @@ public class SensorProvider {
             entry.getValue().setContext(context);
         }
 
-        for (Map.Entry<Integer, ISensor> entry : enabledSensors.entrySet()) {
+        for (Map.Entry<Integer, ISensor> entry : runningSensors.entrySet()) {
             entry.getValue().setContext(context);
         }
 
@@ -359,5 +359,28 @@ public class SensorProvider {
         }
 
         return result;
+    }
+
+    /**
+     * Starts all sensors in running mappings
+     */
+    public void startAllStoppedSensors() {
+
+        for (Map.Entry<Integer, ISensor> entry : runningSensors.entrySet()) {
+            entry.getValue().startSensor();
+        }
+    }
+
+    /**
+     * Stops all sensors from running
+     */
+    public void stopAllRunningSensors() {
+
+        for (Map.Entry<Integer, ISensor> entry : runningSensors.entrySet()) {
+            entry.getValue().stopSensor();
+        }
+
+        // finally clear the mappings
+        runningSensors.clear();
     }
 }

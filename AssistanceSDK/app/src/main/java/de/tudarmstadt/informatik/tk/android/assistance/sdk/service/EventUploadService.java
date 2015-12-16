@@ -487,7 +487,7 @@ public class EventUploadService extends GcmTaskService {
     public void getEntriesForUpload(int numberOfElements) {
 
         DaoProvider daoProvider = DaoProvider.getInstance(getApplicationContext());
-        Map<Integer, ISensor> sensors = SensorProvider.getInstance(getApplicationContext()).getEnabledSensors();
+        Map<Integer, ISensor> sensors = SensorProvider.getInstance(getApplicationContext()).getRunningSensors();
 
         for (Map.Entry<Integer, ISensor> entry : sensors.entrySet()) {
 

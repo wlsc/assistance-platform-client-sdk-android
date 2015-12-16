@@ -111,7 +111,7 @@ public class HarvesterService extends Service implements Callback {
 
         Map<Integer, ISensor> enabledSensors = SensorProvider
                 .getInstance(getApplicationContext())
-                .getEnabledSensors();
+                .getRunningSensors();
 
         if (enabledSensors != null && enabledSensors.size() > 0) {
 
@@ -157,20 +157,11 @@ public class HarvesterService extends Service implements Callback {
 
         mSensorsStarted = true;
 
-        mSensorProvider = SensorProvider.getInstance(this);
-
-        Map<Integer, ISensor> enabledSensors = mSensorProvider.getEnabledSensors();
-
-        for (Map.Entry<Integer, ISensor> entry : enabledSensors.entrySet()) {
-
-            ISensor sensor = entry.getValue();
-
-            if (sensor == null) {
-                continue;
-            }
-
-            sensor.startSensor();
+        if (mSensorProvider == null) {
+            mSensorProvider = SensorProvider.getInstance(getApplicationContext());
         }
+
+        mSensorProvider.startAllStoppedSensors();
 
         showIcon();
 
@@ -187,21 +178,10 @@ public class HarvesterService extends Service implements Callback {
         mSensorsStarted = false;
 
         if (mSensorProvider == null) {
-            mSensorProvider = SensorProvider.getInstance(this);
+            mSensorProvider = SensorProvider.getInstance(getApplicationContext());
         }
 
-        Map<Integer, ISensor> enabledSensors = mSensorProvider.getEnabledSensors();
-
-        for (Map.Entry<Integer, ISensor> entry : enabledSensors.entrySet()) {
-
-            ISensor sensor = entry.getValue();
-
-            if (sensor == null) {
-                continue;
-            }
-
-            sensor.stopSensor();
-        }
+        mSensorProvider.stopAllRunningSensors();
 
         Log.d(TAG, "All sensors were stopped.");
         Log.d(TAG, "Service was stopped.");
