@@ -8,13 +8,15 @@ import java.util.List;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import de.tudarmstadt.informatik.tk.assistance.model.client.feedback.ContentDto;
 import de.tudarmstadt.informatik.tk.assistance.model.client.feedback.enums.GroupAlignment;
 
 /**
  * @author Wladimir Schmidt (wlsc.dev@gmail.com)
  * @date 06.12.2015
  */
-public class GroupDto implements IContentDto {
+@Deprecated
+public class GroupDto {
 
   @SerializedName("alignment")
   @Expose
@@ -22,13 +24,13 @@ public class GroupDto implements IContentDto {
 
   @SerializedName("content")
   @Expose
-  private List<IContentDto> content;
+  private List<ContentDto> content;
 
-  public GroupDto(List<IContentDto> content) {
+  public GroupDto(List<ContentDto> content) {
     this.content = content;
   }
 
-  public GroupDto(GroupAlignment alignment, List<IContentDto> content) {
+  public GroupDto(GroupAlignment alignment, List<ContentDto> content) {
     this.alignment = alignment;
     this.content = content;
   }
@@ -41,11 +43,11 @@ public class GroupDto implements IContentDto {
     this.alignment = alignment;
   }
 
-  public List<IContentDto> getContent() {
+  public List<ContentDto> getContent() {
     return content;
   }
 
-  public void setContent(List<IContentDto> content) {
+  public void setContent(List<ContentDto> content) {
     this.content = content;
   }
 

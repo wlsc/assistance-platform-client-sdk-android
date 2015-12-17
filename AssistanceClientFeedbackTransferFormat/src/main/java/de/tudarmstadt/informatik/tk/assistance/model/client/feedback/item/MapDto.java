@@ -12,7 +12,8 @@ import com.google.gson.annotations.SerializedName;
  * @author Wladimir Schmidt (wlsc.dev@gmail.com)
  * @date 06.12.2015
  */
-public class MapDto implements IContentDto {
+@Deprecated
+public class MapDto {
 
   @SerializedName("points")
   @Expose

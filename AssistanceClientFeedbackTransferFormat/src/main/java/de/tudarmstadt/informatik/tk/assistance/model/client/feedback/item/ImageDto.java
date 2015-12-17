@@ -10,7 +10,8 @@ import com.google.gson.annotations.SerializedName;
  * @author Wladimir Schmidt (wlsc.dev@gmail.com)
  * @date 06.12.2015
  */
-public class ImageDto implements IContentDto {
+@Deprecated
+public class ImageDto {
 
   @SerializedName("source")
   @Expose

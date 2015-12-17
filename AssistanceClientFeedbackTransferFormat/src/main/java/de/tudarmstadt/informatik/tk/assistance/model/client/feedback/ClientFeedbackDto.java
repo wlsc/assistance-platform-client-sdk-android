@@ -6,8 +6,6 @@ package de.tudarmstadt.informatik.tk.assistance.model.client.feedback;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-import de.tudarmstadt.informatik.tk.assistance.model.client.feedback.item.IContentDto;
-
 /**
  * @author Wladimir Schmidt (wlsc.dev@gmail.com)
  * @date 06.12.2015
@@ -20,13 +18,13 @@ public class ClientFeedbackDto {
 
   @SerializedName("content")
   @Expose
-  private IContentDto content;
+  private ContentDto content;
 
   @SerializedName("created")
   @Expose
   private String created;
 
-  public ClientFeedbackDto(String modulePackageName, IContentDto content, String created) {
+  public ClientFeedbackDto(String modulePackageName, ContentDto content, String created) {
     this.modulePackageName = modulePackageName;
     this.content = content;
     this.created = created;
@@ -40,11 +38,11 @@ public class ClientFeedbackDto {
     this.modulePackageName = modulePackageName;
   }
 
-  public IContentDto getContent() {
+  public ContentDto getContent() {
     return content;
   }
 
-  public void setContent(IContentDto content) {
+  public void setContent(ContentDto content) {
     this.content = content;
   }
 

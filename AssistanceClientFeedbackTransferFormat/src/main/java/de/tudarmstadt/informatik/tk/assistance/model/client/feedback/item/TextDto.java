@@ -14,7 +14,8 @@ import de.tudarmstadt.informatik.tk.assistance.model.client.feedback.enums.TextA
  * @author Wladimir Schmidt (wlsc.dev@gmail.com)
  * @date 06.12.2015
  */
-public class TextDto implements IContentDto {
+@Deprecated
+public class TextDto {
 
   @SerializedName("caption")
   @Expose
