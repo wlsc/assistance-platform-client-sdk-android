@@ -16,6 +16,10 @@ import de.tudarmstadt.informatik.tk.assistance.model.client.feedback.enums.TextA
  */
 public class TextDto implements IContentDto {
 
+  @SerializedName("caption")
+  @Expose
+  private String caption;
+
   @SerializedName("style")
   @Expose
   private String[] style;
@@ -36,19 +40,29 @@ public class TextDto implements IContentDto {
   @Expose
   private Integer priority;
 
-  public TextDto(String[] style, Boolean highlighted, TextAlignment alignment) {
+  public TextDto(String caption, String[] style, Boolean highlighted, TextAlignment alignment) {
+    this.caption = caption;
     this.style = style;
     this.highlighted = highlighted;
     this.alignment = alignment;
   }
 
-  public TextDto(String[] style, Boolean highlighted, TextAlignment alignment, String target,
-      Integer priority) {
+  public TextDto(String caption, String[] style, Boolean highlighted, TextAlignment alignment,
+      String target, Integer priority) {
+    this.caption = caption;
     this.style = style;
     this.highlighted = highlighted;
     this.alignment = alignment;
     this.target = target;
     this.priority = priority;
+  }
+
+  public String getCaption() {
+    return caption;
+  }
+
+  public void setCaption(String caption) {
+    this.caption = caption;
   }
 
   public String[] getStyle() {
@@ -93,7 +107,8 @@ public class TextDto implements IContentDto {
 
   @Override
   public String toString() {
-    return "TextDto [style=" + Arrays.toString(style) + ", highlighted=" + highlighted
-        + ", alignment=" + alignment + ", target=" + target + ", priority=" + priority + "]";
+    return "TextDto [caption=" + caption + ", style=" + Arrays.toString(style) + ", highlighted="
+        + highlighted + ", alignment=" + alignment + ", target=" + target + ", priority=" + priority
+        + "]";
   }
 }

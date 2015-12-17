@@ -3,6 +3,8 @@
  */
 package de.tudarmstadt.informatik.tk.assistance.model.client.feedback.item;
 
+import java.util.List;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -20,13 +22,13 @@ public class GroupDto implements IContentDto {
 
   @SerializedName("content")
   @Expose
-  private IContentDto content;
+  private List<IContentDto> content;
 
-  public GroupDto(IContentDto content) {
+  public GroupDto(List<IContentDto> content) {
     this.content = content;
   }
 
-  public GroupDto(GroupAlignment alignment, IContentDto content) {
+  public GroupDto(GroupAlignment alignment, List<IContentDto> content) {
     this.alignment = alignment;
     this.content = content;
   }
@@ -39,11 +41,11 @@ public class GroupDto implements IContentDto {
     this.alignment = alignment;
   }
 
-  public IContentDto getContent() {
+  public List<IContentDto> getContent() {
     return content;
   }
 
-  public void setContent(IContentDto content) {
+  public void setContent(List<IContentDto> content) {
     this.content = content;
   }
 
