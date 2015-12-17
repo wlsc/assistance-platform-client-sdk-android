@@ -181,7 +181,7 @@ public class DynamicHelper {
      * @param viewGroup  : parent view
      * @param ids        : hashmap of ids <String, Integer> (string as setted in json, int that we use in layout)
      */
-    public static void applyLayoutProperties(View view, List<DynamicProperty> properties, ViewGroup viewGroup, HashMap<String, Integer> ids) {
+    public static void applyLayoutProperties(View view, List<DynamicProperty> properties, ViewGroup viewGroup, Map<String, Integer> ids) {
         if (viewGroup == null)
             return;
         ViewGroup.LayoutParams params = createLayoutParams(viewGroup);
@@ -915,7 +915,7 @@ public class DynamicHelper {
      * get ViewHolder class and make reference for evert @link(DynamicViewId) to the actual view
      * if target contains HashMap<String, Integer> will replaced with the idsMap
      */
-    public static void parseDynamicView(Object target, View container, HashMap<String, Integer> idsMap) {
+    public static void parseDynamicView(Object target, View container, Map<String, Integer> idsMap) {
 
         for (Field field : target.getClass().getDeclaredFields()) {
             if (field.isAnnotationPresent(DynamicViewId.class)) {
