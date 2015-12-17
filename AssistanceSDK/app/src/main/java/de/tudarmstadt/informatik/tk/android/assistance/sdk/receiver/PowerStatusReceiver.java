@@ -16,6 +16,7 @@ import de.tudarmstadt.informatik.tk.android.assistance.sdk.service.HarvesterServ
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.util.BatteryUtils;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.util.DateUtils;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.util.DeviceUtils;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.util.ServiceUtils;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.util.logger.Log;
 
 /**
@@ -52,23 +53,23 @@ public class PowerStatusReceiver extends BroadcastReceiver {
 
         if (isAc) {
             powerStateEvent.setChargingMode(PowerChargingType.AC_ADAPTER);
-            powerStateEvent.setIsCharging(true);
+            powerStateEvent.setIsCharging(Boolean.TRUE);
         }
 
         if (isUsb) {
             powerStateEvent.setChargingMode(PowerChargingType.USB);
-            powerStateEvent.setIsCharging(true);
+            powerStateEvent.setIsCharging(Boolean.TRUE);
         }
 
         if (isWireless) {
             powerStateEvent.setChargingMode(PowerChargingType.WIRELESS);
-            powerStateEvent.setIsCharging(true);
+            powerStateEvent.setIsCharging(Boolean.TRUE);
         }
 
         if (Intent.ACTION_POWER_CONNECTED.equals(action)) {
             Log.d(TAG, "Power connected");
 
-            if (!isServiceRunning) {
+            if (!isServiceRunning && ServiceUtils.isHarvesterAbleToRun(context.getApplicationContext())) {
                 HarvesterServiceProvider
                         .getInstance(context.getApplicationContext())
                         .startSensingService();
@@ -86,7 +87,7 @@ public class PowerStatusReceiver extends BroadcastReceiver {
         if (Intent.ACTION_BATTERY_LOW.equals(action)) {
             Log.d(TAG, "Remaining battery is really low");
 
-            if (isServiceRunning) {
+            if (isServiceRunning && ServiceUtils.isHarvesterAbleToRun(context.getApplicationContext())) {
                 HarvesterServiceProvider
                         .getInstance(context.getApplicationContext())
                         .stopSensingService();
@@ -98,7 +99,7 @@ public class PowerStatusReceiver extends BroadcastReceiver {
         if (Intent.ACTION_BATTERY_OKAY.equals(action)) {
             Log.d(TAG, "Remaining battery is OKAY");
 
-            if (!isServiceRunning) {
+            if (!isServiceRunning && ServiceUtils.isHarvesterAbleToRun(context.getApplicationContext())) {
                 HarvesterServiceProvider
                         .getInstance(context.getApplicationContext())
                         .startSensingService();
