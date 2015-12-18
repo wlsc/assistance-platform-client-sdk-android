@@ -109,11 +109,11 @@ public class ContactsEvent extends AbstractContentObserverEvent {
                 String strGivenName = null;
                 String strFamilyName = null;
 
-                String[] projectionNameParams = new String[]{
+                String[] projectionNameParams = {
                         ContactsContract.CommonDataKinds.StructuredName.GIVEN_NAME,
                         ContactsContract.CommonDataKinds.StructuredName.FAMILY_NAME};
                 String whereName = ContactsContract.Data.MIMETYPE + " = ? AND " + Data.CONTACT_ID + " = ?";
-                String[] whereNameParams = new String[]{
+                String[] whereNameParams = {
                         ContactsContract.CommonDataKinds.StructuredName.CONTENT_ITEM_TYPE,
                         strContactId};
 
