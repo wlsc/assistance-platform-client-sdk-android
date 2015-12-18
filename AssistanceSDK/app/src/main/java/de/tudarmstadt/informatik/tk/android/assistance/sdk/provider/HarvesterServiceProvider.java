@@ -12,7 +12,7 @@ import android.os.RemoteException;
 
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.service.AssistanceAccessibilityService;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.service.HarvesterService;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.util.DeviceUtils;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.util.ServiceUtils;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.util.logger.Log;
 
 /**
@@ -56,7 +56,7 @@ public class HarvesterServiceProvider implements ServiceConnection {
     }
 
     public boolean isServiceRunning() {
-        return DeviceUtils.isServiceRunning(mContext, HarvesterService.class);
+        return ServiceUtils.isServiceRunning(mContext, HarvesterService.class);
     }
 
     /**
@@ -65,7 +65,7 @@ public class HarvesterServiceProvider implements ServiceConnection {
      * @return
      */
     public boolean isAccessibilityServiceRunning() {
-        return DeviceUtils.isServiceRunning(mContext, AssistanceAccessibilityService.class);
+        return ServiceUtils.isServiceRunning(mContext, AssistanceAccessibilityService.class);
     }
 
     /**

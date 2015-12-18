@@ -24,7 +24,7 @@ import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DaoSession;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.DaoProvider;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.PreferenceProvider;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.SensorProvider;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.util.DeviceUtils;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.util.ServiceUtils;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.util.logger.Log;
 
 /**
@@ -351,7 +351,7 @@ public class HarvesterService extends Service implements Callback {
      */
     private void startAccessibilityService() {
 
-        if (!DeviceUtils.isServiceRunning(getApplicationContext(),
+        if (!ServiceUtils.isServiceRunning(getApplicationContext(),
                 AssistanceAccessibilityService.class)) {
 
             Log.d(TAG, "Starting accessibility service...");

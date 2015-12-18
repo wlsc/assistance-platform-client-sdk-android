@@ -15,7 +15,6 @@ import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.HarvesterSer
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.service.HarvesterService;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.util.BatteryUtils;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.util.DateUtils;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.util.DeviceUtils;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.util.ServiceUtils;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.util.logger.Log;
 
@@ -37,7 +36,7 @@ public class PowerStatusReceiver extends BroadcastReceiver {
         final String action = intent.getAction();
         Log.d(TAG, "Power status has changed. Type: " + action);
 
-        final boolean isServiceRunning = DeviceUtils
+        final boolean isServiceRunning = ServiceUtils
                 .isServiceRunning(context.getApplicationContext(), HarvesterService.class);
 
         DbPowerStateEvent powerStateEvent = new DbPowerStateEvent();

@@ -7,7 +7,7 @@ import android.content.Intent;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.HarvesterServiceProvider;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.PreferenceProvider;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.service.HarvesterService;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.util.DeviceUtils;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.util.ServiceUtils;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.util.logger.Log;
 
 /**
@@ -38,7 +38,7 @@ public class BootReceiver extends BroadcastReceiver {
 
                 Log.d(TAG, "Start on boot activated -> starting service...");
 
-                if (!DeviceUtils.isServiceRunning(
+                if (!ServiceUtils.isServiceRunning(
                         context.getApplicationContext(),
                         HarvesterService.class)) {
 

@@ -14,7 +14,7 @@ import de.tudarmstadt.informatik.tk.android.assistance.sdk.event.UpdateSensorInt
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.DtoType;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensing.AbstractPeriodicEvent;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.util.DateUtils;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.util.DeviceUtils;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.util.ServiceUtils;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.util.logger.Log;
 
 /**
@@ -92,7 +92,7 @@ public class RunningServicesReaderEvent extends AbstractPeriodicEvent {
     @Override
     protected void getData() {
 
-        List<RunningServiceInfo> services = DeviceUtils
+        List<RunningServiceInfo> services = ServiceUtils
                 .getRunningServices(context, MAXIMUM_SERVICES);
 
         List<String> servicesPackageNames = new ArrayList<>(services.size());
