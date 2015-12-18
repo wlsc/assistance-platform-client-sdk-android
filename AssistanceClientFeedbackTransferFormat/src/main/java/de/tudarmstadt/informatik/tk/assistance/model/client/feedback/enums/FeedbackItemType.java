@@ -20,4 +20,15 @@ public enum FeedbackItemType {
   public String getValue() {
     return this.value;
   }
+
+  public static FeedbackItemType getEnum(String enumString) {
+
+    for (FeedbackItemType entry : FeedbackItemType.values()) {
+      if (entry.value.equalsIgnoreCase(enumString)) {
+        return entry;
+      }
+    }
+
+    return null;
+  }
 }
