@@ -9,9 +9,6 @@ import java.util.List;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-import de.tudarmstadt.informatik.tk.assistance.model.client.feedback.enums.GroupAlignment;
-import de.tudarmstadt.informatik.tk.assistance.model.client.feedback.enums.TextAlignment;
-
 /**
  * @author Wladimir Schmidt (wlsc.dev@gmail.com)
  * @date 17.12.2015
@@ -36,11 +33,11 @@ public class ContentDto {
 
   @SerializedName("groupAlignment")
   @Expose
-  private GroupAlignment groupAlignment;
+  private String groupAlignment;
 
   @SerializedName("textAlignment")
   @Expose
-  private TextAlignment textAlignment;
+  private String textAlignment;
 
   @SerializedName("content")
   @Expose
@@ -100,19 +97,19 @@ public class ContentDto {
     this.priority = priority;
   }
 
-  public GroupAlignment getGroupAlignment() {
+  public String getGroupAlignment() {
     return groupAlignment;
   }
 
-  public void setGroupAlignment(GroupAlignment groupAlignment) {
+  public void setGroupAlignment(String groupAlignment) {
     this.groupAlignment = groupAlignment;
   }
 
-  public TextAlignment getTextAlignment() {
+  public String getTextAlignment() {
     return textAlignment;
   }
 
-  public void setTextAlignment(TextAlignment textAlignment) {
+  public void setTextAlignment(String textAlignment) {
     this.textAlignment = textAlignment;
   }
 
