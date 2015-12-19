@@ -73,6 +73,11 @@ public class HarvesterServiceProvider implements ServiceConnection {
      */
     public void startSensingService() {
 
+        if (!ServiceUtils.isHarvesterAbleToRun(mContext.getApplicationContext())) {
+            Log.d(TAG, "Sensing service was not able to run (mo active modules?)");
+            return;
+        }
+
         if (!isServiceRunning()) {
 
             Intent intent = new Intent(mContext, HarvesterService.class);
@@ -80,7 +85,10 @@ public class HarvesterServiceProvider implements ServiceConnection {
         }
 
         showHarvestIcon(true);
-        bindService();
+
+        if (!isServiceBound()) {
+            bindService();
+        }
     }
 
     /**
@@ -103,7 +111,10 @@ public class HarvesterServiceProvider implements ServiceConnection {
     public void stopSensingService() {
 
         sendMessageToService(HarvesterService.MSG_CMD_STOP_SERVICE);
-        unbindService();
+
+        if (isServiceBound()) {
+            unbindService();
+        }
     }
 
     /**

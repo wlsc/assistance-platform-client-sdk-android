@@ -158,13 +158,9 @@ public class PermissionUtils {
      * @param permission
      * @return
      */
-    public boolean isPermissionGranted(String permission) {
+    public boolean isGranted(String permission) {
+        return permission != null && ContextCompat.checkSelfPermission(mContext, permission) == PackageManager.PERMISSION_GRANTED;
 
-        if (permission == null) {
-            return false;
-        }
-
-        return ContextCompat.checkSelfPermission(mContext, permission) == PackageManager.PERMISSION_GRANTED;
     }
 
     /**
@@ -174,11 +170,7 @@ public class PermissionUtils {
      * @return
      */
     public boolean handlePermissionResult(@NonNull int[] grantResults) {
+        return !(grantResults == null || grantResults.length <= 0) && grantResults[0] == PackageManager.PERMISSION_GRANTED;
 
-        if (grantResults == null || grantResults.length <= 0) {
-            return false;
-        }
-
-        return grantResults[0] == PackageManager.PERMISSION_GRANTED;
     }
 }
