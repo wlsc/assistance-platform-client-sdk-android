@@ -162,7 +162,10 @@ public class ContactsEvent extends AbstractContentObserverEvent {
 
                 try {
                     if (checkForContactChange(allExistingContacts, sensorContact)) {
+
+                        Log.d(TAG, "Insert entry");
                         daoProvider.getContactEventDao().insert(sensorContact);
+                        Log.d(TAG, "Finished");
                     }
                 } catch (Exception e) {
                     Log.e(TAG, "Some error: ", e);
@@ -173,6 +176,8 @@ public class ContactsEvent extends AbstractContentObserverEvent {
                 syncMails(sensorContact);
 
             }
+        } catch (SecurityException se) {
+            Log.d(TAG, "Permission was not granted for this event!");
         } catch (NullPointerException npe) {
             Log.d(TAG, "NPE in cursor");
         } catch (Exception e) {
@@ -302,7 +307,10 @@ public class ContactsEvent extends AbstractContentObserverEvent {
 
                 try {
                     if (checkForContactMailChange(mapExistingMails, sensorContactMail)) {
+
+                        Log.d(TAG, "Contact email: Insert entry");
                         daoProvider.getContactEmailEventDao().insert(sensorContactMail);
+                        Log.d(TAG, "Finished");
                     }
 
                 } catch (Exception e) {
@@ -389,7 +397,10 @@ public class ContactsEvent extends AbstractContentObserverEvent {
 
                 try {
                     if (checkForContactNumberChange(mapExistingNumbers, sensorContactNumber)) {
+
+                        Log.d(TAG, "Contact number: Insert entry");
                         daoProvider.getContactNumberEventDao().insert(sensorContactNumber);
+                        Log.d(TAG, "Finished");
                     }
                 } catch (Exception e) {
                     Log.e(TAG, "Some error: ", e);

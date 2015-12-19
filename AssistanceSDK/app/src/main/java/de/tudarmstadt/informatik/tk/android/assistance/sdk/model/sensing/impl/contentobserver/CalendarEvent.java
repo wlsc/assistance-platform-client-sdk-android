@@ -153,7 +153,10 @@ public class CalendarEvent extends AbstractContentObserverEvent {
 
                 try {
                     if (checkForChange(allExistingEvents, event)) {
+
+                        Log.d(TAG, "Insert entry");
                         daoProvider.getCalendarEventDao().insert(event);
+                        Log.d(TAG, "Finished");
                     }
                 } catch (Exception e) {
                     Log.e(TAG, "Cannot check calendar event for change", e);
@@ -219,7 +222,10 @@ public class CalendarEvent extends AbstractContentObserverEvent {
 
                     try {
                         if (checkForReminderChange(mapExistingReminders, reminder)) {
+
+                            Log.d(TAG, "Calendar reminder: Insert entry");
                             daoProvider.getCalendarReminderEventDao().insert(reminder);
+                            Log.d(TAG, "Finished");
                         }
                     } catch (Exception e) {
                         Log.e(TAG, "Cannot check calendar reminder event for change", e);
