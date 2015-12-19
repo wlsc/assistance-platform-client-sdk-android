@@ -31,13 +31,9 @@ public class ContentDto {
   @Expose
   private Integer priority;
 
-  @SerializedName("groupAlignment")
+  @SerializedName("alignment")
   @Expose
-  private String groupAlignment;
-
-  @SerializedName("textAlignment")
-  @Expose
-  private String textAlignment;
+  private String alignment;
 
   @SerializedName("content")
   @Expose
@@ -97,20 +93,12 @@ public class ContentDto {
     this.priority = priority;
   }
 
-  public String getGroupAlignment() {
-    return groupAlignment;
+  public String getAlignment() {
+    return alignment;
   }
 
-  public void setGroupAlignment(String groupAlignment) {
-    this.groupAlignment = groupAlignment;
-  }
-
-  public String getTextAlignment() {
-    return textAlignment;
-  }
-
-  public void setTextAlignment(String textAlignment) {
-    this.textAlignment = textAlignment;
+  public void setAlignment(String alignment) {
+    this.alignment = alignment;
   }
 
   public List<ContentDto> getContent() {
@@ -164,9 +152,9 @@ public class ContentDto {
   @Override
   public String toString() {
     return "ContentDto [type=" + type + ", caption=" + caption + ", target=" + target
-        + ", priority=" + priority + ", groupAlignment=" + groupAlignment + ", textAlignment="
-        + textAlignment + ", content=" + content + ", source=" + source + ", points="
-        + Arrays.toString(points) + ", showUserLocation=" + showUserLocation + ", style="
-        + Arrays.toString(style) + ", highlighted=" + highlighted + "]";
+        + ", priority=" + priority + ", alignment=" + alignment + ", content=" + content
+        + ", source=" + source + ", points=" + Arrays.toString(points) + ", showUserLocation="
+        + showUserLocation + ", style=" + Arrays.toString(style) + ", highlighted=" + highlighted
+        + "]";
   }
 }
