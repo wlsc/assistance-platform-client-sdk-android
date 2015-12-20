@@ -32,13 +32,4 @@ public class DeviceUtils {
         return sensor != null;
     }
 
-    /**
-     * Generates new random UUID string
-     *
-     * @return
-     */
-    public static String generateUUID() {
-        return UUID.randomUUID().toString();
-    }
-    
 }

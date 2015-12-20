@@ -13,4 +13,6 @@ public interface ModuleCapabilityDao extends CommonDao<DbModuleCapability> {
 
     List<DbModuleCapability> getAllActive(Long moduleId);
 
+    List<DbModuleCapability> getAllActiveRequired(Long moduleId);
+
 }

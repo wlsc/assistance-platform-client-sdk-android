@@ -62,4 +62,20 @@ public class ModuleCapabilityDaoImpl extends
                 .build()
                 .list();
     }
+
+    @Override
+    public List<DbModuleCapability> getAllActiveRequired(Long moduleId) {
+
+        if (moduleId == null || moduleId < 0) {
+            return Collections.emptyList();
+        }
+
+        return dao
+                .queryBuilder()
+                .where(DbModuleCapabilityDao.Properties.ModuleId.eq(moduleId))
+                .where(DbModuleCapabilityDao.Properties.Active.eq(Boolean.TRUE))
+                .where(DbModuleCapabilityDao.Properties.Required.eq(Boolean.TRUE))
+                .build()
+                .list();
+    }
 }
