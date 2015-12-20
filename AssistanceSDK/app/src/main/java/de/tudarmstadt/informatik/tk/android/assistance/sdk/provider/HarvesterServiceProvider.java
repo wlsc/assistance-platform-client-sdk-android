@@ -74,7 +74,7 @@ public class HarvesterServiceProvider implements ServiceConnection {
     public void startSensingService() {
 
         if (!ServiceUtils.isHarvesterAbleToRun(mContext.getApplicationContext())) {
-            Log.d(TAG, "Sensing service was not able to run (mo active modules?)");
+            Log.d(TAG, "Sensing service was not able to run (no active modules?)");
             return;
         }
 
