@@ -10,6 +10,7 @@ import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbModule;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbUser;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.DaoProvider;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.PreferenceProvider;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.util.logger.Log;
 
 /**
  * @author Wladimir Schmidt (wlsc.dev@gmail.com)
@@ -24,7 +25,7 @@ public class ServiceUtils {
 
 
     /**
-     * Checks if sensing service is able to run
+     * Checks if sensing service is able to run -> user have active modules
      *
      * @param context
      * @return
@@ -34,12 +35,14 @@ public class ServiceUtils {
         String userToken = PreferenceProvider.getInstance(context).getUserToken();
 
         if (StringUtils.isNullOrEmpty(userToken)) {
+            Log.d(TAG, "User token is null");
             return false;
         }
 
         DbUser user = DaoProvider.getInstance(context).getUserDao().getByToken(userToken);
 
         if (user == null) {
+            Log.d(TAG, "User is null");
             return false;
         }
 
@@ -48,6 +51,35 @@ public class ServiceUtils {
                 .getAllActive(user.getId());
 
         return activeModules != null && !activeModules.isEmpty();
+    }
+
+    /**
+     * Returns true if user has any modules installed
+     *
+     * @param context
+     * @return
+     */
+    public static boolean hasUserModules(Context context) {
+
+        String userToken = PreferenceProvider.getInstance(context).getUserToken();
+
+        if (StringUtils.isNullOrEmpty(userToken)) {
+            Log.d(TAG, "User token is null");
+            return false;
+        }
+
+        DbUser user = DaoProvider.getInstance(context).getUserDao().getByToken(userToken);
+
+        if (user == null) {
+            Log.d(TAG, "User is null");
+            return false;
+        }
+
+        List<DbModule> userModules = DaoProvider.getInstance(context)
+                .getModuleDao()
+                .getAll(user.getId());
+
+        return userModules != null && !userModules.isEmpty();
     }
 
     /**
