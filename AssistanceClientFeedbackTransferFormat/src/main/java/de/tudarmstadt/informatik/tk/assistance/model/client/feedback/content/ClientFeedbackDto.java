@@ -1,7 +1,7 @@
 /**
  * 
  */
-package de.tudarmstadt.informatik.tk.assistance.model.client.feedback;
+package de.tudarmstadt.informatik.tk.assistance.model.client.feedback.content;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;

@@ -1,7 +1,7 @@
 /**
  * 
  */
-package de.tudarmstadt.informatik.tk.assistance.model.client.feedback.enums;
+package de.tudarmstadt.informatik.tk.assistance.model.client.feedback.content.enums;
 
 /**
  * @author Wladimir Schmidt (wlsc.dev@gmail.com)

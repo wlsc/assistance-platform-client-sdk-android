@@ -1,7 +1,7 @@
 /**
  * 
  */
-package de.tudarmstadt.informatik.tk.assistance.model.client.feedback;
+package de.tudarmstadt.informatik.tk.assistance.model.client.feedback.content;
 
 import java.util.Arrays;
 import java.util.List;
@@ -17,47 +17,47 @@ public class ContentDto {
 
   @SerializedName("type")
   @Expose
-  private String type;
+  protected String type;
 
   @SerializedName("caption")
   @Expose
-  private String caption;
+  protected String caption;
 
   @SerializedName("target")
   @Expose
-  private String target;
+  protected String target;
 
   @SerializedName("priority")
   @Expose
-  private Integer priority;
+  protected Integer priority;
 
   @SerializedName("alignment")
   @Expose
-  private String alignment;
+  protected String alignment;
 
   @SerializedName("content")
   @Expose
-  private List<ContentDto> content;
+  protected List<ContentDto> content;
 
   @SerializedName("source")
   @Expose
-  private String source;
+  protected String source;
 
   @SerializedName("points")
   @Expose
-  private String[][] points;
+  protected String[][] points;
 
   @SerializedName("showUserLocation")
   @Expose
-  private Boolean showUserLocation;
+  protected Boolean showUserLocation;
 
   @SerializedName("style")
   @Expose
-  private String[] style;
+  protected String[] style;
 
   @SerializedName("highlighted")
   @Expose
-  private Boolean highlighted;
+  protected Boolean highlighted;
 
   public ContentDto() {}
 
