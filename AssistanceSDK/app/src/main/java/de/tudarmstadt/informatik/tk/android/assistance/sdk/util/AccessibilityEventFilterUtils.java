@@ -92,14 +92,19 @@ public class AccessibilityEventFilterUtils {
                     keyStrokes = 0;
                 }
                 /** same app but different activity */
-                else if (!lastClass.equals(className)) {
+                else {
 
-                    foregroundEvent.setEventType(ForegroundEvent.EVENT_ACTIVITY);
+                    if (lastClass != null) {
+                        if (!lastClass.equals(className)) {
 
-                    lWindow("Activity", appName, packageName, className, activityLabel);
-                } else {
-                    // lMisc(event.getEventType(), appName, packageName, className);
-                    break;
+                            foregroundEvent.setEventType(ForegroundEvent.EVENT_ACTIVITY);
+
+                            lWindow("Activity", appName, packageName, className, activityLabel);
+                        } else {
+                            // lMisc(event.getEventType(), appName, packageName, className);
+                            break;
+                        }
+                    }
                 }
 
                 /** update current running app */
