@@ -142,9 +142,15 @@ public class LocationSensor extends
         Log.d(TAG, "New normal interval: " + newNormalUpdateIntervalInSec + " sec");
 
         if (mGoogleApiClient.isConnected()) {
-            LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient,
-                    getNewLocationRequest(),
-                    this);
+
+            try {
+                LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient,
+                        getNewLocationRequest(),
+                        this);
+            } catch (SecurityException ex) {
+                Log.d(TAG, "SecurityException: user disabled location permission!");
+                stopSensor();
+            }
         }
     }
 

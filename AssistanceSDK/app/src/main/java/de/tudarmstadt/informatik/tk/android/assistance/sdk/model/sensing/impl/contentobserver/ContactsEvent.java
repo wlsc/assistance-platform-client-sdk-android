@@ -82,8 +82,7 @@ public class ContactsEvent extends AbstractContentObserverEvent {
 
         try {
 
-            cursor = context
-                    .getContentResolver()
+            cursor = context.getContentResolver()
                     .query(URI_CONTACTS, null, Data.IN_VISIBLE_GROUP + " = 1", null, null);
 
             if (cursor == null) {
@@ -178,8 +177,6 @@ public class ContactsEvent extends AbstractContentObserverEvent {
             }
         } catch (SecurityException se) {
             Log.d(TAG, "Permission was not granted for this event!");
-        } catch (NullPointerException npe) {
-            Log.d(TAG, "NPE in cursor");
         } catch (Exception e) {
             Log.e(TAG, "Some error:", e);
         } finally {
