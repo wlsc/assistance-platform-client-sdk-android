@@ -92,7 +92,7 @@ public class ConverterUtils {
         dbModule.setCopyright(availableModuleResponse.getCopyright() == null ? "" : availableModuleResponse.getCopyright());
         dbModule.setDescriptionShort(availableModuleResponse.getDescriptionShort() == null ? "" : availableModuleResponse.getDescriptionShort());
         dbModule.setDescriptionFull(availableModuleResponse.getDescriptionFull() == null ? "" : availableModuleResponse.getDescriptionFull());
-        dbModule.setPackageName(availableModuleResponse.getModulePackage() == null ? "" : availableModuleResponse.getModulePackage());
+        dbModule.setPackageName(availableModuleResponse.getPackageName() == null ? "" : availableModuleResponse.getPackageName());
         dbModule.setSupportEmail(availableModuleResponse.getSupportEmail() == null ? "" : availableModuleResponse.getSupportEmail());
         dbModule.setCreated(DateUtils.dateToISO8601String(new Date(), Locale.getDefault()));
 

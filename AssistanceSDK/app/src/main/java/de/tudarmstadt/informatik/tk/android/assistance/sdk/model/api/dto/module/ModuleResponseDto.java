@@ -61,7 +61,7 @@ public class ModuleResponseDto {
         this.supportEmail = supportEmail;
     }
 
-    public String getModulePackage() {
+    public String getPackageName() {
         return modulePackage;
     }
 
