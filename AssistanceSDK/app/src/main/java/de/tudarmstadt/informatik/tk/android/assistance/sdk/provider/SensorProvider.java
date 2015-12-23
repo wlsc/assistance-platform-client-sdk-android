@@ -37,7 +37,7 @@ import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensing.impl.tr
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.util.logger.Log;
 
 /**
- * Main sensor provider
+ * Sensor and event provider/handler
  *
  * @edited by Wladimir Schmidt (wlsc.dev@gmail.com)
  * @date 08.10.2015
@@ -340,7 +340,7 @@ public class SensorProvider {
      */
     public ISensor getSensorByDtoType(String apiDtoType) {
 
-        if (apiDtoType == null || apiDtoType.isEmpty()) {
+        if (apiDtoType == null || apiDtoType.isEmpty() || availableSensors == null) {
             return null;
         }
 
@@ -362,9 +362,110 @@ public class SensorProvider {
     }
 
     /**
+     * Returns minimum of required update frequency
+     * for each sensor type
+     *
+     * @param dtoType
+     * @return
+     */
+    public Double getMinRequiredUpdateFrequency(String userToken, String dtoType) {
+
+        if (userToken == null || userToken.isEmpty() || dtoType == null) {
+            return null;
+        }
+
+        Double result = Double.MAX_VALUE;
+
+        DbUser user = daoProvider.getUserDao().getByToken(userToken);
+
+        List<DbModule> modules = daoProvider.getModuleDao().getAllActive(user.getId());
+
+        if (modules.isEmpty()) {
+            return null;
+        }
+
+        for (DbModule module : modules) {
+
+            List<DbModuleCapability> capabilities = module.getDbModuleCapabilityList();
+
+            if (capabilities.isEmpty()) {
+                continue;
+            }
+
+            for (DbModuleCapability cap : capabilities) {
+
+                // we found our sensor
+                if (cap.getType().equals(dtoType)) {
+
+                    // take the minimum
+                    result = Math.min(cap.getRequiredUpdateFrequency(), result);
+
+                    // don't need to continue here
+                    break;
+                }
+            }
+        }
+
+        return result;
+    }
+
+    /**
+     * Returns minimum required readings for upload function
+     * per each given dto type
+     *
+     * @param userToken
+     * @param dtoType
+     * @return
+     */
+    public Double getMinRequiredReadings(String userToken, String dtoType) {
+
+        if (userToken == null || userToken.isEmpty() || dtoType == null) {
+            return null;
+        }
+
+        Double result = Double.MAX_VALUE;
+
+        DbUser user = daoProvider.getUserDao().getByToken(userToken);
+
+        List<DbModule> modules = daoProvider.getModuleDao().getAllActive(user.getId());
+
+        if (modules.isEmpty()) {
+            return null;
+        }
+
+        for (DbModule module : modules) {
+
+            List<DbModuleCapability> capabilities = module.getDbModuleCapabilityList();
+
+            if (capabilities.isEmpty()) {
+                continue;
+            }
+
+            for (DbModuleCapability cap : capabilities) {
+
+                // we found our sensor
+                if (cap.getType().equals(dtoType)) {
+
+                    // take the minimum readings
+                    result = Math.min(cap.getMinRequiredReadings(), result);
+
+                    // don't need to continue here
+                    break;
+                }
+            }
+        }
+
+        return result;
+    }
+
+    /**
      * Starts all sensors in running mappings
      */
     public void startAllStoppedSensors() {
+
+        if (runningSensors == null) {
+            return;
+        }
 
         for (Map.Entry<Integer, ISensor> entry : runningSensors.entrySet()) {
             entry.getValue().startSensor();
@@ -376,8 +477,24 @@ public class SensorProvider {
      */
     public void stopAllRunningSensors() {
 
+        if (runningSensors == null) {
+            return;
+        }
+
         for (Map.Entry<Integer, ISensor> entry : runningSensors.entrySet()) {
             entry.getValue().stopSensor();
+        }
+    }
+
+    /**
+     * Removes all enabled sensors
+     */
+    public void clearRunningSensors() {
+
+        if (runningSensors != null) {
+
+            stopAllRunningSensors();
+            runningSensors.clear();
         }
     }
 }

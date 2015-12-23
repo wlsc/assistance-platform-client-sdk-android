@@ -90,7 +90,7 @@ public class DbModuleCapability {
         this.requiredUpdateFrequency = requiredUpdateFrequency;
     }
 
-    public Integer getMinRequiredReadingsOnUpdate() {
+    public Integer getMinRequiredReadings() {
         return minRequiredReadingsOnUpdate;
     }
 
