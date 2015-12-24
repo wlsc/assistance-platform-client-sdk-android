@@ -1,6 +1,8 @@
 package de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto;
 
 import android.content.res.Resources;
+import android.hardware.Sensor;
+import android.util.SparseIntArray;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -13,8 +15,11 @@ import de.tudarmstadt.informatik.tk.android.assistance.sdk.R;
  */
 public class DtoType {
 
-    // holder of API string to DTO type mappings
-    private static final Map<String, Integer> mappings = new HashMap<>();
+    // holder of API type string to DTO type mappings
+    private static final Map<String, Integer> apiNameToDtoTypeMap = new HashMap<>();
+
+    // mapper for Android sensors to DTO types
+    private static final SparseIntArray androidSensorToDtoTypeMap = new SparseIntArray();
 
     /**
      * Type of sensors and events
@@ -71,31 +76,38 @@ public class DtoType {
     public static final int CALENDAR_REMINDER = 25;
 
     static {
-        mappings.put(getApiName(LOCATION), LOCATION);
-        mappings.put(getApiName(GYROSCOPE), GYROSCOPE);
-        mappings.put(getApiName(ACCELEROMETER), ACCELEROMETER);
-        mappings.put(getApiName(MAGNETIC_FIELD), MAGNETIC_FIELD);
-        mappings.put(getApiName(MOTION_ACTIVITY), MOTION_ACTIVITY);
-        mappings.put(getApiName(CONNECTION), CONNECTION);
-        mappings.put(getApiName(WIFI_CONNECTION), WIFI_CONNECTION);
-        mappings.put(getApiName(MOBILE_DATA_CONNECTION), MOBILE_DATA_CONNECTION);
-        mappings.put(getApiName(LOUDNESS), LOUDNESS);
-        mappings.put(getApiName(POWER_STATE), POWER_STATE);
-        mappings.put(getApiName(POWER_LEVEL), POWER_LEVEL);
-        mappings.put(getApiName(FOREGROUND), FOREGROUND);
-        mappings.put(getApiName(LIGHT), LIGHT);
-        mappings.put(getApiName(RUNNING_SERVICES), RUNNING_SERVICES);
-        mappings.put(getApiName(ACCOUNT_READER), ACCOUNT_READER);
-        mappings.put(getApiName(RUNNING_TASKS), RUNNING_TASKS);
-        mappings.put(getApiName(RUNNING_PROCESSES), RUNNING_PROCESSES);
-        mappings.put(getApiName(RINGTONE), RINGTONE);
-        mappings.put(getApiName(BACKGROUND_TRAFFIC), BACKGROUND_TRAFFIC);
-        mappings.put(getApiName(CALL_LOG), CALL_LOG);
-        mappings.put(getApiName(BROWSER_HISTORY), BROWSER_HISTORY);
-        mappings.put(getApiName(FOREGROUND_TRAFFIC), FOREGROUND_TRAFFIC);
-        mappings.put(getApiName(CALENDAR), CALENDAR);
-        mappings.put(getApiName(CALENDAR_REMINDER), CALENDAR_REMINDER);
-        mappings.put(getApiName(CONTACT), CONTACT);
+        apiNameToDtoTypeMap.put(getApiName(LOCATION), LOCATION);
+        apiNameToDtoTypeMap.put(getApiName(GYROSCOPE), GYROSCOPE);
+        apiNameToDtoTypeMap.put(getApiName(ACCELEROMETER), ACCELEROMETER);
+        apiNameToDtoTypeMap.put(getApiName(MAGNETIC_FIELD), MAGNETIC_FIELD);
+        apiNameToDtoTypeMap.put(getApiName(MOTION_ACTIVITY), MOTION_ACTIVITY);
+        apiNameToDtoTypeMap.put(getApiName(CONNECTION), CONNECTION);
+        apiNameToDtoTypeMap.put(getApiName(WIFI_CONNECTION), WIFI_CONNECTION);
+        apiNameToDtoTypeMap.put(getApiName(MOBILE_DATA_CONNECTION), MOBILE_DATA_CONNECTION);
+        apiNameToDtoTypeMap.put(getApiName(LOUDNESS), LOUDNESS);
+        apiNameToDtoTypeMap.put(getApiName(POWER_STATE), POWER_STATE);
+        apiNameToDtoTypeMap.put(getApiName(POWER_LEVEL), POWER_LEVEL);
+        apiNameToDtoTypeMap.put(getApiName(FOREGROUND), FOREGROUND);
+        apiNameToDtoTypeMap.put(getApiName(LIGHT), LIGHT);
+        apiNameToDtoTypeMap.put(getApiName(RUNNING_SERVICES), RUNNING_SERVICES);
+        apiNameToDtoTypeMap.put(getApiName(ACCOUNT_READER), ACCOUNT_READER);
+        apiNameToDtoTypeMap.put(getApiName(RUNNING_TASKS), RUNNING_TASKS);
+        apiNameToDtoTypeMap.put(getApiName(RUNNING_PROCESSES), RUNNING_PROCESSES);
+        apiNameToDtoTypeMap.put(getApiName(RINGTONE), RINGTONE);
+        apiNameToDtoTypeMap.put(getApiName(BACKGROUND_TRAFFIC), BACKGROUND_TRAFFIC);
+        apiNameToDtoTypeMap.put(getApiName(CALL_LOG), CALL_LOG);
+        apiNameToDtoTypeMap.put(getApiName(BROWSER_HISTORY), BROWSER_HISTORY);
+        apiNameToDtoTypeMap.put(getApiName(FOREGROUND_TRAFFIC), FOREGROUND_TRAFFIC);
+        apiNameToDtoTypeMap.put(getApiName(CALENDAR), CALENDAR);
+        apiNameToDtoTypeMap.put(getApiName(CALENDAR_REMINDER), CALENDAR_REMINDER);
+        apiNameToDtoTypeMap.put(getApiName(CONTACT), CONTACT);
+
+        androidSensorToDtoTypeMap.put(Sensor.TYPE_ACCELEROMETER, ACCELEROMETER);
+        androidSensorToDtoTypeMap.put(Sensor.TYPE_GYROSCOPE, GYROSCOPE);
+        androidSensorToDtoTypeMap.put(Sensor.TYPE_GYROSCOPE_UNCALIBRATED, GYROSCOPE);
+        androidSensorToDtoTypeMap.put(Sensor.TYPE_MAGNETIC_FIELD, MAGNETIC_FIELD);
+        androidSensorToDtoTypeMap.put(Sensor.TYPE_MAGNETIC_FIELD_UNCALIBRATED, MAGNETIC_FIELD);
+        androidSensorToDtoTypeMap.put(Sensor.TYPE_LIGHT, LIGHT);
     }
 
     private DtoType() {
@@ -234,6 +246,17 @@ public class DtoType {
             return -1;
         }
 
-        return DtoType.mappings.get(apiName).intValue();
+        return DtoType.apiNameToDtoTypeMap.get(apiName).intValue();
+    }
+
+    /**
+     * Returns DTO type by Android sensor type
+     * (in case of available mapping)
+     *
+     * @param androidSensorType
+     * @return
+     */
+    public static int getDtoType(int androidSensorType) {
+        return androidSensorToDtoTypeMap.get(androidSensorType);
     }
 }
