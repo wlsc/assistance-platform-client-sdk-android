@@ -514,9 +514,13 @@ public class SensorProvider {
             return Collections.emptySet();
         }
 
-        Set<Integer> dtos = new HashSet<>();
-
         SensorManager mSensorManager = (SensorManager) mContext.getSystemService(Context.SENSOR_SERVICE);
+
+        if (mSensorManager == null) {
+            return Collections.emptySet();
+        }
+
+        Set<Integer> dtos = new HashSet<>();
 
         if (mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER) != null) {
             dtos.add(DtoType.getDtoType(Sensor.TYPE_ACCELEROMETER));
@@ -535,5 +539,29 @@ public class SensorProvider {
         }
 
         return dtos;
+    }
+
+    /**
+     * Checks for ability of an user to run given module capability sensor/event type
+     *
+     * @param apiType
+     * @return
+     */
+    public boolean hasUserAbilityToRunSensor(String apiType) {
+
+        if (apiType == null) {
+            return false;
+        }
+
+        Set<Integer> usableSensors = getUsableDeviceSensorDtos();
+        int dtoType = DtoType.getDtoType(apiType);
+
+        boolean result = false;
+
+        if (usableSensors.contains(dtoType)) {
+            result = true;
+        }
+
+        return result;
     }
 }
