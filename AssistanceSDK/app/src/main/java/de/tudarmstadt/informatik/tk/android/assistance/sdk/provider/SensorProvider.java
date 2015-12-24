@@ -1,11 +1,16 @@
 package de.tudarmstadt.informatik.tk.android.assistance.sdk.provider;
 
 import android.content.Context;
+import android.hardware.Sensor;
+import android.hardware.SensorManager;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import de.greenrobot.event.EventBus;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbModule;
@@ -496,5 +501,39 @@ public class SensorProvider {
             stopAllRunningSensors();
             runningSensors.clear();
         }
+    }
+
+    /**
+     * Returns DTO types of which sensors are available on the running Android systen
+     *
+     * @return
+     */
+    public Set<Integer> getUsableDeviceSensorDtos() {
+
+        if (mContext == null) {
+            return Collections.emptySet();
+        }
+
+        Set<Integer> dtos = new HashSet<>();
+
+        SensorManager mSensorManager = (SensorManager) mContext.getSystemService(Context.SENSOR_SERVICE);
+
+        if (mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER) != null) {
+            dtos.add(DtoType.getDtoType(Sensor.TYPE_ACCELEROMETER));
+        }
+
+        if (mSensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE) != null) {
+            dtos.add(DtoType.getDtoType(Sensor.TYPE_GYROSCOPE));
+        }
+
+        if (mSensorManager.getDefaultSensor(Sensor.TYPE_LIGHT) != null) {
+            dtos.add(DtoType.getDtoType(Sensor.TYPE_LIGHT));
+        }
+
+        if (mSensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD) != null) {
+            dtos.add(DtoType.getDtoType(Sensor.TYPE_MAGNETIC_FIELD));
+        }
+
+        return dtos;
     }
 }
