@@ -61,9 +61,9 @@ public class SensorProvider {
 
     private Context mContext;
 
-    private PreferenceProvider preferenceProvider;
+    private static PreferenceProvider preferenceProvider;
 
-    private DaoProvider daoProvider;
+    private static DaoProvider daoProvider;
 
     /**
      * Constructs this class
