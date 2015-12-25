@@ -61,6 +61,8 @@ public class SensorProvider {
 
     private Context mContext;
 
+    private PreferenceProvider preferenceProvider;
+
     private DaoProvider daoProvider;
 
     /**
@@ -71,6 +73,7 @@ public class SensorProvider {
     private SensorProvider(Context context) {
         this.mContext = context;
 
+        preferenceProvider = PreferenceProvider.getInstance(context);
         daoProvider = DaoProvider.getInstance(context);
 
         initSensors();
@@ -182,7 +185,7 @@ public class SensorProvider {
 
         Log.d(TAG, "Initializing ENABLED sensors...");
 
-        String userToken = PreferenceProvider.getInstance(mContext).getUserToken();
+        String userToken = preferenceProvider.getUserToken();
         DbUser user = daoProvider.getUserDao().getByToken(userToken);
 
         if (userToken.isEmpty() || user == null) {
@@ -556,12 +559,59 @@ public class SensorProvider {
         Set<Integer> usableSensors = getUsableDeviceSensorDtos();
         int dtoType = DtoType.getDtoType(apiType);
 
-        boolean result = false;
-
         if (usableSensors.contains(dtoType)) {
-            result = true;
+            return true;
         }
 
-        return result;
+        if (!DtoType.getApiName(dtoType).isEmpty()) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Checks if given module capability active
+     *
+     * @param apiType
+     * @return
+     */
+    public boolean isModuleCapabilityActive(String apiType) {
+
+        String userToken = preferenceProvider.getUserToken();
+
+        if (userToken.isEmpty()) {
+            return false;
+        }
+
+        DbUser user = daoProvider.getUserDao().getByToken(userToken);
+
+        if (user == null) {
+            return false;
+        }
+
+        List<DbModule> activeModules = daoProvider.getModuleDao().getAllActive(user.getId());
+
+        if (activeModules == null || activeModules.isEmpty()) {
+            return false;
+        }
+
+        for (DbModule module : activeModules) {
+
+            List<DbModuleCapability> caps = module.getDbModuleCapabilityList();
+
+            if (caps == null) {
+                continue;
+            }
+
+            for (DbModuleCapability cap : caps) {
+
+                if (cap.getType().equals(apiType) && cap.getActive()) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 }
