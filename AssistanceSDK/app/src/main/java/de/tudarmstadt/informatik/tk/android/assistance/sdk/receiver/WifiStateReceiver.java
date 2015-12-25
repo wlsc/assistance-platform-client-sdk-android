@@ -20,11 +20,11 @@ public class WifiStateReceiver extends BroadcastReceiver {
 
     // Earliest point in time in the future
     // from which your task might start executing
-    private long UPLOAD_ALL_TASKS_START_SECS = 0l;
+    private static final long UPLOAD_ALL_TASKS_START_SECS = 0l;
 
     // latest point in time in the future
     // at which your task must have executed
-    private long UPLOAD_ALL_TASKS_END_SECS = 3600l;
+    private static final long UPLOAD_ALL_TASKS_END_SECS = 3600l;
 
     @Override
     public void onReceive(final Context context, Intent intent) {
@@ -102,8 +102,8 @@ public class WifiStateReceiver extends BroadcastReceiver {
     private void scheduleTask(Context context) {
 
         EventUploadService.scheduleOneTimeTask(context,
-                UPLOAD_ALL_TASKS_START_SECS,
-                UPLOAD_ALL_TASKS_END_SECS,
+                WifiStateReceiver.UPLOAD_ALL_TASKS_START_SECS,
+                WifiStateReceiver.UPLOAD_ALL_TASKS_END_SECS,
                 "onetimetag | 1");
     }
 }
