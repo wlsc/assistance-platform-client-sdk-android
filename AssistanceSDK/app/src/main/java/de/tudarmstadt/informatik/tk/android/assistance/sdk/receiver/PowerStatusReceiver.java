@@ -8,10 +8,12 @@ import java.util.Date;
 import java.util.Locale;
 
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbPowerStateEvent;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.DtoType;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.constant.PowerChargingStatus;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.constant.PowerChargingType;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.DaoProvider;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.HarvesterServiceProvider;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.SensorProvider;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.service.HarvesterService;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.util.BatteryUtils;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.util.DateUtils;
@@ -30,6 +32,14 @@ public class PowerStatusReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
 
         if (context == null) {
+            return;
+        }
+
+        final boolean isModuleCapabilityActive = SensorProvider.getInstance(context)
+                .isModuleCapabilityActive(DtoType.getApiName(DtoType.POWER_STATE));
+
+        if (!isModuleCapabilityActive) {
+            Log.d(TAG, "Module capability is not active. Event is ignored");
             return;
         }
 
