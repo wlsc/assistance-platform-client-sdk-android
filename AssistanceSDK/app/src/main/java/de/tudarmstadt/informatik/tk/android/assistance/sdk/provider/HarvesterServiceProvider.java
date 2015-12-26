@@ -208,11 +208,14 @@ public class HarvesterServiceProvider implements ServiceConnection {
 
         try {
 
-            mContext.bindService(new Intent(mContext, HarvesterService.class),
-                    mServiceConnection,
-                    Context.BIND_AUTO_CREATE);
+            if (!isServiceBound()) {
 
-            isServiceBound = true;
+                mContext.bindService(new Intent(mContext, HarvesterService.class),
+                        mServiceConnection,
+                        Context.BIND_AUTO_CREATE);
+
+                isServiceBound = true;
+            }
 
         } catch (Exception e) {
             Log.e(TAG, "Some error.");
