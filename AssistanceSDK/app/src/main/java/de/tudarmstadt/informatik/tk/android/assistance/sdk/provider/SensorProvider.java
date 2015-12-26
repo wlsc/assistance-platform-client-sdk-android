@@ -370,15 +370,15 @@ public class SensorProvider {
     }
 
     /**
-     * Returns minimum of required update frequency
-     * for each sensor type
+     * Returns required collection frequency
+     * for given sensor type
      *
-     * @param dtoType
+     * @param sensorType
      * @return
      */
-    public Double getMinRequiredUpdateFrequency(String dtoType) {
+    public Double getCollectionFrequency(String sensorType) {
 
-        if (dtoType == null) {
+        if (sensorType == null) {
             return null;
         }
 
@@ -409,7 +409,61 @@ public class SensorProvider {
             for (DbModuleCapability cap : capabilities) {
 
                 // we found our active capability type
-                if (cap.getActive() && cap.getType().equals(dtoType)) {
+                if (cap.getActive() && cap.getType().equals(sensorType)) {
+
+                    // take the minimum
+                    result = Math.min(cap.getCollectionFrequency(), result);
+
+                    // don't need to continue here
+                    break;
+                }
+            }
+        }
+
+        return result;
+    }
+
+    /**
+     * Returns minimum of required update frequency
+     * for each sensor type
+     *
+     * @param sensorType
+     * @return
+     */
+    public Double getMinRequiredUpdateFrequency(String sensorType) {
+
+        if (sensorType == null) {
+            return null;
+        }
+
+        String userToken = preferenceProvider.getUserToken();
+
+        DbUser user = daoProvider.getUserDao().getByToken(userToken);
+
+        if (user == null) {
+            return null;
+        }
+
+        List<DbModule> modules = daoProvider.getModuleDao().getAllActive(user.getId());
+
+        if (modules.isEmpty()) {
+            return null;
+        }
+
+        Double result = Double.MAX_VALUE;
+
+        for (DbModule module : modules) {
+
+            List<DbModuleCapability> capabilities = module.getDbModuleCapabilityList();
+
+            if (capabilities.isEmpty()) {
+                continue;
+            }
+
+            for (DbModuleCapability cap : capabilities) {
+
+                // we found our active capability type
+                if (cap.getActive() && cap.getType().equals(sensorType)) {
 
                     // take the minimum
                     result = Math.min(cap.getRequiredUpdateFrequency(), result);
@@ -427,12 +481,12 @@ public class SensorProvider {
      * Returns minimum required readings for upload function
      * per each given dto type
      *
-     * @param dtoType
+     * @param sensorType
      * @return
      */
-    public Double getMinRequiredReadings(String dtoType) {
+    public Double getMinRequiredReadings(String sensorType) {
 
-        if (dtoType == null) {
+        if (sensorType == null) {
             return null;
         }
 
@@ -463,7 +517,7 @@ public class SensorProvider {
             for (DbModuleCapability cap : capabilities) {
 
                 // only active capability
-                if (cap.getActive() && cap.getType().equals(dtoType)) {
+                if (cap.getActive() && cap.getType().equals(sensorType)) {
 
                     // take the minimum readings
                     result = Math.min(cap.getMinRequiredReadings(), result);
