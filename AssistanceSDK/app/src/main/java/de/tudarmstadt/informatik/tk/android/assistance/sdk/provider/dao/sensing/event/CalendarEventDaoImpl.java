@@ -78,6 +78,21 @@ public class CalendarEventDaoImpl extends
     }
 
     @Override
+    public DbCalendarEvent get(Long id) {
+
+        if (id == null) {
+            return null;
+        }
+
+        return dao
+                .queryBuilder()
+                .where(DbCalendarEventDao.Properties.Id.eq(id))
+                .limit(1)
+                .build()
+                .unique();
+    }
+
+    @Override
     public List<DbCalendarEvent> getLastN(int amount) {
 
         if (amount <= 0) {

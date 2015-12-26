@@ -11,5 +11,5 @@ import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.CommonDa
  */
 public interface NewsDao extends CommonDao<DbNews> {
 
-    List<DbNews> get(Long userId);
+    List<DbNews> getAll(Long userId);
 }

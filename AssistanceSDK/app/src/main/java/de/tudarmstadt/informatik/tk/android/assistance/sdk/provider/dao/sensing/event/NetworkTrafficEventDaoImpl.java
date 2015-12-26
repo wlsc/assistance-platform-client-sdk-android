@@ -66,6 +66,21 @@ public class NetworkTrafficEventDaoImpl extends
     }
 
     @Override
+    public DbNetworkTrafficEvent get(Long id) {
+
+        if (id == null) {
+            return null;
+        }
+
+        return dao
+                .queryBuilder()
+                .where(DbNetworkTrafficEventDao.Properties.Id.eq(id))
+                .limit(1)
+                .build()
+                .unique();
+    }
+
+    @Override
     public List<DbNetworkTrafficEvent> getLastN(int amount) {
 
         if (amount <= 0) {

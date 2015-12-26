@@ -11,6 +11,6 @@ import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.
  */
 public interface ContactEmailEventDao extends CommonEventDao<DbContactEmailEvent> {
 
-    List<DbContactEmailEvent> get(Long contactId);
+    List<DbContactEmailEvent> getAll(Long contactId);
 
 }

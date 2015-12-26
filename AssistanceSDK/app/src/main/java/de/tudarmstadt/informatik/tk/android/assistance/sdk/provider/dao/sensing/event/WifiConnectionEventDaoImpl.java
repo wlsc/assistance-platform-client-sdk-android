@@ -60,6 +60,21 @@ public class WifiConnectionEventDaoImpl extends
     }
 
     @Override
+    public DbWifiConnectionEvent get(Long id) {
+
+        if (id == null) {
+            return null;
+        }
+
+        return dao
+                .queryBuilder()
+                .where(DbWifiConnectionEventDao.Properties.Id.eq(id))
+                .limit(1)
+                .build()
+                .unique();
+    }
+
+    @Override
     public List<DbWifiConnectionEvent> getLastN(int amount) {
 
         if (amount <= 0) {

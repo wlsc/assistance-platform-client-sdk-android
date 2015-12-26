@@ -167,7 +167,7 @@ public class LightSensor
     public void onEvent(UpdateSensorIntervalEvent event) {
 
         // only accept this sensor topic type
-        if (event.getTopic() != getType()) {
+        if (event.getDtoType() != getType()) {
             return;
         }
 

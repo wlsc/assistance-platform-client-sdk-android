@@ -103,6 +103,21 @@ public class ContactEventDaoImpl extends
     }
 
     @Override
+    public DbContactEvent get(Long id) {
+
+        if (id == null) {
+            return null;
+        }
+
+        return dao
+                .queryBuilder()
+                .where(DbContactEventDao.Properties.Id.eq(id))
+                .limit(1)
+                .build()
+                .unique();
+    }
+
+    @Override
     public List<DbContactEvent> getLastN(int amount) {
 
         if (amount <= 0) {

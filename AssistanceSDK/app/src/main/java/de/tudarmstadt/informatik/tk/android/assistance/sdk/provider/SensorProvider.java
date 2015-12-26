@@ -376,21 +376,27 @@ public class SensorProvider {
      * @param dtoType
      * @return
      */
-    public Double getMinRequiredUpdateFrequency(String userToken, String dtoType) {
+    public Double getMinRequiredUpdateFrequency(String dtoType) {
 
-        if (userToken == null || userToken.isEmpty() || dtoType == null) {
+        if (dtoType == null) {
             return null;
         }
 
-        Double result = Double.MAX_VALUE;
+        String userToken = preferenceProvider.getUserToken();
 
         DbUser user = daoProvider.getUserDao().getByToken(userToken);
+
+        if (user == null) {
+            return null;
+        }
 
         List<DbModule> modules = daoProvider.getModuleDao().getAllActive(user.getId());
 
         if (modules.isEmpty()) {
             return null;
         }
+
+        Double result = Double.MAX_VALUE;
 
         for (DbModule module : modules) {
 
@@ -402,8 +408,8 @@ public class SensorProvider {
 
             for (DbModuleCapability cap : capabilities) {
 
-                // we found our sensor
-                if (cap.getType().equals(dtoType)) {
+                // we found our active capability type
+                if (cap.getActive() && cap.getType().equals(dtoType)) {
 
                     // take the minimum
                     result = Math.min(cap.getRequiredUpdateFrequency(), result);
@@ -421,25 +427,30 @@ public class SensorProvider {
      * Returns minimum required readings for upload function
      * per each given dto type
      *
-     * @param userToken
      * @param dtoType
      * @return
      */
-    public Double getMinRequiredReadings(String userToken, String dtoType) {
+    public Double getMinRequiredReadings(String dtoType) {
 
-        if (userToken == null || userToken.isEmpty() || dtoType == null) {
+        if (dtoType == null) {
             return null;
         }
 
-        Double result = Double.MAX_VALUE;
+        String userToken = preferenceProvider.getUserToken();
 
         DbUser user = daoProvider.getUserDao().getByToken(userToken);
+
+        if (user == null) {
+            return null;
+        }
 
         List<DbModule> modules = daoProvider.getModuleDao().getAllActive(user.getId());
 
         if (modules.isEmpty()) {
             return null;
         }
+
+        Double result = Double.MAX_VALUE;
 
         for (DbModule module : modules) {
 
@@ -451,8 +462,8 @@ public class SensorProvider {
 
             for (DbModuleCapability cap : capabilities) {
 
-                // we found our sensor
-                if (cap.getType().equals(dtoType)) {
+                // only active capability
+                if (cap.getActive() && cap.getType().equals(dtoType)) {
 
                     // take the minimum readings
                     result = Math.min(cap.getMinRequiredReadings(), result);
@@ -613,5 +624,77 @@ public class SensorProvider {
         }
 
         return false;
+    }
+
+    /**
+     * Activates given sensors/events by DTO type
+     *
+     * @param dtoTypes
+     * @return
+     */
+    public boolean activateSensors(Set<Integer> dtoTypes) {
+
+        if (dtoTypes == null) {
+            Log.d(TAG, "DTO types array was null");
+            return false;
+        }
+
+        Log.d(TAG, "Activating sensors...");
+
+        for (Integer type : dtoTypes) {
+
+            // that sensor is not running
+            if (runningSensors.get(type) == null) {
+
+                // get
+                ISensor sensor = availableSensors.get(type);
+
+                // run
+                sensor.startSensor();
+
+                // add to running sensors pool
+                runningSensors.put(type, sensor);
+            }
+        }
+
+        Log.d(TAG, "Finished activate sensors");
+
+        return true;
+    }
+
+    /**
+     * Deactivates given sensors/events by DTO type
+     *
+     * @param dtoTypes
+     * @return
+     */
+    public boolean deactivateSensors(Set<Integer> dtoTypes) {
+
+        if (dtoTypes == null) {
+            Log.d(TAG, "DTO types array was null");
+            return false;
+        }
+
+        Log.d(TAG, "Deactivating sensors...");
+
+        for (Integer type : dtoTypes) {
+
+            // sensor is running
+            if (runningSensors.get(type) != null) {
+
+                // get
+                ISensor sensor = availableSensors.get(type);
+
+                // stop
+                sensor.stopSensor();
+
+                // remove from running sensors pool
+                runningSensors.remove(type);
+            }
+        }
+
+        Log.d(TAG, "Finished deactivate sensors");
+
+        return true;
     }
 }

@@ -57,6 +57,21 @@ public class MobileConnectionEventDaoImpl extends
     }
 
     @Override
+    public DbMobileConnectionEvent get(Long id) {
+
+        if (id == null) {
+            return null;
+        }
+
+        return dao
+                .queryBuilder()
+                .where(DbMobileConnectionEventDao.Properties.Id.eq(id))
+                .limit(1)
+                .build()
+                .unique();
+    }
+
+    @Override
     public List<DbMobileConnectionEvent> getLastN(int amount) {
 
         if (amount <= 0) {

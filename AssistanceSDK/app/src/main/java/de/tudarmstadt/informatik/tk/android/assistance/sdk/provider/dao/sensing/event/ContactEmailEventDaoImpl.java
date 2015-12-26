@@ -59,6 +59,21 @@ public class ContactEmailEventDaoImpl extends
     }
 
     @Override
+    public DbContactEmailEvent get(Long id) {
+
+        if (id == null) {
+            return null;
+        }
+
+        return dao
+                .queryBuilder()
+                .where(DbContactEmailEventDao.Properties.Id.eq(id))
+                .limit(1)
+                .build()
+                .unique();
+    }
+
+    @Override
     public List<DbContactEmailEvent> getLastN(int amount) {
 
         if (amount <= 0) {
@@ -74,7 +89,7 @@ public class ContactEmailEventDaoImpl extends
     }
 
     @Override
-    public List<DbContactEmailEvent> get(Long contactId) {
+    public List<DbContactEmailEvent> getAll(Long contactId) {
 
         if (contactId == null) {
             return Collections.emptyList();

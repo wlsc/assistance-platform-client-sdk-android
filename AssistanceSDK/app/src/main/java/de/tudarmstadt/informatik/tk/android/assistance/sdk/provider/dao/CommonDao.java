@@ -8,6 +8,8 @@ import java.util.List;
  */
 public interface CommonDao<T> {
 
+    T get(Long id);
+
     List<T> getAll();
 
     List<T> getFirstN(int amount);

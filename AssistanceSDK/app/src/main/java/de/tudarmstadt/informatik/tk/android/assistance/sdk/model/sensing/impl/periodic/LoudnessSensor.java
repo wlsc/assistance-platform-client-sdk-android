@@ -446,7 +446,7 @@ public class LoudnessSensor extends AbstractPeriodicEvent implements Callback {
     public void onEvent(UpdateSensorIntervalEvent event) {
 
         // only accept this sensor topic type
-        if (event.getTopic() != getType()) {
+        if (event.getDtoType() != getType()) {
             return;
         }
 

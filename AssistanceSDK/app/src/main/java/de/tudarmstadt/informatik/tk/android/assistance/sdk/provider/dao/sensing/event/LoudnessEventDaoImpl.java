@@ -55,6 +55,21 @@ public class LoudnessEventDaoImpl extends
     }
 
     @Override
+    public DbLoudnessEvent get(Long id) {
+
+        if (id == null) {
+            return null;
+        }
+
+        return dao
+                .queryBuilder()
+                .where(DbLoudnessEventDao.Properties.Id.eq(id))
+                .limit(1)
+                .build()
+                .unique();
+    }
+
+    @Override
     public List<DbLoudnessEvent> getLastN(int amount) {
 
         if (amount <= 0) {

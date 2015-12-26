@@ -55,6 +55,21 @@ public class PowerLevelEventDaoImpl extends
     }
 
     @Override
+    public DbPowerLevelEvent get(Long id) {
+
+        if (id == null) {
+            return null;
+        }
+
+        return dao
+                .queryBuilder()
+                .where(DbPowerLevelEventDao.Properties.Id.eq(id))
+                .limit(1)
+                .build()
+                .unique();
+    }
+
+    @Override
     public List<DbPowerLevelEvent> getLastN(int amount) {
 
         if (amount <= 0) {

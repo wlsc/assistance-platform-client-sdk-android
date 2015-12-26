@@ -55,6 +55,21 @@ public class LightSensorDaoImpl extends
     }
 
     @Override
+    public DbLightSensor get(Long id) {
+
+        if (id == null) {
+            return null;
+        }
+
+        return dao
+                .queryBuilder()
+                .where(DbLightSensorDao.Properties.Id.eq(id))
+                .limit(1)
+                .build()
+                .unique();
+    }
+
+    @Override
     public List<DbLightSensor> getLastN(int amount) {
 
         if (amount <= 0) {

@@ -55,6 +55,21 @@ public class RunningProcessesEventDaoImpl extends
     }
 
     @Override
+    public DbRunningProcessesEvent get(Long id) {
+
+        if (id == null) {
+            return null;
+        }
+
+        return dao
+                .queryBuilder()
+                .where(DbRunningProcessesEventDao.Properties.Id.eq(id))
+                .limit(1)
+                .build()
+                .unique();
+    }
+
+    @Override
     public List<DbRunningProcessesEvent> getLastN(int amount) {
 
         if (amount <= 0) {

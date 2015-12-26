@@ -526,7 +526,7 @@ public class ContactsEvent extends AbstractContentObserverEvent {
 
         List<DbContactNumberEvent> list = daoProvider
                 .getContactNumberEventDao()
-                .get(contactId);
+                .getAll(contactId);
 
         Map<String, DbContactNumberEvent> map = new HashMap<>();
 
@@ -541,7 +541,7 @@ public class ContactsEvent extends AbstractContentObserverEvent {
 
         List<DbContactEmailEvent> contactMails = daoProvider
                 .getContactEmailEventDao()
-                .get(contactId);
+                .getAll(contactId);
 
         Map<String, DbContactEmailEvent> map = new HashMap<>();
 

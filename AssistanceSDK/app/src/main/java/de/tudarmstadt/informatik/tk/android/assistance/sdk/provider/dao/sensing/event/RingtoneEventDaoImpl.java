@@ -55,6 +55,21 @@ public class RingtoneEventDaoImpl extends
     }
 
     @Override
+    public DbRingtoneEvent get(Long id) {
+
+        if (id == null) {
+            return null;
+        }
+
+        return dao
+                .queryBuilder()
+                .where(DbRingtoneEventDao.Properties.Id.eq(id))
+                .limit(1)
+                .build()
+                .unique();
+    }
+
+    @Override
     public List<DbRingtoneEvent> getLastN(int amount) {
 
         if (amount <= 0) {

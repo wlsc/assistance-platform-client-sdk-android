@@ -76,6 +76,21 @@ public class UserDaoImpl extends
     }
 
     @Override
+    public DbUser get(Long id) {
+
+        if (id == null) {
+            return null;
+        }
+
+        return dao
+                .queryBuilder()
+                .where(DbUserDao.Properties.Id.eq(id))
+                .limit(1)
+                .build()
+                .unique();
+    }
+
+    @Override
     public List<DbUser> getLastN(int amount) {
 
         if (amount <= 0) {

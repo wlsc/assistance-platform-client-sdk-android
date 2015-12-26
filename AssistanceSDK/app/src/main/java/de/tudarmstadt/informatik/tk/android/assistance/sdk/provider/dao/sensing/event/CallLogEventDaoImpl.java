@@ -62,6 +62,21 @@ public class CallLogEventDaoImpl extends
     }
 
     @Override
+    public DbCallLogEvent get(Long id) {
+
+        if (id == null) {
+            return null;
+        }
+
+        return dao
+                .queryBuilder()
+                .where(DbCallLogEventDao.Properties.Id.eq(id))
+                .limit(1)
+                .build()
+                .unique();
+    }
+
+    @Override
     public List<DbCallLogEvent> getLastN(int amount) {
 
         if (amount <= 0) {

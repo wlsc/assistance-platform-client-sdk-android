@@ -62,6 +62,21 @@ public class BrowserHistoryEventDaoImpl extends
     }
 
     @Override
+    public DbBrowserHistoryEvent get(Long id) {
+
+        if (id == null) {
+            return null;
+        }
+
+        return dao
+                .queryBuilder()
+                .where(DbBrowserHistoryEventDao.Properties.Id.eq(id))
+                .limit(1)
+                .build()
+                .unique();
+    }
+
+    @Override
     public List<DbBrowserHistoryEvent> getLastN(int amount) {
 
         if (amount <= 0) {

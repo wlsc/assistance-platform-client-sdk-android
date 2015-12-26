@@ -61,6 +61,21 @@ public class ForegroundEventDaoImpl extends
     }
 
     @Override
+    public DbForegroundEvent get(Long id) {
+
+        if (id == null) {
+            return null;
+        }
+
+        return dao
+                .queryBuilder()
+                .where(DbForegroundEventDao.Properties.Id.eq(id))
+                .limit(1)
+                .build()
+                .unique();
+    }
+
+    @Override
     public List<DbForegroundEvent> getLastN(int amount) {
 
         if (amount <= 0) {

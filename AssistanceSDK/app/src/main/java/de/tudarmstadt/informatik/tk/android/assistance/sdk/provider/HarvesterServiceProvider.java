@@ -26,7 +26,9 @@ public class HarvesterServiceProvider implements ServiceConnection {
 
     private static HarvesterServiceProvider INSTANCE;
 
-    private final Context mContext;
+    private static Context mContext;
+
+    private static ModuleProvider moduleProvider;
 
     private Messenger mMessengerOutgoing = null;
     private Messenger mMessengerIncoming = new Messenger(new IncomingMessageHandler());
@@ -44,6 +46,8 @@ public class HarvesterServiceProvider implements ServiceConnection {
         if (isServiceRunning()) {
             bindService();
         }
+
+        moduleProvider = ModuleProvider.getInstance(context);
     }
 
     public static HarvesterServiceProvider getInstance(Context context) {
@@ -51,6 +55,8 @@ public class HarvesterServiceProvider implements ServiceConnection {
         if (INSTANCE == null) {
             INSTANCE = new HarvesterServiceProvider(context);
         }
+
+        mContext = context;
 
         return INSTANCE;
     }

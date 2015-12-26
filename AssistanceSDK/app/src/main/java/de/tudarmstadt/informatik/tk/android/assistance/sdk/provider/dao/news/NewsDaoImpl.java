@@ -40,7 +40,7 @@ public class NewsDaoImpl extends
      * @return
      */
     @Override
-    public List<DbNews> get(Long userId) {
+    public List<DbNews> getAll(Long userId) {
 
         if (userId == null) {
             return Collections.emptyList();
@@ -51,6 +51,21 @@ public class NewsDaoImpl extends
                 .where(DbNewsDao.Properties.UserId.eq(userId))
                 .build()
                 .list();
+    }
+
+    @Override
+    public DbNews get(Long id) {
+
+        if (id == null) {
+            return null;
+        }
+
+        return dao
+                .queryBuilder()
+                .where(DbNewsDao.Properties.Id.eq(id))
+                .limit(1)
+                .build()
+                .unique();
     }
 
     @Override

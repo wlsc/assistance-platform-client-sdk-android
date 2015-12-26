@@ -63,6 +63,21 @@ public class MagneticFieldSensorDaoImpl extends
     }
 
     @Override
+    public DbMagneticFieldSensor get(Long id) {
+
+        if (id == null) {
+            return null;
+        }
+
+        return dao
+                .queryBuilder()
+                .where(DbMagneticFieldSensorDao.Properties.Id.eq(id))
+                .limit(1)
+                .build()
+                .unique();
+    }
+
+    @Override
     public List<DbMagneticFieldSensor> getLastN(int amount) {
 
         if (amount <= 0) {

@@ -11,6 +11,8 @@ import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.CommonDa
  */
 public interface ModuleDao extends CommonDao<DbModule> {
 
+    DbModule get(Long moduleId);
+
     DbModule getByPackageIdUserId(String modulePackageName, Long userId);
 
     List<DbModule> getAll(Long userId);

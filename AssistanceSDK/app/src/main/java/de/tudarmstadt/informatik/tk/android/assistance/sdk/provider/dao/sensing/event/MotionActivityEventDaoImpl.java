@@ -61,6 +61,21 @@ public class MotionActivityEventDaoImpl extends
     }
 
     @Override
+    public DbMotionActivityEvent get(Long id) {
+
+        if (id == null) {
+            return null;
+        }
+
+        return dao
+                .queryBuilder()
+                .where(DbMotionActivityEventDao.Properties.Id.eq(id))
+                .limit(1)
+                .build()
+                .unique();
+    }
+
+    @Override
     public List<DbMotionActivityEvent> getLastN(int amount) {
 
         if (amount <= 0) {

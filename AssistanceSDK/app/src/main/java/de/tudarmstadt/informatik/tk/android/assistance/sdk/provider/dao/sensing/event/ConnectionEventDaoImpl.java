@@ -55,6 +55,21 @@ public class ConnectionEventDaoImpl extends
     }
 
     @Override
+    public DbConnectionEvent get(Long id) {
+
+        if (id == null) {
+            return null;
+        }
+
+        return dao
+                .queryBuilder()
+                .where(DbConnectionEventDao.Properties.Id.eq(id))
+                .limit(1)
+                .build()
+                .unique();
+    }
+
+    @Override
     public List<DbConnectionEvent> getLastN(int amount) {
 
         if (amount <= 0) {

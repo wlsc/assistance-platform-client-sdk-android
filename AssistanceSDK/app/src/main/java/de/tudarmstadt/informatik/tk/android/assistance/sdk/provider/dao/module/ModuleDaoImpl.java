@@ -86,6 +86,21 @@ public class ModuleDaoImpl extends
     }
 
     @Override
+    public DbModule get(Long moduleId) {
+
+        if (moduleId == null || moduleId.longValue() < 0) {
+            return null;
+        }
+
+        return dao
+                .queryBuilder()
+                .where(DbModuleDao.Properties.Id.eq(moduleId))
+                .limit(1)
+                .build()
+                .unique();
+    }
+
+    @Override
     public List<DbModule> getLastN(int amount) {
 
         if (amount <= 0) {
