@@ -9,7 +9,6 @@ import java.util.Set;
 import de.greenrobot.event.EventBus;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbModule;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbModuleCapability;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.event.ModuleStateChangeEvent;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.event.UpdateSensorIntervalEvent;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.DtoType;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.util.logger.Log;
@@ -34,10 +33,6 @@ public class ModuleProvider {
 
     private ModuleProvider(Context context) {
         this.mContext = context;
-
-        if (!EventBus.getDefault().isRegistered(this)) {
-            EventBus.getDefault().register(this);
-        }
     }
 
     public static ModuleProvider getInstance(Context context) {
@@ -57,26 +52,12 @@ public class ModuleProvider {
     }
 
     /**
-     * On module install event
-     *
-     * @param event
-     */
-    public void onEvent(ModuleStateChangeEvent event) {
-
-        Log.d(TAG, "Received module state change event");
-        Log.d(TAG, "Module id: " + event.getModuleId());
-        Log.d(TAG, "IsEnabled: " + event.isActive());
-
-        toggleModuleState(event.getModuleId(), event.isActive());
-    }
-
-    /**
      * Enables or disables module
      *
      * @param moduleId
      * @param isActive
      */
-    private void toggleModuleState(long moduleId, boolean isActive) {
+    public void toggleModuleState(long moduleId, boolean isActive) {
 
         // update db entry
         boolean wasUpdated = updateDb(moduleId, isActive);
