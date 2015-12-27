@@ -243,9 +243,14 @@ public class HarvesterServiceProvider implements ServiceConnection {
                 }
             }
 
-            // disconnecting...
-            this.mContext.unbindService(mServiceConnection);
-            this.isServiceBound = false;
+            try {
+                // disconnecting...
+                this.mContext.unbindService(mServiceConnection);
+            } catch (IllegalArgumentException iae) {
+                Log.d(TAG, "Service was not bound!");
+            } finally {
+                this.isServiceBound = false;
+            }
 
             Log.d(TAG, "The service provider was unbound from sensing service");
         }
