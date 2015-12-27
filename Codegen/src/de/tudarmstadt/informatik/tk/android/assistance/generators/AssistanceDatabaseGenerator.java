@@ -46,6 +46,7 @@ public class AssistanceDatabaseGenerator {
     user.addStringProperty("userpicFilename");
     user.addStringProperty("lastLogin");
     user.addStringProperty("joinedSince");
+    user.addStringProperty("uuid");
     user.addStringProperty("created").notNull();
 
     // ----- Social user profile scheme -----
@@ -107,7 +108,7 @@ public class AssistanceDatabaseGenerator {
     moduleCapability.addStringProperty("type").notNull().index();
     moduleCapability.addDoubleProperty("collectionFrequency");
     moduleCapability.addDoubleProperty("requiredUpdateFrequency");
-    moduleCapability.addIntProperty("minRequiredReadingsOnUpdate");
+    moduleCapability.addIntProperty("minRequiredReadings");
     moduleCapability.addBooleanProperty("required").notNull();
     moduleCapability.addBooleanProperty("active").notNull().index();
     moduleCapability.addStringProperty("created").notNull();

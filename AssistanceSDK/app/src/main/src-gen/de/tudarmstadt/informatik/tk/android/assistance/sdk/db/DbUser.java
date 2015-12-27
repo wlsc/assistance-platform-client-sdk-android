@@ -19,6 +19,7 @@ public class DbUser {
     private String userpicFilename;
     private String lastLogin;
     private String joinedSince;
+    private String uuid;
     /** Not-null value. */
     private String created;
 
@@ -40,7 +41,7 @@ public class DbUser {
         this.id = id;
     }
 
-    public DbUser(Long id, String token, String firstname, String lastname, String primaryEmail, String userpicFilename, String lastLogin, String joinedSince, String created) {
+    public DbUser(Long id, String token, String firstname, String lastname, String primaryEmail, String userpicFilename, String lastLogin, String joinedSince, String uuid, String created) {
         this.id = id;
         this.token = token;
         this.firstname = firstname;
@@ -49,6 +50,7 @@ public class DbUser {
         this.userpicFilename = userpicFilename;
         this.lastLogin = lastLogin;
         this.joinedSince = joinedSince;
+        this.uuid = uuid;
         this.created = created;
     }
 
@@ -122,6 +124,14 @@ public class DbUser {
 
     public void setJoinedSince(String joinedSince) {
         this.joinedSince = joinedSince;
+    }
+
+    public String getUuid() {
+        return uuid;
+    }
+
+    public void setUuid(String uuid) {
+        this.uuid = uuid;
     }
 
     /** Not-null value. */

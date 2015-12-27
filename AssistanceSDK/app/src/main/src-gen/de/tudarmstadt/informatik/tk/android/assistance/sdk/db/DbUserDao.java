@@ -31,7 +31,8 @@ public class DbUserDao extends AbstractDao<DbUser, Long> {
         public final static Property UserpicFilename = new Property(5, String.class, "userpicFilename", false, "USERPIC_FILENAME");
         public final static Property LastLogin = new Property(6, String.class, "lastLogin", false, "LAST_LOGIN");
         public final static Property JoinedSince = new Property(7, String.class, "joinedSince", false, "JOINED_SINCE");
-        public final static Property Created = new Property(8, String.class, "created", false, "CREATED");
+        public final static Property Uuid = new Property(8, String.class, "uuid", false, "UUID");
+        public final static Property Created = new Property(9, String.class, "created", false, "CREATED");
     };
 
     private DaoSession daoSession;
@@ -58,7 +59,8 @@ public class DbUserDao extends AbstractDao<DbUser, Long> {
                 "\"USERPIC_FILENAME\" TEXT," + // 5: userpicFilename
                 "\"LAST_LOGIN\" TEXT," + // 6: lastLogin
                 "\"JOINED_SINCE\" TEXT," + // 7: joinedSince
-                "\"CREATED\" TEXT NOT NULL );"); // 8: created
+                "\"UUID\" TEXT," + // 8: uuid
+                "\"CREATED\" TEXT NOT NULL );"); // 9: created
         // Add Indexes
         db.execSQL("CREATE INDEX " + constraint + "IDX_user__id ON user" +
                 " (\"_id\");");
@@ -114,7 +116,12 @@ public class DbUserDao extends AbstractDao<DbUser, Long> {
         if (joinedSince != null) {
             stmt.bindString(8, joinedSince);
         }
-        stmt.bindString(9, entity.getCreated());
+ 
+        String uuid = entity.getUuid();
+        if (uuid != null) {
+            stmt.bindString(9, uuid);
+        }
+        stmt.bindString(10, entity.getCreated());
     }
 
     @Override
@@ -141,7 +148,8 @@ public class DbUserDao extends AbstractDao<DbUser, Long> {
             cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5), // userpicFilename
             cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6), // lastLogin
             cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7), // joinedSince
-            cursor.getString(offset + 8) // created
+            cursor.isNull(offset + 8) ? null : cursor.getString(offset + 8), // uuid
+            cursor.getString(offset + 9) // created
         );
         return entity;
     }
@@ -157,7 +165,8 @@ public class DbUserDao extends AbstractDao<DbUser, Long> {
         entity.setUserpicFilename(cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5));
         entity.setLastLogin(cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6));
         entity.setJoinedSince(cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7));
-        entity.setCreated(cursor.getString(offset + 8));
+        entity.setUuid(cursor.isNull(offset + 8) ? null : cursor.getString(offset + 8));
+        entity.setCreated(cursor.getString(offset + 9));
      }
     
     /** @inheritdoc */
