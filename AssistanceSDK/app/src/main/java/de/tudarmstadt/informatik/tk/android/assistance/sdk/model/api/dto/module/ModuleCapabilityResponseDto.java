@@ -69,7 +69,7 @@ public class ModuleCapabilityResponseDto {
         this.requiredUpdateFrequency = requiredUpdateFrequency;
     }
 
-    public Integer getMinRequiredReadingsOnUpdate() {
+    public Integer getMinRequiredReadings() {
         return this.minRequiredReadingsOnUpdate;
     }
 

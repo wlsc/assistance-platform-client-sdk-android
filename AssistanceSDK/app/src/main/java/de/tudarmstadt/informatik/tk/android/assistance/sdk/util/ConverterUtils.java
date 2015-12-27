@@ -138,7 +138,7 @@ public class ConverterUtils {
         moduleCapability.setType(moduleCapabilityResponse.getType());
         moduleCapability.setCollectionFrequency(moduleCapabilityResponse.getCollectionFrequency());
         moduleCapability.setRequiredUpdateFrequency(moduleCapabilityResponse.getRequiredUpdateFrequency());
-        moduleCapability.setMinRequiredReadingsOnUpdate(moduleCapabilityResponse.getMinRequiredReadingsOnUpdate());
+        moduleCapability.setMinRequiredReadings(moduleCapabilityResponse.getMinRequiredReadings());
         moduleCapability.setCreated(DateUtils.dateToISO8601String(new Date(), Locale.getDefault()));
 
         return moduleCapability;
