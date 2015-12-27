@@ -79,11 +79,6 @@ public class SensorProvider {
         initSensors();
     }
 
-    private void initSensors() {
-        initAvailableSensors();
-        initEnabledSensors();
-    }
-
     public static SensorProvider getInstance(Context ctx) {
 
         if (INSTANCE == null) {
@@ -93,6 +88,11 @@ public class SensorProvider {
         }
 
         return INSTANCE;
+    }
+
+    private void initSensors() {
+        initAvailableSensors();
+        initEnabledSensors();
     }
 
     /**

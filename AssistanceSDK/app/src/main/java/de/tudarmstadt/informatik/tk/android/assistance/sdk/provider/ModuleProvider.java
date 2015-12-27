@@ -3,6 +3,7 @@ package de.tudarmstadt.informatik.tk.android.assistance.sdk.provider;
 import android.content.Context;
 
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -117,8 +118,61 @@ public class ModuleProvider {
             }
 
         } else {
-            sensorProvider.deactivateSensors(dtoTypes);
+            // deactivate given sensors
+
+            // filter module capabilities
+            // check if deactivating module is in required capabilities from another module
+            Iterator<Integer> iterator = dtoTypes.iterator();
+            while (iterator.hasNext()) {
+
+                Integer dtoType = iterator.next();
+
+                boolean isAnotherModuleRequired = isAnotherModuleUsingRequired(module, dtoType);
+
+                if (isAnotherModuleRequired) {
+                    iterator.remove();
+                }
+            }
+
+            if (!dtoTypes.isEmpty()) {
+                sensorProvider.deactivateSensors(dtoTypes);
+            }
         }
+    }
+
+    /**
+     * Checks if given DTO type is being used in anothers module required capabilities
+     *
+     * @param module
+     * @param dtoType
+     * @return
+     */
+    private boolean isAnotherModuleUsingRequired(DbModule module, Integer dtoType) {
+
+        if (module == null || dtoType == null) {
+            return false;
+        }
+
+        String typeStr = DtoType.getApiName(dtoType);
+
+        List<DbModule> allActiveModules = daoProvider.getModuleDao().getAllActive(module.getUserId());
+
+        for (DbModule activeModule : allActiveModules) {
+
+            if (!activeModule.getId().equals(module.getId())) {
+
+                List<DbModuleCapability> capabilities = activeModule.getDbModuleCapabilityList();
+
+                for (DbModuleCapability cap : capabilities) {
+
+                    if (cap.getRequired() && typeStr.equals(cap.getType())) {
+                        return true;
+                    }
+                }
+            }
+        }
+
+        return false;
     }
 
     /**
