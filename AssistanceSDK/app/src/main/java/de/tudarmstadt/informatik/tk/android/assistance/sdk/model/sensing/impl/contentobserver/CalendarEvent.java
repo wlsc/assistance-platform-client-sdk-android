@@ -8,14 +8,17 @@ import android.os.AsyncTask;
 import android.provider.CalendarContract.Events;
 import android.provider.CalendarContract.Reminders;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbCalendarEvent;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbCalendarReminderEvent;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.DtoType;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensing.AbstractContentObserverEvent;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.util.DateUtils;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.util.logger.Log;
 
 /**
@@ -150,6 +153,7 @@ public class CalendarEvent extends AbstractContentObserverEvent {
                 event.setIsNew(true);
                 event.setIsDeleted(false);
                 event.setIsUpdated(false);
+                event.setCreated(DateUtils.dateToISO8601String(new Date(), Locale.getDefault()));
 
                 try {
                     if (checkForChange(allExistingEvents, event)) {
@@ -219,6 +223,7 @@ public class CalendarEvent extends AbstractContentObserverEvent {
                     reminder.setIsNew(true);
                     reminder.setIsDeleted(false);
                     reminder.setIsUpdated(false);
+                    reminder.setCreated(DateUtils.dateToISO8601String(new Date(), Locale.getDefault()));
 
                     try {
                         if (checkForReminderChange(mapExistingReminders, reminder)) {
