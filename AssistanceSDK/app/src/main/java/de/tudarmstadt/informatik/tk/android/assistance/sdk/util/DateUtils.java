@@ -48,6 +48,30 @@ public class DateUtils {
         return dateFormat.format(date);
     }
 
+    /**
+     * Converts timestamp to ISO 8601 format
+     *
+     * @param timestamp
+     * @param localeStr
+     * @return
+     */
+    public static String timestampToISO8601String(long timestamp, String localeStr) {
+
+        if (timestamp < 0) {
+            return null;
+        }
+
+        SimpleDateFormat sdf = new SimpleDateFormat(DATE_ISO8601_FORMAT);
+
+        if (localeStr == null || localeStr.trim().isEmpty()) {
+            sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
+        } else {
+            sdf.setTimeZone(TimeZone.getTimeZone(localeStr));
+        }
+
+        return sdf.format(new Date(timestamp));
+    }
+
     public static long[] getDayStartEnd(Calendar day) {
 
         Calendar temp = (Calendar) day.clone();
