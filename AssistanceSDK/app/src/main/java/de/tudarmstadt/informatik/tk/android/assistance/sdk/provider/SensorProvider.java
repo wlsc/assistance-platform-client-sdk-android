@@ -540,6 +540,8 @@ public class SensorProvider {
             return;
         }
 
+        Log.d(TAG, "Running sensors size: " + runningSensors.size());
+
         for (Map.Entry<Integer, ISensor> entry : runningSensors.entrySet()) {
             entry.getValue().startSensor();
         }

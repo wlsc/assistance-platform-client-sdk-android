@@ -56,7 +56,7 @@ public class ConverterUtils {
 
                 capabilityResponseDto.setCollectionFrequency(dbCap.getCollectionFrequency());
                 capabilityResponseDto.setRequiredUpdateFrequency(dbCap.getRequiredUpdateFrequency());
-                capabilityResponseDto.setMinRequiredReadingsOnUpdate(dbCap.getMinRequiredReadings());
+                capabilityResponseDto.setMinRequiredReadings(dbCap.getMinRequiredReadings());
                 capabilityResponseDto.setType(dbCap.getType());
 
                 if (dbCap.getRequired()) {
@@ -116,7 +116,7 @@ public class ConverterUtils {
         moduleCapabilityResponse.setType(moduleCapability.getType());
         moduleCapabilityResponse.setCollectionFrequency(moduleCapability.getCollectionFrequency());
         moduleCapabilityResponse.setRequiredUpdateFrequency(moduleCapability.getRequiredUpdateFrequency());
-        moduleCapabilityResponse.setMinRequiredReadingsOnUpdate(moduleCapability.getMinRequiredReadings());
+        moduleCapabilityResponse.setMinRequiredReadings(moduleCapability.getMinRequiredReadings());
 
         return moduleCapabilityResponse;
     }

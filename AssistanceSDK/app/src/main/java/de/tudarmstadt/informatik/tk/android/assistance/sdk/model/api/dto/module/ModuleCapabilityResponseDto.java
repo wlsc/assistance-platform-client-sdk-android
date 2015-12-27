@@ -33,16 +33,16 @@ public class ModuleCapabilityResponseDto {
     // so the module can keep up with processing.
     @SerializedName("min_required_readings_on_update")
     @Expose
-    private Integer minRequiredReadingsOnUpdate;
+    private Integer minRequiredReadings;
 
     public ModuleCapabilityResponseDto() {
     }
 
-    public ModuleCapabilityResponseDto(String type, Double collectionFrequency, Double requiredUpdateFrequency, Integer minRequiredReadingsOnUpdate) {
+    public ModuleCapabilityResponseDto(String type, Double collectionFrequency, Double requiredUpdateFrequency, Integer minRequiredReadings) {
         this.type = type;
         this.collectionFrequency = collectionFrequency;
         this.requiredUpdateFrequency = requiredUpdateFrequency;
-        this.minRequiredReadingsOnUpdate = minRequiredReadingsOnUpdate;
+        this.minRequiredReadings = minRequiredReadings;
     }
 
     public String getType() {
@@ -70,11 +70,11 @@ public class ModuleCapabilityResponseDto {
     }
 
     public Integer getMinRequiredReadings() {
-        return this.minRequiredReadingsOnUpdate;
+        return this.minRequiredReadings;
     }
 
-    public void setMinRequiredReadingsOnUpdate(Integer minRequiredReadingsOnUpdate) {
-        this.minRequiredReadingsOnUpdate = minRequiredReadingsOnUpdate;
+    public void setMinRequiredReadings(Integer minRequiredReadings) {
+        this.minRequiredReadings = minRequiredReadings;
     }
 
     @Override
@@ -83,7 +83,7 @@ public class ModuleCapabilityResponseDto {
                 "type='" + type + '\'' +
                 ", collectionFrequency=" + collectionFrequency +
                 ", requiredUpdateFrequency=" + requiredUpdateFrequency +
-                ", minRequiredReadingsOnUpdate=" + minRequiredReadingsOnUpdate +
+                ", minRequiredReadings=" + minRequiredReadings +
                 '}';
     }
 }
