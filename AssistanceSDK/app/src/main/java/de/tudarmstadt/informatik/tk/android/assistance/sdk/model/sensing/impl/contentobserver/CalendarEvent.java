@@ -9,6 +9,7 @@ import android.provider.CalendarContract.Events;
 import android.provider.CalendarContract.Reminders;
 import android.support.annotation.Nullable;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -122,6 +123,7 @@ public class CalendarEvent extends AbstractContentObserverEvent {
                 allExistingEvents.put(event.getEventId(), event);
             }
 
+            List<DbCalendarEvent> entriesToInsert = new ArrayList<>();
             String created = DateUtils.dateToISO8601String(new Date(), Locale.getDefault());
 
             // Iterate over event
@@ -159,15 +161,19 @@ public class CalendarEvent extends AbstractContentObserverEvent {
                 try {
                     if (checkForChange(allExistingEvents, event)) {
 
-                        Log.d(TAG, "Insert entry");
-                        daoProvider.getCalendarEventDao().insert(event);
-                        Log.d(TAG, "Finished");
+                        entriesToInsert.add(event);
                     }
                 } catch (Exception e) {
                     Log.e(TAG, "Cannot check calendar event for change", e);
                 }
 
                 syncReminders(event);
+            }
+
+            if (!entriesToInsert.isEmpty()) {
+                Log.d(TAG, "Insert entries");
+                daoProvider.getCalendarEventDao().insert(entriesToInsert);
+                Log.d(TAG, "Finished");
             }
 
         } catch (Exception e) {
@@ -212,6 +218,7 @@ public class CalendarEvent extends AbstractContentObserverEvent {
                     return;
                 }
 
+                List<DbCalendarReminderEvent> entriesToInsert = new ArrayList<>();
                 String created = DateUtils.dateToISO8601String(new Date(), Locale.getDefault());
 
                 // Iterate over event
@@ -231,15 +238,19 @@ public class CalendarEvent extends AbstractContentObserverEvent {
                     try {
                         if (checkForReminderChange(mapExistingReminders, reminder)) {
 
-                            Log.d(TAG, "Calendar reminder: Insert entry");
-                            daoProvider.getCalendarReminderEventDao().insert(reminder);
-                            Log.d(TAG, "Finished");
+                            entriesToInsert.add(reminder);
                         }
                     } catch (Exception e) {
                         Log.e(TAG, "Cannot check calendar reminder event for change", e);
                     }
-
                 }
+
+                if (!entriesToInsert.isEmpty()) {
+                    Log.d(TAG, "Calendar reminder: Insert entries");
+                    daoProvider.getCalendarReminderEventDao().insert(entriesToInsert);
+                    Log.d(TAG, "Finished");
+                }
+
             } finally {
                 if (cur != null) {
                     cur.close();
