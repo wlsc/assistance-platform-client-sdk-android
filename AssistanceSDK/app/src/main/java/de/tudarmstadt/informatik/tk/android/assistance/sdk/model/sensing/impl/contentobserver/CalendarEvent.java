@@ -7,6 +7,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.provider.CalendarContract.Events;
 import android.provider.CalendarContract.Reminders;
+import android.support.annotation.Nullable;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -35,6 +36,7 @@ public class CalendarEvent extends AbstractContentObserverEvent {
     private static final Uri URI_CALENDAR = android.provider.CalendarContract.Events.CONTENT_URI;
     private static final Uri URI_REMINDER = android.provider.CalendarContract.Reminders.CONTENT_URI;
 
+    @Nullable
     private AsyncTask<Void, Void, Void> syncingTask;
 
     private static final String[] PROJECTION_EVENTS =
@@ -99,9 +101,6 @@ public class CalendarEvent extends AbstractContentObserverEvent {
     }
 
     protected void syncData() {
-        // optional selection
-        // String selection = null;
-        // String[] selectionArgs = new String[] {};
 
         Log.d(TAG, "Syncing data...");
 
@@ -122,6 +121,8 @@ public class CalendarEvent extends AbstractContentObserverEvent {
             for (DbCalendarEvent event : events) {
                 allExistingEvents.put(event.getEventId(), event);
             }
+
+            String created = DateUtils.dateToISO8601String(new Date(), Locale.getDefault());
 
             // Iterate over event
             while (cur.moveToNext() && isRunning()) {
@@ -150,10 +151,10 @@ public class CalendarEvent extends AbstractContentObserverEvent {
                 event.setRecurrenceRule(getStringByColumnName(cur, Events.RRULE));
                 event.setStatus(getIntByColumnName(cur, Events.STATUS));
                 event.setTitle(getStringByColumnName(cur, Events.TITLE));
-                event.setIsNew(true);
-                event.setIsDeleted(false);
-                event.setIsUpdated(false);
-                event.setCreated(DateUtils.dateToISO8601String(new Date(), Locale.getDefault()));
+                event.setIsNew(Boolean.TRUE);
+                event.setIsDeleted(Boolean.FALSE);
+                event.setIsUpdated(Boolean.FALSE);
+                event.setCreated(created);
 
                 try {
                     if (checkForChange(allExistingEvents, event)) {
@@ -169,11 +170,11 @@ public class CalendarEvent extends AbstractContentObserverEvent {
                 syncReminders(event);
             }
 
-            cur.close();
-
         } catch (Exception e) {
             Log.e(TAG, "Cannot get all existing events!", e);
             return;
+        } finally {
+            cur.close();
         }
 
         for (DbCalendarEvent event : allExistingEvents.values()) {
@@ -211,6 +212,8 @@ public class CalendarEvent extends AbstractContentObserverEvent {
                     return;
                 }
 
+                String created = DateUtils.dateToISO8601String(new Date(), Locale.getDefault());
+
                 // Iterate over event
                 while (cur.moveToNext() && isRunning()) {
 
@@ -220,10 +223,10 @@ public class CalendarEvent extends AbstractContentObserverEvent {
                     reminder.setEventId(eventId);
                     reminder.setMethod(getIntByColumnName(cur, Reminders.METHOD));
                     reminder.setMinutes(getIntByColumnName(cur, Reminders.MINUTES));
-                    reminder.setIsNew(true);
-                    reminder.setIsDeleted(false);
-                    reminder.setIsUpdated(false);
-                    reminder.setCreated(DateUtils.dateToISO8601String(new Date(), Locale.getDefault()));
+                    reminder.setIsNew(Boolean.TRUE);
+                    reminder.setIsDeleted(Boolean.FALSE);
+                    reminder.setIsUpdated(Boolean.FALSE);
+                    reminder.setCreated(created);
 
                     try {
                         if (checkForReminderChange(mapExistingReminders, reminder)) {
@@ -258,18 +261,18 @@ public class CalendarEvent extends AbstractContentObserverEvent {
 
         if (existingItem == null) {
 
-            newItem.setIsNew(true);
-            newItem.setIsUpdated(false);
-            newItem.setIsDeleted(false);
+            newItem.setIsNew(Boolean.TRUE);
+            newItem.setIsUpdated(Boolean.FALSE);
+            newItem.setIsDeleted(Boolean.FALSE);
 
             return true;
 
         } else {
             if (hasEventDifference(existingItem, newItem)) {
 
-                newItem.setIsNew(false);
-                newItem.setIsUpdated(true);
-                newItem.setIsDeleted(false);
+                newItem.setIsNew(Boolean.FALSE);
+                newItem.setIsUpdated(Boolean.TRUE);
+                newItem.setIsDeleted(Boolean.FALSE);
                 newItem.setId(existingItem.getId());
 
                 return true;
@@ -291,18 +294,18 @@ public class CalendarEvent extends AbstractContentObserverEvent {
 
         if (existingItem == null) {
 
-            newItem.setIsNew(true);
-            newItem.setIsUpdated(false);
-            newItem.setIsDeleted(false);
+            newItem.setIsNew(Boolean.TRUE);
+            newItem.setIsUpdated(Boolean.FALSE);
+            newItem.setIsDeleted(Boolean.FALSE);
 
             return true;
 
         } else {
             if (hasReminderDifference(existingItem, newItem)) {
 
-                newItem.setIsNew(false);
-                newItem.setIsUpdated(true);
-                newItem.setIsDeleted(false);
+                newItem.setIsNew(Boolean.FALSE);
+                newItem.setIsUpdated(Boolean.TRUE);
+                newItem.setIsDeleted(Boolean.FALSE);
                 newItem.setId(existingItem.getId());
 
                 return true;
@@ -396,6 +399,7 @@ public class CalendarEvent extends AbstractContentObserverEvent {
 
         syncingTask = new AsyncTask<Void, Void, Void>() {
 
+            @Nullable
             @Override
             protected Void doInBackground(Void... params) {
 

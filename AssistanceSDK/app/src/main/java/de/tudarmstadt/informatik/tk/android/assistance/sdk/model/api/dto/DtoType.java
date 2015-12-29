@@ -73,8 +73,6 @@ public class DtoType {
 
     public static final int FOREGROUND_TRAFFIC = 24;
 
-    public static final int CALENDAR_REMINDER = 25;
-
     static {
         apiNameToDtoTypeMap.put(getApiName(LOCATION), LOCATION);
         apiNameToDtoTypeMap.put(getApiName(GYROSCOPE), GYROSCOPE);
@@ -99,7 +97,6 @@ public class DtoType {
         apiNameToDtoTypeMap.put(getApiName(BROWSER_HISTORY), BROWSER_HISTORY);
         apiNameToDtoTypeMap.put(getApiName(FOREGROUND_TRAFFIC), FOREGROUND_TRAFFIC);
         apiNameToDtoTypeMap.put(getApiName(CALENDAR), CALENDAR);
-        apiNameToDtoTypeMap.put(getApiName(CALENDAR_REMINDER), CALENDAR_REMINDER);
         apiNameToDtoTypeMap.put(getApiName(CONTACT), CONTACT);
 
         androidSensorToDtoTypeMap.put(Sensor.TYPE_ACCELEROMETER, ACCELEROMETER);
@@ -145,8 +142,6 @@ public class DtoType {
                 return res.getString(R.string.event_power_level);
             case CALENDAR:
                 return res.getString(R.string.event_calendar);
-            case CALENDAR_REMINDER:
-                return res.getString(R.string.event_calendar_reminder);
             case CALL_LOG:
                 return res.getString(R.string.event_calllog);
             case FOREGROUND_TRAFFIC:
@@ -209,8 +204,6 @@ public class DtoType {
                 return "powerlevel";
             case CALENDAR:
                 return "calendar";
-            case CALENDAR_REMINDER:
-                return "calendarreminder";
             case CALL_LOG:
                 return "call_log";
             case FOREGROUND_TRAFFIC:

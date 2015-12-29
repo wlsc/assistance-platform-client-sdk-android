@@ -1,7 +1,9 @@
-package de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.sensing.event;
+package de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.sensing.event.calendar;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+
+import java.util.Set;
 
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.DtoType;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.SensorDto;
@@ -16,11 +18,11 @@ public class CalendarEventDto implements SensorDto {
 
     @SerializedName("eventId")
     @Expose
-    private Long eventId;
+    private String eventId;
 
     @SerializedName("calendarId")
     @Expose
-    private Long calendarId;
+    private String calendarId;
 
     @SerializedName("allDay")
     @Expose
@@ -34,13 +36,13 @@ public class CalendarEventDto implements SensorDto {
     @Expose
     private String description;
 
-    @SerializedName("timestampStart")
+    @SerializedName("startDate")
     @Expose
-    private Long timestampStart;
+    private String startDate;
 
-    @SerializedName("timestampEnd")
+    @SerializedName("endDate")
     @Expose
-    private Long timestampEnd;
+    private String endDate;
 
     @SerializedName("duration")
     @Expose
@@ -50,14 +52,6 @@ public class CalendarEventDto implements SensorDto {
     @Expose
     private String location;
 
-    @SerializedName("timezoneStart")
-    @Expose
-    private String timezoneStart;
-
-    @SerializedName("timezoneEnd")
-    @Expose
-    private String timezoneEnd;
-
     @SerializedName("recurrenceExceptionDate")
     @Expose
     private String recurrenceExceptionDate;
@@ -66,9 +60,9 @@ public class CalendarEventDto implements SensorDto {
     @Expose
     private String recurrenceExceptionRule;
 
-    @SerializedName("hasAlarm")
+    @SerializedName("alarms")
     @Expose
-    private Boolean hasAlarm;
+    private Set<CalendarReminderEventDto> alarms;
 
     @SerializedName("lastDate")
     @Expose
@@ -102,14 +96,6 @@ public class CalendarEventDto implements SensorDto {
     @Expose
     private String title;
 
-    @SerializedName("isNew")
-    @Expose
-    private Boolean isNew;
-
-    @SerializedName("isUpdated")
-    @Expose
-    private Boolean isUpdated;
-
     @SerializedName("isDeleted")
     @Expose
     private Boolean isDeleted;
@@ -135,22 +121,20 @@ public class CalendarEventDto implements SensorDto {
         this.typeStr = DtoType.getApiName(this.type);
     }
 
-    public CalendarEventDto(Long id, Long eventId, Long calendarId, Boolean allDay, Integer availability, String description, Long timestampStart, Long timestampEnd, String duration, String location, String timezoneStart, String timezoneEnd, String recurrenceExceptionDate, String recurrenceExceptionRule, Boolean hasAlarm, Long lastDate, Boolean originalAllDay, String originalId, Long originalInstanceTime, String recurrenceDate, String recurrenceRule, Integer status, String title, Boolean isNew, Boolean isUpdated, Boolean isDeleted, String created) {
+    public CalendarEventDto(Long id, String eventId, String calendarId, Boolean allDay, Integer availability, String description, String startDate, String endDate, String duration, String location, String recurrenceExceptionDate, String recurrenceExceptionRule, Set<CalendarReminderEventDto> alarms, Long lastDate, Boolean originalAllDay, String originalId, Long originalInstanceTime, String recurrenceDate, String recurrenceRule, Integer status, String title, Boolean isDeleted, String created) {
         this.id = id;
         this.eventId = eventId;
         this.calendarId = calendarId;
         this.allDay = allDay;
         this.availability = availability;
         this.description = description;
-        this.timestampStart = timestampStart;
-        this.timestampEnd = timestampEnd;
+        this.startDate = startDate;
+        this.endDate = endDate;
         this.duration = duration;
         this.location = location;
-        this.timezoneStart = timezoneStart;
-        this.timezoneEnd = timezoneEnd;
         this.recurrenceExceptionDate = recurrenceExceptionDate;
         this.recurrenceExceptionRule = recurrenceExceptionRule;
-        this.hasAlarm = hasAlarm;
+        this.alarms = alarms;
         this.lastDate = lastDate;
         this.originalAllDay = originalAllDay;
         this.originalId = originalId;
@@ -159,8 +143,6 @@ public class CalendarEventDto implements SensorDto {
         this.recurrenceRule = recurrenceRule;
         this.status = status;
         this.title = title;
-        this.isNew = isNew;
-        this.isUpdated = isUpdated;
         this.isDeleted = isDeleted;
         this.created = created;
         this.type = DtoType.CALENDAR;
@@ -175,19 +157,19 @@ public class CalendarEventDto implements SensorDto {
         this.id = id;
     }
 
-    public Long getEventId() {
+    public String getEventId() {
         return eventId;
     }
 
-    public void setEventId(Long eventId) {
+    public void setEventId(String eventId) {
         this.eventId = eventId;
     }
 
-    public Long getCalendarId() {
+    public String getCalendarId() {
         return calendarId;
     }
 
-    public void setCalendarId(Long calendarId) {
+    public void setCalendarId(String calendarId) {
         this.calendarId = calendarId;
     }
 
@@ -215,20 +197,20 @@ public class CalendarEventDto implements SensorDto {
         this.description = description;
     }
 
-    public Long getTimestampStart() {
-        return timestampStart;
+    public String getStartDate() {
+        return startDate;
     }
 
-    public void setTimestampStart(Long timestampStart) {
-        this.timestampStart = timestampStart;
+    public void setStartDate(String startDate) {
+        this.startDate = startDate;
     }
 
-    public Long getTimestampEnd() {
-        return timestampEnd;
+    public String getEndDate() {
+        return endDate;
     }
 
-    public void setTimestampEnd(Long timestampEnd) {
-        this.timestampEnd = timestampEnd;
+    public void setEndDate(String endDate) {
+        this.endDate = endDate;
     }
 
     public String getDuration() {
@@ -247,22 +229,6 @@ public class CalendarEventDto implements SensorDto {
         this.location = location;
     }
 
-    public String getTimezoneStart() {
-        return timezoneStart;
-    }
-
-    public void setTimezoneStart(String timezoneStart) {
-        this.timezoneStart = timezoneStart;
-    }
-
-    public String getTimezoneEnd() {
-        return timezoneEnd;
-    }
-
-    public void setTimezoneEnd(String timezoneEnd) {
-        this.timezoneEnd = timezoneEnd;
-    }
-
     public String getRecurrenceExceptionDate() {
         return recurrenceExceptionDate;
     }
@@ -279,12 +245,12 @@ public class CalendarEventDto implements SensorDto {
         this.recurrenceExceptionRule = recurrenceExceptionRule;
     }
 
-    public Boolean getHasAlarm() {
-        return hasAlarm;
+    public Set<CalendarReminderEventDto> getAlarms() {
+        return alarms;
     }
 
-    public void setHasAlarm(Boolean hasAlarm) {
-        this.hasAlarm = hasAlarm;
+    public void setAlarms(Set<CalendarReminderEventDto> alarms) {
+        this.alarms = alarms;
     }
 
     public Long getLastDate() {
@@ -351,22 +317,6 @@ public class CalendarEventDto implements SensorDto {
         this.title = title;
     }
 
-    public Boolean getIsNew() {
-        return isNew;
-    }
-
-    public void setIsNew(Boolean isNew) {
-        this.isNew = isNew;
-    }
-
-    public Boolean getIsUpdated() {
-        return isUpdated;
-    }
-
-    public void setIsUpdated(Boolean isUpdated) {
-        this.isUpdated = isUpdated;
-    }
-
     public Boolean getIsDeleted() {
         return isDeleted;
     }
@@ -405,20 +355,18 @@ public class CalendarEventDto implements SensorDto {
     public String toString() {
         return "CalendarEventDto{" +
                 "id=" + id +
-                ", eventId=" + eventId +
-                ", calendarId=" + calendarId +
+                ", eventId='" + eventId + '\'' +
+                ", calendarId='" + calendarId + '\'' +
                 ", allDay=" + allDay +
                 ", availability=" + availability +
                 ", description='" + description + '\'' +
-                ", timestampStart=" + timestampStart +
-                ", timestampEnd=" + timestampEnd +
+                ", startDate='" + startDate + '\'' +
+                ", endDate='" + endDate + '\'' +
                 ", duration='" + duration + '\'' +
                 ", location='" + location + '\'' +
-                ", timezoneStart='" + timezoneStart + '\'' +
-                ", timezoneEnd='" + timezoneEnd + '\'' +
                 ", recurrenceExceptionDate='" + recurrenceExceptionDate + '\'' +
                 ", recurrenceExceptionRule='" + recurrenceExceptionRule + '\'' +
-                ", hasAlarm=" + hasAlarm +
+                ", alarms=" + alarms +
                 ", lastDate=" + lastDate +
                 ", originalAllDay=" + originalAllDay +
                 ", originalId='" + originalId + '\'' +
@@ -427,8 +375,6 @@ public class CalendarEventDto implements SensorDto {
                 ", recurrenceRule='" + recurrenceRule + '\'' +
                 ", status=" + status +
                 ", title='" + title + '\'' +
-                ", isNew=" + isNew +
-                ", isUpdated=" + isUpdated +
                 ", isDeleted=" + isDeleted +
                 ", created='" + created + '\'' +
                 ", typeStr='" + typeStr + '\'' +

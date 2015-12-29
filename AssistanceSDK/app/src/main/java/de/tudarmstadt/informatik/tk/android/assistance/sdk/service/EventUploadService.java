@@ -17,8 +17,10 @@ import com.google.android.gms.gcm.TaskParams;
 import com.google.common.collect.Lists;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.Config;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbAccelerometerSensor;
@@ -51,6 +53,8 @@ import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.login.L
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.login.LoginResponseDto;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.login.UserDeviceDto;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.sensing.EventUploadRequestDto;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.sensing.event.calendar.CalendarEventDto;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.sensing.event.calendar.CalendarReminderEventDto;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.endpoint.EndpointGenerator;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.endpoint.EventUploadEndpoint;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.endpoint.LoginEndpoint;
@@ -58,6 +62,7 @@ import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensing.ISensor
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.DaoProvider;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.PreferenceProvider;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.SensorProvider;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.event.CalendarReminderEventDao;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.util.ConnectionUtils;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.util.HardwareUtils;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.util.logger.Log;
@@ -915,45 +920,50 @@ public class EventUploadService extends GcmTaskService {
 
                 case DtoType.CALENDAR:
 
-                    List<DbCalendarEvent> calendarList;
+                    // retrieve all events
+                    List<DbCalendarEvent> calendarList = daoProvider
+                            .getCalendarEventDao()
+                            .getAll();
 
-                    // give all
-                    if (numberOfElements == 0) {
-                        calendarList = daoProvider
-                                .getCalendarEventDao()
-                                .getAll();
-                    } else {
-                        calendarList = daoProvider
-                                .getCalendarEventDao()
-                                .getFirstN(numberOfElements);
+                    List<SensorDto> calendarListConverted = daoProvider
+                            .getCalendarEventDao()
+                            .convertObjects(calendarList);
+
+                    List<CalendarEventDto> calendarListConvertedNew = new ArrayList<>(
+                            calendarListConverted.size());
+                    Set<CalendarReminderEventDto> eventRemindersConvertedNew = new HashSet<>();
+
+                    final CalendarReminderEventDao calendarReminderEventDao = daoProvider
+                            .getCalendarReminderEventDao();
+
+                    for (SensorDto sensorDto : calendarListConverted) {
+
+                        if (sensorDto == null) {
+                            continue;
+                        }
+
+                        CalendarEventDto calendarEventDto = (CalendarEventDto) sensorDto;
+                        List<DbCalendarReminderEvent> eventReminders = calendarReminderEventDao
+                                .getAllByEventId(Long.valueOf(calendarEventDto.getEventId()));
+
+                        if (eventReminders == null || eventReminders.isEmpty()) {
+                            continue;
+                        }
+
+                        List<SensorDto> eventRemindersConverted = calendarReminderEventDao
+                                .convertObjects(eventReminders);
+
+                        for (SensorDto sensorReminderDto : eventRemindersConverted) {
+                            eventRemindersConvertedNew.add((CalendarReminderEventDto) sensorReminderDto);
+                        }
+
+                        calendarEventDto.setAlarms(eventRemindersConvertedNew);
+                        calendarListConvertedNew.add(calendarEventDto);
                     }
 
                     dbEvents.put(type, calendarList);
-                    requestEvents.put(type, daoProvider
-                            .getCalendarEventDao()
-                            .convertObjects(calendarList));
+                    requestEvents.put(type, calendarListConverted);
 
-                    /**
-                     * Calendar reminder events
-                     */
-
-                    List<DbCalendarReminderEvent> calendarReminderList;
-
-                    // give all
-                    if (numberOfElements == 0) {
-                        calendarReminderList = daoProvider
-                                .getCalendarReminderEventDao()
-                                .getAll();
-                    } else {
-                        calendarReminderList = daoProvider
-                                .getCalendarReminderEventDao()
-                                .getFirstN(numberOfElements);
-                    }
-
-                    dbEvents.put(DtoType.CALENDAR_REMINDER, calendarReminderList);
-                    requestEvents.put(DtoType.CALENDAR_REMINDER, daoProvider
-                            .getCalendarReminderEventDao()
-                            .convertObjects(calendarReminderList));
 
                     break;
 
@@ -1118,14 +1128,6 @@ public class EventUploadService extends GcmTaskService {
 
                 case DtoType.BROWSER_HISTORY:
                     daoProvider.getBrowserHistoryEventDao().delete((List<DbBrowserHistoryEvent>) values);
-                    break;
-
-                case DtoType.CALENDAR:
-                    daoProvider.getCalendarEventDao().delete((List<DbCalendarEvent>) values);
-                    break;
-
-                case DtoType.CALENDAR_REMINDER:
-                    daoProvider.getCalendarReminderEventDao().delete((List<DbCalendarReminderEvent>) values);
                     break;
 
                 case DtoType.CONTACT:

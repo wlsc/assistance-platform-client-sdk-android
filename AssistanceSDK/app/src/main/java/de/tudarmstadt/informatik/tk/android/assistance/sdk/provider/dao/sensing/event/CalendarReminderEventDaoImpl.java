@@ -6,8 +6,7 @@ import java.util.List;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DaoSession;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbCalendarReminderEvent;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbCalendarReminderEventDao;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.DtoType;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.sensing.event.CalendarReminderEventDto;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.sensing.event.calendar.CalendarReminderEventDto;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.CommonEventDaoImpl;
 
 /**
@@ -45,16 +44,8 @@ public class CalendarReminderEventDaoImpl extends
         CalendarReminderEventDto result = new CalendarReminderEventDto();
 
         result.setId(sensor.getId());
-        result.setReminderId(sensor.getReminderId());
-        result.setEventId(sensor.getEventId());
-        result.setMethod(sensor.getMethod());
-        result.setMinutes(sensor.getMinutes());
-        result.setIsNew(sensor.getIsNew());
-        result.setIsUpdated(sensor.getIsUpdated());
-        result.setIsDeleted(sensor.getIsDeleted());
-        result.setType(DtoType.CALENDAR_REMINDER);
-        result.setTypeStr(DtoType.getApiName(DtoType.CALENDAR_REMINDER));
-        result.setCreated(sensor.getCreated());
+        result.setType(sensor.getMethod());
+        result.setOffset(sensor.getMinutes());
 
         return result;
     }

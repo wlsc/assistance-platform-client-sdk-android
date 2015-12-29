@@ -7,8 +7,9 @@ import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DaoSession;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbCalendarEvent;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbCalendarEventDao;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.DtoType;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.sensing.event.CalendarEventDto;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.sensing.event.calendar.CalendarEventDto;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.CommonEventDaoImpl;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.util.DateUtils;
 
 /**
  * @author Wladimir Schmidt (wlsc.dev@gmail.com)
@@ -45,20 +46,17 @@ public class CalendarEventDaoImpl extends
         CalendarEventDto result = new CalendarEventDto();
 
         result.setId(sensor.getId());
-        result.setEventId(sensor.getEventId());
-        result.setCalendarId(sensor.getCalendarId());
+        result.setEventId(String.valueOf(sensor.getEventId()));
+        result.setCalendarId(String.valueOf(sensor.getCalendarId()));
         result.setAllDay(sensor.getAllDay());
         result.setAvailability(sensor.getAvailability());
         result.setDescription(sensor.getDescription());
-        result.setTimestampStart(sensor.getTimestampStart());
-        result.setTimestampEnd(sensor.getTimestampEnd());
+        result.setStartDate(DateUtils.timestampToISO8601String(sensor.getTimestampStart(), sensor.getTimezoneStart()));
+        result.setEndDate(DateUtils.timestampToISO8601String(sensor.getTimestampEnd(), sensor.getTimezoneEnd()));
         result.setDuration(sensor.getDuration());
         result.setLocation(sensor.getLocation());
-        result.setTimezoneStart(sensor.getTimezoneStart());
-        result.setTimezoneEnd(sensor.getTimezoneEnd());
         result.setRecurrenceExceptionDate(sensor.getRecurrenceExceptionDate());
         result.setRecurrenceExceptionRule(sensor.getRecurrenceExceptionRule());
-        result.setHasAlarm(sensor.getHasAlarm());
         result.setLastDate(sensor.getLastDate());
         result.setOriginalAllDay(sensor.getOriginalAllDay());
         result.setOriginalId(sensor.getOriginalId());
@@ -67,12 +65,10 @@ public class CalendarEventDaoImpl extends
         result.setRecurrenceRule(sensor.getRecurrenceRule());
         result.setStatus(sensor.getStatus());
         result.setTitle(sensor.getTitle());
-        result.setIsNew(sensor.getIsNew());
-        result.setIsUpdated(sensor.getIsUpdated());
         result.setIsDeleted(sensor.getIsDeleted());
+        result.setCreated(sensor.getCreated());
         result.setType(DtoType.CALENDAR);
         result.setTypeStr(DtoType.getApiName(DtoType.CALENDAR));
-        result.setCreated(sensor.getCreated());
 
         return result;
     }
