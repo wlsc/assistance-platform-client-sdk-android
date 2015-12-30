@@ -235,7 +235,7 @@ public class DtoType {
             case UNI_TUCAN:
                 return "tucan";
             case SOCIAL_FACEBOOK:
-                return "facebook";
+                return "facebooktoken";
             default:
                 return "";
         }

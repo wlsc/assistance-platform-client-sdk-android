@@ -15,7 +15,7 @@ import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.SensorD
  */
 public class FacebookDto implements SensorDto {
 
-    @SerializedName("token")
+    @SerializedName("oauthToken")
     @Expose
     private String token;
 
