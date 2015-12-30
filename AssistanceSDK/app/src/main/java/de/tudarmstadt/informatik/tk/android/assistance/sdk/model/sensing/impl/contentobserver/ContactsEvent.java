@@ -5,11 +5,12 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.provider.ContactsContract;
-import android.provider.ContactsContract.CommonDataKinds.Email;
 import android.provider.ContactsContract.CommonDataKinds.Note;
 import android.provider.ContactsContract.CommonDataKinds.Phone;
 import android.provider.ContactsContract.Data;
+import android.support.annotation.Nullable;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -33,12 +34,13 @@ public class ContactsEvent extends AbstractContentObserverEvent {
 
     private static ContactsEvent INSTANCE;
 
-    private static final Uri URI_EMAIL = Email.CONTENT_URI;
+    private static final Uri URI_EMAIL = ContactsContract.CommonDataKinds.Email.CONTENT_URI;
     private static final Uri URI_DATA = Data.CONTENT_URI;
     private static final Uri URI_PHONE = Phone.CONTENT_URI;
     private static final Uri URI_RAW_CONTACTS = ContactsContract.RawContacts.CONTENT_URI;
     private static final Uri URI_CONTACTS = ContactsContract.Contacts.CONTENT_URI;
 
+    @Nullable
     private AsyncTask<Void, Void, Void> syncingTask;
 
     private ContactsEvent(Context context) {
@@ -93,7 +95,6 @@ public class ContactsEvent extends AbstractContentObserverEvent {
 
             try {
                 allExistingContacts = getAllExistingContacts();
-
             } catch (Exception e) {
                 Log.e(TAG, "Some error: ", e);
                 return;
@@ -103,7 +104,7 @@ public class ContactsEvent extends AbstractContentObserverEvent {
 
                 String strContactId = getStringByColumnName(cursor, ContactsContract.Contacts._ID);
 
-                System.out.println("sync Contact Id: " + strContactId);
+                Log.d(TAG, "sync Contact Id: " + strContactId);
 
                 String strGivenName = null;
                 String strFamilyName = null;
@@ -147,7 +148,7 @@ public class ContactsEvent extends AbstractContentObserverEvent {
                 DbContactEvent sensorContact = new DbContactEvent();
 
                 sensorContact.setContactId(Long.valueOf(strContactId));
-//                sensorContact.setGlobalContactId(KrakenUtils.getGlobalId(context, Long.valueOf(strContactId)));
+                sensorContact.setGlobalContactId(Long.valueOf(strContactId));
                 sensorContact.setDisplayName(getStringByColumnName(cursor, Data.DISPLAY_NAME_PRIMARY));
                 sensorContact.setGivenName(strGivenName);
                 sensorContact.setFamilyName(strFamilyName);
@@ -155,25 +156,20 @@ public class ContactsEvent extends AbstractContentObserverEvent {
                 sensorContact.setLastTimeContacted(getIntByColumnName(cursor, Data.LAST_TIME_CONTACTED));
                 sensorContact.setTimesContacted(getIntByColumnName(cursor, Data.TIMES_CONTACTED));
                 sensorContact.setNote(getNote(strContactId));
-                sensorContact.setIsNew(true);
-                sensorContact.setIsDeleted(false);
-                sensorContact.setIsUpdated(false);
+                sensorContact.setIsNew(Boolean.TRUE);
+                sensorContact.setIsDeleted(Boolean.FALSE);
+                sensorContact.setIsUpdated(Boolean.FALSE);
 
-                try {
-                    if (checkForContactChange(allExistingContacts, sensorContact)) {
+                if (checkForContactChange(allExistingContacts, sensorContact)) {
 
-                        Log.d(TAG, "Insert entry");
-                        daoProvider.getContactEventDao().insert(sensorContact);
-                        Log.d(TAG, "Finished");
-                    }
-                } catch (Exception e) {
-                    Log.e(TAG, "Some error: ", e);
+                    Log.d(TAG, "Insert entry");
+                    daoProvider.getContactEventDao().insert(sensorContact);
+                    Log.d(TAG, "Finished");
                 }
 
                 // get extra data
                 syncNumbers(sensorContact);
                 syncMails(sensorContact);
-
             }
         } catch (SecurityException se) {
             Log.d(TAG, "Permission was not granted for this event!");
@@ -186,15 +182,18 @@ public class ContactsEvent extends AbstractContentObserverEvent {
         }
 
         // this deletes implicitly all numbers and mails which have no contact anymore
-        for (DbContactEvent contact : allExistingContacts.values()) {
+        for (Map.Entry<Long, DbContactEvent> entry : allExistingContacts.entrySet()) {
 
             if (!isRunning()) {
                 return;
             }
 
+            DbContactEvent contact = entry.getValue();
+
             syncNumbers(contact);
             syncMails(contact);
         }
+
         // remaining contacts are deleted
         deleteRemainingEntries(allExistingContacts, true);
     }
@@ -203,22 +202,29 @@ public class ContactsEvent extends AbstractContentObserverEvent {
 
         boolean bSomethingDeleted = false;
 
-        for (DbContactEvent entry : allExistingContacts.values()) {
+        List<DbContactEvent> entriesToDelete = new ArrayList<>();
+
+        for (Map.Entry<Long, DbContactEvent> entry : allExistingContacts.entrySet()) {
 
             if (b && !isRunning()) {
                 return bSomethingDeleted;
             }
 
-            entry.setIsDeleted(true);
-            entry.setIsNew(false);
-            entry.setIsUpdated(false);
+            DbContactEvent dbContact = entry.getValue();
 
-            daoProvider.getContactEventDao().delete(entry);
+            dbContact.setIsDeleted(Boolean.TRUE);
+            dbContact.setIsNew(Boolean.FALSE);
+            dbContact.setIsUpdated(Boolean.FALSE);
+
+            entriesToDelete.add(dbContact);
 
             if (!bSomethingDeleted) {
                 bSomethingDeleted = true;
             }
         }
+
+        // remove entries
+        daoProvider.getContactEventDao().delete(entriesToDelete);
 
         return bSomethingDeleted;
     }
@@ -227,22 +233,29 @@ public class ContactsEvent extends AbstractContentObserverEvent {
 
         boolean bSomethingDeleted = false;
 
-        for (DbContactEmailEvent entry : allExistingContactsEmail.values()) {
+        List<DbContactEmailEvent> entriesToDelete = new ArrayList<>();
+
+        for (Map.Entry<String, DbContactEmailEvent> entry : allExistingContactsEmail.entrySet()) {
 
             if (b && !isRunning()) {
                 return bSomethingDeleted;
             }
 
-            entry.setIsDeleted(true);
-            entry.setIsNew(false);
-            entry.setIsUpdated(false);
+            DbContactEmailEvent dbContactEmail = entry.getValue();
 
-            daoProvider.getContactEmailEventDao().delete(entry);
+            dbContactEmail.setIsDeleted(Boolean.TRUE);
+            dbContactEmail.setIsNew(Boolean.FALSE);
+            dbContactEmail.setIsUpdated(Boolean.FALSE);
+
+            entriesToDelete.add(dbContactEmail);
 
             if (!bSomethingDeleted) {
                 bSomethingDeleted = true;
             }
         }
+
+        // delete entries
+        daoProvider.getContactEmailEventDao().delete(entriesToDelete);
 
         return bSomethingDeleted;
     }
@@ -251,22 +264,29 @@ public class ContactsEvent extends AbstractContentObserverEvent {
 
         boolean bSomethingDeleted = false;
 
-        for (DbContactNumberEvent entry : allExistingContactsNumber.values()) {
+        List<DbContactNumberEvent> entriesToDelete = new ArrayList<>();
+
+        for (Map.Entry<String, DbContactNumberEvent> entry : allExistingContactsNumber.entrySet()) {
 
             if (b && !isRunning()) {
                 return bSomethingDeleted;
             }
 
-            entry.setIsDeleted(true);
-            entry.setIsNew(false);
-            entry.setIsUpdated(false);
+            DbContactNumberEvent dbContactNumber = entry.getValue();
 
-            daoProvider.getContactNumberEventDao().delete(entry);
+            dbContactNumber.setIsDeleted(Boolean.TRUE);
+            dbContactNumber.setIsNew(Boolean.FALSE);
+            dbContactNumber.setIsUpdated(Boolean.FALSE);
+
+            entriesToDelete.add(dbContactNumber);
 
             if (!bSomethingDeleted) {
                 bSomethingDeleted = true;
             }
         }
+
+        // delete entries
+        daoProvider.getContactNumberEventDao().delete(entriesToDelete);
 
         return bSomethingDeleted;
     }
@@ -276,7 +296,10 @@ public class ContactsEvent extends AbstractContentObserverEvent {
         long longContactId = sensorContact.getContactId();
         Map<String, DbContactEmailEvent> mapExistingMails = getExistingMails(longContactId);
 
-        String[] columns = new String[]{Email.ADDRESS, Email.TYPE};
+        String[] columns = {
+                ContactsContract.CommonDataKinds.Email.ADDRESS,
+                ContactsContract.CommonDataKinds.Email.TYPE
+        };
 
         Cursor emails = null;
 
@@ -284,36 +307,40 @@ public class ContactsEvent extends AbstractContentObserverEvent {
 
             emails = context
                     .getContentResolver()
-                    .query(URI_EMAIL, columns, Email.CONTACT_ID + " = " + longContactId, null, null);
+                    .query(URI_EMAIL,
+                            columns,
+                            ContactsContract.CommonDataKinds.Email.CONTACT_ID + " = " + longContactId,
+                            null,
+                            null);
 
             if (emails == null) {
                 return;
             }
 
+            List<DbContactEmailEvent> entriesToInsert = new ArrayList<>();
+
             while (emails.moveToNext()) {
 
                 DbContactEmailEvent sensorContactMail = new DbContactEmailEvent();
 
-                sensorContactMail.setMailId(getLongByColumnName(emails, Email._ID));
+                sensorContactMail.setMailId(getLongByColumnName(emails, ContactsContract.CommonDataKinds.Email._ID));
                 sensorContactMail.setContactId(sensorContact.getId());
-                sensorContactMail.setAddress(getStringByColumnName(emails, Email.ADDRESS));
-                sensorContactMail.setType(getStringByColumnName(emails, Email.TYPE));
-                sensorContactMail.setIsNew(true);
-                sensorContactMail.setIsDeleted(false);
-                sensorContactMail.setIsUpdated(false);
+                sensorContactMail.setAddress(getStringByColumnName(emails, ContactsContract.CommonDataKinds.Email.ADDRESS));
+                sensorContactMail.setType(getStringByColumnName(emails, ContactsContract.CommonDataKinds.Email.TYPE));
+                sensorContactMail.setIsNew(Boolean.TRUE);
+                sensorContactMail.setIsDeleted(Boolean.FALSE);
+                sensorContactMail.setIsUpdated(Boolean.FALSE);
 
-                try {
-                    if (checkForContactMailChange(mapExistingMails, sensorContactMail)) {
+                if (checkForContactMailChange(mapExistingMails, sensorContactMail)) {
 
-                        Log.d(TAG, "Contact email: Insert entry");
-                        daoProvider.getContactEmailEventDao().insert(sensorContactMail);
-                        Log.d(TAG, "Finished");
-                    }
-
-                } catch (Exception e) {
-                    Log.e(TAG, "Some error: ", e);
+                    entriesToInsert.add(sensorContactMail);
                 }
             }
+
+            Log.d(TAG, "Contact email: Insert entry");
+            daoProvider.getContactEmailEventDao().insert(entriesToInsert);
+            Log.d(TAG, "Finished");
+
         } finally {
             if (emails != null) {
                 emails.close();
@@ -334,18 +361,18 @@ public class ContactsEvent extends AbstractContentObserverEvent {
 
         if (existingItem == null) {
 
-            newItem.setIsNew(true);
-            newItem.setIsUpdated(false);
-            newItem.setIsDeleted(false);
+            newItem.setIsNew(Boolean.TRUE);
+            newItem.setIsUpdated(Boolean.FALSE);
+            newItem.setIsDeleted(Boolean.FALSE);
 
             return true;
 
         } else {
             if (hasContactMailDifference(existingItem, newItem)) {
 
-                newItem.setIsNew(false);
-                newItem.setIsUpdated(true);
-                newItem.setIsDeleted(false);
+                newItem.setIsNew(Boolean.FALSE);
+                newItem.setIsUpdated(Boolean.TRUE);
+                newItem.setIsDeleted(Boolean.FALSE);
                 newItem.setId(existingItem.getId());
 
                 return true;
@@ -374,11 +401,17 @@ public class ContactsEvent extends AbstractContentObserverEvent {
 
             curPhones = context
                     .getContentResolver()
-                    .query(URI_PHONE, null, Phone.CONTACT_ID + " = " + longContactId, null, null);
+                    .query(URI_PHONE,
+                            null,
+                            Phone.CONTACT_ID + " = " + longContactId,
+                            null,
+                            null);
 
             if (curPhones == null) {
                 return;
             }
+
+            List<DbContactNumberEvent> entriesToInsert = new ArrayList<>();
 
             while (curPhones.moveToNext()) {
 
@@ -388,23 +421,22 @@ public class ContactsEvent extends AbstractContentObserverEvent {
                 sensorContactNumber.setContactId(sensorContact.getId());
                 sensorContactNumber.setNumber(getStringByColumnName(curPhones, Phone.NUMBER));
                 sensorContactNumber.setType(getStringByColumnName(curPhones, Phone.TYPE));
-                sensorContactNumber.setIsNew(true);
-                sensorContactNumber.setIsDeleted(false);
-                sensorContactNumber.setIsUpdated(false);
+                sensorContactNumber.setIsNew(Boolean.TRUE);
+                sensorContactNumber.setIsDeleted(Boolean.FALSE);
+                sensorContactNumber.setIsUpdated(Boolean.FALSE);
 
-                try {
-                    if (checkForContactNumberChange(mapExistingNumbers, sensorContactNumber)) {
+                if (checkForContactNumberChange(mapExistingNumbers, sensorContactNumber)) {
 
-                        Log.d(TAG, "Contact number: Insert entry");
-                        daoProvider.getContactNumberEventDao().insert(sensorContactNumber);
-                        Log.d(TAG, "Finished");
-                    }
-                } catch (Exception e) {
-                    Log.e(TAG, "Some error: ", e);
+                    entriesToInsert.add(sensorContactNumber);
                 }
             }
-        } catch (NullPointerException npe) {
-            Log.d(TAG, "");
+
+            Log.d(TAG, "Contact number: Insert entry");
+            daoProvider.getContactNumberEventDao().insert(entriesToInsert);
+            Log.d(TAG, "Finished");
+
+        } catch (Exception e) {
+            Log.d(TAG, "Some error");
         } finally {
             if (curPhones != null) {
                 curPhones.close();
@@ -425,18 +457,18 @@ public class ContactsEvent extends AbstractContentObserverEvent {
 
         if (existingItem == null) {
 
-            newItem.setIsNew(true);
-            newItem.setIsUpdated(false);
-            newItem.setIsDeleted(false);
+            newItem.setIsNew(Boolean.TRUE);
+            newItem.setIsUpdated(Boolean.FALSE);
+            newItem.setIsDeleted(Boolean.FALSE);
 
             return true;
 
         } else {
             if (hasContactNumberDifference(existingItem, newItem)) {
 
-                newItem.setIsNew(false);
-                newItem.setIsUpdated(true);
-                newItem.setIsDeleted(false);
+                newItem.setIsNew(Boolean.FALSE);
+                newItem.setIsUpdated(Boolean.TRUE);
+                newItem.setIsDeleted(Boolean.FALSE);
                 newItem.setId(existingItem.getId());
 
                 return true;
@@ -465,18 +497,18 @@ public class ContactsEvent extends AbstractContentObserverEvent {
 
         if (existingItem == null) {
 
-            newItem.setIsNew(true);
-            newItem.setIsUpdated(false);
-            newItem.setIsDeleted(false);
+            newItem.setIsNew(Boolean.TRUE);
+            newItem.setIsUpdated(Boolean.FALSE);
+            newItem.setIsDeleted(Boolean.FALSE);
 
             result = true;
 
         } else {
             if (hasContactDifference(existingItem, newItem)) {
 
-                newItem.setIsNew(false);
-                newItem.setIsUpdated(true);
-                newItem.setIsDeleted(false);
+                newItem.setIsNew(Boolean.FALSE);
+                newItem.setIsUpdated(Boolean.TRUE);
+                newItem.setIsDeleted(Boolean.FALSE);
                 newItem.setId(existingItem.getId());
 
                 result = true;
@@ -591,6 +623,7 @@ public class ContactsEvent extends AbstractContentObserverEvent {
 
         syncingTask = new AsyncTask<Void, Void, Void>() {
 
+            @Nullable
             @Override
             protected Void doInBackground(Void... params) {
 
