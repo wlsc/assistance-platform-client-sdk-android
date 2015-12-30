@@ -23,6 +23,8 @@ import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensing.impl.co
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensing.impl.contentobserver.CalendarEvent;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensing.impl.contentobserver.CallLogEvent;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensing.impl.contentobserver.ContactsEvent;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensing.impl.general.FacebookEvent;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensing.impl.general.TucanEvent;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensing.impl.periodic.BackgroundTrafficEvent;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensing.impl.periodic.LoudnessSensor;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensing.impl.periodic.PowerLevelEvent;
@@ -174,6 +176,15 @@ public class SensorProvider {
 
         CallLogEvent callLogEvent = CallLogEvent.getInstance(mContext);
         availableSensors.put(callLogEvent.getType(), callLogEvent);
+
+        /*
+         *  GENERAL DUMMY SENSORS / EVENTS
+         */
+        TucanEvent tucanEvent = TucanEvent.getInstance(mContext);
+        availableSensors.put(tucanEvent.getType(), tucanEvent);
+
+        FacebookEvent facebookEvent = FacebookEvent.getInstance(mContext);
+        availableSensors.put(facebookEvent.getType(), facebookEvent);
 
         Log.d(TAG, "Finished. Number of sensors: " + availableSensors.size());
     }
