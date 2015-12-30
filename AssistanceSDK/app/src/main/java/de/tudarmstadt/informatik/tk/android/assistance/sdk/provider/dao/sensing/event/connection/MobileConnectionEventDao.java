@@ -1,4 +1,4 @@
-package de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.event;
+package de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.event.connection;
 
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbMobileConnectionEvent;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.CommonEventDao;

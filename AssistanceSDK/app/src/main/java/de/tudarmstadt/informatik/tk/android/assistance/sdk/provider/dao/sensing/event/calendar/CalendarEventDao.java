@@ -1,4 +1,4 @@
-package de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.event;
+package de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.event.calendar;
 
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbCalendarEvent;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.CommonEventDao;

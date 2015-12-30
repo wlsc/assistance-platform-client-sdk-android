@@ -1,4 +1,4 @@
-package de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.event;
+package de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.event.calendar;
 
 import java.util.Collections;
 import java.util.List;

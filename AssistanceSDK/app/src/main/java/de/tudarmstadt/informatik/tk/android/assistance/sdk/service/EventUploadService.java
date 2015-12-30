@@ -62,7 +62,7 @@ import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensing.ISensor
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.DaoProvider;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.PreferenceProvider;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.SensorProvider;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.event.CalendarReminderEventDao;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.event.calendar.CalendarReminderEventDao;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.util.ConnectionUtils;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.util.HardwareUtils;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.util.logger.Log;
