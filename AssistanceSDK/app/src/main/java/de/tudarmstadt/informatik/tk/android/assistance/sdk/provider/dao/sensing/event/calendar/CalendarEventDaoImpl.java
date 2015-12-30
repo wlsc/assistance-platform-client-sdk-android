@@ -98,4 +98,13 @@ public class CalendarEventDaoImpl extends
                 .build()
                 .list();
     }
+
+    @Override
+    public List<DbCalendarEvent> getAllUpdated() {
+        return dao
+                .queryBuilder()
+                .where(DbCalendarEventDao.Properties.IsUpdated.eq(1))
+                .build()
+                .list();
+    }
 }

@@ -1,13 +1,16 @@
 package de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensing.impl.contentobserver;
 
+import android.Manifest;
 import android.content.ContentResolver;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.provider.CalendarContract.Events;
 import android.provider.CalendarContract.Reminders;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -104,6 +107,20 @@ public class CalendarEvent extends AbstractContentObserverEvent {
     protected void syncData() {
 
         Log.d(TAG, "Syncing data...");
+
+        if (context == null) {
+            return;
+        }
+
+        if (ActivityCompat.checkSelfPermission(
+                context,
+                Manifest.permission.READ_CALENDAR) != PackageManager.PERMISSION_GRANTED) {
+
+            Log.d(TAG, "Permission was NOT granted!");
+            setRunning(false);
+
+            return;
+        }
 
         // Submit the query
         ContentResolver cr = context.getContentResolver();

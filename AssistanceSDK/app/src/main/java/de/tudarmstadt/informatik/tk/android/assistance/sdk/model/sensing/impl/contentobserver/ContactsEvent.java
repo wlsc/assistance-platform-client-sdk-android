@@ -1,6 +1,8 @@
 package de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensing.impl.contentobserver;
 
+import android.Manifest;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -9,6 +11,7 @@ import android.provider.ContactsContract.CommonDataKinds.Note;
 import android.provider.ContactsContract.CommonDataKinds.Phone;
 import android.provider.ContactsContract.Data;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -74,11 +77,19 @@ public class ContactsEvent extends AbstractContentObserverEvent {
             return;
         }
 
+        if (ActivityCompat.checkSelfPermission(
+                context,
+                Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED) {
+
+            Log.d(TAG, "Permission was NOT granted!");
+            setRunning(false);
+
+            return;
+        }
+
         //ContactsContract.CommonDataKinds.StructuredName.
 
         //Cursor cursor = context.getContentResolver().query(URI_RAW_CONTACTS, null, "deleted=?", new String[] { "0" }, null);
-
-        Map<Long, DbContactEvent> allExistingContacts = new HashMap<>();
 
         Cursor cursor = null;
         Cursor nameCur = null;
@@ -94,7 +105,7 @@ public class ContactsEvent extends AbstractContentObserverEvent {
 
             cursor.moveToFirst();
 
-            allExistingContacts = getAllExistingContacts();
+            Map<Long, DbContactEvent> allExistingContacts = getAllExistingContacts();
 
             while (cursor.moveToNext() && isRunning()) {
 

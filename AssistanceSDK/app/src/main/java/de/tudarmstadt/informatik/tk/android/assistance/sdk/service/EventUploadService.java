@@ -830,28 +830,6 @@ public class EventUploadService extends GcmTaskService {
 
                     break;
 
-                case DtoType.CALL_LOG:
-
-                    List<DbCallLogEvent> callLogList;
-
-                    // give all
-                    if (numberOfElements == 0) {
-                        callLogList = daoProvider
-                                .getCallLogEventDao()
-                                .getAll();
-                    } else {
-                        callLogList = daoProvider
-                                .getCallLogEventDao()
-                                .getFirstN(numberOfElements);
-                    }
-
-                    dbEvents.put(type, callLogList);
-                    requestEvents.put(type, daoProvider
-                            .getCallLogEventDao()
-                            .convertObjects(callLogList));
-
-                    break;
-
                 case DtoType.GYROSCOPE:
 
                     List<DbGyroscopeSensor> gyroList;
@@ -923,7 +901,7 @@ public class EventUploadService extends GcmTaskService {
                     // retrieve all events
                     List<DbCalendarEvent> calendarList = daoProvider
                             .getCalendarEventDao()
-                            .getAll();
+                            .getAllUpdated();
 
                     List<SensorDto> calendarListConverted = daoProvider
                             .getCalendarEventDao()
@@ -964,6 +942,28 @@ public class EventUploadService extends GcmTaskService {
                     dbEvents.put(type, calendarList);
                     requestEvents.put(type, calendarListConverted);
 
+
+                    break;
+
+                case DtoType.CALL_LOG:
+
+                    List<DbCallLogEvent> callLogList;
+
+                    // give all
+                    if (numberOfElements == 0) {
+                        callLogList = daoProvider
+                                .getCallLogEventDao()
+                                .getAll();
+                    } else {
+                        callLogList = daoProvider
+                                .getCallLogEventDao()
+                                .getFirstN(numberOfElements);
+                    }
+
+                    dbEvents.put(type, callLogList);
+                    requestEvents.put(type, daoProvider
+                            .getCallLogEventDao()
+                            .convertObjects(callLogList));
 
                     break;
 
@@ -1114,10 +1114,6 @@ public class EventUploadService extends GcmTaskService {
                     daoProvider.getRingtoneEventDao().delete((List<DbRingtoneEvent>) values);
                     break;
 
-                case DtoType.CALL_LOG:
-                    daoProvider.getCallLogEventDao().delete((List<DbCallLogEvent>) values);
-                    break;
-
                 case DtoType.GYROSCOPE:
                     daoProvider.getGyroscopeSensorDao().delete((List<DbGyroscopeSensor>) values);
                     break;
@@ -1130,8 +1126,8 @@ public class EventUploadService extends GcmTaskService {
                     daoProvider.getBrowserHistoryEventDao().delete((List<DbBrowserHistoryEvent>) values);
                     break;
 
-                case DtoType.CONTACT:
-                    daoProvider.getContactEventDao().delete((List<DbContactEvent>) values);
+                case DtoType.CALL_LOG:
+                    daoProvider.getCallLogEventDao().delete((List<DbCallLogEvent>) values);
                     break;
 
                 case DtoType.POWER_STATE:
