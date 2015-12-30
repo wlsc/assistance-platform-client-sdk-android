@@ -16,13 +16,11 @@
     <string name="sensor_loudness">Loudness</string>
     <string name="sensor_magnetic_field_uncalibrated">Magnetic field (uncalibrated)</string>
     <string name="sensor_gyroscope_uncalibrated">Gyroscope (uncalibrated)</string>
-
-    <string name="measurement_log">Log</string>
     <string name="sensor_activity">Activity</string>
     <string name="sensor_light">Ambient light</string>
+
     <string name="event_power_state">Power state</string>
     <string name="event_power_level">Power level</string>
-    <string name="sensor_location">Location</string>
     <string name="event_ringtone">Ringtone</string>
     <string name="event_account_reader">Account reader</string>
     <string name="event_running_processes">Running processes</string>
@@ -32,12 +30,13 @@
     <string name="event_contact_email">Contact email</string>
     <string name="event_contact_number">Contact number</string>
     <string name="event_calendar">Calendar</string>
-    <string name="event_calendar_reminder">Calendar reminders</string>
     <string name="event_calllog">Call log</string>
     <string name="event_browser_history">Browser history</string>
     <string name="event_network_traffic">Traffic Usage</string>
     <string name="event_background_traffic">Background Traffic Usage</string>
-    <string name="event_foreground_event">Last used apps</string>
+    <string name="event_foreground">Last used apps</string>
+    <string name="event_uni_tucan">TUCaN</string>
+    <string name="event_social_facebook">Facebook</string>
 
     <!-- Service -->
     <string name="service_running_notification_title">Assistance service is running!</string>

@@ -10,6 +10,5 @@ public interface SensorDto {
 
     int getType();
 
-    void setType(int type);
-
+    String getCreated();
 }

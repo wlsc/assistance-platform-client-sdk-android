@@ -20,7 +20,7 @@
     <string name="sensor_loudness">Lautstärke</string>
     <string name="event_calllog">Anrufliste</string>
     <string name="event_browser_history">Browser Verlauf</string>
-    <string name="event_foreground_event">Benutzte Apps</string>
+    <string name="event_foreground">Benutzte Apps</string>
     <string name="event_network_traffic">Datenverbrauch</string>
 
     <!-- Service -->

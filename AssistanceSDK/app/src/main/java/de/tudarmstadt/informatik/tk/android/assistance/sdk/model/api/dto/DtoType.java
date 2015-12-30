@@ -73,6 +73,10 @@ public class DtoType {
 
     public static final int FOREGROUND_TRAFFIC = 24;
 
+    public static final int UNI_TUCAN = 25;
+
+    public static final int SOCIAL_FACEBOOK = 26;
+
     static {
         apiNameToDtoTypeMap.put(getApiName(LOCATION), LOCATION);
         apiNameToDtoTypeMap.put(getApiName(GYROSCOPE), GYROSCOPE);
@@ -98,6 +102,8 @@ public class DtoType {
         apiNameToDtoTypeMap.put(getApiName(FOREGROUND_TRAFFIC), FOREGROUND_TRAFFIC);
         apiNameToDtoTypeMap.put(getApiName(CALENDAR), CALENDAR);
         apiNameToDtoTypeMap.put(getApiName(CONTACT), CONTACT);
+        apiNameToDtoTypeMap.put(getApiName(UNI_TUCAN), UNI_TUCAN);
+        apiNameToDtoTypeMap.put(getApiName(SOCIAL_FACEBOOK), SOCIAL_FACEBOOK);
 
         androidSensorToDtoTypeMap.put(Sensor.TYPE_ACCELEROMETER, ACCELEROMETER);
         androidSensorToDtoTypeMap.put(Sensor.TYPE_GYROSCOPE, GYROSCOPE);
@@ -131,7 +137,7 @@ public class DtoType {
             case LOUDNESS:
                 return res.getString(R.string.sensor_loudness);
             case FOREGROUND:
-                return res.getString(R.string.event_foreground_event);
+                return res.getString(R.string.event_foreground);
             case LIGHT:
                 return res.getString(R.string.sensor_light);
             case RINGTONE:
@@ -160,6 +166,10 @@ public class DtoType {
                 return res.getString(R.string.event_running_tasks);
             case RUNNING_PROCESSES:
                 return res.getString(R.string.event_running_processes);
+            case UNI_TUCAN:
+                return res.getString(R.string.event_uni_tucan);
+            case SOCIAL_FACEBOOK:
+                return res.getString(R.string.event_social_facebook);
             default:
                 return "";
         }
@@ -222,6 +232,10 @@ public class DtoType {
                 return "runningtask";
             case RUNNING_PROCESSES:
                 return "runningprocess";
+            case UNI_TUCAN:
+                return "tucan";
+            case SOCIAL_FACEBOOK:
+                return "facebook";
             default:
                 return "";
         }
