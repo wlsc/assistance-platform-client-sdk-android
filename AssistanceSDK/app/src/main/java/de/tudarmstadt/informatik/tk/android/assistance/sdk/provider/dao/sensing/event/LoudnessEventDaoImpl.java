@@ -6,7 +6,6 @@ import java.util.List;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DaoSession;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbLoudnessEvent;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbLoudnessEventDao;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.DtoType;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.SensorDto;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.sensing.event.LoudnessEventDto;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.CommonEventDaoImpl;
@@ -45,11 +44,8 @@ public class LoudnessEventDaoImpl extends
 
         LoudnessEventDto result = new LoudnessEventDto();
 
-        result.setId(sensor.getId());
         result.setLoudness(sensor.getLoudness());
         result.setCreated(sensor.getCreated());
-        result.setType(DtoType.LOUDNESS);
-        result.setTypeStr(DtoType.getApiName(DtoType.LOUDNESS));
 
         return result;
     }

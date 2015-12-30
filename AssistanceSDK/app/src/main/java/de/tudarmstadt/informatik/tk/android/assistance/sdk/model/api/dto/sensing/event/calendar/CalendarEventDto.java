@@ -14,8 +14,6 @@ import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.SensorD
  */
 public class CalendarEventDto implements SensorDto {
 
-    private Long id;
-
     @SerializedName("eventId")
     @Expose
     private String eventId;
@@ -62,7 +60,7 @@ public class CalendarEventDto implements SensorDto {
 
     @SerializedName("alarms")
     @Expose
-    private Set<CalendarReminderEventDto> alarms;
+    private Set<CalendarReminder> alarms;
 
     @SerializedName("lastDate")
     @Expose
@@ -115,14 +113,7 @@ public class CalendarEventDto implements SensorDto {
         this.typeStr = DtoType.getApiName(this.type);
     }
 
-    public CalendarEventDto(Long id) {
-        this.id = id;
-        this.type = DtoType.CALENDAR;
-        this.typeStr = DtoType.getApiName(this.type);
-    }
-
-    public CalendarEventDto(Long id, String eventId, String calendarId, Boolean allDay, Integer availability, String description, String startDate, String endDate, String duration, String location, String recurrenceExceptionDate, String recurrenceExceptionRule, Set<CalendarReminderEventDto> alarms, Long lastDate, Boolean originalAllDay, String originalId, Long originalInstanceTime, String recurrenceDate, String recurrenceRule, Integer status, String title, Boolean isDeleted, String created) {
-        this.id = id;
+    public CalendarEventDto(String eventId, String calendarId, Boolean allDay, Integer availability, String description, String startDate, String endDate, String duration, String location, String recurrenceExceptionDate, String recurrenceExceptionRule, Set<CalendarReminder> alarms, Long lastDate, Boolean originalAllDay, String originalId, Long originalInstanceTime, String recurrenceDate, String recurrenceRule, Integer status, String title, Boolean isDeleted, String created) {
         this.eventId = eventId;
         this.calendarId = calendarId;
         this.allDay = allDay;
@@ -147,14 +138,6 @@ public class CalendarEventDto implements SensorDto {
         this.created = created;
         this.type = DtoType.CALENDAR;
         this.typeStr = DtoType.getApiName(this.type);
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public String getEventId() {
@@ -245,11 +228,11 @@ public class CalendarEventDto implements SensorDto {
         this.recurrenceExceptionRule = recurrenceExceptionRule;
     }
 
-    public Set<CalendarReminderEventDto> getAlarms() {
+    public Set<CalendarReminder> getAlarms() {
         return alarms;
     }
 
-    public void setAlarms(Set<CalendarReminderEventDto> alarms) {
+    public void setAlarms(Set<CalendarReminder> alarms) {
         this.alarms = alarms;
     }
 
@@ -347,14 +330,8 @@ public class CalendarEventDto implements SensorDto {
     }
 
     @Override
-    public void setType(int type) {
-        this.type = type;
-    }
-
-    @Override
     public String toString() {
         return "CalendarEventDto{" +
-                "id=" + id +
                 ", eventId='" + eventId + '\'' +
                 ", calendarId='" + calendarId + '\'' +
                 ", allDay=" + allDay +

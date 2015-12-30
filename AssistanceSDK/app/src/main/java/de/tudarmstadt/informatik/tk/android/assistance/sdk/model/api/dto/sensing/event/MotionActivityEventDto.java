@@ -13,8 +13,6 @@ import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.SensorD
  */
 public class MotionActivityEventDto implements SensorDto {
 
-    private Long id;
-
     @SerializedName("walking")
     @Expose
     private Integer walking;
@@ -63,14 +61,7 @@ public class MotionActivityEventDto implements SensorDto {
 
     }
 
-    public MotionActivityEventDto(long id) {
-        this.id = id;
-        this.type = DtoType.MOTION_ACTIVITY;
-        this.typeStr = DtoType.getApiName(this.type);
-    }
-
-    public MotionActivityEventDto(long id, Integer walking, Integer running, Integer cycling, Integer driving, Integer stationary, Integer unknown, String created, Integer onFoot, Integer tilting) {
-        this.id = id;
+    public MotionActivityEventDto(Integer walking, Integer running, Integer cycling, Integer driving, Integer stationary, Integer unknown, String created, Integer onFoot, Integer tilting) {
         this.walking = walking;
         this.running = running;
         this.cycling = cycling;
@@ -82,14 +73,6 @@ public class MotionActivityEventDto implements SensorDto {
         this.tilting = tilting;
         this.type = DtoType.MOTION_ACTIVITY;
         this.typeStr = DtoType.getApiName(this.type);
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public Integer getWalking() {
@@ -175,11 +158,6 @@ public class MotionActivityEventDto implements SensorDto {
         return type;
     }
 
-    @Override
-    public void setType(int type) {
-        this.type = type;
-    }
-
     public String getTypeStr() {
         return this.typeStr;
     }
@@ -191,7 +169,6 @@ public class MotionActivityEventDto implements SensorDto {
     @Override
     public String toString() {
         return "MotionActivityEventRequest{" +
-                "id=" + id +
                 ", walking=" + walking +
                 ", running=" + running +
                 ", cycling=" + cycling +

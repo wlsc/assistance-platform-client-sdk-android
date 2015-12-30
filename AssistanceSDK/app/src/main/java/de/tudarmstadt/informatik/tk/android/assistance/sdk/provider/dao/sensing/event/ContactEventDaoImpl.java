@@ -10,9 +10,8 @@ import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbContactEmailEven
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbContactEvent;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbContactEventDao;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbContactNumberEvent;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.DtoType;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.SensorDto;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.sensing.event.contact.ContactEmailNumberItemDto;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.sensing.event.contact.ContactEmailNumber;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.sensing.event.contact.ContactEventDto;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.CommonEventDaoImpl;
 
@@ -50,7 +49,6 @@ public class ContactEventDaoImpl extends
 
         ContactEventDto result = new ContactEventDto();
 
-        result.setId(sensor.getId());
         result.setGlobalContactId(sensor.getGlobalContactId());
         result.setDisplayName(sensor.getDisplayName());
         result.setGivenName(sensor.getGivenName());
@@ -61,19 +59,17 @@ public class ContactEventDaoImpl extends
         result.setNote(sensor.getNote());
         result.setIsDeleted(sensor.getIsDeleted());
         result.setCreated(sensor.getCreated());
-        result.setType(DtoType.CONTACT);
-        result.setTypeStr(DtoType.getApiName(DtoType.CONTACT));
 
         List<DbContactEmailEvent> dbEmails = sensor.getDbContactEmailEventList();
         List<DbContactNumberEvent> dbNumbers = sensor.getDbContactNumberEventList();
 
         if (dbEmails != null && !dbEmails.isEmpty()) {
 
-            Set<ContactEmailNumberItemDto> emailsDto = new HashSet<>(dbEmails.size());
+            Set<ContactEmailNumber> emailsDto = new HashSet<>(dbEmails.size());
 
             for (DbContactEmailEvent emailEvent : dbEmails) {
 
-                ContactEmailNumberItemDto emailDto = new ContactEmailNumberItemDto(
+                ContactEmailNumber emailDto = new ContactEmailNumber(
                         emailEvent.getType(),
                         emailEvent.getAddress());
 
@@ -85,11 +81,11 @@ public class ContactEventDaoImpl extends
 
         if (dbNumbers != null && !dbNumbers.isEmpty()) {
 
-            Set<ContactEmailNumberItemDto> numbersDto = new HashSet<>(dbNumbers.size());
+            Set<ContactEmailNumber> numbersDto = new HashSet<>(dbNumbers.size());
 
             for (DbContactNumberEvent numberEvent : dbNumbers) {
 
-                ContactEmailNumberItemDto emailDto = new ContactEmailNumberItemDto(
+                ContactEmailNumber emailDto = new ContactEmailNumber(
                         numberEvent.getType(),
                         numberEvent.getNumber());
 

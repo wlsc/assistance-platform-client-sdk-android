@@ -6,7 +6,6 @@ import java.util.List;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DaoSession;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbRunningServicesEvent;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbRunningServicesEventDao;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.DtoType;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.SensorDto;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.sensing.event.RunningServiceEventDto;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.CommonEventDaoImpl;
@@ -45,11 +44,8 @@ public class RunningServicesEventDaoImpl extends
 
         RunningServiceEventDto result = new RunningServiceEventDto();
 
-        result.setId(sensor.getId());
         result.setPackageName(sensor.getPackageName());
         result.setClassName(sensor.getClassName());
-        result.setType(DtoType.RUNNING_SERVICES);
-        result.setTypeStr(DtoType.getApiName(DtoType.RUNNING_SERVICES));
         result.setCreated(sensor.getCreated());
 
         return result;

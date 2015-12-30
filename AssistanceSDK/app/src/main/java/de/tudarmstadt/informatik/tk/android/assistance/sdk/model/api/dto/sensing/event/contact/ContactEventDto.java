@@ -14,8 +14,6 @@ import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.SensorD
  */
 public class ContactEventDto implements SensorDto {
 
-    private Long id;
-
     @SerializedName("globalContactId")
     @Expose
     private Long globalContactId;
@@ -50,11 +48,11 @@ public class ContactEventDto implements SensorDto {
 
     @SerializedName("phoneNumbers")
     @Expose
-    private Set<ContactEmailNumberItemDto> phoneNumbers;
+    private Set<ContactEmailNumber> phoneNumbers;
 
     @SerializedName("emailAddresses")
     @Expose
-    private Set<ContactEmailNumberItemDto> emailAddresses;
+    private Set<ContactEmailNumber> emailAddresses;
 
     @SerializedName("isDeleted")
     @Expose
@@ -75,14 +73,7 @@ public class ContactEventDto implements SensorDto {
         this.typeStr = DtoType.getApiName(this.type);
     }
 
-    public ContactEventDto(Long id) {
-        this.id = id;
-        this.type = DtoType.CONTACT;
-        this.typeStr = DtoType.getApiName(this.type);
-    }
-
-    public ContactEventDto(Long id, Long globalContactId, String displayName, String givenName, String familyName, Integer starred, Integer lastTimeContacted, Integer timesContacted, String note, Set<ContactEmailNumberItemDto> phoneNumbers, Set<ContactEmailNumberItemDto> emailAddresses, Boolean isDeleted, String created) {
-        this.id = id;
+    public ContactEventDto(Long globalContactId, String displayName, String givenName, String familyName, Integer starred, Integer lastTimeContacted, Integer timesContacted, String note, Set<ContactEmailNumber> phoneNumbers, Set<ContactEmailNumber> emailAddresses, Boolean isDeleted, String created) {
         this.globalContactId = globalContactId;
         this.displayName = displayName;
         this.givenName = givenName;
@@ -95,14 +86,6 @@ public class ContactEventDto implements SensorDto {
         this.emailAddresses = emailAddresses;
         this.isDeleted = isDeleted;
         this.created = created;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public Long getGlobalContactId() {
@@ -169,19 +152,19 @@ public class ContactEventDto implements SensorDto {
         this.note = note;
     }
 
-    public Set<ContactEmailNumberItemDto> getPhoneNumbers() {
+    public Set<ContactEmailNumber> getPhoneNumbers() {
         return phoneNumbers;
     }
 
-    public void setPhoneNumbers(Set<ContactEmailNumberItemDto> phoneNumbers) {
+    public void setPhoneNumbers(Set<ContactEmailNumber> phoneNumbers) {
         this.phoneNumbers = phoneNumbers;
     }
 
-    public Set<ContactEmailNumberItemDto> getEmailAddresses() {
+    public Set<ContactEmailNumber> getEmailAddresses() {
         return emailAddresses;
     }
 
-    public void setEmailAddresses(Set<ContactEmailNumberItemDto> emailAddresses) {
+    public void setEmailAddresses(Set<ContactEmailNumber> emailAddresses) {
         this.emailAddresses = emailAddresses;
     }
 
@@ -215,14 +198,8 @@ public class ContactEventDto implements SensorDto {
     }
 
     @Override
-    public void setType(int type) {
-        this.type = type;
-    }
-
-    @Override
     public String toString() {
         return "ContactEventDto{" +
-                "id=" + id +
                 ", globalContactId=" + globalContactId +
                 ", displayName='" + displayName + '\'' +
                 ", givenName='" + givenName + '\'' +

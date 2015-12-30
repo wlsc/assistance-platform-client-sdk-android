@@ -54,7 +54,7 @@ import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.login.L
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.login.UserDeviceDto;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.sensing.EventUploadRequestDto;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.sensing.event.calendar.CalendarEventDto;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.sensing.event.calendar.CalendarReminderEventDto;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.sensing.event.calendar.CalendarReminder;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.endpoint.EndpointGenerator;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.endpoint.EventUploadEndpoint;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.endpoint.LoginEndpoint;
@@ -228,10 +228,10 @@ public class EventUploadService extends GcmTaskService {
                                     @Override
                                     public void run() {
 
-                                        EventUploadRequestDto eventUploadRequest = new EventUploadRequestDto();
-
-                                        eventUploadRequest.setDataEvents(partEvent);
-                                        eventUploadRequest.setServerDeviceId(serverDeviceId);
+                                        EventUploadRequestDto eventUploadRequest = new EventUploadRequestDto(
+                                                serverDeviceId,
+                                                partEvent
+                                        );
 
                                         doUploadEventData(eventUploadRequest);
                                     }
@@ -285,10 +285,10 @@ public class EventUploadService extends GcmTaskService {
                             @Override
                             public void run() {
 
-                                EventUploadRequestDto eventUploadRequest = new EventUploadRequestDto();
-
-                                eventUploadRequest.setDataEvents(eventPart);
-                                eventUploadRequest.setServerDeviceId(serverDeviceId);
+                                EventUploadRequestDto eventUploadRequest = new EventUploadRequestDto(
+                                        serverDeviceId,
+                                        eventPart
+                                );
 
                                 doUploadEventData(eventUploadRequest);
                             }
@@ -931,7 +931,7 @@ public class EventUploadService extends GcmTaskService {
 
                     List<CalendarEventDto> calendarListConvertedNew = new ArrayList<>(
                             calendarListConverted.size());
-                    Set<CalendarReminderEventDto> eventRemindersConvertedNew = new HashSet<>();
+                    Set<CalendarReminder> eventRemindersConvertedNew = new HashSet<>();
 
                     final CalendarReminderEventDao calendarReminderEventDao = daoProvider
                             .getCalendarReminderEventDao();
@@ -954,7 +954,7 @@ public class EventUploadService extends GcmTaskService {
                                 .convertObjects(eventReminders);
 
                         for (SensorDto sensorReminderDto : eventRemindersConverted) {
-                            eventRemindersConvertedNew.add((CalendarReminderEventDto) sensorReminderDto);
+                            eventRemindersConvertedNew.add((CalendarReminder) sensorReminderDto);
                         }
 
                         calendarEventDto.setAlarms(eventRemindersConvertedNew);

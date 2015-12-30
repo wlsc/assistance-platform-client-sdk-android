@@ -6,7 +6,6 @@ import java.util.List;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DaoSession;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbCallLogEvent;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbCallLogEventDao;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.DtoType;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.sensing.event.CallLogEventDto;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.CommonEventDaoImpl;
 
@@ -46,7 +45,7 @@ public class CallLogEventDaoImpl extends
 
         result.setId(sensor.getId());
         result.setCallId(sensor.getCallId());
-        result.setType(sensor.getType());
+        result.setCallType(sensor.getType());
         result.setName(sensor.getName());
         result.setNumber(sensor.getNumber());
         result.setDate(sensor.getDate());
@@ -55,8 +54,6 @@ public class CallLogEventDaoImpl extends
         result.setIsUpdated(sensor.getIsUpdated());
         result.setIsDeleted(sensor.getIsDeleted());
         result.setCreated(sensor.getCreated());
-        result.setType(DtoType.CALL_LOG);
-        result.setTypeStr(DtoType.getApiName(DtoType.CALL_LOG));
 
         return result;
     }

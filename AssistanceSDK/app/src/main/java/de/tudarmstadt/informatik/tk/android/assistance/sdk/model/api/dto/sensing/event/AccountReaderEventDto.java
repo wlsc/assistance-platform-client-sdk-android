@@ -12,8 +12,6 @@ import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.SensorD
  */
 public class AccountReaderEventDto implements SensorDto {
 
-    private Long id;
-
     @SerializedName("types")
     @Expose
     private String types;
@@ -33,26 +31,11 @@ public class AccountReaderEventDto implements SensorDto {
         this.typeStr = DtoType.getApiName(this.type);
     }
 
-    public AccountReaderEventDto(Long id) {
-        this.id = id;
-        this.type = DtoType.ACCOUNT_READER;
-        this.typeStr = DtoType.getApiName(this.type);
-    }
-
-    public AccountReaderEventDto(Long id, String types, String created) {
-        this.id = id;
+    public AccountReaderEventDto(String types, String created) {
         this.types = types;
         this.created = created;
         this.type = DtoType.ACCOUNT_READER;
         this.typeStr = DtoType.getApiName(this.type);
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public String getTypes() {
@@ -85,14 +68,8 @@ public class AccountReaderEventDto implements SensorDto {
     }
 
     @Override
-    public void setType(int type) {
-        this.type = type;
-    }
-
-    @Override
     public String toString() {
         return "AccountReaderEventDto{" +
-                "id=" + id +
                 ", types='" + types + '\'' +
                 ", created='" + created + '\'' +
                 ", typeStr='" + typeStr + '\'' +

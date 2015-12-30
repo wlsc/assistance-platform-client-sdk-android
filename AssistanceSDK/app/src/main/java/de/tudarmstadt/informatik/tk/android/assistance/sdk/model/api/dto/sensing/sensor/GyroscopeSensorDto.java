@@ -13,8 +13,6 @@ import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.SensorD
  */
 public class GyroscopeSensorDto implements SensorDto {
 
-    private Long id;
-
     @SerializedName("x")
     @Expose
     private Double x;
@@ -73,14 +71,7 @@ public class GyroscopeSensorDto implements SensorDto {
         this.typeStr = DtoType.getApiName(this.type);
     }
 
-    public GyroscopeSensorDto(long id) {
-        this.id = id;
-        this.type = DtoType.GYROSCOPE;
-        this.typeStr = DtoType.getApiName(this.type);
-    }
-
-    public GyroscopeSensorDto(Long id, Double x, Double y, Double z, Float xUncalibratedNoDrift, Float yUncalibratedNoDrift, Float zUncalibratedNoDrift, Float xUncalibratedEstimatedDrift, Float yUncalibratedEstimatedDrift, Float zUncalibratedEstimatedDrift, Integer accuracy, String created) {
-        this.id = id;
+    public GyroscopeSensorDto(Double x, Double y, Double z, Float xUncalibratedNoDrift, Float yUncalibratedNoDrift, Float zUncalibratedNoDrift, Float xUncalibratedEstimatedDrift, Float yUncalibratedEstimatedDrift, Float zUncalibratedEstimatedDrift, Integer accuracy, String created) {
         this.x = x;
         this.y = y;
         this.z = z;
@@ -94,14 +85,6 @@ public class GyroscopeSensorDto implements SensorDto {
         this.created = created;
         this.type = DtoType.GYROSCOPE;
         this.typeStr = DtoType.getApiName(this.type);
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public Double getX() {
@@ -197,11 +180,6 @@ public class GyroscopeSensorDto implements SensorDto {
         return type;
     }
 
-    @Override
-    public void setType(int type) {
-        this.type = type;
-    }
-
     public String getTypeStr() {
         return this.typeStr;
     }
@@ -213,7 +191,6 @@ public class GyroscopeSensorDto implements SensorDto {
     @Override
     public String toString() {
         return "GyroscopeSensorDto{" +
-                "id=" + id +
                 ", x=" + x +
                 ", y=" + y +
                 ", z=" + z +

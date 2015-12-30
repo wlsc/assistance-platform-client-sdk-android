@@ -12,8 +12,6 @@ import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.SensorD
  */
 public class MagneticFieldSensorDto implements SensorDto {
 
-    private Long id;
-
     @SerializedName("x")
     @Expose
     private Double x;
@@ -72,14 +70,7 @@ public class MagneticFieldSensorDto implements SensorDto {
         this.typeStr = DtoType.getApiName(this.type);
     }
 
-    public MagneticFieldSensorDto(long id) {
-        this.id = id;
-        this.type = DtoType.MAGNETIC_FIELD;
-        this.typeStr = DtoType.getApiName(this.type);
-    }
-
-    public MagneticFieldSensorDto(Long id, Double x, Double y, Double z, float xUncalibratedNoHardIron, float yUncalibratedNoHardIron, float zUncalibratedNoHardIron, float xUncalibratedEstimatedIronBias, float yUncalibratedEstimatedIronBias, float zUncalibratedEstimatedIronBias, String created, Integer accuracy) {
-        this.id = id;
+    public MagneticFieldSensorDto(Double x, Double y, Double z, float xUncalibratedNoHardIron, float yUncalibratedNoHardIron, float zUncalibratedNoHardIron, float xUncalibratedEstimatedIronBias, float yUncalibratedEstimatedIronBias, float zUncalibratedEstimatedIronBias, String created, Integer accuracy) {
         this.x = x;
         this.y = y;
         this.z = z;
@@ -93,14 +84,6 @@ public class MagneticFieldSensorDto implements SensorDto {
         this.accuracy = accuracy;
         this.type = DtoType.MAGNETIC_FIELD;
         this.typeStr = DtoType.getApiName(this.type);
-    }
-
-    public Long getId() {
-        return this.id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public Double getX() {
@@ -205,14 +188,8 @@ public class MagneticFieldSensorDto implements SensorDto {
     }
 
     @Override
-    public void setType(int type) {
-        this.type = type;
-    }
-
-    @Override
     public String toString() {
         return "MagneticFieldSensorRequest{" +
-                "id=" + id +
                 ", x=" + x +
                 ", y=" + y +
                 ", z=" + z +

@@ -12,8 +12,6 @@ import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.SensorD
  */
 public class PowerStateEventDto implements SensorDto {
 
-    private Long id;
-
     @SerializedName("isCharging")
     @Expose
     private Boolean isCharging;
@@ -49,14 +47,7 @@ public class PowerStateEventDto implements SensorDto {
         this.typeStr = DtoType.getApiName(this.type);
     }
 
-    public PowerStateEventDto(Long id) {
-        this.id = id;
-        this.type = DtoType.POWER_STATE;
-        this.typeStr = DtoType.getApiName(this.type);
-    }
-
-    public PowerStateEventDto(Long id, Boolean isCharging, Float percent, Integer chargingState, Integer chargingMode, Boolean powerSaveMode, String created) {
-        this.id = id;
+    public PowerStateEventDto(Boolean isCharging, Float percent, Integer chargingState, Integer chargingMode, Boolean powerSaveMode, String created) {
         this.isCharging = isCharging;
         this.percent = percent;
         this.chargingState = chargingState;
@@ -65,62 +56,35 @@ public class PowerStateEventDto implements SensorDto {
         this.created = created;
         this.type = DtoType.POWER_STATE;
         this.typeStr = DtoType.getApiName(this.type);
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public Boolean getIsCharging() {
-        return isCharging;
-    }
-
-    public void setIsCharging(Boolean isCharging) {
-        this.isCharging = isCharging;
+        return this.isCharging;
     }
 
     public Float getPercent() {
-        return percent;
-    }
-
-    public void setPercent(Float percent) {
-        this.percent = percent;
+        return this.percent;
     }
 
     public Integer getChargingState() {
-        return chargingState;
-    }
-
-    public void setChargingState(Integer chargingState) {
-        this.chargingState = chargingState;
+        return this.chargingState;
     }
 
     public Integer getChargingMode() {
-        return chargingMode;
-    }
-
-    public void setChargingMode(Integer chargingMode) {
-        this.chargingMode = chargingMode;
+        return this.chargingMode;
     }
 
     public Boolean getPowerSaveMode() {
-        return powerSaveMode;
+        return this.powerSaveMode;
     }
 
-    public void setPowerSaveMode(Boolean powerSaveMode) {
-        this.powerSaveMode = powerSaveMode;
-    }
-
+    @Override
     public String getCreated() {
-        return created;
+        return this.created;
     }
 
-    public void setCreated(String created) {
-        this.created = created;
+    public String getTypeStr() {
+        return this.typeStr;
     }
 
     @Override
@@ -129,23 +93,9 @@ public class PowerStateEventDto implements SensorDto {
     }
 
     @Override
-    public void setType(int type) {
-        this.type = type;
-    }
-
-    public String getTypeStr() {
-        return typeStr;
-    }
-
-    public void setTypeStr(String typeStr) {
-        this.typeStr = typeStr;
-    }
-
-    @Override
     public String toString() {
         return "PowerStateEventDto{" +
-                "id=" + id +
-                ", isCharging=" + isCharging +
+                "isCharging=" + isCharging +
                 ", percent=" + percent +
                 ", chargingState=" + chargingState +
                 ", chargingMode=" + chargingMode +

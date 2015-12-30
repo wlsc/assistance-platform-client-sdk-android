@@ -6,7 +6,6 @@ import java.util.List;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DaoSession;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbBrowserHistoryEvent;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbBrowserHistoryEventDao;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.DtoType;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.SensorDto;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.sensing.event.BrowserHistoryEventDto;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.CommonEventDaoImpl;
@@ -45,7 +44,6 @@ public class BrowserHistoryEventDaoImpl extends
 
         BrowserHistoryEventDto result = new BrowserHistoryEventDto();
 
-        result.setId(sensor.getId());
         result.setUrl(sensor.getUrl());
         result.setTitle(sensor.getTitle());
         result.setLastVisited(sensor.getLastVisited());
@@ -54,8 +52,6 @@ public class BrowserHistoryEventDaoImpl extends
         result.setIsNew(sensor.getIsNew());
         result.setIsUpdated(result.getIsDeleted());
         result.setIsDeleted(sensor.getIsDeleted());
-        result.setType(DtoType.BROWSER_HISTORY);
-        result.setTypeStr(DtoType.getApiName(DtoType.BROWSER_HISTORY));
         result.setCreated(sensor.getCreated());
 
         return result;

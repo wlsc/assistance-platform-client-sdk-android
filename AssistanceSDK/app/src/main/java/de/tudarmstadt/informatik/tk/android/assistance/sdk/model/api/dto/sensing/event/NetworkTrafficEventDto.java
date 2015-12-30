@@ -12,8 +12,6 @@ import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.SensorD
  */
 public class NetworkTrafficEventDto implements SensorDto {
 
-    private Long id;
-
     @SerializedName("appName")
     @Expose
     private String appName;
@@ -53,14 +51,7 @@ public class NetworkTrafficEventDto implements SensorDto {
         this.typeStr = DtoType.getApiName(this.type);
     }
 
-    public NetworkTrafficEventDto(Long id) {
-        this.id = id;
-        this.type = DtoType.FOREGROUND_TRAFFIC;
-        this.typeStr = DtoType.getApiName(this.type);
-    }
-
-    public NetworkTrafficEventDto(Long id, String appName, Long rxBytes, Long txBytes, Boolean background, Double longitude, Double latitude, String created) {
-        this.id = id;
+    public NetworkTrafficEventDto(String appName, Long rxBytes, Long txBytes, Boolean background, Double longitude, Double latitude, String created) {
         this.appName = appName;
         this.rxBytes = rxBytes;
         this.txBytes = txBytes;
@@ -70,14 +61,6 @@ public class NetworkTrafficEventDto implements SensorDto {
         this.created = created;
         this.type = DtoType.FOREGROUND_TRAFFIC;
         this.typeStr = DtoType.getApiName(this.type);
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public String getAppName() {
@@ -150,14 +133,8 @@ public class NetworkTrafficEventDto implements SensorDto {
     }
 
     @Override
-    public void setType(int type) {
-        this.type = type;
-    }
-
-    @Override
     public String toString() {
         return "NetworkTrafficEventDto{" +
-                "id=" + id +
                 ", appName='" + appName + '\'' +
                 ", rxBytes=" + rxBytes +
                 ", txBytes=" + txBytes +

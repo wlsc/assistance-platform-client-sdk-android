@@ -12,8 +12,6 @@ import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.SensorD
  */
 public class ConnectionEventDto implements SensorDto {
 
-    private Long id;
-
     @SerializedName("isWifi")
     @Expose
     private boolean wifi;
@@ -39,27 +37,12 @@ public class ConnectionEventDto implements SensorDto {
         this.typeStr = DtoType.getApiName(this.type);
     }
 
-    public ConnectionEventDto(long id) {
-        this.id = id;
-        this.type = DtoType.CONNECTION;
-        this.typeStr = DtoType.getApiName(this.type);
-    }
-
-    public ConnectionEventDto(long id, boolean isWifi, boolean isMobile, String created) {
-        this.id = id;
+    public ConnectionEventDto(boolean isWifi, boolean isMobile, String created) {
         this.wifi = isWifi;
         this.mobile = isMobile;
         this.created = created;
         this.type = DtoType.CONNECTION;
         this.typeStr = DtoType.getApiName(this.type);
-    }
-
-    public Long getId() {
-        return this.id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public boolean isWifi() {
@@ -100,14 +83,8 @@ public class ConnectionEventDto implements SensorDto {
     }
 
     @Override
-    public void setType(int type) {
-        this.type = type;
-    }
-
-    @Override
     public String toString() {
         return "ConnectionEventRequest{" +
-                "id=" + id +
                 ", wifi=" + wifi +
                 ", mobile=" + mobile +
                 ", created='" + created + '\'' +

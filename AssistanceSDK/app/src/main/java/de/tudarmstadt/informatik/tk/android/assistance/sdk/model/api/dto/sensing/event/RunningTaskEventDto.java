@@ -12,8 +12,6 @@ import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.SensorD
  */
 public class RunningTaskEventDto implements SensorDto {
 
-    private Long id;
-
     @SerializedName("name")
     @Expose
     private String name;
@@ -37,27 +35,12 @@ public class RunningTaskEventDto implements SensorDto {
         this.typeStr = DtoType.getApiName(this.type);
     }
 
-    public RunningTaskEventDto(Long id) {
-        this.id = id;
-        this.type = DtoType.RUNNING_TASKS;
-        this.typeStr = DtoType.getApiName(this.type);
-    }
-
-    public RunningTaskEventDto(Long id, String name, Integer stackPosition, String created) {
-        this.id = id;
+    public RunningTaskEventDto(String name, Integer stackPosition, String created) {
         this.name = name;
         this.stackPosition = stackPosition;
         this.created = created;
         this.type = DtoType.RUNNING_TASKS;
         this.typeStr = DtoType.getApiName(this.type);
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public String getName() {
@@ -98,14 +81,8 @@ public class RunningTaskEventDto implements SensorDto {
     }
 
     @Override
-    public void setType(int type) {
-        this.type = type;
-    }
-
-    @Override
     public String toString() {
         return "RunningTaskEventDto{" +
-                "id=" + id +
                 ", name='" + name + '\'' +
                 ", stackPosition=" + stackPosition +
                 ", created='" + created + '\'' +

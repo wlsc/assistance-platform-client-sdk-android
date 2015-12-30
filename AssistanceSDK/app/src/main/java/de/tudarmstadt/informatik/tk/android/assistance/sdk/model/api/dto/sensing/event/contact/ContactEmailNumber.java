@@ -7,7 +7,7 @@ import com.google.gson.annotations.SerializedName;
  * @author Wladimir Schmidt (wlsc.dev@gmail.com)
  * @date 11.12.2015
  */
-public class ContactEmailNumberItemDto {
+public class ContactEmailNumber {
 
     @SerializedName("label")
     @Expose
@@ -17,7 +17,7 @@ public class ContactEmailNumberItemDto {
     @Expose
     private String value;
 
-    public ContactEmailNumberItemDto(String label, String value) {
+    public ContactEmailNumber(String label, String value) {
         this.label = label;
         this.value = value;
     }
@@ -40,7 +40,7 @@ public class ContactEmailNumberItemDto {
 
     @Override
     public String toString() {
-        return "ContactEmailNumberItemDto{" +
+        return "ContactEmailNumber{" +
                 "label='" + label + '\'' +
                 ", value='" + value + '\'' +
                 '}';

@@ -6,7 +6,6 @@ import java.util.List;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DaoSession;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbAccelerometerSensor;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbAccelerometerSensorDao;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.DtoType;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.sensing.sensor.AccelerometerSensorDto;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.CommonEventDaoImpl;
 
@@ -38,26 +37,23 @@ public class AccelerometerSensorDaoImpl extends
     /**
      * Converts db object to request object
      *
-     * @param dbSensor
+     * @param sensor
      * @return
      */
     @Override
-    public AccelerometerSensorDto convertObject(DbAccelerometerSensor dbSensor) {
+    public AccelerometerSensorDto convertObject(DbAccelerometerSensor sensor) {
 
-        if (dbSensor == null) {
+        if (sensor == null) {
             return null;
         }
 
         AccelerometerSensorDto result = new AccelerometerSensorDto();
 
-        result.setId(dbSensor.getId());
-        result.setX(dbSensor.getX());
-        result.setY(dbSensor.getY());
-        result.setZ(dbSensor.getZ());
-        result.setAccuracy(dbSensor.getAccuracy());
-        result.setType(DtoType.ACCELEROMETER);
-        result.setTypeStr(DtoType.getApiName(DtoType.ACCELEROMETER));
-        result.setCreated(dbSensor.getCreated());
+        result.setX(sensor.getX());
+        result.setY(sensor.getY());
+        result.setZ(sensor.getZ());
+        result.setAccuracy(sensor.getAccuracy());
+        result.setCreated(sensor.getCreated());
 
         return result;
     }

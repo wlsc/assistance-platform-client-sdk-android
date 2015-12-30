@@ -13,8 +13,6 @@ import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.SensorD
  */
 public class MobileConnectionEventDto implements SensorDto {
 
-    private Long id;
-
     @SerializedName("carrierName")
     @Expose
     private String carrierName;
@@ -49,14 +47,7 @@ public class MobileConnectionEventDto implements SensorDto {
 
     }
 
-    public MobileConnectionEventDto(long id) {
-        this.id = id;
-        this.type = DtoType.MOBILE_DATA_CONNECTION;
-        this.typeStr = DtoType.getApiName(this.type);
-    }
-
-    public MobileConnectionEventDto(long id, String carrierName, String mobileCountryCode, String mobileNetworkCode, String created, Boolean voipAvailable) {
-        this.id = id;
+    public MobileConnectionEventDto(String carrierName, String mobileCountryCode, String mobileNetworkCode, String created, Boolean voipAvailable) {
         this.carrierName = carrierName;
         this.mobileCountryCode = mobileCountryCode;
         this.mobileNetworkCode = mobileNetworkCode;
@@ -64,14 +55,6 @@ public class MobileConnectionEventDto implements SensorDto {
         this.voipAvailable = voipAvailable;
         this.type = DtoType.MOBILE_DATA_CONNECTION;
         this.typeStr = DtoType.getApiName(this.type);
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public String getCarrierName() {
@@ -125,11 +108,6 @@ public class MobileConnectionEventDto implements SensorDto {
         return type;
     }
 
-    @Override
-    public void setType(int type) {
-        this.type = type;
-    }
-
     public String getTypeStr() {
         return this.typeStr;
     }
@@ -141,7 +119,6 @@ public class MobileConnectionEventDto implements SensorDto {
     @Override
     public String toString() {
         return "MobileConnectionEventRequest{" +
-                "id=" + id +
                 ", carrierName='" + carrierName + '\'' +
                 ", mobileCountryCode='" + mobileCountryCode + '\'' +
                 ", mobileNetworkCode='" + mobileNetworkCode + '\'' +

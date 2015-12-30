@@ -12,8 +12,6 @@ import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.SensorD
  */
 public class RunningServiceEventDto implements SensorDto {
 
-    private Long id;
-
     @SerializedName("packageName")
     @Expose
     private String packageName;
@@ -37,25 +35,10 @@ public class RunningServiceEventDto implements SensorDto {
         this.typeStr = DtoType.getApiName(this.type);
     }
 
-    public RunningServiceEventDto(Long id) {
-        this.id = id;
-        this.type = DtoType.RUNNING_SERVICES;
-        this.typeStr = DtoType.getApiName(this.type);
-    }
-
-    public RunningServiceEventDto(Long id, String packageName, String className, String created) {
-        this.id = id;
+    public RunningServiceEventDto(String packageName, String className, String created) {
         this.packageName = packageName;
         this.className = className;
         this.created = created;
-    }
-
-    public Long getId() {
-        return this.id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public String getPackageName() {
@@ -96,14 +79,8 @@ public class RunningServiceEventDto implements SensorDto {
     }
 
     @Override
-    public void setType(int type) {
-        this.type = type;
-    }
-
-    @Override
     public String toString() {
         return "RunningServiceEventDto{" +
-                "id=" + id +
                 ", packageName='" + packageName + '\'' +
                 ", className='" + className + '\'' +
                 ", created='" + created + '\'' +

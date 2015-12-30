@@ -12,8 +12,6 @@ import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.SensorD
  */
 public class AccelerometerSensorDto implements SensorDto {
 
-    private Long id;
-
     @SerializedName("x")
     @Expose
     private Double x;
@@ -48,14 +46,7 @@ public class AccelerometerSensorDto implements SensorDto {
         this.typeStr = DtoType.getApiName(this.type);
     }
 
-    public AccelerometerSensorDto(long id) {
-        this.id = id;
-        this.type = DtoType.ACCELEROMETER;
-        this.typeStr = DtoType.getApiName(this.type);
-    }
-
-    public AccelerometerSensorDto(long id, Double x, Double y, Double z, String created, Integer accuracy) {
-        this.id = id;
+    public AccelerometerSensorDto(Double x, Double y, Double z, String created, Integer accuracy) {
         this.x = x;
         this.y = y;
         this.z = z;
@@ -63,14 +54,6 @@ public class AccelerometerSensorDto implements SensorDto {
         this.accuracy = accuracy;
         this.type = DtoType.ACCELEROMETER;
         this.typeStr = DtoType.getApiName(this.type);
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public Double getX() {
@@ -124,11 +107,6 @@ public class AccelerometerSensorDto implements SensorDto {
         return type;
     }
 
-    @Override
-    public void setType(int type) {
-        this.type = type;
-    }
-
     public String getTypeStr() {
         return this.typeStr;
     }
@@ -140,7 +118,6 @@ public class AccelerometerSensorDto implements SensorDto {
     @Override
     public String toString() {
         return "AccelerometerSensorRequest{" +
-                "id=" + id +
                 ", x=" + x +
                 ", y=" + y +
                 ", z=" + z +

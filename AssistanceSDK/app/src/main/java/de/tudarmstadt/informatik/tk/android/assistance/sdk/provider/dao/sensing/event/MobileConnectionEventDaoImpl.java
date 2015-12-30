@@ -6,7 +6,6 @@ import java.util.List;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DaoSession;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbMobileConnectionEvent;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbMobileConnectionEventDao;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.DtoType;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.sensing.event.MobileConnectionEventDto;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.CommonEventDaoImpl;
 
@@ -44,13 +43,10 @@ public class MobileConnectionEventDaoImpl extends
 
         MobileConnectionEventDto result = new MobileConnectionEventDto();
 
-        result.setId(sensor.getId());
         result.setCarrierName(sensor.getCarrierName());
         result.setMobileCountryCode(sensor.getMobileCountryCode());
         result.setMobileNetworkCode(sensor.getMobileNetworkCode());
         result.setVoipAvailable(sensor.getVoipAvailable());
-        result.setType(DtoType.MOBILE_DATA_CONNECTION);
-        result.setTypeStr(DtoType.getApiName(DtoType.MOBILE_DATA_CONNECTION));
         result.setCreated(sensor.getCreated());
 
         return result;

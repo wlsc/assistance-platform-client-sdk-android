@@ -12,8 +12,6 @@ import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.SensorD
  */
 public class PowerLevelEventDto implements SensorDto {
 
-    private Long id;
-
     @SerializedName("percent")
     @Expose
     private Float percent;
@@ -33,26 +31,11 @@ public class PowerLevelEventDto implements SensorDto {
         this.typeStr = DtoType.getApiName(this.type);
     }
 
-    public PowerLevelEventDto(Long id) {
-        this.id = id;
-        this.type = DtoType.POWER_LEVEL;
-        this.typeStr = DtoType.getApiName(this.type);
-    }
-
-    public PowerLevelEventDto(Long id, Float percent, String created) {
-        this.id = id;
+    public PowerLevelEventDto(Float percent, String created) {
         this.percent = percent;
         this.created = created;
         this.type = DtoType.POWER_LEVEL;
         this.typeStr = DtoType.getApiName(this.type);
-    }
-
-    public Long getId() {
-        return this.id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public Float getPercent() {
@@ -85,14 +68,8 @@ public class PowerLevelEventDto implements SensorDto {
     }
 
     @Override
-    public void setType(int type) {
-        this.type = type;
-    }
-
-    @Override
     public String toString() {
         return "PowerLevelEventDto{" +
-                "id=" + id +
                 ", percent=" + percent +
                 ", created='" + created + '\'' +
                 ", typeStr='" + typeStr + '\'' +

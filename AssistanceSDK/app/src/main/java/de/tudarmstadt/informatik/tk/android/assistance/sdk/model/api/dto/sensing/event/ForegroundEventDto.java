@@ -14,8 +14,6 @@ import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.SensorD
  */
 public class ForegroundEventDto implements SensorDto {
 
-    private Long id;
-
     @SerializedName("packageName")
     @Expose
     private String packageName;
@@ -63,14 +61,7 @@ public class ForegroundEventDto implements SensorDto {
         this.typeStr = DtoType.getApiName(this.type);
     }
 
-    public ForegroundEventDto(Long id) {
-        this.id = id;
-        this.type = DtoType.FOREGROUND;
-        this.typeStr = DtoType.getApiName(this.type);
-    }
-
-    public ForegroundEventDto(Long id, String packageName, String appName, String className, String activityLabel, String color, String url, String eventType, Integer keystrokes, String created) {
-        this.id = id;
+    public ForegroundEventDto(String packageName, String appName, String className, String activityLabel, String color, String url, String eventType, Integer keystrokes, String created) {
         this.packageName = packageName;
         this.appName = appName;
         this.className = className;
@@ -87,19 +78,6 @@ public class ForegroundEventDto implements SensorDto {
     @Override
     public int getType() {
         return this.type;
-    }
-
-    @Override
-    public void setType(int type) {
-        this.type = type;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public String getPackageName() {
@@ -185,7 +163,6 @@ public class ForegroundEventDto implements SensorDto {
     @Override
     public String toString() {
         return "ForegroundEventRequest{" +
-                "id=" + id +
                 ", packageName='" + packageName + '\'' +
                 ", appName='" + appName + '\'' +
                 ", className='" + className + '\'' +

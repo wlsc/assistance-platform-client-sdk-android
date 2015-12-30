@@ -44,7 +44,6 @@ public class ForegroundEventDaoImpl extends
 
         ForegroundEventDto result = new ForegroundEventDto();
 
-        result.setId(sensor.getId());
         result.setAppName(sensor.getAppName());
         result.setActivityLabel(sensor.getActivityLabel());
         result.setClassName(sensor.getClassName());
@@ -53,8 +52,6 @@ public class ForegroundEventDaoImpl extends
         result.setPackageName(sensor.getPackageName());
         result.setUrl(sensor.getUrl());
         result.setEventType(DtoType.getApiName(sensor.getEventType()));
-        result.setType(DtoType.FOREGROUND);
-        result.setTypeStr(DtoType.getApiName(DtoType.FOREGROUND));
         result.setCreated(sensor.getCreated());
 
         return result;

@@ -6,7 +6,6 @@ import java.util.List;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DaoSession;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbMagneticFieldSensor;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbMagneticFieldSensorDao;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.DtoType;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.sensing.sensor.MagneticFieldSensorDto;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.CommonEventDaoImpl;
 
@@ -44,7 +43,6 @@ public class MagneticFieldSensorDaoImpl extends
 
         MagneticFieldSensorDto result = new MagneticFieldSensorDto();
 
-        result.setId(sensor.getId());
         result.setX(sensor.getX());
         result.setY(sensor.getY());
         result.setZ(sensor.getZ());
@@ -55,8 +53,6 @@ public class MagneticFieldSensorDaoImpl extends
         result.setxUncalibratedEstimatedIronBias(sensor.getXUncalibratedEstimatedIronBias());
         result.setyUncalibratedEstimatedIronBias(sensor.getYUncalibratedEstimatedIronBias());
         result.setzUncalibratedEstimatedIronBias(sensor.getZUncalibratedEstimatedIronBias());
-        result.setType(DtoType.MAGNETIC_FIELD);
-        result.setTypeStr(DtoType.getApiName(DtoType.MAGNETIC_FIELD));
         result.setCreated(sensor.getCreated());
 
         return result;

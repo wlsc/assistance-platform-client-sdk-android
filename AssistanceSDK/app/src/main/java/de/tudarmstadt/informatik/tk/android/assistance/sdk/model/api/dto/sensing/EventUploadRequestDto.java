@@ -17,14 +17,11 @@ public class EventUploadRequestDto {
 
     @SerializedName("device_id")
     @Expose
-    private Long serverDeviceId;
+    private final Long serverDeviceId;
 
     @SerializedName("sensorreadings")
     @Expose
-    private List<SensorDto> dataEvents;
-
-    public EventUploadRequestDto() {
-    }
+    private final List<SensorDto> dataEvents;
 
     public EventUploadRequestDto(Long serverDeviceId, List<SensorDto> dataEvents) {
         this.serverDeviceId = serverDeviceId;
@@ -35,16 +32,8 @@ public class EventUploadRequestDto {
         return this.serverDeviceId;
     }
 
-    public void setServerDeviceId(Long serverDeviceId) {
-        this.serverDeviceId = serverDeviceId;
-    }
-
     public List<SensorDto> getDataEvents() {
         return this.dataEvents;
-    }
-
-    public void setDataEvents(List<SensorDto> dataEvents) {
-        this.dataEvents = dataEvents;
     }
 
     @Override

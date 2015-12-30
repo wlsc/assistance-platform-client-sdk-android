@@ -12,8 +12,6 @@ import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.SensorD
  */
 public class LocationSensorDto implements SensorDto {
 
-    private Long id;
-
     @SerializedName("latitude")
     @Expose
     private Double latitude;
@@ -63,14 +61,7 @@ public class LocationSensorDto implements SensorDto {
         this.typeStr = DtoType.getApiName(this.type);
     }
 
-    public LocationSensorDto(long id) {
-        this.id = id;
-        this.type = DtoType.LOCATION;
-        this.typeStr = DtoType.getApiName(this.type);
-    }
-
-    public LocationSensorDto(long id, Double latitude, Double longitude, Double accuracyHorizontal, Float speed, String created, Double altitude, Double accuracyVertical, Integer course, Integer floor) {
-        this.id = id;
+    public LocationSensorDto(Double latitude, Double longitude, Double accuracyHorizontal, Float speed, String created, Double altitude, Double accuracyVertical, Integer course, Integer floor) {
         this.latitude = latitude;
         this.longitude = longitude;
         this.accuracyHorizontal = accuracyHorizontal;
@@ -82,14 +73,6 @@ public class LocationSensorDto implements SensorDto {
         this.floor = floor;
         this.type = DtoType.LOCATION;
         this.typeStr = DtoType.getApiName(this.type);
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public Double getLatitude() {
@@ -175,11 +158,6 @@ public class LocationSensorDto implements SensorDto {
         return type;
     }
 
-    @Override
-    public void setType(int type) {
-        this.type = type;
-    }
-
     public String getTypeStr() {
         return this.typeStr;
     }
@@ -191,7 +169,6 @@ public class LocationSensorDto implements SensorDto {
     @Override
     public String toString() {
         return "PositionSensorRequest{" +
-                "id=" + id +
                 ", latitude=" + latitude +
                 ", longitude=" + longitude +
                 ", accuracyHorizontal=" + accuracyHorizontal +

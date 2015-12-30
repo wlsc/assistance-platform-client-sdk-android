@@ -6,7 +6,6 @@ import java.util.List;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DaoSession;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbGyroscopeSensor;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbGyroscopeSensorDao;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.DtoType;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.sensing.sensor.GyroscopeSensorDto;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.CommonEventDaoImpl;
 
@@ -44,7 +43,6 @@ public class GyroscopeSensorDaoImpl extends
 
         GyroscopeSensorDto result = new GyroscopeSensorDto();
 
-        result.setId(sensor.getId());
         result.setX(sensor.getX());
         result.setY(sensor.getY());
         result.setZ(sensor.getZ());
@@ -55,8 +53,6 @@ public class GyroscopeSensorDaoImpl extends
         result.setxUncalibratedEstimatedDrift(sensor.getXUncalibratedEstimatedDrift());
         result.setyUncalibratedEstimatedDrift(sensor.getYUncalibratedEstimatedDrift());
         result.setzUncalibratedEstimatedDrift(sensor.getZUncalibratedEstimatedDrift());
-        result.setType(DtoType.GYROSCOPE);
-        result.setTypeStr(DtoType.getApiName(DtoType.GYROSCOPE));
         result.setCreated(sensor.getCreated());
 
         return result;

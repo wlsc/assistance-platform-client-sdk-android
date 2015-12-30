@@ -6,7 +6,6 @@ import java.util.List;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DaoSession;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbNetworkTrafficEvent;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbNetworkTrafficEventDao;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.DtoType;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.sensing.event.NetworkTrafficEventDto;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.CommonEventDaoImpl;
 
@@ -44,22 +43,12 @@ public class NetworkTrafficEventDaoImpl extends
 
         NetworkTrafficEventDto result = new NetworkTrafficEventDto();
 
-        result.setId(sensor.getId());
         result.setAppName(sensor.getAppName());
         result.setRxBytes(sensor.getRxBytes());
         result.setTxBytes(sensor.getTxBytes());
         result.setBackground(sensor.getBackground());
         result.setLongitude(sensor.getLongitude());
         result.setLatitude(sensor.getLatitude());
-
-//        if (sensor.getBackground()) {
-//            result.setType(DtoType.BACKGROUND_TRAFFIC);
-//            result.setTypeStr(DtoType.getApiName(DtoType.BACKGROUND_TRAFFIC));
-//        } else {
-        result.setType(DtoType.FOREGROUND_TRAFFIC);
-        result.setTypeStr(DtoType.getApiName(DtoType.FOREGROUND_TRAFFIC));
-//        }
-
         result.setCreated(sensor.getCreated());
 
         return result;

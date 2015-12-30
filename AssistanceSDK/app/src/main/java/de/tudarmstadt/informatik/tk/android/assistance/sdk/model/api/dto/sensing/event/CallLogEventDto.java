@@ -193,11 +193,6 @@ public class CallLogEventDto implements SensorDto {
     }
 
     @Override
-    public void setType(int type) {
-        this.type = type;
-    }
-
-    @Override
     public String toString() {
         return "CallLogEventRequest{" +
                 "id=" + id +

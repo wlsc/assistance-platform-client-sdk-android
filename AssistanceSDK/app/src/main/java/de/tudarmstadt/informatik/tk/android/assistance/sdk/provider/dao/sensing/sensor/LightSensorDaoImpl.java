@@ -6,7 +6,6 @@ import java.util.List;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DaoSession;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbLightSensor;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbLightSensorDao;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.DtoType;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.sensing.sensor.LightSensorDto;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.CommonEventDaoImpl;
 
@@ -44,11 +43,8 @@ public class LightSensorDaoImpl extends
 
         LightSensorDto result = new LightSensorDto();
 
-        result.setId(sensor.getId());
         result.setAccuracy(sensor.getAccuracy());
         result.setValue(sensor.getValue());
-        result.setType(DtoType.LIGHT);
-        result.setTypeStr(DtoType.getApiName(DtoType.LIGHT));
         result.setCreated(sensor.getCreated());
 
         return result;

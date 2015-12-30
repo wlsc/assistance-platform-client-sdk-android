@@ -12,8 +12,6 @@ import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.SensorD
  */
 public class LoudnessEventDto implements SensorDto {
 
-    private Long id;
-
     @SerializedName("loudness")
     @Expose
     private float loudness;
@@ -35,26 +33,11 @@ public class LoudnessEventDto implements SensorDto {
         this.typeStr = DtoType.getApiName(this.type);
     }
 
-    public LoudnessEventDto(long id) {
-        this.id = id;
-        this.type = DtoType.LOUDNESS;
-        this.typeStr = DtoType.getApiName(this.type);
-    }
-
-    public LoudnessEventDto(long id, float loudness, String created) {
-        this.id = id;
+    public LoudnessEventDto(float loudness, String created) {
         this.loudness = loudness;
         this.created = created;
         this.type = DtoType.LOUDNESS;
         this.typeStr = DtoType.getApiName(this.type);
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public float getLoudness() {
@@ -84,11 +67,6 @@ public class LoudnessEventDto implements SensorDto {
         return type;
     }
 
-    @Override
-    public void setType(int type) {
-        this.type = type;
-    }
-
     public String getTypeStr() {
         return this.typeStr;
     }
@@ -100,7 +78,6 @@ public class LoudnessEventDto implements SensorDto {
     @Override
     public String toString() {
         return "LoudnessEventRequest{" +
-                "id=" + id +
                 ", loudness=" + loudness +
                 ", created='" + created + '\'' +
                 ", typeStr='" + typeStr + '\'' +

@@ -6,7 +6,6 @@ import java.util.List;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DaoSession;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbConnectionEvent;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbConnectionEventDao;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.DtoType;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.sensing.event.ConnectionEventDto;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.CommonEventDaoImpl;
 
@@ -44,11 +43,8 @@ public class ConnectionEventDaoImpl extends
 
         ConnectionEventDto result = new ConnectionEventDto();
 
-        result.setId(sensor.getId());
         result.setIsMobile(sensor.getIsMobile());
         result.setIsWifi(sensor.getIsWifi());
-        result.setType(DtoType.CONNECTION);
-        result.setTypeStr(DtoType.getApiName(DtoType.CONNECTION));
         result.setCreated(sensor.getCreated());
 
         return result;

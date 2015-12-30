@@ -6,7 +6,6 @@ import java.util.List;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DaoSession;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbMotionActivityEvent;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbMotionActivityEventDao;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.DtoType;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.sensing.event.MotionActivityEventDto;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.CommonEventDaoImpl;
 
@@ -44,7 +43,6 @@ public class MotionActivityEventDaoImpl extends
 
         MotionActivityEventDto result = new MotionActivityEventDto();
 
-        result.setId(sensor.getId());
         result.setRunning(sensor.getRunning());
         result.setStationary(sensor.getStationary());
         result.setCycling(sensor.getCycling());
@@ -53,8 +51,6 @@ public class MotionActivityEventDaoImpl extends
         result.setOnFoot(sensor.getOnFoot());
         result.setTilting(sensor.getTilting());
         result.setUnknown(sensor.getUnknown());
-        result.setType(DtoType.MOTION_ACTIVITY);
-        result.setTypeStr(DtoType.getApiName(DtoType.MOTION_ACTIVITY));
         result.setCreated(sensor.getCreated());
 
         return result;

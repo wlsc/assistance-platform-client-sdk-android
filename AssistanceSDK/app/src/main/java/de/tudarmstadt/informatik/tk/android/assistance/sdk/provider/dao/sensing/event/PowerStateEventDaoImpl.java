@@ -6,7 +6,6 @@ import java.util.List;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DaoSession;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbPowerStateEvent;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbPowerStateEventDao;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.DtoType;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.sensing.event.PowerStateEventDto;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.CommonEventDaoImpl;
 
@@ -42,17 +41,14 @@ public class PowerStateEventDaoImpl extends
             return null;
         }
 
-        PowerStateEventDto result = new PowerStateEventDto();
-
-        result.setId(sensor.getId());
-        result.setIsCharging(sensor.getIsCharging());
-        result.setPercent(sensor.getPercent());
-        result.setChargingState(sensor.getChargingState());
-        result.setChargingMode(sensor.getChargingMode());
-        result.setPowerSaveMode(sensor.getPowerSaveMode());
-        result.setType(DtoType.POWER_STATE);
-        result.setTypeStr(DtoType.getApiName(DtoType.POWER_STATE));
-        result.setCreated(sensor.getCreated());
+        PowerStateEventDto result = new PowerStateEventDto(
+                sensor.getIsCharging(),
+                sensor.getPercent(),
+                sensor.getChargingState(),
+                sensor.getChargingMode(),
+                sensor.getPowerSaveMode(),
+                sensor.getCreated()
+        );
 
         return result;
     }

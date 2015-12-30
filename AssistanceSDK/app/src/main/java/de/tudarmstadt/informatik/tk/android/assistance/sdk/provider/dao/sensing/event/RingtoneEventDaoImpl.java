@@ -6,7 +6,6 @@ import java.util.List;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DaoSession;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbRingtoneEvent;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbRingtoneEventDao;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.DtoType;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.SensorDto;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.sensing.event.RingtoneEventDto;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.CommonEventDaoImpl;
@@ -45,10 +44,7 @@ public class RingtoneEventDaoImpl extends
 
         RingtoneEventDto result = new RingtoneEventDto();
 
-        result.setId(sensor.getId());
         result.setMode(sensor.getMode());
-        result.setType(DtoType.RINGTONE);
-        result.setTypeStr(DtoType.getApiName(DtoType.RINGTONE));
         result.setCreated(sensor.getCreated());
 
         return result;

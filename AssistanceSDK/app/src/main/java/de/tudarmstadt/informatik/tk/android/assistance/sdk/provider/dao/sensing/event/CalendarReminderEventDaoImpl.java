@@ -6,7 +6,7 @@ import java.util.List;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DaoSession;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbCalendarReminderEvent;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbCalendarReminderEventDao;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.sensing.event.calendar.CalendarReminderEventDto;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.sensing.event.calendar.CalendarReminder;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.CommonEventDaoImpl;
 
 /**
@@ -35,17 +35,29 @@ public class CalendarReminderEventDaoImpl extends
     }
 
     @Override
-    public CalendarReminderEventDto convertObject(DbCalendarReminderEvent sensor) {
+    public CalendarReminder convertObject(DbCalendarReminderEvent sensor) {
 
         if (sensor == null) {
             return null;
         }
 
-        CalendarReminderEventDto result = new CalendarReminderEventDto();
+        Boolean isDefaultOffset = sensor.getMinutes() == null ? Boolean.TRUE : Boolean.FALSE;
 
-        result.setId(sensor.getId());
-        result.setType(sensor.getMethod());
-        result.setOffset(sensor.getMinutes());
+        CalendarReminder result = null;
+
+        if (isDefaultOffset) {
+            result = new CalendarReminder(
+                    isDefaultOffset,
+                    sensor.getMethod()
+            );
+        } else {
+            result = new CalendarReminder(
+                    isDefaultOffset,
+                    sensor.getMethod(),
+                    sensor.getMinutes()
+            );
+        }
+
 
         return result;
     }

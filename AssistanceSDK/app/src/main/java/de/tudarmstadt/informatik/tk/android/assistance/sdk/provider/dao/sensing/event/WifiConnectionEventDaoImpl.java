@@ -6,7 +6,6 @@ import java.util.List;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DaoSession;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbWifiConnectionEvent;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbWifiConnectionEventDao;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.DtoType;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.sensing.event.WifiConnectionEventDto;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.CommonEventDaoImpl;
 
@@ -44,7 +43,6 @@ public class WifiConnectionEventDaoImpl extends
 
         WifiConnectionEventDto result = new WifiConnectionEventDto();
 
-        result.setId(sensor.getId());
         result.setSsid(sensor.getSsid());
         result.setBssid(sensor.getBssid());
         result.setChannel(sensor.getChannel());
@@ -52,8 +50,6 @@ public class WifiConnectionEventDaoImpl extends
         result.setLinkSpeed(sensor.getLinkSpeed());
         result.setSignalStrength(sensor.getSignalStrength());
         result.setNetworkId(sensor.getNetworkId());
-        result.setType(DtoType.WIFI_CONNECTION);
-        result.setTypeStr(DtoType.getApiName(DtoType.WIFI_CONNECTION));
         result.setCreated(sensor.getCreated());
 
         return result;

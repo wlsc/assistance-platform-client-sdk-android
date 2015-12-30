@@ -14,8 +14,6 @@ import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.SensorD
  */
 public class LightSensorDto implements SensorDto {
 
-    private Long id;
-
     @SerializedName("value")
     @Expose
     private Float value;
@@ -39,14 +37,7 @@ public class LightSensorDto implements SensorDto {
         this.typeStr = DtoType.getApiName(this.type);
     }
 
-    public LightSensorDto(Long id) {
-        this.id = id;
-        this.type = DtoType.LIGHT;
-        this.typeStr = DtoType.getApiName(this.type);
-    }
-
-    public LightSensorDto(Long id, Float value, Integer accuracy, String created, String typeStr, int type) {
-        this.id = id;
+    public LightSensorDto(Float value, Integer accuracy, String created, String typeStr, int type) {
         this.value = value;
         this.accuracy = accuracy;
         this.created = created;
@@ -54,14 +45,6 @@ public class LightSensorDto implements SensorDto {
         this.type = type;
         this.type = DtoType.LIGHT;
         this.typeStr = DtoType.getApiName(this.type);
-    }
-
-    public Long getId() {
-        return this.id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public Float getValue() {
@@ -102,14 +85,8 @@ public class LightSensorDto implements SensorDto {
     }
 
     @Override
-    public void setType(int type) {
-        this.type = type;
-    }
-
-    @Override
     public String toString() {
         return "LightSensorRequest{" +
-                "id=" + id +
                 ", value=" + value +
                 ", accuracy=" + accuracy +
                 ", created='" + created + '\'' +

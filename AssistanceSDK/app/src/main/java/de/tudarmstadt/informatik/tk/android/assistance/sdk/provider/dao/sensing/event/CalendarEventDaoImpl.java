@@ -6,7 +6,6 @@ import java.util.List;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DaoSession;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbCalendarEvent;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbCalendarEventDao;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.DtoType;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.sensing.event.calendar.CalendarEventDto;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.CommonEventDaoImpl;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.util.DateUtils;
@@ -45,7 +44,6 @@ public class CalendarEventDaoImpl extends
 
         CalendarEventDto result = new CalendarEventDto();
 
-        result.setId(sensor.getId());
         result.setEventId(String.valueOf(sensor.getEventId()));
         result.setCalendarId(String.valueOf(sensor.getCalendarId()));
         result.setAllDay(sensor.getAllDay());
@@ -67,8 +65,6 @@ public class CalendarEventDaoImpl extends
         result.setTitle(sensor.getTitle());
         result.setIsDeleted(sensor.getIsDeleted());
         result.setCreated(sensor.getCreated());
-        result.setType(DtoType.CALENDAR);
-        result.setTypeStr(DtoType.getApiName(DtoType.CALENDAR));
 
         return result;
     }
