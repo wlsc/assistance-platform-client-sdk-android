@@ -24,7 +24,7 @@ public class DbCalendarReminderEventDao extends AbstractDao<DbCalendarReminderEv
     */
     public static class Properties {
         public final static Property Id = new Property(0, Long.class, "id", true, "_id");
-        public final static Property ReminderId = new Property(1, Long.class, "reminderId", false, "REMINDER_ID");
+        public final static Property ReminderId = new Property(1, long.class, "reminderId", false, "REMINDER_ID");
         public final static Property EventId = new Property(2, Long.class, "eventId", false, "EVENT_ID");
         public final static Property Method = new Property(3, Integer.class, "method", false, "METHOD");
         public final static Property Minutes = new Property(4, Integer.class, "minutes", false, "MINUTES");
@@ -48,7 +48,7 @@ public class DbCalendarReminderEventDao extends AbstractDao<DbCalendarReminderEv
         String constraint = ifNotExists? "IF NOT EXISTS ": "";
         db.execSQL("CREATE TABLE " + constraint + "\"calendar_reminder_event\" (" + //
                 "\"_id\" INTEGER PRIMARY KEY AUTOINCREMENT ," + // 0: id
-                "\"REMINDER_ID\" INTEGER," + // 1: reminderId
+                "\"REMINDER_ID\" INTEGER NOT NULL UNIQUE ," + // 1: reminderId
                 "\"EVENT_ID\" INTEGER," + // 2: eventId
                 "\"METHOD\" INTEGER," + // 3: method
                 "\"MINUTES\" INTEGER," + // 4: minutes
@@ -59,6 +59,8 @@ public class DbCalendarReminderEventDao extends AbstractDao<DbCalendarReminderEv
         // Add Indexes
         db.execSQL("CREATE INDEX " + constraint + "IDX_calendar_reminder_event__id ON calendar_reminder_event" +
                 " (\"_id\");");
+        db.execSQL("CREATE INDEX " + constraint + "IDX_calendar_reminder_event_REMINDER_ID ON calendar_reminder_event" +
+                " (\"REMINDER_ID\");");
     }
 
     /** Drops the underlying database table. */
@@ -76,11 +78,7 @@ public class DbCalendarReminderEventDao extends AbstractDao<DbCalendarReminderEv
         if (id != null) {
             stmt.bindLong(1, id);
         }
- 
-        Long reminderId = entity.getReminderId();
-        if (reminderId != null) {
-            stmt.bindLong(2, reminderId);
-        }
+        stmt.bindLong(2, entity.getReminderId());
  
         Long eventId = entity.getEventId();
         if (eventId != null) {
@@ -125,7 +123,7 @@ public class DbCalendarReminderEventDao extends AbstractDao<DbCalendarReminderEv
     public DbCalendarReminderEvent readEntity(Cursor cursor, int offset) {
         DbCalendarReminderEvent entity = new DbCalendarReminderEvent( //
             cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0), // id
-            cursor.isNull(offset + 1) ? null : cursor.getLong(offset + 1), // reminderId
+            cursor.getLong(offset + 1), // reminderId
             cursor.isNull(offset + 2) ? null : cursor.getLong(offset + 2), // eventId
             cursor.isNull(offset + 3) ? null : cursor.getInt(offset + 3), // method
             cursor.isNull(offset + 4) ? null : cursor.getInt(offset + 4), // minutes
@@ -141,7 +139,7 @@ public class DbCalendarReminderEventDao extends AbstractDao<DbCalendarReminderEv
     @Override
     public void readEntity(Cursor cursor, DbCalendarReminderEvent entity, int offset) {
         entity.setId(cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0));
-        entity.setReminderId(cursor.isNull(offset + 1) ? null : cursor.getLong(offset + 1));
+        entity.setReminderId(cursor.getLong(offset + 1));
         entity.setEventId(cursor.isNull(offset + 2) ? null : cursor.getLong(offset + 2));
         entity.setMethod(cursor.isNull(offset + 3) ? null : cursor.getInt(offset + 3));
         entity.setMinutes(cursor.isNull(offset + 4) ? null : cursor.getInt(offset + 4));

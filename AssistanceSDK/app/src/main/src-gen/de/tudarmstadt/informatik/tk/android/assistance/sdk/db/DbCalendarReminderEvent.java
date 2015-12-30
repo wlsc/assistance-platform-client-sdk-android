@@ -7,7 +7,7 @@ package de.tudarmstadt.informatik.tk.android.assistance.sdk.db;
 public class DbCalendarReminderEvent implements de.tudarmstadt.informatik.tk.android.assistance.sdk.interfaces.IDbUpdatableSensor {
 
     private Long id;
-    private Long reminderId;
+    private long reminderId;
     private Long eventId;
     private Integer method;
     private Integer minutes;
@@ -24,7 +24,7 @@ public class DbCalendarReminderEvent implements de.tudarmstadt.informatik.tk.and
         this.id = id;
     }
 
-    public DbCalendarReminderEvent(Long id, Long reminderId, Long eventId, Integer method, Integer minutes, Boolean isNew, Boolean isUpdated, Boolean isDeleted, String created) {
+    public DbCalendarReminderEvent(Long id, long reminderId, Long eventId, Integer method, Integer minutes, Boolean isNew, Boolean isUpdated, Boolean isDeleted, String created) {
         this.id = id;
         this.reminderId = reminderId;
         this.eventId = eventId;
@@ -44,11 +44,11 @@ public class DbCalendarReminderEvent implements de.tudarmstadt.informatik.tk.and
         this.id = id;
     }
 
-    public Long getReminderId() {
+    public long getReminderId() {
         return reminderId;
     }
 
-    public void setReminderId(Long reminderId) {
+    public void setReminderId(long reminderId) {
         this.reminderId = reminderId;
     }
 

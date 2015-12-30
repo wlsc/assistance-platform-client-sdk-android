@@ -312,6 +312,10 @@ public class CalendarEvent extends AbstractContentObserverEvent {
 
     private boolean checkForReminderChange(Map<Long, DbCalendarReminderEvent> map, DbCalendarReminderEvent newItem) {
 
+        if (newItem == null) {
+            throw new IllegalArgumentException();
+        }
+
         Long eventId = newItem.getEventId();
 
         if (eventId == null) {
