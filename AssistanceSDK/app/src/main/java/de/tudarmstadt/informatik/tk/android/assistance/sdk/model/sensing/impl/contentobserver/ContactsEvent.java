@@ -81,6 +81,7 @@ public class ContactsEvent extends AbstractContentObserverEvent {
         Map<Long, DbContactEvent> allExistingContacts = new HashMap<>();
 
         Cursor cursor = null;
+        Cursor nameCur = null;
 
         try {
 
@@ -93,12 +94,7 @@ public class ContactsEvent extends AbstractContentObserverEvent {
 
             cursor.moveToFirst();
 
-            try {
-                allExistingContacts = getAllExistingContacts();
-            } catch (Exception e) {
-                Log.e(TAG, "Some error: ", e);
-                return;
-            }
+            allExistingContacts = getAllExistingContacts();
 
             while (cursor.moveToNext() && isRunning()) {
 
@@ -117,30 +113,19 @@ public class ContactsEvent extends AbstractContentObserverEvent {
                         ContactsContract.CommonDataKinds.StructuredName.CONTENT_ITEM_TYPE,
                         strContactId};
 
-                Cursor nameCur = null;
 
-                try {
+                nameCur = context.getContentResolver().query(URI_DATA, projectionNameParams, whereName, whereNameParams, null);
 
-                    nameCur = context.getContentResolver().query(URI_DATA, projectionNameParams, whereName, whereNameParams, null);
+                if (nameCur != null) {
 
-                    if (nameCur != null) {
+                    if (nameCur.moveToFirst()) {
 
-                        if (nameCur.moveToFirst()) {
-
-                            strGivenName = getStringByColumnName(
-                                    nameCur,
-                                    ContactsContract.CommonDataKinds.StructuredName.GIVEN_NAME);
-                            strFamilyName = getStringByColumnName(
-                                    nameCur,
-                                    ContactsContract.CommonDataKinds.StructuredName.FAMILY_NAME);
-                        }
-                    }
-
-                } catch (Exception e) {
-                    Log.e(TAG, "Some error: ", e);
-                } finally {
-                    if (nameCur != null) {
-                        nameCur.close();
+                        strGivenName = getStringByColumnName(
+                                nameCur,
+                                ContactsContract.CommonDataKinds.StructuredName.GIVEN_NAME);
+                        strFamilyName = getStringByColumnName(
+                                nameCur,
+                                ContactsContract.CommonDataKinds.StructuredName.FAMILY_NAME);
                     }
                 }
 
@@ -171,6 +156,24 @@ public class ContactsEvent extends AbstractContentObserverEvent {
                 syncNumbers(sensorContact);
                 syncMails(sensorContact);
             }
+
+
+            // this deletes implicitly all numbers and mails which have no contact anymore
+            for (Map.Entry<Long, DbContactEvent> entry : allExistingContacts.entrySet()) {
+
+                if (!isRunning()) {
+                    return;
+                }
+
+                DbContactEvent contact = entry.getValue();
+
+                syncNumbers(contact);
+                syncMails(contact);
+            }
+
+            // remaining contacts are deleted
+            deleteRemainingEntries(allExistingContacts, true);
+
         } catch (SecurityException se) {
             Log.d(TAG, "Permission was not granted for this event!");
         } catch (NumberFormatException e) {
@@ -178,26 +181,15 @@ public class ContactsEvent extends AbstractContentObserverEvent {
         } catch (Exception e) {
             Log.e(TAG, "Some error:", e);
         } finally {
+
             if (cursor != null) {
                 cursor.close();
             }
-        }
 
-        // this deletes implicitly all numbers and mails which have no contact anymore
-        for (Map.Entry<Long, DbContactEvent> entry : allExistingContacts.entrySet()) {
-
-            if (!isRunning()) {
-                return;
+            if (nameCur != null) {
+                nameCur.close();
             }
-
-            DbContactEvent contact = entry.getValue();
-
-            syncNumbers(contact);
-            syncMails(contact);
         }
-
-        // remaining contacts are deleted
-        deleteRemainingEntries(allExistingContacts, true);
     }
 
     private boolean deleteRemainingEntries(Map<Long, DbContactEvent> allExistingContacts, boolean b) {

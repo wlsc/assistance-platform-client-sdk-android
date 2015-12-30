@@ -1,6 +1,10 @@
 package de.tudarmstadt.informatik.tk.android.assistance.sdk.provider;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.pm.PackageManager;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 
 import java.util.HashSet;
 import java.util.Iterator;
@@ -12,6 +16,7 @@ import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbModule;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbModuleCapability;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.event.UpdateSensorIntervalEvent;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.DtoType;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.util.PermissionUtils;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.util.logger.Log;
 
 /**
@@ -200,5 +205,33 @@ public class ModuleProvider {
         Log.d(TAG, "Finished db update");
 
         return true;
+    }
+
+    /**
+     * Checks optional module capability premissions
+     *
+     * @param activity
+     * @param capability
+     */
+    public void checkModuleCapabilityPermission(Activity activity, DbModuleCapability capability) {
+
+        String[] permsToCheck = PermissionUtils.getInstance(mContext).getDangerousPermissionsToDtoMapping()
+                .get(capability.getType());
+
+        if (permsToCheck != null) {
+
+            for (String perm : permsToCheck) {
+
+                // check permissions for that action
+                int result = ContextCompat.checkSelfPermission(
+                        mContext,
+                        perm
+                );
+
+                if (result != PackageManager.PERMISSION_GRANTED) {
+                    ActivityCompat.requestPermissions(activity, new String[]{perm}, 240);
+                }
+            }
+        }
     }
 }
