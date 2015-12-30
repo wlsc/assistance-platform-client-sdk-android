@@ -183,13 +183,13 @@ public class CalendarEvent extends AbstractContentObserverEvent {
             cur.close();
         }
 
-        for (DbCalendarEvent event : allExistingEvents.values()) {
+        for (Map.Entry<Long, DbCalendarEvent> entry : allExistingEvents.entrySet()) {
 
             if (!isRunning()) {
                 break;
             }
 
-            syncReminders(event);
+            syncReminders(entry.getValue());
         }
     }
 

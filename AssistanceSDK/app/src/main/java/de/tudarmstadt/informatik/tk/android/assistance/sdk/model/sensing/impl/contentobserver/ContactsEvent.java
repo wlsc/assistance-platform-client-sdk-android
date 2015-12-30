@@ -173,6 +173,8 @@ public class ContactsEvent extends AbstractContentObserverEvent {
             }
         } catch (SecurityException se) {
             Log.d(TAG, "Permission was not granted for this event!");
+        } catch (NumberFormatException e) {
+            Log.d(TAG, "Number format exception", e);
         } catch (Exception e) {
             Log.e(TAG, "Some error:", e);
         } finally {

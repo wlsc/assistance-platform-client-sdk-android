@@ -25,6 +25,7 @@ import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.DaoProvider;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.PreferenceProvider;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.SensorProvider;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.util.ServiceUtils;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.util.StringUtils;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.util.logger.Log;
 
 /**
@@ -85,15 +86,14 @@ public class HarvesterService extends Service implements Callback {
 
         Log.d(TAG, "Service starting...");
 
-        // just init it here (for EventBus events)
         this.sensorProvider = SensorProvider.getInstance(getApplicationContext());
-        // init settings
         mPreferenceProvider = PreferenceProvider.getInstance(getApplicationContext());
 
         String userToken = mPreferenceProvider.getUserToken();
 
         // check if user is logged in
-        if (userToken == null || userToken.isEmpty()) {
+        if (StringUtils.isNullOrEmpty(userToken)) {
+            Log.d(TAG, "User token is null or empty");
             return;
         }
 
@@ -110,6 +110,11 @@ public class HarvesterService extends Service implements Callback {
     private void initService() {
 
         Log.d(TAG, "Initializing service...");
+
+        if (!ServiceUtils.isHarvesterAbleToRun(getApplicationContext())) {
+            Log.d(TAG, "Harvester was not able to run now");
+            return;
+        }
 
 //        Map<Integer, ISensor> enabledSensors = SensorProvider
 //                .getInstance(getApplicationContext())
