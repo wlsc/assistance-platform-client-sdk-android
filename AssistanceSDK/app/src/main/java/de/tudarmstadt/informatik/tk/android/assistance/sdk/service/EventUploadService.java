@@ -340,7 +340,7 @@ public class EventUploadService extends GcmTaskService {
                             Log.d(TAG, "OK response from server received");
 
                             // successful transmission of event data -> remove that data from db
-                            removeDbSentEvents();
+                            handleSentEvents();
 
                             // reschedule default periodic task
                             if (isNeedInConnectionFallback) {
@@ -1038,9 +1038,9 @@ public class EventUploadService extends GcmTaskService {
     /**
      * Removes successful transmitted entries from database
      */
-    public void removeDbSentEvents() {
+    public void handleSentEvents() {
 
-        Log.d(TAG, "Removing sent events from db...");
+        Log.d(TAG, "Handling sent events...");
 
         DaoProvider daoProvider = DaoProvider.getInstance(getApplicationContext());
 
@@ -1136,6 +1136,17 @@ public class EventUploadService extends GcmTaskService {
 
                 case DtoType.POWER_LEVEL:
                     daoProvider.getPowerLevelEventDao().delete((List<DbPowerLevelEvent>) values);
+                    break;
+
+                case DtoType.CALENDAR:
+                    List<DbCalendarEvent> calendarEvents = (List<DbCalendarEvent>) values;
+
+                    for (DbCalendarEvent calEvent : calendarEvents) {
+                        calEvent.setIsNew(false);
+                    }
+
+                    // update events state
+                    daoProvider.getCalendarEventDao().update(calendarEvents);
                     break;
             }
         }
