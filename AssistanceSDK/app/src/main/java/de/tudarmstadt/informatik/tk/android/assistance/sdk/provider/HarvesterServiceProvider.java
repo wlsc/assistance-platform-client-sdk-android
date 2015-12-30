@@ -38,14 +38,19 @@ public class HarvesterServiceProvider implements ServiceConnection {
     // connection to sensing service
     private ServiceConnection mServiceConnection;
 
+    private Intent serviceIntent;
+
     private HarvesterServiceProvider(Context context) {
 
         mContext = context;
         mServiceConnection = this;
+        serviceIntent = new Intent(mContext, HarvesterService.class);
 
-        if (isServiceRunning()) {
+        if (!isServiceBound()) {
             bindService();
         }
+
+        sendMessageToService(HarvesterService.MSG_CMD_START_SERVICE);
 
         moduleProvider = ModuleProvider.getInstance(context);
     }
@@ -85,15 +90,11 @@ public class HarvesterServiceProvider implements ServiceConnection {
         }
 
         if (!isServiceRunning()) {
-
-            Intent intent = new Intent(mContext, HarvesterService.class);
-            mContext.startService(intent);
-        }
-
-        showHarvestIcon(true);
-
-        if (!isServiceBound()) {
+            mContext.startService(serviceIntent);
+        } else {
             bindService();
+            sendMessageToService(HarvesterService.MSG_CMD_START_SERVICE);
+            showHarvestIcon(true);
         }
     }
 
@@ -150,20 +151,10 @@ public class HarvesterServiceProvider implements ServiceConnection {
 
         Log.d(TAG, "Service is connected to binder");
 
-        mMessengerOutgoing = new Messenger(service);
-
         isServiceBound = true;
 
-        try {
-
-            Message msg = Message.obtain(null, HarvesterService.MSG_CMD_REGISTER_CLIENT);
-
-            msg.replyTo = mMessengerIncoming;
-            mMessengerOutgoing.send(msg);
-
-        } catch (RemoteException e) {
-            Log.e(TAG, "Service has crashed");
-        }
+//        sendMessageToService(HarvesterService.MSG_CMD_REGISTER_CLIENT);
+        sendMessageToService(HarvesterService.MSG_CMD_START_SERVICE);
     }
 
     @Override
@@ -197,7 +188,7 @@ public class HarvesterServiceProvider implements ServiceConnection {
                 }
             }
         } else {
-            Log.d(TAG, "Service is not bound. Cannot send command");
+            Log.d(TAG, "Service is not bound. Cannot send command. Please bind the service");
         }
     }
 
@@ -206,19 +197,20 @@ public class HarvesterServiceProvider implements ServiceConnection {
      */
     private void bindService() {
 
-        try {
+        if (!isServiceBound()) {
 
-            if (!isServiceBound()) {
-
-                mContext.bindService(new Intent(mContext, HarvesterService.class),
+            try {
+                mContext.bindService(
+                        serviceIntent,
                         mServiceConnection,
-                        Context.BIND_AUTO_CREATE);
+                        Context.BIND_AUTO_CREATE
+                );
 
                 isServiceBound = true;
-            }
 
-        } catch (Exception e) {
-            Log.e(TAG, "Some error.");
+            } catch (Exception e) {
+                Log.e(TAG, "Some error.");
+            }
         }
     }
 
@@ -229,30 +221,18 @@ public class HarvesterServiceProvider implements ServiceConnection {
 
         if (isServiceBound()) {
 
-            if (mMessengerOutgoing != null) {
-
-                try {
-
-                    Message msg = Message.obtain(null, HarvesterService.MSG_CMD_UNREGISTER_CLIENT);
-
-                    msg.replyTo = mMessengerIncoming;
-                    mMessengerOutgoing.send(msg);
-
-                } catch (RemoteException e) {
-                    Log.e(TAG, "Sensing service crashed!");
-                }
-            }
+            sendMessageToService(HarvesterService.MSG_CMD_UNREGISTER_CLIENT);
 
             try {
                 // disconnecting...
-                this.mContext.unbindService(mServiceConnection);
+                mContext.unbindService(mServiceConnection);
             } catch (IllegalArgumentException iae) {
                 Log.d(TAG, "Service was not bound!");
             } finally {
                 this.isServiceBound = false;
             }
 
-            Log.d(TAG, "The service provider was unbound from sensing service");
+            Log.d(TAG, "The service provider was successfully unbound from sensing service!");
         }
     }
 
