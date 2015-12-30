@@ -14,8 +14,10 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbContactEmailEvent;
@@ -24,6 +26,7 @@ import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbContactNumberEve
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.DtoType;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.enums.EPushType;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensing.AbstractContentObserverEvent;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.util.DateUtils;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.util.logger.Log;
 
 /**
@@ -87,8 +90,6 @@ public class ContactsEvent extends AbstractContentObserverEvent {
             return;
         }
 
-        //ContactsContract.CommonDataKinds.StructuredName.
-
         //Cursor cursor = context.getContentResolver().query(URI_RAW_CONTACTS, null, "deleted=?", new String[] { "0" }, null);
 
         Cursor cursor = null;
@@ -102,8 +103,6 @@ public class ContactsEvent extends AbstractContentObserverEvent {
             if (cursor == null) {
                 return;
             }
-
-            cursor.moveToFirst();
 
             Map<Long, DbContactEvent> allExistingContacts = getAllExistingContacts();
 
@@ -155,6 +154,7 @@ public class ContactsEvent extends AbstractContentObserverEvent {
                 sensorContact.setIsNew(Boolean.TRUE);
                 sensorContact.setIsDeleted(Boolean.FALSE);
                 sensorContact.setIsUpdated(Boolean.FALSE);
+                sensorContact.setCreated(DateUtils.dateToISO8601String(new Date(), Locale.getDefault()));
 
                 if (checkForContactChange(allExistingContacts, sensorContact)) {
 
@@ -335,6 +335,7 @@ public class ContactsEvent extends AbstractContentObserverEvent {
                 sensorContactMail.setIsNew(Boolean.TRUE);
                 sensorContactMail.setIsDeleted(Boolean.FALSE);
                 sensorContactMail.setIsUpdated(Boolean.FALSE);
+                sensorContactMail.setCreated(DateUtils.dateToISO8601String(new Date(), Locale.getDefault()));
 
                 if (checkForContactMailChange(mapExistingMails, sensorContactMail)) {
 
@@ -429,6 +430,7 @@ public class ContactsEvent extends AbstractContentObserverEvent {
                 sensorContactNumber.setIsNew(Boolean.TRUE);
                 sensorContactNumber.setIsDeleted(Boolean.FALSE);
                 sensorContactNumber.setIsUpdated(Boolean.FALSE);
+                sensorContactNumber.setCreated(DateUtils.dateToISO8601String(new Date(), Locale.getDefault()));
 
                 if (checkForContactNumberChange(mapExistingNumbers, sensorContactNumber)) {
 
@@ -441,7 +443,7 @@ public class ContactsEvent extends AbstractContentObserverEvent {
             Log.d(TAG, "Finished");
 
         } catch (Exception e) {
-            Log.d(TAG, "Some error");
+            Log.e(TAG, "Some error:", e);
         } finally {
             if (curPhones != null) {
                 curPhones.close();

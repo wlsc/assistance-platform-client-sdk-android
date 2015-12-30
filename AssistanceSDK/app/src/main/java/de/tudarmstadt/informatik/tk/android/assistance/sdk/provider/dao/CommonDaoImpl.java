@@ -49,7 +49,7 @@ public abstract class CommonDaoImpl<T> implements CommonDao<T> {
             return -1l;
         }
 
-        return dao.insert(dbItem);
+        return dao.insertOrReplace(dbItem);
     }
 
     @Override
@@ -59,7 +59,7 @@ public abstract class CommonDaoImpl<T> implements CommonDao<T> {
             return;
         }
 
-        dao.insertInTx(dbItems);
+        dao.insertOrReplaceInTx(dbItems);
     }
 
     @Override
