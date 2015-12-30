@@ -175,13 +175,9 @@ public class CalendarEvent extends AbstractContentObserverEvent {
                 event.setIsUpdated(Boolean.FALSE);
                 event.setCreated(created);
 
-                try {
-                    if (checkForChange(allExistingEvents, event)) {
-
-                        entriesToInsert.add(event);
-                    }
-                } catch (Exception e) {
-                    Log.e(TAG, "Cannot check calendar event for change", e);
+                // checking for any changes
+                if (checkForChange(allExistingEvents, event)) {
+                    entriesToInsert.add(event);
                 }
 
                 syncReminders(event);
@@ -193,20 +189,23 @@ public class CalendarEvent extends AbstractContentObserverEvent {
                 Log.d(TAG, "Finished");
             }
 
+            /**
+             * Sync reminder at this point
+             */
+            for (Map.Entry<Long, DbCalendarEvent> entry : allExistingEvents.entrySet()) {
+
+                if (!isRunning()) {
+                    break;
+                }
+
+                syncReminders(entry.getValue());
+            }
+
         } catch (Exception e) {
             Log.e(TAG, "Cannot get all existing events!", e);
             return;
         } finally {
             cur.close();
-        }
-
-        for (Map.Entry<Long, DbCalendarEvent> entry : allExistingEvents.entrySet()) {
-
-            if (!isRunning()) {
-                break;
-            }
-
-            syncReminders(entry.getValue());
         }
     }
 
@@ -252,13 +251,9 @@ public class CalendarEvent extends AbstractContentObserverEvent {
                     reminder.setIsUpdated(Boolean.FALSE);
                     reminder.setCreated(created);
 
-                    try {
-                        if (checkForReminderChange(mapExistingReminders, reminder)) {
+                    if (checkForReminderChange(mapExistingReminders, reminder)) {
 
-                            entriesToInsert.add(reminder);
-                        }
-                    } catch (Exception e) {
-                        Log.e(TAG, "Cannot check calendar reminder event for change", e);
+                        entriesToInsert.add(reminder);
                     }
                 }
 
