@@ -35,7 +35,7 @@ dependencies {
 
     compile fileTree(include: ['*.jar'], dir: 'libs')
     compile project(':LiveSDK')
-    compile 'com.facebook.android:facebook-android-sdk:3.23.1'
+    compile 'com.facebook.android:facebook-android-sdk:4.8.2'
     // twitter library
     compile 'org.twitter4j:twitter4j-core:4.0.4'
     // support library
