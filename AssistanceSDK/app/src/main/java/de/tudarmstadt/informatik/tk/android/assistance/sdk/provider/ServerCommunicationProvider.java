@@ -3,9 +3,9 @@ package de.tudarmstadt.informatik.tk.android.assistance.sdk.provider;
 import android.content.Context;
 
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbUser;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.device.DeviceRegistrationRequestDto;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.endpoint.DeviceEndpoint;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.endpoint.EndpointGenerator;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.device.DeviceRegistrationRequestDto;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.device.DeviceApi;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.ApiGenerator;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.util.logger.Log;
 import retrofit.Callback;
 import retrofit.RetrofitError;
@@ -66,8 +66,8 @@ public class ServerCommunicationProvider {
         deviceRegistrationRequest.setDeviceId(serverDeviceId);
         deviceRegistrationRequest.setRegistrationToken(registrationToken);
 
-        DeviceEndpoint deviceEndpoint = EndpointGenerator.getInstance(mContext).create(DeviceEndpoint.class);
-        deviceEndpoint.registerDevice(userToken, deviceRegistrationRequest, new Callback<Void>() {
+        DeviceApi deviceApi = ApiGenerator.getInstance(mContext).create(DeviceApi.class);
+        deviceApi.registerDevice(userToken, deviceRegistrationRequest, new Callback<Void>() {
 
             @Override
             public void success(Void aVoid, Response response) {

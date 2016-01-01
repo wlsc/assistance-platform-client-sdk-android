@@ -6,7 +6,7 @@ import java.util.List;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DaoSession;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbCallLogEvent;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbCallLogEventDao;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.sensing.event.CallLogEventDto;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.sensing.event.CallLogEventDto;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.CommonEventDaoImpl;
 
 /**

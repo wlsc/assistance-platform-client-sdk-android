@@ -10,9 +10,9 @@ import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbContactEmailEven
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbContactEvent;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbContactEventDao;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbContactNumberEvent;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.SensorDto;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.sensing.event.contact.ContactEmailNumber;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.sensing.event.contact.ContactEventDto;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.SensorDto;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.sensing.event.contact.ContactEmailNumber;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.sensing.event.contact.ContactEventDto;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.CommonEventDaoImpl;
 
 /**

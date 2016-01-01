@@ -8,7 +8,7 @@ import java.util.Date;
 import java.util.Locale;
 
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbPowerStateEvent;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.DtoType;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.DtoType;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.constant.PowerChargingStatus;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.constant.PowerChargingType;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.DaoProvider;

@@ -23,7 +23,7 @@ import java.util.Map;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbContactEmailEvent;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbContactEvent;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbContactNumberEvent;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.DtoType;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.DtoType;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.enums.EPushType;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensing.AbstractContentObserverEvent;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.util.DateUtils;

@@ -47,17 +47,17 @@ import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbRunningServicesE
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbRunningTasksEvent;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbWifiConnectionEvent;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.interfaces.IDbSensor;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.DtoType;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.SensorDto;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.login.LoginRequestDto;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.login.LoginResponseDto;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.login.UserDeviceDto;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.sensing.EventUploadRequestDto;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.sensing.event.calendar.CalendarEventDto;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.sensing.event.calendar.CalendarReminder;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.endpoint.EndpointGenerator;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.endpoint.EventUploadEndpoint;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.endpoint.LoginEndpoint;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.ApiGenerator;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.DtoType;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.SensorDto;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.login.LoginApi;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.login.LoginRequestDto;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.login.LoginResponseDto;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.login.UserDeviceDto;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.sensing.EventUploadApi;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.sensing.EventUploadRequestDto;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.sensing.event.calendar.CalendarEventDto;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.sensing.event.calendar.CalendarReminder;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensing.ISensor;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.DaoProvider;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.PreferenceProvider;
@@ -69,6 +69,10 @@ import de.tudarmstadt.informatik.tk.android.assistance.sdk.util.logger.Log;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
+import rx.Subscriber;
+import rx.Subscription;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 /**
  * @author Wladimir Schmidt (wlsc.dev@gmail.com)
@@ -118,6 +122,8 @@ public class EventUploadService extends GcmTaskService {
     private SparseArray<List<? extends SensorDto>> requestEvents = new SparseArray<>();
 
     private static boolean isNeedInConnectionFallback;
+
+    private Subscription subUserLogin;
 
     @Override
     public void onCreate() {
@@ -223,18 +229,14 @@ public class EventUploadService extends GcmTaskService {
 
                             for (final List<SensorDto> partEvent : eventParts) {
 
-                                AsyncTask.execute(new Runnable() {
+                                AsyncTask.execute(() -> {
 
-                                    @Override
-                                    public void run() {
+                                    EventUploadRequestDto eventUploadRequest = new EventUploadRequestDto(
+                                            serverDeviceId,
+                                            partEvent
+                                    );
 
-                                        EventUploadRequestDto eventUploadRequest = new EventUploadRequestDto(
-                                                serverDeviceId,
-                                                partEvent
-                                        );
-
-                                        doUploadEventData(eventUploadRequest);
-                                    }
+                                    doUploadEventData(eventUploadRequest);
                                 });
                             }
                         }
@@ -247,53 +249,45 @@ public class EventUploadService extends GcmTaskService {
         if (isPeriodic) {
 
             Handler handler = new Handler(getMainLooper());
-            handler.post(new Runnable() {
+            handler.post(() -> {
 
-                @Override
-                public void run() {
+                final long serverDeviceId = mPreferenceProvider.getServerDeviceId();
 
-                    final long serverDeviceId = mPreferenceProvider.getServerDeviceId();
+                Log.d(TAG, "Sync server device id: " + serverDeviceId);
 
-                    Log.d(TAG, "Sync server device id: " + serverDeviceId);
+                // user logged out
+                if (serverDeviceId == -1) {
+                    Log.d(TAG, "User logged out -- all tasks has been canceled!");
+                    GcmNetworkManager.getInstance(getApplicationContext())
+                            .cancelAllTasks(EventUploadService.class);
+                    return;
+                }
 
-                    // user logged out
-                    if (serverDeviceId == -1) {
-                        Log.d(TAG, "User logged out -- all tasks has been canceled!");
-                        GcmNetworkManager.getInstance(getApplicationContext())
-                                .cancelAllTasks(EventUploadService.class);
-                        return;
-                    }
+                getEntriesForUpload(PUSH_NUMBER_OF_EACH_ELEMENTS);
 
-                    getEntriesForUpload(PUSH_NUMBER_OF_EACH_ELEMENTS);
+                final List<SensorDto> eventsAsList = new ArrayList<>();
 
-                    final List<SensorDto> eventsAsList = new ArrayList<>();
+                for (int i = 0, eventsSize = requestEvents.size(); i < eventsSize; i++) {
+                    eventsAsList.addAll(requestEvents.valueAt(i));
+                }
 
-                    for (int i = 0, eventsSize = requestEvents.size(); i < eventsSize; i++) {
-                        eventsAsList.addAll(requestEvents.valueAt(i));
-                    }
+                Log.d(TAG, "There are " + eventsAsList.size() + " events to upload");
 
-                    Log.d(TAG, "There are " + eventsAsList.size() + " events to upload");
+                // send partial with many requests
+                List<List<SensorDto>> eventParts = Lists
+                        .partition(eventsAsList, EVENTS_NUMBER_TO_SPLIT_AFTER);
 
-                    // send partial with many requests
-                    List<List<SensorDto>> eventParts = Lists
-                            .partition(eventsAsList, EVENTS_NUMBER_TO_SPLIT_AFTER);
+                for (final List<SensorDto> eventPart : eventParts) {
 
-                    for (final List<SensorDto> eventPart : eventParts) {
+                    AsyncTask.execute(() -> {
 
-                        AsyncTask.execute(new Runnable() {
+                        EventUploadRequestDto eventUploadRequest = new EventUploadRequestDto(
+                                serverDeviceId,
+                                eventPart
+                        );
 
-                            @Override
-                            public void run() {
-
-                                EventUploadRequestDto eventUploadRequest = new EventUploadRequestDto(
-                                        serverDeviceId,
-                                        eventPart
-                                );
-
-                                doUploadEventData(eventUploadRequest);
-                            }
-                        });
-                    }
+                        doUploadEventData(eventUploadRequest);
+                    });
                 }
             });
         }
@@ -321,13 +315,13 @@ public class EventUploadService extends GcmTaskService {
         }
 
         // send to upload data service
-        EventUploadEndpoint eventUploadEndpoint = EndpointGenerator
+        EventUploadApi eventUploadApi = ApiGenerator
                 .getInstance(getApplicationContext())
-                .create(EventUploadEndpoint.class);
+                .create(EventUploadApi.class);
 
         String userToken = mPreferenceProvider.getUserToken();
 
-        eventUploadEndpoint.uploadData(userToken, eventUploadRequest,
+        eventUploadApi.uploadData(userToken, eventUploadRequest,
                 new Callback<Void>() {
 
                     @Override
@@ -362,7 +356,7 @@ public class EventUploadService extends GcmTaskService {
 
                             // user need relogin
                             if (response.getStatus() == 401) {
-                                doRelogin();
+                                relogin();
                             }
                         }
 
@@ -379,18 +373,13 @@ public class EventUploadService extends GcmTaskService {
     /**
      * Does user token refresh
      */
-    private void doRelogin() {
+    private void relogin() {
 
         final PreferenceProvider preferenceProvider = PreferenceProvider.getInstance(getApplicationContext());
 
         String email = preferenceProvider.getUserEmail();
         String password = preferenceProvider.getUserPassword();
         long serverDeviceId = preferenceProvider.getServerDeviceId();
-
-        LoginRequestDto loginRequest = new LoginRequestDto();
-
-        loginRequest.setUserEmail(email);
-        loginRequest.setPassword(password);
 
         UserDeviceDto userDevice = new UserDeviceDto();
 
@@ -404,29 +393,43 @@ public class EventUploadService extends GcmTaskService {
             userDevice.setDeviceId(HardwareUtils.getAndroidId(this));
         }
 
-        loginRequest.setDevice(userDevice);
+        LoginRequestDto loginRequest = new LoginRequestDto(email, password, userDevice);
 
-        LoginEndpoint userEndpoint = EndpointGenerator.getInstance(getApplicationContext()).create(LoginEndpoint.class);
-        userEndpoint.loginUser(loginRequest, new Callback<LoginResponseDto>() {
+        LoginApi userEndpoint = ApiGenerator.getInstance(getApplicationContext())
+                .create(LoginApi.class);
 
-            @Override
-            public void success(LoginResponseDto apiResponse, Response response) {
+        subUserLogin = userEndpoint.loginUser(loginRequest)
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<LoginResponseDto>() {
 
-                if (apiResponse != null) {
-                    Log.d(TAG, "User token received: " + apiResponse.getUserToken());
+                    @Override
+                    public void onCompleted() {
+                        // do nothing
+                    }
 
-                    preferenceProvider.setUserToken(apiResponse.getUserToken());
-                } else {
-                    Log.d(TAG, "apiResponse is NULL");
-                }
-            }
+                    @Override
+                    public void onError(Throwable e) {
+                        if (e instanceof RetrofitError) {
+                            // ignore by now
+                            Log.d(TAG, "login function failed. server status: " +
+                                    ((RetrofitError) e).getResponse().getStatus());
+                        }
+                    }
 
-            @Override
-            public void failure(RetrofitError error) {
-                // ignore by now
-                Log.d(TAG, "login function failed. server status: " + error.getResponse().getStatus());
-            }
-        });
+                    @Override
+                    public void onNext(LoginResponseDto response) {
+
+                        if (response != null) {
+                            Log.d(TAG, "User token received: " + response.getUserToken());
+
+                            preferenceProvider.setUserToken(response.getUserToken());
+
+                        } else {
+                            Log.d(TAG, "apiResponse is NULL");
+                        }
+                    }
+                });
     }
 
     /**
@@ -1224,5 +1227,15 @@ public class EventUploadService extends GcmTaskService {
         GcmNetworkManager.getInstance(context).schedule(oneTimeTask);
 
         Log.d(TAG, "One time task was scheduled!");
+    }
+
+    @Override
+    public void onDestroy() {
+
+        if (subUserLogin != null) {
+            subUserLogin.unsubscribe();
+        }
+
+        super.onDestroy();
     }
 }

@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.greenrobot.dao.AbstractDao;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.dto.SensorDto;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.SensorDto;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.CommonDaoImpl;
 
 /**
