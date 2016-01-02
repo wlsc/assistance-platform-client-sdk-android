@@ -11,6 +11,7 @@ import retrofit.http.GET;
 import retrofit.http.Header;
 import retrofit.http.POST;
 import retrofit.http.Path;
+import rx.Observable;
 
 /**
  * Module service API endpoint
@@ -21,12 +22,14 @@ import retrofit.http.Path;
 public interface ModuleApi {
 
     @GET(Config.ASSISTANCE_MODULE_LIST_ENDPOINT)
-    void getAvailableModules(@Header("X-AUTH-TOKEN") String userToken,
-                             Callback<List<ModuleResponseDto>> callback);
+    Observable<List<ModuleResponseDto>> getAvailableModules(
+            @Header("X-AUTH-TOKEN") String userToken
+    );
 
     @GET(Config.ASSISTANCE_MODULE_ACTIVE_ENDPOINT)
-    void getActiveModules(@Header("X-AUTH-TOKEN") String userToken,
-                          Callback<Set<String>> callback);
+    Observable<Set<String>> getActiveModules(
+            @Header("X-AUTH-TOKEN") String userToken
+    );
 
     @POST(Config.ASSISTANCE_MODULE_ACTIVATE_ENDPOINT)
     void activateModule(@Header("X-AUTH-TOKEN") String userToken,
