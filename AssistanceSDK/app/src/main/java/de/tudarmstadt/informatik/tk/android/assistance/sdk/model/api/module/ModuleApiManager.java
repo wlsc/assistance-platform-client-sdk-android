@@ -50,4 +50,11 @@ public class ModuleApiManager {
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread());
     }
+
+    public Observable<ActivatedModulesResponse> getActivatedModules(String userToken) {
+        return Observable.combineLatest(
+                getAvailableModules(userToken),
+                getActiveModulesRequest(userToken),
+                ActivatedModulesResponse::new);
+    }
 }
