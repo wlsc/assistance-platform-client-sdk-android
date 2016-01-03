@@ -92,6 +92,7 @@ public class HarvesterServiceProvider implements ServiceConnection {
         } else {
             bindService();
             sendMessageToService(HarvesterService.MSG_CMD_START_SERVICE);
+            SensorProvider.getInstance(mContext).startAllStoppedSensors();
             showHarvestIcon(true);
         }
     }

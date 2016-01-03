@@ -191,6 +191,11 @@ public class HarvesterService extends Service implements Callback {
      */
     private void showIcon() {
 
+        if (!ServiceUtils.isHarvesterAbleToRun(getApplicationContext())) {
+            Log.d(TAG, "Harvester was not able to run now");
+            return;
+        }
+
         Log.d(TAG, "Showing icon...");
 
         Class mainClass = null;
