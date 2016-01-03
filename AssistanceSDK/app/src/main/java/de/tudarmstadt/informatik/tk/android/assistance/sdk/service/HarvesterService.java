@@ -122,12 +122,7 @@ public class HarvesterService extends Service implements Callback {
 //
 //        if (enabledSensors != null && enabledSensors.size() > 0) {
 
-        if (!mSensorsStarted) {
-
-            Log.d(TAG, "Found installed modules -> starting monitoring activities...");
-
-            monitorStart();
-        }
+        monitorStart();
 
         // schedule uploader task
         startService(new Intent(this, EventUploadService.class));

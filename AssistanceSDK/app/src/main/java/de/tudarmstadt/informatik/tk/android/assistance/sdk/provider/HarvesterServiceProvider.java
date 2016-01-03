@@ -29,6 +29,7 @@ public class HarvesterServiceProvider implements ServiceConnection {
     private static Context mContext;
 
     private static ModuleProvider moduleProvider;
+    private static SensorProvider sensorProvider;
 
     private Messenger mMessengerOutgoing = null;
     private Messenger mMessengerIncoming = new Messenger(new IncomingMessageHandler());
@@ -50,6 +51,7 @@ public class HarvesterServiceProvider implements ServiceConnection {
             bindService();
         }
 
+        sensorProvider = SensorProvider.getInstance(context);
         moduleProvider = ModuleProvider.getInstance(context);
     }
 
@@ -92,7 +94,7 @@ public class HarvesterServiceProvider implements ServiceConnection {
         } else {
             bindService();
             sendMessageToService(HarvesterService.MSG_CMD_START_SERVICE);
-            SensorProvider.getInstance(mContext).startAllStoppedSensors();
+            sensorProvider.startAllStoppedSensors();
             showHarvestIcon(true);
         }
     }

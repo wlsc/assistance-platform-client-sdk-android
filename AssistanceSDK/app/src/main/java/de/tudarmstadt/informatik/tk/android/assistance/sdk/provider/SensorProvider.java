@@ -303,6 +303,7 @@ public class SensorProvider {
      * @return
      */
     public Map<Integer, ISensor> getRunningSensors() {
+        Log.d(TAG, "Running sensors: " + runningSensors.size());
         return runningSensors;
     }
 
@@ -763,5 +764,13 @@ public class SensorProvider {
         Log.d(TAG, "Finished deactivate sensors");
 
         return true;
+    }
+
+    /**
+     * Synchronizes runninng sensors with DB entries
+     */
+    public void synchronizeRunningSensorsWithDb() {
+        clearRunningSensors();
+        initEnabledSensors();
     }
 }

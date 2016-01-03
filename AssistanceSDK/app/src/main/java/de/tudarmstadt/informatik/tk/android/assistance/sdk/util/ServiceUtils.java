@@ -5,11 +5,14 @@ import android.content.Context;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbModule;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbUser;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensing.ISensor;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.DaoProvider;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.PreferenceProvider;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.SensorProvider;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.util.logger.Log;
 
 /**
@@ -50,7 +53,9 @@ public class ServiceUtils {
                 .getModuleDao()
                 .getAllActive(user.getId());
 
-        return activeModules != null && !activeModules.isEmpty();
+        Map<Integer, ISensor> runningSensors = SensorProvider.getInstance(context).getRunningSensors();
+
+        return activeModules != null && !activeModules.isEmpty() && !runningSensors.isEmpty();
     }
 
     /**
