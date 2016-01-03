@@ -50,8 +50,6 @@ public class HarvesterServiceProvider implements ServiceConnection {
             bindService();
         }
 
-        sendMessageToService(HarvesterService.MSG_CMD_START_SERVICE);
-
         moduleProvider = ModuleProvider.getInstance(context);
     }
 
@@ -153,8 +151,9 @@ public class HarvesterServiceProvider implements ServiceConnection {
 
         isServiceBound = true;
 
-//        sendMessageToService(HarvesterService.MSG_CMD_REGISTER_CLIENT);
-        sendMessageToService(HarvesterService.MSG_CMD_START_SERVICE);
+        mMessengerOutgoing = new Messenger(service);
+
+        sendMessageToService(HarvesterService.MSG_CMD_REGISTER_CLIENT);
     }
 
     @Override
@@ -186,6 +185,8 @@ public class HarvesterServiceProvider implements ServiceConnection {
                 } catch (RemoteException e) {
                     Log.e(TAG, "Cannot send message to service!");
                 }
+            } else {
+                Log.d(TAG, "Service: outgoing canal is null");
             }
         } else {
             Log.d(TAG, "Service is not bound. Cannot send command. Please bind the service");

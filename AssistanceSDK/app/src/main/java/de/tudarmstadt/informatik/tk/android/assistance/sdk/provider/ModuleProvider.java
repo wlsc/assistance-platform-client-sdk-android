@@ -208,7 +208,7 @@ public class ModuleProvider {
     }
 
     /**
-     * Checks optional module capability premissions
+     * Checks optional module capability permissions
      *
      * @param activity
      * @param capability

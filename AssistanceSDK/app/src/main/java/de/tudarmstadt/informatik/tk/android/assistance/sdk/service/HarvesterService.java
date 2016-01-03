@@ -256,6 +256,7 @@ public class HarvesterService extends Service implements Callback {
     @Override
     public void onDestroy() {
         Log.d(TAG, "Destroying service...");
+        mClients = null;
         stopService();
         super.onDestroy();
     }
