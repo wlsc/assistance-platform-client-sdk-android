@@ -30,7 +30,7 @@
 
     <uses-permission android:name="de.tudarmstadt.informatik.tk.android.assistance.permission.C2D_MESSAGE" />
 
-    <application android:allowBackup="false">
+    <application>
 
         <meta-data
             android:name="com.google.android.gms.version"

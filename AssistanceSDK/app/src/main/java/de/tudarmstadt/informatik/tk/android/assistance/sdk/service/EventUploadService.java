@@ -196,49 +196,45 @@ public class EventUploadService extends GcmTaskService {
                     isPeriodic = false;
 
                     Handler handler = new Handler(getMainLooper());
-                    handler.post(new Runnable() {
+                    handler.post(() -> {
 
-                        @Override
-                        public void run() {
+                        final long serverDeviceId = mPreferenceProvider.getServerDeviceId();
 
-                            final long serverDeviceId = mPreferenceProvider.getServerDeviceId();
+                        Log.d(TAG, "Sync server device id: " + serverDeviceId);
 
-                            Log.d(TAG, "Sync server device id: " + serverDeviceId);
+                        // user logged out
+                        if (serverDeviceId == -1) {
+                            Log.d(TAG, "User logged out -- all tasks has been canceled!");
+                            GcmNetworkManager.getInstance(getApplicationContext())
+                                    .cancelAllTasks(EventUploadService.class);
+                            return;
+                        }
 
-                            // user logged out
-                            if (serverDeviceId == -1) {
-                                Log.d(TAG, "User logged out -- all tasks has been canceled!");
-                                GcmNetworkManager.getInstance(getApplicationContext())
-                                        .cancelAllTasks(EventUploadService.class);
-                                return;
-                            }
+                        getEntriesForUpload(0);
 
-                            getEntriesForUpload(0);
+                        final List<SensorDto> eventsAsList = new ArrayList<>();
 
-                            final List<SensorDto> eventsAsList = new ArrayList<>();
+                        for (int i = 0, eventsSize = requestEvents.size(); i < eventsSize; i++) {
+                            eventsAsList.addAll(requestEvents.valueAt(i));
+                        }
 
-                            for (int i = 0, eventsSize = requestEvents.size(); i < eventsSize; i++) {
-                                eventsAsList.addAll(requestEvents.valueAt(i));
-                            }
+                        Log.d(TAG, "There are " + eventsAsList.size() + " events to upload");
 
-                            Log.d(TAG, "There are " + eventsAsList.size() + " events to upload");
+                        // send partial data with many requests
+                        List<List<SensorDto>> eventParts = Lists
+                                .partition(eventsAsList, EVENTS_NUMBER_TO_SPLIT_AFTER);
 
-                            // send partial data with many requests
-                            List<List<SensorDto>> eventParts = Lists
-                                    .partition(eventsAsList, EVENTS_NUMBER_TO_SPLIT_AFTER);
+                        for (final List<SensorDto> partEvent : eventParts) {
 
-                            for (final List<SensorDto> partEvent : eventParts) {
+                            AsyncTask.execute(() -> {
 
-                                AsyncTask.execute(() -> {
+                                EventUploadRequestDto eventUploadRequest = new EventUploadRequestDto(
+                                        serverDeviceId,
+                                        partEvent
+                                );
 
-                                    EventUploadRequestDto eventUploadRequest = new EventUploadRequestDto(
-                                            serverDeviceId,
-                                            partEvent
-                                    );
-
-                                    doUploadEventData(eventUploadRequest);
-                                });
-                            }
+                                doUploadEventData(eventUploadRequest);
+                            });
                         }
                     });
                 }

@@ -3,6 +3,7 @@ package de.tudarmstadt.informatik.tk.android.assistance.sdk.provider;
 import android.content.Context;
 import android.hardware.Sensor;
 import android.hardware.SensorManager;
+import android.util.SparseArray;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -16,6 +17,7 @@ import de.greenrobot.event.EventBus;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbModule;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbModuleCapability;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbUser;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.event.UpdateSensorIntervalEvent;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.DtoType;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.enums.EPushType;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensing.ISensor;
@@ -199,39 +201,68 @@ public class SensorProvider {
         String userToken = preferenceProvider.getUserToken();
         DbUser user = daoProvider.getUserDao().getByToken(userToken);
 
-        if (userToken.isEmpty() || user == null) {
+        if (user == null) {
             Log.d(TAG, "user token or user is NULL!");
             return;
         }
 
-        List<DbModule> userActiveModules = daoProvider.getModuleDao().getAllActive(user.getId());
+        List<DbModule> activeModules = daoProvider.getModuleDao().getAllActive(user.getId());
 
-        if (userActiveModules == null || userActiveModules.isEmpty()) {
+        if (activeModules.isEmpty()) {
             Log.d(TAG, "User has no active modules!");
             return;
         }
 
-        List<DbModuleCapability> moduleCapabilities = new ArrayList<>();
+        List<DbModuleCapability> activeModuleCapabilities = new ArrayList<>();
 
-        for (DbModule module : userActiveModules) {
+        for (DbModule module : activeModules) {
 
-            moduleCapabilities.addAll(daoProvider.getModuleCapabilityDao()
-                    .getAllActive(module.getId()));
+            List<DbModuleCapability> caps = module.getDbModuleCapabilityList();
+
+            if (caps.isEmpty()) {
+                continue;
+            }
+
+            for (DbModuleCapability cap : caps) {
+
+                if (cap.getActive()) {
+                    activeModuleCapabilities.add(cap);
+                }
+            }
         }
+
+        // measure intervals by their DTO type
+        SparseArray<Double> sensorIntervals = new SparseArray<>();
 
         /*
          * Save them in map for further fast access
          */
-        for (DbModuleCapability dbCap : moduleCapabilities) {
+        for (DbModuleCapability cap : activeModuleCapabilities) {
 
-            int capType = DtoType.getDtoType(dbCap.getType());
+            int capType = DtoType.getDtoType(cap.getType());
             ISensor sensor = availableSensors.get(capType);
 
-            runningSensors.put(sensor.getType(), sensor);
+            // haven't seen that sensor yet
+            if (runningSensors.get(capType) == null) {
+                runningSensors.put(capType, sensor);
+                sensorIntervals.put(capType, cap.getCollectionFrequency());
+            } else {
+                Double oldCollectionFreq = sensorIntervals.get(capType);
+                sensorIntervals.put(capType, Math.min(oldCollectionFreq, cap.getCollectionFrequency()));
+            }
 
             if (!EventBus.getDefault().isRegistered(sensor)) {
                 EventBus.getDefault().register(sensor);
             }
+        }
+
+        // send collection interval updates to sensor/events
+        for (int i = 0, sensorIntervalsSize = sensorIntervals.size(); i < sensorIntervalsSize; i++) {
+            EventBus.getDefault().post(
+                    new UpdateSensorIntervalEvent(
+                            sensorIntervals.keyAt(i),
+                            sensorIntervals.valueAt(i)
+                    ));
         }
 
         Log.d(TAG, "Finished. Number of sensors: " + runningSensors.size());

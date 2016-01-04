@@ -3,9 +3,9 @@ package de.tudarmstadt.informatik.tk.android.assistance.sdk.provider;
 import android.app.Activity;
 import android.content.Context;
 import android.content.pm.PackageManager;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -213,8 +213,9 @@ public class ModuleProvider {
      * @param activity
      * @param capability
      */
-    public void checkModuleCapabilityPermission(Activity activity, DbModuleCapability capability) {
+    public String[] getNotGrantedModuleCapabilityPermission(Activity activity, DbModuleCapability capability) {
 
+        List<String> result = new ArrayList<>();
         String[] permsToCheck = PermissionUtils.getInstance(mContext).getDangerousPermissionsToDtoMapping()
                 .get(capability.getType());
 
@@ -223,15 +224,17 @@ public class ModuleProvider {
             for (String perm : permsToCheck) {
 
                 // check permissions for that action
-                int result = ContextCompat.checkSelfPermission(
+                int res = ContextCompat.checkSelfPermission(
                         mContext,
                         perm
                 );
 
-                if (result != PackageManager.PERMISSION_GRANTED) {
-                    ActivityCompat.requestPermissions(activity, new String[]{perm}, 240);
+                if (res != PackageManager.PERMISSION_GRANTED) {
+                    result.add(perm);
                 }
             }
         }
+
+        return result.toArray(new String[result.size()]);
     }
 }
