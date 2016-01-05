@@ -24,9 +24,20 @@ public class ConnectionUtils {
      */
     private static NetworkInfo getActiveNetwork(Context context) {
 
-        ConnectivityManager connectivityManager = (ConnectivityManager) context
-                .getSystemService(Context.CONNECTIVITY_SERVICE);
+        ConnectivityManager connectivityManager = getConnectivityManager(context);
         return connectivityManager.getActiveNetworkInfo();
+    }
+
+    /**
+     * Supplies a connectivity manager
+     *
+     * @param context
+     * @return
+     */
+    private static ConnectivityManager getConnectivityManager(Context context) {
+
+        return (ConnectivityManager) context
+                .getSystemService(Context.CONNECTIVITY_SERVICE);
     }
 
     /**
@@ -97,5 +108,17 @@ public class ConnectionUtils {
                     Settings.System.AIRPLANE_MODE_ON,
                     0) == 1;
         }
+    }
+
+    /**
+     * Checks if current connection with the internet is metered (charges apply)
+     *
+     * @param context
+     * @return
+     */
+    public static boolean isConnectionMetered(Context context) {
+
+        ConnectivityManager manager = getConnectivityManager(context);
+        return manager != null && manager.isActiveNetworkMetered();
     }
 }
