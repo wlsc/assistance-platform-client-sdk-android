@@ -10,7 +10,6 @@ import java.util.Date;
 import java.util.Locale;
 
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbAccelerometerSensor;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.event.UpdateSensorIntervalEvent;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.DtoType;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensing.AbstractTriggeredEvent;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.util.DateUtils;
@@ -184,21 +183,14 @@ public class AccelerometerSensor extends
 
     /**
      * Update intervals
-     *
-     * @param event
      */
     @Override
-    public void onEvent(UpdateSensorIntervalEvent event) {
-
-        // only accept this sensor topic type
-        if (event.getDtoType() != getType()) {
-            return;
-        }
+    public void updateSensorInterval(Double collectionInterval) {
 
         Log.d(TAG, "onUpdate interval");
         Log.d(TAG, "Old update interval: " + UPDATE_INTERVAL_IN_SEC + " sec");
 
-        int newUpdateIntervalInSec = (int) Math.round(1.0 / event.getCollectionFrequency());
+        int newUpdateIntervalInSec = collectionInterval.intValue();
 
         Log.d(TAG, "New update interval: " + newUpdateIntervalInSec + " sec");
 

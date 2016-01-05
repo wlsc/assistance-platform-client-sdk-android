@@ -55,6 +55,11 @@ public class AccountsReaderEvent extends AbstractPeriodicEvent implements ISenso
     }
 
     @Override
+    public void updateSensorInterval(Double collectionInterval) {
+
+    }
+
+    @Override
     public int getType() {
         return DtoType.ACCOUNT_READER;
     }

@@ -115,7 +115,7 @@ public class ModuleProvider {
             // update collections frequencies
             for (Integer dtoType : dtoTypes) {
 
-                Double collectionFreq = sensorProvider.getCollectionFrequency(
+                Double collectionFreq = sensorProvider.getCollectionInterval(
                         DtoType.getApiName(dtoType));
 
                 // fire change event

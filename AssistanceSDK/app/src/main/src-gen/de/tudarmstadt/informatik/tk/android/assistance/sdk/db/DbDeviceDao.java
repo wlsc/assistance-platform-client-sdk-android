@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteStatement;
-import android.support.annotation.Nullable;
 
 import de.greenrobot.dao.AbstractDao;
 import de.greenrobot.dao.Property;
@@ -147,7 +146,6 @@ public class DbDeviceDao extends AbstractDao<DbDevice, Long> {
     }
 
     /** @inheritdoc */
-    @Nullable
     @Override
     public Long readKey(Cursor cursor, int offset) {
         return cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0);
@@ -196,7 +194,6 @@ public class DbDeviceDao extends AbstractDao<DbDevice, Long> {
     }
     
     /** @inheritdoc */
-    @Nullable
     @Override
     public Long getKey(DbDevice entity) {
         if(entity != null) {
@@ -252,7 +249,6 @@ public class DbDeviceDao extends AbstractDao<DbDevice, Long> {
         return entity;    
     }
 
-    @Nullable
     public DbDevice loadDeep(Long key) {
         assertSinglePk();
         if (key == null) {

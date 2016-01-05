@@ -30,13 +30,14 @@ public class DbModuleCapabilityDao extends AbstractDao<DbModuleCapability, Long>
     public static class Properties {
         public final static Property Id = new Property(0, Long.class, "id", true, "_id");
         public final static Property Type = new Property(1, String.class, "type", false, "TYPE");
-        public final static Property CollectionFrequency = new Property(2, Double.class, "collectionFrequency", false, "COLLECTION_FREQUENCY");
-        public final static Property RequiredUpdateFrequency = new Property(3, Double.class, "requiredUpdateFrequency", false, "REQUIRED_UPDATE_FREQUENCY");
-        public final static Property MinRequiredReadings = new Property(4, Integer.class, "minRequiredReadings", false, "MIN_REQUIRED_READINGS");
-        public final static Property Required = new Property(5, boolean.class, "required", false, "REQUIRED");
-        public final static Property Active = new Property(6, boolean.class, "active", false, "ACTIVE");
-        public final static Property Created = new Property(7, String.class, "created", false, "CREATED");
-        public final static Property ModuleId = new Property(8, Long.class, "moduleId", false, "MODULE_ID");
+        public final static Property CollectionInterval = new Property(2, Double.class, "collectionInterval", false, "COLLECTION_INTERVAL");
+        public final static Property UpdateInterval = new Property(3, Double.class, "updateInterval", false, "UPDATE_INTERVAL");
+        public final static Property Accuracy = new Property(4, Integer.class, "accuracy", false, "ACCURACY");
+        public final static Property Permissions = new Property(5, String.class, "permissions", false, "PERMISSIONS");
+        public final static Property Required = new Property(6, boolean.class, "required", false, "REQUIRED");
+        public final static Property Active = new Property(7, boolean.class, "active", false, "ACTIVE");
+        public final static Property Created = new Property(8, String.class, "created", false, "CREATED");
+        public final static Property ModuleId = new Property(9, Long.class, "moduleId", false, "MODULE_ID");
     };
 
     private DaoSession daoSession;
@@ -58,13 +59,14 @@ public class DbModuleCapabilityDao extends AbstractDao<DbModuleCapability, Long>
         db.execSQL("CREATE TABLE " + constraint + "\"module_capability\" (" + //
                 "\"_id\" INTEGER PRIMARY KEY AUTOINCREMENT ," + // 0: id
                 "\"TYPE\" TEXT NOT NULL ," + // 1: type
-                "\"COLLECTION_FREQUENCY\" REAL," + // 2: collectionFrequency
-                "\"REQUIRED_UPDATE_FREQUENCY\" REAL," + // 3: requiredUpdateFrequency
-                "\"MIN_REQUIRED_READINGS\" INTEGER," + // 4: minRequiredReadings
-                "\"REQUIRED\" INTEGER NOT NULL ," + // 5: required
-                "\"ACTIVE\" INTEGER NOT NULL ," + // 6: active
-                "\"CREATED\" TEXT NOT NULL ," + // 7: created
-                "\"MODULE_ID\" INTEGER);"); // 8: moduleId
+                "\"COLLECTION_INTERVAL\" REAL," + // 2: collectionInterval
+                "\"UPDATE_INTERVAL\" REAL," + // 3: updateInterval
+                "\"ACCURACY\" INTEGER," + // 4: accuracy
+                "\"PERMISSIONS\" TEXT," + // 5: permissions
+                "\"REQUIRED\" INTEGER NOT NULL ," + // 6: required
+                "\"ACTIVE\" INTEGER NOT NULL ," + // 7: active
+                "\"CREATED\" TEXT NOT NULL ," + // 8: created
+                "\"MODULE_ID\" INTEGER);"); // 9: moduleId
         // Add Indexes
         db.execSQL("CREATE INDEX " + constraint + "IDX_module_capability__id ON module_capability" +
                 " (\"_id\");");
@@ -93,27 +95,32 @@ public class DbModuleCapabilityDao extends AbstractDao<DbModuleCapability, Long>
         }
         stmt.bindString(2, entity.getType());
  
-        Double collectionFrequency = entity.getCollectionFrequency();
-        if (collectionFrequency != null) {
-            stmt.bindDouble(3, collectionFrequency);
+        Double collectionInterval = entity.getCollectionInterval();
+        if (collectionInterval != null) {
+            stmt.bindDouble(3, collectionInterval);
         }
  
-        Double requiredUpdateFrequency = entity.getRequiredUpdateFrequency();
-        if (requiredUpdateFrequency != null) {
-            stmt.bindDouble(4, requiredUpdateFrequency);
+        Double updateInterval = entity.getUpdateInterval();
+        if (updateInterval != null) {
+            stmt.bindDouble(4, updateInterval);
         }
  
-        Integer minRequiredReadings = entity.getMinRequiredReadings();
-        if (minRequiredReadings != null) {
-            stmt.bindLong(5, minRequiredReadings);
+        Integer accuracy = entity.getAccuracy();
+        if (accuracy != null) {
+            stmt.bindLong(5, accuracy);
         }
-        stmt.bindLong(6, entity.getRequired() ? 1L: 0L);
-        stmt.bindLong(7, entity.getActive() ? 1L: 0L);
-        stmt.bindString(8, entity.getCreated());
+ 
+        String permissions = entity.getPermissions();
+        if (permissions != null) {
+            stmt.bindString(6, permissions);
+        }
+        stmt.bindLong(7, entity.getRequired() ? 1L: 0L);
+        stmt.bindLong(8, entity.getActive() ? 1L: 0L);
+        stmt.bindString(9, entity.getCreated());
  
         Long moduleId = entity.getModuleId();
         if (moduleId != null) {
-            stmt.bindLong(9, moduleId);
+            stmt.bindLong(10, moduleId);
         }
     }
 
@@ -135,13 +142,14 @@ public class DbModuleCapabilityDao extends AbstractDao<DbModuleCapability, Long>
         DbModuleCapability entity = new DbModuleCapability( //
             cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0), // id
             cursor.getString(offset + 1), // type
-            cursor.isNull(offset + 2) ? null : cursor.getDouble(offset + 2), // collectionFrequency
-            cursor.isNull(offset + 3) ? null : cursor.getDouble(offset + 3), // requiredUpdateFrequency
-            cursor.isNull(offset + 4) ? null : cursor.getInt(offset + 4), // minRequiredReadings
-            cursor.getShort(offset + 5) != 0, // required
-            cursor.getShort(offset + 6) != 0, // active
-            cursor.getString(offset + 7), // created
-            cursor.isNull(offset + 8) ? null : cursor.getLong(offset + 8) // moduleId
+            cursor.isNull(offset + 2) ? null : cursor.getDouble(offset + 2), // collectionInterval
+            cursor.isNull(offset + 3) ? null : cursor.getDouble(offset + 3), // updateInterval
+            cursor.isNull(offset + 4) ? null : cursor.getInt(offset + 4), // accuracy
+            cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5), // permissions
+            cursor.getShort(offset + 6) != 0, // required
+            cursor.getShort(offset + 7) != 0, // active
+            cursor.getString(offset + 8), // created
+            cursor.isNull(offset + 9) ? null : cursor.getLong(offset + 9) // moduleId
         );
         return entity;
     }
@@ -151,13 +159,14 @@ public class DbModuleCapabilityDao extends AbstractDao<DbModuleCapability, Long>
     public void readEntity(Cursor cursor, DbModuleCapability entity, int offset) {
         entity.setId(cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0));
         entity.setType(cursor.getString(offset + 1));
-        entity.setCollectionFrequency(cursor.isNull(offset + 2) ? null : cursor.getDouble(offset + 2));
-        entity.setRequiredUpdateFrequency(cursor.isNull(offset + 3) ? null : cursor.getDouble(offset + 3));
-        entity.setMinRequiredReadings(cursor.isNull(offset + 4) ? null : cursor.getInt(offset + 4));
-        entity.setRequired(cursor.getShort(offset + 5) != 0);
-        entity.setActive(cursor.getShort(offset + 6) != 0);
-        entity.setCreated(cursor.getString(offset + 7));
-        entity.setModuleId(cursor.isNull(offset + 8) ? null : cursor.getLong(offset + 8));
+        entity.setCollectionInterval(cursor.isNull(offset + 2) ? null : cursor.getDouble(offset + 2));
+        entity.setUpdateInterval(cursor.isNull(offset + 3) ? null : cursor.getDouble(offset + 3));
+        entity.setAccuracy(cursor.isNull(offset + 4) ? null : cursor.getInt(offset + 4));
+        entity.setPermissions(cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5));
+        entity.setRequired(cursor.getShort(offset + 6) != 0);
+        entity.setActive(cursor.getShort(offset + 7) != 0);
+        entity.setCreated(cursor.getString(offset + 8));
+        entity.setModuleId(cursor.isNull(offset + 9) ? null : cursor.getLong(offset + 9));
      }
     
     /** @inheritdoc */

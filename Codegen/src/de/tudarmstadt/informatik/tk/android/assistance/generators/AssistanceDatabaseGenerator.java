@@ -106,9 +106,10 @@ public class AssistanceDatabaseGenerator {
     moduleCapability.setTableName("module_capability");
     moduleCapability.addIdProperty().autoincrement().index();
     moduleCapability.addStringProperty("type").notNull().index();
-    moduleCapability.addDoubleProperty("collectionFrequency");
-    moduleCapability.addDoubleProperty("requiredUpdateFrequency");
-    moduleCapability.addIntProperty("minRequiredReadings");
+    moduleCapability.addDoubleProperty("collectionInterval");
+    moduleCapability.addDoubleProperty("updateInterval");
+    moduleCapability.addIntProperty("accuracy");
+    moduleCapability.addStringProperty("permissions");
     moduleCapability.addBooleanProperty("required").notNull();
     moduleCapability.addBooleanProperty("active").notNull().index();
     moduleCapability.addStringProperty("created").notNull();

@@ -3,7 +3,6 @@ package de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensing;
 import android.content.Context;
 
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DaoSession;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.event.UpdateSensorIntervalEvent;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.enums.EPushType;
 
 
@@ -37,5 +36,5 @@ public interface ISensor {
 
     void dumpData();
 
-    void onEvent(UpdateSensorIntervalEvent event);
+    void updateSensorInterval(Double collectionInterval);
 }

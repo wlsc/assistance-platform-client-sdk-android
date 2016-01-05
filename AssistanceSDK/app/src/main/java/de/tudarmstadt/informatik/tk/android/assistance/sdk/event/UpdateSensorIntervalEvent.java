@@ -8,18 +8,18 @@ public class UpdateSensorIntervalEvent {
 
     private final int dtoType;
 
-    private final double collectionFrequency;
+    private final double collectionInterval;
 
-    public UpdateSensorIntervalEvent(int dtoType, double collectionFrequency) {
+    public UpdateSensorIntervalEvent(int dtoType, double collectionInterval) {
         this.dtoType = dtoType;
-        this.collectionFrequency = collectionFrequency;
+        this.collectionInterval = collectionInterval;
     }
 
     public int getDtoType() {
         return this.dtoType;
     }
 
-    public double getCollectionFrequency() {
-        return this.collectionFrequency;
+    public double getCollectionInterval() {
+        return this.collectionInterval;
     }
 }

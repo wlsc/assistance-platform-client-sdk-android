@@ -12,9 +12,10 @@ public class DbModuleCapability {
     private Long id;
     /** Not-null value. */
     private String type;
-    private Double collectionFrequency;
-    private Double requiredUpdateFrequency;
-    private Integer minRequiredReadings;
+    private Double collectionInterval;
+    private Double updateInterval;
+    private Integer accuracy;
+    private String permissions;
     private boolean required;
     private boolean active;
     /** Not-null value. */
@@ -38,12 +39,13 @@ public class DbModuleCapability {
         this.id = id;
     }
 
-    public DbModuleCapability(Long id, String type, Double collectionFrequency, Double requiredUpdateFrequency, Integer minRequiredReadings, boolean required, boolean active, String created, Long moduleId) {
+    public DbModuleCapability(Long id, String type, Double collectionInterval, Double updateInterval, Integer accuracy, String permissions, boolean required, boolean active, String created, Long moduleId) {
         this.id = id;
         this.type = type;
-        this.collectionFrequency = collectionFrequency;
-        this.requiredUpdateFrequency = requiredUpdateFrequency;
-        this.minRequiredReadings = minRequiredReadings;
+        this.collectionInterval = collectionInterval;
+        this.updateInterval = updateInterval;
+        this.accuracy = accuracy;
+        this.permissions = permissions;
         this.required = required;
         this.active = active;
         this.created = created;
@@ -74,28 +76,36 @@ public class DbModuleCapability {
         this.type = type;
     }
 
-    public Double getCollectionFrequency() {
-        return collectionFrequency;
+    public Double getCollectionInterval() {
+        return collectionInterval;
     }
 
-    public void setCollectionFrequency(Double collectionFrequency) {
-        this.collectionFrequency = collectionFrequency;
+    public void setCollectionInterval(Double collectionInterval) {
+        this.collectionInterval = collectionInterval;
     }
 
-    public Double getRequiredUpdateFrequency() {
-        return requiredUpdateFrequency;
+    public Double getUpdateInterval() {
+        return updateInterval;
     }
 
-    public void setRequiredUpdateFrequency(Double requiredUpdateFrequency) {
-        this.requiredUpdateFrequency = requiredUpdateFrequency;
+    public void setUpdateInterval(Double updateInterval) {
+        this.updateInterval = updateInterval;
     }
 
-    public Integer getMinRequiredReadings() {
-        return minRequiredReadings;
+    public Integer getAccuracy() {
+        return accuracy;
     }
 
-    public void setMinRequiredReadings(Integer minRequiredReadings) {
-        this.minRequiredReadings = minRequiredReadings;
+    public void setAccuracy(Integer accuracy) {
+        this.accuracy = accuracy;
+    }
+
+    public String getPermissions() {
+        return permissions;
+    }
+
+    public void setPermissions(String permissions) {
+        this.permissions = permissions;
     }
 
     public boolean getRequired() {

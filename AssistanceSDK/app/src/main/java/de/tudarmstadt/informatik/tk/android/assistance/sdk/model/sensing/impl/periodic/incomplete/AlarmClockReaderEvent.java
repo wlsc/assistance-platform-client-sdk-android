@@ -20,6 +20,11 @@ public class AlarmClockReaderEvent extends AbstractPeriodicEvent implements ISen
     }
 
     @Override
+    public void updateSensorInterval(Double collectionInterval) {
+
+    }
+
+    @Override
     public int getType() {
         // TODO Auto-generated method stub
         return -1;

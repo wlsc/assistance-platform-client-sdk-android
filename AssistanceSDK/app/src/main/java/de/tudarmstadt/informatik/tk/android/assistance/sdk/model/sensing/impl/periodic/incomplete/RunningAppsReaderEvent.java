@@ -32,6 +32,11 @@ public class RunningAppsReaderEvent extends AbstractPeriodicEvent implements ISe
     }
 
     @Override
+    public void updateSensorInterval(Double collectionInterval) {
+
+    }
+
+    @Override
     public int getType() {
         return DtoType.RUNNING_SERVICES;
     }

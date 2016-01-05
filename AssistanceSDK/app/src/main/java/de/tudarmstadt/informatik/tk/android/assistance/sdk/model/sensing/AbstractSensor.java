@@ -87,8 +87,18 @@ public abstract class AbstractSensor implements ISensor {
         this.isRunning = isRunning;
     }
 
-    @Override
+    /**
+     * Update event for sensor sampling interval
+     *
+     * @param event
+     */
     public void onEvent(UpdateSensorIntervalEvent event) {
-        // do default things
+
+        // only accept this sensor topic type
+        if (event.getDtoType() != getType()) {
+            return;
+        }
+
+        updateSensorInterval(event.getCollectionInterval());
     }
 }

@@ -452,4 +452,9 @@ public class CalendarEvent extends AbstractContentObserverEvent {
     public void dumpData() {
 
     }
+
+    @Override
+    public void updateSensorInterval(Double collectionInterval) {
+
+    }
 }

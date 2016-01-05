@@ -2,6 +2,9 @@ package de.tudarmstadt.informatik.tk.android.assistance.sdk.util;
 
 import android.support.annotation.Nullable;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -19,6 +22,8 @@ import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.module.Modu
  * @date 08.09.2015
  */
 public class ConverterUtils {
+
+    private final static Gson gson = new Gson();
 
     private ConverterUtils() {
     }
@@ -55,12 +60,7 @@ public class ConverterUtils {
 
             for (DbModuleCapability dbCap : dbModuleCaps) {
 
-                ModuleCapabilityResponseDto capabilityResponseDto = new ModuleCapabilityResponseDto();
-
-                capabilityResponseDto.setCollectionFrequency(dbCap.getCollectionFrequency());
-                capabilityResponseDto.setRequiredUpdateFrequency(dbCap.getRequiredUpdateFrequency());
-                capabilityResponseDto.setMinRequiredReadings(dbCap.getMinRequiredReadings());
-                capabilityResponseDto.setType(dbCap.getType());
+                ModuleCapabilityResponseDto capabilityResponseDto = convertModuleCapability(dbCap);
 
                 if (dbCap.getRequired()) {
                     reqCapsDto.add(capabilityResponseDto);
@@ -119,9 +119,19 @@ public class ConverterUtils {
         ModuleCapabilityResponseDto moduleCapabilityResponse = new ModuleCapabilityResponseDto();
 
         moduleCapabilityResponse.setType(moduleCapability.getType());
-        moduleCapabilityResponse.setCollectionFrequency(moduleCapability.getCollectionFrequency());
-        moduleCapabilityResponse.setRequiredUpdateFrequency(moduleCapability.getRequiredUpdateFrequency());
-        moduleCapabilityResponse.setMinRequiredReadings(moduleCapability.getMinRequiredReadings());
+        moduleCapabilityResponse.setCollectionInterval(moduleCapability.getCollectionInterval());
+        moduleCapabilityResponse.setUpdateInterval(moduleCapability.getUpdateInterval());
+        moduleCapabilityResponse.setAccuracy(moduleCapability.getAccuracy());
+
+        String permissions = moduleCapability.getPermissions();
+
+        if (permissions != null) {
+            moduleCapabilityResponse.setPermissions(
+                    gson.fromJson(
+                            permissions,
+                            new TypeToken<List<String>>() {
+                            }.getType()));
+        }
 
         return moduleCapabilityResponse;
     }
@@ -142,9 +152,16 @@ public class ConverterUtils {
         DbModuleCapability moduleCapability = new DbModuleCapability();
 
         moduleCapability.setType(moduleCapabilityResponse.getType());
-        moduleCapability.setCollectionFrequency(moduleCapabilityResponse.getCollectionFrequency());
-        moduleCapability.setRequiredUpdateFrequency(moduleCapabilityResponse.getRequiredUpdateFrequency());
-        moduleCapability.setMinRequiredReadings(moduleCapabilityResponse.getMinRequiredReadings());
+        moduleCapability.setCollectionInterval(moduleCapabilityResponse.getCollectionInterval());
+        moduleCapability.setUpdateInterval(moduleCapabilityResponse.getUpdateInterval());
+        moduleCapability.setAccuracy(moduleCapabilityResponse.getAccuracy());
+
+        List<String> permissions = moduleCapabilityResponse.getPermissions();
+
+        if (permissions != null && !permissions.isEmpty()) {
+            moduleCapability.setPermissions(gson.toJson(permissions));
+        }
+
         moduleCapability.setCreated(DateUtils.dateToISO8601String(new Date(), Locale.getDefault()));
 
         return moduleCapability;

@@ -669,6 +669,11 @@ public class ContactsEvent extends AbstractContentObserverEvent {
     }
 
     @Override
+    public void updateSensorInterval(Double collectionInterval) {
+
+    }
+
+    @Override
     public void reset() {
 
     }

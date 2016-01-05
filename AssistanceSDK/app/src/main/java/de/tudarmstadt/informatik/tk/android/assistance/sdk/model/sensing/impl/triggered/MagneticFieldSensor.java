@@ -11,7 +11,6 @@ import java.util.Date;
 import java.util.Locale;
 
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbMagneticFieldSensor;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.event.UpdateSensorIntervalEvent;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.DtoType;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensing.AbstractTriggeredEvent;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.util.DateUtils;
@@ -85,7 +84,7 @@ public class MagneticFieldSensor extends AbstractTriggeredEvent implements Senso
      * <p>See {@link SensorManager SensorManager}
      * for details on possible sensor types.
      * <p>See also {@link SensorEvent SensorEvent}.
-     * <p/>
+     * <p>
      * <p><b>NOTE:</b> The application doesn't own the
      * {@link SensorEvent event}
      * object passed as a parameter and therefore cannot hold on to it.
@@ -128,7 +127,7 @@ public class MagneticFieldSensor extends AbstractTriggeredEvent implements Senso
 
     /**
      * Called when the accuracy of the registered sensor has changed.
-     * <p/>
+     * <p>
      * <p>See the SENSOR_STATUS_* constants in
      * {@link SensorManager SensorManager} for details.
      *
@@ -280,21 +279,14 @@ public class MagneticFieldSensor extends AbstractTriggeredEvent implements Senso
 
     /**
      * Update intervals
-     *
-     * @param event
      */
     @Override
-    public void onEvent(UpdateSensorIntervalEvent event) {
-
-        // only accept this sensor topic type
-        if (event.getDtoType() != getType()) {
-            return;
-        }
+    public void updateSensorInterval(Double collectionInterval) {
 
         Log.d(TAG, "onUpdate interval");
         Log.d(TAG, "Old update interval: " + UPDATE_INTERVAL_IN_SEC + " sec");
 
-        int newUpdateIntervalInSec = (int) Math.round(1.0 / event.getCollectionFrequency());
+        int newUpdateIntervalInSec = collectionInterval.intValue();
 
         Log.d(TAG, "New update interval: " + newUpdateIntervalInSec + " sec");
 

@@ -312,6 +312,11 @@ public class ForegroundEvent extends AbstractTriggeredEvent {
     }
 
     @Override
+    public void updateSensorInterval(Double collectionInterval) {
+        // empty
+    }
+
+    @Override
     public void reset() {
 
     }

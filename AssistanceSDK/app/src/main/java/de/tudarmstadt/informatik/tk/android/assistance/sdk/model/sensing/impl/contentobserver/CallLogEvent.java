@@ -68,6 +68,11 @@ public class CallLogEvent extends AbstractContentObserverEvent {
     }
 
     @Override
+    public void updateSensorInterval(Double collectionInterval) {
+
+    }
+
+    @Override
     public int getType() {
         return DtoType.CALL_LOG;
     }

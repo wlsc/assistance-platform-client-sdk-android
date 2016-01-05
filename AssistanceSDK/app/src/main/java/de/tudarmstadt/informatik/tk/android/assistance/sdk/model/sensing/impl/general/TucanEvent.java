@@ -2,7 +2,6 @@ package de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensing.impl.g
 
 import android.content.Context;
 
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.event.UpdateSensorIntervalEvent;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.DtoType;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.enums.EPushType;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensing.DummyEvent;
@@ -49,6 +48,7 @@ public class TucanEvent extends DummyEvent {
     }
 
     @Override
-    public void onEvent(UpdateSensorIntervalEvent event) {
+    public void updateSensorInterval(Double collectionInterval) {
+
     }
 }

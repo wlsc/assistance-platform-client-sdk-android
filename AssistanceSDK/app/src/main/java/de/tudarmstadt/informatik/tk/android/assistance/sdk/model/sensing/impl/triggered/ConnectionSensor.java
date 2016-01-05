@@ -152,6 +152,11 @@ public class ConnectionSensor extends AbstractTriggeredEvent {
     }
 
     @Override
+    public void updateSensorInterval(Double collectionInterval) {
+        // empty
+    }
+
+    @Override
     public void startSensor() {
 
         if (!isRunning()) {

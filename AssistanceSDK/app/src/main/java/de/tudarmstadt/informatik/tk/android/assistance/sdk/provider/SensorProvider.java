@@ -245,10 +245,10 @@ public class SensorProvider {
             // haven't seen that sensor yet
             if (runningSensors.get(capType) == null) {
                 runningSensors.put(capType, sensor);
-                sensorIntervals.put(capType, cap.getCollectionFrequency());
+                sensorIntervals.put(capType, cap.getCollectionInterval());
             } else {
                 Double oldCollectionFreq = sensorIntervals.get(capType);
-                sensorIntervals.put(capType, Math.min(oldCollectionFreq, cap.getCollectionFrequency()));
+                sensorIntervals.put(capType, Math.min(oldCollectionFreq, cap.getCollectionInterval()));
             }
 
             if (!EventBus.getDefault().isRegistered(sensor)) {
@@ -419,7 +419,7 @@ public class SensorProvider {
      * @param sensorType
      * @return
      */
-    public Double getCollectionFrequency(String sensorType) {
+    public Double getCollectionInterval(String sensorType) {
 
         if (sensorType == null) {
             return null;
@@ -455,7 +455,7 @@ public class SensorProvider {
                 if (cap.getActive() && cap.getType().equals(sensorType)) {
 
                     // take the minimum
-                    result = Math.min(cap.getCollectionFrequency(), result);
+                    result = Math.min(cap.getCollectionInterval(), result);
 
                     // don't need to continue here
                     break;
@@ -467,13 +467,13 @@ public class SensorProvider {
     }
 
     /**
-     * Returns minimum of required update frequency
+     * Returns minimum of required update interval
      * for each sensor type
      *
      * @param sensorType
      * @return
      */
-    public Double getMinRequiredUpdateFrequency(String sensorType) {
+    public Double getUpdateInterval(String sensorType) {
 
         if (sensorType == null) {
             return null;
@@ -509,61 +509,7 @@ public class SensorProvider {
                 if (cap.getActive() && cap.getType().equals(sensorType)) {
 
                     // take the minimum
-                    result = Math.min(cap.getRequiredUpdateFrequency(), result);
-
-                    // don't need to continue here
-                    break;
-                }
-            }
-        }
-
-        return result;
-    }
-
-    /**
-     * Returns minimum required readings for upload function
-     * per each given dto type
-     *
-     * @param sensorType
-     * @return
-     */
-    public Double getMinRequiredReadings(String sensorType) {
-
-        if (sensorType == null) {
-            return null;
-        }
-
-        String userToken = preferenceProvider.getUserToken();
-
-        DbUser user = daoProvider.getUserDao().getByToken(userToken);
-
-        if (user == null) {
-            return null;
-        }
-
-        List<DbModule> modules = daoProvider.getModuleDao().getAllActive(user.getId());
-
-        if (modules.isEmpty()) {
-            return null;
-        }
-
-        Double result = Double.MAX_VALUE;
-
-        for (DbModule module : modules) {
-
-            List<DbModuleCapability> capabilities = module.getDbModuleCapabilityList();
-
-            if (capabilities.isEmpty()) {
-                continue;
-            }
-
-            for (DbModuleCapability cap : capabilities) {
-
-                // only active capability
-                if (cap.getActive() && cap.getType().equals(sensorType)) {
-
-                    // take the minimum readings
-                    result = Math.min(cap.getMinRequiredReadings(), result);
+                    result = Math.min(cap.getUpdateInterval(), result);
 
                     // don't need to continue here
                     break;

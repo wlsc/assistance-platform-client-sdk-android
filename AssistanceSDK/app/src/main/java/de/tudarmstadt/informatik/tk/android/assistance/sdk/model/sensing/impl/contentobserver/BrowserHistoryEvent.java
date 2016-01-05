@@ -56,6 +56,11 @@ public class BrowserHistoryEvent extends AbstractContentObserverEvent {
     }
 
     @Override
+    public void updateSensorInterval(Double collectionInterval) {
+
+    }
+
+    @Override
     protected void syncData() {
 
         Log.d(TAG, "Syncing data...");

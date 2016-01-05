@@ -136,6 +136,11 @@ public class ForegroundTrafficEvent extends AbstractTriggeredEvent {
     }
 
     @Override
+    public void updateSensorInterval(Double collectionInterval) {
+        // empty
+    }
+
+    @Override
     public void reset() {
 
     }
@@ -196,7 +201,7 @@ public class ForegroundTrafficEvent extends AbstractTriggeredEvent {
      * will store the traffic information and the actual position in database
      *
      * @param event includes information about the app which was execute in foreground
-     *              <p/>
+     *              <p>
      *              Receiver of an intent send by sendBroadcast().
      */
     private void storeData(DbForegroundEvent event) {
