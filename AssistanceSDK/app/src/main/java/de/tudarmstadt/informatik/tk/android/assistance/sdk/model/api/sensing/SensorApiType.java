@@ -128,7 +128,7 @@ public class SensorApiType {
     public static String getName(int type, Resources res) {
         switch (type) {
             case LOCATION:
-                return res.getString(R.string.sensor_position);
+                return res.getString(R.string.sensor_location);
             case GYROSCOPE:
                 return res.getString(R.string.sensor_gyroscope);
             case ACCELEROMETER:

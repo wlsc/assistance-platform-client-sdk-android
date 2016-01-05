@@ -1,56 +1,76 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="alert_accessibility">Damit Kraken richtig funktioniert, musst Du die Bedienungshilfe für Kraken.Me aktivieren. Dazu einfach die Bedienungshilfen Einstellungen aufrufen und den Kraken.Me Dienst einschalten.</string>
-    <string name="alert_accessibility_button">Bedienungshilfen Einstellungen öffnen</string>
-
-    <!-- Sensors -->
-    <string name="sensor_accelerometer">Accelerometer</string>
-    <string name="sensor_activity">Aktivität</string>
-    <string name="sensor_connection">Drahtlose Verbindungen</string>
-    <string name="sensor_light">Umgebungslicht</string>
-    <string name="sensor_ringtone">Klingelton</string>
-    <string name="sensor_account_reader">Account reader</string>
-    <string name="sensor_running_processes">Laufende Prozesse</string>
-    <string name="sensor_running_services">Laufende Dienste</string>
-    <string name="sensor_running_tasks">Laufende Tasks</string>
-    <string name="sensor_contacts">Kontakte</string>
-    <string name="sensor_calendar">Kalender</string>
-    <string name="sensor_loudness">Lautstärke</string>
-    <string name="sensor_calllog">Anrufliste</string>
-    <string name="sensor_browser_history">Browser Verlauf</string>
-    <string name="sensor_foreground">Benutzte Apps</string>
-    <string name="sensor_network_traffic">Datenverbrauch</string>
-
-    <!-- Data Profiles -->
-    <string-array name="data_profile_titles">
-        <item>Basis</item>
-        <item>Vollständig</item>
-    </string-array>
-    <string-array name="data_profile_descriptions">
-        <item>Aktivität, Benutzte Apps, Browser Verlauf, Accelerometer, Drahtlose Verbindungen, Umgebungslicht, Klingelton</item>
-        <item>Zusätzlich Kalender, GPS, Datenverbrauch, Anrufliste, Kontakte</item>
-    </string-array>
-
-    <!-- Settings -->
-    <string name="data_profile">Datenprofil</string>
-    <string name="pref_activated">Kraken</string>
-    <string name="pref_activated_summary">Kraken Hintergrunddienst aktivieren oder deaktivieren</string>
-    <string name="pref_data">Daten</string>
-    <string name="pref_show_notification_summary">Benachrichtigung bei laufendem Service anzeigen</string>
-    <string name="pref_show_notification">Benachrichtigung</string>
-
-    <!-- Tutorial -->
-    <string name="tutorial_welcome_title">Willkommen zu Kraken!</string>
-    <string name="tutorial_welcome_text">Kraken hilft Dir dabei dein digitales Leben zu verstehen. Gleichzeitig hilfst Du uns dabei unser Forschungsprojekt zu realisieren.</string>
-    <string name="tutorial_dataprofile_title">Datenprofil auswählen</string>
-    <string name="tutorial_dataprofile_text">Du kannst diese und weitere Optionen jederzeit in den Einstellungen der App anpassen.</string>
-    <string name="tutorial_finish_title">Nur noch zwei Schritte</string>
-    <string name="tutorial_finish_accessibility">Damit Assitance App richtig funktioniert, musst Du die Bedienungshilfe aktivieren. Dazu einfach schalten Sie oben ein!</string>
-    <string name="tutorial_accessibility_activate">Jetzt aktivieren</string>
-    <string name="tutorial_finish_login">Um Kraken zu verwenden ist ein Login erforderlich.</string>
-    <string name="tutorial_disclaimer_title">Disclaimer</string>
-    <string name="tutorial_disclaimer_text">Kraken.me sammelt Handlungsdaten und Profilinformationen im Rahmen der Forschung an der Technischen Universität Darmstadt und um dir Dienstleistungen auf Grundlage dieser Daten anzubieten. Daten werden über die Kraken.me Android Applikation, den Kraken.me Desktop Monitor und den Social Hub zur Verbindung mit sozialen Netzen erfasst. Basierend auf den Kraken.me Applikationen die du verwendest und deiner Entscheidung für eines von mehreren Sammelprofilen entscheidest du welche Daten gesammelt werden. Unter folgenden <a href="http://kraken.me/index.html#/datenschutz">Link</a> findest du eine Übersicht über die erhobenen Daten nach Applikation und Sammelprofil.\n\nDie Daten können von uns zu Forschungszwecken und zur Anzeige in den angeschlossenen Kraken.me-Anwendungen mit automatisierten Methoden aufbereitet und analysiert werden. Die Daten werden niemals für kommerzielle Zwecke verwendet. Wir behalten uns das Recht vor Teilmengen der Daten anonymisiert und aggregiert an Dritte weiterzugeben.</string>
-    <string name="accept">Akzeptieren</string>
-    <string name="decline">Ablehnen</string>
-
+  <string name="alert_accessibility">Damit Kraken richtig funktioniert, musst Du die Bedienungshilfe für Kraken.Me aktivieren. Dazu einfach die Bedienungshilfen Einstellungen aufrufen und den Kraken.Me Dienst einschalten.</string>
+  <string name="alert_accessibility_button">Bedienungshilfen Einstellungen öffnen</string>
+  <string name="sensor_location">Standort</string>
+  <string name="sensor_gyroscope">Gyroskop</string>
+  <string name="sensor_accelerometer">Beschleunigungsmesser</string>
+  <string name="sensor_magnetic_field">Magnetisches Feld</string>
+  <string name="sensor_motion_activity">Bewegungsaktivität</string>
+  <string name="sensor_connection">Drahtlose Verbindungen</string>
+  <string name="sensor_wifi_connection">WI-FI-Verbindung</string>
+  <string name="sensor_mobile_connection">Mobile Verbindung</string>
+  <string name="sensor_loudness">Lautstärke</string>
+  <string name="sensor_magnetic_field_uncalibrated">Magnetfeld (unkalibriert)</string>
+  <string name="sensor_gyroscope_uncalibrated">Gyroskop (unkalibriert)</string>
+  <string name="sensor_activity">Aktivität</string>
+  <string name="sensor_light">Umgebungslicht</string>
+  <string name="sensor_power_state">Netzstatus</string>
+  <string name="sensor_power_level">Sendeleistung</string>
+  <string name="sensor_ringtone">Klingelton</string>
+  <string name="sensor_account_reader">Konto-Leser</string>
+  <string name="sensor_running_processes">Laufende Prozesse</string>
+  <string name="sensor_running_services">Laufende Dienste</string>
+  <string name="sensor_running_tasks">Laufende Tasks</string>
+  <string name="sensor_contacts">Kontakte</string>
+  <string name="sensor_contact_email">Kontakt per e-Mail</string>
+  <string name="sensor_contact_number">Kontakt-Telefon</string>
+  <string name="sensor_calendar">Kalender</string>
+  <string name="sensor_calllog">Anrufliste</string>
+  <string name="sensor_browser_history">Browser Verlauf</string>
+  <string name="sensor_network_traffic">Datenverbrauch</string>
+  <string name="sensor_background_traffic">Hintergrund Datenverkehrsverwendung</string>
+  <string name="sensor_foreground">Benutzte Apps</string>
+  <string name="sensor_uni_tucan">TUCaN</string>
+  <string name="sensor_social_facebook">Facebook</string>
+  <string name="service_running_notification_title">Assistance-Service läuft!</string>
+  <string name="service_running_notification_text">Sammeln von Daten...</string>
+  <string name="finish">Fertig</string>
+  <string name="general">Allgemeine</string>
+  <string name="login">Anmeldung</string>
+  <string name="settings">Einstellungen</string>
+  <string name="next">Weiter</string>
+  <string name="tutorial">Tutorial</string>
+  <string name="today">Heute</string>
+  <string name="yesterday">Gestern</string>
+  <string name="choose_day">Wählen Sie Datum</string>
+  <string name="about">Über</string>
+  <string-array name="data_profile_titles">
+    <item>Basis</item>
+    <item>Vollständig</item>
+  </string-array>
+  <string-array name="data_profile_descriptions">
+    <item>Aktivität, Benutzte Apps, Browser Verlauf, Accelerometer, Drahtlose Verbindungen, Umgebungslicht, Klingelton</item>
+    <item>Zusätzlich Kalender, GPS, Datenverbrauch, Anrufliste, Kontakte</item>
+  </string-array>
+  <string name="data_profile">Datenprofil</string>
+  <string name="pref_activated">Kraken</string>
+  <string name="pref_activated_summary">Kraken Hintergrunddienst aktivieren oder deaktivieren</string>
+  <string name="pref_data">Daten</string>
+  <string name="pref_show_notification_summary">Benachrichtigung bei laufendem Service anzeigen</string>
+  <string name="pref_show_notification">Benachrichtigung</string>
+  <string name="tutorial_welcome_title">Willkommen zu Kraken!</string>
+  <string name="tutorial_welcome_text">Kraken hilft Dir dabei dein digitales Leben zu verstehen. Gleichzeitig hilfst Du uns dabei unser Forschungsprojekt zu realisieren.</string>
+  <string name="tutorial_dataprofile_title">Datenprofil auswählen</string>
+  <string name="tutorial_dataprofile_text">Du kannst diese und weitere Optionen jederzeit in den Einstellungen der App anpassen.</string>
+  <string name="tutorial_finish_title">Nur noch zwei Schritte</string>
+  <string name="tutorial_finish_accessibility">Damit Assitance App richtig funktioniert, musst Du die Bedienungshilfe aktivieren. Dazu einfach schalten Sie oben ein!</string>
+  <string name="tutorial_finish_accessibility_turn_on">Schalten Sie einfach auf den Schalter, und das war\'s!</string>
+  <string name="tutorial_accessibility_activate">Jetzt aktivieren</string>
+  <string name="tutorial_finish_login">Um Kraken zu verwenden ist ein Login erforderlich.</string>
+  <string name="tutorial_disclaimer_title">Haftungsausschluss</string>
+  <string name="tutorial_disclaimer_text">Kraken.me sammelt Handlungsdaten und Profilinformationen im Rahmen der Forschung an der Technischen Universität Darmstadt und um dir Dienstleistungen auf Grundlage dieser Daten anzubieten. Daten werden über die Kraken.me Android Applikation, den Kraken.me Desktop Monitor und den Social Hub zur Verbindung mit sozialen Netzen erfasst. Basierend auf den Kraken.me Applikationen die du verwendest und deiner Entscheidung für eines von mehreren Sammelprofilen entscheidest du welche Daten gesammelt werden. Unter folgenden <a href="http://kraken.me/index.html#/datenschutz">Link</a> findest du eine Übersicht über die erhobenen Daten nach Applikation und Sammelprofil.\n\nDie Daten können von uns zu Forschungszwecken und zur Anzeige in den angeschlossenen Kraken.me-Anwendungen mit automatisierten Methoden aufbereitet und analysiert werden. Die Daten werden niemals für kommerzielle Zwecke verwendet. Wir behalten uns das Recht vor Teilmengen der Daten anonymisiert und aggregiert an Dritte weiterzugeben.</string>
+  <string name="accept">Akzeptieren</string>
+  <string name="decline">Ablehnen</string>
+  <string name="permission_is_mandatory">Diese Erlaubnis ist entscheidend für den Programmbetrieb</string>
 </resources>
