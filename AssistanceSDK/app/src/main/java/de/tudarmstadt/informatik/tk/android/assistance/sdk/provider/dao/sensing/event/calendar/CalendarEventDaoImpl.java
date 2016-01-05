@@ -6,9 +6,9 @@ import java.util.Collections;
 import java.util.List;
 
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DaoSession;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbCalendarEvent;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbCalendarEventDao;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.sensing.event.calendar.CalendarEventDto;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbCalendarSensor;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbCalendarSensorDao;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.sensing.sensor.calendar.CalendarSensorDto;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.CommonEventDaoImpl;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.util.DateUtils;
 
@@ -17,7 +17,7 @@ import de.tudarmstadt.informatik.tk.android.assistance.sdk.util.DateUtils;
  * @date 30.10.2015
  */
 public class CalendarEventDaoImpl extends
-        CommonEventDaoImpl<DbCalendarEvent> implements
+        CommonEventDaoImpl<DbCalendarSensor> implements
         CalendarEventDao {
 
     private static final String TAG = CalendarEventDaoImpl.class.getSimpleName();
@@ -25,7 +25,7 @@ public class CalendarEventDaoImpl extends
     private static CalendarEventDao INSTANCE;
 
     private CalendarEventDaoImpl(DaoSession daoSession) {
-        super(daoSession.getDbCalendarEventDao());
+        super(daoSession.getDbCalendarSensorDao());
     }
 
     public static CalendarEventDao getInstance(DaoSession mDaoSession) {
@@ -39,13 +39,13 @@ public class CalendarEventDaoImpl extends
 
     @Nullable
     @Override
-    public CalendarEventDto convertObject(DbCalendarEvent sensor) {
+    public CalendarSensorDto convertObject(DbCalendarSensor sensor) {
 
         if (sensor == null) {
             return null;
         }
 
-        CalendarEventDto result = new CalendarEventDto();
+        CalendarSensorDto result = new CalendarSensorDto();
 
         result.setEventId(String.valueOf(sensor.getEventId()));
         result.setCalendarId(String.valueOf(sensor.getCalendarId()));
@@ -74,7 +74,7 @@ public class CalendarEventDaoImpl extends
 
     @Nullable
     @Override
-    public DbCalendarEvent get(Long id) {
+    public DbCalendarSensor get(Long id) {
 
         if (id == null) {
             return null;
@@ -82,14 +82,14 @@ public class CalendarEventDaoImpl extends
 
         return dao
                 .queryBuilder()
-                .where(DbCalendarEventDao.Properties.Id.eq(id))
+                .where(DbCalendarSensorDao.Properties.Id.eq(id))
                 .limit(1)
                 .build()
                 .unique();
     }
 
     @Override
-    public List<DbCalendarEvent> getLastN(int amount) {
+    public List<DbCalendarSensor> getLastN(int amount) {
 
         if (amount <= 0) {
             return Collections.emptyList();
@@ -97,17 +97,17 @@ public class CalendarEventDaoImpl extends
 
         return dao
                 .queryBuilder()
-                .orderDesc(DbCalendarEventDao.Properties.Id)
+                .orderDesc(DbCalendarSensorDao.Properties.Id)
                 .limit(amount)
                 .build()
                 .list();
     }
 
     @Override
-    public List<DbCalendarEvent> getAllUpdated() {
+    public List<DbCalendarSensor> getAllUpdated() {
         return dao
                 .queryBuilder()
-                .where(DbCalendarEventDao.Properties.IsUpdated.eq(1))
+                .where(DbCalendarSensorDao.Properties.IsUpdated.eq(1))
                 .build()
                 .list();
     }

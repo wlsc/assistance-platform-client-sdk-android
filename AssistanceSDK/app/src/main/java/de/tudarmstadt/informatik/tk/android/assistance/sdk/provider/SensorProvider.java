@@ -18,31 +18,31 @@ import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbModule;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbModuleCapability;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbUser;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.event.UpdateSensorIntervalEvent;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.DtoType;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.sensing.SensorApiType;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.enums.EPushType;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensing.ISensor;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensing.impl.contentobserver.BrowserHistoryEvent;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensing.impl.contentobserver.CalendarEvent;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensing.impl.contentobserver.CallLogEvent;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensing.impl.contentobserver.ContactsEvent;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensing.impl.general.FacebookEvent;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensing.impl.general.TucanEvent;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensing.impl.periodic.BackgroundTrafficEvent;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensing.impl.contentobserver.BrowserHistorySensor;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensing.impl.contentobserver.CalendarSensor;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensing.impl.contentobserver.CallLogSensor;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensing.impl.contentobserver.ContactsSensor;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensing.impl.general.FacebookSensor;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensing.impl.general.TucanSensor;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensing.impl.periodic.BackgroundTrafficSensor;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensing.impl.periodic.LoudnessSensor;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensing.impl.periodic.PowerLevelEvent;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensing.impl.periodic.RingtoneEvent;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensing.impl.periodic.RunningProcessesReaderEvent;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensing.impl.periodic.RunningServicesReaderEvent;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensing.impl.periodic.RunningTasksReaderEvent;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensing.impl.periodic.PowerLevelSensor;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensing.impl.periodic.RingtoneSensor;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensing.impl.periodic.RunningProcessesReaderSensor;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensing.impl.periodic.RunningServicesReaderSensor;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensing.impl.periodic.RunningTasksReaderSensor;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensing.impl.triggered.AccelerometerSensor;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensing.impl.triggered.ConnectionSensor;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensing.impl.triggered.ForegroundEvent;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensing.impl.triggered.ForegroundTrafficEvent;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensing.impl.triggered.ForegroundSensor;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensing.impl.triggered.ForegroundTrafficSensor;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensing.impl.triggered.GyroscopeSensor;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensing.impl.triggered.LightSensor;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensing.impl.triggered.LocationSensor;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensing.impl.triggered.MagneticFieldSensor;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensing.impl.triggered.MotionActivityEvent;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensing.impl.triggered.MotionActivitySensor;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.util.logger.Log;
 
 /**
@@ -116,11 +116,11 @@ public class SensorProvider {
         ConnectionSensor connectionSensor = ConnectionSensor.getInstance(mContext);
         availableSensors.put(connectionSensor.getType(), connectionSensor);
 
-        ForegroundEvent foregroundEvent = ForegroundEvent.getInstance(mContext);
-        availableSensors.put(foregroundEvent.getType(), foregroundEvent);
+        ForegroundSensor foregroundSensor = ForegroundSensor.getInstance(mContext);
+        availableSensors.put(foregroundSensor.getType(), foregroundSensor);
 
-        ForegroundTrafficEvent foregroundTrafficEvent = ForegroundTrafficEvent.getInstance(mContext);
-        availableSensors.put(foregroundTrafficEvent.getType(), foregroundTrafficEvent);
+        ForegroundTrafficSensor foregroundTrafficSensor = ForegroundTrafficSensor.getInstance(mContext);
+        availableSensors.put(foregroundTrafficSensor.getType(), foregroundTrafficSensor);
 
         GyroscopeSensor gyroscopeSensor = GyroscopeSensor.getInstance(mContext);
         availableSensors.put(gyroscopeSensor.getType(), gyroscopeSensor);
@@ -134,58 +134,58 @@ public class SensorProvider {
         MagneticFieldSensor magneticFieldSensor = MagneticFieldSensor.getInstance(mContext);
         availableSensors.put(magneticFieldSensor.getType(), magneticFieldSensor);
 
-        MotionActivityEvent motionActivityEvent = MotionActivityEvent.getInstance(mContext);
-        availableSensors.put(motionActivityEvent.getType(), motionActivityEvent);
+        MotionActivitySensor motionActivitySensor = MotionActivitySensor.getInstance(mContext);
+        availableSensors.put(motionActivitySensor.getType(), motionActivitySensor);
 
         /*
          * Periodic events / sensors
          */
 
-        PowerLevelEvent powerLevelEvent = PowerLevelEvent.getInstance(mContext);
+        PowerLevelSensor powerLevelEvent = PowerLevelSensor.getInstance(mContext);
         availableSensors.put(powerLevelEvent.getType(), powerLevelEvent);
 
-        BackgroundTrafficEvent backgroundTrafficEvent = BackgroundTrafficEvent.getInstance(mContext);
+        BackgroundTrafficSensor backgroundTrafficEvent = BackgroundTrafficSensor.getInstance(mContext);
         availableSensors.put(backgroundTrafficEvent.getType(), backgroundTrafficEvent);
 
-        RingtoneEvent ringtoneEvent = RingtoneEvent.getInstance(mContext);
+        RingtoneSensor ringtoneEvent = RingtoneSensor.getInstance(mContext);
         availableSensors.put(ringtoneEvent.getType(), ringtoneEvent);
 
         // loudness sensor is blocking microphone and consuming too much battery
         LoudnessSensor loudnessSensor = LoudnessSensor.getInstance(mContext);
         availableSensors.put(loudnessSensor.getType(), loudnessSensor);
 
-        RunningProcessesReaderEvent runningProcessesReaderEvent = RunningProcessesReaderEvent.getInstance(mContext);
+        RunningProcessesReaderSensor runningProcessesReaderEvent = RunningProcessesReaderSensor.getInstance(mContext);
         availableSensors.put(runningProcessesReaderEvent.getType(), runningProcessesReaderEvent);
 
-        RunningTasksReaderEvent runningTasksReaderEvent = RunningTasksReaderEvent.getInstance(mContext);
+        RunningTasksReaderSensor runningTasksReaderEvent = RunningTasksReaderSensor.getInstance(mContext);
         availableSensors.put(runningTasksReaderEvent.getType(), runningTasksReaderEvent);
 
-        RunningServicesReaderEvent runningServicesReaderEvent = RunningServicesReaderEvent.getInstance(mContext);
+        RunningServicesReaderSensor runningServicesReaderEvent = RunningServicesReaderSensor.getInstance(mContext);
         availableSensors.put(runningServicesReaderEvent.getType(), runningServicesReaderEvent);
 
         /*
          *  Content observers
          */
 
-        BrowserHistoryEvent browserHistoryEvent = BrowserHistoryEvent.getInstance(mContext);
+        BrowserHistorySensor browserHistoryEvent = BrowserHistorySensor.getInstance(mContext);
         availableSensors.put(browserHistoryEvent.getType(), browserHistoryEvent);
 
-        CalendarEvent calendarEvent = CalendarEvent.getInstance(mContext);
+        CalendarSensor calendarEvent = CalendarSensor.getInstance(mContext);
         availableSensors.put(calendarEvent.getType(), calendarEvent);
 
-        ContactsEvent contactsEvent = ContactsEvent.getInstance(mContext);
+        ContactsSensor contactsEvent = ContactsSensor.getInstance(mContext);
         availableSensors.put(contactsEvent.getType(), contactsEvent);
 
-        CallLogEvent callLogEvent = CallLogEvent.getInstance(mContext);
+        CallLogSensor callLogEvent = CallLogSensor.getInstance(mContext);
         availableSensors.put(callLogEvent.getType(), callLogEvent);
 
         /*
          *  GENERAL DUMMY SENSORS / EVENTS
          */
-        TucanEvent tucanEvent = TucanEvent.getInstance(mContext);
+        TucanSensor tucanEvent = TucanSensor.getInstance(mContext);
         availableSensors.put(tucanEvent.getType(), tucanEvent);
 
-        FacebookEvent facebookEvent = FacebookEvent.getInstance(mContext);
+        FacebookSensor facebookEvent = FacebookSensor.getInstance(mContext);
         availableSensors.put(facebookEvent.getType(), facebookEvent);
 
         Log.d(TAG, "Finished. Number of sensors: " + availableSensors.size());
@@ -239,7 +239,7 @@ public class SensorProvider {
          */
         for (DbModuleCapability cap : activeModuleCapabilities) {
 
-            int capType = DtoType.getDtoType(cap.getType());
+            int capType = SensorApiType.getDtoType(cap.getType());
             ISensor sensor = availableSensors.get(capType);
 
             // haven't seen that sensor yet
@@ -397,7 +397,7 @@ public class SensorProvider {
 
         ISensor result = null;
 
-        int dtoType = DtoType.getDtoType(apiDtoType);
+        int dtoType = SensorApiType.getDtoType(apiDtoType);
 
         for (Map.Entry<Integer, ISensor> entry : availableSensors.entrySet()) {
 
@@ -582,19 +582,19 @@ public class SensorProvider {
         Set<Integer> dtos = new HashSet<>();
 
         if (mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER) != null) {
-            dtos.add(DtoType.getDtoType(Sensor.TYPE_ACCELEROMETER));
+            dtos.add(SensorApiType.getDtoType(Sensor.TYPE_ACCELEROMETER));
         }
 
         if (mSensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE) != null) {
-            dtos.add(DtoType.getDtoType(Sensor.TYPE_GYROSCOPE));
+            dtos.add(SensorApiType.getDtoType(Sensor.TYPE_GYROSCOPE));
         }
 
         if (mSensorManager.getDefaultSensor(Sensor.TYPE_LIGHT) != null) {
-            dtos.add(DtoType.getDtoType(Sensor.TYPE_LIGHT));
+            dtos.add(SensorApiType.getDtoType(Sensor.TYPE_LIGHT));
         }
 
         if (mSensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD) != null) {
-            dtos.add(DtoType.getDtoType(Sensor.TYPE_MAGNETIC_FIELD));
+            dtos.add(SensorApiType.getDtoType(Sensor.TYPE_MAGNETIC_FIELD));
         }
 
         return dtos;
@@ -613,13 +613,13 @@ public class SensorProvider {
         }
 
         Set<Integer> usableSensors = getUsableDeviceSensorDtos();
-        int dtoType = DtoType.getDtoType(apiType);
+        int dtoType = SensorApiType.getDtoType(apiType);
 
         if (usableSensors.contains(dtoType)) {
             return true;
         }
 
-        if (!DtoType.getApiName(dtoType).isEmpty()) {
+        if (!SensorApiType.getApiName(dtoType).isEmpty()) {
             return true;
         }
 

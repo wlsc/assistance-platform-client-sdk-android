@@ -24,40 +24,40 @@ import java.util.Set;
 
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.Config;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbAccelerometerSensor;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbBrowserHistoryEvent;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbCalendarEvent;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbCalendarReminderEvent;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbCallLogEvent;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbConnectionEvent;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbContactEvent;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbForegroundEvent;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbBrowserHistorySensor;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbCalendarSensor;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbCalendarReminderSensor;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbCallLogSensor;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbConnectionSensor;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbContactSensor;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbForegroundSensor;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbGyroscopeSensor;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbLightSensor;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbLoudnessEvent;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbLoudnessSensor;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbMagneticFieldSensor;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbMobileConnectionEvent;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbMotionActivityEvent;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbNetworkTrafficEvent;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbMobileConnectionSensor;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbMotionActivitySensor;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbNetworkTrafficSensor;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbPositionSensor;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbPowerLevelEvent;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbPowerStateEvent;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbRingtoneEvent;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbRunningProcessesEvent;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbRunningServicesEvent;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbRunningTasksEvent;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbWifiConnectionEvent;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbPowerLevelSensor;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbPowerStateSensor;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbRingtoneSensor;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbRunningProcessesSensor;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbRunningServicesSensor;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbRunningTasksSensor;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbWifiConnectionSensor;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.interfaces.IDbSensor;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.ApiGenerator;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.DtoType;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.sensing.SensorApiType;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.SensorDto;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.login.LoginApi;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.login.LoginRequestDto;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.login.LoginResponseDto;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.login.UserDeviceDto;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.sensing.EventUploadApi;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.sensing.EventUploadRequestDto;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.sensing.event.calendar.CalendarEventDto;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.sensing.event.calendar.CalendarReminder;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.sensing.SensorUploadApi;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.sensing.SensorUploadDto;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.sensing.sensor.calendar.CalendarSensorDto;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.sensing.sensor.calendar.CalendarReminder;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensing.ISensor;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.DaoProvider;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.PreferenceProvider;
@@ -228,7 +228,7 @@ public class EventUploadService extends GcmTaskService {
 
                             AsyncTask.execute(() -> {
 
-                                EventUploadRequestDto eventUploadRequest = new EventUploadRequestDto(
+                                SensorUploadDto eventUploadRequest = new SensorUploadDto(
                                         serverDeviceId,
                                         partEvent
                                 );
@@ -277,7 +277,7 @@ public class EventUploadService extends GcmTaskService {
 
                     AsyncTask.execute(() -> {
 
-                        EventUploadRequestDto eventUploadRequest = new EventUploadRequestDto(
+                        SensorUploadDto eventUploadRequest = new SensorUploadDto(
                                 serverDeviceId,
                                 eventPart
                         );
@@ -296,7 +296,7 @@ public class EventUploadService extends GcmTaskService {
      *
      * @param eventUploadRequest
      */
-    private void doUploadEventData(@Nullable final EventUploadRequestDto eventUploadRequest) {
+    private void doUploadEventData(@Nullable final SensorUploadDto eventUploadRequest) {
 
         Log.d(TAG, "Uploading data...");
 
@@ -311,13 +311,13 @@ public class EventUploadService extends GcmTaskService {
         }
 
         // send to upload data service
-        EventUploadApi eventUploadApi = ApiGenerator
+        SensorUploadApi sensorUploadApi = ApiGenerator
                 .getInstance(getApplicationContext())
-                .create(EventUploadApi.class);
+                .create(SensorUploadApi.class);
 
         String userToken = mPreferenceProvider.getUserToken();
 
-        eventUploadApi.uploadData(userToken, eventUploadRequest,
+        sensorUploadApi.uploadData(userToken, eventUploadRequest,
                 new Callback<Void>() {
 
                     @Override
@@ -504,7 +504,7 @@ public class EventUploadService extends GcmTaskService {
             int type = sensor.getType();
 
             switch (type) {
-                case DtoType.ACCELEROMETER:
+                case SensorApiType.ACCELEROMETER:
 
                     List<DbAccelerometerSensor> accList;
 
@@ -526,7 +526,7 @@ public class EventUploadService extends GcmTaskService {
 
                     break;
 
-                case DtoType.LOCATION:
+                case SensorApiType.LOCATION:
 
                     List<DbPositionSensor> posList;
 
@@ -548,9 +548,9 @@ public class EventUploadService extends GcmTaskService {
 
                     break;
 
-                case DtoType.MOTION_ACTIVITY:
+                case SensorApiType.MOTION_ACTIVITY:
 
-                    List<DbMotionActivityEvent> maList;
+                    List<DbMotionActivitySensor> maList;
 
                     // give all
                     if (numberOfElements == 0) {
@@ -570,9 +570,9 @@ public class EventUploadService extends GcmTaskService {
 
                     break;
 
-                case DtoType.FOREGROUND:
+                case SensorApiType.FOREGROUND:
 
-                    List<DbForegroundEvent> feList;
+                    List<DbForegroundSensor> feList;
 
                     // give all
                     if (numberOfElements == 0) {
@@ -592,10 +592,10 @@ public class EventUploadService extends GcmTaskService {
 
                     break;
 
-                case DtoType.CONNECTION:
+                case SensorApiType.CONNECTION:
 
                     // connection
-                    List<DbConnectionEvent> conList;
+                    List<DbConnectionSensor> conList;
 
                     // give all
                     if (numberOfElements == 0) {
@@ -614,7 +614,7 @@ public class EventUploadService extends GcmTaskService {
                             .convertObjects(conList));
 
                     // mobile connection
-                    List<DbMobileConnectionEvent> mobConList;
+                    List<DbMobileConnectionSensor> mobConList;
 
                     // give all
                     if (numberOfElements == 0) {
@@ -627,13 +627,13 @@ public class EventUploadService extends GcmTaskService {
                                 .getFirstN(numberOfElements);
                     }
 
-                    dbEvents.put(DtoType.MOBILE_DATA_CONNECTION, mobConList);
-                    requestEvents.put(DtoType.MOBILE_DATA_CONNECTION, daoProvider
+                    dbEvents.put(SensorApiType.MOBILE_DATA_CONNECTION, mobConList);
+                    requestEvents.put(SensorApiType.MOBILE_DATA_CONNECTION, daoProvider
                             .getMobileConnectionEventDao()
                             .convertObjects(mobConList));
 
                     // wifi connection
-                    List<DbWifiConnectionEvent> wifiConList;
+                    List<DbWifiConnectionSensor> wifiConList;
 
                     // give all
                     if (numberOfElements == 0) {
@@ -646,16 +646,16 @@ public class EventUploadService extends GcmTaskService {
                                 .getFirstN(numberOfElements);
                     }
 
-                    dbEvents.put(DtoType.WIFI_CONNECTION, wifiConList);
-                    requestEvents.put(DtoType.WIFI_CONNECTION, daoProvider
+                    dbEvents.put(SensorApiType.WIFI_CONNECTION, wifiConList);
+                    requestEvents.put(SensorApiType.WIFI_CONNECTION, daoProvider
                             .getWifiConnectionEventDao()
                             .convertObjects(wifiConList));
 
                     break;
 
-                case DtoType.FOREGROUND_TRAFFIC:
+                case SensorApiType.FOREGROUND_TRAFFIC:
 
-                    List<DbNetworkTrafficEvent> fteList;
+                    List<DbNetworkTrafficSensor> fteList;
 
                     // give all
                     if (numberOfElements == 0) {
@@ -675,9 +675,9 @@ public class EventUploadService extends GcmTaskService {
 
                     break;
 
-                case DtoType.BACKGROUND_TRAFFIC:
+                case SensorApiType.BACKGROUND_TRAFFIC:
 
-                    List<DbNetworkTrafficEvent> bteList;
+                    List<DbNetworkTrafficSensor> bteList;
 
                     // give all
                     if (numberOfElements == 0) {
@@ -697,7 +697,7 @@ public class EventUploadService extends GcmTaskService {
 
                     break;
 
-                case DtoType.LIGHT:
+                case SensorApiType.LIGHT:
 
                     List<DbLightSensor> lightList;
 
@@ -719,9 +719,9 @@ public class EventUploadService extends GcmTaskService {
 
                     break;
 
-                case DtoType.LOUDNESS:
+                case SensorApiType.LOUDNESS:
 
-                    List<DbLoudnessEvent> loudnessList;
+                    List<DbLoudnessSensor> loudnessList;
 
                     // give all
                     if (numberOfElements == 0) {
@@ -741,9 +741,9 @@ public class EventUploadService extends GcmTaskService {
 
                     break;
 
-                case DtoType.RUNNING_PROCESSES:
+                case SensorApiType.RUNNING_PROCESSES:
 
-                    List<DbRunningProcessesEvent> runProccessList;
+                    List<DbRunningProcessesSensor> runProccessList;
 
                     // give all
                     if (numberOfElements == 0) {
@@ -763,9 +763,9 @@ public class EventUploadService extends GcmTaskService {
 
                     break;
 
-                case DtoType.RUNNING_SERVICES:
+                case SensorApiType.RUNNING_SERVICES:
 
-                    List<DbRunningServicesEvent> runServiceList;
+                    List<DbRunningServicesSensor> runServiceList;
 
                     // give all
                     if (numberOfElements == 0) {
@@ -785,9 +785,9 @@ public class EventUploadService extends GcmTaskService {
 
                     break;
 
-                case DtoType.RUNNING_TASKS:
+                case SensorApiType.RUNNING_TASKS:
 
-                    List<DbRunningTasksEvent> runTaskList;
+                    List<DbRunningTasksSensor> runTaskList;
 
                     // give all
                     if (numberOfElements == 0) {
@@ -807,9 +807,9 @@ public class EventUploadService extends GcmTaskService {
 
                     break;
 
-                case DtoType.RINGTONE:
+                case SensorApiType.RINGTONE:
 
-                    List<DbRingtoneEvent> ringtoneList;
+                    List<DbRingtoneSensor> ringtoneList;
 
                     // give all
                     if (numberOfElements == 0) {
@@ -829,7 +829,7 @@ public class EventUploadService extends GcmTaskService {
 
                     break;
 
-                case DtoType.GYROSCOPE:
+                case SensorApiType.GYROSCOPE:
 
                     List<DbGyroscopeSensor> gyroList;
 
@@ -851,7 +851,7 @@ public class EventUploadService extends GcmTaskService {
 
                     break;
 
-                case DtoType.MAGNETIC_FIELD:
+                case SensorApiType.MAGNETIC_FIELD:
 
                     List<DbMagneticFieldSensor> mfList;
 
@@ -873,9 +873,9 @@ public class EventUploadService extends GcmTaskService {
 
                     break;
 
-                case DtoType.BROWSER_HISTORY:
+                case SensorApiType.BROWSER_HISTORY:
 
-                    List<DbBrowserHistoryEvent> bhList;
+                    List<DbBrowserHistorySensor> bhList;
 
                     // give all
                     if (numberOfElements == 0) {
@@ -895,10 +895,10 @@ public class EventUploadService extends GcmTaskService {
 
                     break;
 
-                case DtoType.CALENDAR:
+                case SensorApiType.CALENDAR:
 
                     // retrieve all events
-                    List<DbCalendarEvent> calendarList = daoProvider
+                    List<DbCalendarSensor> calendarList = daoProvider
                             .getCalendarEventDao()
                             .getAllUpdated();
 
@@ -906,7 +906,7 @@ public class EventUploadService extends GcmTaskService {
                             .getCalendarEventDao()
                             .convertObjects(calendarList);
 
-                    List<CalendarEventDto> calendarListConvertedNew = new ArrayList<>(
+                    List<CalendarSensorDto> calendarListConvertedNew = new ArrayList<>(
                             calendarListConverted.size());
                     Set<CalendarReminder> eventRemindersConvertedNew = new HashSet<>();
 
@@ -919,9 +919,9 @@ public class EventUploadService extends GcmTaskService {
                             continue;
                         }
 
-                        CalendarEventDto calendarEventDto = (CalendarEventDto) sensorDto;
-                        List<DbCalendarReminderEvent> eventReminders = calendarReminderEventDao
-                                .getAllByEventId(Long.valueOf(calendarEventDto.getEventId()));
+                        CalendarSensorDto calendarSensorDto = (CalendarSensorDto) sensorDto;
+                        List<DbCalendarReminderSensor> eventReminders = calendarReminderEventDao
+                                .getAllByEventId(Long.valueOf(calendarSensorDto.getEventId()));
 
                         if (eventReminders == null || eventReminders.isEmpty()) {
                             continue;
@@ -934,8 +934,8 @@ public class EventUploadService extends GcmTaskService {
                             eventRemindersConvertedNew.add((CalendarReminder) sensorReminderDto);
                         }
 
-                        calendarEventDto.setAlarms(eventRemindersConvertedNew);
-                        calendarListConvertedNew.add(calendarEventDto);
+                        calendarSensorDto.setAlarms(eventRemindersConvertedNew);
+                        calendarListConvertedNew.add(calendarSensorDto);
                     }
 
                     dbEvents.put(type, calendarList);
@@ -944,9 +944,9 @@ public class EventUploadService extends GcmTaskService {
 
                     break;
 
-                case DtoType.CALL_LOG:
+                case SensorApiType.CALL_LOG:
 
-                    List<DbCallLogEvent> callLogList;
+                    List<DbCallLogSensor> callLogList;
 
                     // give all
                     if (numberOfElements == 0) {
@@ -966,9 +966,9 @@ public class EventUploadService extends GcmTaskService {
 
                     break;
 
-                case DtoType.CONTACT:
+                case SensorApiType.CONTACT:
 
-                    List<DbContactEvent> contactsList;
+                    List<DbContactSensor> contactsList;
 
                     // give all
                     if (numberOfElements == 0) {
@@ -988,9 +988,9 @@ public class EventUploadService extends GcmTaskService {
 
                     break;
 
-                case DtoType.POWER_LEVEL:
+                case SensorApiType.POWER_LEVEL:
 
-                    List<DbPowerLevelEvent> powerLevelList;
+                    List<DbPowerLevelSensor> powerLevelList;
 
                     // give all
                     if (numberOfElements == 0) {
@@ -1015,7 +1015,7 @@ public class EventUploadService extends GcmTaskService {
         /**
          * BATTERY STATUS
          */
-        List<DbPowerStateEvent> powerStateList;
+        List<DbPowerStateSensor> powerStateList;
 
         // give all
         if (numberOfElements == 0) {
@@ -1028,8 +1028,8 @@ public class EventUploadService extends GcmTaskService {
                     .getFirstN(numberOfElements);
         }
 
-        dbEvents.put(DtoType.POWER_STATE, powerStateList);
-        requestEvents.put(DtoType.POWER_STATE, daoProvider
+        dbEvents.put(SensorApiType.POWER_STATE, powerStateList);
+        requestEvents.put(SensorApiType.POWER_STATE, daoProvider
                 .getPowerStateEventDao()
                 .convertObjects(powerStateList));
     }
@@ -1053,94 +1053,94 @@ public class EventUploadService extends GcmTaskService {
             }
 
             switch (type) {
-                case DtoType.ACCELEROMETER:
+                case SensorApiType.ACCELEROMETER:
                     daoProvider.getAccelerometerSensorDao().delete((List<DbAccelerometerSensor>) values);
                     break;
 
-                case DtoType.LOCATION:
+                case SensorApiType.LOCATION:
                     daoProvider.getLocationSensorDao().delete((List<DbPositionSensor>) values);
                     break;
 
-                case DtoType.MOTION_ACTIVITY:
-                    daoProvider.getMotionActivityEventDao().delete((List<DbMotionActivityEvent>) values);
+                case SensorApiType.MOTION_ACTIVITY:
+                    daoProvider.getMotionActivityEventDao().delete((List<DbMotionActivitySensor>) values);
                     break;
 
-                case DtoType.FOREGROUND:
-                    daoProvider.getForegroundEventDao().delete((List<DbForegroundEvent>) values);
+                case SensorApiType.FOREGROUND:
+                    daoProvider.getForegroundEventDao().delete((List<DbForegroundSensor>) values);
                     break;
 
-                case DtoType.FOREGROUND_TRAFFIC:
-                    daoProvider.getNetworkTrafficEventDao().delete((List<DbNetworkTrafficEvent>) values);
+                case SensorApiType.FOREGROUND_TRAFFIC:
+                    daoProvider.getNetworkTrafficEventDao().delete((List<DbNetworkTrafficSensor>) values);
                     break;
 
-                case DtoType.BACKGROUND_TRAFFIC:
-                    daoProvider.getNetworkTrafficEventDao().delete((List<DbNetworkTrafficEvent>) values);
+                case SensorApiType.BACKGROUND_TRAFFIC:
+                    daoProvider.getNetworkTrafficEventDao().delete((List<DbNetworkTrafficSensor>) values);
                     break;
 
-                case DtoType.CONNECTION:
-                    daoProvider.getConnectionEventDao().delete((List<DbConnectionEvent>) values);
+                case SensorApiType.CONNECTION:
+                    daoProvider.getConnectionEventDao().delete((List<DbConnectionSensor>) values);
                     break;
 
-                case DtoType.MOBILE_DATA_CONNECTION:
-                    daoProvider.getMobileConnectionEventDao().delete((List<DbMobileConnectionEvent>) values);
+                case SensorApiType.MOBILE_DATA_CONNECTION:
+                    daoProvider.getMobileConnectionEventDao().delete((List<DbMobileConnectionSensor>) values);
                     break;
 
-                case DtoType.WIFI_CONNECTION:
-                    daoProvider.getWifiConnectionEventDao().delete((List<DbWifiConnectionEvent>) values);
+                case SensorApiType.WIFI_CONNECTION:
+                    daoProvider.getWifiConnectionEventDao().delete((List<DbWifiConnectionSensor>) values);
                     break;
 
-                case DtoType.LIGHT:
+                case SensorApiType.LIGHT:
                     daoProvider.getLightSensorDao().delete((List<DbLightSensor>) values);
                     break;
 
-                case DtoType.LOUDNESS:
-                    daoProvider.getLoudnessEventDao().delete((List<DbLoudnessEvent>) values);
+                case SensorApiType.LOUDNESS:
+                    daoProvider.getLoudnessEventDao().delete((List<DbLoudnessSensor>) values);
                     break;
 
-                case DtoType.RUNNING_PROCESSES:
-                    daoProvider.getRunningProcessesEventDao().delete((List<DbRunningProcessesEvent>) values);
+                case SensorApiType.RUNNING_PROCESSES:
+                    daoProvider.getRunningProcessesEventDao().delete((List<DbRunningProcessesSensor>) values);
                     break;
 
-                case DtoType.RUNNING_SERVICES:
-                    daoProvider.getRunningServicesEventDao().delete((List<DbRunningServicesEvent>) values);
+                case SensorApiType.RUNNING_SERVICES:
+                    daoProvider.getRunningServicesEventDao().delete((List<DbRunningServicesSensor>) values);
                     break;
 
-                case DtoType.RUNNING_TASKS:
-                    daoProvider.getRunningTasksEventDao().delete((List<DbRunningTasksEvent>) values);
+                case SensorApiType.RUNNING_TASKS:
+                    daoProvider.getRunningTasksEventDao().delete((List<DbRunningTasksSensor>) values);
                     break;
 
-                case DtoType.RINGTONE:
-                    daoProvider.getRingtoneEventDao().delete((List<DbRingtoneEvent>) values);
+                case SensorApiType.RINGTONE:
+                    daoProvider.getRingtoneEventDao().delete((List<DbRingtoneSensor>) values);
                     break;
 
-                case DtoType.GYROSCOPE:
+                case SensorApiType.GYROSCOPE:
                     daoProvider.getGyroscopeSensorDao().delete((List<DbGyroscopeSensor>) values);
                     break;
 
-                case DtoType.MAGNETIC_FIELD:
+                case SensorApiType.MAGNETIC_FIELD:
                     daoProvider.getMagneticFieldSensorDao().delete((List<DbMagneticFieldSensor>) values);
                     break;
 
-                case DtoType.BROWSER_HISTORY:
-                    daoProvider.getBrowserHistoryEventDao().delete((List<DbBrowserHistoryEvent>) values);
+                case SensorApiType.BROWSER_HISTORY:
+                    daoProvider.getBrowserHistoryEventDao().delete((List<DbBrowserHistorySensor>) values);
                     break;
 
-                case DtoType.CALL_LOG:
-                    daoProvider.getCallLogEventDao().delete((List<DbCallLogEvent>) values);
+                case SensorApiType.CALL_LOG:
+                    daoProvider.getCallLogEventDao().delete((List<DbCallLogSensor>) values);
                     break;
 
-                case DtoType.POWER_STATE:
-                    daoProvider.getPowerStateEventDao().delete((List<DbPowerStateEvent>) values);
+                case SensorApiType.POWER_STATE:
+                    daoProvider.getPowerStateEventDao().delete((List<DbPowerStateSensor>) values);
                     break;
 
-                case DtoType.POWER_LEVEL:
-                    daoProvider.getPowerLevelEventDao().delete((List<DbPowerLevelEvent>) values);
+                case SensorApiType.POWER_LEVEL:
+                    daoProvider.getPowerLevelEventDao().delete((List<DbPowerLevelSensor>) values);
                     break;
 
-                case DtoType.CALENDAR:
-                    List<DbCalendarEvent> calendarEvents = (List<DbCalendarEvent>) values;
+                case SensorApiType.CALENDAR:
+                    List<DbCalendarSensor> calendarEvents = (List<DbCalendarSensor>) values;
 
-                    for (DbCalendarEvent calEvent : calendarEvents) {
+                    for (DbCalendarSensor calEvent : calendarEvents) {
                         calEvent.setIsNew(false);
                     }
 

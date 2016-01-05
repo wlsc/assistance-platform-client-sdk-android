@@ -5,7 +5,7 @@ import android.content.Intent;
 
 import com.google.android.gms.location.ActivityRecognitionResult;
 
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensing.impl.triggered.MotionActivityEvent;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensing.impl.triggered.MotionActivitySensor;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.util.logger.Log;
 
 public class ActivitySensorService extends IntentService {
@@ -25,11 +25,11 @@ public class ActivitySensorService extends IntentService {
 
             ActivityRecognitionResult result = ActivityRecognitionResult.extractResult(intent);
 
-            MotionActivityEvent motionActivityEvent = MotionActivityEvent.getInstance(getApplicationContext());
+            MotionActivitySensor motionActivitySensor = MotionActivitySensor.getInstance(getApplicationContext());
 
-            if (result != null && motionActivityEvent != null) {
+            if (result != null && motionActivitySensor != null) {
 
-                motionActivityEvent.handleData(result);
+                motionActivitySensor.handleData(result);
 
             } else {
                 Log.e(TAG, "Cannot extract recognition result!");

@@ -19,28 +19,28 @@ import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbPositionSensor;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbGyroscopeSensor;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbAccelerometerSensor;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbMagneticFieldSensor;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbMotionActivityEvent;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbConnectionEvent;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbWifiConnectionEvent;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbMobileConnectionEvent;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbLoudnessEvent;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbForegroundEvent;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbMotionActivitySensor;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbConnectionSensor;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbWifiConnectionSensor;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbMobileConnectionSensor;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbLoudnessSensor;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbForegroundSensor;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbLightSensor;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbRingtoneEvent;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbRunningProcessesEvent;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbRunningServicesEvent;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbRunningTasksEvent;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbAccountReaderEvent;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbNetworkTrafficEvent;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbBrowserHistoryEvent;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbCallLogEvent;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbCalendarEvent;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbCalendarReminderEvent;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbContactEvent;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbContactNumberEvent;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbContactEmailEvent;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbPowerStateEvent;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbPowerLevelEvent;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbRingtoneSensor;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbRunningProcessesSensor;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbRunningServicesSensor;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbRunningTasksSensor;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbAccountReaderSensor;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbNetworkTrafficSensor;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbBrowserHistorySensor;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbCallLogSensor;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbCalendarSensor;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbCalendarReminderSensor;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbContactSensor;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbContactNumberSensor;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbContactEmailSensor;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbPowerStateSensor;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbPowerLevelSensor;
 
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbUserDao;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbUserSocialProfileDao;
@@ -52,28 +52,28 @@ import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbPositionSensorDa
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbGyroscopeSensorDao;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbAccelerometerSensorDao;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbMagneticFieldSensorDao;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbMotionActivityEventDao;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbConnectionEventDao;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbWifiConnectionEventDao;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbMobileConnectionEventDao;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbLoudnessEventDao;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbForegroundEventDao;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbMotionActivitySensorDao;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbConnectionSensorDao;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbWifiConnectionSensorDao;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbMobileConnectionSensorDao;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbLoudnessSensorDao;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbForegroundSensorDao;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbLightSensorDao;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbRingtoneEventDao;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbRunningProcessesEventDao;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbRunningServicesEventDao;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbRunningTasksEventDao;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbAccountReaderEventDao;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbNetworkTrafficEventDao;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbBrowserHistoryEventDao;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbCallLogEventDao;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbCalendarEventDao;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbCalendarReminderEventDao;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbContactEventDao;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbContactNumberEventDao;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbContactEmailEventDao;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbPowerStateEventDao;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbPowerLevelEventDao;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbRingtoneSensorDao;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbRunningProcessesSensorDao;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbRunningServicesSensorDao;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbRunningTasksSensorDao;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbAccountReaderSensorDao;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbNetworkTrafficSensorDao;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbBrowserHistorySensorDao;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbCallLogSensorDao;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbCalendarSensorDao;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbCalendarReminderSensorDao;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbContactSensorDao;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbContactNumberSensorDao;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbContactEmailSensorDao;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbPowerStateSensorDao;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbPowerLevelSensorDao;
 
 // THIS CODE IS GENERATED BY greenDAO, DO NOT EDIT.
 
@@ -94,28 +94,28 @@ public class DaoSession extends AbstractDaoSession {
     private final DaoConfig dbGyroscopeSensorDaoConfig;
     private final DaoConfig dbAccelerometerSensorDaoConfig;
     private final DaoConfig dbMagneticFieldSensorDaoConfig;
-    private final DaoConfig dbMotionActivityEventDaoConfig;
-    private final DaoConfig dbConnectionEventDaoConfig;
-    private final DaoConfig dbWifiConnectionEventDaoConfig;
-    private final DaoConfig dbMobileConnectionEventDaoConfig;
-    private final DaoConfig dbLoudnessEventDaoConfig;
-    private final DaoConfig dbForegroundEventDaoConfig;
+    private final DaoConfig dbMotionActivitySensorDaoConfig;
+    private final DaoConfig dbConnectionSensorDaoConfig;
+    private final DaoConfig dbWifiConnectionSensorDaoConfig;
+    private final DaoConfig dbMobileConnectionSensorDaoConfig;
+    private final DaoConfig dbLoudnessSensorDaoConfig;
+    private final DaoConfig dbForegroundSensorDaoConfig;
     private final DaoConfig dbLightSensorDaoConfig;
-    private final DaoConfig dbRingtoneEventDaoConfig;
-    private final DaoConfig dbRunningProcessesEventDaoConfig;
-    private final DaoConfig dbRunningServicesEventDaoConfig;
-    private final DaoConfig dbRunningTasksEventDaoConfig;
-    private final DaoConfig dbAccountReaderEventDaoConfig;
-    private final DaoConfig dbNetworkTrafficEventDaoConfig;
-    private final DaoConfig dbBrowserHistoryEventDaoConfig;
-    private final DaoConfig dbCallLogEventDaoConfig;
-    private final DaoConfig dbCalendarEventDaoConfig;
-    private final DaoConfig dbCalendarReminderEventDaoConfig;
-    private final DaoConfig dbContactEventDaoConfig;
-    private final DaoConfig dbContactNumberEventDaoConfig;
-    private final DaoConfig dbContactEmailEventDaoConfig;
-    private final DaoConfig dbPowerStateEventDaoConfig;
-    private final DaoConfig dbPowerLevelEventDaoConfig;
+    private final DaoConfig dbRingtoneSensorDaoConfig;
+    private final DaoConfig dbRunningProcessesSensorDaoConfig;
+    private final DaoConfig dbRunningServicesSensorDaoConfig;
+    private final DaoConfig dbRunningTasksSensorDaoConfig;
+    private final DaoConfig dbAccountReaderSensorDaoConfig;
+    private final DaoConfig dbNetworkTrafficSensorDaoConfig;
+    private final DaoConfig dbBrowserHistorySensorDaoConfig;
+    private final DaoConfig dbCallLogSensorDaoConfig;
+    private final DaoConfig dbCalendarSensorDaoConfig;
+    private final DaoConfig dbCalendarReminderSensorDaoConfig;
+    private final DaoConfig dbContactSensorDaoConfig;
+    private final DaoConfig dbContactNumberSensorDaoConfig;
+    private final DaoConfig dbContactEmailSensorDaoConfig;
+    private final DaoConfig dbPowerStateSensorDaoConfig;
+    private final DaoConfig dbPowerLevelSensorDaoConfig;
 
     private final DbUserDao dbUserDao;
     private final DbUserSocialProfileDao dbUserSocialProfileDao;
@@ -127,28 +127,28 @@ public class DaoSession extends AbstractDaoSession {
     private final DbGyroscopeSensorDao dbGyroscopeSensorDao;
     private final DbAccelerometerSensorDao dbAccelerometerSensorDao;
     private final DbMagneticFieldSensorDao dbMagneticFieldSensorDao;
-    private final DbMotionActivityEventDao dbMotionActivityEventDao;
-    private final DbConnectionEventDao dbConnectionEventDao;
-    private final DbWifiConnectionEventDao dbWifiConnectionEventDao;
-    private final DbMobileConnectionEventDao dbMobileConnectionEventDao;
-    private final DbLoudnessEventDao dbLoudnessEventDao;
-    private final DbForegroundEventDao dbForegroundEventDao;
+    private final DbMotionActivitySensorDao dbMotionActivitySensorDao;
+    private final DbConnectionSensorDao dbConnectionSensorDao;
+    private final DbWifiConnectionSensorDao dbWifiConnectionSensorDao;
+    private final DbMobileConnectionSensorDao dbMobileConnectionSensorDao;
+    private final DbLoudnessSensorDao dbLoudnessSensorDao;
+    private final DbForegroundSensorDao dbForegroundSensorDao;
     private final DbLightSensorDao dbLightSensorDao;
-    private final DbRingtoneEventDao dbRingtoneEventDao;
-    private final DbRunningProcessesEventDao dbRunningProcessesEventDao;
-    private final DbRunningServicesEventDao dbRunningServicesEventDao;
-    private final DbRunningTasksEventDao dbRunningTasksEventDao;
-    private final DbAccountReaderEventDao dbAccountReaderEventDao;
-    private final DbNetworkTrafficEventDao dbNetworkTrafficEventDao;
-    private final DbBrowserHistoryEventDao dbBrowserHistoryEventDao;
-    private final DbCallLogEventDao dbCallLogEventDao;
-    private final DbCalendarEventDao dbCalendarEventDao;
-    private final DbCalendarReminderEventDao dbCalendarReminderEventDao;
-    private final DbContactEventDao dbContactEventDao;
-    private final DbContactNumberEventDao dbContactNumberEventDao;
-    private final DbContactEmailEventDao dbContactEmailEventDao;
-    private final DbPowerStateEventDao dbPowerStateEventDao;
-    private final DbPowerLevelEventDao dbPowerLevelEventDao;
+    private final DbRingtoneSensorDao dbRingtoneSensorDao;
+    private final DbRunningProcessesSensorDao dbRunningProcessesSensorDao;
+    private final DbRunningServicesSensorDao dbRunningServicesSensorDao;
+    private final DbRunningTasksSensorDao dbRunningTasksSensorDao;
+    private final DbAccountReaderSensorDao dbAccountReaderSensorDao;
+    private final DbNetworkTrafficSensorDao dbNetworkTrafficSensorDao;
+    private final DbBrowserHistorySensorDao dbBrowserHistorySensorDao;
+    private final DbCallLogSensorDao dbCallLogSensorDao;
+    private final DbCalendarSensorDao dbCalendarSensorDao;
+    private final DbCalendarReminderSensorDao dbCalendarReminderSensorDao;
+    private final DbContactSensorDao dbContactSensorDao;
+    private final DbContactNumberSensorDao dbContactNumberSensorDao;
+    private final DbContactEmailSensorDao dbContactEmailSensorDao;
+    private final DbPowerStateSensorDao dbPowerStateSensorDao;
+    private final DbPowerLevelSensorDao dbPowerLevelSensorDao;
 
     public DaoSession(SQLiteDatabase db, IdentityScopeType type, Map<Class<? extends AbstractDao<?, ?>>, DaoConfig>
             daoConfigMap) {
@@ -184,71 +184,71 @@ public class DaoSession extends AbstractDaoSession {
         dbMagneticFieldSensorDaoConfig = daoConfigMap.get(DbMagneticFieldSensorDao.class).clone();
         dbMagneticFieldSensorDaoConfig.initIdentityScope(type);
 
-        dbMotionActivityEventDaoConfig = daoConfigMap.get(DbMotionActivityEventDao.class).clone();
-        dbMotionActivityEventDaoConfig.initIdentityScope(type);
+        dbMotionActivitySensorDaoConfig = daoConfigMap.get(DbMotionActivitySensorDao.class).clone();
+        dbMotionActivitySensorDaoConfig.initIdentityScope(type);
 
-        dbConnectionEventDaoConfig = daoConfigMap.get(DbConnectionEventDao.class).clone();
-        dbConnectionEventDaoConfig.initIdentityScope(type);
+        dbConnectionSensorDaoConfig = daoConfigMap.get(DbConnectionSensorDao.class).clone();
+        dbConnectionSensorDaoConfig.initIdentityScope(type);
 
-        dbWifiConnectionEventDaoConfig = daoConfigMap.get(DbWifiConnectionEventDao.class).clone();
-        dbWifiConnectionEventDaoConfig.initIdentityScope(type);
+        dbWifiConnectionSensorDaoConfig = daoConfigMap.get(DbWifiConnectionSensorDao.class).clone();
+        dbWifiConnectionSensorDaoConfig.initIdentityScope(type);
 
-        dbMobileConnectionEventDaoConfig = daoConfigMap.get(DbMobileConnectionEventDao.class).clone();
-        dbMobileConnectionEventDaoConfig.initIdentityScope(type);
+        dbMobileConnectionSensorDaoConfig = daoConfigMap.get(DbMobileConnectionSensorDao.class).clone();
+        dbMobileConnectionSensorDaoConfig.initIdentityScope(type);
 
-        dbLoudnessEventDaoConfig = daoConfigMap.get(DbLoudnessEventDao.class).clone();
-        dbLoudnessEventDaoConfig.initIdentityScope(type);
+        dbLoudnessSensorDaoConfig = daoConfigMap.get(DbLoudnessSensorDao.class).clone();
+        dbLoudnessSensorDaoConfig.initIdentityScope(type);
 
-        dbForegroundEventDaoConfig = daoConfigMap.get(DbForegroundEventDao.class).clone();
-        dbForegroundEventDaoConfig.initIdentityScope(type);
+        dbForegroundSensorDaoConfig = daoConfigMap.get(DbForegroundSensorDao.class).clone();
+        dbForegroundSensorDaoConfig.initIdentityScope(type);
 
         dbLightSensorDaoConfig = daoConfigMap.get(DbLightSensorDao.class).clone();
         dbLightSensorDaoConfig.initIdentityScope(type);
 
-        dbRingtoneEventDaoConfig = daoConfigMap.get(DbRingtoneEventDao.class).clone();
-        dbRingtoneEventDaoConfig.initIdentityScope(type);
+        dbRingtoneSensorDaoConfig = daoConfigMap.get(DbRingtoneSensorDao.class).clone();
+        dbRingtoneSensorDaoConfig.initIdentityScope(type);
 
-        dbRunningProcessesEventDaoConfig = daoConfigMap.get(DbRunningProcessesEventDao.class).clone();
-        dbRunningProcessesEventDaoConfig.initIdentityScope(type);
+        dbRunningProcessesSensorDaoConfig = daoConfigMap.get(DbRunningProcessesSensorDao.class).clone();
+        dbRunningProcessesSensorDaoConfig.initIdentityScope(type);
 
-        dbRunningServicesEventDaoConfig = daoConfigMap.get(DbRunningServicesEventDao.class).clone();
-        dbRunningServicesEventDaoConfig.initIdentityScope(type);
+        dbRunningServicesSensorDaoConfig = daoConfigMap.get(DbRunningServicesSensorDao.class).clone();
+        dbRunningServicesSensorDaoConfig.initIdentityScope(type);
 
-        dbRunningTasksEventDaoConfig = daoConfigMap.get(DbRunningTasksEventDao.class).clone();
-        dbRunningTasksEventDaoConfig.initIdentityScope(type);
+        dbRunningTasksSensorDaoConfig = daoConfigMap.get(DbRunningTasksSensorDao.class).clone();
+        dbRunningTasksSensorDaoConfig.initIdentityScope(type);
 
-        dbAccountReaderEventDaoConfig = daoConfigMap.get(DbAccountReaderEventDao.class).clone();
-        dbAccountReaderEventDaoConfig.initIdentityScope(type);
+        dbAccountReaderSensorDaoConfig = daoConfigMap.get(DbAccountReaderSensorDao.class).clone();
+        dbAccountReaderSensorDaoConfig.initIdentityScope(type);
 
-        dbNetworkTrafficEventDaoConfig = daoConfigMap.get(DbNetworkTrafficEventDao.class).clone();
-        dbNetworkTrafficEventDaoConfig.initIdentityScope(type);
+        dbNetworkTrafficSensorDaoConfig = daoConfigMap.get(DbNetworkTrafficSensorDao.class).clone();
+        dbNetworkTrafficSensorDaoConfig.initIdentityScope(type);
 
-        dbBrowserHistoryEventDaoConfig = daoConfigMap.get(DbBrowserHistoryEventDao.class).clone();
-        dbBrowserHistoryEventDaoConfig.initIdentityScope(type);
+        dbBrowserHistorySensorDaoConfig = daoConfigMap.get(DbBrowserHistorySensorDao.class).clone();
+        dbBrowserHistorySensorDaoConfig.initIdentityScope(type);
 
-        dbCallLogEventDaoConfig = daoConfigMap.get(DbCallLogEventDao.class).clone();
-        dbCallLogEventDaoConfig.initIdentityScope(type);
+        dbCallLogSensorDaoConfig = daoConfigMap.get(DbCallLogSensorDao.class).clone();
+        dbCallLogSensorDaoConfig.initIdentityScope(type);
 
-        dbCalendarEventDaoConfig = daoConfigMap.get(DbCalendarEventDao.class).clone();
-        dbCalendarEventDaoConfig.initIdentityScope(type);
+        dbCalendarSensorDaoConfig = daoConfigMap.get(DbCalendarSensorDao.class).clone();
+        dbCalendarSensorDaoConfig.initIdentityScope(type);
 
-        dbCalendarReminderEventDaoConfig = daoConfigMap.get(DbCalendarReminderEventDao.class).clone();
-        dbCalendarReminderEventDaoConfig.initIdentityScope(type);
+        dbCalendarReminderSensorDaoConfig = daoConfigMap.get(DbCalendarReminderSensorDao.class).clone();
+        dbCalendarReminderSensorDaoConfig.initIdentityScope(type);
 
-        dbContactEventDaoConfig = daoConfigMap.get(DbContactEventDao.class).clone();
-        dbContactEventDaoConfig.initIdentityScope(type);
+        dbContactSensorDaoConfig = daoConfigMap.get(DbContactSensorDao.class).clone();
+        dbContactSensorDaoConfig.initIdentityScope(type);
 
-        dbContactNumberEventDaoConfig = daoConfigMap.get(DbContactNumberEventDao.class).clone();
-        dbContactNumberEventDaoConfig.initIdentityScope(type);
+        dbContactNumberSensorDaoConfig = daoConfigMap.get(DbContactNumberSensorDao.class).clone();
+        dbContactNumberSensorDaoConfig.initIdentityScope(type);
 
-        dbContactEmailEventDaoConfig = daoConfigMap.get(DbContactEmailEventDao.class).clone();
-        dbContactEmailEventDaoConfig.initIdentityScope(type);
+        dbContactEmailSensorDaoConfig = daoConfigMap.get(DbContactEmailSensorDao.class).clone();
+        dbContactEmailSensorDaoConfig.initIdentityScope(type);
 
-        dbPowerStateEventDaoConfig = daoConfigMap.get(DbPowerStateEventDao.class).clone();
-        dbPowerStateEventDaoConfig.initIdentityScope(type);
+        dbPowerStateSensorDaoConfig = daoConfigMap.get(DbPowerStateSensorDao.class).clone();
+        dbPowerStateSensorDaoConfig.initIdentityScope(type);
 
-        dbPowerLevelEventDaoConfig = daoConfigMap.get(DbPowerLevelEventDao.class).clone();
-        dbPowerLevelEventDaoConfig.initIdentityScope(type);
+        dbPowerLevelSensorDaoConfig = daoConfigMap.get(DbPowerLevelSensorDao.class).clone();
+        dbPowerLevelSensorDaoConfig.initIdentityScope(type);
 
         dbUserDao = new DbUserDao(dbUserDaoConfig, this);
         dbUserSocialProfileDao = new DbUserSocialProfileDao(dbUserSocialProfileDaoConfig, this);
@@ -260,28 +260,28 @@ public class DaoSession extends AbstractDaoSession {
         dbGyroscopeSensorDao = new DbGyroscopeSensorDao(dbGyroscopeSensorDaoConfig, this);
         dbAccelerometerSensorDao = new DbAccelerometerSensorDao(dbAccelerometerSensorDaoConfig, this);
         dbMagneticFieldSensorDao = new DbMagneticFieldSensorDao(dbMagneticFieldSensorDaoConfig, this);
-        dbMotionActivityEventDao = new DbMotionActivityEventDao(dbMotionActivityEventDaoConfig, this);
-        dbConnectionEventDao = new DbConnectionEventDao(dbConnectionEventDaoConfig, this);
-        dbWifiConnectionEventDao = new DbWifiConnectionEventDao(dbWifiConnectionEventDaoConfig, this);
-        dbMobileConnectionEventDao = new DbMobileConnectionEventDao(dbMobileConnectionEventDaoConfig, this);
-        dbLoudnessEventDao = new DbLoudnessEventDao(dbLoudnessEventDaoConfig, this);
-        dbForegroundEventDao = new DbForegroundEventDao(dbForegroundEventDaoConfig, this);
+        dbMotionActivitySensorDao = new DbMotionActivitySensorDao(dbMotionActivitySensorDaoConfig, this);
+        dbConnectionSensorDao = new DbConnectionSensorDao(dbConnectionSensorDaoConfig, this);
+        dbWifiConnectionSensorDao = new DbWifiConnectionSensorDao(dbWifiConnectionSensorDaoConfig, this);
+        dbMobileConnectionSensorDao = new DbMobileConnectionSensorDao(dbMobileConnectionSensorDaoConfig, this);
+        dbLoudnessSensorDao = new DbLoudnessSensorDao(dbLoudnessSensorDaoConfig, this);
+        dbForegroundSensorDao = new DbForegroundSensorDao(dbForegroundSensorDaoConfig, this);
         dbLightSensorDao = new DbLightSensorDao(dbLightSensorDaoConfig, this);
-        dbRingtoneEventDao = new DbRingtoneEventDao(dbRingtoneEventDaoConfig, this);
-        dbRunningProcessesEventDao = new DbRunningProcessesEventDao(dbRunningProcessesEventDaoConfig, this);
-        dbRunningServicesEventDao = new DbRunningServicesEventDao(dbRunningServicesEventDaoConfig, this);
-        dbRunningTasksEventDao = new DbRunningTasksEventDao(dbRunningTasksEventDaoConfig, this);
-        dbAccountReaderEventDao = new DbAccountReaderEventDao(dbAccountReaderEventDaoConfig, this);
-        dbNetworkTrafficEventDao = new DbNetworkTrafficEventDao(dbNetworkTrafficEventDaoConfig, this);
-        dbBrowserHistoryEventDao = new DbBrowserHistoryEventDao(dbBrowserHistoryEventDaoConfig, this);
-        dbCallLogEventDao = new DbCallLogEventDao(dbCallLogEventDaoConfig, this);
-        dbCalendarEventDao = new DbCalendarEventDao(dbCalendarEventDaoConfig, this);
-        dbCalendarReminderEventDao = new DbCalendarReminderEventDao(dbCalendarReminderEventDaoConfig, this);
-        dbContactEventDao = new DbContactEventDao(dbContactEventDaoConfig, this);
-        dbContactNumberEventDao = new DbContactNumberEventDao(dbContactNumberEventDaoConfig, this);
-        dbContactEmailEventDao = new DbContactEmailEventDao(dbContactEmailEventDaoConfig, this);
-        dbPowerStateEventDao = new DbPowerStateEventDao(dbPowerStateEventDaoConfig, this);
-        dbPowerLevelEventDao = new DbPowerLevelEventDao(dbPowerLevelEventDaoConfig, this);
+        dbRingtoneSensorDao = new DbRingtoneSensorDao(dbRingtoneSensorDaoConfig, this);
+        dbRunningProcessesSensorDao = new DbRunningProcessesSensorDao(dbRunningProcessesSensorDaoConfig, this);
+        dbRunningServicesSensorDao = new DbRunningServicesSensorDao(dbRunningServicesSensorDaoConfig, this);
+        dbRunningTasksSensorDao = new DbRunningTasksSensorDao(dbRunningTasksSensorDaoConfig, this);
+        dbAccountReaderSensorDao = new DbAccountReaderSensorDao(dbAccountReaderSensorDaoConfig, this);
+        dbNetworkTrafficSensorDao = new DbNetworkTrafficSensorDao(dbNetworkTrafficSensorDaoConfig, this);
+        dbBrowserHistorySensorDao = new DbBrowserHistorySensorDao(dbBrowserHistorySensorDaoConfig, this);
+        dbCallLogSensorDao = new DbCallLogSensorDao(dbCallLogSensorDaoConfig, this);
+        dbCalendarSensorDao = new DbCalendarSensorDao(dbCalendarSensorDaoConfig, this);
+        dbCalendarReminderSensorDao = new DbCalendarReminderSensorDao(dbCalendarReminderSensorDaoConfig, this);
+        dbContactSensorDao = new DbContactSensorDao(dbContactSensorDaoConfig, this);
+        dbContactNumberSensorDao = new DbContactNumberSensorDao(dbContactNumberSensorDaoConfig, this);
+        dbContactEmailSensorDao = new DbContactEmailSensorDao(dbContactEmailSensorDaoConfig, this);
+        dbPowerStateSensorDao = new DbPowerStateSensorDao(dbPowerStateSensorDaoConfig, this);
+        dbPowerLevelSensorDao = new DbPowerLevelSensorDao(dbPowerLevelSensorDaoConfig, this);
 
         registerDao(DbUser.class, dbUserDao);
         registerDao(DbUserSocialProfile.class, dbUserSocialProfileDao);
@@ -293,28 +293,28 @@ public class DaoSession extends AbstractDaoSession {
         registerDao(DbGyroscopeSensor.class, dbGyroscopeSensorDao);
         registerDao(DbAccelerometerSensor.class, dbAccelerometerSensorDao);
         registerDao(DbMagneticFieldSensor.class, dbMagneticFieldSensorDao);
-        registerDao(DbMotionActivityEvent.class, dbMotionActivityEventDao);
-        registerDao(DbConnectionEvent.class, dbConnectionEventDao);
-        registerDao(DbWifiConnectionEvent.class, dbWifiConnectionEventDao);
-        registerDao(DbMobileConnectionEvent.class, dbMobileConnectionEventDao);
-        registerDao(DbLoudnessEvent.class, dbLoudnessEventDao);
-        registerDao(DbForegroundEvent.class, dbForegroundEventDao);
+        registerDao(DbMotionActivitySensor.class, dbMotionActivitySensorDao);
+        registerDao(DbConnectionSensor.class, dbConnectionSensorDao);
+        registerDao(DbWifiConnectionSensor.class, dbWifiConnectionSensorDao);
+        registerDao(DbMobileConnectionSensor.class, dbMobileConnectionSensorDao);
+        registerDao(DbLoudnessSensor.class, dbLoudnessSensorDao);
+        registerDao(DbForegroundSensor.class, dbForegroundSensorDao);
         registerDao(DbLightSensor.class, dbLightSensorDao);
-        registerDao(DbRingtoneEvent.class, dbRingtoneEventDao);
-        registerDao(DbRunningProcessesEvent.class, dbRunningProcessesEventDao);
-        registerDao(DbRunningServicesEvent.class, dbRunningServicesEventDao);
-        registerDao(DbRunningTasksEvent.class, dbRunningTasksEventDao);
-        registerDao(DbAccountReaderEvent.class, dbAccountReaderEventDao);
-        registerDao(DbNetworkTrafficEvent.class, dbNetworkTrafficEventDao);
-        registerDao(DbBrowserHistoryEvent.class, dbBrowserHistoryEventDao);
-        registerDao(DbCallLogEvent.class, dbCallLogEventDao);
-        registerDao(DbCalendarEvent.class, dbCalendarEventDao);
-        registerDao(DbCalendarReminderEvent.class, dbCalendarReminderEventDao);
-        registerDao(DbContactEvent.class, dbContactEventDao);
-        registerDao(DbContactNumberEvent.class, dbContactNumberEventDao);
-        registerDao(DbContactEmailEvent.class, dbContactEmailEventDao);
-        registerDao(DbPowerStateEvent.class, dbPowerStateEventDao);
-        registerDao(DbPowerLevelEvent.class, dbPowerLevelEventDao);
+        registerDao(DbRingtoneSensor.class, dbRingtoneSensorDao);
+        registerDao(DbRunningProcessesSensor.class, dbRunningProcessesSensorDao);
+        registerDao(DbRunningServicesSensor.class, dbRunningServicesSensorDao);
+        registerDao(DbRunningTasksSensor.class, dbRunningTasksSensorDao);
+        registerDao(DbAccountReaderSensor.class, dbAccountReaderSensorDao);
+        registerDao(DbNetworkTrafficSensor.class, dbNetworkTrafficSensorDao);
+        registerDao(DbBrowserHistorySensor.class, dbBrowserHistorySensorDao);
+        registerDao(DbCallLogSensor.class, dbCallLogSensorDao);
+        registerDao(DbCalendarSensor.class, dbCalendarSensorDao);
+        registerDao(DbCalendarReminderSensor.class, dbCalendarReminderSensorDao);
+        registerDao(DbContactSensor.class, dbContactSensorDao);
+        registerDao(DbContactNumberSensor.class, dbContactNumberSensorDao);
+        registerDao(DbContactEmailSensor.class, dbContactEmailSensorDao);
+        registerDao(DbPowerStateSensor.class, dbPowerStateSensorDao);
+        registerDao(DbPowerLevelSensor.class, dbPowerLevelSensorDao);
     }
     
     public void clear() {
@@ -328,28 +328,28 @@ public class DaoSession extends AbstractDaoSession {
         dbGyroscopeSensorDaoConfig.getIdentityScope().clear();
         dbAccelerometerSensorDaoConfig.getIdentityScope().clear();
         dbMagneticFieldSensorDaoConfig.getIdentityScope().clear();
-        dbMotionActivityEventDaoConfig.getIdentityScope().clear();
-        dbConnectionEventDaoConfig.getIdentityScope().clear();
-        dbWifiConnectionEventDaoConfig.getIdentityScope().clear();
-        dbMobileConnectionEventDaoConfig.getIdentityScope().clear();
-        dbLoudnessEventDaoConfig.getIdentityScope().clear();
-        dbForegroundEventDaoConfig.getIdentityScope().clear();
+        dbMotionActivitySensorDaoConfig.getIdentityScope().clear();
+        dbConnectionSensorDaoConfig.getIdentityScope().clear();
+        dbWifiConnectionSensorDaoConfig.getIdentityScope().clear();
+        dbMobileConnectionSensorDaoConfig.getIdentityScope().clear();
+        dbLoudnessSensorDaoConfig.getIdentityScope().clear();
+        dbForegroundSensorDaoConfig.getIdentityScope().clear();
         dbLightSensorDaoConfig.getIdentityScope().clear();
-        dbRingtoneEventDaoConfig.getIdentityScope().clear();
-        dbRunningProcessesEventDaoConfig.getIdentityScope().clear();
-        dbRunningServicesEventDaoConfig.getIdentityScope().clear();
-        dbRunningTasksEventDaoConfig.getIdentityScope().clear();
-        dbAccountReaderEventDaoConfig.getIdentityScope().clear();
-        dbNetworkTrafficEventDaoConfig.getIdentityScope().clear();
-        dbBrowserHistoryEventDaoConfig.getIdentityScope().clear();
-        dbCallLogEventDaoConfig.getIdentityScope().clear();
-        dbCalendarEventDaoConfig.getIdentityScope().clear();
-        dbCalendarReminderEventDaoConfig.getIdentityScope().clear();
-        dbContactEventDaoConfig.getIdentityScope().clear();
-        dbContactNumberEventDaoConfig.getIdentityScope().clear();
-        dbContactEmailEventDaoConfig.getIdentityScope().clear();
-        dbPowerStateEventDaoConfig.getIdentityScope().clear();
-        dbPowerLevelEventDaoConfig.getIdentityScope().clear();
+        dbRingtoneSensorDaoConfig.getIdentityScope().clear();
+        dbRunningProcessesSensorDaoConfig.getIdentityScope().clear();
+        dbRunningServicesSensorDaoConfig.getIdentityScope().clear();
+        dbRunningTasksSensorDaoConfig.getIdentityScope().clear();
+        dbAccountReaderSensorDaoConfig.getIdentityScope().clear();
+        dbNetworkTrafficSensorDaoConfig.getIdentityScope().clear();
+        dbBrowserHistorySensorDaoConfig.getIdentityScope().clear();
+        dbCallLogSensorDaoConfig.getIdentityScope().clear();
+        dbCalendarSensorDaoConfig.getIdentityScope().clear();
+        dbCalendarReminderSensorDaoConfig.getIdentityScope().clear();
+        dbContactSensorDaoConfig.getIdentityScope().clear();
+        dbContactNumberSensorDaoConfig.getIdentityScope().clear();
+        dbContactEmailSensorDaoConfig.getIdentityScope().clear();
+        dbPowerStateSensorDaoConfig.getIdentityScope().clear();
+        dbPowerLevelSensorDaoConfig.getIdentityScope().clear();
     }
 
     public DbUserDao getDbUserDao() {
@@ -392,92 +392,92 @@ public class DaoSession extends AbstractDaoSession {
         return dbMagneticFieldSensorDao;
     }
 
-    public DbMotionActivityEventDao getDbMotionActivityEventDao() {
-        return dbMotionActivityEventDao;
+    public DbMotionActivitySensorDao getDbMotionActivitySensorDao() {
+        return dbMotionActivitySensorDao;
     }
 
-    public DbConnectionEventDao getDbConnectionEventDao() {
-        return dbConnectionEventDao;
+    public DbConnectionSensorDao getDbConnectionSensorDao() {
+        return dbConnectionSensorDao;
     }
 
-    public DbWifiConnectionEventDao getDbWifiConnectionEventDao() {
-        return dbWifiConnectionEventDao;
+    public DbWifiConnectionSensorDao getDbWifiConnectionSensorDao() {
+        return dbWifiConnectionSensorDao;
     }
 
-    public DbMobileConnectionEventDao getDbMobileConnectionEventDao() {
-        return dbMobileConnectionEventDao;
+    public DbMobileConnectionSensorDao getDbMobileConnectionSensorDao() {
+        return dbMobileConnectionSensorDao;
     }
 
-    public DbLoudnessEventDao getDbLoudnessEventDao() {
-        return dbLoudnessEventDao;
+    public DbLoudnessSensorDao getDbLoudnessSensorDao() {
+        return dbLoudnessSensorDao;
     }
 
-    public DbForegroundEventDao getDbForegroundEventDao() {
-        return dbForegroundEventDao;
+    public DbForegroundSensorDao getDbForegroundSensorDao() {
+        return dbForegroundSensorDao;
     }
 
     public DbLightSensorDao getDbLightSensorDao() {
         return dbLightSensorDao;
     }
 
-    public DbRingtoneEventDao getDbRingtoneEventDao() {
-        return dbRingtoneEventDao;
+    public DbRingtoneSensorDao getDbRingtoneSensorDao() {
+        return dbRingtoneSensorDao;
     }
 
-    public DbRunningProcessesEventDao getDbRunningProcessesEventDao() {
-        return dbRunningProcessesEventDao;
+    public DbRunningProcessesSensorDao getDbRunningProcessesSensorDao() {
+        return dbRunningProcessesSensorDao;
     }
 
-    public DbRunningServicesEventDao getDbRunningServicesEventDao() {
-        return dbRunningServicesEventDao;
+    public DbRunningServicesSensorDao getDbRunningServicesSensorDao() {
+        return dbRunningServicesSensorDao;
     }
 
-    public DbRunningTasksEventDao getDbRunningTasksEventDao() {
-        return dbRunningTasksEventDao;
+    public DbRunningTasksSensorDao getDbRunningTasksSensorDao() {
+        return dbRunningTasksSensorDao;
     }
 
-    public DbAccountReaderEventDao getDbAccountReaderEventDao() {
-        return dbAccountReaderEventDao;
+    public DbAccountReaderSensorDao getDbAccountReaderSensorDao() {
+        return dbAccountReaderSensorDao;
     }
 
-    public DbNetworkTrafficEventDao getDbNetworkTrafficEventDao() {
-        return dbNetworkTrafficEventDao;
+    public DbNetworkTrafficSensorDao getDbNetworkTrafficSensorDao() {
+        return dbNetworkTrafficSensorDao;
     }
 
-    public DbBrowserHistoryEventDao getDbBrowserHistoryEventDao() {
-        return dbBrowserHistoryEventDao;
+    public DbBrowserHistorySensorDao getDbBrowserHistorySensorDao() {
+        return dbBrowserHistorySensorDao;
     }
 
-    public DbCallLogEventDao getDbCallLogEventDao() {
-        return dbCallLogEventDao;
+    public DbCallLogSensorDao getDbCallLogSensorDao() {
+        return dbCallLogSensorDao;
     }
 
-    public DbCalendarEventDao getDbCalendarEventDao() {
-        return dbCalendarEventDao;
+    public DbCalendarSensorDao getDbCalendarSensorDao() {
+        return dbCalendarSensorDao;
     }
 
-    public DbCalendarReminderEventDao getDbCalendarReminderEventDao() {
-        return dbCalendarReminderEventDao;
+    public DbCalendarReminderSensorDao getDbCalendarReminderSensorDao() {
+        return dbCalendarReminderSensorDao;
     }
 
-    public DbContactEventDao getDbContactEventDao() {
-        return dbContactEventDao;
+    public DbContactSensorDao getDbContactSensorDao() {
+        return dbContactSensorDao;
     }
 
-    public DbContactNumberEventDao getDbContactNumberEventDao() {
-        return dbContactNumberEventDao;
+    public DbContactNumberSensorDao getDbContactNumberSensorDao() {
+        return dbContactNumberSensorDao;
     }
 
-    public DbContactEmailEventDao getDbContactEmailEventDao() {
-        return dbContactEmailEventDao;
+    public DbContactEmailSensorDao getDbContactEmailSensorDao() {
+        return dbContactEmailSensorDao;
     }
 
-    public DbPowerStateEventDao getDbPowerStateEventDao() {
-        return dbPowerStateEventDao;
+    public DbPowerStateSensorDao getDbPowerStateSensorDao() {
+        return dbPowerStateSensorDao;
     }
 
-    public DbPowerLevelEventDao getDbPowerLevelEventDao() {
-        return dbPowerLevelEventDao;
+    public DbPowerLevelSensorDao getDbPowerLevelSensorDao() {
+        return dbPowerLevelSensorDao;
     }
 
 }

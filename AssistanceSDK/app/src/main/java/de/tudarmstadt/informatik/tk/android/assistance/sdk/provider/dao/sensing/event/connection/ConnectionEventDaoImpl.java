@@ -6,9 +6,9 @@ import java.util.Collections;
 import java.util.List;
 
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DaoSession;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbConnectionEvent;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbConnectionEventDao;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.sensing.event.ConnectionEventDto;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbConnectionSensor;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbConnectionSensorDao;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.sensing.sensor.ConnectionSensorDto;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.CommonEventDaoImpl;
 
 /**
@@ -16,7 +16,7 @@ import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.
  * @date 30.10.2015
  */
 public class ConnectionEventDaoImpl extends
-        CommonEventDaoImpl<DbConnectionEvent> implements
+        CommonEventDaoImpl<DbConnectionSensor> implements
         ConnectionEventDao {
 
     private static final String TAG = ConnectionEventDaoImpl.class.getSimpleName();
@@ -24,7 +24,7 @@ public class ConnectionEventDaoImpl extends
     private static ConnectionEventDao INSTANCE;
 
     private ConnectionEventDaoImpl(DaoSession daoSession) {
-        super(daoSession.getDbConnectionEventDao());
+        super(daoSession.getDbConnectionSensorDao());
     }
 
     public static ConnectionEventDao getInstance(DaoSession mDaoSession) {
@@ -38,13 +38,13 @@ public class ConnectionEventDaoImpl extends
 
     @Nullable
     @Override
-    public ConnectionEventDto convertObject(DbConnectionEvent sensor) {
+    public ConnectionSensorDto convertObject(DbConnectionSensor sensor) {
 
         if (sensor == null) {
             return null;
         }
 
-        ConnectionEventDto result = new ConnectionEventDto();
+        ConnectionSensorDto result = new ConnectionSensorDto();
 
         result.setIsMobile(sensor.getIsMobile());
         result.setIsWifi(sensor.getIsWifi());
@@ -55,7 +55,7 @@ public class ConnectionEventDaoImpl extends
 
     @Nullable
     @Override
-    public DbConnectionEvent get(Long id) {
+    public DbConnectionSensor get(Long id) {
 
         if (id == null) {
             return null;
@@ -63,14 +63,14 @@ public class ConnectionEventDaoImpl extends
 
         return dao
                 .queryBuilder()
-                .where(DbConnectionEventDao.Properties.Id.eq(id))
+                .where(DbConnectionSensorDao.Properties.Id.eq(id))
                 .limit(1)
                 .build()
                 .unique();
     }
 
     @Override
-    public List<DbConnectionEvent> getLastN(int amount) {
+    public List<DbConnectionSensor> getLastN(int amount) {
 
         if (amount <= 0) {
             return Collections.emptyList();
@@ -78,7 +78,7 @@ public class ConnectionEventDaoImpl extends
 
         return dao
                 .queryBuilder()
-                .orderDesc(DbConnectionEventDao.Properties.Id)
+                .orderDesc(DbConnectionSensorDao.Properties.Id)
                 .limit(amount)
                 .build()
                 .list();

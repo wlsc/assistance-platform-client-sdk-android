@@ -6,10 +6,10 @@ import java.util.Collections;
 import java.util.List;
 
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DaoSession;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbRingtoneEvent;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbRingtoneEventDao;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbRingtoneSensor;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbRingtoneSensorDao;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.SensorDto;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.sensing.event.RingtoneEventDto;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.sensing.sensor.RingtoneSensorDto;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.CommonEventDaoImpl;
 
 /**
@@ -17,7 +17,7 @@ import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.
  * @date 24.11.2015
  */
 public class RingtoneEventDaoImpl extends
-        CommonEventDaoImpl<DbRingtoneEvent> implements
+        CommonEventDaoImpl<DbRingtoneSensor> implements
         RingtoneEventDao {
 
     private static final String TAG = RingtoneEventDaoImpl.class.getSimpleName();
@@ -25,7 +25,7 @@ public class RingtoneEventDaoImpl extends
     private static RingtoneEventDao INSTANCE;
 
     private RingtoneEventDaoImpl(DaoSession daoSession) {
-        super(daoSession.getDbRingtoneEventDao());
+        super(daoSession.getDbRingtoneSensorDao());
     }
 
     public static RingtoneEventDao getInstance(DaoSession mDaoSession) {
@@ -39,13 +39,13 @@ public class RingtoneEventDaoImpl extends
 
     @Nullable
     @Override
-    public SensorDto convertObject(DbRingtoneEvent sensor) {
+    public SensorDto convertObject(DbRingtoneSensor sensor) {
 
         if (sensor == null) {
             return null;
         }
 
-        RingtoneEventDto result = new RingtoneEventDto();
+        RingtoneSensorDto result = new RingtoneSensorDto();
 
         result.setMode(sensor.getMode());
         result.setCreated(sensor.getCreated());
@@ -55,7 +55,7 @@ public class RingtoneEventDaoImpl extends
 
     @Nullable
     @Override
-    public DbRingtoneEvent get(Long id) {
+    public DbRingtoneSensor get(Long id) {
 
         if (id == null) {
             return null;
@@ -63,14 +63,14 @@ public class RingtoneEventDaoImpl extends
 
         return dao
                 .queryBuilder()
-                .where(DbRingtoneEventDao.Properties.Id.eq(id))
+                .where(DbRingtoneSensorDao.Properties.Id.eq(id))
                 .limit(1)
                 .build()
                 .unique();
     }
 
     @Override
-    public List<DbRingtoneEvent> getLastN(int amount) {
+    public List<DbRingtoneSensor> getLastN(int amount) {
 
         if (amount <= 0) {
             return Collections.emptyList();
@@ -78,7 +78,7 @@ public class RingtoneEventDaoImpl extends
 
         return dao
                 .queryBuilder()
-                .orderDesc(DbRingtoneEventDao.Properties.Id)
+                .orderDesc(DbRingtoneSensorDao.Properties.Id)
                 .limit(amount)
                 .build()
                 .list();

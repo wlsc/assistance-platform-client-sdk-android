@@ -6,8 +6,8 @@ import java.util.Collections;
 import java.util.List;
 
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DaoSession;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbContactNumberEvent;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbContactNumberEventDao;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbContactNumberSensor;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbContactNumberSensorDao;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.SensorDto;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.CommonEventDaoImpl;
 
@@ -16,7 +16,7 @@ import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.
  * @date 24.11.2015
  */
 public class ContactNumberEventDaoImpl extends
-        CommonEventDaoImpl<DbContactNumberEvent> implements
+        CommonEventDaoImpl<DbContactNumberSensor> implements
         ContactNumberEventDao {
 
     private static final String TAG = ContactNumberEventDaoImpl.class.getSimpleName();
@@ -24,7 +24,7 @@ public class ContactNumberEventDaoImpl extends
     private static ContactNumberEventDao INSTANCE;
 
     private ContactNumberEventDaoImpl(DaoSession daoSession) {
-        super(daoSession.getDbContactNumberEventDao());
+        super(daoSession.getDbContactNumberSensorDao());
     }
 
     public static ContactNumberEventDao getInstance(DaoSession mDaoSession) {
@@ -38,7 +38,7 @@ public class ContactNumberEventDaoImpl extends
 
     @Nullable
     @Override
-    public SensorDto convertObject(DbContactNumberEvent sensor) {
+    public SensorDto convertObject(DbContactNumberSensor sensor) {
 
         if (sensor == null) {
             return null;
@@ -54,8 +54,8 @@ public class ContactNumberEventDaoImpl extends
 //        result.setIsUpdated(sensor.getIsUpdated());
 //        result.setIsDeleted(sensor.getIsDeleted());
 //        result.setContactId(sensor.getContactId());
-//        result.setType(DtoType.CONTACT_NUMBER);
-//        result.setTypeStr(DtoType.getApiName(DtoType.CONTACT_NUMBER));
+//        result.setType(SensorApiType.CONTACT_NUMBER);
+//        result.setTypeStr(SensorApiType.getApiName(SensorApiType.CONTACT_NUMBER));
 //        result.setCreated(sensor.getCreated());
 
         return null;
@@ -63,7 +63,7 @@ public class ContactNumberEventDaoImpl extends
 
     @Nullable
     @Override
-    public DbContactNumberEvent get(Long id) {
+    public DbContactNumberSensor get(Long id) {
 
         if (id == null) {
             return null;
@@ -71,14 +71,14 @@ public class ContactNumberEventDaoImpl extends
 
         return dao
                 .queryBuilder()
-                .where(DbContactNumberEventDao.Properties.Id.eq(id))
+                .where(DbContactNumberSensorDao.Properties.Id.eq(id))
                 .limit(1)
                 .build()
                 .unique();
     }
 
     @Override
-    public List<DbContactNumberEvent> getLastN(int amount) {
+    public List<DbContactNumberSensor> getLastN(int amount) {
 
         if (amount <= 0) {
             return Collections.emptyList();
@@ -86,14 +86,14 @@ public class ContactNumberEventDaoImpl extends
 
         return dao
                 .queryBuilder()
-                .orderDesc(DbContactNumberEventDao.Properties.Id)
+                .orderDesc(DbContactNumberSensorDao.Properties.Id)
                 .limit(amount)
                 .build()
                 .list();
     }
 
     @Override
-    public List<DbContactNumberEvent> getAll(Long contactId) {
+    public List<DbContactNumberSensor> getAll(Long contactId) {
 
         if (contactId == null) {
             return Collections.emptyList();
@@ -101,7 +101,7 @@ public class ContactNumberEventDaoImpl extends
 
         return dao
                 .queryBuilder()
-                .where(DbContactNumberEventDao.Properties.ContactId.eq(contactId))
+                .where(DbContactNumberSensorDao.Properties.ContactId.eq(contactId))
                 .build()
                 .list();
     }

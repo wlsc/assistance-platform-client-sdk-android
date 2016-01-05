@@ -15,7 +15,7 @@ import de.greenrobot.event.EventBus;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbModule;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbModuleCapability;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.event.UpdateSensorIntervalEvent;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.DtoType;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.sensing.SensorApiType;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.util.PermissionUtils;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.util.logger.Log;
 
@@ -104,7 +104,7 @@ public class ModuleProvider {
 
             // only when that capability was previously active
             if (capability.getActive()) {
-                dtoTypes.add(DtoType.getDtoType(capability.getType()));
+                dtoTypes.add(SensorApiType.getDtoType(capability.getType()));
             }
         }
 
@@ -116,7 +116,7 @@ public class ModuleProvider {
             for (Integer dtoType : dtoTypes) {
 
                 Double collectionFreq = sensorProvider.getCollectionInterval(
-                        DtoType.getApiName(dtoType));
+                        SensorApiType.getApiName(dtoType));
 
                 // fire change event
                 EventBus.getDefault().post(new UpdateSensorIntervalEvent(dtoType, collectionFreq));
@@ -158,7 +158,7 @@ public class ModuleProvider {
             return false;
         }
 
-        String typeStr = DtoType.getApiName(dtoType);
+        String typeStr = SensorApiType.getApiName(dtoType);
 
         List<DbModule> allActiveModules = daoProvider.getModuleDao().getAllActive(module.getUserId());
 

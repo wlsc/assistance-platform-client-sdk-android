@@ -3,8 +3,8 @@ package de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.sensing.se
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.DtoType;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.SensorDto;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.sensing.SensorApiType;
 
 /**
  * @author Wladimir Schmidt (wlsc.dev@gmail.com)
@@ -42,8 +42,8 @@ public class AccelerometerSensorDto implements SensorDto {
     private int type;
 
     public AccelerometerSensorDto() {
-        this.type = DtoType.ACCELEROMETER;
-        this.typeStr = DtoType.getApiName(this.type);
+        this.type = SensorApiType.ACCELEROMETER;
+        this.typeStr = SensorApiType.getApiName(this.type);
     }
 
     public AccelerometerSensorDto(Double x, Double y, Double z, String created, Integer accuracy) {
@@ -52,8 +52,8 @@ public class AccelerometerSensorDto implements SensorDto {
         this.z = z;
         this.created = created;
         this.accuracy = accuracy;
-        this.type = DtoType.ACCELEROMETER;
-        this.typeStr = DtoType.getApiName(this.type);
+        this.type = SensorApiType.ACCELEROMETER;
+        this.typeStr = SensorApiType.getApiName(this.type);
     }
 
     public Double getX() {

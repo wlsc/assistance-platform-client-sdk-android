@@ -6,10 +6,10 @@ import java.util.Collections;
 import java.util.List;
 
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DaoSession;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbForegroundEvent;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbForegroundEventDao;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.DtoType;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.sensing.event.ForegroundEventDto;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbForegroundSensor;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbForegroundSensorDao;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.sensing.SensorApiType;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.sensing.sensor.ForegroundSensorDto;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.CommonEventDaoImpl;
 
 /**
@@ -17,7 +17,7 @@ import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.
  * @date 30.10.2015
  */
 public class ForegroundEventDaoImpl extends
-        CommonEventDaoImpl<DbForegroundEvent> implements
+        CommonEventDaoImpl<DbForegroundSensor> implements
         ForegroundEventDao {
 
     private static final String TAG = ForegroundEventDaoImpl.class.getSimpleName();
@@ -25,7 +25,7 @@ public class ForegroundEventDaoImpl extends
     private static ForegroundEventDao INSTANCE;
 
     private ForegroundEventDaoImpl(DaoSession daoSession) {
-        super(daoSession.getDbForegroundEventDao());
+        super(daoSession.getDbForegroundSensorDao());
     }
 
     public static ForegroundEventDao getInstance(DaoSession mDaoSession) {
@@ -39,13 +39,13 @@ public class ForegroundEventDaoImpl extends
 
     @Nullable
     @Override
-    public ForegroundEventDto convertObject(DbForegroundEvent sensor) {
+    public ForegroundSensorDto convertObject(DbForegroundSensor sensor) {
 
         if (sensor == null) {
             return null;
         }
 
-        ForegroundEventDto result = new ForegroundEventDto();
+        ForegroundSensorDto result = new ForegroundSensorDto();
 
         result.setAppName(sensor.getAppName());
         result.setActivityLabel(sensor.getActivityLabel());
@@ -54,7 +54,7 @@ public class ForegroundEventDaoImpl extends
         result.setKeystrokes(sensor.getKeystrokes());
         result.setPackageName(sensor.getPackageName());
         result.setUrl(sensor.getUrl());
-        result.setEventType(DtoType.getApiName(sensor.getEventType()));
+        result.setEventType(SensorApiType.getApiName(sensor.getEventType()));
         result.setCreated(sensor.getCreated());
 
         return result;
@@ -62,7 +62,7 @@ public class ForegroundEventDaoImpl extends
 
     @Nullable
     @Override
-    public DbForegroundEvent get(Long id) {
+    public DbForegroundSensor get(Long id) {
 
         if (id == null) {
             return null;
@@ -70,14 +70,14 @@ public class ForegroundEventDaoImpl extends
 
         return dao
                 .queryBuilder()
-                .where(DbForegroundEventDao.Properties.Id.eq(id))
+                .where(DbForegroundSensorDao.Properties.Id.eq(id))
                 .limit(1)
                 .build()
                 .unique();
     }
 
     @Override
-    public List<DbForegroundEvent> getLastN(int amount) {
+    public List<DbForegroundSensor> getLastN(int amount) {
 
         if (amount <= 0) {
             return Collections.emptyList();
@@ -85,7 +85,7 @@ public class ForegroundEventDaoImpl extends
 
         return dao
                 .queryBuilder()
-                .orderDesc(DbForegroundEventDao.Properties.Id)
+                .orderDesc(DbForegroundSensorDao.Properties.Id)
                 .limit(amount)
                 .build()
                 .list();

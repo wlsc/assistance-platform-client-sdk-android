@@ -3,8 +3,8 @@ package de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.sensing.se
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.DtoType;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.SensorDto;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.sensing.SensorApiType;
 
 /**
  * @author Wladimir Schmidt (wlsc.dev@gmail.com)
@@ -66,8 +66,8 @@ public class MagneticFieldSensorDto implements SensorDto {
     private int type;
 
     public MagneticFieldSensorDto() {
-        this.type = DtoType.MAGNETIC_FIELD;
-        this.typeStr = DtoType.getApiName(this.type);
+        this.type = SensorApiType.MAGNETIC_FIELD;
+        this.typeStr = SensorApiType.getApiName(this.type);
     }
 
     public MagneticFieldSensorDto(Double x, Double y, Double z, float xUncalibratedNoHardIron, float yUncalibratedNoHardIron, float zUncalibratedNoHardIron, float xUncalibratedEstimatedIronBias, float yUncalibratedEstimatedIronBias, float zUncalibratedEstimatedIronBias, String created, Integer accuracy) {
@@ -82,8 +82,8 @@ public class MagneticFieldSensorDto implements SensorDto {
         this.zUncalibratedEstimatedIronBias = zUncalibratedEstimatedIronBias;
         this.created = created;
         this.accuracy = accuracy;
-        this.type = DtoType.MAGNETIC_FIELD;
-        this.typeStr = DtoType.getApiName(this.type);
+        this.type = SensorApiType.MAGNETIC_FIELD;
+        this.typeStr = SensorApiType.getApiName(this.type);
     }
 
     public Double getX() {

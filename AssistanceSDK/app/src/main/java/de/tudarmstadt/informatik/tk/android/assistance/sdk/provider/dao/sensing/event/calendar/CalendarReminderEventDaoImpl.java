@@ -6,9 +6,9 @@ import java.util.Collections;
 import java.util.List;
 
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DaoSession;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbCalendarReminderEvent;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbCalendarReminderEventDao;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.sensing.event.calendar.CalendarReminder;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbCalendarReminderSensor;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbCalendarReminderSensorDao;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.sensing.sensor.calendar.CalendarReminder;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.CommonEventDaoImpl;
 
 /**
@@ -16,7 +16,7 @@ import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.
  * @date 30.10.2015
  */
 public class CalendarReminderEventDaoImpl extends
-        CommonEventDaoImpl<DbCalendarReminderEvent> implements
+        CommonEventDaoImpl<DbCalendarReminderSensor> implements
         CalendarReminderEventDao {
 
     private static final String TAG = CalendarReminderEventDaoImpl.class.getSimpleName();
@@ -24,7 +24,7 @@ public class CalendarReminderEventDaoImpl extends
     private static CalendarReminderEventDao INSTANCE;
 
     private CalendarReminderEventDaoImpl(DaoSession daoSession) {
-        super(daoSession.getDbCalendarReminderEventDao());
+        super(daoSession.getDbCalendarReminderSensorDao());
     }
 
     public static CalendarReminderEventDao getInstance(DaoSession mDaoSession) {
@@ -38,7 +38,7 @@ public class CalendarReminderEventDaoImpl extends
 
     @Nullable
     @Override
-    public CalendarReminder convertObject(DbCalendarReminderEvent sensor) {
+    public CalendarReminder convertObject(DbCalendarReminderSensor sensor) {
 
         if (sensor == null) {
             return null;
@@ -66,7 +66,7 @@ public class CalendarReminderEventDaoImpl extends
     }
 
     @Override
-    public List<DbCalendarReminderEvent> getAllByEventId(long eventId) {
+    public List<DbCalendarReminderSensor> getAllByEventId(long eventId) {
 
         if (eventId <= 0) {
             return Collections.emptyList();
@@ -74,14 +74,14 @@ public class CalendarReminderEventDaoImpl extends
 
         return dao
                 .queryBuilder()
-                .where(DbCalendarReminderEventDao.Properties.EventId.eq(eventId))
+                .where(DbCalendarReminderSensorDao.Properties.EventId.eq(eventId))
                 .build()
                 .list();
     }
 
     @Nullable
     @Override
-    public DbCalendarReminderEvent get(Long id) {
+    public DbCalendarReminderSensor get(Long id) {
 
         if (id == null) {
             return null;
@@ -89,14 +89,14 @@ public class CalendarReminderEventDaoImpl extends
 
         return dao
                 .queryBuilder()
-                .where(DbCalendarReminderEventDao.Properties.Id.eq(id))
+                .where(DbCalendarReminderSensorDao.Properties.Id.eq(id))
                 .limit(1)
                 .build()
                 .unique();
     }
 
     @Override
-    public List<DbCalendarReminderEvent> getLastN(int amount) {
+    public List<DbCalendarReminderSensor> getLastN(int amount) {
 
         if (amount <= 0) {
             return Collections.emptyList();
@@ -104,7 +104,7 @@ public class CalendarReminderEventDaoImpl extends
 
         return dao
                 .queryBuilder()
-                .orderDesc(DbCalendarReminderEventDao.Properties.Id)
+                .orderDesc(DbCalendarReminderSensorDao.Properties.Id)
                 .limit(amount)
                 .build()
                 .list();

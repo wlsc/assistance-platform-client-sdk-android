@@ -13,8 +13,8 @@ import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbForegroundEvent;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensing.impl.triggered.ForegroundEvent;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbForegroundSensor;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensing.impl.triggered.ForegroundSensor;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.util.logger.Log;
 
 import static android.content.pm.PackageManager.NameNotFoundException;
@@ -51,10 +51,10 @@ public class AccessibilityEventFilterUtils {
      * Receives an AccessibilityEvent and writes out data depending on the internal states.
      *
      * @param event AccessibilityEvent
-     * @return ForegroundEvent
+     * @return ForegroundSensor
      */
     @Nullable
-    public DbForegroundEvent filter(AccessibilityEvent event) {
+    public DbForegroundSensor filter(AccessibilityEvent event) {
 
         if (event == null || event.getPackageName() == null) {
             return null;
@@ -64,7 +64,7 @@ public class AccessibilityEventFilterUtils {
         String className = event.getClassName() == null ? null : event.getClassName().toString();
         String appName = getAppName(packageName);
 
-        DbForegroundEvent foregroundEvent = new DbForegroundEvent();
+        DbForegroundSensor foregroundEvent = new DbForegroundSensor();
         foregroundEvent.setPackageName(packageName);
         foregroundEvent.setAppName(appName);
         foregroundEvent.setClassName(className);
@@ -84,7 +84,7 @@ public class AccessibilityEventFilterUtils {
                         //break;
                     }
 
-                    foregroundEvent.setEventType(ForegroundEvent.EVENT_APP);
+                    foregroundEvent.setEventType(ForegroundSensor.EVENT_APP);
 
                     lWindow("App", appName, packageName, className, activityLabel);
 
@@ -99,7 +99,7 @@ public class AccessibilityEventFilterUtils {
                     if (lastClass != null) {
                         if (!lastClass.equals(className)) {
 
-                            foregroundEvent.setEventType(ForegroundEvent.EVENT_ACTIVITY);
+                            foregroundEvent.setEventType(ForegroundSensor.EVENT_ACTIVITY);
 
                             lWindow("Activity", appName, packageName, className, activityLabel);
                         } else {

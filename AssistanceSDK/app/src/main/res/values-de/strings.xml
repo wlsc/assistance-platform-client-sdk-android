@@ -8,18 +8,18 @@
     <string name="sensor_activity">Aktivität</string>
     <string name="sensor_connection">Drahtlose Verbindungen</string>
     <string name="sensor_light">Umgebungslicht</string>
-    <string name="event_ringtone">Klingelton</string>
-    <string name="event_account_reader">Account reader</string>
-    <string name="event_running_processes">Laufende Prozesse</string>
-    <string name="event_running_services">Laufende Dienste</string>
-    <string name="event_running_tasks">Laufende Tasks</string>
-    <string name="event_contacts">Kontakte</string>
-    <string name="event_calendar">Kalender</string>
+    <string name="sensor_ringtone">Klingelton</string>
+    <string name="sensor_account_reader">Account reader</string>
+    <string name="sensor_running_processes">Laufende Prozesse</string>
+    <string name="sensor_running_services">Laufende Dienste</string>
+    <string name="sensor_running_tasks">Laufende Tasks</string>
+    <string name="sensor_contacts">Kontakte</string>
+    <string name="sensor_calendar">Kalender</string>
     <string name="sensor_loudness">Lautstärke</string>
-    <string name="event_calllog">Anrufliste</string>
-    <string name="event_browser_history">Browser Verlauf</string>
-    <string name="event_foreground">Benutzte Apps</string>
-    <string name="event_network_traffic">Datenverbrauch</string>
+    <string name="sensor_calllog">Anrufliste</string>
+    <string name="sensor_browser_history">Browser Verlauf</string>
+    <string name="sensor_foreground">Benutzte Apps</string>
+    <string name="sensor_network_traffic">Datenverbrauch</string>
 
     <!-- Data Profiles -->
     <string-array name="data_profile_titles">

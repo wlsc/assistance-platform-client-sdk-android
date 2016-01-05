@@ -6,10 +6,10 @@ import java.util.Collections;
 import java.util.List;
 
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DaoSession;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbAccountReaderEvent;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbAccountReaderEventDao;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbAccountReaderSensor;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbAccountReaderSensorDao;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.SensorDto;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.sensing.event.AccountReaderEventDto;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.sensing.sensor.AccountReaderSensorDto;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.CommonEventDaoImpl;
 
 /**
@@ -17,7 +17,7 @@ import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.
  * @date 24.11.2015
  */
 public class AccountReaderEventDaoImpl extends
-        CommonEventDaoImpl<DbAccountReaderEvent> implements
+        CommonEventDaoImpl<DbAccountReaderSensor> implements
         AccountReaderEventDao {
 
     private static final String TAG = AccountReaderEventDaoImpl.class.getSimpleName();
@@ -25,7 +25,7 @@ public class AccountReaderEventDaoImpl extends
     private static AccountReaderEventDao INSTANCE;
 
     private AccountReaderEventDaoImpl(DaoSession daoSession) {
-        super(daoSession.getDbAccountReaderEventDao());
+        super(daoSession.getDbAccountReaderSensorDao());
     }
 
     public static AccountReaderEventDao getInstance(DaoSession mDaoSession) {
@@ -39,13 +39,13 @@ public class AccountReaderEventDaoImpl extends
 
     @Nullable
     @Override
-    public SensorDto convertObject(DbAccountReaderEvent sensor) {
+    public SensorDto convertObject(DbAccountReaderSensor sensor) {
 
         if (sensor == null) {
             return null;
         }
 
-        AccountReaderEventDto result = new AccountReaderEventDto();
+        AccountReaderSensorDto result = new AccountReaderSensorDto();
 
         result.setTypes(sensor.getTypes());
         result.setCreated(sensor.getCreated());
@@ -55,7 +55,7 @@ public class AccountReaderEventDaoImpl extends
 
     @Nullable
     @Override
-    public DbAccountReaderEvent get(Long id) {
+    public DbAccountReaderSensor get(Long id) {
 
         if (id == null) {
             return null;
@@ -63,14 +63,14 @@ public class AccountReaderEventDaoImpl extends
 
         return dao
                 .queryBuilder()
-                .where(DbAccountReaderEventDao.Properties.Id.eq(id))
+                .where(DbAccountReaderSensorDao.Properties.Id.eq(id))
                 .limit(1)
                 .build()
                 .unique();
     }
 
     @Override
-    public List<DbAccountReaderEvent> getLastN(int amount) {
+    public List<DbAccountReaderSensor> getLastN(int amount) {
 
         if (amount <= 0) {
             return Collections.emptyList();
@@ -78,7 +78,7 @@ public class AccountReaderEventDaoImpl extends
 
         return dao
                 .queryBuilder()
-                .orderDesc(DbAccountReaderEventDao.Properties.Id)
+                .orderDesc(DbAccountReaderSensorDao.Properties.Id)
                 .limit(amount)
                 .build()
                 .list();

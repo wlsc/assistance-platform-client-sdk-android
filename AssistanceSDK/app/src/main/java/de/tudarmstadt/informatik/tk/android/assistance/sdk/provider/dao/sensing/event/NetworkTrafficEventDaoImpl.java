@@ -6,9 +6,9 @@ import java.util.Collections;
 import java.util.List;
 
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DaoSession;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbNetworkTrafficEvent;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbNetworkTrafficEventDao;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.sensing.event.NetworkTrafficEventDto;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbNetworkTrafficSensor;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbNetworkTrafficSensorDao;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.sensing.sensor.NetworkTrafficSensorDto;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.CommonEventDaoImpl;
 
 /**
@@ -16,7 +16,7 @@ import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.
  * @date 30.10.2015
  */
 public class NetworkTrafficEventDaoImpl extends
-        CommonEventDaoImpl<DbNetworkTrafficEvent> implements
+        CommonEventDaoImpl<DbNetworkTrafficSensor> implements
         NetworkTrafficEventDao {
 
     private static final String TAG = NetworkTrafficEventDaoImpl.class.getSimpleName();
@@ -24,7 +24,7 @@ public class NetworkTrafficEventDaoImpl extends
     private static NetworkTrafficEventDao INSTANCE;
 
     private NetworkTrafficEventDaoImpl(DaoSession daoSession) {
-        super(daoSession.getDbNetworkTrafficEventDao());
+        super(daoSession.getDbNetworkTrafficSensorDao());
     }
 
     public static NetworkTrafficEventDao getInstance(DaoSession mDaoSession) {
@@ -38,13 +38,13 @@ public class NetworkTrafficEventDaoImpl extends
 
     @Nullable
     @Override
-    public NetworkTrafficEventDto convertObject(DbNetworkTrafficEvent sensor) {
+    public NetworkTrafficSensorDto convertObject(DbNetworkTrafficSensor sensor) {
 
         if (sensor == null) {
             return null;
         }
 
-        NetworkTrafficEventDto result = new NetworkTrafficEventDto();
+        NetworkTrafficSensorDto result = new NetworkTrafficSensorDto();
 
         result.setAppName(sensor.getAppName());
         result.setRxBytes(sensor.getRxBytes());
@@ -59,7 +59,7 @@ public class NetworkTrafficEventDaoImpl extends
 
     @Nullable
     @Override
-    public DbNetworkTrafficEvent get(Long id) {
+    public DbNetworkTrafficSensor get(Long id) {
 
         if (id == null) {
             return null;
@@ -67,14 +67,14 @@ public class NetworkTrafficEventDaoImpl extends
 
         return dao
                 .queryBuilder()
-                .where(DbNetworkTrafficEventDao.Properties.Id.eq(id))
+                .where(DbNetworkTrafficSensorDao.Properties.Id.eq(id))
                 .limit(1)
                 .build()
                 .unique();
     }
 
     @Override
-    public List<DbNetworkTrafficEvent> getLastN(int amount) {
+    public List<DbNetworkTrafficSensor> getLastN(int amount) {
 
         if (amount <= 0) {
             return Collections.emptyList();
@@ -82,32 +82,32 @@ public class NetworkTrafficEventDaoImpl extends
 
         return dao
                 .queryBuilder()
-                .orderDesc(DbNetworkTrafficEventDao.Properties.Id)
+                .orderDesc(DbNetworkTrafficSensorDao.Properties.Id)
                 .limit(amount)
                 .build()
                 .list();
     }
 
     @Override
-    public List<DbNetworkTrafficEvent> getAllBackground() {
+    public List<DbNetworkTrafficSensor> getAllBackground() {
         return dao
                 .queryBuilder()
-                .where(DbNetworkTrafficEventDao.Properties.Background.eq(Boolean.TRUE))
+                .where(DbNetworkTrafficSensorDao.Properties.Background.eq(Boolean.TRUE))
                 .build()
                 .list();
     }
 
     @Override
-    public List<DbNetworkTrafficEvent> getAllForeground() {
+    public List<DbNetworkTrafficSensor> getAllForeground() {
         return dao
                 .queryBuilder()
-                .where(DbNetworkTrafficEventDao.Properties.Background.eq(Boolean.FALSE))
+                .where(DbNetworkTrafficSensorDao.Properties.Background.eq(Boolean.FALSE))
                 .build()
                 .list();
     }
 
     @Override
-    public List<DbNetworkTrafficEvent> getFirstNBackground(int amount) {
+    public List<DbNetworkTrafficSensor> getFirstNBackground(int amount) {
 
         if (amount <= 0) {
             return Collections.emptyList();
@@ -115,14 +115,14 @@ public class NetworkTrafficEventDaoImpl extends
 
         return dao
                 .queryBuilder()
-                .where(DbNetworkTrafficEventDao.Properties.Background.eq(Boolean.TRUE))
+                .where(DbNetworkTrafficSensorDao.Properties.Background.eq(Boolean.TRUE))
                 .limit(amount)
                 .build()
                 .list();
     }
 
     @Override
-    public List<DbNetworkTrafficEvent> getFirstNForeground(int amount) {
+    public List<DbNetworkTrafficSensor> getFirstNForeground(int amount) {
 
         if (amount <= 0) {
             return Collections.emptyList();
@@ -130,7 +130,7 @@ public class NetworkTrafficEventDaoImpl extends
 
         return dao
                 .queryBuilder()
-                .where(DbNetworkTrafficEventDao.Properties.Background.eq(Boolean.FALSE))
+                .where(DbNetworkTrafficSensorDao.Properties.Background.eq(Boolean.FALSE))
                 .limit(amount)
                 .build()
                 .list();

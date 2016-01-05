@@ -8,13 +8,13 @@ import java.util.List;
 import java.util.Set;
 
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DaoSession;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbContactEmailEvent;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbContactEvent;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbContactEventDao;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbContactNumberEvent;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbContactEmailSensor;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbContactSensor;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbContactSensorDao;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbContactNumberSensor;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.SensorDto;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.sensing.event.contact.ContactEmailNumber;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.sensing.event.contact.ContactEventDto;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.sensing.sensor.contact.ContactEmailNumber;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.sensing.sensor.contact.ContactSensorDto;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.CommonEventDaoImpl;
 
 /**
@@ -22,7 +22,7 @@ import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.
  * @date 24.11.2015
  */
 public class ContactEventDaoImpl extends
-        CommonEventDaoImpl<DbContactEvent> implements
+        CommonEventDaoImpl<DbContactSensor> implements
         ContactEventDao {
 
     private static final String TAG = ContactEventDaoImpl.class.getSimpleName();
@@ -30,7 +30,7 @@ public class ContactEventDaoImpl extends
     private static ContactEventDao INSTANCE;
 
     private ContactEventDaoImpl(DaoSession daoSession) {
-        super(daoSession.getDbContactEventDao());
+        super(daoSession.getDbContactSensorDao());
     }
 
     public static ContactEventDao getInstance(DaoSession mDaoSession) {
@@ -44,13 +44,13 @@ public class ContactEventDaoImpl extends
 
     @Nullable
     @Override
-    public SensorDto convertObject(DbContactEvent sensor) {
+    public SensorDto convertObject(DbContactSensor sensor) {
 
         if (sensor == null) {
             return null;
         }
 
-        ContactEventDto result = new ContactEventDto();
+        ContactSensorDto result = new ContactSensorDto();
 
         result.setGlobalContactId(sensor.getGlobalContactId());
         result.setDisplayName(sensor.getDisplayName());
@@ -63,14 +63,14 @@ public class ContactEventDaoImpl extends
         result.setIsDeleted(sensor.getIsDeleted());
         result.setCreated(sensor.getCreated());
 
-        List<DbContactEmailEvent> dbEmails = sensor.getDbContactEmailEventList();
-        List<DbContactNumberEvent> dbNumbers = sensor.getDbContactNumberEventList();
+        List<DbContactEmailSensor> dbEmails = sensor.getDbContactEmailSensorList();
+        List<DbContactNumberSensor> dbNumbers = sensor.getDbContactNumberSensorList();
 
         if (dbEmails != null && !dbEmails.isEmpty()) {
 
             Set<ContactEmailNumber> emailsDto = new HashSet<>(dbEmails.size());
 
-            for (DbContactEmailEvent emailEvent : dbEmails) {
+            for (DbContactEmailSensor emailEvent : dbEmails) {
 
                 ContactEmailNumber emailDto = new ContactEmailNumber(
                         emailEvent.getType(),
@@ -86,7 +86,7 @@ public class ContactEventDaoImpl extends
 
             Set<ContactEmailNumber> numbersDto = new HashSet<>(dbNumbers.size());
 
-            for (DbContactNumberEvent numberEvent : dbNumbers) {
+            for (DbContactNumberSensor numberEvent : dbNumbers) {
 
                 ContactEmailNumber emailDto = new ContactEmailNumber(
                         numberEvent.getType(),
@@ -103,7 +103,7 @@ public class ContactEventDaoImpl extends
 
     @Nullable
     @Override
-    public DbContactEvent get(Long id) {
+    public DbContactSensor get(Long id) {
 
         if (id == null) {
             return null;
@@ -111,14 +111,14 @@ public class ContactEventDaoImpl extends
 
         return dao
                 .queryBuilder()
-                .where(DbContactEventDao.Properties.Id.eq(id))
+                .where(DbContactSensorDao.Properties.Id.eq(id))
                 .limit(1)
                 .build()
                 .unique();
     }
 
     @Override
-    public List<DbContactEvent> getLastN(int amount) {
+    public List<DbContactSensor> getLastN(int amount) {
 
         if (amount <= 0) {
             return Collections.emptyList();
@@ -126,7 +126,7 @@ public class ContactEventDaoImpl extends
 
         return dao
                 .queryBuilder()
-                .orderDesc(DbContactEventDao.Properties.Id)
+                .orderDesc(DbContactSensorDao.Properties.Id)
                 .limit(amount)
                 .build()
                 .list();

@@ -3,8 +3,8 @@ package de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.sensing.se
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.DtoType;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.SensorDto;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.sensing.SensorApiType;
 
 /**
  * @author Wladimir Schmidt (wlsc.dev@gmail.com)
@@ -57,8 +57,8 @@ public class LocationSensorDto implements SensorDto {
     private int type;
 
     public LocationSensorDto() {
-        this.type = DtoType.LOCATION;
-        this.typeStr = DtoType.getApiName(this.type);
+        this.type = SensorApiType.LOCATION;
+        this.typeStr = SensorApiType.getApiName(this.type);
     }
 
     public LocationSensorDto(Double latitude, Double longitude, Double accuracyHorizontal, Float speed, String created, Double altitude, Double accuracyVertical, Integer course, Integer floor) {
@@ -71,8 +71,8 @@ public class LocationSensorDto implements SensorDto {
         this.accuracyVertical = accuracyVertical;
         this.course = course;
         this.floor = floor;
-        this.type = DtoType.LOCATION;
-        this.typeStr = DtoType.getApiName(this.type);
+        this.type = SensorApiType.LOCATION;
+        this.typeStr = SensorApiType.getApiName(this.type);
     }
 
     public Double getLatitude() {

@@ -6,9 +6,9 @@ import java.util.Collections;
 import java.util.List;
 
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DaoSession;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbMotionActivityEvent;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbMotionActivityEventDao;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.sensing.event.MotionActivityEventDto;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbMotionActivitySensor;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbMotionActivitySensorDao;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.sensing.sensor.MotionActivitySensorDto;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.CommonEventDaoImpl;
 
 /**
@@ -16,7 +16,7 @@ import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.
  * @date 30.10.2015
  */
 public class MotionActivityEventDaoImpl extends
-        CommonEventDaoImpl<DbMotionActivityEvent> implements
+        CommonEventDaoImpl<DbMotionActivitySensor> implements
         MotionActivityEventDao {
 
     private static final String TAG = MotionActivityEventDaoImpl.class.getSimpleName();
@@ -24,7 +24,7 @@ public class MotionActivityEventDaoImpl extends
     private static MotionActivityEventDao INSTANCE;
 
     private MotionActivityEventDaoImpl(DaoSession daoSession) {
-        super(daoSession.getDbMotionActivityEventDao());
+        super(daoSession.getDbMotionActivitySensorDao());
     }
 
     public static MotionActivityEventDao getInstance(DaoSession mDaoSession) {
@@ -38,13 +38,13 @@ public class MotionActivityEventDaoImpl extends
 
     @Nullable
     @Override
-    public MotionActivityEventDto convertObject(DbMotionActivityEvent sensor) {
+    public MotionActivitySensorDto convertObject(DbMotionActivitySensor sensor) {
 
         if (sensor == null) {
             return null;
         }
 
-        MotionActivityEventDto result = new MotionActivityEventDto();
+        MotionActivitySensorDto result = new MotionActivitySensorDto();
 
         result.setRunning(sensor.getRunning());
         result.setStationary(sensor.getStationary());
@@ -61,7 +61,7 @@ public class MotionActivityEventDaoImpl extends
 
     @Nullable
     @Override
-    public DbMotionActivityEvent get(Long id) {
+    public DbMotionActivitySensor get(Long id) {
 
         if (id == null) {
             return null;
@@ -69,14 +69,14 @@ public class MotionActivityEventDaoImpl extends
 
         return dao
                 .queryBuilder()
-                .where(DbMotionActivityEventDao.Properties.Id.eq(id))
+                .where(DbMotionActivitySensorDao.Properties.Id.eq(id))
                 .limit(1)
                 .build()
                 .unique();
     }
 
     @Override
-    public List<DbMotionActivityEvent> getLastN(int amount) {
+    public List<DbMotionActivitySensor> getLastN(int amount) {
 
         if (amount <= 0) {
             return Collections.emptyList();
@@ -84,7 +84,7 @@ public class MotionActivityEventDaoImpl extends
 
         return dao
                 .queryBuilder()
-                .orderDesc(DbMotionActivityEventDao.Properties.Id)
+                .orderDesc(DbMotionActivitySensorDao.Properties.Id)
                 .limit(amount)
                 .build()
                 .list();

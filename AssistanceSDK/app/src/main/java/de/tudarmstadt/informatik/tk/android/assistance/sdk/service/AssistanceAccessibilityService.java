@@ -4,9 +4,9 @@ import android.accessibilityservice.AccessibilityService;
 import android.content.Intent;
 import android.view.accessibility.AccessibilityEvent;
 
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.DtoType;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensing.impl.triggered.ForegroundEvent;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensing.impl.triggered.ForegroundTrafficEvent;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.sensing.SensorApiType;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensing.impl.triggered.ForegroundSensor;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensing.impl.triggered.ForegroundTrafficSensor;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.PreferenceProvider;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.SensorProvider;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.util.logger.Log;
@@ -21,8 +21,8 @@ public class AssistanceAccessibilityService extends AccessibilityService {
 
     private static final String TAG = AssistanceAccessibilityService.class.getSimpleName();
 
-    private ForegroundEvent mForegroundSensor;
-    private ForegroundTrafficEvent mForegroundTrafficEvent;
+    private ForegroundSensor mForegroundSensor;
+    private ForegroundTrafficSensor mForegroundTrafficSensor;
 
     @Override
     public void onCreate() {
@@ -30,13 +30,13 @@ public class AssistanceAccessibilityService extends AccessibilityService {
 
         Log.d(TAG, "Starting service...");
 
-        mForegroundSensor = (ForegroundEvent) SensorProvider
+        mForegroundSensor = (ForegroundSensor) SensorProvider
                 .getInstance(getApplicationContext())
-                .getAvailableSensor(DtoType.FOREGROUND);
+                .getAvailableSensor(SensorApiType.FOREGROUND);
 
-        mForegroundTrafficEvent = (ForegroundTrafficEvent) SensorProvider
+        mForegroundTrafficSensor = (ForegroundTrafficSensor) SensorProvider
                 .getInstance(getApplicationContext())
-                .getAvailableSensor(DtoType.FOREGROUND_TRAFFIC);
+                .getAvailableSensor(SensorApiType.FOREGROUND_TRAFFIC);
 
         Log.d(TAG, "Successfully started.");
     }
@@ -50,8 +50,8 @@ public class AssistanceAccessibilityService extends AccessibilityService {
             mForegroundSensor.onEvent(event);
         }
 
-        if (mForegroundTrafficEvent != null) {
-            mForegroundTrafficEvent.onEvent(event);
+        if (mForegroundTrafficSensor != null) {
+            mForegroundTrafficSensor.onEvent(event);
         }
     }
 

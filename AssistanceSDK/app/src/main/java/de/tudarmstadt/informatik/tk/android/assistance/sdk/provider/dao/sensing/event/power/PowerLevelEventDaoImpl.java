@@ -6,10 +6,10 @@ import java.util.Collections;
 import java.util.List;
 
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DaoSession;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbPowerLevelEvent;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbPowerLevelEventDao;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbPowerLevelSensor;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbPowerLevelSensorDao;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.SensorDto;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.sensing.event.PowerLevelEventDto;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.sensing.sensor.PowerLevelSensorDto;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.CommonEventDaoImpl;
 
 /**
@@ -17,7 +17,7 @@ import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.
  * @date 08.12.2015
  */
 public class PowerLevelEventDaoImpl extends
-        CommonEventDaoImpl<DbPowerLevelEvent> implements
+        CommonEventDaoImpl<DbPowerLevelSensor> implements
         PowerLevelEventDao {
 
     private static final String TAG = PowerLevelEventDaoImpl.class.getSimpleName();
@@ -25,7 +25,7 @@ public class PowerLevelEventDaoImpl extends
     private static PowerLevelEventDao INSTANCE;
 
     private PowerLevelEventDaoImpl(DaoSession daoSession) {
-        super(daoSession.getDbPowerLevelEventDao());
+        super(daoSession.getDbPowerLevelSensorDao());
     }
 
     public static PowerLevelEventDao getInstance(DaoSession mDaoSession) {
@@ -39,13 +39,13 @@ public class PowerLevelEventDaoImpl extends
 
     @Nullable
     @Override
-    public SensorDto convertObject(DbPowerLevelEvent sensor) {
+    public SensorDto convertObject(DbPowerLevelSensor sensor) {
 
         if (sensor == null) {
             return null;
         }
 
-        PowerLevelEventDto result = new PowerLevelEventDto();
+        PowerLevelSensorDto result = new PowerLevelSensorDto();
 
         result.setPercent(sensor.getPercent());
         result.setCreated(sensor.getCreated());
@@ -55,7 +55,7 @@ public class PowerLevelEventDaoImpl extends
 
     @Nullable
     @Override
-    public DbPowerLevelEvent get(Long id) {
+    public DbPowerLevelSensor get(Long id) {
 
         if (id == null) {
             return null;
@@ -63,14 +63,14 @@ public class PowerLevelEventDaoImpl extends
 
         return dao
                 .queryBuilder()
-                .where(DbPowerLevelEventDao.Properties.Id.eq(id))
+                .where(DbPowerLevelSensorDao.Properties.Id.eq(id))
                 .limit(1)
                 .build()
                 .unique();
     }
 
     @Override
-    public List<DbPowerLevelEvent> getLastN(int amount) {
+    public List<DbPowerLevelSensor> getLastN(int amount) {
 
         if (amount <= 0) {
             return Collections.emptyList();
@@ -78,7 +78,7 @@ public class PowerLevelEventDaoImpl extends
 
         return dao
                 .queryBuilder()
-                .orderDesc(DbPowerLevelEventDao.Properties.Id)
+                .orderDesc(DbPowerLevelSensorDao.Properties.Id)
                 .limit(amount)
                 .build()
                 .list();

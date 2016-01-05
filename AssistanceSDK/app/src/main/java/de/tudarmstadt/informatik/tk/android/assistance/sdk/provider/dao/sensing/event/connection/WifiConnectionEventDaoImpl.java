@@ -6,9 +6,9 @@ import java.util.Collections;
 import java.util.List;
 
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DaoSession;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbWifiConnectionEvent;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbWifiConnectionEventDao;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.sensing.event.WifiConnectionEventDto;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbWifiConnectionSensor;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbWifiConnectionSensorDao;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.sensing.sensor.WifiConnectionSensorDto;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.CommonEventDaoImpl;
 
 /**
@@ -16,7 +16,7 @@ import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.
  * @date 30.10.2015
  */
 public class WifiConnectionEventDaoImpl extends
-        CommonEventDaoImpl<DbWifiConnectionEvent> implements
+        CommonEventDaoImpl<DbWifiConnectionSensor> implements
         WifiConnectionEventDao {
 
     private static final String TAG = WifiConnectionEventDaoImpl.class.getSimpleName();
@@ -24,7 +24,7 @@ public class WifiConnectionEventDaoImpl extends
     private static WifiConnectionEventDao INSTANCE;
 
     private WifiConnectionEventDaoImpl(DaoSession daoSession) {
-        super(daoSession.getDbWifiConnectionEventDao());
+        super(daoSession.getDbWifiConnectionSensorDao());
     }
 
     public static WifiConnectionEventDao getInstance(DaoSession mDaoSession) {
@@ -38,13 +38,13 @@ public class WifiConnectionEventDaoImpl extends
 
     @Nullable
     @Override
-    public WifiConnectionEventDto convertObject(DbWifiConnectionEvent sensor) {
+    public WifiConnectionSensorDto convertObject(DbWifiConnectionSensor sensor) {
 
         if (sensor == null) {
             return null;
         }
 
-        WifiConnectionEventDto result = new WifiConnectionEventDto();
+        WifiConnectionSensorDto result = new WifiConnectionSensorDto();
 
         result.setSsid(sensor.getSsid());
         result.setBssid(sensor.getBssid());
@@ -60,7 +60,7 @@ public class WifiConnectionEventDaoImpl extends
 
     @Nullable
     @Override
-    public DbWifiConnectionEvent get(Long id) {
+    public DbWifiConnectionSensor get(Long id) {
 
         if (id == null) {
             return null;
@@ -68,14 +68,14 @@ public class WifiConnectionEventDaoImpl extends
 
         return dao
                 .queryBuilder()
-                .where(DbWifiConnectionEventDao.Properties.Id.eq(id))
+                .where(DbWifiConnectionSensorDao.Properties.Id.eq(id))
                 .limit(1)
                 .build()
                 .unique();
     }
 
     @Override
-    public List<DbWifiConnectionEvent> getLastN(int amount) {
+    public List<DbWifiConnectionSensor> getLastN(int amount) {
 
         if (amount <= 0) {
             return Collections.emptyList();
@@ -83,7 +83,7 @@ public class WifiConnectionEventDaoImpl extends
 
         return dao
                 .queryBuilder()
-                .orderDesc(DbWifiConnectionEventDao.Properties.Id)
+                .orderDesc(DbWifiConnectionSensorDao.Properties.Id)
                 .limit(amount)
                 .build()
                 .list();

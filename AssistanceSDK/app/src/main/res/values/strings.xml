@@ -4,7 +4,7 @@
     <string name="alert_accessibility">For an Assistance App to work properly you need to activate the accessibility option. Therefore just open the Accessibility Settings and enable the Kraken.Me service.</string>
     <string name="alert_accessibility_button">Open Accessibility Settings</string>
 
-    <!-- Sensors and Events names -->
+    <!-- Sensors names -->
     <string name="sensor_position">GPS position</string>
     <string name="sensor_gyroscope">Gyroscope</string>
     <string name="sensor_accelerometer">Accelerometer</string>
@@ -19,24 +19,25 @@
     <string name="sensor_activity">Activity</string>
     <string name="sensor_light">Ambient light</string>
 
-    <string name="event_power_state">Power state</string>
-    <string name="event_power_level">Power level</string>
-    <string name="event_ringtone">Ringtone</string>
-    <string name="event_account_reader">Account reader</string>
-    <string name="event_running_processes">Running processes</string>
-    <string name="event_running_services">Running services</string>
-    <string name="event_running_tasks">Running tasks</string>
-    <string name="event_contacts">Contacts</string>
-    <string name="event_contact_email">Contact email</string>
-    <string name="event_contact_number">Contact number</string>
-    <string name="event_calendar">Calendar</string>
-    <string name="event_calllog">Call log</string>
-    <string name="event_browser_history">Browser history</string>
-    <string name="event_network_traffic">Traffic Usage</string>
-    <string name="event_background_traffic">Background Traffic Usage</string>
-    <string name="event_foreground">Last used apps</string>
-    <string name="event_uni_tucan">TUCaN</string>
-    <string name="event_social_facebook">Facebook</string>
+    <!-- Soft sensor names -->
+    <string name="sensor_power_state">Power state</string>
+    <string name="sensor_power_level">Power level</string>
+    <string name="sensor_ringtone">Ringtone</string>
+    <string name="sensor_account_reader">Account reader</string>
+    <string name="sensor_running_processes">Running processes</string>
+    <string name="sensor_running_services">Running services</string>
+    <string name="sensor_running_tasks">Running tasks</string>
+    <string name="sensor_contacts">Contacts</string>
+    <string name="sensor_contact_email">Contact email</string>
+    <string name="sensor_contact_number">Contact number</string>
+    <string name="sensor_calendar">Calendar</string>
+    <string name="sensor_calllog">Call log</string>
+    <string name="sensor_browser_history">Browser history</string>
+    <string name="sensor_network_traffic">Traffic Usage</string>
+    <string name="sensor_background_traffic">Background Traffic Usage</string>
+    <string name="sensor_foreground">Last used apps</string>
+    <string name="sensor_uni_tucan">TUCaN</string>
+    <string name="sensor_social_facebook">Facebook</string>
 
     <!-- Service -->
     <string name="service_running_notification_title">Assistance service is running!</string>

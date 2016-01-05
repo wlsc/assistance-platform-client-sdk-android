@@ -16,9 +16,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbLoudnessEvent;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.DtoType;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensing.AbstractPeriodicEvent;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbLoudnessSensor;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.sensing.SensorApiType;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensing.impl.AbstractPeriodicSensor;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.util.DateUtils;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.util.logger.Log;
 
@@ -27,7 +27,7 @@ import de.tudarmstadt.informatik.tk.android.assistance.sdk.util.logger.Log;
  * @edited by Wladimir Schmidt (wlsc.dev@gmail.com)
  * @date 24.11.2015
  */
-public class LoudnessSensor extends AbstractPeriodicEvent implements Callback {
+public class LoudnessSensor extends AbstractPeriodicSensor implements Callback {
 
     private static final String TAG = LoudnessSensor.class.getSimpleName();
 
@@ -141,7 +141,7 @@ public class LoudnessSensor extends AbstractPeriodicEvent implements Callback {
     @Override
     public void dumpData() {
 
-        DbLoudnessEvent loudnessSensor = new DbLoudnessEvent();
+        DbLoudnessSensor loudnessSensor = new DbLoudnessSensor();
 
         loudnessSensor.setLoudness(currentValue);
         loudnessSensor.setCreated(DateUtils.dateToISO8601String(new Date(), Locale.getDefault()));
@@ -214,7 +214,7 @@ public class LoudnessSensor extends AbstractPeriodicEvent implements Callback {
 
     @Override
     public int getType() {
-        return DtoType.LOUDNESS;
+        return SensorApiType.LOUDNESS;
     }
 
     @Override

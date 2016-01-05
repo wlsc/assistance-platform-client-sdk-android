@@ -13,11 +13,11 @@ import android.telephony.TelephonyManager;
 import java.util.Date;
 import java.util.Locale;
 
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbConnectionEvent;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbMobileConnectionEvent;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbWifiConnectionEvent;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.DtoType;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensing.AbstractTriggeredEvent;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbConnectionSensor;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbMobileConnectionSensor;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbWifiConnectionSensor;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.sensing.SensorApiType;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensing.impl.AbstractTriggeredSensor;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.util.ConnectionUtils;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.util.DateUtils;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.util.StringUtils;
@@ -28,7 +28,7 @@ import de.tudarmstadt.informatik.tk.android.assistance.sdk.util.logger.Log;
  * @edited by Wladimir Schmidt (wlsc.dev@gmail.com)
  * @date 26.10.2015
  */
-public class ConnectionSensor extends AbstractTriggeredEvent {
+public class ConnectionSensor extends AbstractTriggeredSensor {
 
     private static final String TAG = ConnectionReceiver.class.getSimpleName();
 
@@ -88,7 +88,7 @@ public class ConnectionSensor extends AbstractTriggeredEvent {
         /**
          * Connection event
          */
-        DbConnectionEvent connectionEvent = new DbConnectionEvent();
+        DbConnectionSensor connectionEvent = new DbConnectionSensor();
 
         connectionEvent.setIsMobile(isMobileDataAvailable);
         connectionEvent.setIsWifi(isWifiDataAvailable);
@@ -108,7 +108,7 @@ public class ConnectionSensor extends AbstractTriggeredEvent {
             /**
              * Mobile data information
              */
-            DbMobileConnectionEvent mobileConnectionEvent = new DbMobileConnectionEvent();
+            DbMobileConnectionSensor mobileConnectionEvent = new DbMobileConnectionSensor();
 
             mobileConnectionEvent.setCarrierName(mobileCarrierName);
             mobileConnectionEvent.setMobileCountryCode(mobileCarrierCode);
@@ -132,7 +132,7 @@ public class ConnectionSensor extends AbstractTriggeredEvent {
             /**
              * WIFI data information
              */
-            DbWifiConnectionEvent wifiConnectionEvent = new DbWifiConnectionEvent();
+            DbWifiConnectionSensor wifiConnectionEvent = new DbWifiConnectionSensor();
 
             wifiConnectionEvent.setSsid(ssid);
             wifiConnectionEvent.setBssid(bssid);
@@ -201,7 +201,7 @@ public class ConnectionSensor extends AbstractTriggeredEvent {
 
     @Override
     public int getType() {
-        return DtoType.CONNECTION;
+        return SensorApiType.CONNECTION;
     }
 
     @Override

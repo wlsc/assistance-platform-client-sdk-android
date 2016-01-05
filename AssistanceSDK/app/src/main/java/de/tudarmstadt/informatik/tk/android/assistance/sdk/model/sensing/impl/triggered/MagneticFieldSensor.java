@@ -11,8 +11,8 @@ import java.util.Date;
 import java.util.Locale;
 
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbMagneticFieldSensor;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.DtoType;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensing.AbstractTriggeredEvent;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.sensing.SensorApiType;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensing.impl.AbstractTriggeredSensor;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.util.DateUtils;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.util.logger.Log;
 
@@ -20,7 +20,7 @@ import de.tudarmstadt.informatik.tk.android.assistance.sdk.util.logger.Log;
  * @author Wladimir Schmidt (wlsc.dev@gmail.com)
  * @date 27.10.2015
  */
-public class MagneticFieldSensor extends AbstractTriggeredEvent implements SensorEventListener {
+public class MagneticFieldSensor extends AbstractTriggeredSensor implements SensorEventListener {
 
     private static final String TAG = MagneticFieldSensor.class.getSimpleName();
 
@@ -199,7 +199,7 @@ public class MagneticFieldSensor extends AbstractTriggeredEvent implements Senso
 
     @Override
     public int getType() {
-        return DtoType.MAGNETIC_FIELD;
+        return SensorApiType.MAGNETIC_FIELD;
     }
 
     @Override

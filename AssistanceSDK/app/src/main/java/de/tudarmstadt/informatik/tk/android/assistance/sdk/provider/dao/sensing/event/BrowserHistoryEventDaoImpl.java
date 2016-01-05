@@ -6,10 +6,10 @@ import java.util.Collections;
 import java.util.List;
 
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DaoSession;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbBrowserHistoryEvent;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbBrowserHistoryEventDao;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbBrowserHistorySensor;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbBrowserHistorySensorDao;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.SensorDto;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.sensing.event.BrowserHistoryEventDto;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.sensing.sensor.BrowserHistorySensorDto;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.CommonEventDaoImpl;
 
 /**
@@ -17,7 +17,7 @@ import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.
  * @date 24.11.2015
  */
 public class BrowserHistoryEventDaoImpl extends
-        CommonEventDaoImpl<DbBrowserHistoryEvent> implements
+        CommonEventDaoImpl<DbBrowserHistorySensor> implements
         BrowserHistoryEventDao {
 
     private static final String TAG = BrowserHistoryEventDaoImpl.class.getSimpleName();
@@ -25,7 +25,7 @@ public class BrowserHistoryEventDaoImpl extends
     private static BrowserHistoryEventDao INSTANCE;
 
     private BrowserHistoryEventDaoImpl(DaoSession daoSession) {
-        super(daoSession.getDbBrowserHistoryEventDao());
+        super(daoSession.getDbBrowserHistorySensorDao());
     }
 
     public static BrowserHistoryEventDao getInstance(DaoSession mDaoSession) {
@@ -39,13 +39,13 @@ public class BrowserHistoryEventDaoImpl extends
 
     @Nullable
     @Override
-    public SensorDto convertObject(DbBrowserHistoryEvent sensor) {
+    public SensorDto convertObject(DbBrowserHistorySensor sensor) {
 
         if (sensor == null) {
             return null;
         }
 
-        BrowserHistoryEventDto result = new BrowserHistoryEventDto();
+        BrowserHistorySensorDto result = new BrowserHistorySensorDto();
 
         result.setUrl(sensor.getUrl());
         result.setTitle(sensor.getTitle());
@@ -62,7 +62,7 @@ public class BrowserHistoryEventDaoImpl extends
 
     @Nullable
     @Override
-    public DbBrowserHistoryEvent get(Long id) {
+    public DbBrowserHistorySensor get(Long id) {
 
         if (id == null) {
             return null;
@@ -70,14 +70,14 @@ public class BrowserHistoryEventDaoImpl extends
 
         return dao
                 .queryBuilder()
-                .where(DbBrowserHistoryEventDao.Properties.Id.eq(id))
+                .where(DbBrowserHistorySensorDao.Properties.Id.eq(id))
                 .limit(1)
                 .build()
                 .unique();
     }
 
     @Override
-    public List<DbBrowserHistoryEvent> getLastN(int amount) {
+    public List<DbBrowserHistorySensor> getLastN(int amount) {
 
         if (amount <= 0) {
             return Collections.emptyList();
@@ -85,7 +85,7 @@ public class BrowserHistoryEventDaoImpl extends
 
         return dao
                 .queryBuilder()
-                .orderDesc(DbBrowserHistoryEventDao.Properties.Id)
+                .orderDesc(DbBrowserHistorySensorDao.Properties.Id)
                 .limit(amount)
                 .build()
                 .list();

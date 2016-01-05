@@ -3,8 +3,8 @@ package de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.sensing.se
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.DtoType;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.SensorDto;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.sensing.SensorApiType;
 
 /**
  * Light sensor request DTO
@@ -33,8 +33,8 @@ public class LightSensorDto implements SensorDto {
     private int type;
 
     public LightSensorDto() {
-        this.type = DtoType.LIGHT;
-        this.typeStr = DtoType.getApiName(this.type);
+        this.type = SensorApiType.LIGHT;
+        this.typeStr = SensorApiType.getApiName(this.type);
     }
 
     public LightSensorDto(Float value, Integer accuracy, String created, String typeStr, int type) {
@@ -43,8 +43,8 @@ public class LightSensorDto implements SensorDto {
         this.created = created;
         this.typeStr = typeStr;
         this.type = type;
-        this.type = DtoType.LIGHT;
-        this.typeStr = DtoType.getApiName(this.type);
+        this.type = SensorApiType.LIGHT;
+        this.typeStr = SensorApiType.getApiName(this.type);
     }
 
     public Float getValue() {

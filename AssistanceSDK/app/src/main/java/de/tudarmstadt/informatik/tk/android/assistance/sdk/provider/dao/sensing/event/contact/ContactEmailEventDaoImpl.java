@@ -6,8 +6,8 @@ import java.util.Collections;
 import java.util.List;
 
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DaoSession;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbContactEmailEvent;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbContactEmailEventDao;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbContactEmailSensor;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbContactEmailSensorDao;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.SensorDto;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.CommonEventDaoImpl;
 
@@ -16,7 +16,7 @@ import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.
  * @date 24.11.2015
  */
 public class ContactEmailEventDaoImpl extends
-        CommonEventDaoImpl<DbContactEmailEvent> implements
+        CommonEventDaoImpl<DbContactEmailSensor> implements
         ContactEmailEventDao {
 
     private static final String TAG = ContactEmailEventDaoImpl.class.getSimpleName();
@@ -24,7 +24,7 @@ public class ContactEmailEventDaoImpl extends
     private static ContactEmailEventDao INSTANCE;
 
     private ContactEmailEventDaoImpl(DaoSession daoSession) {
-        super(daoSession.getDbContactEmailEventDao());
+        super(daoSession.getDbContactEmailSensorDao());
     }
 
     public static ContactEmailEventDao getInstance(DaoSession mDaoSession) {
@@ -38,7 +38,7 @@ public class ContactEmailEventDaoImpl extends
 
     @Nullable
     @Override
-    public SensorDto convertObject(DbContactEmailEvent sensor) {
+    public SensorDto convertObject(DbContactEmailSensor sensor) {
 
         if (sensor == null) {
             return null;
@@ -54,8 +54,8 @@ public class ContactEmailEventDaoImpl extends
 //        result.setIsNew(sensor.getIsNew());
 //        result.setIsUpdated(sensor.getIsUpdated());
 //        result.setIsDeleted(sensor.getIsDeleted());
-//        result.setType(DtoType.CONTACT_EMAIL);
-//        result.setTypeStr(DtoType.getApiName(DtoType.CONTACT_EMAIL));
+//        result.setType(SensorApiType.CONTACT_EMAIL);
+//        result.setTypeStr(SensorApiType.getApiName(SensorApiType.CONTACT_EMAIL));
 //        result.setCreated(sensor.getCreated());
 
         return null;
@@ -63,7 +63,7 @@ public class ContactEmailEventDaoImpl extends
 
     @Nullable
     @Override
-    public DbContactEmailEvent get(Long id) {
+    public DbContactEmailSensor get(Long id) {
 
         if (id == null) {
             return null;
@@ -71,14 +71,14 @@ public class ContactEmailEventDaoImpl extends
 
         return dao
                 .queryBuilder()
-                .where(DbContactEmailEventDao.Properties.Id.eq(id))
+                .where(DbContactEmailSensorDao.Properties.Id.eq(id))
                 .limit(1)
                 .build()
                 .unique();
     }
 
     @Override
-    public List<DbContactEmailEvent> getLastN(int amount) {
+    public List<DbContactEmailSensor> getLastN(int amount) {
 
         if (amount <= 0) {
             return Collections.emptyList();
@@ -86,14 +86,14 @@ public class ContactEmailEventDaoImpl extends
 
         return dao
                 .queryBuilder()
-                .orderDesc(DbContactEmailEventDao.Properties.Id)
+                .orderDesc(DbContactEmailSensorDao.Properties.Id)
                 .limit(amount)
                 .build()
                 .list();
     }
 
     @Override
-    public List<DbContactEmailEvent> getAll(Long contactId) {
+    public List<DbContactEmailSensor> getAll(Long contactId) {
 
         if (contactId == null) {
             return Collections.emptyList();
@@ -101,7 +101,7 @@ public class ContactEmailEventDaoImpl extends
 
         return dao
                 .queryBuilder()
-                .where(DbContactEmailEventDao.Properties.ContactId.eq(contactId))
+                .where(DbContactEmailSensorDao.Properties.ContactId.eq(contactId))
                 .build()
                 .list();
     }

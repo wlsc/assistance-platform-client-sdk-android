@@ -17,8 +17,8 @@ import java.util.Date;
 import java.util.Locale;
 
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbPositionSensor;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.DtoType;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensing.AbstractTriggeredEvent;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.sensing.SensorApiType;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensing.impl.AbstractTriggeredSensor;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.PreferenceProvider;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.util.DateUtils;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.util.logger.Log;
@@ -29,7 +29,7 @@ import de.tudarmstadt.informatik.tk.android.assistance.sdk.util.logger.Log;
  * @date 08.10.2015
  */
 public class LocationSensor extends
-        AbstractTriggeredEvent implements
+        AbstractTriggeredSensor implements
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener,
         LocationListener {
@@ -306,7 +306,7 @@ public class LocationSensor extends
 
     @Override
     public int getType() {
-        return DtoType.LOCATION;
+        return SensorApiType.LOCATION;
     }
 
     @Override

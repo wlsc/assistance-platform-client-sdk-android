@@ -6,9 +6,9 @@ import java.util.Collections;
 import java.util.List;
 
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DaoSession;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbCallLogEvent;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbCallLogEventDao;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.sensing.event.CallLogEventDto;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbCallLogSensor;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbCallLogSensorDao;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.sensing.sensor.CallLogSensorDto;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.CommonEventDaoImpl;
 
 /**
@@ -16,7 +16,7 @@ import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.
  * @date 30.10.2015
  */
 public class CallLogEventDaoImpl extends
-        CommonEventDaoImpl<DbCallLogEvent> implements
+        CommonEventDaoImpl<DbCallLogSensor> implements
         CallLogEventDao {
 
     private static final String TAG = CallLogEventDaoImpl.class.getSimpleName();
@@ -24,7 +24,7 @@ public class CallLogEventDaoImpl extends
     private static CallLogEventDao INSTANCE;
 
     private CallLogEventDaoImpl(DaoSession daoSession) {
-        super(daoSession.getDbCallLogEventDao());
+        super(daoSession.getDbCallLogSensorDao());
     }
 
     public static CallLogEventDao getInstance(DaoSession mDaoSession) {
@@ -38,13 +38,13 @@ public class CallLogEventDaoImpl extends
 
     @Nullable
     @Override
-    public CallLogEventDto convertObject(DbCallLogEvent sensor) {
+    public CallLogSensorDto convertObject(DbCallLogSensor sensor) {
 
         if (sensor == null) {
             return null;
         }
 
-        CallLogEventDto result = new CallLogEventDto();
+        CallLogSensorDto result = new CallLogSensorDto();
 
         result.setId(sensor.getId());
         result.setCallId(sensor.getCallId());
@@ -63,7 +63,7 @@ public class CallLogEventDaoImpl extends
 
     @Nullable
     @Override
-    public DbCallLogEvent get(Long id) {
+    public DbCallLogSensor get(Long id) {
 
         if (id == null) {
             return null;
@@ -71,14 +71,14 @@ public class CallLogEventDaoImpl extends
 
         return dao
                 .queryBuilder()
-                .where(DbCallLogEventDao.Properties.Id.eq(id))
+                .where(DbCallLogSensorDao.Properties.Id.eq(id))
                 .limit(1)
                 .build()
                 .unique();
     }
 
     @Override
-    public List<DbCallLogEvent> getLastN(int amount) {
+    public List<DbCallLogSensor> getLastN(int amount) {
 
         if (amount <= 0) {
             return Collections.emptyList();
@@ -86,7 +86,7 @@ public class CallLogEventDaoImpl extends
 
         return dao
                 .queryBuilder()
-                .orderDesc(DbCallLogEventDao.Properties.Id)
+                .orderDesc(DbCallLogSensorDao.Properties.Id)
                 .limit(amount)
                 .build()
                 .list();
@@ -98,10 +98,10 @@ public class CallLogEventDaoImpl extends
      * @return
      */
     @Override
-    public DbCallLogEvent getLastCallLogEvent() {
+    public DbCallLogSensor getLastCallLogEvent() {
         return dao
                 .queryBuilder()
-                .orderDesc(DbCallLogEventDao.Properties.Id)
+                .orderDesc(DbCallLogSensorDao.Properties.Id)
                 .limit(1)
                 .build()
                 .unique();

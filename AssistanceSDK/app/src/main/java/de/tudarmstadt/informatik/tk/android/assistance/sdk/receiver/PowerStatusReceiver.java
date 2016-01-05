@@ -7,8 +7,8 @@ import android.content.Intent;
 import java.util.Date;
 import java.util.Locale;
 
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbPowerStateEvent;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.DtoType;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbPowerStateSensor;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.sensing.SensorApiType;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.constant.PowerChargingStatus;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.constant.PowerChargingType;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.DaoProvider;
@@ -36,7 +36,7 @@ public class PowerStatusReceiver extends BroadcastReceiver {
         }
 
         final boolean isModuleCapabilityActive = SensorProvider.getInstance(context)
-                .isModuleCapabilityActive(DtoType.getApiName(DtoType.POWER_STATE));
+                .isModuleCapabilityActive(SensorApiType.getApiName(SensorApiType.POWER_STATE));
 
         if (!isModuleCapabilityActive) {
             Log.d(TAG, "Module capability is not active. Event is ignored");
@@ -49,7 +49,7 @@ public class PowerStatusReceiver extends BroadcastReceiver {
         final boolean isServiceRunning = ServiceUtils
                 .isServiceRunning(context.getApplicationContext(), HarvesterService.class);
 
-        DbPowerStateEvent powerStateEvent = new DbPowerStateEvent();
+        DbPowerStateSensor powerStateEvent = new DbPowerStateSensor();
 
         // default
         powerStateEvent.setChargingState(PowerChargingStatus.NONE);

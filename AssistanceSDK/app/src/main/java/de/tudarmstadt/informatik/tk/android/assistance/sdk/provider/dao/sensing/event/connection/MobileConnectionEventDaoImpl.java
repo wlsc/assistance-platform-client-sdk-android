@@ -6,9 +6,9 @@ import java.util.Collections;
 import java.util.List;
 
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DaoSession;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbMobileConnectionEvent;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbMobileConnectionEventDao;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.sensing.event.MobileConnectionEventDto;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbMobileConnectionSensor;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbMobileConnectionSensorDao;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.sensing.sensor.MobileConnectionSensorDto;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.CommonEventDaoImpl;
 
 /**
@@ -16,7 +16,7 @@ import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.
  * @date 30.10.2015
  */
 public class MobileConnectionEventDaoImpl extends
-        CommonEventDaoImpl<DbMobileConnectionEvent> implements
+        CommonEventDaoImpl<DbMobileConnectionSensor> implements
         MobileConnectionEventDao {
 
     private static final String TAG = MobileConnectionEventDaoImpl.class.getSimpleName();
@@ -24,7 +24,7 @@ public class MobileConnectionEventDaoImpl extends
     private static MobileConnectionEventDao INSTANCE;
 
     private MobileConnectionEventDaoImpl(DaoSession daoSession) {
-        super(daoSession.getDbMobileConnectionEventDao());
+        super(daoSession.getDbMobileConnectionSensorDao());
     }
 
     public static MobileConnectionEventDao getInstance(DaoSession mDaoSession) {
@@ -38,13 +38,13 @@ public class MobileConnectionEventDaoImpl extends
 
     @Nullable
     @Override
-    public MobileConnectionEventDto convertObject(DbMobileConnectionEvent sensor) {
+    public MobileConnectionSensorDto convertObject(DbMobileConnectionSensor sensor) {
 
         if (sensor == null) {
             return null;
         }
 
-        MobileConnectionEventDto result = new MobileConnectionEventDto();
+        MobileConnectionSensorDto result = new MobileConnectionSensorDto();
 
         result.setCarrierName(sensor.getCarrierName());
         result.setMobileCountryCode(sensor.getMobileCountryCode());
@@ -57,7 +57,7 @@ public class MobileConnectionEventDaoImpl extends
 
     @Nullable
     @Override
-    public DbMobileConnectionEvent get(Long id) {
+    public DbMobileConnectionSensor get(Long id) {
 
         if (id == null) {
             return null;
@@ -65,14 +65,14 @@ public class MobileConnectionEventDaoImpl extends
 
         return dao
                 .queryBuilder()
-                .where(DbMobileConnectionEventDao.Properties.Id.eq(id))
+                .where(DbMobileConnectionSensorDao.Properties.Id.eq(id))
                 .limit(1)
                 .build()
                 .unique();
     }
 
     @Override
-    public List<DbMobileConnectionEvent> getLastN(int amount) {
+    public List<DbMobileConnectionSensor> getLastN(int amount) {
 
         if (amount <= 0) {
             return Collections.emptyList();
@@ -80,7 +80,7 @@ public class MobileConnectionEventDaoImpl extends
 
         return dao
                 .queryBuilder()
-                .orderDesc(DbMobileConnectionEventDao.Properties.Id)
+                .orderDesc(DbMobileConnectionSensorDao.Properties.Id)
                 .limit(amount)
                 .build()
                 .list();

@@ -6,10 +6,10 @@ import java.util.Collections;
 import java.util.List;
 
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DaoSession;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbRunningTasksEvent;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbRunningTasksEventDao;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbRunningTasksSensor;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbRunningTasksSensorDao;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.SensorDto;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.sensing.event.RunningTaskEventDto;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.sensing.sensor.RunningTaskSensorDto;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.CommonEventDaoImpl;
 
 /**
@@ -17,7 +17,7 @@ import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.
  * @date 24.11.2015
  */
 public class RunningTasksEventDaoImpl extends
-        CommonEventDaoImpl<DbRunningTasksEvent> implements
+        CommonEventDaoImpl<DbRunningTasksSensor> implements
         RunningTasksEventDao {
 
     private static final String TAG = RunningTasksEventDaoImpl.class.getSimpleName();
@@ -25,7 +25,7 @@ public class RunningTasksEventDaoImpl extends
     private static RunningTasksEventDao INSTANCE;
 
     private RunningTasksEventDaoImpl(DaoSession daoSession) {
-        super(daoSession.getDbRunningTasksEventDao());
+        super(daoSession.getDbRunningTasksSensorDao());
     }
 
     public static RunningTasksEventDao getInstance(DaoSession mDaoSession) {
@@ -39,13 +39,13 @@ public class RunningTasksEventDaoImpl extends
 
     @Nullable
     @Override
-    public SensorDto convertObject(DbRunningTasksEvent sensor) {
+    public SensorDto convertObject(DbRunningTasksSensor sensor) {
 
         if (sensor == null) {
             return null;
         }
 
-        RunningTaskEventDto result = new RunningTaskEventDto();
+        RunningTaskSensorDto result = new RunningTaskSensorDto();
 
         result.setName(sensor.getName());
         result.setStackPosition(sensor.getStackPosition());
@@ -56,7 +56,7 @@ public class RunningTasksEventDaoImpl extends
 
     @Nullable
     @Override
-    public DbRunningTasksEvent get(Long id) {
+    public DbRunningTasksSensor get(Long id) {
 
         if (id == null) {
             return null;
@@ -64,14 +64,14 @@ public class RunningTasksEventDaoImpl extends
 
         return dao
                 .queryBuilder()
-                .where(DbRunningTasksEventDao.Properties.Id.eq(id))
+                .where(DbRunningTasksSensorDao.Properties.Id.eq(id))
                 .limit(1)
                 .build()
                 .unique();
     }
 
     @Override
-    public List<DbRunningTasksEvent> getLastN(int amount) {
+    public List<DbRunningTasksSensor> getLastN(int amount) {
 
         if (amount <= 0) {
             return Collections.emptyList();
@@ -79,7 +79,7 @@ public class RunningTasksEventDaoImpl extends
 
         return dao
                 .queryBuilder()
-                .orderDesc(DbRunningTasksEventDao.Properties.Id)
+                .orderDesc(DbRunningTasksSensorDao.Properties.Id)
                 .limit(amount)
                 .build()
                 .list();

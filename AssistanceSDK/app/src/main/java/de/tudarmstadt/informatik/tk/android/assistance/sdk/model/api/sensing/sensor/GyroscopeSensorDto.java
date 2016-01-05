@@ -4,8 +4,8 @@ package de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.sensing.se
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.DtoType;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.SensorDto;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.sensing.SensorApiType;
 
 /**
  * @author Wladimir Schmidt (wlsc.dev@gmail.com)
@@ -67,8 +67,8 @@ public class GyroscopeSensorDto implements SensorDto {
     private int type;
 
     public GyroscopeSensorDto() {
-        this.type = DtoType.GYROSCOPE;
-        this.typeStr = DtoType.getApiName(this.type);
+        this.type = SensorApiType.GYROSCOPE;
+        this.typeStr = SensorApiType.getApiName(this.type);
     }
 
     public GyroscopeSensorDto(Double x, Double y, Double z, Float xUncalibratedNoDrift, Float yUncalibratedNoDrift, Float zUncalibratedNoDrift, Float xUncalibratedEstimatedDrift, Float yUncalibratedEstimatedDrift, Float zUncalibratedEstimatedDrift, Integer accuracy, String created) {
@@ -83,8 +83,8 @@ public class GyroscopeSensorDto implements SensorDto {
         this.zUncalibratedEstimatedDrift = zUncalibratedEstimatedDrift;
         this.accuracy = accuracy;
         this.created = created;
-        this.type = DtoType.GYROSCOPE;
-        this.typeStr = DtoType.getApiName(this.type);
+        this.type = SensorApiType.GYROSCOPE;
+        this.typeStr = SensorApiType.getApiName(this.type);
     }
 
     public Double getX() {

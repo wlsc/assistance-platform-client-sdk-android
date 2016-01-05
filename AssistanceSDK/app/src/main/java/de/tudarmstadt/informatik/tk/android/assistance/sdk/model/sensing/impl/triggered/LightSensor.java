@@ -10,8 +10,8 @@ import java.util.Date;
 import java.util.Locale;
 
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbLightSensor;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.DtoType;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensing.AbstractTriggeredEvent;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.sensing.SensorApiType;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensing.impl.AbstractTriggeredSensor;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.DaoProvider;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.util.DateUtils;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.util.logger.Log;
@@ -22,7 +22,7 @@ import de.tudarmstadt.informatik.tk.android.assistance.sdk.util.logger.Log;
  * @date 26.10.2015
  */
 public class LightSensor
-        extends AbstractTriggeredEvent
+        extends AbstractTriggeredSensor
         implements SensorEventListener {
 
     private static final String TAG = LightSensor.class.getSimpleName();
@@ -130,7 +130,7 @@ public class LightSensor
 
     @Override
     public int getType() {
-        return DtoType.LIGHT;
+        return SensorApiType.LIGHT;
     }
 
     @Override

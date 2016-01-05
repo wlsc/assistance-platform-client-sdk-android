@@ -6,10 +6,10 @@ import java.util.Collections;
 import java.util.List;
 
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DaoSession;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbRunningServicesEvent;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbRunningServicesEventDao;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbRunningServicesSensor;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbRunningServicesSensorDao;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.SensorDto;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.sensing.event.RunningServiceEventDto;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.sensing.sensor.RunningServiceSensorDto;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.CommonEventDaoImpl;
 
 /**
@@ -17,7 +17,7 @@ import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.
  * @date 24.11.2015
  */
 public class RunningServicesEventDaoImpl extends
-        CommonEventDaoImpl<DbRunningServicesEvent> implements
+        CommonEventDaoImpl<DbRunningServicesSensor> implements
         RunningServicesEventDao {
 
     private static final String TAG = RunningServicesEventDaoImpl.class.getSimpleName();
@@ -25,7 +25,7 @@ public class RunningServicesEventDaoImpl extends
     private static RunningServicesEventDao INSTANCE;
 
     private RunningServicesEventDaoImpl(DaoSession daoSession) {
-        super(daoSession.getDbRunningServicesEventDao());
+        super(daoSession.getDbRunningServicesSensorDao());
     }
 
     public static RunningServicesEventDao getInstance(DaoSession mDaoSession) {
@@ -39,13 +39,13 @@ public class RunningServicesEventDaoImpl extends
 
     @Nullable
     @Override
-    public SensorDto convertObject(DbRunningServicesEvent sensor) {
+    public SensorDto convertObject(DbRunningServicesSensor sensor) {
 
         if (sensor == null) {
             return null;
         }
 
-        RunningServiceEventDto result = new RunningServiceEventDto();
+        RunningServiceSensorDto result = new RunningServiceSensorDto();
 
         result.setPackageName(sensor.getPackageName());
         result.setClassName(sensor.getClassName());
@@ -56,7 +56,7 @@ public class RunningServicesEventDaoImpl extends
 
     @Nullable
     @Override
-    public DbRunningServicesEvent get(Long id) {
+    public DbRunningServicesSensor get(Long id) {
 
         if (id == null) {
             return null;
@@ -64,14 +64,14 @@ public class RunningServicesEventDaoImpl extends
 
         return dao
                 .queryBuilder()
-                .where(DbRunningServicesEventDao.Properties.Id.eq(id))
+                .where(DbRunningServicesSensorDao.Properties.Id.eq(id))
                 .limit(1)
                 .build()
                 .unique();
     }
 
     @Override
-    public List<DbRunningServicesEvent> getLastN(int amount) {
+    public List<DbRunningServicesSensor> getLastN(int amount) {
 
         if (amount <= 0) {
             return Collections.emptyList();
@@ -79,7 +79,7 @@ public class RunningServicesEventDaoImpl extends
 
         return dao
                 .queryBuilder()
-                .orderDesc(DbRunningServicesEventDao.Properties.Id)
+                .orderDesc(DbRunningServicesSensorDao.Properties.Id)
                 .limit(amount)
                 .build()
                 .list();

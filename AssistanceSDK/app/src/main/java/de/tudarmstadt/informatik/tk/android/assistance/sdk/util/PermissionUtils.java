@@ -9,7 +9,7 @@ import android.support.v4.content.ContextCompat;
 import java.util.HashMap;
 import java.util.Map;
 
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.DtoType;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.sensing.SensorApiType;
 
 /**
  * Provides permission checks on runtime
@@ -58,7 +58,7 @@ public class PermissionUtils {
         dangerousPermissionsToDtoMapping = new HashMap<>();
 
         dangerousPermissionsToDtoMapping.put(
-                DtoType.getApiName(DtoType.CALENDAR),
+                SensorApiType.getApiName(SensorApiType.CALENDAR),
                 new String[]{
                         Manifest.permission.READ_CALENDAR//,
 //                        Manifest.permission.WRITE_CALENDAR
@@ -66,7 +66,7 @@ public class PermissionUtils {
         );
 
         dangerousPermissionsToDtoMapping.put(
-                DtoType.getApiName(DtoType.CALL_LOG),
+                SensorApiType.getApiName(SensorApiType.CALL_LOG),
                 new String[]{
                         Manifest.permission.READ_CALL_LOG//,
 //                        Manifest.permission.WRITE_CALL_LOG
@@ -74,7 +74,7 @@ public class PermissionUtils {
         );
 
         dangerousPermissionsToDtoMapping.put(
-                DtoType.getApiName(DtoType.CONTACT),
+                SensorApiType.getApiName(SensorApiType.CONTACT),
                 new String[]{
 //                        Manifest.permission.GET_ACCOUNTS,
 //                        Manifest.permission.WRITE_CONTACTS,
@@ -83,7 +83,7 @@ public class PermissionUtils {
         );
 
         dangerousPermissionsToDtoMapping.put(
-                DtoType.getApiName(DtoType.LOCATION),
+                SensorApiType.getApiName(SensorApiType.LOCATION),
                 new String[]{
                         Manifest.permission.ACCESS_COARSE_LOCATION,
                         Manifest.permission.ACCESS_FINE_LOCATION

@@ -6,9 +6,9 @@ import java.util.Collections;
 import java.util.List;
 
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DaoSession;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbPowerStateEvent;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbPowerStateEventDao;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.sensing.event.PowerStateEventDto;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbPowerStateSensor;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbPowerStateSensorDao;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.sensing.sensor.PowerStateSensorDto;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.CommonEventDaoImpl;
 
 /**
@@ -16,7 +16,7 @@ import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.
  * @date 31.10.2015
  */
 public class PowerStateEventDaoImpl extends
-        CommonEventDaoImpl<DbPowerStateEvent> implements
+        CommonEventDaoImpl<DbPowerStateSensor> implements
         PowerStateEventDao {
 
     private static final String TAG = PowerStateEventDaoImpl.class.getSimpleName();
@@ -24,7 +24,7 @@ public class PowerStateEventDaoImpl extends
     private static PowerStateEventDao INSTANCE;
 
     private PowerStateEventDaoImpl(DaoSession daoSession) {
-        super(daoSession.getDbPowerStateEventDao());
+        super(daoSession.getDbPowerStateSensorDao());
     }
 
     public static PowerStateEventDao getInstance(DaoSession mDaoSession) {
@@ -38,13 +38,13 @@ public class PowerStateEventDaoImpl extends
 
     @Nullable
     @Override
-    public PowerStateEventDto convertObject(DbPowerStateEvent sensor) {
+    public PowerStateSensorDto convertObject(DbPowerStateSensor sensor) {
 
         if (sensor == null) {
             return null;
         }
 
-        PowerStateEventDto result = new PowerStateEventDto(
+        PowerStateSensorDto result = new PowerStateSensorDto(
                 sensor.getIsCharging(),
                 sensor.getPercent(),
                 sensor.getChargingState(),
@@ -58,7 +58,7 @@ public class PowerStateEventDaoImpl extends
 
     @Nullable
     @Override
-    public DbPowerStateEvent get(Long id) {
+    public DbPowerStateSensor get(Long id) {
 
         if (id == null) {
             return null;
@@ -66,14 +66,14 @@ public class PowerStateEventDaoImpl extends
 
         return dao
                 .queryBuilder()
-                .where(DbPowerStateEventDao.Properties.Id.eq(id))
+                .where(DbPowerStateSensorDao.Properties.Id.eq(id))
                 .limit(1)
                 .build()
                 .unique();
     }
 
     @Override
-    public List<DbPowerStateEvent> getLastN(int amount) {
+    public List<DbPowerStateSensor> getLastN(int amount) {
 
         if (amount <= 0) {
             return Collections.emptyList();
@@ -81,7 +81,7 @@ public class PowerStateEventDaoImpl extends
 
         return dao
                 .queryBuilder()
-                .orderDesc(DbPowerStateEventDao.Properties.Id)
+                .orderDesc(DbPowerStateSensorDao.Properties.Id)
                 .limit(amount)
                 .build()
                 .list();

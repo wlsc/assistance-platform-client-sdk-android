@@ -1,12 +1,12 @@
 package de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.event;
 
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbForegroundEvent;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbForegroundSensor;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.CommonEventDao;
 
 /**
  * @author Wladimir Schmidt (wlsc.dev@gmail.com)
  * @date 30.10.2015
  */
-public interface ForegroundEventDao extends CommonEventDao<DbForegroundEvent> {
+public interface ForegroundEventDao extends CommonEventDao<DbForegroundSensor> {
 
 }
