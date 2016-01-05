@@ -4,6 +4,7 @@ import android.content.Context;
 import android.database.ContentObserver;
 import android.database.Cursor;
 import android.net.Uri;
+import android.support.annotation.Nullable;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -28,12 +29,7 @@ public abstract class AbstractContentObserverEvent extends AbstractSensor {
         public void run() {
             Log.d(TAG, "Syncing now...");
 
-            mDaoSession.runInTx(new Runnable() {
-                @Override
-                public void run() {
-                    syncData();
-                }
-            });
+            mDaoSession.runInTx(() -> syncData());
 
             mTimer = null;
         }
@@ -57,6 +53,7 @@ public abstract class AbstractContentObserverEvent extends AbstractSensor {
         }
     }
 
+    @Nullable
     protected String getStringByColumnName(Cursor cur, String strColumnName) {
         int index = cur.getColumnIndex(strColumnName);
         return (index == -1) ? null : cur.getString(cur.getColumnIndex(strColumnName));

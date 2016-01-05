@@ -1,5 +1,7 @@
 package de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing;
 
+import android.support.annotation.Nullable;
+
 import java.util.List;
 
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.SensorDto;
@@ -11,6 +13,7 @@ import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.CommonDa
  */
 public interface CommonEventDao<T> extends CommonDao<T> {
 
+    @Nullable
     SensorDto convertObject(T sensor);
 
     List<SensorDto> convertObjects(List<T> dbSensors);

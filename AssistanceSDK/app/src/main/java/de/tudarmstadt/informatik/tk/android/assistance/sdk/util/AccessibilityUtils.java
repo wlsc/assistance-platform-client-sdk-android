@@ -33,11 +33,8 @@ public class AccessibilityUtils {
             AlertDialog.Builder builder = new AlertDialog.Builder(context);
             builder.setMessage(R.string.alert_accessibility);
             builder.setPositiveButton(R.string.alert_accessibility_button,
-                    new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            openAccessibiliySettings(context);
-                        }
+                    (dialog, which) -> {
+                        openAccessibiliySettings(context);
                     });
             if (!((Activity) context).isFinishing()) {
                 builder.create().show();

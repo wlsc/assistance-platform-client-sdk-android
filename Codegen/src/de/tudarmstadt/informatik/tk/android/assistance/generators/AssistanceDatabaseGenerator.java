@@ -118,22 +118,6 @@ public class AssistanceDatabaseGenerator {
     moduleCapability.addToOne(module, moduleCapabilityFKModuleProperty);
     module.addToMany(moduleCapability, moduleCapabilityFKModuleProperty);
 
-    // ----- Module installation scheme -----
-//    Entity moduleInstallation = schema.addEntity("DbModuleInstallation");
-//    moduleInstallation.setTableName("module_installation");
-//    moduleInstallation.addIdProperty().autoincrement().index();
-//    moduleInstallation.addBooleanProperty("active").notNull();
-//    moduleInstallation.addStringProperty("created").notNull();
-//
-//    Property moduleInstallationFKModuleProperty =
-//        moduleInstallation.addLongProperty("moduleId").index().getProperty();
-//    Property moduleInstallationFKUserProperty =
-//        moduleInstallation.addLongProperty("userId").index().getProperty();
-//    moduleInstallation.addToOne(module, moduleInstallationFKModuleProperty);
-//    module.addToMany(moduleInstallation, moduleInstallationFKModuleProperty);
-//    moduleInstallation.addToOne(user, moduleInstallationFKUserProperty);
-//    user.addToMany(moduleInstallation, moduleInstallationFKUserProperty);
-    
     // ----- Assistance News scheme -----
     Entity assistanceNews = schema.addEntity("DbNews");
     assistanceNews.setTableName("news");

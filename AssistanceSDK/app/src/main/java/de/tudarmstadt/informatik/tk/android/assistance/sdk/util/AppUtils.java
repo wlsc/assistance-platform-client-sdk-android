@@ -43,7 +43,7 @@ public class AppUtils {
      */
     public static String generateSHA256(String someString) {
 
-        MessageDigest md = null;
+        MessageDigest md;
         String result = "";
 
         try {

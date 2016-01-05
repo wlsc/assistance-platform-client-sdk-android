@@ -18,7 +18,7 @@ public class RunningAppsReaderEvent extends AbstractPeriodicEvent implements ISe
     private static final int MAXIMUM_SERVICES = 20;
     private ActivityManager m_activityManager;
 
-    private List<String> m_liLastServices = new LinkedList<String>();
+    private List<String> m_liLastServices = new LinkedList<>();
 
     public RunningAppsReaderEvent(Context context) {
         super(context);

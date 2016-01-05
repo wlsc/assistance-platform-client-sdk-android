@@ -1,5 +1,7 @@
 package de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.event;
 
+import android.support.annotation.Nullable;
+
 import java.util.Collections;
 import java.util.List;
 
@@ -35,6 +37,7 @@ public class RunningTasksEventDaoImpl extends
         return INSTANCE;
     }
 
+    @Nullable
     @Override
     public SensorDto convertObject(DbRunningTasksEvent sensor) {
 
@@ -51,6 +54,7 @@ public class RunningTasksEventDaoImpl extends
         return result;
     }
 
+    @Nullable
     @Override
     public DbRunningTasksEvent get(Long id) {
 

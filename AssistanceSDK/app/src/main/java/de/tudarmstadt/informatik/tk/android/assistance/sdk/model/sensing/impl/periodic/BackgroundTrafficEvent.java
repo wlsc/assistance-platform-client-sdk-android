@@ -24,7 +24,7 @@ import de.tudarmstadt.informatik.tk.android.assistance.sdk.util.logger.Log;
  * This is a Periodic Sensor class which collect the mobile traffic data produced by the apps in the
  * background in periodic intervals. This is important to get the traffic from apps which runs
  * services in background.
- * <p/>
+ * <p>
  * Created by Stefan Hacker on 09.12.14
  *
  * @edited by Wladimir Schmidt (wlsc.dev@gmail.com)
@@ -108,6 +108,9 @@ public class BackgroundTrafficEvent extends AbstractPeriodicEvent {
             return;
         }
 
+        PreferenceProvider preferenceProvider = PreferenceProvider.getInstance(context);
+        String created = DateUtils.dateToISO8601String(new Date(), Locale.getDefault());
+
         List<DbNetworkTrafficEvent> insertList = new ArrayList<>();
 
         for (ApplicationInfo packageInfo : packages) {
@@ -124,11 +127,11 @@ public class BackgroundTrafficEvent extends AbstractPeriodicEvent {
                 networkTrafficEvent.setAppName(packageInfo.packageName);
                 networkTrafficEvent.setTxBytes(TrafficStats.getUidTxPackets(packageInfo.uid));
                 networkTrafficEvent.setRxBytes(TrafficStats.getUidRxPackets(packageInfo.uid));
-                networkTrafficEvent.setBackground(true);
-                networkTrafficEvent.setCreated(DateUtils.dateToISO8601String(new Date(), Locale.getDefault()));
+                networkTrafficEvent.setBackground(Boolean.TRUE);
+                networkTrafficEvent.setCreated(created);
 
-                double lastLatitude = PreferenceProvider.getInstance(context).getLastLatitude();
-                double lastLongitude = PreferenceProvider.getInstance(context).getLastLongitude();
+                double lastLatitude = preferenceProvider.getLastLatitude();
+                double lastLongitude = preferenceProvider.getLastLongitude();
 
                 if (lastLatitude != 0) {
                     networkTrafficEvent.setLatitude(lastLatitude);

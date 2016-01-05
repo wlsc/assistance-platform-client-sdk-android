@@ -1,5 +1,7 @@
 package de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.sensor;
 
+import android.support.annotation.Nullable;
+
 import java.util.Collections;
 import java.util.List;
 
@@ -34,6 +36,7 @@ public class LightSensorDaoImpl extends
         return INSTANCE;
     }
 
+    @Nullable
     @Override
     public LightSensorDto convertObject(DbLightSensor sensor) {
 
@@ -50,6 +53,7 @@ public class LightSensorDaoImpl extends
         return result;
     }
 
+    @Nullable
     @Override
     public DbLightSensor get(Long id) {
 

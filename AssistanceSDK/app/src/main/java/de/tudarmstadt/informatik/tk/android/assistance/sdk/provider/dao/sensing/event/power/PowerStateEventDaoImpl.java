@@ -1,5 +1,7 @@
 package de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.event.power;
 
+import android.support.annotation.Nullable;
+
 import java.util.Collections;
 import java.util.List;
 
@@ -34,6 +36,7 @@ public class PowerStateEventDaoImpl extends
         return INSTANCE;
     }
 
+    @Nullable
     @Override
     public PowerStateEventDto convertObject(DbPowerStateEvent sensor) {
 
@@ -53,6 +56,7 @@ public class PowerStateEventDaoImpl extends
         return result;
     }
 
+    @Nullable
     @Override
     public DbPowerStateEvent get(Long id) {
 

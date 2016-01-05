@@ -6,6 +6,8 @@ package de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.exception;
  */
 public class ServiceTemporaryNotAvailableException extends Exception {
 
+    private static final long serialVersionUID = 4061083637941614272L;
+
     public ServiceTemporaryNotAvailableException(String message) {
     }
 }

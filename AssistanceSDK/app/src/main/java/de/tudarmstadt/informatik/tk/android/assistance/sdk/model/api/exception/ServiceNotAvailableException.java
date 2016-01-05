@@ -6,6 +6,8 @@ package de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.exception;
  */
 public class ServiceNotAvailableException extends Exception {
 
+    private static final long serialVersionUID = -8737807391261219986L;
+
     public ServiceNotAvailableException(String message) {
         super(message);
     }

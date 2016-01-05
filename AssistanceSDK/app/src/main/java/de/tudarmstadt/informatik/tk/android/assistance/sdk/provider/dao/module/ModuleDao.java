@@ -1,5 +1,7 @@
 package de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.module;
 
+import android.support.annotation.Nullable;
+
 import java.util.List;
 
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbModule;
@@ -11,8 +13,7 @@ import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.CommonDa
  */
 public interface ModuleDao extends CommonDao<DbModule> {
 
-    DbModule get(Long moduleId);
-
+    @Nullable
     DbModule getByPackageIdUserId(String modulePackageName, Long userId);
 
     List<DbModule> getAll(Long userId);

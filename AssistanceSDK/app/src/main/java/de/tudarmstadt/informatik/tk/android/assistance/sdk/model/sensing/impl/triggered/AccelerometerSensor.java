@@ -202,7 +202,7 @@ public class AccelerometerSensor extends
 
         Log.d(TAG, "New update interval: " + newUpdateIntervalInSec + " sec");
 
-        setUpdateIntervalInSec(newUpdateIntervalInSec);
+        UPDATE_INTERVAL_IN_SEC = newUpdateIntervalInSec;
     }
 
     public int getUpdateIntervalInSec() {

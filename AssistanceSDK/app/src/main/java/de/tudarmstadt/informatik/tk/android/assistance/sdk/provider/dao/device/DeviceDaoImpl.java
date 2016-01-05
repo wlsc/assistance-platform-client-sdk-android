@@ -1,5 +1,7 @@
 package de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.device;
 
+import android.support.annotation.Nullable;
+
 import java.util.Collections;
 import java.util.List;
 
@@ -40,6 +42,7 @@ public class DeviceDaoImpl extends
      * @param deviceId
      * @return
      */
+    @Nullable
     @Override
     public DbDevice getById(long deviceId) {
 
@@ -94,6 +97,7 @@ public class DeviceDaoImpl extends
         }
     }
 
+    @Nullable
     @Override
     public DbDevice get(Long id) {
 

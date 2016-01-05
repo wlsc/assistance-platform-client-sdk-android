@@ -939,7 +939,7 @@ public class EventUploadService extends GcmTaskService {
                     }
 
                     dbEvents.put(type, calendarList);
-                    requestEvents.put(type, calendarListConverted);
+                    requestEvents.put(type, calendarListConvertedNew);
 
 
                     break;

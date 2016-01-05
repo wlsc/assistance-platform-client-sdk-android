@@ -2,6 +2,7 @@ package de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api;
 
 import android.content.res.Resources;
 import android.hardware.Sensor;
+import android.os.Build;
 import android.util.SparseIntArray;
 
 import java.util.HashMap;
@@ -107,9 +108,17 @@ public class DtoType {
 
         androidSensorToDtoTypeMap.put(Sensor.TYPE_ACCELEROMETER, ACCELEROMETER);
         androidSensorToDtoTypeMap.put(Sensor.TYPE_GYROSCOPE, GYROSCOPE);
-        androidSensorToDtoTypeMap.put(Sensor.TYPE_GYROSCOPE_UNCALIBRATED, GYROSCOPE);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
+            androidSensorToDtoTypeMap.put(Sensor.TYPE_GYROSCOPE_UNCALIBRATED, GYROSCOPE);
+        }
+
         androidSensorToDtoTypeMap.put(Sensor.TYPE_MAGNETIC_FIELD, MAGNETIC_FIELD);
-        androidSensorToDtoTypeMap.put(Sensor.TYPE_MAGNETIC_FIELD_UNCALIBRATED, MAGNETIC_FIELD);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
+            androidSensorToDtoTypeMap.put(Sensor.TYPE_MAGNETIC_FIELD_UNCALIBRATED, MAGNETIC_FIELD);
+        }
+
         androidSensorToDtoTypeMap.put(Sensor.TYPE_LIGHT, LIGHT);
     }
 

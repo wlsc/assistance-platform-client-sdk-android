@@ -1,5 +1,7 @@
 package de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.event.contact;
 
+import android.support.annotation.Nullable;
+
 import java.util.Collections;
 import java.util.List;
 
@@ -34,6 +36,7 @@ public class ContactNumberEventDaoImpl extends
         return INSTANCE;
     }
 
+    @Nullable
     @Override
     public SensorDto convertObject(DbContactNumberEvent sensor) {
 
@@ -58,6 +61,7 @@ public class ContactNumberEventDaoImpl extends
         return null;
     }
 
+    @Nullable
     @Override
     public DbContactNumberEvent get(Long id) {
 

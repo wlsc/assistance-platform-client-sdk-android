@@ -1,5 +1,7 @@
 package de.tudarmstadt.informatik.tk.android.assistance.sdk.model.httpclient;
 
+import android.support.annotation.Nullable;
+
 import com.squareup.okhttp.OkHttpClient;
 
 import java.security.SecureRandom;
@@ -48,6 +50,7 @@ public class UntrustedOkHttpClient {
                         public void checkServerTrusted(X509Certificate[] chain, String authType) throws CertificateException {
                         }
 
+                        @Nullable
                         @Override
                         public X509Certificate[] getAcceptedIssuers() {
                             return null;
@@ -64,13 +67,7 @@ public class UntrustedOkHttpClient {
 
                 okHttpClient = new OkHttpClient();
                 okHttpClient.setSslSocketFactory(sslSocketFactory);
-                okHttpClient.setHostnameVerifier(new HostnameVerifier() {
-
-                    @Override
-                    public boolean verify(String hostname, SSLSession session) {
-                        return true;
-                    }
-                });
+                okHttpClient.setHostnameVerifier((hostname, session) -> true);
             }
 
             return okHttpClient;

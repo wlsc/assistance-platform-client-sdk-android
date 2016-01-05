@@ -4,6 +4,7 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.support.annotation.Nullable;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -33,6 +34,7 @@ public class ImageUtils {
         return bitmap;
     }
 
+    @Nullable
     public static String getMainColor(Bitmap bitmap) {
 
         if (bitmap == null) {
@@ -64,12 +66,7 @@ public class ImageUtils {
 
     public static String getMostCommonColour(Map<Integer, Integer> map) {
         List<Map.Entry<Integer, Integer>> list = new ArrayList<>(map.entrySet());
-        Collections.sort(list, new Comparator<Map.Entry<Integer, Integer>>() {
-            @Override
-            public int compare(Map.Entry<Integer, Integer> lhs, Map.Entry<Integer, Integer> rhs) {
-                return lhs.getValue().compareTo(rhs.getValue());
-            }
-        });
+        Collections.sort(list, (lhs, rhs) -> lhs.getValue().compareTo(rhs.getValue()));
         Map.Entry me = (Map.Entry) list.get(list.size() - 1);
         int[] rgb = getRGBArr((Integer) me.getKey());
 

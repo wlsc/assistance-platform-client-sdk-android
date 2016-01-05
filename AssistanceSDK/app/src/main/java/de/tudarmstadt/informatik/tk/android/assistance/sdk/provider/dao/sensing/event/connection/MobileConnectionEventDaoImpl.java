@@ -1,5 +1,7 @@
 package de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.event.connection;
 
+import android.support.annotation.Nullable;
+
 import java.util.Collections;
 import java.util.List;
 
@@ -34,6 +36,7 @@ public class MobileConnectionEventDaoImpl extends
         return INSTANCE;
     }
 
+    @Nullable
     @Override
     public MobileConnectionEventDto convertObject(DbMobileConnectionEvent sensor) {
 
@@ -52,6 +55,7 @@ public class MobileConnectionEventDaoImpl extends
         return result;
     }
 
+    @Nullable
     @Override
     public DbMobileConnectionEvent get(Long id) {
 

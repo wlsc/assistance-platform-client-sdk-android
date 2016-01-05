@@ -6,6 +6,8 @@ package de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.exception;
  */
 public class BadRequestException extends Exception {
 
+    private static final long serialVersionUID = 7791364649743639354L;
+
     public BadRequestException(String message) {
         super(message);
     }

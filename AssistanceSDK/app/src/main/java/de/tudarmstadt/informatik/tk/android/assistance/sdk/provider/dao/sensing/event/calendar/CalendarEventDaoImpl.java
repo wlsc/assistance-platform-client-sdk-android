@@ -1,5 +1,7 @@
 package de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.event.calendar;
 
+import android.support.annotation.Nullable;
+
 import java.util.Collections;
 import java.util.List;
 
@@ -35,6 +37,7 @@ public class CalendarEventDaoImpl extends
         return INSTANCE;
     }
 
+    @Nullable
     @Override
     public CalendarEventDto convertObject(DbCalendarEvent sensor) {
 
@@ -69,6 +72,7 @@ public class CalendarEventDaoImpl extends
         return result;
     }
 
+    @Nullable
     @Override
     public DbCalendarEvent get(Long id) {
 

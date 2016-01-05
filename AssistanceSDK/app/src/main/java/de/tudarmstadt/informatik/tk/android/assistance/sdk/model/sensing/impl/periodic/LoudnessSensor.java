@@ -7,6 +7,7 @@ import android.media.MediaRecorder;
 import android.os.Bundle;
 import android.os.Handler.Callback;
 import android.os.Message;
+import android.support.annotation.Nullable;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 
@@ -48,14 +49,14 @@ public class LoudnessSensor extends AbstractPeriodicEvent implements Callback {
 
     private float currentValue;
 
-    public class LeqValue {
+    public static class LeqValue {
 
         public float value = 0;
         public int samples = 0;
 
     }
 
-    public class RMSValue {
+    public static class RMSValue {
 
         public float value = 0;
         public int samples = 0;
@@ -119,7 +120,7 @@ public class LoudnessSensor extends AbstractPeriodicEvent implements Callback {
         mPhoneListener = new PhoneListener(this);
 
         if (tManager != null) {
-            tManager.listen(mPhoneListener, PhoneListener.LISTEN_CALL_STATE);
+            tManager.listen(mPhoneListener, PhoneStateListener.LISTEN_CALL_STATE);
         }
     }
 
@@ -220,7 +221,7 @@ public class LoudnessSensor extends AbstractPeriodicEvent implements Callback {
     @Override
     public void reset() {
 
-        this.currentValue = 0f;
+        this.currentValue = 0.0f;
     }
 
     @Override
@@ -246,6 +247,7 @@ public class LoudnessSensor extends AbstractPeriodicEvent implements Callback {
         super.stopSensor();
     }
 
+    @Nullable
     public RMSValue calcRMS(short[] data) {
 
         if (data == null) {
@@ -266,7 +268,7 @@ public class LoudnessSensor extends AbstractPeriodicEvent implements Callback {
         return rmsValue;
     }
 
-    public class AudioRecorder extends Thread {
+    public static class AudioRecorder extends Thread {
 
         private LoudnessSensor mSensor;
         private AudioRecord audioInput = null;
@@ -321,7 +323,7 @@ public class LoudnessSensor extends AbstractPeriodicEvent implements Callback {
                 short[] audioData = new short[bufferSize];
 
                 int offset = 0;
-                int read = 0;
+                int read;
 
                 boolean flushBuffer = false;
 
@@ -403,7 +405,7 @@ public class LoudnessSensor extends AbstractPeriodicEvent implements Callback {
         }
     }
 
-    public class PhoneListener extends PhoneStateListener {
+    public static class PhoneListener extends PhoneStateListener {
 
         private LoudnessSensor sensor;
 

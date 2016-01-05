@@ -1,5 +1,7 @@
 package de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api;
 
+import android.support.annotation.Nullable;
+
 /**
  * General sensor request interface
  *
@@ -10,5 +12,6 @@ public interface SensorDto {
 
     int getType();
 
+    @Nullable
     String getCreated();
 }

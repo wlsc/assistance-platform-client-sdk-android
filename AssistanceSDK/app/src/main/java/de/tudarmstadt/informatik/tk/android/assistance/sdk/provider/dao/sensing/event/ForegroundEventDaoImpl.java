@@ -1,5 +1,7 @@
 package de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.event;
 
+import android.support.annotation.Nullable;
+
 import java.util.Collections;
 import java.util.List;
 
@@ -35,6 +37,7 @@ public class ForegroundEventDaoImpl extends
         return INSTANCE;
     }
 
+    @Nullable
     @Override
     public ForegroundEventDto convertObject(DbForegroundEvent sensor) {
 
@@ -57,6 +60,7 @@ public class ForegroundEventDaoImpl extends
         return result;
     }
 
+    @Nullable
     @Override
     public DbForegroundEvent get(Long id) {
 

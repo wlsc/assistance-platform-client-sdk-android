@@ -5,4 +5,5 @@ package de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.module.exc
  * @date 01.01.2016
  */
 public class ActiveModulesException extends IllegalArgumentException {
+    private static final long serialVersionUID = 7259991793397751526L;
 }

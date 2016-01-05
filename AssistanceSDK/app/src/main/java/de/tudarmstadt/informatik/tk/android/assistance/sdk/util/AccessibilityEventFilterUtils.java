@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.pm.ActivityInfo;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
+import android.support.annotation.Nullable;
 import android.view.accessibility.AccessibilityEvent;
 
 import java.util.Date;
@@ -52,6 +53,7 @@ public class AccessibilityEventFilterUtils {
      * @param event AccessibilityEvent
      * @return ForegroundEvent
      */
+    @Nullable
     public DbForegroundEvent filter(AccessibilityEvent event) {
 
         if (event == null || event.getPackageName() == null) {
@@ -182,6 +184,7 @@ public class AccessibilityEventFilterUtils {
         return sb.toString();
     }
 
+    @Nullable
     public String getAppName(String packageName) {
         PackageManager pm = mContext.getPackageManager();
         ApplicationInfo ai = null;
@@ -193,6 +196,7 @@ public class AccessibilityEventFilterUtils {
         return ai != null ? pm.getApplicationLabel(ai).toString() : null;
     }
 
+    @Nullable
     public String getActivityLabel(String packageName, String className) {
         if (packageName == null || className == null) {
             return null;

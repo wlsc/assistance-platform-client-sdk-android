@@ -1,5 +1,7 @@
 package de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.event.calendar;
 
+import android.support.annotation.Nullable;
+
 import java.util.Collections;
 import java.util.List;
 
@@ -34,6 +36,7 @@ public class CalendarReminderEventDaoImpl extends
         return INSTANCE;
     }
 
+    @Nullable
     @Override
     public CalendarReminder convertObject(DbCalendarReminderEvent sensor) {
 
@@ -43,7 +46,7 @@ public class CalendarReminderEventDaoImpl extends
 
         Boolean isDefaultOffset = sensor.getMinutes() == null ? Boolean.TRUE : Boolean.FALSE;
 
-        CalendarReminder result = null;
+        CalendarReminder result;
 
         if (isDefaultOffset) {
             result = new CalendarReminder(
@@ -76,6 +79,7 @@ public class CalendarReminderEventDaoImpl extends
                 .list();
     }
 
+    @Nullable
     @Override
     public DbCalendarReminderEvent get(Long id) {
 

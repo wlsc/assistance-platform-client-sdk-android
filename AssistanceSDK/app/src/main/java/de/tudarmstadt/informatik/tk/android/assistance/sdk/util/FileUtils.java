@@ -89,7 +89,7 @@ public class FileUtils {
 
             fileInputStream = new FileInputStream(file);
             StringBuilder sb = new StringBuilder();
-            int read = -1;
+            int read;
 
             while ((read = fileInputStream.read()) != -1) {
                 sb.append((char) read);

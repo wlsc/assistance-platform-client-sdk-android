@@ -6,12 +6,14 @@ import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.provider.BaseColumns;
 import android.provider.ContactsContract;
+import android.provider.ContactsContract.CommonDataKinds.Email;
 import android.provider.ContactsContract.CommonDataKinds.Note;
 import android.provider.ContactsContract.CommonDataKinds.Phone;
 import android.provider.ContactsContract.Data;
 import android.support.annotation.Nullable;
-import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -80,7 +82,7 @@ public class ContactsEvent extends AbstractContentObserverEvent {
             return;
         }
 
-        if (ActivityCompat.checkSelfPermission(
+        if (ContextCompat.checkSelfPermission(
                 context,
                 Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED) {
 
@@ -104,11 +106,12 @@ public class ContactsEvent extends AbstractContentObserverEvent {
                 return;
             }
 
+            String created = DateUtils.dateToISO8601String(new Date(), Locale.getDefault());
             Map<Long, DbContactEvent> allExistingContacts = getAllExistingContacts();
 
             while (cursor.moveToNext() && isRunning()) {
 
-                String strContactId = getStringByColumnName(cursor, ContactsContract.Contacts._ID);
+                String strContactId = getStringByColumnName(cursor, BaseColumns._ID);
 
                 Log.d(TAG, "sync Contact Id: " + strContactId);
 
@@ -154,7 +157,7 @@ public class ContactsEvent extends AbstractContentObserverEvent {
                 sensorContact.setIsNew(Boolean.TRUE);
                 sensorContact.setIsDeleted(Boolean.FALSE);
                 sensorContact.setIsUpdated(Boolean.FALSE);
-                sensorContact.setCreated(DateUtils.dateToISO8601String(new Date(), Locale.getDefault()));
+                sensorContact.setCreated(created);
 
                 if (checkForContactChange(allExistingContacts, sensorContact)) {
 
@@ -322,20 +325,22 @@ public class ContactsEvent extends AbstractContentObserverEvent {
                 return;
             }
 
+            String created = DateUtils.dateToISO8601String(new Date(), Locale.getDefault());
+
             List<DbContactEmailEvent> entriesToInsert = new ArrayList<>();
 
             while (emails.moveToNext()) {
 
                 DbContactEmailEvent sensorContactMail = new DbContactEmailEvent();
 
-                sensorContactMail.setMailId(getLongByColumnName(emails, ContactsContract.CommonDataKinds.Email._ID));
+                sensorContactMail.setMailId(getLongByColumnName(emails, BaseColumns._ID));
                 sensorContactMail.setContactId(sensorContact.getId());
-                sensorContactMail.setAddress(getStringByColumnName(emails, ContactsContract.CommonDataKinds.Email.ADDRESS));
-                sensorContactMail.setType(getStringByColumnName(emails, ContactsContract.CommonDataKinds.Email.TYPE));
+                sensorContactMail.setAddress(getStringByColumnName(emails, Email.ADDRESS));
+                sensorContactMail.setType(getStringByColumnName(emails, Email.TYPE));
                 sensorContactMail.setIsNew(Boolean.TRUE);
                 sensorContactMail.setIsDeleted(Boolean.FALSE);
                 sensorContactMail.setIsUpdated(Boolean.FALSE);
-                sensorContactMail.setCreated(DateUtils.dateToISO8601String(new Date(), Locale.getDefault()));
+                sensorContactMail.setCreated(created);
 
                 if (checkForContactMailChange(mapExistingMails, sensorContactMail)) {
 
@@ -417,20 +422,22 @@ public class ContactsEvent extends AbstractContentObserverEvent {
                 return;
             }
 
+            String created = DateUtils.dateToISO8601String(new Date(), Locale.getDefault());
+
             List<DbContactNumberEvent> entriesToInsert = new ArrayList<>();
 
             while (curPhones.moveToNext()) {
 
                 DbContactNumberEvent sensorContactNumber = new DbContactNumberEvent();
 
-                sensorContactNumber.setNumberId(getLongByColumnName(curPhones, Phone._ID));
+                sensorContactNumber.setNumberId(getLongByColumnName(curPhones, BaseColumns._ID));
                 sensorContactNumber.setContactId(sensorContact.getId());
                 sensorContactNumber.setNumber(getStringByColumnName(curPhones, Phone.NUMBER));
                 sensorContactNumber.setType(getStringByColumnName(curPhones, Phone.TYPE));
                 sensorContactNumber.setIsNew(Boolean.TRUE);
                 sensorContactNumber.setIsDeleted(Boolean.FALSE);
                 sensorContactNumber.setIsUpdated(Boolean.FALSE);
-                sensorContactNumber.setCreated(DateUtils.dateToISO8601String(new Date(), Locale.getDefault()));
+                sensorContactNumber.setCreated(created);
 
                 if (checkForContactNumberChange(mapExistingNumbers, sensorContactNumber)) {
 

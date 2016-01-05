@@ -1,5 +1,7 @@
 package de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao;
 
+import android.support.annotation.Nullable;
+
 import java.util.List;
 
 /**
@@ -8,6 +10,7 @@ import java.util.List;
  */
 public interface CommonDao<T> {
 
+    @Nullable
     T get(Long id);
 
     List<T> getAll();

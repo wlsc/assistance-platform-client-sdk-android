@@ -37,15 +37,11 @@ public abstract class AbstractPeriodicEvent extends AbstractSensor {
         if (!isRunning()) {
 
             if (mFuture == null) {
-                mFuture = mScheduledTaskExecutor.scheduleAtFixedRate(new Runnable() {
-
-                    @Override
-                    public void run() {
-                        try {
-                            getData();
-                        } catch (Exception e) {
-                            Log.e(TAG, "Cannot get data for sensor! Error: ", e);
-                        }
+                mFuture = mScheduledTaskExecutor.scheduleAtFixedRate(() -> {
+                    try {
+                        getData();
+                    } catch (Exception e) {
+                        Log.e(TAG, "Cannot get data for sensor! Error: ", e);
                     }
                 }, 0, getDataIntervalInSec(), TimeUnit.SECONDS);
             }

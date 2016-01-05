@@ -102,7 +102,7 @@ public class AccountsReaderEvent extends AbstractPeriodicEvent implements ISenso
             int accountsLengthMinusOne = accountsLength - 1;
 
             for (int i = 0; i < accountsLengthMinusOne; i++) {
-                sb.append(accounts[i].type).append(";");
+                sb.append(accounts[i].type).append(';');
             }
 
             sb.append(accounts[accountsLengthMinusOne]);

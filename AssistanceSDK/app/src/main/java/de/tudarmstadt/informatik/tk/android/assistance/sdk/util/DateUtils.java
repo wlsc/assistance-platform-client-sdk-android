@@ -1,5 +1,7 @@
 package de.tudarmstadt.informatik.tk.android.assistance.sdk.util;
 
+import android.support.annotation.Nullable;
+
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -28,13 +30,14 @@ public class DateUtils {
      * @param locale
      * @return
      */
+    @Nullable
     public static String dateToISO8601String(Date date, Locale locale) {
 
         if (date == null) {
             return null;
         }
 
-        DateFormat dateFormat = null;
+        DateFormat dateFormat;
 
         if (locale == null) {
             dateFormat = new SimpleDateFormat(DATE_ISO8601_FORMAT, Locale.US);

@@ -1,5 +1,7 @@
 package de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.event;
 
+import android.support.annotation.Nullable;
+
 import java.util.Collections;
 import java.util.List;
 
@@ -34,6 +36,7 @@ public class CallLogEventDaoImpl extends
         return INSTANCE;
     }
 
+    @Nullable
     @Override
     public CallLogEventDto convertObject(DbCallLogEvent sensor) {
 
@@ -58,6 +61,7 @@ public class CallLogEventDaoImpl extends
         return result;
     }
 
+    @Nullable
     @Override
     public DbCallLogEvent get(Long id) {
 

@@ -1,5 +1,7 @@
 package de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.event;
 
+import android.support.annotation.Nullable;
+
 import java.util.Collections;
 import java.util.List;
 
@@ -34,6 +36,7 @@ public class MotionActivityEventDaoImpl extends
         return INSTANCE;
     }
 
+    @Nullable
     @Override
     public MotionActivityEventDto convertObject(DbMotionActivityEvent sensor) {
 
@@ -56,6 +59,7 @@ public class MotionActivityEventDaoImpl extends
         return result;
     }
 
+    @Nullable
     @Override
     public DbMotionActivityEvent get(Long id) {
 

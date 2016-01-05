@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.support.annotation.Nullable;
 
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.PreferenceProvider;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.service.EventUploadService;
@@ -54,6 +55,7 @@ public class WifiStateReceiver extends BroadcastReceiver {
 
                 new AsyncTask<Void, Void, Void>() {
 
+                    @Nullable
                     @Override
                     protected Void doInBackground(Void... params) {
                         Log.d(TAG, "Starting background uploader task...");

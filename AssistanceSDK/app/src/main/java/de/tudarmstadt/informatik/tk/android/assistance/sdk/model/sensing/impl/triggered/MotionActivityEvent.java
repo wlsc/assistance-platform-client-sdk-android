@@ -175,7 +175,7 @@ public class MotionActivityEvent extends
     }
 
     @Override
-    public void onConnectionFailed(ConnectionResult connectionResult) {
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
 
         Log.d(TAG, "Connection failed.");
 
@@ -187,12 +187,8 @@ public class MotionActivityEvent extends
 		 */
             if (connectionResult.hasResolution()) {
 
-                try {
-                    connectionResult.startResolutionForResult((Activity) context,
-                            CONNECTION_FAILURE_RESOLUTION_REQUEST);
-                } catch (SendIntentException e) {
-                    Log.e(TAG, "Cannot start resolution", e);
-                }
+                connectionResult.startResolutionForResult((Activity) context,
+                        CONNECTION_FAILURE_RESOLUTION_REQUEST);
                 // If no resolution is available, display an error dialog
             } else {
                 Log.d(TAG, "Cannot find any resolution");
@@ -204,6 +200,9 @@ public class MotionActivityEvent extends
                 // context,
                 // CONNECTION_FAILURE_RESOLUTION_REQUEST);
             }
+
+        } catch (SendIntentException e) {
+            Log.e(TAG, "Cannot start resolution", e);
         } finally {
             setRunning(false);
         }
@@ -275,7 +274,7 @@ public class MotionActivityEvent extends
 
         Log.d(TAG, "New update interval: " + newUpdateIntervalInSec + " sec");
 
-        setUpdateIntervalInSec(newUpdateIntervalInSec);
+        UPDATE_INTERVAL_IN_SEC = newUpdateIntervalInSec;
 
         if (mGoogleApiClient.isConnected()) {
 

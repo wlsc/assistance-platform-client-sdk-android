@@ -1,5 +1,7 @@
 package de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.user;
 
+import android.support.annotation.Nullable;
+
 import java.util.Collections;
 import java.util.List;
 
@@ -39,6 +41,7 @@ public class UserDaoImpl extends
      * @param email
      * @return
      */
+    @Nullable
     @Override
     public DbUser getByEmail(String email) {
 
@@ -60,6 +63,7 @@ public class UserDaoImpl extends
      * @param token
      * @return
      */
+    @Nullable
     @Override
     public DbUser getByToken(String token) {
 
@@ -75,6 +79,7 @@ public class UserDaoImpl extends
                 .unique();
     }
 
+    @Nullable
     @Override
     public DbUser get(Long id) {
 

@@ -1,5 +1,7 @@
 package de.tudarmstadt.informatik.tk.android.assistance.sdk.util;
 
+import android.support.annotation.Nullable;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -27,6 +29,7 @@ public class ConverterUtils {
      * @param dbModule
      * @return
      */
+    @Nullable
     public static ModuleResponseDto convertModule(DbModule dbModule) {
 
         if (dbModule == null) {
@@ -79,6 +82,7 @@ public class ConverterUtils {
      * @param availableModuleResponse
      * @return
      */
+    @Nullable
     public static DbModule convertModule(ModuleResponseDto availableModuleResponse) {
 
         if (availableModuleResponse == null) {
@@ -105,6 +109,7 @@ public class ConverterUtils {
      * @param moduleCapability
      * @return
      */
+    @Nullable
     public static ModuleCapabilityResponseDto convertModuleCapability(DbModuleCapability moduleCapability) {
 
         if (moduleCapability == null) {
@@ -127,6 +132,7 @@ public class ConverterUtils {
      * @param moduleCapabilityResponse
      * @return
      */
+    @Nullable
     public static DbModuleCapability convertModuleCapability(ModuleCapabilityResponseDto moduleCapabilityResponse) {
 
         if (moduleCapabilityResponse == null) {

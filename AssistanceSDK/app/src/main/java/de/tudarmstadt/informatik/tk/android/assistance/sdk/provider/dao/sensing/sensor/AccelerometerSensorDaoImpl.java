@@ -1,5 +1,7 @@
 package de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.sensor;
 
+import android.support.annotation.Nullable;
+
 import java.util.Collections;
 import java.util.List;
 
@@ -40,6 +42,7 @@ public class AccelerometerSensorDaoImpl extends
      * @param sensor
      * @return
      */
+    @Nullable
     @Override
     public AccelerometerSensorDto convertObject(DbAccelerometerSensor sensor) {
 
@@ -58,6 +61,7 @@ public class AccelerometerSensorDaoImpl extends
         return result;
     }
 
+    @Nullable
     @Override
     public DbAccelerometerSensor get(Long id) {
 

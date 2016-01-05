@@ -1,5 +1,7 @@
 package de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.sensor;
 
+import android.support.annotation.Nullable;
+
 import java.util.Collections;
 import java.util.List;
 
@@ -34,6 +36,7 @@ public class GyroscopeSensorDaoImpl extends
         return INSTANCE;
     }
 
+    @Nullable
     @Override
     public GyroscopeSensorDto convertObject(DbGyroscopeSensor sensor) {
 
@@ -58,6 +61,7 @@ public class GyroscopeSensorDaoImpl extends
         return result;
     }
 
+    @Nullable
     @Override
     public DbGyroscopeSensor get(Long id) {
 

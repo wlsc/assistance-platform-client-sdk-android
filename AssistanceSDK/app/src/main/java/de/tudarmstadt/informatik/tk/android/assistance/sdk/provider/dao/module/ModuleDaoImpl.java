@@ -1,5 +1,7 @@
 package de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.module;
 
+import android.support.annotation.Nullable;
+
 import java.util.Collections;
 import java.util.List;
 
@@ -40,6 +42,7 @@ public class ModuleDaoImpl extends
      * @param userId
      * @return
      */
+    @Nullable
     @Override
     public DbModule getByPackageIdUserId(String modulePackageName, Long userId) {
 
@@ -85,10 +88,11 @@ public class ModuleDaoImpl extends
                 .list();
     }
 
+    @Nullable
     @Override
     public DbModule get(Long moduleId) {
 
-        if (moduleId == null || moduleId.longValue() < 0) {
+        if (moduleId == null || moduleId < 0) {
             return null;
         }
 

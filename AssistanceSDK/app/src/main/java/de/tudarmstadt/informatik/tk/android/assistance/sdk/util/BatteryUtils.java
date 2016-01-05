@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.BatteryManager;
+import android.os.Build;
 
 /**
  * @author Wladimir Schmidt (wlsc.dev@gmail.com)
@@ -59,7 +60,10 @@ public class BatteryUtils {
 
         Intent intent = getBatteryChangedIntent(context);
         int plugged = intent.getIntExtra(BatteryManager.EXTRA_PLUGGED, -1);
-        boolean isPlugged = plugged == BatteryManager.BATTERY_PLUGGED_WIRELESS;
+        boolean isPlugged = false;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+            isPlugged = plugged == BatteryManager.BATTERY_PLUGGED_WIRELESS;
+        }
 
         return isPlugged;
     }
@@ -74,9 +78,15 @@ public class BatteryUtils {
 
         Intent intent = getBatteryChangedIntent(context);
         int plugged = intent.getIntExtra(BatteryManager.EXTRA_PLUGGED, -1);
-        boolean isPlugged = (plugged == BatteryManager.BATTERY_PLUGGED_AC) ||
-                (plugged == BatteryManager.BATTERY_PLUGGED_USB) ||
-                (plugged == BatteryManager.BATTERY_PLUGGED_WIRELESS);
+        boolean isPlugged = false;
+
+        isPlugged = plugged == BatteryManager.BATTERY_PLUGGED_AC ||
+                plugged == BatteryManager.BATTERY_PLUGGED_USB ||
+                plugged == BatteryManager.BATTERY_PLUGGED_WIRELESS;
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+            isPlugged = isPlugged || (plugged == BatteryManager.BATTERY_PLUGGED_WIRELESS);
+        }
 
         return isPlugged;
     }

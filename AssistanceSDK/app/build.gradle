@@ -51,13 +51,13 @@ dependencies {
     compile 'com.squareup.retrofit:retrofit:1.9.0'
     compile 'com.squareup.retrofit:retrofit-mock:1.9.0'
     // efficient HTTP client
-    compile 'com.squareup.okhttp:okhttp:2.6.0'
+    compile 'com.squareup.okhttp:okhttp:2.7.1'
     // database ORM
     compile 'de.greenrobot:greendao:2.1.0'
     // event bus system
-    compile 'de.greenrobot:eventbus:2.4.0'
+    compile 'de.greenrobot:eventbus:2.4.1'
     // google's guava
-    compile 'com.google.guava:guava:18.0'
+    compile 'com.google.guava:guava:19.0'
     // reactive
     compile 'io.reactivex:rxjava:1.1.0'
     compile 'io.reactivex:rxandroid:1.1.0'

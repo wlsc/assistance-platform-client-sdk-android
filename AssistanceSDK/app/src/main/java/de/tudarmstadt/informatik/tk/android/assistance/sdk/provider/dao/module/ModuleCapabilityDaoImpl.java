@@ -1,5 +1,7 @@
 package de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.module;
 
+import android.support.annotation.Nullable;
+
 import java.util.Collections;
 import java.util.List;
 
@@ -33,6 +35,7 @@ public class ModuleCapabilityDaoImpl extends
         return INSTANCE;
     }
 
+    @Nullable
     @Override
     public DbModuleCapability get(Long id) {
 

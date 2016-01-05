@@ -1,5 +1,7 @@
 package de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.sensing.event.calendar;
 
+import android.support.annotation.Nullable;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -47,6 +49,7 @@ public class CalendarReminder implements SensorDto {
         return -1;
     }
 
+    @Nullable
     @Override
     public String getCreated() {
         return null;

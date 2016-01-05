@@ -50,20 +50,16 @@ public class FacebookProvider {
                                  final OnFacebookGraphResponse onFacebookGraphResponse) {
 
         GraphRequest request = GraphRequest.newMeRequest(accessToken,
-                new GraphRequest.GraphJSONObjectCallback() {
+                (object, response) -> {
 
-                    @Override
-                    public void onCompleted(JSONObject object, GraphResponse response) {
-
-                        if (object == null) {
-                            Log.d(TAG, "Response is null");
-                            return;
-                        }
-
-                        Log.d(TAG, "Object received: " + object.toString());
-
-                        onFacebookGraphResponse.onCompleted(object, response);
+                    if (object == null) {
+                        Log.d(TAG, "Response is null");
+                        return;
                     }
+
+                    Log.d(TAG, "Object received: " + object.toString());
+
+                    onFacebookGraphResponse.onCompleted(object, response);
                 }
         );
 

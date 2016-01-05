@@ -41,7 +41,7 @@ public abstract class AbstractSensor implements ISensor {
     public void setContext(Context context) {
         this.context = context;
         if (context instanceof HarvesterService) {
-            setDaoSession(((HarvesterService) context).getDaoSession());
+            this.mDaoSession = ((HarvesterService) context).getDaoSession();
         }
     }
 

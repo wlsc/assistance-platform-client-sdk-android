@@ -4,12 +4,10 @@
     <string name="alert_accessibility_button">Bedienungshilfen Einstellungen öffnen</string>
 
     <!-- Sensors -->
-    <string name="measurement_log">Log</string>
     <string name="sensor_accelerometer">Accelerometer</string>
     <string name="sensor_activity">Aktivität</string>
     <string name="sensor_connection">Drahtlose Verbindungen</string>
     <string name="sensor_light">Umgebungslicht</string>
-    <string name="sensor_location">GPS</string>
     <string name="event_ringtone">Klingelton</string>
     <string name="event_account_reader">Account reader</string>
     <string name="event_running_processes">Laufende Prozesse</string>
@@ -22,9 +20,6 @@
     <string name="event_browser_history">Browser Verlauf</string>
     <string name="event_foreground">Benutzte Apps</string>
     <string name="event_network_traffic">Datenverbrauch</string>
-
-    <!-- Service -->
-    <string name="service_notfication_text">Kraken Service ist aktiv</string>
 
     <!-- Data Profiles -->
     <string-array name="data_profile_titles">

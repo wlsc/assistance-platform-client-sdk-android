@@ -303,7 +303,7 @@ public class GyroscopeSensor extends
 
         Log.d(TAG, "New update interval: " + newUpdateIntervalInSec + " sec");
 
-        setUpdateIntervalInSec(newUpdateIntervalInSec);
+        this.UPDATE_INTERVAL_IN_SEC = newUpdateIntervalInSec;
     }
 
     public int getUpdateIntervalInSec() {

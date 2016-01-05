@@ -1,5 +1,7 @@
 package de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.device;
 
+import android.support.annotation.Nullable;
+
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbDevice;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.CommonDao;
 
@@ -9,6 +11,7 @@ import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.CommonDa
  */
 public interface DeviceDao extends CommonDao<DbDevice> {
 
+    @Nullable
     DbDevice getById(long deviceId);
 
     boolean saveRegistrationTokenToDb(String registrationToken, long userId, long serverDeviceId);

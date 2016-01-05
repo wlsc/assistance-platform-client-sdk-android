@@ -1,5 +1,7 @@
 package de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.event;
 
+import android.support.annotation.Nullable;
+
 import java.util.Collections;
 import java.util.List;
 
@@ -34,6 +36,7 @@ public class NetworkTrafficEventDaoImpl extends
         return INSTANCE;
     }
 
+    @Nullable
     @Override
     public NetworkTrafficEventDto convertObject(DbNetworkTrafficEvent sensor) {
 
@@ -54,6 +57,7 @@ public class NetworkTrafficEventDaoImpl extends
         return result;
     }
 
+    @Nullable
     @Override
     public DbNetworkTrafficEvent get(Long id) {
 

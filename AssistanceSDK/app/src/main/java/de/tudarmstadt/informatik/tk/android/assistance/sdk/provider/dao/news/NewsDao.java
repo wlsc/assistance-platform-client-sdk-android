@@ -1,5 +1,7 @@
 package de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.news;
 
+import android.support.annotation.Nullable;
+
 import java.util.List;
 
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbNews;
@@ -14,7 +16,9 @@ public interface NewsDao extends CommonDao<DbNews> {
 
     List<DbNews> getAll(Long userId);
 
+    @Nullable
     ClientFeedbackDto convert(DbNews dbNews);
 
+    @Nullable
     DbNews convert(ClientFeedbackDto dbNews);
 }

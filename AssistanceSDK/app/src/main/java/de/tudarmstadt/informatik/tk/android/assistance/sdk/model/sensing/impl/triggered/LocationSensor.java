@@ -129,7 +129,7 @@ public class LocationSensor extends
 
         Log.d(TAG, "New fastest interval: " + newFastestUpdateIntervalInSec + " sec");
 
-        setFastestIntervalInSec(newFastestUpdateIntervalInSec);
+        FASTEST_INTERVAL_IN_SEC = newFastestUpdateIntervalInSec;
 
         // calc +10% to new normal update interval
         int newNormalUpdateIntervalInSec = newFastestUpdateIntervalInSec +
@@ -137,7 +137,7 @@ public class LocationSensor extends
 
         Log.d(TAG, "Old normal interval: " + UPDATE_INTERVAL_IN_SEC + " sec");
 
-        setUpdateIntervalInSec(newNormalUpdateIntervalInSec);
+        UPDATE_INTERVAL_IN_SEC = newNormalUpdateIntervalInSec;
 
         Log.d(TAG, "New normal interval: " + newNormalUpdateIntervalInSec + " sec");
 
@@ -228,7 +228,7 @@ public class LocationSensor extends
     }
 
     @Override
-    public void onConnectionFailed(ConnectionResult connectionResult) {
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
         /*
          * Google Play services can resolve some errors it detects. If the error
 		 * has a resolution, try sending an Intent to start a Google Play

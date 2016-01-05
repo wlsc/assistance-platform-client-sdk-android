@@ -243,7 +243,7 @@ public class HarvesterServiceProvider implements ServiceConnection {
     /**
      * Handle incoming messages
      */
-    private class IncomingMessageHandler extends Handler {
+    private static class IncomingMessageHandler extends Handler {
 
         @Override
         public void handleMessage(Message msg) {

@@ -1,5 +1,7 @@
 package de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.news;
 
+import android.support.annotation.Nullable;
+
 import com.google.gson.Gson;
 import com.google.gson.JsonParser;
 import com.google.gson.JsonSyntaxException;
@@ -60,6 +62,7 @@ public class NewsDaoImpl extends
                 .list();
     }
 
+    @Nullable
     @Override
     public ClientFeedbackDto convert(DbNews dbNews) {
 
@@ -88,6 +91,7 @@ public class NewsDaoImpl extends
         return clientFeedbackDto;
     }
 
+    @Nullable
     @Override
     public DbNews convert(ClientFeedbackDto feedbackDto) {
 
@@ -112,6 +116,7 @@ public class NewsDaoImpl extends
         return result;
     }
 
+    @Nullable
     @Override
     public DbNews get(Long id) {
 
