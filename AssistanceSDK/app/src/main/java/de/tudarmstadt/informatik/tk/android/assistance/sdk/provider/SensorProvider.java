@@ -28,6 +28,7 @@ import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensing.impl.co
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensing.impl.general.FacebookSensor;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensing.impl.general.TucanSensor;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensing.impl.periodic.BackgroundTrafficSensor;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensing.impl.periodic.ForegroundTrafficSensor;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensing.impl.periodic.LoudnessSensor;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensing.impl.periodic.PowerLevelSensor;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensing.impl.periodic.RingtoneSensor;
@@ -37,7 +38,6 @@ import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensing.impl.pe
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensing.impl.triggered.AccelerometerSensor;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensing.impl.triggered.ConnectionSensor;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensing.impl.triggered.ForegroundSensor;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensing.impl.triggered.ForegroundTrafficSensor;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensing.impl.triggered.GyroscopeSensor;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensing.impl.triggered.LightSensor;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensing.impl.triggered.LocationSensor;
@@ -258,6 +258,11 @@ public class SensorProvider {
 
         // send collection interval updates to sensor/events
         for (int i = 0, sensorIntervalsSize = sensorIntervals.size(); i < sensorIntervalsSize; i++) {
+
+            if (sensorIntervals.valueAt(i) == null) {
+                continue;
+            }
+
             EventBus.getDefault().post(
                     new UpdateSensorIntervalEvent(
                             sensorIntervals.keyAt(i),
