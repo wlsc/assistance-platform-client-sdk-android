@@ -162,7 +162,7 @@ public class ContactsSensor extends AbstractContentObserverSensor {
                 if (checkForContactChange(allExistingContacts, sensorContact)) {
 
                     Log.d(TAG, "Insert entry");
-                    daoProvider.getContactEventDao().insert(sensorContact);
+                    daoProvider.getContactSensorDao().insert(sensorContact);
                     Log.d(TAG, "Finished");
                 }
 
@@ -232,7 +232,7 @@ public class ContactsSensor extends AbstractContentObserverSensor {
         }
 
         // remove entries
-        daoProvider.getContactEventDao().delete(entriesToDelete);
+        daoProvider.getContactSensorDao().delete(entriesToDelete);
 
         return bSomethingDeleted;
     }
@@ -263,7 +263,7 @@ public class ContactsSensor extends AbstractContentObserverSensor {
         }
 
         // delete entries
-        daoProvider.getContactEmailEventDao().delete(entriesToDelete);
+        daoProvider.getContactEmailSensorDao().delete(entriesToDelete);
 
         return bSomethingDeleted;
     }
@@ -294,7 +294,7 @@ public class ContactsSensor extends AbstractContentObserverSensor {
         }
 
         // delete entries
-        daoProvider.getContactNumberEventDao().delete(entriesToDelete);
+        daoProvider.getContactNumberSensorDao().delete(entriesToDelete);
 
         return bSomethingDeleted;
     }
@@ -349,7 +349,7 @@ public class ContactsSensor extends AbstractContentObserverSensor {
             }
 
             Log.d(TAG, "Contact email: Insert entry");
-            daoProvider.getContactEmailEventDao().insert(entriesToInsert);
+            daoProvider.getContactEmailSensorDao().insert(entriesToInsert);
             Log.d(TAG, "Finished");
 
         } finally {
@@ -446,7 +446,7 @@ public class ContactsSensor extends AbstractContentObserverSensor {
             }
 
             Log.d(TAG, "Contact number: Insert entry");
-            daoProvider.getContactNumberEventDao().insert(entriesToInsert);
+            daoProvider.getContactNumberSensorDao().insert(entriesToInsert);
             Log.d(TAG, "Finished");
 
         } catch (Exception e) {
@@ -559,7 +559,7 @@ public class ContactsSensor extends AbstractContentObserverSensor {
 
         Map<Long, DbContactSensor> result = new HashMap<>();
 
-        List<DbContactSensor> allContacts = daoProvider.getContactEventDao().getAll();
+        List<DbContactSensor> allContacts = daoProvider.getContactSensorDao().getAll();
 
         for (DbContactSensor event : allContacts) {
             result.put(event.getGlobalContactId(), event);
@@ -571,7 +571,7 @@ public class ContactsSensor extends AbstractContentObserverSensor {
     private Map<String, DbContactNumberSensor> getExistingNumbers(long contactId) {
 
         List<DbContactNumberSensor> list = daoProvider
-                .getContactNumberEventDao()
+                .getContactNumberSensorDao()
                 .getAll(contactId);
 
         Map<String, DbContactNumberSensor> map = new HashMap<>();
@@ -586,7 +586,7 @@ public class ContactsSensor extends AbstractContentObserverSensor {
     private Map<String, DbContactEmailSensor> getExistingMails(long contactId) {
 
         List<DbContactEmailSensor> contactMails = daoProvider
-                .getContactEmailEventDao()
+                .getContactEmailSensorDao()
                 .getAll(contactId);
 
         Map<String, DbContactEmailSensor> map = new HashMap<>();

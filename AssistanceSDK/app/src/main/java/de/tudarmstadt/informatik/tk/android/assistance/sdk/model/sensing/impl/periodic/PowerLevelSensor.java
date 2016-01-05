@@ -78,7 +78,7 @@ public class PowerLevelSensor extends AbstractPeriodicSensor {
 
         Log.d(TAG, "Insert entry");
 
-        daoProvider.getPowerLevelEventDao().insert(powerLevelEvent);
+        daoProvider.getPowerLevelSensorDao().insert(powerLevelEvent);
 
         Log.d(TAG, "Finished");
     }

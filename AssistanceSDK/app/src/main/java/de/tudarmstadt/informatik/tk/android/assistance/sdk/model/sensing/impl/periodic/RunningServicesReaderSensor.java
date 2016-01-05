@@ -70,7 +70,7 @@ public class RunningServicesReaderSensor extends AbstractPeriodicSensor {
             runningServicesEvent.setClassName(lastServiceClassNames.get(i));
             runningServicesEvent.setCreated(DateUtils.dateToISO8601String(nowDate, Locale.getDefault()));
 
-            daoProvider.getRunningServicesEventDao().insert(runningServicesEvent);
+            daoProvider.getRunningServicesSensorDao().insert(runningServicesEvent);
         }
 
         Log.d(TAG, "Finished");

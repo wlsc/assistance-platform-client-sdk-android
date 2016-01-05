@@ -9,7 +9,7 @@ import java.util.Locale;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbRingtoneSensor;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.sensing.SensorApiType;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensing.impl.AbstractPeriodicSensor;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.event.RingtoneEventDao;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.event.RingtoneSensorDao;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.util.DateUtils;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.util.logger.Log;
 
@@ -20,7 +20,7 @@ import de.tudarmstadt.informatik.tk.android.assistance.sdk.util.logger.Log;
  */
 public class RingtoneSensor extends AbstractPeriodicSensor {
 
-    private static final String TAG = RingtoneEventDao.class.getSimpleName();
+    private static final String TAG = RingtoneSensorDao.class.getSimpleName();
 
     private static RingtoneSensor INSTANCE;
 
@@ -61,7 +61,7 @@ public class RingtoneSensor extends AbstractPeriodicSensor {
 
         Log.d(TAG, "Insert entry");
 
-        daoProvider.getRingtoneEventDao().insert(ringtoneEvent);
+        daoProvider.getRingtoneSensorDao().insert(ringtoneEvent);
 
         Log.d(TAG, "Finished");
     }

@@ -49,7 +49,7 @@ public class AccountsReaderSensor extends AbstractPeriodicSensor implements ISen
 
         Log.d(TAG, "Insert entry");
 
-        daoProvider.getAccountReaderEventDao().insert(accountReaderEvent);
+        daoProvider.getAccountReaderSensorDao().insert(accountReaderEvent);
 
         Log.d(TAG, "Finished");
     }

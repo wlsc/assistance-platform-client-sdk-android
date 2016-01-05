@@ -126,7 +126,7 @@ public class PowerStatusReceiver extends BroadcastReceiver {
         Log.d(TAG, "Insert entry");
 
         DaoProvider.getInstance(context.getApplicationContext())
-                .getPowerStateEventDao()
+                .getPowerStateSensorDao()
                 .insert(powerStateEvent);
 
         Log.d(TAG, "Finished");

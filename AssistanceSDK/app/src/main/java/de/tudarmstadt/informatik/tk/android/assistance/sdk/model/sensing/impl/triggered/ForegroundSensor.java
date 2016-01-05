@@ -110,7 +110,7 @@ public class ForegroundSensor extends AbstractTriggeredSensor {
 
             Log.d(TAG, "Insert entry");
 
-            daoProvider.getForegroundEventDao().insert(dbForegroundEvent);
+            daoProvider.getForegroundSensorDao().insert(dbForegroundEvent);
 
             Log.d(TAG, "Finished");
         }
@@ -141,7 +141,7 @@ public class ForegroundSensor extends AbstractTriggeredSensor {
 
             Log.d(TAG, "Insert entry");
 
-            daoProvider.getForegroundEventDao().insert(dbForegroundEvent);
+            daoProvider.getForegroundSensorDao().insert(dbForegroundEvent);
 
             Log.d(TAG, "Finished");
         }
@@ -167,7 +167,7 @@ public class ForegroundSensor extends AbstractTriggeredSensor {
 
                 Log.d(TAG, "Insert entry");
 
-                daoProvider.getForegroundEventDao().insert(foregroundEvent);
+                daoProvider.getForegroundSensorDao().insert(foregroundEvent);
 
                 Log.d(TAG, "Finished");
 
@@ -296,7 +296,7 @@ public class ForegroundSensor extends AbstractTriggeredSensor {
 
             Log.d(TAG, "Insert entry");
 
-            daoProvider.getForegroundEventDao().insert(foregroundEvent);
+            daoProvider.getForegroundSensorDao().insert(foregroundEvent);
 
             Log.d(TAG, "Finished");
         }

@@ -134,7 +134,7 @@ public class CalendarSensor extends AbstractContentObserverSensor {
 
         try {
 
-            List<DbCalendarSensor> events = daoProvider.getCalendarEventDao().getAll();
+            List<DbCalendarSensor> events = daoProvider.getCalendarSensorDao().getAll();
 
             for (DbCalendarSensor event : events) {
                 allExistingEvents.put(event.getEventId(), event);
@@ -185,7 +185,7 @@ public class CalendarSensor extends AbstractContentObserverSensor {
 
             if (!entriesToInsert.isEmpty()) {
                 Log.d(TAG, "Insert entries");
-                daoProvider.getCalendarEventDao().insert(entriesToInsert);
+                daoProvider.getCalendarSensorDao().insert(entriesToInsert);
                 Log.d(TAG, "Finished");
             }
 
@@ -259,7 +259,7 @@ public class CalendarSensor extends AbstractContentObserverSensor {
 
                 if (!entriesToInsert.isEmpty()) {
                     Log.d(TAG, "Calendar reminder: Insert entries");
-                    daoProvider.getCalendarReminderEventDao().insert(entriesToInsert);
+                    daoProvider.getCalendarReminderSensorDao().insert(entriesToInsert);
                     Log.d(TAG, "Finished");
                 }
 
@@ -351,7 +351,7 @@ public class CalendarSensor extends AbstractContentObserverSensor {
     private Map<Long, DbCalendarReminderSensor> getExistingReminders(long eventId) {
 
         List<DbCalendarReminderSensor> list = daoProvider
-                .getCalendarReminderEventDao()
+                .getCalendarReminderSensorDao()
                 .getAllByEventId(eventId);
 
         Map<Long, DbCalendarReminderSensor> map = new HashMap<>();

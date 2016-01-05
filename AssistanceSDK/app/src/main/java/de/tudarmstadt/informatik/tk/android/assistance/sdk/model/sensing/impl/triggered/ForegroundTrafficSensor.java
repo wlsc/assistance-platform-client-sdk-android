@@ -241,7 +241,7 @@ public class ForegroundTrafficSensor extends AbstractTriggeredSensor {
 
                 Log.d(TAG, "Insert entry");
 
-                daoProvider.getNetworkTrafficEventDao().insert(networkTrafficEvent);
+                daoProvider.getNetworkTrafficSensorDao().insert(networkTrafficEvent);
 
                 Log.d(TAG, "Finished");
 
@@ -295,7 +295,7 @@ public class ForegroundTrafficSensor extends AbstractTriggeredSensor {
 
             Log.d(TAG, "Insert entry");
 
-            daoProvider.getNetworkTrafficEventDao().insert(networkTrafficEvent);
+            daoProvider.getNetworkTrafficSensorDao().insert(networkTrafficEvent);
 
             Log.d(TAG, "Finished");
         }

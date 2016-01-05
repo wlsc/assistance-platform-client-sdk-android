@@ -96,7 +96,7 @@ public class ConnectionSensor extends AbstractTriggeredSensor {
 
         Log.d(TAG, "Insert entry");
 
-        daoProvider.getConnectionEventDao().insert(connectionEvent);
+        daoProvider.getConnectionSensorDao().insert(connectionEvent);
 
         Log.d(TAG, "Finished");
 
@@ -117,7 +117,7 @@ public class ConnectionSensor extends AbstractTriggeredSensor {
 
             Log.d(TAG, "MOBILE: Insert entry");
 
-            daoProvider.getMobileConnectionEventDao().insert(mobileConnectionEvent);
+            daoProvider.getMobileConnectionSensorDao().insert(mobileConnectionEvent);
 
             Log.d(TAG, "MOBILE: Finished");
         }
@@ -145,7 +145,7 @@ public class ConnectionSensor extends AbstractTriggeredSensor {
 
             Log.d(TAG, "WIFI: Insert entry");
 
-            daoProvider.getWifiConnectionEventDao().insert(wifiConnectionEvent);
+            daoProvider.getWifiConnectionSensorDao().insert(wifiConnectionEvent);
 
             Log.d(TAG, "WIFI: Finished");
         }

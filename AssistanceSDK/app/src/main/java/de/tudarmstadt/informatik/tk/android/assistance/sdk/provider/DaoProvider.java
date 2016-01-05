@@ -16,48 +16,48 @@ import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.module.M
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.module.ModuleDaoImpl;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.news.NewsDao;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.news.NewsDaoImpl;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.event.AccountReaderEventDao;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.event.AccountReaderEventDaoImpl;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.event.BrowserHistoryEventDao;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.event.BrowserHistoryEventDaoImpl;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.event.calendar.CalendarEventDao;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.event.calendar.CalendarEventDaoImpl;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.event.calendar.CalendarReminderEventDao;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.event.calendar.CalendarReminderEventDaoImpl;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.event.CallLogEventDao;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.event.CallLogEventDaoImpl;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.event.connection.ConnectionEventDao;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.event.connection.ConnectionEventDaoImpl;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.event.contact.ContactEmailEventDao;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.event.contact.ContactEmailEventDaoImpl;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.event.contact.ContactEventDao;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.event.contact.ContactEventDaoImpl;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.event.contact.ContactNumberEventDao;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.event.contact.ContactNumberEventDaoImpl;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.event.ForegroundEventDao;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.event.ForegroundEventDaoImpl;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.event.LoudnessEventDao;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.event.LoudnessEventDaoImpl;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.event.connection.MobileConnectionEventDao;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.event.connection.MobileConnectionEventDaoImpl;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.event.MotionActivityEventDao;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.event.MotionActivityEventDaoImpl;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.event.NetworkTrafficEventDao;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.event.NetworkTrafficEventDaoImpl;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.event.power.PowerLevelEventDao;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.event.power.PowerLevelEventDaoImpl;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.event.power.PowerStateEventDao;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.event.power.PowerStateEventDaoImpl;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.event.RingtoneEventDao;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.event.RingtoneEventDaoImpl;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.event.RunningProcessesEventDao;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.event.RunningProcessesEventDaoImpl;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.event.RunningServicesEventDao;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.event.RunningServicesEventDaoImpl;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.event.RunningTasksEventDao;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.event.RunningTasksEventDaoImpl;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.event.connection.WifiConnectionEventDao;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.event.connection.WifiConnectionEventDaoImpl;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.event.AccountReaderSensorDao;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.event.AccountReaderSensorDaoImpl;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.event.BrowserHistorySensorDao;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.event.BrowserHistorySensorDaoImpl;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.event.CallLogSensorDao;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.event.CallLogSensorDaoImpl;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.event.ForegroundSensorDao;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.event.ForegroundSensorDaoImpl;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.event.LoudnessSensorDao;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.event.LoudnessSensorDaoImpl;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.event.MotionActivitySensorDao;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.event.MotionActivitySensorDaoImpl;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.event.NetworkTrafficSensorDao;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.event.NetworkTrafficSensorDaoImpl;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.event.RingtoneSensorDao;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.event.RingtoneSensorDaoImpl;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.event.RunningProcessesSensorDao;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.event.RunningProcessesSensorDaoImpl;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.event.RunningServicesSensorDao;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.event.RunningServicesSensorDaoImpl;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.event.RunningTasksSensorDao;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.event.RunningTasksSensorDaoImpl;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.event.calendar.CalendarReminderSensorDao;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.event.calendar.CalendarReminderSensorDaoImpl;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.event.calendar.CalendarSensorDao;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.event.calendar.CalendarSensorDaoImpl;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.event.connection.ConnectionSensorDao;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.event.connection.ConnectionSensorDaoImpl;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.event.connection.MobileConnectionSensorDao;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.event.connection.MobileConnectionSensorDaoImpl;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.event.connection.WifiConnectionSensorDao;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.event.connection.WifiConnectionSensorDaoImpl;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.event.contact.ContactEmailSensorDao;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.event.contact.ContactEmailSensorDaoImpl;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.event.contact.ContactNumberSensorDao;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.event.contact.ContactNumberSensorDaoImpl;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.event.contact.ContactSensorDao;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.event.contact.ContactSensorDaoImpl;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.event.power.PowerLevelSensorDao;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.event.power.PowerLevelSensorDaoImpl;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.event.power.PowerStateSensorDao;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.event.power.PowerStateSensorDaoImpl;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.sensor.AccelerometerSensorDao;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.sensor.AccelerometerSensorDaoImpl;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.sensor.GyroscopeSensorDao;
@@ -163,9 +163,9 @@ public class DaoProvider {
     }
 
     /**
-     * **************************************************************
-     * ******************* SENSORS / EVENTS *************************
-     * **************************************************************
+     * ************************************************************
+     * ******************* SENSORS / SOFT SENSORS *****************
+     * ************************************************************
      */
 
     /**
@@ -187,12 +187,12 @@ public class DaoProvider {
     }
 
     /**
-     * MotionActivityEventDao
+     * MotionActivitySensorDao
      *
      * @return
      */
-    public MotionActivityEventDao getMotionActivityEventDao() {
-        return MotionActivityEventDaoImpl.getInstance(mDaoSession);
+    public MotionActivitySensorDao getMotionActivitySensorDao() {
+        return MotionActivitySensorDaoImpl.getInstance(mDaoSession);
     }
 
     /**
@@ -223,183 +223,183 @@ public class DaoProvider {
     }
 
     /**
-     * ForegroundEventDao
+     * ForegroundSensorDao
      *
      * @return
      */
-    public ForegroundEventDao getForegroundEventDao() {
-        return ForegroundEventDaoImpl.getInstance(mDaoSession);
+    public ForegroundSensorDao getForegroundSensorDao() {
+        return ForegroundSensorDaoImpl.getInstance(mDaoSession);
     }
 
     /**
-     * MobileConnectionEventDao
+     * MobileConnectionSensorDao
      *
      * @return
      */
-    public MobileConnectionEventDao getMobileConnectionEventDao() {
-        return MobileConnectionEventDaoImpl.getInstance(mDaoSession);
+    public MobileConnectionSensorDao getMobileConnectionSensorDao() {
+        return MobileConnectionSensorDaoImpl.getInstance(mDaoSession);
     }
 
     /**
-     * NetworkTrafficEventDao
+     * NetworkTrafficSensorDao
      *
      * @return
      */
-    public NetworkTrafficEventDao getNetworkTrafficEventDao() {
-        return NetworkTrafficEventDaoImpl.getInstance(mDaoSession);
+    public NetworkTrafficSensorDao getNetworkTrafficSensorDao() {
+        return NetworkTrafficSensorDaoImpl.getInstance(mDaoSession);
     }
 
     /**
-     * CallLogEventDao
+     * CallLogSensorDao
      *
      * @return
      */
-    public CallLogEventDao getCallLogEventDao() {
-        return CallLogEventDaoImpl.getInstance(mDaoSession);
+    public CallLogSensorDao getCallLogSensorDao() {
+        return CallLogSensorDaoImpl.getInstance(mDaoSession);
     }
 
     /**
-     * CalendarEventDao
+     * CalendarSensorDao
      *
      * @return
      */
-    public CalendarEventDao getCalendarEventDao() {
-        return CalendarEventDaoImpl.getInstance(mDaoSession);
+    public CalendarSensorDao getCalendarSensorDao() {
+        return CalendarSensorDaoImpl.getInstance(mDaoSession);
     }
 
     /**
-     * CalendarReminderEventDao
+     * CalendarReminderSensorDao
      *
      * @return
      */
-    public CalendarReminderEventDao getCalendarReminderEventDao() {
-        return CalendarReminderEventDaoImpl.getInstance(mDaoSession);
+    public CalendarReminderSensorDao getCalendarReminderSensorDao() {
+        return CalendarReminderSensorDaoImpl.getInstance(mDaoSession);
     }
 
     /**
-     * ConnectionEventDao
+     * ConnectionSensorDao
      *
      * @return
      */
-    public ConnectionEventDao getConnectionEventDao() {
-        return ConnectionEventDaoImpl.getInstance(mDaoSession);
+    public ConnectionSensorDao getConnectionSensorDao() {
+        return ConnectionSensorDaoImpl.getInstance(mDaoSession);
     }
 
     /**
-     * WifiConnectionEventDao
+     * WifiConnectionSensorDao
      *
      * @return
      */
-    public WifiConnectionEventDao getWifiConnectionEventDao() {
-        return WifiConnectionEventDaoImpl.getInstance(mDaoSession);
+    public WifiConnectionSensorDao getWifiConnectionSensorDao() {
+        return WifiConnectionSensorDaoImpl.getInstance(mDaoSession);
     }
 
     /**
-     * PowerStateEventDao
+     * PowerStateSensorDao
      *
      * @return
      */
-    public PowerStateEventDao getPowerStateEventDao() {
-        return PowerStateEventDaoImpl.getInstance(mDaoSession);
+    public PowerStateSensorDao getPowerStateSensorDao() {
+        return PowerStateSensorDaoImpl.getInstance(mDaoSession);
     }
 
     /**
-     * PowerLevelEventDao
+     * PowerLevelSensorDao
      *
      * @return
      */
-    public PowerLevelEventDao getPowerLevelEventDao() {
-        return PowerLevelEventDaoImpl.getInstance(mDaoSession);
+    public PowerLevelSensorDao getPowerLevelSensorDao() {
+        return PowerLevelSensorDaoImpl.getInstance(mDaoSession);
     }
 
     /**
-     * LoudnessEventDao
+     * LoudnessSensorDao
      *
      * @return
      */
-    public LoudnessEventDao getLoudnessEventDao() {
-        return LoudnessEventDaoImpl.getInstance(mDaoSession);
+    public LoudnessSensorDao getLoudnessSensorDao() {
+        return LoudnessSensorDaoImpl.getInstance(mDaoSession);
     }
 
     /**
-     * RingtoneEventDao
+     * RingtoneSensorDao
      *
      * @return
      */
-    public RingtoneEventDao getRingtoneEventDao() {
-        return RingtoneEventDaoImpl.getInstance(mDaoSession);
+    public RingtoneSensorDao getRingtoneSensorDao() {
+        return RingtoneSensorDaoImpl.getInstance(mDaoSession);
     }
 
     /**
-     * AccountReaderEventDao
+     * AccountReaderSensorDao
      *
      * @return
      */
-    public AccountReaderEventDao getAccountReaderEventDao() {
-        return AccountReaderEventDaoImpl.getInstance(mDaoSession);
+    public AccountReaderSensorDao getAccountReaderSensorDao() {
+        return AccountReaderSensorDaoImpl.getInstance(mDaoSession);
     }
 
     /**
-     * BrowserHistoryEventDao
+     * BrowserHistorySensorDao
      *
      * @return
      */
-    public BrowserHistoryEventDao getBrowserHistoryEventDao() {
-        return BrowserHistoryEventDaoImpl.getInstance(mDaoSession);
+    public BrowserHistorySensorDao getBrowserHistorySensorDao() {
+        return BrowserHistorySensorDaoImpl.getInstance(mDaoSession);
     }
 
     /**
-     * ContactEventDao
+     * ContactSensorDao
      *
      * @return
      */
-    public ContactEventDao getContactEventDao() {
-        return ContactEventDaoImpl.getInstance(mDaoSession);
+    public ContactSensorDao getContactSensorDao() {
+        return ContactSensorDaoImpl.getInstance(mDaoSession);
     }
 
     /**
-     * ContactEmailEventDao
+     * ContactEmailSensorDao
      *
      * @return
      */
-    public ContactEmailEventDao getContactEmailEventDao() {
-        return ContactEmailEventDaoImpl.getInstance(mDaoSession);
+    public ContactEmailSensorDao getContactEmailSensorDao() {
+        return ContactEmailSensorDaoImpl.getInstance(mDaoSession);
     }
 
     /**
-     * ContactNumberEventDao
+     * ContactNumberSensorDao
      *
      * @return
      */
-    public ContactNumberEventDao getContactNumberEventDao() {
-        return ContactNumberEventDaoImpl.getInstance(mDaoSession);
+    public ContactNumberSensorDao getContactNumberSensorDao() {
+        return ContactNumberSensorDaoImpl.getInstance(mDaoSession);
     }
 
     /**
-     * RunningProcessesEventDao
+     * RunningProcessesSensorDao
      *
      * @return
      */
-    public RunningProcessesEventDao getRunningProcessesEventDao() {
-        return RunningProcessesEventDaoImpl.getInstance(mDaoSession);
+    public RunningProcessesSensorDao getRunningProcessesSensorDao() {
+        return RunningProcessesSensorDaoImpl.getInstance(mDaoSession);
     }
 
     /**
-     * RunningServicesEventDao
+     * RunningServicesSensorDao
      *
      * @return
      */
-    public RunningServicesEventDao getRunningServicesEventDao() {
-        return RunningServicesEventDaoImpl.getInstance(mDaoSession);
+    public RunningServicesSensorDao getRunningServicesSensorDao() {
+        return RunningServicesSensorDaoImpl.getInstance(mDaoSession);
     }
 
     /**
-     * RunningTasksEventDao
+     * RunningTasksSensorDao
      *
      * @return
      */
-    public RunningTasksEventDao getRunningTasksEventDao() {
-        return RunningTasksEventDaoImpl.getInstance(mDaoSession);
+    public RunningTasksSensorDao getRunningTasksSensorDao() {
+        return RunningTasksSensorDaoImpl.getInstance(mDaoSession);
     }
 
     /**

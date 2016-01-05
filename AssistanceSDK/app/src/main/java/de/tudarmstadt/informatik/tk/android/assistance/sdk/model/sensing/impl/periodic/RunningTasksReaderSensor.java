@@ -71,7 +71,7 @@ public class RunningTasksReaderSensor extends AbstractPeriodicSensor {
 
         Log.d(TAG, "Insert entry");
 
-        daoProvider.getRunningTasksEventDao().insert(runningTasksEvent);
+        daoProvider.getRunningTasksSensorDao().insert(runningTasksEvent);
 
         Log.d(TAG, "Finished");
     }

@@ -71,7 +71,7 @@ public class BackgroundTrafficSensor extends AbstractPeriodicSensor {
 
         Log.d(TAG, "Insert entry");
 
-        daoProvider.getNetworkTrafficEventDao().insert(networkTrafficEvent);
+        daoProvider.getNetworkTrafficSensorDao().insert(networkTrafficEvent);
 
         Log.d(TAG, "Finished");
 
@@ -147,7 +147,7 @@ public class BackgroundTrafficSensor extends AbstractPeriodicSensor {
 
         Log.d(TAG, "Insert entry");
 
-        daoProvider.getNetworkTrafficEventDao().insert(insertList);
+        daoProvider.getNetworkTrafficSensorDao().insert(insertList);
 
         Log.d(TAG, "Finished");
     }

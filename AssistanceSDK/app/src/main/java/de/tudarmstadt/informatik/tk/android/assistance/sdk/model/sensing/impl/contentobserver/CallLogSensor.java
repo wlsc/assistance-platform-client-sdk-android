@@ -62,7 +62,7 @@ public class CallLogSensor extends AbstractContentObserverSensor {
 
         Log.d(TAG, "Insert entries");
 
-        daoProvider.getCallLogEventDao().insert(events);
+        daoProvider.getCallLogSensorDao().insert(events);
 
         Log.d(TAG, "Finished");
     }
@@ -126,7 +126,7 @@ public class CallLogSensor extends AbstractContentObserverSensor {
 
         long longLastKnownCallLogId = -1;
 
-        DbCallLogSensor lastItem = daoProvider.getCallLogEventDao().getLastCallLogEvent();
+        DbCallLogSensor lastItem = daoProvider.getCallLogSensorDao().getLastCallLogEvent();
 
         if (lastItem != null) {
             longLastKnownCallLogId = lastItem.getCallId();

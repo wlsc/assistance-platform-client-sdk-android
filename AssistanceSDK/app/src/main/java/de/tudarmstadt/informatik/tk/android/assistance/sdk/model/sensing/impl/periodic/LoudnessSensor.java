@@ -148,7 +148,7 @@ public class LoudnessSensor extends AbstractPeriodicSensor implements Callback {
 
         Log.d(TAG, "Insert entry");
 
-        daoProvider.getLoudnessEventDao().insert(loudnessSensor);
+        daoProvider.getLoudnessSensorDao().insert(loudnessSensor);
 
         Log.d(TAG, "Finished");
     }

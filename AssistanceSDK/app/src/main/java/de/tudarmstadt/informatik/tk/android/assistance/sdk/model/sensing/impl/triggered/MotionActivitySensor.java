@@ -130,7 +130,7 @@ public class MotionActivitySensor extends
 
         Log.d(TAG, "Insert entry");
 
-        daoProvider.getMotionActivityEventDao().insert(motionActivityEvent);
+        daoProvider.getMotionActivitySensorDao().insert(motionActivityEvent);
 
         Log.d(TAG, "Finished");
     }

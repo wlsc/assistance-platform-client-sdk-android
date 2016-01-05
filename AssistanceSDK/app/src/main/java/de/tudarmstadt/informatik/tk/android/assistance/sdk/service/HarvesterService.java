@@ -125,7 +125,7 @@ public class HarvesterService extends Service implements Callback {
         monitorStart();
 
         // schedule uploader task
-        startService(new Intent(this, EventUploadService.class));
+        startService(new Intent(this, SensorUploadService.class));
 
         startAccessibilityService();
 
@@ -144,7 +144,7 @@ public class HarvesterService extends Service implements Callback {
 
         monitorStop();
 
-        GcmNetworkManager.getInstance(getApplicationContext()).cancelAllTasks(EventUploadService.class);
+        GcmNetworkManager.getInstance(getApplicationContext()).cancelAllTasks(SensorUploadService.class);
 
         stopForeground(true);
         stopSelf();

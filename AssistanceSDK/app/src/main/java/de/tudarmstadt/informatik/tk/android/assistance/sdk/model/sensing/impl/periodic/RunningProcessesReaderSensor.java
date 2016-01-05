@@ -65,7 +65,7 @@ public class RunningProcessesReaderSensor extends AbstractPeriodicSensor {
 
         Log.d(TAG, "Insert entry");
 
-        daoProvider.getRunningProcessesEventDao().insert(runningProcessesEvent);
+        daoProvider.getRunningProcessesSensorDao().insert(runningProcessesEvent);
 
         Log.d(TAG, "Finished");
     }
