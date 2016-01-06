@@ -1,4 +1,4 @@
-# Kraken.Me SDK
+# AssistanceSDK
 
 AssistanceSDK is a platform to track user's behavior and interaction with a device
 
