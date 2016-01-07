@@ -9,7 +9,7 @@ import java.util.Locale;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbRingtoneSensor;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.sensing.SensorApiType;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensing.impl.AbstractPeriodicSensor;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.event.RingtoneSensorDao;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.RingtoneSensorDao;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.util.DateUtils;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.util.logger.Log;
 
