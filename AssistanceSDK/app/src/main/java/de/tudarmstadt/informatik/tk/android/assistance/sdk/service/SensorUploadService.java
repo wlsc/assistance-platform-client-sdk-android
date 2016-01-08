@@ -11,7 +11,6 @@ import android.util.SparseArray;
 import com.google.android.gms.gcm.GcmNetworkManager;
 import com.google.android.gms.gcm.GcmTaskService;
 import com.google.android.gms.gcm.OneoffTask;
-import com.google.android.gms.gcm.PeriodicTask;
 import com.google.android.gms.gcm.Task;
 import com.google.android.gms.gcm.TaskParams;
 import com.google.common.collect.Lists;
@@ -70,6 +69,7 @@ import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.contact.ContactEmailSensorDao;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.contact.ContactNumberSensorDao;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.util.ConnectionUtils;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.util.GcmUtils;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.util.HardwareUtils;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.util.logger.Log;
 import retrofit.Callback;
@@ -145,7 +145,7 @@ public class SensorUploadService extends GcmTaskService {
 
         if (userToken != null && !userToken.isEmpty()) {
 
-            cancelAllTasks(getApplicationContext());
+            GcmUtils.cancelAllTasks(getApplicationContext());
 
             if (isNeedInConnectionFallback) {
                 schedulePeriodicTask(getApplicationContext(),
@@ -442,7 +442,7 @@ public class SensorUploadService extends GcmTaskService {
         Log.d(TAG, "Rescheduling default periodic task...");
 
         // cancelling fallback periodic task
-        cancelByTag(getApplicationContext(), taskTagFallback);
+        GcmUtils.cancelByTag(getApplicationContext(), taskTagFallback);
 
         // reschedule periodic task with default timings
         schedulePeriodicTask(getApplicationContext(),
@@ -459,7 +459,7 @@ public class SensorUploadService extends GcmTaskService {
         Log.d(TAG, "Rescheduling fallback periodic task...");
 
         // cancelling default periodic task
-        cancelByTag(getApplicationContext(), taskTagDefault);
+        GcmUtils.cancelByTag(getApplicationContext(), taskTagDefault);
 
         // reschedule periodic task with fallback timings
         schedulePeriodicTask(getApplicationContext(),
@@ -474,7 +474,7 @@ public class SensorUploadService extends GcmTaskService {
         Log.d(TAG, "Reinitialize periodic task...");
 
         // first cancel any running event uploader tasks
-        cancelAllTasks(getApplicationContext());
+        GcmUtils.cancelAllTasks(getApplicationContext());
 
         if (isNeedInConnectionFallback) {
             schedulePeriodicTask(getApplicationContext(),
@@ -1220,47 +1220,10 @@ public class SensorUploadService extends GcmTaskService {
     }
 
     /**
-     * Cancels all GCM Network Manager tasks
-     */
-    public static void cancelAllTasks(Context context) {
-        GcmNetworkManager.getInstance(context).cancelAllTasks(SensorUploadService.class);
-    }
-
-    /**
-     * Cancels default periodic task
-     */
-    public static void cancel(Context context) {
-        GcmNetworkManager.getInstance(context).cancelTask(taskTagDefault, SensorUploadService.class);
-    }
-
-    /**
-     * Cancels GCM Network Manager periodic task
-     */
-    public static void cancelByTag(Context context, @NonNull String tag) {
-        GcmNetworkManager.getInstance(context).cancelTask(tag, SensorUploadService.class);
-    }
-
-    /**
      * Schedules an periodic upload task
      */
     public static void schedulePeriodicTask(Context context, long paramPeriodSecs, long paramFlexSecs, String tag) {
-
-        Log.d(TAG, "Scheduling periodic task...");
-
-        PeriodicTask periodicTask = new PeriodicTask.Builder()
-                .setService(SensorUploadService.class)
-                .setPeriod(paramPeriodSecs)
-                .setFlex(paramFlexSecs)
-                .setTag(tag)
-                .setPersisted(true)
-                .setUpdateCurrent(true)
-                .setRequiredNetwork(Task.NETWORK_STATE_ANY)
-                .setRequiresCharging(false)
-                .build();
-
-        GcmNetworkManager.getInstance(context).schedule(periodicTask);
-
-        Log.d(TAG, "Periodic task scheduled!");
+        GcmUtils.startPeriodicTask(context, paramPeriodSecs, paramFlexSecs, tag);
     }
 
     /**

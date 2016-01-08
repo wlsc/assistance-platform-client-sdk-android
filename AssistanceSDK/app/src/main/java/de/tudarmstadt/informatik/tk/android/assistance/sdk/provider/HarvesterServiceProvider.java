@@ -12,6 +12,7 @@ import android.os.RemoteException;
 
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.service.AssistanceAccessibilityService;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.service.HarvesterService;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.service.PlanBService;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.util.ServiceUtils;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.util.logger.Log;
 
@@ -140,6 +141,24 @@ public class HarvesterServiceProvider implements ServiceConnection {
     public void stopAccessibilityService() {
 
         Intent intent = new Intent(mContext, AssistanceAccessibilityService.class);
+        mContext.stopService(intent);
+    }
+
+    /**
+     * Starts PlanB Service to watch for Harvester Service instance
+     */
+    public void startPlanBService() {
+
+        Intent intent = new Intent(mContext, PlanBService.class);
+        mContext.startService(intent);
+    }
+
+    /**
+     * Stops PlanB Service
+     */
+    public void stopPlanBService() {
+
+        Intent intent = new Intent(mContext, PlanBService.class);
         mContext.stopService(intent);
     }
 

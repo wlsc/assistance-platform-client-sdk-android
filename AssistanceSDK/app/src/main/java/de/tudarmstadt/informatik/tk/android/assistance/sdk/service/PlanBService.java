@@ -6,6 +6,7 @@ import com.google.android.gms.gcm.TaskParams;
 
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.HarvesterServiceProvider;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.PreferenceProvider;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.util.GcmUtils;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.util.logger.Log;
 
 /**
@@ -32,6 +33,15 @@ public class PlanBService extends GcmTaskService {
             taskID + ": " +
             periodSecs + "s, f:" +
             flexSecs;
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        Log.d(TAG, "PlanB Service starting...");
+
+        // schedule service to repeat itself
+        GcmUtils.startPeriodicTask(getApplicationContext(), periodSecs, flexSecs, taskTag);
+    }
 
     @Override
     public int onRunTask(TaskParams taskParams) {
