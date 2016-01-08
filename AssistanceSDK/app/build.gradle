@@ -51,7 +51,7 @@ dependencies {
     compile 'com.squareup.retrofit:retrofit:1.9.0'
     compile 'com.squareup.retrofit:retrofit-mock:1.9.0'
     // efficient HTTP client
-    compile 'com.squareup.okhttp:okhttp:2.7.1'
+    compile 'com.squareup.okhttp:okhttp:2.7.2'
     // database ORM
     compile 'de.greenrobot:greendao:2.1.0'
     // event bus system
