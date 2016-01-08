@@ -145,7 +145,7 @@ public class SensorUploadService extends GcmTaskService {
 
         if (userToken != null && !userToken.isEmpty()) {
 
-            GcmUtils.cancelAllTasks(getApplicationContext());
+            GcmUtils.cancelAllTasks(getApplicationContext(), SensorUploadService.class);
 
             if (isNeedInConnectionFallback) {
                 schedulePeriodicTask(getApplicationContext(),
@@ -211,8 +211,7 @@ public class SensorUploadService extends GcmTaskService {
                         // user logged out
                         if (serverDeviceId == -1) {
                             Log.d(TAG, "User logged out -- all tasks has been canceled!");
-                            GcmNetworkManager.getInstance(getApplicationContext())
-                                    .cancelAllTasks(SensorUploadService.class);
+                            GcmUtils.cancelAllTasks(getApplicationContext(), SensorUploadService.class);
                             return;
                         }
 
@@ -260,8 +259,7 @@ public class SensorUploadService extends GcmTaskService {
                 // user logged out
                 if (serverDeviceId == -1) {
                     Log.d(TAG, "User logged out -- all tasks has been canceled!");
-                    GcmNetworkManager.getInstance(getApplicationContext())
-                            .cancelAllTasks(SensorUploadService.class);
+                    GcmUtils.cancelAllTasks(getApplicationContext(), SensorUploadService.class);
                     return;
                 }
 
@@ -442,7 +440,7 @@ public class SensorUploadService extends GcmTaskService {
         Log.d(TAG, "Rescheduling default periodic task...");
 
         // cancelling fallback periodic task
-        GcmUtils.cancelByTag(getApplicationContext(), taskTagFallback);
+        GcmUtils.cancelByTag(getApplicationContext(), taskTagFallback, SensorUploadService.class);
 
         // reschedule periodic task with default timings
         schedulePeriodicTask(getApplicationContext(),
@@ -459,7 +457,7 @@ public class SensorUploadService extends GcmTaskService {
         Log.d(TAG, "Rescheduling fallback periodic task...");
 
         // cancelling default periodic task
-        GcmUtils.cancelByTag(getApplicationContext(), taskTagDefault);
+        GcmUtils.cancelByTag(getApplicationContext(), taskTagDefault, SensorUploadService.class);
 
         // reschedule periodic task with fallback timings
         schedulePeriodicTask(getApplicationContext(),
@@ -474,7 +472,7 @@ public class SensorUploadService extends GcmTaskService {
         Log.d(TAG, "Reinitialize periodic task...");
 
         // first cancel any running event uploader tasks
-        GcmUtils.cancelAllTasks(getApplicationContext());
+        GcmUtils.cancelAllTasks(getApplicationContext(), SensorUploadService.class);
 
         if (isNeedInConnectionFallback) {
             schedulePeriodicTask(getApplicationContext(),
@@ -1223,7 +1221,7 @@ public class SensorUploadService extends GcmTaskService {
      * Schedules an periodic upload task
      */
     public static void schedulePeriodicTask(Context context, long paramPeriodSecs, long paramFlexSecs, String tag) {
-        GcmUtils.startPeriodicTask(context, paramPeriodSecs, paramFlexSecs, tag);
+        GcmUtils.startPeriodicTask(context, SensorUploadService.class, paramPeriodSecs, paramFlexSecs, tag);
     }
 
     /**

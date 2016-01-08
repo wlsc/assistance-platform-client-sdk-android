@@ -40,7 +40,7 @@ public class PlanBService extends GcmTaskService {
         Log.d(TAG, "PlanB Service starting...");
 
         // schedule service to repeat itself
-        GcmUtils.startPeriodicTask(getApplicationContext(), periodSecs, flexSecs, taskTag);
+        GcmUtils.startPeriodicTask(getApplicationContext(), PlanBService.class, periodSecs, flexSecs, taskTag);
     }
 
     @Override

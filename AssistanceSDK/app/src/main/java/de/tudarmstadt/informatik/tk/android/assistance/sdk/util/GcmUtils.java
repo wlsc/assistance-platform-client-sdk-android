@@ -11,7 +11,6 @@ import com.google.android.gms.gcm.PeriodicTask;
 import com.google.android.gms.gcm.Task;
 
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.Config;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.service.SensorUploadService;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.util.logger.Log;
 
 /**
@@ -60,12 +59,12 @@ public class GcmUtils {
      * @param flexSecs
      * @param tag
      */
-    public static void startPeriodicTask(Context context, long periodSecs, long flexSecs, String tag) {
+    public static void startPeriodicTask(Context context, Class clazz, long periodSecs, long flexSecs, String tag) {
 
         Log.d(TAG, "Scheduling periodic task...");
 
         PeriodicTask task = new PeriodicTask.Builder()
-                .setService(SensorUploadService.class)
+                .setService(clazz)
                 .setPeriod(periodSecs)
                 .setFlex(flexSecs)
                 .setTag(tag)
@@ -83,21 +82,21 @@ public class GcmUtils {
     /**
      * Cancels all GCM Network Manager tasks
      */
-    public static void cancelAllTasks(Context context) {
-        GcmNetworkManager.getInstance(context).cancelAllTasks(SensorUploadService.class);
+    public static void cancelAllTasks(Context context, Class clazz) {
+        GcmNetworkManager.getInstance(context).cancelAllTasks(clazz);
     }
 
     /**
      * Cancels default periodic task
      */
-    public static void cancel(Context context, String taskTagDefault) {
-        GcmNetworkManager.getInstance(context).cancelTask(taskTagDefault, SensorUploadService.class);
+    public static void cancel(Context context, String taskTagDefault, Class clazz) {
+        GcmNetworkManager.getInstance(context).cancelTask(taskTagDefault, clazz);
     }
 
     /**
      * Cancels GCM Network Manager periodic task
      */
-    public static void cancelByTag(Context context, @NonNull String tag) {
-        GcmNetworkManager.getInstance(context).cancelTask(tag, SensorUploadService.class);
+    public static void cancelByTag(Context context, @NonNull String tag, Class clazz) {
+        GcmNetworkManager.getInstance(context).cancelTask(tag, clazz);
     }
 }
