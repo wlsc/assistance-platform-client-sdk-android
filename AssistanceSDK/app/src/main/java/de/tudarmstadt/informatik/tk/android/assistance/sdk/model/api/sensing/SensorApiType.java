@@ -5,7 +5,9 @@ import android.hardware.Sensor;
 import android.os.Build;
 import android.util.SparseIntArray;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.R;
@@ -21,6 +23,8 @@ public class SensorApiType {
 
     // mapper for Android sensors to DTO types
     private static final SparseIntArray androidSensorToDtoTypeMap = new SparseIntArray();
+
+    private static List<String> allPossibleTypes = new ArrayList<>();
 
     /**
      * Type of sensors and events
@@ -79,6 +83,10 @@ public class SensorApiType {
     public static final int SOCIAL_FACEBOOK = 26;
 
     static {
+
+        // always give here the last one
+        createAllPossibleModuleTypes(SOCIAL_FACEBOOK);
+
         apiNameToDtoTypeMap.put(getApiName(LOCATION), LOCATION);
         apiNameToDtoTypeMap.put(getApiName(GYROSCOPE), GYROSCOPE);
         apiNameToDtoTypeMap.put(getApiName(ACCELEROMETER), ACCELEROMETER);
@@ -274,5 +282,26 @@ public class SensorApiType {
      */
     public static int getDtoType(int androidSensorType) {
         return androidSensorToDtoTypeMap.get(androidSensorType);
+    }
+
+    /**
+     * Creates all possible module types
+     *
+     * @param lastTypeNumber
+     */
+    private static void createAllPossibleModuleTypes(int lastTypeNumber) {
+
+        for (int i = 1; i <= lastTypeNumber; i++) {
+
+            String apiName = getApiName(i);
+
+            if (!apiName.isEmpty()) {
+                allPossibleTypes.add(apiName);
+            }
+        }
+    }
+    
+    public static List<String> getAllPossibleModuleTypes() {
+        return allPossibleTypes;
     }
 }

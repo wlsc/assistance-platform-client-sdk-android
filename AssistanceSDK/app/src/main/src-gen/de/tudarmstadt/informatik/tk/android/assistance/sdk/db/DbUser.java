@@ -32,6 +32,7 @@ public class DbUser {
     private List<DbUserSocialProfile> dbUserSocialProfileList;
     private List<DbDevice> dbDeviceList;
     private List<DbModule> dbModuleList;
+    private List<DbModuleAllowedCapabilities> dbModuleAllowedCapabilitiesList;
     private List<DbNews> dbNewsList;
 
     public DbUser() {
@@ -208,6 +209,28 @@ public class DbUser {
     /** Resets a to-many relationship, making the next get call to query for a fresh result. */
     public synchronized void resetDbModuleList() {
         dbModuleList = null;
+    }
+
+    /** To-many relationship, resolved on first access (and after reset). Changes to to-many relations are not persisted, make changes to the target entity. */
+    public List<DbModuleAllowedCapabilities> getDbModuleAllowedCapabilitiesList() {
+        if (dbModuleAllowedCapabilitiesList == null) {
+            if (daoSession == null) {
+                throw new DaoException("Entity is detached from DAO context");
+            }
+            DbModuleAllowedCapabilitiesDao targetDao = daoSession.getDbModuleAllowedCapabilitiesDao();
+            List<DbModuleAllowedCapabilities> dbModuleAllowedCapabilitiesListNew = targetDao._queryDbUser_DbModuleAllowedCapabilitiesList(id);
+            synchronized (this) {
+                if(dbModuleAllowedCapabilitiesList == null) {
+                    dbModuleAllowedCapabilitiesList = dbModuleAllowedCapabilitiesListNew;
+                }
+            }
+        }
+        return dbModuleAllowedCapabilitiesList;
+    }
+
+    /** Resets a to-many relationship, making the next get call to query for a fresh result. */
+    public synchronized void resetDbModuleAllowedCapabilitiesList() {
+        dbModuleAllowedCapabilitiesList = null;
     }
 
     /** To-many relationship, resolved on first access (and after reset). Changes to to-many relations are not persisted, make changes to the target entity. */

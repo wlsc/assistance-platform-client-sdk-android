@@ -147,6 +147,8 @@ public class GcmRegistrationIntentService extends IntentService {
                     return;
                 } else {
 
+                    Log.d(TAG, "Saving GCM registration ID into DB...");
+
                     final long serverDeviceId = preferenceProvider.getServerDeviceId();
 
                     daoProvider.getDeviceDao().saveRegistrationTokenToDb(

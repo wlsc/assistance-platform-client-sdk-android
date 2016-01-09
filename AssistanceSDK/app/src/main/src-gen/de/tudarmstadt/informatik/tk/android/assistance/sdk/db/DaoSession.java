@@ -14,6 +14,7 @@ import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbUserSocialProfil
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbDevice;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbModule;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbModuleCapability;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbModuleAllowedCapabilities;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbNews;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbPositionSensor;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbGyroscopeSensor;
@@ -47,6 +48,7 @@ import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbUserSocialProfil
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbDeviceDao;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbModuleDao;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbModuleCapabilityDao;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbModuleAllowedCapabilitiesDao;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbNewsDao;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbPositionSensorDao;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbGyroscopeSensorDao;
@@ -89,6 +91,7 @@ public class DaoSession extends AbstractDaoSession {
     private final DaoConfig dbDeviceDaoConfig;
     private final DaoConfig dbModuleDaoConfig;
     private final DaoConfig dbModuleCapabilityDaoConfig;
+    private final DaoConfig dbModuleAllowedCapabilitiesDaoConfig;
     private final DaoConfig dbNewsDaoConfig;
     private final DaoConfig dbPositionSensorDaoConfig;
     private final DaoConfig dbGyroscopeSensorDaoConfig;
@@ -122,6 +125,7 @@ public class DaoSession extends AbstractDaoSession {
     private final DbDeviceDao dbDeviceDao;
     private final DbModuleDao dbModuleDao;
     private final DbModuleCapabilityDao dbModuleCapabilityDao;
+    private final DbModuleAllowedCapabilitiesDao dbModuleAllowedCapabilitiesDao;
     private final DbNewsDao dbNewsDao;
     private final DbPositionSensorDao dbPositionSensorDao;
     private final DbGyroscopeSensorDao dbGyroscopeSensorDao;
@@ -168,6 +172,9 @@ public class DaoSession extends AbstractDaoSession {
 
         dbModuleCapabilityDaoConfig = daoConfigMap.get(DbModuleCapabilityDao.class).clone();
         dbModuleCapabilityDaoConfig.initIdentityScope(type);
+
+        dbModuleAllowedCapabilitiesDaoConfig = daoConfigMap.get(DbModuleAllowedCapabilitiesDao.class).clone();
+        dbModuleAllowedCapabilitiesDaoConfig.initIdentityScope(type);
 
         dbNewsDaoConfig = daoConfigMap.get(DbNewsDao.class).clone();
         dbNewsDaoConfig.initIdentityScope(type);
@@ -255,6 +262,7 @@ public class DaoSession extends AbstractDaoSession {
         dbDeviceDao = new DbDeviceDao(dbDeviceDaoConfig, this);
         dbModuleDao = new DbModuleDao(dbModuleDaoConfig, this);
         dbModuleCapabilityDao = new DbModuleCapabilityDao(dbModuleCapabilityDaoConfig, this);
+        dbModuleAllowedCapabilitiesDao = new DbModuleAllowedCapabilitiesDao(dbModuleAllowedCapabilitiesDaoConfig, this);
         dbNewsDao = new DbNewsDao(dbNewsDaoConfig, this);
         dbPositionSensorDao = new DbPositionSensorDao(dbPositionSensorDaoConfig, this);
         dbGyroscopeSensorDao = new DbGyroscopeSensorDao(dbGyroscopeSensorDaoConfig, this);
@@ -288,6 +296,7 @@ public class DaoSession extends AbstractDaoSession {
         registerDao(DbDevice.class, dbDeviceDao);
         registerDao(DbModule.class, dbModuleDao);
         registerDao(DbModuleCapability.class, dbModuleCapabilityDao);
+        registerDao(DbModuleAllowedCapabilities.class, dbModuleAllowedCapabilitiesDao);
         registerDao(DbNews.class, dbNewsDao);
         registerDao(DbPositionSensor.class, dbPositionSensorDao);
         registerDao(DbGyroscopeSensor.class, dbGyroscopeSensorDao);
@@ -323,6 +332,7 @@ public class DaoSession extends AbstractDaoSession {
         dbDeviceDaoConfig.getIdentityScope().clear();
         dbModuleDaoConfig.getIdentityScope().clear();
         dbModuleCapabilityDaoConfig.getIdentityScope().clear();
+        dbModuleAllowedCapabilitiesDaoConfig.getIdentityScope().clear();
         dbNewsDaoConfig.getIdentityScope().clear();
         dbPositionSensorDaoConfig.getIdentityScope().clear();
         dbGyroscopeSensorDaoConfig.getIdentityScope().clear();
@@ -370,6 +380,10 @@ public class DaoSession extends AbstractDaoSession {
 
     public DbModuleCapabilityDao getDbModuleCapabilityDao() {
         return dbModuleCapabilityDao;
+    }
+
+    public DbModuleAllowedCapabilitiesDao getDbModuleAllowedCapabilitiesDao() {
+        return dbModuleAllowedCapabilitiesDao;
     }
 
     public DbNewsDao getDbNewsDao() {

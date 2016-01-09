@@ -10,12 +10,16 @@ import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DaoMaster;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DaoSession;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.device.DeviceDao;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.device.DeviceDaoImpl;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.module.ModuleAllowedCapsDao;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.module.ModuleAllowedCapsDaoImpl;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.module.ModuleCapabilityDao;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.module.ModuleCapabilityDaoImpl;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.module.ModuleDao;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.module.ModuleDaoImpl;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.news.NewsDao;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.news.NewsDaoImpl;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.AccelerometerSensorDao;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.AccelerometerSensorDaoImpl;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.AccountReaderSensorDao;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.AccountReaderSensorDaoImpl;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.BrowserHistorySensorDao;
@@ -24,8 +28,16 @@ import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.CallLogSensorDaoImpl;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.ForegroundSensorDao;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.ForegroundSensorDaoImpl;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.GyroscopeSensorDao;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.GyroscopeSensorDaoImpl;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.LightSensorDao;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.LightSensorDaoImpl;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.LocationSensorDao;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.LocationSensorDaoImpl;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.LoudnessSensorDao;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.LoudnessSensorDaoImpl;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.MagneticFieldSensorDao;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.MagneticFieldSensorDaoImpl;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.MotionActivitySensorDao;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.MotionActivitySensorDaoImpl;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.NetworkTrafficSensorDao;
@@ -58,16 +70,6 @@ import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.power.PowerLevelSensorDaoImpl;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.power.PowerStateSensorDao;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.power.PowerStateSensorDaoImpl;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.AccelerometerSensorDao;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.AccelerometerSensorDaoImpl;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.GyroscopeSensorDao;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.GyroscopeSensorDaoImpl;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.LightSensorDao;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.LightSensorDaoImpl;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.LocationSensorDao;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.LocationSensorDaoImpl;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.MagneticFieldSensorDao;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.sensing.MagneticFieldSensorDaoImpl;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.user.UserDao;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.user.UserDaoImpl;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.util.db.DbAssistanceOpenHelper;
@@ -151,6 +153,15 @@ public class DaoProvider {
      */
     public ModuleCapabilityDao getModuleCapabilityDao() {
         return ModuleCapabilityDaoImpl.getInstance(mDaoSession);
+    }
+
+    /**
+     * ModuleAllowedCapsDao
+     *
+     * @return
+     */
+    public ModuleAllowedCapsDao getModuleAllowedCapsDao() {
+        return ModuleAllowedCapsDaoImpl.getInstance(mDaoSession);
     }
 
     /**

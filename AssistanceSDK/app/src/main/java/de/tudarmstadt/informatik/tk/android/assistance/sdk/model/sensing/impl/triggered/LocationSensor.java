@@ -51,6 +51,8 @@ public class LocationSensor extends
 
     private static final int CONNECTION_FAILURE_RESOLUTION_REQUEST = 9_000;
 
+    private final PreferenceProvider preferenceProvider;
+
     private Double latitude;
     private Double longitude;
     private Double accuracyHorizontal;
@@ -62,6 +64,7 @@ public class LocationSensor extends
         super(context);
 
         mGoogleApiClient = getGoogleApiClient();
+        preferenceProvider = PreferenceProvider.getInstance(context);
     }
 
     /**
@@ -256,9 +259,7 @@ public class LocationSensor extends
 
     @Override
     public void onConnected(Bundle arg0) {
-        // maybe this is not a good choice, because maybe the last location is
-        // out-dated?
-        // But let's give it a try...
+
         try {
 
             if (mGoogleApiClient == null) {
@@ -292,6 +293,11 @@ public class LocationSensor extends
     @Override
     public void onLocationChanged(android.location.Location location) {
 
+        if (location == null) {
+            Log.d(TAG, "Bad location (NULL)!");
+            return;
+        }
+
         // location changed -> update values
         Log.d(TAG, "Location has changed");
 
@@ -303,8 +309,8 @@ public class LocationSensor extends
         altitude = location.getAltitude();
 
         // saving them to SharedPreferences to further fast access
-        PreferenceProvider.getInstance(context).setLastLatitude(latitude);
-        PreferenceProvider.getInstance(context).setLastLongitude(longitude);
+        preferenceProvider.setLastLatitude(latitude);
+        preferenceProvider.setLastLongitude(longitude);
 
         dumpData();
     }
