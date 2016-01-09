@@ -47,7 +47,7 @@ public class LocationSensor extends
 
     private static LocationSensor INSTANCE;
 
-    private GoogleApiClient mGoogleApiClient;
+    private static GoogleApiClient mGoogleApiClient;
 
     private static final int CONNECTION_FAILURE_RESOLUTION_REQUEST = 9_000;
 
@@ -81,6 +81,11 @@ public class LocationSensor extends
 
     @NonNull
     private GoogleApiClient getGoogleApiClient() {
+
+        if (mGoogleApiClient != null) {
+            return mGoogleApiClient;
+        }
+
         return new GoogleApiClient.Builder(context)
                 .addApi(LocationServices.API)
                 .addConnectionCallbacks(this)

@@ -8,6 +8,7 @@ import retrofit.http.Body;
 import retrofit.http.GET;
 import retrofit.http.Header;
 import retrofit.http.POST;
+import rx.Observable;
 
 /**
  * API endpoints for managing user's devices
@@ -18,9 +19,8 @@ import retrofit.http.POST;
 public interface DeviceApi {
 
     @POST(Config.DEVICE_REGISTRATION_ENDPOINT)
-    void registerDevice(@Header("X-AUTH-TOKEN") String userToken,
-                        @Body DeviceRegistrationRequestDto body,
-                        Callback<Void> callback);
+    Observable<Void> registerDevice(@Header("X-AUTH-TOKEN") String userToken,
+                                    @Body DeviceRegistrationRequestDto body);
 
     @GET(Config.DEVICE_LIST_ENDPOINT)
     void getDeviceList(@Header("X-AUTH-TOKEN") String userToken,

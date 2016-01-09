@@ -12,9 +12,15 @@ import com.google.android.gms.iid.InstanceID;
 import java.io.IOException;
 
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.Config;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbUser;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.device.DeviceRegistrationRequestDto;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.ApiProvider;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.DaoProvider;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.PreferenceProvider;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.ServerCommunicationProvider;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.util.logger.Log;
+import rx.Observable;
+import rx.Subscriber;
+import rx.Subscription;
 
 /**
  * Does GCM mobile client registration
@@ -29,11 +35,24 @@ public class GcmRegistrationIntentService extends IntentService {
     private static final String TOPICS_SERVICE = "/topics/";
     private static final String[] TOPICS = {"global"};
 
+    private PreferenceProvider preferenceProvider;
+    private DaoProvider daoProvider;
+
+    private Subscription gcmRegistrationSubscriber;
+
     /**
      * Creates an IntentService.  Invoked by your subclass's constructor.
      */
     public GcmRegistrationIntentService() {
         super(TAG);
+    }
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+
+        preferenceProvider = PreferenceProvider.getInstance(getApplicationContext());
+        daoProvider = DaoProvider.getInstance(getApplicationContext());
     }
 
     /**
@@ -68,14 +87,14 @@ public class GcmRegistrationIntentService extends IntentService {
             // You should store a boolean that indicates whether the generated token has been
             // sent to your server. If the boolean is false, send the token to your server,
             // otherwise your server should have already received the token.
-            PreferenceProvider.getInstance(getApplicationContext()).setSentTokenToServer(true);
+            preferenceProvider.setSentTokenToServer(true);
 
         } catch (Exception e) {
 
             Log.e(TAG, "Failed to complete token refresh", e);
             // If an exception happens while fetching the new token or updating our registration data
             // on a third-party server, this ensures that we'll attempt the update at a later time.
-            PreferenceProvider.getInstance(getApplicationContext()).setSentTokenToServer(false);
+            preferenceProvider.setSentTokenToServer(false);
         }
 
         // Notify UI that registration has completed, so the progress indicator can be hidden.
@@ -92,8 +111,60 @@ public class GcmRegistrationIntentService extends IntentService {
 
         Log.d(TAG, "Sending GCM registration token to backend...");
 
-        final ServerCommunicationProvider communicationProvider = ServerCommunicationProvider.getInstance(getApplicationContext());
-        communicationProvider.sendGcmRegistrationToken(token);
+        final String userToken = preferenceProvider.getUserToken();
+        final long serverDeviceId = preferenceProvider.getServerDeviceId();
+
+        DeviceRegistrationRequestDto deviceRegistrationRequest = new DeviceRegistrationRequestDto();
+
+        deviceRegistrationRequest.setDeviceId(serverDeviceId);
+        deviceRegistrationRequest.setRegistrationToken(token);
+
+        Observable<Void> subscription = ApiProvider.getInstance(getApplicationContext())
+                .getDeviceApiProvider()
+                .getDeviceRegistration(userToken, deviceRegistrationRequest);
+
+        gcmRegistrationSubscriber = subscription.subscribe(new Subscriber<Void>() {
+
+            @Override
+            public void onCompleted() {
+                Log.d(TAG, "gcmRegistrationSubscriber: onCompleted");
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                Log.d(TAG, "gcmRegistrationSubscriber: onError");
+            }
+
+            @Override
+            public void onNext(Void aVoid) {
+
+                // persist registration
+                final String userToken = preferenceProvider.getUserToken();
+                DbUser user = daoProvider.getUserDao().getByToken(userToken);
+
+                if (user == null) {
+                    Log.d(TAG, "No such user found! Token: " + userToken);
+                    return;
+                } else {
+
+                    final long serverDeviceId = preferenceProvider.getServerDeviceId();
+
+                    daoProvider.getDeviceDao().saveRegistrationTokenToDb(
+                            token,
+                            user.getId(),
+                            serverDeviceId);
+                }
+            }
+        });
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+
+        if (gcmRegistrationSubscriber != null) {
+            gcmRegistrationSubscriber.unsubscribe();
+        }
     }
 
     /**
