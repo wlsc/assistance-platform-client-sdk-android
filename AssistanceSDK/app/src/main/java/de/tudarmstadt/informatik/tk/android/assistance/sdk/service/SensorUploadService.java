@@ -1,7 +1,6 @@
 package de.tudarmstadt.informatik.tk.android.assistance.sdk.service;
 
 import android.content.Context;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
@@ -229,9 +228,11 @@ public class SensorUploadService extends GcmTaskService {
                         List<List<SensorDto>> eventParts = Lists
                                 .partition(eventsAsList, EVENTS_NUMBER_TO_SPLIT_AFTER);
 
+                        Handler uploadHandler = new Handler(getMainLooper());
+
                         for (final List<SensorDto> partEvent : eventParts) {
 
-                            AsyncTask.execute(() -> {
+                            uploadHandler.post(() -> {
 
                                 SensorUploadDto eventUploadRequest = new SensorUploadDto(
                                         serverDeviceId,
@@ -277,9 +278,11 @@ public class SensorUploadService extends GcmTaskService {
                 List<List<SensorDto>> eventParts = Lists
                         .partition(eventsAsList, EVENTS_NUMBER_TO_SPLIT_AFTER);
 
+                Handler uploadHandler = new Handler(getMainLooper());
+
                 for (final List<SensorDto> eventPart : eventParts) {
 
-                    AsyncTask.execute(() -> {
+                    uploadHandler.post(() -> {
 
                         SensorUploadDto eventUploadRequest = new SensorUploadDto(
                                 serverDeviceId,

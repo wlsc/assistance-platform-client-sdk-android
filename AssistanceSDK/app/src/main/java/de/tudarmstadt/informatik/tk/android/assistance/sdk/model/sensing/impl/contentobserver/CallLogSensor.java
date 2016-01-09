@@ -6,7 +6,8 @@ import android.content.Context;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
-import android.os.AsyncTask;
+import android.os.Handler;
+import android.os.Looper;
 import android.provider.CallLog;
 import android.support.v4.app.ActivityCompat;
 
@@ -34,7 +35,7 @@ public class CallLogSensor extends AbstractContentObserverSensor {
 
     protected static final Uri URI_CALL_LOG = android.provider.CallLog.Calls.CONTENT_URI;
 
-    private AsyncTask<Void, Void, Void> syncingTask;
+    private Handler syncingTask;
 
     private List<DbCallLogSensor> events = new ArrayList<>();
 
@@ -85,17 +86,13 @@ public class CallLogSensor extends AbstractContentObserverSensor {
     @Override
     public void startSensor() {
 
-        syncingTask = new AsyncTask<Void, Void, Void>() {
+        syncingTask = new Handler(Looper.getMainLooper());
 
-            @Override
-            protected Void doInBackground(Void... params) {
+        syncingTask.post(() -> {
 
-                syncData();
-                context.getContentResolver().registerContentObserver(URI_CALL_LOG, true, mObserver);
-
-                return null;
-            }
-        }.execute();
+            syncData();
+            context.getContentResolver().registerContentObserver(URI_CALL_LOG, true, mObserver);
+        });
 
         setRunning(true);
     }

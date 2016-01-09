@@ -6,10 +6,10 @@ import android.content.Context;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
-import android.os.AsyncTask;
+import android.os.Handler;
+import android.os.Looper;
 import android.provider.CalendarContract.Events;
 import android.provider.CalendarContract.Reminders;
-import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 
 import java.util.ArrayList;
@@ -19,8 +19,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbCalendarSensor;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbCalendarReminderSensor;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbCalendarSensor;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.sensing.SensorApiType;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensing.impl.AbstractContentObserverSensor;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.util.DateUtils;
@@ -40,8 +40,7 @@ public class CalendarSensor extends AbstractContentObserverSensor {
     private static final Uri URI_CALENDAR = android.provider.CalendarContract.Events.CONTENT_URI;
     private static final Uri URI_REMINDER = android.provider.CalendarContract.Reminders.CONTENT_URI;
 
-    @Nullable
-    private AsyncTask<Void, Void, Void> syncingTask;
+    private Handler syncingTask;
 
     private static final String[] PROJECTION_EVENTS =
             {
@@ -424,19 +423,14 @@ public class CalendarSensor extends AbstractContentObserverSensor {
     @Override
     public void startSensor() {
 
-        syncingTask = new AsyncTask<Void, Void, Void>() {
+        syncingTask = new Handler(Looper.getMainLooper());
 
-            @Nullable
-            @Override
-            protected Void doInBackground(Void... params) {
+        syncingTask.post(() -> {
 
-                syncData();
-                context.getContentResolver().registerContentObserver(URI_CALENDAR, true, mObserver);
-                context.getContentResolver().registerContentObserver(URI_REMINDER, true, mObserver);
-
-                return null;
-            }
-        }.execute();
+            syncData();
+            context.getContentResolver().registerContentObserver(URI_CALENDAR, true, mObserver);
+            context.getContentResolver().registerContentObserver(URI_REMINDER, true, mObserver);
+        });
 
         setRunning(true);
     }

@@ -3,8 +3,8 @@ package de.tudarmstadt.informatik.tk.android.assistance.sdk.receiver;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.os.AsyncTask;
-import android.support.annotation.Nullable;
+import android.os.Handler;
+import android.os.Looper;
 
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.PreferenceProvider;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.service.SensorUploadService;
@@ -53,17 +53,13 @@ public class WifiStateReceiver extends BroadcastReceiver {
                     return;
                 }
 
-                new AsyncTask<Void, Void, Void>() {
+                Handler handler = new Handler(Looper.getMainLooper());
 
-                    @Nullable
-                    @Override
-                    protected Void doInBackground(Void... params) {
-                        Log.d(TAG, "Starting background uploader task...");
-                        uploadAllEvents(context.getApplicationContext());
-                        return null;
-                    }
+                handler.post(() -> {
 
-                }.execute();
+                    Log.d(TAG, "Starting background uploader task...");
+                    uploadAllEvents(context.getApplicationContext());
+                });
 
             } else {
                 Log.d(TAG, "Internet is OFFLINE");

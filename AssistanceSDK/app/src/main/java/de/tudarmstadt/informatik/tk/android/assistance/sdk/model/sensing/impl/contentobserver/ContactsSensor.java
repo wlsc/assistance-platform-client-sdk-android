@@ -5,14 +5,14 @@ import android.content.Context;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
-import android.os.AsyncTask;
+import android.os.Handler;
+import android.os.Looper;
 import android.provider.BaseColumns;
 import android.provider.ContactsContract;
 import android.provider.ContactsContract.CommonDataKinds.Email;
 import android.provider.ContactsContract.CommonDataKinds.Note;
 import android.provider.ContactsContract.CommonDataKinds.Phone;
 import android.provider.ContactsContract.Data;
-import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 
 import java.util.ArrayList;
@@ -23,8 +23,8 @@ import java.util.Locale;
 import java.util.Map;
 
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbContactEmailSensor;
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbContactSensor;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbContactNumberSensor;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbContactSensor;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.sensing.SensorApiType;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.enums.EPushType;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.sensing.impl.AbstractContentObserverSensor;
@@ -48,8 +48,7 @@ public class ContactsSensor extends AbstractContentObserverSensor {
     private static final Uri URI_RAW_CONTACTS = ContactsContract.RawContacts.CONTENT_URI;
     private static final Uri URI_CONTACTS = ContactsContract.Contacts.CONTENT_URI;
 
-    @Nullable
-    private AsyncTask<Void, Void, Void> syncingTask;
+    private Handler syncingTask;
 
     private ContactsSensor(Context context) {
         super(context);
@@ -635,18 +634,13 @@ public class ContactsSensor extends AbstractContentObserverSensor {
     @Override
     public void startSensor() {
 
-        syncingTask = new AsyncTask<Void, Void, Void>() {
+        syncingTask = new Handler(Looper.getMainLooper());
 
-            @Nullable
-            @Override
-            protected Void doInBackground(Void... params) {
+        syncingTask.post(() -> {
 
-                syncData();
-                context.getContentResolver().registerContentObserver(URI_CONTACTS, true, mObserver);
-
-                return null;
-            }
-        }.execute();
+            syncData();
+            context.getContentResolver().registerContentObserver(URI_CONTACTS, true, mObserver);
+        });
 
         setRunning(true);
     }
