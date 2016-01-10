@@ -17,6 +17,7 @@ import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.device.Devi
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.ApiProvider;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.DaoProvider;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.PreferenceProvider;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.util.RxUtils;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.util.logger.Log;
 import rx.Observable;
 import rx.Subscriber;
@@ -121,7 +122,7 @@ public class GcmRegistrationIntentService extends IntentService {
 
         Observable<Void> subscription = ApiProvider.getInstance(getApplicationContext())
                 .getDeviceApiProvider()
-                .getDeviceRegistration(userToken, deviceRegistrationRequest);
+                .deviceRegistration(userToken, deviceRegistrationRequest);
 
         gcmRegistrationSubscriber = subscription.subscribe(new Subscriber<Void>() {
 
@@ -163,10 +164,7 @@ public class GcmRegistrationIntentService extends IntentService {
     @Override
     public void onDestroy() {
         super.onDestroy();
-
-        if (gcmRegistrationSubscriber != null) {
-            gcmRegistrationSubscriber.unsubscribe();
-        }
+        RxUtils.unsubscribe(gcmRegistrationSubscriber);
     }
 
     /**

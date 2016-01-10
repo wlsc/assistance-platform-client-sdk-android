@@ -26,7 +26,7 @@ public class ToggleModuleRequestDto {
         return moduleId;
     }
 
-    public void setModuleId(String moduleId) {
+    public void setModulePackageName(String moduleId) {
         this.moduleId = moduleId;
     }
 

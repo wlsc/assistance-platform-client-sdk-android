@@ -9,6 +9,7 @@ import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.ApiGenerato
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.module.ActivatedModulesResponse;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.module.ModuleApi;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.module.ModuleResponseDto;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.module.ToggleModuleRequestDto;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
@@ -39,7 +40,7 @@ public class ModuleApiProvider {
     }
 
     /**
-     * Returns subscription for available modules
+     * Returns subscription to available modules
      *
      * @param userToken
      * @return
@@ -51,7 +52,7 @@ public class ModuleApiProvider {
     }
 
     /**
-     * Returns subscription for active modules
+     * Returns subscription to active modules
      *
      * @param userToken
      * @return
@@ -63,7 +64,7 @@ public class ModuleApiProvider {
     }
 
     /**
-     * Returns subscription for available activated modules (combined request)
+     * Returns subscription to available activated modules (combined request)
      *
      * @param userToken
      * @return
@@ -73,5 +74,18 @@ public class ModuleApiProvider {
                 getAvailableModules(userToken),
                 getActiveModulesRequest(userToken),
                 ActivatedModulesResponse::new);
+    }
+
+    /**
+     * Returns subscription to module deactivation
+     *
+     * @param userToken
+     * @param request
+     * @return
+     */
+    public Observable<Void> deactivateModule(final String userToken, ToggleModuleRequestDto request) {
+        return api.deactivateModule(userToken, request)
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread());
     }
 }

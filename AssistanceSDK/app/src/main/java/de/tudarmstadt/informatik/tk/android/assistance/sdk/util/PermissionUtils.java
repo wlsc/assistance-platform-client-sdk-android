@@ -116,4 +116,28 @@ public class PermissionUtils {
         return !(grantResults == null || grantResults.length <= 0) && grantResults[0] == PackageManager.PERMISSION_GRANTED;
 
     }
+
+    /**
+     * Checks if some of permissions were granted
+     *
+     * @param perms
+     * @return
+     */
+    public boolean isGranted(String[] perms) {
+
+        if (perms == null) {
+            return false;
+        }
+
+        boolean result = false;
+
+        for (String perm : perms) {
+            if (isGranted(perm)) {
+                result = true;
+                break;
+            }
+        }
+
+        return result;
+    }
 }

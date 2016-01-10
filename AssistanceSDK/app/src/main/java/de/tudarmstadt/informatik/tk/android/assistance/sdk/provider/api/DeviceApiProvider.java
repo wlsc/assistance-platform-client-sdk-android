@@ -41,7 +41,7 @@ public class DeviceApiProvider {
      * @param deviceRegistrationRequestDto
      * @return
      */
-    public Observable<Void> getDeviceRegistration(String userToken, DeviceRegistrationRequestDto deviceRegistrationRequestDto) {
+    public Observable<Void> deviceRegistration(String userToken, DeviceRegistrationRequestDto deviceRegistrationRequestDto) {
         return api.registerDevice(userToken, deviceRegistrationRequestDto)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
