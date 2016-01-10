@@ -300,6 +300,8 @@ public class LocationSensor extends
 
         // location changed -> update values
         Log.d(TAG, "Location has changed");
+        Log.d(TAG, "Provider: " + location.getProvider());
+        Log.d(TAG, "Accuracy: " + location.getAccuracy());
 
         latitude = location.getLatitude();
         longitude = location.getLongitude();
