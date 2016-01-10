@@ -8,4 +8,6 @@ import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.CommonDa
  * @date 09.01.2016
  */
 public interface ModuleAllowedCapsDao extends CommonDao<DbModuleAllowedCapabilities> {
+
+    DbModuleAllowedCapabilities get(String type);
 }

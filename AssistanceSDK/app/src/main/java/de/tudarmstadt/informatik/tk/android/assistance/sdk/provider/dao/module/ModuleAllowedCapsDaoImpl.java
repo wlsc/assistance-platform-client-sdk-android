@@ -9,6 +9,7 @@ import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DaoSession;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbModuleAllowedCapabilities;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbModuleAllowedCapabilitiesDao;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.CommonDaoImpl;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.util.StringUtils;
 
 /**
  * @author Wladimir Schmidt (wlsc.dev@gmail.com)
@@ -65,5 +66,21 @@ public class ModuleAllowedCapsDaoImpl extends
                 .limit(amount)
                 .build()
                 .list();
+    }
+
+    @Nullable
+    @Override
+    public DbModuleAllowedCapabilities get(String type) {
+
+        if (StringUtils.isNullOrEmpty(type)) {
+            return null;
+        }
+
+        return dao
+                .queryBuilder()
+                .where(DbModuleAllowedCapabilitiesDao.Properties.Type.eq(type))
+                .limit(1)
+                .build()
+                .unique();
     }
 }
