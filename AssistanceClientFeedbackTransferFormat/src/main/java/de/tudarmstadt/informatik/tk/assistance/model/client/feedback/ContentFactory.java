@@ -6,6 +6,11 @@ import de.tudarmstadt.informatik.tk.assistance.model.client.feedback.content.Con
 import de.tudarmstadt.informatik.tk.assistance.model.client.feedback.content.enums.FeedbackItemType;
 import de.tudarmstadt.informatik.tk.assistance.model.client.feedback.content.enums.GroupAlignment;
 import de.tudarmstadt.informatik.tk.assistance.model.client.feedback.content.enums.TextAlignment;
+import de.tudarmstadt.informatik.tk.assistance.model.client.feedback.content.item.ButtonDto;
+import de.tudarmstadt.informatik.tk.assistance.model.client.feedback.content.item.GroupDto;
+import de.tudarmstadt.informatik.tk.assistance.model.client.feedback.content.item.ImageDto;
+import de.tudarmstadt.informatik.tk.assistance.model.client.feedback.content.item.MapDto;
+import de.tudarmstadt.informatik.tk.assistance.model.client.feedback.content.item.TextDto;
 
 public class ContentFactory {
 
@@ -110,5 +115,83 @@ public class ContentFactory {
     text.setPriority(priority);
 
     return text;
+  }
+
+  public static GroupDto getGroup(ContentDto contentDto) {
+
+    if (contentDto == null) {
+      return new GroupDto();
+    }
+
+    GroupDto groupDto = new GroupDto();
+
+    groupDto.setAlignment(contentDto.getAlignment());
+    groupDto.setContent(contentDto.getContent());
+
+    return groupDto;
+  }
+
+  public static ButtonDto getButton(ContentDto contentDto) {
+
+    if (contentDto == null) {
+      return new ButtonDto();
+    }
+
+    ButtonDto buttonDto = new ButtonDto();
+
+    buttonDto.setCaption(contentDto.getCaption());
+    buttonDto.setTarget(contentDto.getTarget());
+    buttonDto.setPriority(contentDto.getPriority());
+
+    return buttonDto;
+  }
+
+  public static TextDto getText(ContentDto contentDto) {
+
+    if (contentDto == null) {
+      return new TextDto();
+    }
+
+    TextDto textDto = new TextDto();
+
+    textDto.setCaption(contentDto.getCaption());
+    textDto.setStyle(contentDto.getStyle());
+    textDto.setHighlighted(contentDto.getHighlighted());
+    textDto.setAlignment(contentDto.getAlignment());
+    textDto.setTarget(contentDto.getTarget());
+    textDto.setPriority(contentDto.getPriority());
+
+    return textDto;
+  }
+
+  public static ImageDto getImage(ContentDto contentDto) {
+
+    if (contentDto == null) {
+      return new ImageDto();
+    }
+
+    ImageDto imageDto = new ImageDto();
+
+    imageDto.setSource(contentDto.getSource());
+    imageDto.setTarget(contentDto.getTarget());
+    imageDto.setPriority(contentDto.getPriority());
+
+    return imageDto;
+  }
+
+  public static MapDto getMap(ContentDto contentDto) {
+
+    if (contentDto == null) {
+      return new MapDto();
+    }
+
+    MapDto mapDto = new MapDto();
+
+    mapDto.setPoints(contentDto.getPoints());
+    mapDto.setShowUserLocation(contentDto.getShowUserLocation());
+    mapDto.setPriority(contentDto.getPriority());
+    mapDto.setTarget(contentDto.getTarget());
+
+    return mapDto;
   }
 }
