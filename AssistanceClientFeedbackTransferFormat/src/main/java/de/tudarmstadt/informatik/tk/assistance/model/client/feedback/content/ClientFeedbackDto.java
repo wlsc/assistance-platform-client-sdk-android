@@ -12,7 +12,7 @@ import com.google.gson.annotations.SerializedName;
  */
 public class ClientFeedbackDto {
 
-  @SerializedName("moduleId")
+  @SerializedName("modulePackageName")
   @Expose
   private String modulePackageName;
 
