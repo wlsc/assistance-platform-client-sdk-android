@@ -13,7 +13,7 @@ import de.tudarmstadt.informatik.tk.assistance.model.client.feedback.content.Con
  */
 public class MapDto extends ContentDto {
 
-  public String[][] getPoints() {
+  public Double[][] getPoints() {
     return points;
   }
 

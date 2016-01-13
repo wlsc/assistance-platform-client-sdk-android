@@ -45,7 +45,7 @@ public class ContentDto {
 
   @SerializedName("points")
   @Expose
-  protected String[][] points;
+  protected Double[][] points;
 
   @SerializedName("showUserLocation")
   @Expose
@@ -117,11 +117,11 @@ public class ContentDto {
     this.source = source;
   }
 
-  public String[][] getPoints() {
+  public Double[][] getPoints() {
     return points;
   }
 
-  public void setPoints(String[][] points) {
+  public void setPoints(Double[][] points) {
     this.points = points;
   }
 

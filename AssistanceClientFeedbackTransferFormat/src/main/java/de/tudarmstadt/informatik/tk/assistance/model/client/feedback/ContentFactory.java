@@ -56,22 +56,22 @@ public class ContentFactory {
     return button;
   }
 
-  public static ContentDto createMap(String[][] points) {
+  public static ContentDto createMap(Double[][] points) {
 
     return createMap(points, null, null, null);
   }
 
-  public static ContentDto createMap(String[][] points, Boolean showUserLocation) {
+  public static ContentDto createMap(Double[][] points, Boolean showUserLocation) {
 
     return createMap(points, showUserLocation, null, null);
   }
 
-  public static ContentDto createMap(String[][] points, Boolean showUserLocation, String target) {
+  public static ContentDto createMap(Double[][] points, Boolean showUserLocation, String target) {
 
     return createMap(points, showUserLocation, target, null);
   }
 
-  public static ContentDto createMap(String[][] points, Boolean showUserLocation, String target,
+  public static ContentDto createMap(Double[][] points, Boolean showUserLocation, String target,
       Integer priority) {
 
     ContentDto map = createContentType(FeedbackItemType.MAP);
