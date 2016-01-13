@@ -12,9 +12,9 @@ import com.google.gson.annotations.SerializedName;
  */
 public class ClientFeedbackDto {
 
-  @SerializedName("modulePackageName")
+  @SerializedName("moduleId")
   @Expose
-  private String modulePackageName;
+  private String moduleId;
 
   @SerializedName("content")
   @Expose
@@ -25,17 +25,17 @@ public class ClientFeedbackDto {
   private String created;
 
   public ClientFeedbackDto(String modulePackageName, ContentDto content, String created) {
-    this.modulePackageName = modulePackageName;
+    this.moduleId = modulePackageName;
     this.content = content;
     this.created = created;
   }
 
-  public String getModulePackageName() {
-    return modulePackageName;
+  public String getModuleId() {
+    return moduleId;
   }
 
-  public void setModulePackageName(String modulePackageName) {
-    this.modulePackageName = modulePackageName;
+  public void setModuleId(String modulePackageName) {
+    this.moduleId = modulePackageName;
   }
 
   public ContentDto getContent() {
@@ -56,7 +56,7 @@ public class ClientFeedbackDto {
 
   @Override
   public String toString() {
-    return "ClientFeedbackDto [modulePackageName=" + modulePackageName + ", content=" + content
+    return "ClientFeedbackDto [modulePackageName=" + moduleId + ", content=" + content
         + ", created=" + created + "]";
   }
 }
