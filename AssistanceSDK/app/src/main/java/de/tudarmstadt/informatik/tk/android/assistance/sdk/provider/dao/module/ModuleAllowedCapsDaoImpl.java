@@ -70,15 +70,16 @@ public class ModuleAllowedCapsDaoImpl extends
 
     @Nullable
     @Override
-    public DbModuleAllowedCapabilities get(String type) {
+    public DbModuleAllowedCapabilities get(String type, Long userId) {
 
-        if (StringUtils.isNullOrEmpty(type)) {
+        if (StringUtils.isNullOrEmpty(type) || userId == null) {
             return null;
         }
 
         return dao
                 .queryBuilder()
                 .where(DbModuleAllowedCapabilitiesDao.Properties.Type.eq(type))
+                .where(DbModuleAllowedCapabilitiesDao.Properties.UserId.eq(userId))
                 .limit(1)
                 .build()
                 .unique();
