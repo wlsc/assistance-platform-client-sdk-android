@@ -59,6 +59,22 @@ public class ModuleDaoImpl extends
                 .unique();
     }
 
+    @Nullable
+    @Override
+    public DbModule getAnyByPackageId(String modulePackageName) {
+
+        if (modulePackageName == null) {
+            return null;
+        }
+
+        return dao
+                .queryBuilder()
+                .where(DbModuleDao.Properties.PackageName.eq(modulePackageName))
+                .limit(1)
+                .build()
+                .unique();
+    }
+
     @Override
     public List<DbModule> getAll(Long userId) {
 

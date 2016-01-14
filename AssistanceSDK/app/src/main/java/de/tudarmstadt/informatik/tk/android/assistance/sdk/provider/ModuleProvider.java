@@ -237,4 +237,47 @@ public class ModuleProvider {
 
         return result.toArray(new String[result.size()]);
     }
+
+    /**
+     * Returns title of a module
+     *
+     * @param modulePackageName
+     * @param userId
+     * @return
+     */
+    public String getModuleTitle(String modulePackageName, long userId) {
+
+        if (modulePackageName == null || modulePackageName.isEmpty()) {
+            return "";
+        }
+
+        DbModule module = daoProvider.getModuleDao().getByPackageIdUserId(modulePackageName, userId);
+
+        if (module == null) {
+            return "";
+        }
+
+        return module.getTitle();
+    }
+
+    /**
+     * Returns title of a module
+     *
+     * @param modulePackageName
+     * @return
+     */
+    public String getModuleTitle(String modulePackageName) {
+
+        if (modulePackageName == null || modulePackageName.isEmpty()) {
+            return "";
+        }
+
+        DbModule module = daoProvider.getModuleDao().getAnyByPackageId(modulePackageName);
+
+        if (module == null) {
+            return "";
+        }
+
+        return module.getTitle();
+    }
 }

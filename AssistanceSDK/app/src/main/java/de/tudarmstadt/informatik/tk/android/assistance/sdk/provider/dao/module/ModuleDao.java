@@ -13,10 +13,13 @@ import de.tudarmstadt.informatik.tk.android.assistance.sdk.provider.dao.CommonDa
  */
 public interface ModuleDao extends CommonDao<DbModule> {
 
-    @Nullable
-    DbModule getByPackageIdUserId(String modulePackageName, Long userId);
-
     List<DbModule> getAll(Long userId);
 
     List<DbModule> getAllActive(Long userId);
+
+    @Nullable
+    DbModule getByPackageIdUserId(String modulePackageName, Long userId);
+
+    @Nullable
+    DbModule getAnyByPackageId(String modulePackageName);
 }

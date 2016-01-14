@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.Handler;
 import android.os.IBinder;
+import android.os.Looper;
 import android.os.Message;
 import android.os.Messenger;
 import android.os.RemoteException;
@@ -33,7 +34,7 @@ public class HarvesterServiceProvider implements ServiceConnection {
     private static SensorProvider sensorProvider;
 
     private Messenger mMessengerOutgoing = null;
-    private Messenger mMessengerIncoming = new Messenger(new IncomingMessageHandler());
+    private Messenger mMessengerIncoming = new Messenger(new IncomingMessageHandler(Looper.getMainLooper()));
 
     private boolean isServiceBound;
 
@@ -263,6 +264,10 @@ public class HarvesterServiceProvider implements ServiceConnection {
      * Handle incoming messages
      */
     private static class IncomingMessageHandler extends Handler {
+
+        public IncomingMessageHandler(Looper mainLooper) {
+            super(mainLooper);
+        }
 
         @Override
         public void handleMessage(Message msg) {
