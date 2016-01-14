@@ -49,4 +49,8 @@ public interface ModuleApi {
     void getModuleFeedback(@Header("X-AUTH-TOKEN") String userToken,
                            @Path("deviceId") Long deviceId,
                            Callback<List<ClientFeedbackDto>> callback);
+
+    @GET(Config.ASSISTANCE_MODULE_FEEDBACK_ENDPOINT)
+    Observable<List<ClientFeedbackDto>> getModuleFeedback(@Header("X-AUTH-TOKEN") String userToken,
+                                                          @Path("deviceId") Long deviceId);
 }

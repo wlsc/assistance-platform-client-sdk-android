@@ -10,6 +10,7 @@ import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.module.Acti
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.module.ModuleApi;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.module.ModuleResponseDto;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.module.ToggleModuleRequestDto;
+import de.tudarmstadt.informatik.tk.assistance.model.client.feedback.content.ClientFeedbackDto;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
@@ -85,6 +86,19 @@ public class ModuleApiProvider {
      */
     public Observable<Void> deactivateModule(final String userToken, ToggleModuleRequestDto request) {
         return api.deactivateModule(userToken, request)
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    /**
+     * Returns subscription to module feedback channel
+     *
+     * @param userToken
+     * @param deviceId
+     * @return
+     */
+    public Observable<List<ClientFeedbackDto>> moduleFeedback(final String userToken, Long deviceId) {
+        return api.getModuleFeedback(userToken, deviceId)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread());
     }
