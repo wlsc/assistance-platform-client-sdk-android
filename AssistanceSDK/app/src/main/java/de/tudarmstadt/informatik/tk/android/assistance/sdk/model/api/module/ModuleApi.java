@@ -32,23 +32,12 @@ public interface ModuleApi {
     );
 
     @POST(Config.ASSISTANCE_MODULE_ACTIVATE_ENDPOINT)
-    void activateModule(@Header("X-AUTH-TOKEN") String userToken,
-                        @Body ToggleModuleRequestDto body,
-                        Callback<Void> callback);
-
-    @POST(Config.ASSISTANCE_MODULE_DEACTIVATE_ENDPOINT)
-    void deactivateModule(@Header("X-AUTH-TOKEN") String userToken,
-                          @Body ToggleModuleRequestDto body,
-                          Callback<Void> callback);
+    Observable<Void> activateModule(@Header("X-AUTH-TOKEN") String userToken,
+                                    @Body ToggleModuleRequestDto body);
 
     @POST(Config.ASSISTANCE_MODULE_DEACTIVATE_ENDPOINT)
     Observable<Void> deactivateModule(@Header("X-AUTH-TOKEN") String userToken,
                                       @Body ToggleModuleRequestDto body);
-
-    @GET(Config.ASSISTANCE_MODULE_FEEDBACK_ENDPOINT)
-    void getModuleFeedback(@Header("X-AUTH-TOKEN") String userToken,
-                           @Path("deviceId") Long deviceId,
-                           Callback<List<ClientFeedbackDto>> callback);
 
     @GET(Config.ASSISTANCE_MODULE_FEEDBACK_ENDPOINT)
     Observable<List<ClientFeedbackDto>> getModuleFeedback(@Header("X-AUTH-TOKEN") String userToken,

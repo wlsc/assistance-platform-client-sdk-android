@@ -1,17 +1,13 @@
 package de.tudarmstadt.informatik.tk.android.assistance.sdk.util;
 
 import android.accessibilityservice.AccessibilityServiceInfo;
-import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.view.accessibility.AccessibilityEvent;
 import android.view.accessibility.AccessibilityManager;
 
 import java.util.List;
 
-import de.tudarmstadt.informatik.tk.android.assistance.sdk.R;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.service.AssistanceAccessibilityService;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.util.logger.Log;
 
@@ -27,24 +23,7 @@ public class AccessibilityUtils {
     private AccessibilityUtils() {
     }
 
-    public static void checkAccessibilityService(final Context context) {
-
-        if (!isAccessibilityEnabled(context)) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(context);
-            builder.setMessage(R.string.alert_accessibility);
-            builder.setPositiveButton(R.string.alert_accessibility_button,
-                    (dialog, which) -> {
-                        openAccessibiliySettings(context);
-                    });
-            if (!((Activity) context).isFinishing()) {
-                builder.create().show();
-            }
-        }
-    }
-
     public static boolean isAccessibilityEnabled(Context context) {
-
-        //logInstalledAccessiblityServices(context);
 
         final String id = AssistanceAccessibilityService.class.getCanonicalName();
 

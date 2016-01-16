@@ -78,13 +78,28 @@ public class ModuleApiProvider {
     }
 
     /**
+     * Returns subscription to module activation
+     *
+     * @param userToken
+     * @param request
+     * @return
+     */
+    public Observable<Void> activateModule(final String userToken,
+                                           final ToggleModuleRequestDto request) {
+        return api.activateModule(userToken, request)
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    /**
      * Returns subscription to module deactivation
      *
      * @param userToken
      * @param request
      * @return
      */
-    public Observable<Void> deactivateModule(final String userToken, ToggleModuleRequestDto request) {
+    public Observable<Void> deactivateModule(final String userToken,
+                                             final ToggleModuleRequestDto request) {
         return api.deactivateModule(userToken, request)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread());
@@ -97,7 +112,8 @@ public class ModuleApiProvider {
      * @param deviceId
      * @return
      */
-    public Observable<List<ClientFeedbackDto>> moduleFeedback(final String userToken, Long deviceId) {
+    public Observable<List<ClientFeedbackDto>> moduleFeedback(final String userToken,
+                                                              final Long deviceId) {
         return api.getModuleFeedback(userToken, deviceId)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread());
