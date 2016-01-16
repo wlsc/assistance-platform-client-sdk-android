@@ -17,6 +17,7 @@ import de.greenrobot.event.EventBus;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbModule;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbModuleCapability;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbUser;
+import de.tudarmstadt.informatik.tk.android.assistance.sdk.event.ShowAccessibilityServiceTutorialEvent;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.event.UpdateSensorIntervalEvent;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.sensing.SensorApiType;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.enums.EPushType;
@@ -268,6 +269,27 @@ public class SensorProvider {
                             sensorIntervals.keyAt(i),
                             sensorIntervals.valueAt(i)
                     ));
+        }
+
+        Log.d(TAG, "Sent event to: " + sensorIntervals.size());
+
+        // check if it was not already ignored by user once
+        // if not, then show tutorial
+        if (!PreferenceProvider.getInstance(mContext).getAccessibilityServiceIgnoredByUser()) {
+
+            for (DbModuleCapability cap : activeModuleCapabilities) {
+
+                if (cap == null || cap.getType() == null) {
+                    continue;
+                }
+
+                String foregroundTypeName = SensorApiType.getApiName(SensorApiType.FOREGROUND);
+                String foregroundTrafficTypeName = SensorApiType.getApiName(SensorApiType.FOREGROUND_TRAFFIC);
+
+                if (cap.getType().equals(foregroundTypeName) || cap.getType().equals(foregroundTrafficTypeName)) {
+                    EventBus.getDefault().post(new ShowAccessibilityServiceTutorialEvent());
+                }
+            }
         }
 
         Log.d(TAG, "Finished. Number of sensors: " + runningSensors.size());
@@ -530,6 +552,8 @@ public class SensorProvider {
      */
     public void startAllStoppedSensors() {
 
+        Log.d(TAG, "Starting all stopped sensors...");
+
         if (runningSensors == null) {
             return;
         }
@@ -546,7 +570,10 @@ public class SensorProvider {
      */
     public void stopAllRunningSensors() {
 
+        Log.d(TAG, "Stopping all running sensors...");
+
         if (runningSensors == null) {
+            Log.d(TAG, "Running sensors array is null");
             return;
         }
 
@@ -562,6 +589,7 @@ public class SensorProvider {
 
         if (runningSensors != null) {
 
+            Log.d(TAG, "Clearing running sensors...");
             stopAllRunningSensors();
             runningSensors.clear();
         }
@@ -752,6 +780,8 @@ public class SensorProvider {
      * Synchronizes runninng sensors with DB entries
      */
     public void synchronizeRunningSensorsWithDb() {
+
+        Log.d(TAG, "Synchronizing with db...");
         clearRunningSensors();
         initEnabledSensors();
     }
