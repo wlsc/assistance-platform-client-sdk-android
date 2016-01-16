@@ -92,11 +92,15 @@ public class HarvesterServiceProvider implements ServiceConnection {
         }
 
         if (!isServiceRunning()) {
+
             mContext.startService(serviceIntent);
+            startAccessibilityService();
+
         } else {
+
             bindService();
             sendMessageToService(HarvesterService.MSG_CMD_START_SERVICE);
-            sensorProvider.startAllStoppedSensors();
+            sensorProvider.synchronizeRunningSensorsWithDb();
             showHarvestIcon(true);
         }
     }
@@ -125,12 +129,16 @@ public class HarvesterServiceProvider implements ServiceConnection {
         if (isServiceBound()) {
             unbindService();
         }
+
+        stopAccessibilityService();
     }
 
     /**
      * Starts Accessibility Service
      */
     public void startAccessibilityService() {
+
+        Log.d(TAG, "Starting Accessibility Service...");
 
         Intent intent = new Intent(mContext, AssistanceAccessibilityService.class);
         mContext.startService(intent);
@@ -140,6 +148,8 @@ public class HarvesterServiceProvider implements ServiceConnection {
      * Stops Accessibility Service
      */
     public void stopAccessibilityService() {
+
+        Log.d(TAG, "Stopping Accessibility Service...");
 
         Intent intent = new Intent(mContext, AssistanceAccessibilityService.class);
         mContext.stopService(intent);
@@ -177,6 +187,7 @@ public class HarvesterServiceProvider implements ServiceConnection {
         mMessengerOutgoing = new Messenger(service);
 
         sendMessageToService(HarvesterService.MSG_CMD_REGISTER_CLIENT);
+        sendMessageToService(HarvesterService.MSG_CMD_START_SERVICE);
     }
 
     @Override
@@ -224,6 +235,7 @@ public class HarvesterServiceProvider implements ServiceConnection {
         if (!isServiceBound()) {
 
             try {
+
                 mContext.bindService(
                         serviceIntent,
                         mServiceConnection,
@@ -235,13 +247,15 @@ public class HarvesterServiceProvider implements ServiceConnection {
             } catch (Exception e) {
                 Log.e(TAG, "Some error.");
             }
+        } else {
+            Log.d(TAG, "Service is already bound.");
         }
     }
 
     /**
      * Unbinds this provider from sensing service
      */
-    private void unbindService() {
+    public void unbindService() {
 
         if (isServiceBound()) {
 

@@ -23,6 +23,8 @@ public class PreferenceProvider {
     private static final String SENT_TOKEN_TO_SERVER = "sentTokenToServer";
     public static final String REGISTRATION_COMPLETE = "registrationComplete";
 
+    private static final String ASSISTANCE_ACCESSIBILITY_SERVICE_IGNORED_BY_USER = "accessibility_ignored_by_user";
+
     // Last known user location
     private static final String ASSISTANCE_LAST_LATITUDE = "lastKnownLatitude";
     private static final String ASSISTANCE_LAST_LONGITUDE = "lastKnownLongitude";
@@ -140,6 +142,20 @@ public class PreferenceProvider {
 
     public void setShowNotification(boolean showNotification) {
         this.defaultPrefs.edit().putBoolean(KRAKEN_SHOW_NOTIFICATION, showNotification).apply();
+    }
+
+    /**
+     * Returns if user has ignored accessibility tutorial
+     */
+    public boolean getAccessibilityServiceIgnoredByUser() {
+        return prefs.getBoolean(ASSISTANCE_ACCESSIBILITY_SERVICE_IGNORED_BY_USER, false);
+    }
+
+    /**
+     * Set user has ignored accessibility tutorial
+     */
+    public void setAccessibilityServiceIgnoredByUser(boolean isIgnored) {
+        prefs.edit().putBoolean(ASSISTANCE_ACCESSIBILITY_SERVICE_IGNORED_BY_USER, isIgnored).apply();
     }
 
     /**

@@ -47,11 +47,17 @@ public class AssistanceAccessibilityService extends AccessibilityService {
         Log.d(TAG, "onAccessibilityEvent");
 
         if (mForegroundSensor != null) {
+            Log.d(TAG, "Invoking ForegroundSensor onEvent...");
             mForegroundSensor.onEvent(event);
+        } else {
+            Log.d(TAG, "ForegroundSensor is NULL");
         }
 
         if (mForegroundTrafficSensor != null) {
+            Log.d(TAG, "Invoking ForegroundTrafficSensor onEvent...");
             mForegroundTrafficSensor.onEvent(event);
+        } else {
+            Log.d(TAG, "ForegroundTrafficSensor is NULL");
         }
     }
 
@@ -84,7 +90,5 @@ public class AssistanceAccessibilityService extends AccessibilityService {
         Log.d(TAG, "Service is connected!");
 
         PreferenceProvider.getInstance(getApplicationContext()).setActivated(true);
-
     }
-
 }

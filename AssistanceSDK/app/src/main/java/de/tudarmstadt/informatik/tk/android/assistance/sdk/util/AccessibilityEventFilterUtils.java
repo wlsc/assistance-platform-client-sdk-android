@@ -23,7 +23,7 @@ public class AccessibilityEventFilterUtils {
 
     private static final String TAG = AccessibilityEventFilterUtils.class.getSimpleName();
 
-    private static final long ONE_SECOND = 1000;
+    private static final long ONE_SECOND = 1_000;
 
     private static final long MIN_DURATION_APP_CHANGE = 5 * ONE_SECOND;
 
@@ -65,6 +65,7 @@ public class AccessibilityEventFilterUtils {
         String appName = getAppName(packageName);
 
         DbForegroundSensor foregroundEvent = new DbForegroundSensor();
+
         foregroundEvent.setPackageName(packageName);
         foregroundEvent.setAppName(appName);
         foregroundEvent.setClassName(className);
@@ -117,32 +118,6 @@ public class AccessibilityEventFilterUtils {
 
                 return foregroundEvent;
 
-            /*
-            No longer needed now we have browser history?
-            TODO: remove?
-            case AccessibilityEvent.TYPE_VIEW_TEXT_SELECTION_CHANGED:
-
-                String text = getEventText(event);
-
-                Log.d("kraken", "is url? " + text + " --> " + isUrl(text));
-                //lMisc(event.getEventType(), appName, packageName, className);
-
-                boolean isBrowser = Arrays.asList(BROWSER_PACKAGES).contains(packageName);
-
-                // check if the content is a valid url and save it
-                if (isBrowser && isUrl(text)) {
-
-                    foregroundEvent.setEventType(ForegroundEventSensor.EVENT_URL);
-                    foregroundEvent.setUrl(text);
-
-                    lUrl(text, appName, packageName, className);
-
-                    return foregroundEvent;
-                }
-
-                break;
-            */
-
             case AccessibilityEvent.TYPE_VIEW_TEXT_CHANGED:
 
                 /** increment the counter */
@@ -186,29 +161,36 @@ public class AccessibilityEventFilterUtils {
 
     @Nullable
     public String getAppName(String packageName) {
+
         PackageManager pm = mContext.getPackageManager();
         ApplicationInfo ai = null;
+
         try {
             ai = pm.getApplicationInfo(packageName, 0);
         } catch (NameNotFoundException e) {
-            e.printStackTrace();
+            Log.e(TAG, "NameNotFoundException");
         }
+
         return ai != null ? pm.getApplicationLabel(ai).toString() : null;
     }
 
     @Nullable
     public String getActivityLabel(String packageName, String className) {
-        if (packageName == null || className == null) {
+
+        if (mContext == null || packageName == null || className == null) {
             return null;
         }
+
         ComponentName cn = new ComponentName(packageName, className);
         PackageManager pm = mContext.getPackageManager();
         ActivityInfo ai = null;
+
         try {
             ai = pm.getActivityInfo(cn, 0);
         } catch (NameNotFoundException e) {
-            //e.printStackTrace();
+            Log.e(TAG, "NameNotFoundException");
         }
+
         return ai != null ? ai.loadLabel(pm).toString() : null;
     }
 

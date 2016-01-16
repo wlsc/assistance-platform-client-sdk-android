@@ -155,7 +155,7 @@ public class HarvesterService extends Service implements Callback {
      */
     private void monitorStart() {
 
-        Log.d(TAG, "Starting monitoring service...");
+        Log.d(TAG, "Starting sensor monitoring...");
 
         mSensorsStarted = true;
 
@@ -171,7 +171,7 @@ public class HarvesterService extends Service implements Callback {
      */
     private void monitorStop() {
 
-        Log.d(TAG, "Stopping service...");
+        Log.d(TAG, "Stopping sensor monitoring...");
 
         mSensorsStarted = false;
 
