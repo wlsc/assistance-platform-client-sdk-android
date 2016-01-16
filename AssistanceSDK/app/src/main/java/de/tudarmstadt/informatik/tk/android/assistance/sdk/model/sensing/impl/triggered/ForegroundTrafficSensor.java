@@ -13,6 +13,8 @@ import android.view.accessibility.AccessibilityEvent;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbForegroundSensor;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbNetworkTrafficSensor;
@@ -39,6 +41,10 @@ public class ForegroundTrafficSensor extends AbstractTriggeredSensor {
 
     private static ForegroundTrafficSensor INSTANCE;
 
+    private Mode operationMode;
+
+    private int UPDATE_INTERVAL_IN_SEC = 5;
+
     private static String EVENT_SCREEN_OFF = "0";
     private static String EVENT_SCREEN_ON = "1";
     public static String EVENT_START_ASSISTANCE = "2";
@@ -51,16 +57,25 @@ public class ForegroundTrafficSensor extends AbstractTriggeredSensor {
 
     private DbForegroundSensor oldEvent;
 
+    private static ScheduledThreadPoolExecutor taskExecutor;
+
+    public enum Mode {
+        NORMAL,
+        PERIODIC
+    }
+
     /**
      * Constructor of a new Foreground Traffic Sensor
      *
      * @param context
+     * @param mode)
      */
-    private ForegroundTrafficSensor(Context context) {
+    private ForegroundTrafficSensor(Context context, Mode mode) {
         super(context);
 
         if (context != null) {
 
+            this.operationMode = mode;
             mReceiver = new ScreenReceiver();
             mActivityManager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
             mPackageManager = context.getPackageManager();
@@ -69,15 +84,26 @@ public class ForegroundTrafficSensor extends AbstractTriggeredSensor {
     }
 
     /**
-     * Returns singleton of this class
+     * Represents normal mode of this sensor
      *
      * @param context
      * @return
      */
     public static ForegroundTrafficSensor getInstance(Context context) {
+        return getInstance(context, Mode.NORMAL);
+    }
+
+    /**
+     * Returns singleton of this class
+     *
+     * @param context
+     * @param mode
+     * @return
+     */
+    public static ForegroundTrafficSensor getInstance(Context context, Mode mode) {
 
         if (INSTANCE == null) {
-            INSTANCE = new ForegroundTrafficSensor(context);
+            INSTANCE = new ForegroundTrafficSensor(context, mode);
         }
 
         return INSTANCE;
@@ -89,6 +115,8 @@ public class ForegroundTrafficSensor extends AbstractTriggeredSensor {
     @Override
     public void startSensor() {
 
+        Log.d(TAG, "Starting...");
+
         if (!isRunning()) {
 
             IntentFilter filter = new IntentFilter(Intent.ACTION_SCREEN_OFF);
@@ -96,7 +124,11 @@ public class ForegroundTrafficSensor extends AbstractTriggeredSensor {
 
             try {
 
-                if (context != null && mReceiver != null) {
+                if (mReceiver == null) {
+                    mReceiver = new ScreenReceiver();
+                }
+
+                if (context != null) {
 
                     context.registerReceiver(mReceiver, filter);
 
@@ -106,6 +138,7 @@ public class ForegroundTrafficSensor extends AbstractTriggeredSensor {
             } catch (Exception e) {
                 Log.e(TAG, "Some error: ", e);
                 setRunning(false);
+                mReceiver = null;
             }
         }
     }
@@ -115,6 +148,8 @@ public class ForegroundTrafficSensor extends AbstractTriggeredSensor {
      */
     @Override
     public void stopSensor() {
+
+        Log.d(TAG, "Stopping...");
 
         if (isRunning()) {
             try {
@@ -137,7 +172,18 @@ public class ForegroundTrafficSensor extends AbstractTriggeredSensor {
 
     @Override
     public void updateSensorInterval(Double collectionInterval) {
-        // empty
+
+        if (operationMode.equals(Mode.PERIODIC)) {
+
+            Log.d(TAG, "onUpdate interval");
+            Log.d(TAG, "Old update interval: " + UPDATE_INTERVAL_IN_SEC + " sec");
+
+            int newUpdateIntervalInSec = collectionInterval.intValue();
+
+            Log.d(TAG, "New update interval: " + newUpdateIntervalInSec + " sec");
+
+            UPDATE_INTERVAL_IN_SEC = newUpdateIntervalInSec;
+        }
     }
 
     @Override
@@ -173,27 +219,82 @@ public class ForegroundTrafficSensor extends AbstractTriggeredSensor {
     //fired at AccessibilityEvent
     public void onEvent(AccessibilityEvent event) {
 
+        Log.d(TAG, "onEvent invoked: " + event.getEventType());
+
         if (isRunning()) {
+
+            Log.d(TAG, "OK: Sensor is running");
 
             DbForegroundSensor foregroundEvent = mEventFilter.filter(event);
 
             if (foregroundEvent != null) {
 
-                //  null at start of sensors
-                if (oldEvent == null) {
+                /**
+                 * Normal mode
+                 */
+                if (operationMode.equals(Mode.NORMAL)) {
+
+                    //  null at start of sensors
+                    if (oldEvent == null) {
+                        oldEvent = foregroundEvent;
+                    }
+
+                    //  old active app different to new, new app will start
+                    if (!oldEvent.getPackageName().equals(foregroundEvent.getPackageName())) {
+
+                        storeData(oldEvent);
+                    }
+
+                    storeData(foregroundEvent);
+
                     oldEvent = foregroundEvent;
                 }
 
-                //  old active app different to new, new app will start
-                if (!oldEvent.getPackageName().equals(foregroundEvent.getPackageName())) {
+                /**
+                 * Special periodic mode
+                 */
+                if (operationMode.equals(Mode.PERIODIC)) {
 
-                    storeData(oldEvent);
+                    if (event.getEventType() == AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED) {
+
+                        Log.d(TAG, operationMode.toString() +
+                                ": TYPE_WINDOW_STATE_CHANGED event.");
+
+                        // events NOT same
+                        if (oldEvent == null || !oldEvent.getPackageName().equals(foregroundEvent.getPackageName())) {
+
+                            Log.d(TAG, operationMode.toString() + ": package name was changed");
+
+                            oldEvent = foregroundEvent;
+
+                            if (taskExecutor != null) {
+                                taskExecutor.shutdown();
+                            }
+
+                            Log.d(TAG, operationMode.toString() + ": task executor was shutted down");
+                            taskExecutor = new ScheduledThreadPoolExecutor(1);
+                            taskExecutor.scheduleAtFixedRate(
+                                    () -> {
+                                        Log.d(TAG, "Called taskExecutor at " + UPDATE_INTERVAL_IN_SEC);
+                                        storeData(oldEvent);
+                                    },
+                                    0l,
+                                    UPDATE_INTERVAL_IN_SEC * 1_000,
+                                    TimeUnit.MILLISECONDS
+                            );
+
+                        } else {
+                            Log.d(TAG, operationMode.toString() + ": package names are same!");
+                        }
+
+                    } else {
+                        Log.d(TAG, operationMode.toString() +
+                                ": NOT TYPE_WINDOW_STATE_CHANGED event! Was: " + event.getEventType());
+                    }
                 }
-
-                storeData(foregroundEvent);
-
-                oldEvent = foregroundEvent;
             }
+        } else {
+            Log.d(TAG, "FAIL: Sensor is NOT running");
         }
     }
 
