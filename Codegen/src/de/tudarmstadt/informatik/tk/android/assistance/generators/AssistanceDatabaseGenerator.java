@@ -301,7 +301,7 @@ public class AssistanceDatabaseGenerator {
     // ** ANDROID EVENTS / SENSORS **
     // ******************************
 
-    // ----- Foreground Event -----
+    // ----- Foreground Sensor -----
     Entity foregroundEvent = schema.addEntity("DbForegroundSensor");
     foregroundEvent.setTableName("foreground_sensor");
     foregroundEvent.addIdProperty().autoincrement().index();
@@ -325,7 +325,7 @@ public class AssistanceDatabaseGenerator {
     lightSensor.addFloatProperty("value");
     lightSensor.addStringProperty("created").notNull();
 
-    // ----- Ringtone Event -----
+    // ----- Ringtone Sensor -----
     Entity ringtoneEvent = schema.addEntity("DbRingtoneSensor");
     ringtoneEvent.setTableName("ringtone_sensor");
     ringtoneEvent.addIdProperty().autoincrement().index();
@@ -333,7 +333,7 @@ public class AssistanceDatabaseGenerator {
     ringtoneEvent.addIntProperty("mode");
     ringtoneEvent.addStringProperty("created").notNull();
 
-    // ----- Running Processes Event -----
+    // ----- Running Processes Sensor -----
     Entity runningProcessesEvent = schema.addEntity("DbRunningProcessesSensor");
     runningProcessesEvent.setTableName("running_processes_sensor");
     runningProcessesEvent.addIdProperty().autoincrement().index();
@@ -341,7 +341,7 @@ public class AssistanceDatabaseGenerator {
     runningProcessesEvent.addStringProperty("name");
     runningProcessesEvent.addStringProperty("created").notNull();
 
-    // ----- Running Services Event -----
+    // ----- Running Services Sensor -----
     Entity runningServicesEvent = schema.addEntity("DbRunningServicesSensor");
     runningServicesEvent.setTableName("running_services_sensor");
     runningServicesEvent.addIdProperty().autoincrement().index();
@@ -350,7 +350,7 @@ public class AssistanceDatabaseGenerator {
     runningServicesEvent.addStringProperty("className");
     runningServicesEvent.addStringProperty("created").notNull();
 
-    // ----- Running Tasks Event -----
+    // ----- Running Tasks Sensor -----
     Entity runningTasksEvent = schema.addEntity("DbRunningTasksSensor");
     runningTasksEvent.setTableName("running_tasks_sensor");
     runningTasksEvent.addIdProperty().autoincrement().index();
@@ -359,7 +359,7 @@ public class AssistanceDatabaseGenerator {
     runningTasksEvent.addIntProperty("stackPosition");
     runningTasksEvent.addStringProperty("created").notNull();
 
-    // ----- Account Reader Event -----
+    // ----- Account Reader Sensor -----
     Entity accountReaderEvent = schema.addEntity("DbAccountReaderSensor");
     accountReaderEvent.setTableName("account_reader_sensor");
     accountReaderEvent.addIdProperty().autoincrement().index();
@@ -367,7 +367,7 @@ public class AssistanceDatabaseGenerator {
     accountReaderEvent.addStringProperty("types");
     accountReaderEvent.addStringProperty("created").notNull();
 
-    // ----- Network Traffic Event -----
+    // ----- Network Traffic Sensor -----
     Entity networkTrafficEvent = schema.addEntity("DbNetworkTrafficSensor");
     networkTrafficEvent.setTableName("network_traffic_sensor");
     networkTrafficEvent.addIdProperty().autoincrement().index();
@@ -380,7 +380,7 @@ public class AssistanceDatabaseGenerator {
     networkTrafficEvent.addDoubleProperty("latitude");
     networkTrafficEvent.addStringProperty("created").notNull();
 
-    // ----- Browser History Event -----
+    // ----- Browser History Sensor -----
     Entity browserHistoryEvent = schema.addEntity("DbBrowserHistorySensor");
     browserHistoryEvent.setTableName("browser_history_sensor");
     browserHistoryEvent.addIdProperty().autoincrement().index();
@@ -395,7 +395,7 @@ public class AssistanceDatabaseGenerator {
     browserHistoryEvent.addBooleanProperty("isDeleted");
     browserHistoryEvent.addStringProperty("created").notNull();
 
-    // ----- Call Log Event -----
+    // ----- Call Log Sensor -----
     Entity callLogEvent = schema.addEntity("DbCallLogSensor");
     callLogEvent.setTableName("call_log_sensor");
     callLogEvent.addIdProperty().autoincrement().index();
@@ -411,7 +411,7 @@ public class AssistanceDatabaseGenerator {
     callLogEvent.addBooleanProperty("isDeleted");
     callLogEvent.addStringProperty("created").notNull();
 
-    // ----- Calendar Event -----
+    // ----- Calendar Sensor -----
     Entity calendarEvent = schema.addEntity("DbCalendarSensor");
     calendarEvent.setTableName("calendar_sensor");
     calendarEvent.addIdProperty().autoincrement().index();
@@ -443,7 +443,7 @@ public class AssistanceDatabaseGenerator {
     calendarEvent.addBooleanProperty("isDeleted");
     calendarEvent.addStringProperty("created").notNull();
 
-    // ----- Calendar Reminder Event -----
+    // ----- Calendar Reminder Sensor -----
     Entity calendarReminderEvent = schema.addEntity("DbCalendarReminderSensor");
     calendarReminderEvent.setTableName("calendar_reminder_sensor");
     calendarReminderEvent.addIdProperty().autoincrement().index();
@@ -457,7 +457,7 @@ public class AssistanceDatabaseGenerator {
     calendarReminderEvent.addBooleanProperty("isDeleted");
     calendarReminderEvent.addStringProperty("created").notNull();
 
-    // ----- Contact Event -----
+    // ----- Contact Sensor -----
     Entity contactEvent = schema.addEntity("DbContactSensor");
     contactEvent.setTableName("contact_sensor");
     contactEvent.addIdProperty().autoincrement().index();
@@ -476,7 +476,7 @@ public class AssistanceDatabaseGenerator {
     contactEvent.addBooleanProperty("isDeleted");
     contactEvent.addStringProperty("created").notNull();
 
-    // ----- Contact Numbers Event -----
+    // ----- Contact Numbers Sensor -----
     Entity contactNumbersEvent = schema.addEntity("DbContactNumberSensor");
     contactNumbersEvent.setTableName("contact_number_sensor");
     contactNumbersEvent.addIdProperty().autoincrement().index();
@@ -494,7 +494,7 @@ public class AssistanceDatabaseGenerator {
     contactNumbersEvent.addToOne(contactEvent, contactNumberfkContactEvent);
     contactEvent.addToMany(contactNumbersEvent, contactNumberfkContactEvent);
 
-    // ----- Contact Mail Addresses Event -----
+    // ----- Contact Mail Addresses Sensor -----
     Entity contactMailEvent = schema.addEntity("DbContactEmailSensor");
     contactMailEvent.setTableName("contact_email_sensor");
     contactMailEvent.addIdProperty().autoincrement().index();
@@ -512,7 +512,7 @@ public class AssistanceDatabaseGenerator {
     contactMailEvent.addToOne(contactEvent, contactNumberfkContactEvent);
     contactEvent.addToMany(contactMailEvent, contactNumberfkContactEvent);
     
-    // ----- Power State Event -----
+    // ----- Power State Sensor -----
     // REQUIRED
     Entity powerStatusEvent = schema.addEntity("DbPowerStateSensor");
     powerStatusEvent.setTableName("power_state_sensor");
@@ -526,7 +526,7 @@ public class AssistanceDatabaseGenerator {
     powerStatusEvent.addIntProperty("chargingMode");
     powerStatusEvent.addBooleanProperty("powerSaveMode");
     
-    // ----- Power Level Event -----
+    // ----- Power Level Sensor -----
     // REQUIRED
     Entity powerLevelEvent = schema.addEntity("DbPowerLevelSensor");
     powerLevelEvent.setTableName("power_level_sensor");
@@ -534,6 +534,34 @@ public class AssistanceDatabaseGenerator {
     powerLevelEvent.implementsInterface(Config.ASSISTANCE_PACKAGE_SENSOR);
     powerLevelEvent.addFloatProperty("percent");
     powerLevelEvent.addStringProperty("created").notNull();
+    
+    // ----- TUCaN Sensor -----
+    // REQUIRED
+    Entity tucanEvent = schema.addEntity("DbTucanSensor");
+    tucanEvent.setTableName("tucan_sensor");
+    tucanEvent.addIdProperty().autoincrement().index();
+    tucanEvent.implementsInterface(Config.ASSISTANCE_PACKAGE_SENSOR);
+    tucanEvent.addStringProperty("username").notNull();
+    tucanEvent.addStringProperty("password").notNull();
+    tucanEvent.addStringProperty("created").notNull();
+    
+    Property tucanfkUserEvent = tucanEvent.addLongProperty("userId").index().getProperty();
+    tucanEvent.addToOne(user, tucanfkUserEvent);
+//    user.addToMany(tucanEvent, tucanfkUserEvent);
+    
+    // ----- Facebook Sensor -----
+    // REQUIRED
+    Entity facebookEvent = schema.addEntity("DbFacebookSensor");
+    facebookEvent.setTableName("facebook_sensor");
+    facebookEvent.addIdProperty().autoincrement().index();
+    facebookEvent.implementsInterface(Config.ASSISTANCE_PACKAGE_SENSOR);
+    facebookEvent.addStringProperty("oauthToken");
+    facebookEvent.addStringProperty("permissions");
+    facebookEvent.addStringProperty("created").notNull();
+    
+    Property facebookfkUserEvent = facebookEvent.addLongProperty("userId").index().getProperty();
+    facebookEvent.addToOne(user, facebookfkUserEvent);
+//    user.addToMany(tucanEvent, tucanfkUserEvent);
    
 
     // **************************

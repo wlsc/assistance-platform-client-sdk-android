@@ -70,6 +70,10 @@ import de.tudarmstadt.informatik.tk.assistance.sdk.provider.dao.sensing.power.Po
 import de.tudarmstadt.informatik.tk.assistance.sdk.provider.dao.sensing.power.PowerLevelSensorDaoImpl;
 import de.tudarmstadt.informatik.tk.assistance.sdk.provider.dao.sensing.power.PowerStateSensorDao;
 import de.tudarmstadt.informatik.tk.assistance.sdk.provider.dao.sensing.power.PowerStateSensorDaoImpl;
+import de.tudarmstadt.informatik.tk.assistance.sdk.provider.dao.sensing.social.FacebookSensorDao;
+import de.tudarmstadt.informatik.tk.assistance.sdk.provider.dao.sensing.social.FacebookSensorDaoImpl;
+import de.tudarmstadt.informatik.tk.assistance.sdk.provider.dao.sensing.social.TucanSensorDao;
+import de.tudarmstadt.informatik.tk.assistance.sdk.provider.dao.sensing.social.TucanSensorDaoImpl;
 import de.tudarmstadt.informatik.tk.assistance.sdk.provider.dao.user.UserDao;
 import de.tudarmstadt.informatik.tk.assistance.sdk.provider.dao.user.UserDaoImpl;
 import de.tudarmstadt.informatik.tk.assistance.sdk.util.db.DbAssistanceOpenHelper;
@@ -411,6 +415,24 @@ public class DaoProvider {
      */
     public RunningTasksSensorDao getRunningTasksSensorDao() {
         return RunningTasksSensorDaoImpl.getInstance(mDaoSession);
+    }
+
+    /**
+     * TucanSensorDao
+     *
+     * @return
+     */
+    public TucanSensorDao getTucanSensorDao() {
+        return TucanSensorDaoImpl.getInstance(mDaoSession);
+    }
+
+    /**
+     * FacebookSensorDao
+     *
+     * @return
+     */
+    public FacebookSensorDao getFacebookSensorDao() {
+        return FacebookSensorDaoImpl.getInstance(mDaoSession);
     }
 
     /**
