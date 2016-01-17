@@ -235,6 +235,8 @@ public class SensorProvider {
         // measure intervals by their DTO type
         SparseArray<Double> sensorIntervals = new SparseArray<>();
 
+        EventBus eventBus = EventBus.getDefault();
+
         /*
          * Save them in map for further fast access
          */
@@ -252,26 +254,30 @@ public class SensorProvider {
                 sensorIntervals.put(capType, Math.min(oldCollectionFreq, cap.getCollectionInterval()));
             }
 
-            if (!EventBus.getDefault().isRegistered(sensor)) {
-                EventBus.getDefault().register(sensor);
+            if (!eventBus.isRegistered(sensor)) {
+                eventBus.register(sensor);
             }
         }
 
-        // send collection interval updates to sensor/events
-        for (int i = 0, sensorIntervalsSize = sensorIntervals.size(); i < sensorIntervalsSize; i++) {
+        // send only if we have subscribers
+        if (eventBus.hasSubscriberForEvent(UpdateSensorIntervalEvent.class)) {
 
-            if (sensorIntervals.valueAt(i) == null) {
-                continue;
+            // send collection interval updates to sensor/events
+            for (int i = 0, sensorIntervalsSize = sensorIntervals.size(); i < sensorIntervalsSize; i++) {
+
+                if (sensorIntervals.valueAt(i) == null) {
+                    continue;
+                }
+
+                eventBus.post(
+                        new UpdateSensorIntervalEvent(
+                                sensorIntervals.keyAt(i),
+                                sensorIntervals.valueAt(i)
+                        ));
             }
 
-            EventBus.getDefault().post(
-                    new UpdateSensorIntervalEvent(
-                            sensorIntervals.keyAt(i),
-                            sensorIntervals.valueAt(i)
-                    ));
+            Log.d(TAG, "Sent event to: " + sensorIntervals.size());
         }
-
-        Log.d(TAG, "Sent event to: " + sensorIntervals.size());
 
         // check if it was not already ignored by user once
         // if not, then show tutorial
@@ -287,7 +293,9 @@ public class SensorProvider {
                 String foregroundTrafficTypeName = SensorApiType.getApiName(SensorApiType.FOREGROUND_TRAFFIC);
 
                 if (cap.getType().equals(foregroundTypeName) || cap.getType().equals(foregroundTrafficTypeName)) {
-                    EventBus.getDefault().post(new ShowAccessibilityServiceTutorialEvent());
+                    if (eventBus.hasSubscriberForEvent(ShowAccessibilityServiceTutorialEvent.class)) {
+                        eventBus.post(new ShowAccessibilityServiceTutorialEvent());
+                    }
                 }
             }
         }

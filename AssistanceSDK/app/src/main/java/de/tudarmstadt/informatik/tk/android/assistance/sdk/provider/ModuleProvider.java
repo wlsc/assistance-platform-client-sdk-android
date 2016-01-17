@@ -112,14 +112,19 @@ public class ModuleProvider {
 
             sensorProvider.activateSensors(dtoTypes);
 
-            // update collections frequencies
-            for (Integer dtoType : dtoTypes) {
+            EventBus eventBus = EventBus.getDefault();
 
-                Double collectionFreq = sensorProvider.getCollectionInterval(
-                        SensorApiType.getApiName(dtoType));
+            if (eventBus.hasSubscriberForEvent(UpdateSensorIntervalEvent.class)) {
 
-                // fire change event
-                EventBus.getDefault().post(new UpdateSensorIntervalEvent(dtoType, collectionFreq));
+                // update collections frequencies
+                for (Integer dtoType : dtoTypes) {
+
+                    Double collectionFreq = sensorProvider.getCollectionInterval(
+                            SensorApiType.getApiName(dtoType));
+
+                    // fire change event
+                    eventBus.post(new UpdateSensorIntervalEvent(dtoType, collectionFreq));
+                }
             }
 
         } else {
