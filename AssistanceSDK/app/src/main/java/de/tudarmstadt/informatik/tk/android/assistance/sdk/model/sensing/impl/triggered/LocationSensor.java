@@ -15,6 +15,7 @@ import com.google.android.gms.location.LocationServices;
 
 import java.util.Date;
 import java.util.Locale;
+import java.util.concurrent.TimeUnit;
 
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.db.DbPositionSensor;
 import de.tudarmstadt.informatik.tk.android.assistance.sdk.model.api.sensing.SensorApiType;
@@ -38,11 +39,14 @@ public class LocationSensor extends
 
     //------------------- Configuration -------------------
     // Accuracy
-    private static final int ACCURACY = LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY;
+    private static final float ACCURACY_THRESHOLD = 70.0f;
+    private static final int BALANCED_ACCURACY = LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY;
+    private static final int HIGH_ACCURACY = LocationRequest.PRIORITY_HIGH_ACCURACY;
+    private static final int GPS_RUNNING_TIME_IN_SEC = 30;
     // Update frequency in seconds
-    private int UPDATE_INTERVAL_IN_SEC = 20;
+    private int UPDATE_INTERVAL_IN_SEC = 15;
     // The fastest update frequency, in seconds
-    private int FASTEST_INTERVAL_IN_SEC = 15;
+    private int FASTEST_INTERVAL_IN_SEC = 10;
     //-----------------------------------------------------
 
     private static LocationSensor INSTANCE;
@@ -52,6 +56,9 @@ public class LocationSensor extends
     private static final int CONNECTION_FAILURE_RESOLUTION_REQUEST = 9_000;
 
     private final PreferenceProvider preferenceProvider;
+
+    private long firstGPSLocationTimestamp;
+    private boolean isGpsActive;
 
     private Double latitude;
     private Double longitude;
@@ -199,15 +206,36 @@ public class LocationSensor extends
      * @return
      */
     private LocationRequest getNewLocationRequest() {
+        return getLocationRequest(BALANCED_ACCURACY);
+    }
 
-        // Create the LocationRequest object
+    /**
+     * Returns new location request for Google API client
+     *
+     * @param accuracy
+     * @return
+     */
+    private LocationRequest getNewLocationRequest(int accuracy) {
+        return getLocationRequest(accuracy);
+    }
+
+    /**
+     * Get location updates request depenting on accuracy supplied
+     *
+     * @param accuracy
+     * @return
+     */
+    private LocationRequest getLocationRequest(int accuracy) {
+
         LocationRequest locationRequest = LocationRequest.create();
-        // Use high accuracy
-        locationRequest.setPriority(ACCURACY);
+
         // Set the update interval to x seconds
         locationRequest.setInterval(UPDATE_INTERVAL_IN_SEC * 1_000);
         // Set the fastest update interval to x seconds
         locationRequest.setFastestInterval(FASTEST_INTERVAL_IN_SEC * 1_000);
+        // use high accuracy always if update interval is less or equal to 5
+        // else use supplied accuracy
+        locationRequest.setPriority(UPDATE_INTERVAL_IN_SEC <= 5 ? HIGH_ACCURACY : accuracy);
 
         return locationRequest;
     }
@@ -266,10 +294,10 @@ public class LocationSensor extends
                 mGoogleApiClient = getGoogleApiClient();
             }
 
-            Location loc = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+            Location lastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
 
-            if (loc != null) {
-                onLocationChanged(loc);
+            if (lastLocation != null) {
+                onLocationChanged(lastLocation);
             }
 
             if (mGoogleApiClient.isConnected()) {
@@ -291,30 +319,111 @@ public class LocationSensor extends
     }
 
     @Override
-    public void onLocationChanged(android.location.Location location) {
+    public void onLocationChanged(Location location) {
 
         if (location == null) {
             Log.d(TAG, "Bad location (NULL)!");
             return;
         }
 
-        // location changed -> update values
+        // location changed -> check and update values
         Log.d(TAG, "Location has changed");
         Log.d(TAG, "Provider: " + location.getProvider());
         Log.d(TAG, "Accuracy: " + location.getAccuracy());
 
-        latitude = location.getLatitude();
-        longitude = location.getLongitude();
-        accuracyHorizontal = (double) location.getAccuracy();
-        accuracyVertical = (double) location.getAccuracy();
-        speed = location.getSpeed();
-        altitude = location.getAltitude();
+        boolean isGoodLocation = location.getAccuracy() <= ACCURACY_THRESHOLD;
 
-        // saving them to SharedPreferences to further fast access
-        preferenceProvider.setLastLatitude(latitude);
-        preferenceProvider.setLastLongitude(longitude);
+        if (isGpsActive) {
 
-        dumpData();
+            Log.d(TAG, "GPS is active");
+
+            // set first timestamp of enabling GPS location updates
+            if (firstGPSLocationTimestamp == 0) {
+                firstGPSLocationTimestamp = location.getTime();
+            }
+
+            long firstTimeNowDiffInSec = TimeUnit.MILLISECONDS.toSeconds(
+                    location.getTime() - firstGPSLocationTimestamp);
+
+            // check if GPS running long enough
+            if (firstTimeNowDiffInSec >= GPS_RUNNING_TIME_IN_SEC) {
+
+                Log.d(TAG, "Setting up NETWORK location updates...");
+
+                if (mGoogleApiClient.isConnected()) {
+
+                    try {
+                        LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient,
+                                getNewLocationRequest(),
+                                this);
+                        isGpsActive = false;
+
+                    } catch (SecurityException ex) {
+                        Log.d(TAG, "SecurityException: user disabled GPS location permission!");
+                        stopSensor();
+                    }
+                } else {
+                    Log.d(TAG, "Api client is not connected");
+                }
+            } else {
+
+                if (isGoodLocation) {
+
+                    latitude = location.getLatitude();
+                    longitude = location.getLongitude();
+                    accuracyHorizontal = (double) location.getAccuracy();
+                    accuracyVertical = (double) location.getAccuracy();
+                    speed = location.getSpeed();
+                    altitude = location.getAltitude();
+
+                    // saving them to SharedPreferences to further fast access
+                    preferenceProvider.setLastLatitude(latitude);
+                    preferenceProvider.setLastLongitude(longitude);
+
+                    dumpData();
+                }
+            }
+
+        } else {
+
+            Log.d(TAG, "NETWORK is active");
+
+            if (isGoodLocation) {
+
+                latitude = location.getLatitude();
+                longitude = location.getLongitude();
+                accuracyHorizontal = (double) location.getAccuracy();
+                accuracyVertical = (double) location.getAccuracy();
+                speed = location.getSpeed();
+                altitude = location.getAltitude();
+
+                // saving them to SharedPreferences to further fast access
+                preferenceProvider.setLastLatitude(latitude);
+                preferenceProvider.setLastLongitude(longitude);
+
+                dumpData();
+
+            } else {
+
+                Log.d(TAG, "Setting up GPS...");
+
+                if (mGoogleApiClient.isConnected()) {
+
+                    try {
+                        LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient,
+                                getNewLocationRequest(HIGH_ACCURACY),
+                                this);
+                        isGpsActive = true;
+
+                    } catch (SecurityException ex) {
+                        Log.d(TAG, "SecurityException: user disabled GPS location permission!");
+                        stopSensor();
+                    }
+                } else {
+                    Log.d(TAG, "Api client is not connected");
+                }
+            }
+        }
     }
 
     @Override
