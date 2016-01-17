@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="de.tudarmstadt.informatik.tk.android.assistance.sdk">
+    package="de.tudarmstadt.informatik.tk.assistance.sdk">
 
     <!-- Permissions -->
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
@@ -25,10 +25,10 @@
     <!--<uses-permission android:name="android.permission.WAKE_LOCK" />-->
 
     <permission
-        android:name="de.tudarmstadt.informatik.tk.android.assistance.permission.C2D_MESSAGE"
+        android:name="de.tudarmstadt.informatik.tk.assistance.permission.C2D_MESSAGE"
         android:protectionLevel="signature" />
 
-    <uses-permission android:name="de.tudarmstadt.informatik.tk.android.assistance.permission.C2D_MESSAGE" />
+    <uses-permission android:name="de.tudarmstadt.informatik.tk.assistance.permission.C2D_MESSAGE" />
 
     <application>
 
@@ -52,7 +52,7 @@
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
 
         <service
-            android:name=".service.SensorUploadService"
+            android:name="de.tudarmstadt.informatik.tk.assistance.sdk.service.SensorUploadService"
             android:exported="true"
             android:permission="com.google.android.gms.permission.BIND_NETWORK_TASK_SERVICE">
             <intent-filter>
@@ -61,7 +61,7 @@
         </service>
 
         <service
-            android:name="de.tudarmstadt.informatik.tk.android.assistance.sdk.service.PlanBService"
+            android:name="de.tudarmstadt.informatik.tk.assistance.sdk.service.PlanBService"
             android:exported="true"
             android:permission="com.google.android.gms.permission.BIND_NETWORK_TASK_SERVICE">
             <intent-filter>
@@ -70,15 +70,15 @@
         </service>
 
         <service
-            android:name="de.tudarmstadt.informatik.tk.android.assistance.sdk.service.HarvesterService"
+            android:name="de.tudarmstadt.informatik.tk.assistance.sdk.service.HarvesterService"
             android:exported="false">
             <intent-filter>
-                <action android:name="de.tudarmstadt.informatik.tk.android.assistance.sdk.service.HarvesterService" />
+                <action android:name="de.tudarmstadt.informatik.tk.assistance.sdk.service.HarvesterService" />
             </intent-filter>
         </service>
 
         <service
-            android:name="de.tudarmstadt.informatik.tk.android.assistance.sdk.service.AssistanceAccessibilityService"
+            android:name="de.tudarmstadt.informatik.tk.assistance.sdk.service.AssistanceAccessibilityService"
             android:exported="false"
             android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE">
             <intent-filter>
@@ -90,12 +90,12 @@
         </service>
 
         <service
-            android:name="de.tudarmstadt.informatik.tk.android.assistance.sdk.service.ActivitySensorService"
+            android:name="de.tudarmstadt.informatik.tk.assistance.sdk.service.ActivitySensorService"
             android:exported="false"
             android:label="ActivitySensorService" />
 
         <service
-            android:name="de.tudarmstadt.informatik.tk.android.assistance.sdk.service.AssistanceGcmListenerService"
+            android:name="de.tudarmstadt.informatik.tk.assistance.sdk.service.AssistanceGcmListenerService"
             android:exported="false">
             <intent-filter>
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
@@ -103,7 +103,7 @@
         </service>
 
         <service
-            android:name="de.tudarmstadt.informatik.tk.android.assistance.sdk.service.AssistanceInstanceIDListenerService"
+            android:name="de.tudarmstadt.informatik.tk.assistance.sdk.service.AssistanceInstanceIDListenerService"
             android:exported="false">
             <intent-filter>
                 <action android:name="com.google.android.gms.iid.InstanceID" />
@@ -111,7 +111,7 @@
         </service>
 
         <service
-            android:name="de.tudarmstadt.informatik.tk.android.assistance.sdk.service.GcmRegistrationIntentService"
+            android:name="de.tudarmstadt.informatik.tk.assistance.sdk.service.GcmRegistrationIntentService"
             android:exported="false" />
 
         <service
@@ -124,7 +124,7 @@
             android:exported="false" />
 
         <!-- POWER STATUS catcher -->
-        <receiver android:name="de.tudarmstadt.informatik.tk.android.assistance.sdk.receiver.PowerStatusReceiver">
+        <receiver android:name="de.tudarmstadt.informatik.tk.assistance.sdk.receiver.PowerStatusReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.ACTION_POWER_CONNECTED" />
                 <action android:name="android.intent.action.ACTION_POWER_DISCONNECTED" />
@@ -136,7 +136,7 @@
 
         <!-- WI-FI and CONNECTIVITY catcher -->
         <receiver
-            android:name="de.tudarmstadt.informatik.tk.android.assistance.sdk.receiver.WifiStateReceiver"
+            android:name="de.tudarmstadt.informatik.tk.assistance.sdk.receiver.WifiStateReceiver"
             android:enabled="true">
             <intent-filter>
                 <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
@@ -167,7 +167,7 @@
 
         <!-- This will be fired on device start/boot -->
         <receiver
-            android:name="de.tudarmstadt.informatik.tk.android.assistance.sdk.receiver.BootReceiver"
+            android:name="de.tudarmstadt.informatik.tk.assistance.sdk.receiver.BootReceiver"
             android:enabled="true"
             android:exported="false">
             <intent-filter>
