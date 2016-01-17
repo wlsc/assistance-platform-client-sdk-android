@@ -39,10 +39,15 @@ public class LocationSensor extends
 
     //------------------- Configuration -------------------
     // Accuracy
-    private static final float ACCURACY_THRESHOLD = 70.0f;
+    private static final float ACCURACY_THRESHOLD = 100.0f;
+    // NETWORK precision
     private static final int BALANCED_ACCURACY = LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY;
+    // GPS precision
     private static final int HIGH_ACCURACY = LocationRequest.PRIORITY_HIGH_ACCURACY;
+    // for how much time will GPS running
     private static final int GPS_RUNNING_TIME_IN_SEC = 30;
+    // if update interval is lower than this value -> turn on GPS / High Accuracy
+    public static final int TURN_GPS_AFTER_THRESHOLD_IN_SEC = 5;
     // Update frequency in seconds
     private int UPDATE_INTERVAL_IN_SEC = 15;
     // The fastest update frequency, in seconds
@@ -227,6 +232,9 @@ public class LocationSensor extends
      */
     private LocationRequest getLocationRequest(int accuracy) {
 
+        Log.d(TAG, "FASTEST_INTERVAL_IN_SEC: " + FASTEST_INTERVAL_IN_SEC);
+        Log.d(TAG, "UPDATE_INTERVAL_IN_SEC: " + UPDATE_INTERVAL_IN_SEC);
+
         LocationRequest locationRequest = LocationRequest.create();
 
         // Set the update interval to x seconds
@@ -235,7 +243,8 @@ public class LocationSensor extends
         locationRequest.setFastestInterval(FASTEST_INTERVAL_IN_SEC * 1_000);
         // use high accuracy always if update interval is less or equal to 5
         // else use supplied accuracy
-        locationRequest.setPriority(UPDATE_INTERVAL_IN_SEC <= 5 ? HIGH_ACCURACY : accuracy);
+        locationRequest.setPriority(
+                FASTEST_INTERVAL_IN_SEC <= TURN_GPS_AFTER_THRESHOLD_IN_SEC ? HIGH_ACCURACY : accuracy);
 
         return locationRequest;
     }
@@ -346,7 +355,7 @@ public class LocationSensor extends
                     location.getTime() - firstGPSLocationTimestamp);
 
             // check if GPS running long enough
-            if (firstTimeNowDiffInSec >= GPS_RUNNING_TIME_IN_SEC) {
+            if (firstTimeNowDiffInSec >= GPS_RUNNING_TIME_IN_SEC && FASTEST_INTERVAL_IN_SEC > TURN_GPS_AFTER_THRESHOLD_IN_SEC) {
 
                 Log.d(TAG, "Setting up NETWORK location updates...");
 
