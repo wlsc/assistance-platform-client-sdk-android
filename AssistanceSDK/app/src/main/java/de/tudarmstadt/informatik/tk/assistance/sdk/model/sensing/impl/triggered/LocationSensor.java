@@ -390,6 +390,8 @@ public class LocationSensor extends
                     preferenceProvider.setLastLongitude(longitude);
 
                     dumpData();
+                } else {
+                    Log.d(TAG, "Location accuracy (" + location.getAccuracy() + ") is unacceptable!");
                 }
             }
 
@@ -414,6 +416,7 @@ public class LocationSensor extends
 
             } else {
 
+                Log.d(TAG, "Location accuracy (" + location.getAccuracy() + ") is unacceptable!");
                 Log.d(TAG, "Setting up GPS...");
 
                 if (mGoogleApiClient.isConnected()) {
