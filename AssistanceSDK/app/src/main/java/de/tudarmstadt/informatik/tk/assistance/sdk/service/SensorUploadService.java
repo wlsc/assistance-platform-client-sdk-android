@@ -57,16 +57,17 @@ import de.tudarmstadt.informatik.tk.assistance.sdk.model.api.login.LoginRequestD
 import de.tudarmstadt.informatik.tk.assistance.sdk.model.api.login.LoginResponseDto;
 import de.tudarmstadt.informatik.tk.assistance.sdk.model.api.login.UserDeviceDto;
 import de.tudarmstadt.informatik.tk.assistance.sdk.model.api.sensing.SensorApiType;
-import de.tudarmstadt.informatik.tk.assistance.sdk.model.api.sensing.SensorUploadApi;
 import de.tudarmstadt.informatik.tk.assistance.sdk.model.api.sensing.SensorUploadDto;
 import de.tudarmstadt.informatik.tk.assistance.sdk.model.api.sensing.sensor.calendar.CalendarReminder;
 import de.tudarmstadt.informatik.tk.assistance.sdk.model.api.sensing.sensor.calendar.CalendarSensorDto;
 import de.tudarmstadt.informatik.tk.assistance.sdk.model.api.sensing.sensor.contact.ContactEmailNumber;
 import de.tudarmstadt.informatik.tk.assistance.sdk.model.api.sensing.sensor.contact.ContactSensorDto;
 import de.tudarmstadt.informatik.tk.assistance.sdk.model.sensing.ISensor;
+import de.tudarmstadt.informatik.tk.assistance.sdk.provider.ApiProvider;
 import de.tudarmstadt.informatik.tk.assistance.sdk.provider.DaoProvider;
 import de.tudarmstadt.informatik.tk.assistance.sdk.provider.PreferenceProvider;
 import de.tudarmstadt.informatik.tk.assistance.sdk.provider.SensorProvider;
+import de.tudarmstadt.informatik.tk.assistance.sdk.provider.api.SensorUploadApiProvider;
 import de.tudarmstadt.informatik.tk.assistance.sdk.provider.dao.sensing.calendar.CalendarReminderSensorDao;
 import de.tudarmstadt.informatik.tk.assistance.sdk.provider.dao.sensing.contact.ContactEmailSensorDao;
 import de.tudarmstadt.informatik.tk.assistance.sdk.provider.dao.sensing.contact.ContactNumberSensorDao;
@@ -75,8 +76,8 @@ import de.tudarmstadt.informatik.tk.assistance.sdk.provider.dao.sensing.social.T
 import de.tudarmstadt.informatik.tk.assistance.sdk.util.ConnectionUtils;
 import de.tudarmstadt.informatik.tk.assistance.sdk.util.GcmUtils;
 import de.tudarmstadt.informatik.tk.assistance.sdk.util.HardwareUtils;
+import de.tudarmstadt.informatik.tk.assistance.sdk.util.RxUtils;
 import de.tudarmstadt.informatik.tk.assistance.sdk.util.logger.Log;
-import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 import rx.Subscriber;
@@ -126,14 +127,15 @@ public class SensorUploadService extends GcmTaskService {
 
     private static PreferenceProvider mPreferenceProvider;
 
+    private Subscription sensorUploadSubscription;
+    private Subscription userLoginSubscription;
+
     @NonNull
     private SparseArray<List<? extends IDbSensor>> dbEvents = new SparseArray<>();
     @NonNull
     private SparseArray<List<? extends SensorDto>> requestEvents = new SparseArray<>();
 
     private static boolean isNeedInConnectionFallback;
-
-    private Subscription subUserLogin;
 
     @Override
     public void onCreate() {
@@ -181,6 +183,10 @@ public class SensorUploadService extends GcmTaskService {
         if (!ConnectionUtils.isOnline(getApplicationContext())) {
             Log.d(TAG, "Device is not online. Upload request ignored");
             return GcmNetworkManager.RESULT_FAILURE;
+        }
+
+        if (mPreferenceProvider == null) {
+            mPreferenceProvider = PreferenceProvider.getInstance(getApplicationContext());
         }
 
         String userToken = mPreferenceProvider.getUserToken();
@@ -322,60 +328,18 @@ public class SensorUploadService extends GcmTaskService {
             return;
         }
 
-        // send to upload data service
-        SensorUploadApi sensorUploadApi = ApiGenerator
-                .getInstance(getApplicationContext())
-                .create(SensorUploadApi.class);
+        SensorUploadApiProvider sensorApi = ApiProvider.getInstance(this).getSensorUploadApiProvider();
 
+        /**
+         * Send to upload data service
+         */
         String userToken = mPreferenceProvider.getUserToken();
 
-        sensorUploadApi.uploadData(userToken, eventUploadRequest,
-                new Callback<Void>() {
-
-                    @Override
-                    public void success(Void aVoid, @Nullable Response response) {
-
-                        if (response != null && (
-                                response.getStatus() == 200 ||
-                                        response.getStatus() == 204)) {
-
-                            Log.d(TAG, "OK response from server received");
-
-                            // successful transmission of event data -> remove that data from db
-                            handleSentEvents();
-
-                            // reschedule default periodic task
-                            if (isNeedInConnectionFallback) {
-                                isNeedInConnectionFallback = false;
-
-                                rescheduleDefaultPeriodicTask();
-                            }
-                        }
-                    }
-
-                    @Override
-                    public void failure(@NonNull RetrofitError error) {
-
-                        Log.d(TAG, "Server returned error! Kind: " + error.getKind().name());
-
-                        Response response = error.getResponse();
-
-                        if (response != null) {
-
-                            // user need relogin
-                            if (response.getStatus() == 401) {
-                                relogin();
-                            }
-                        }
-
-                        // fallbacking periodic request
-                        if (!isNeedInConnectionFallback) {
-                            isNeedInConnectionFallback = true;
-
-                            rescheduleFallbackPeriodicTask();
-                        }
-                    }
-                });
+        sensorUploadSubscription = sensorApi
+                .uploadData(userToken, eventUploadRequest)
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new SensorUploadSubscriber());
     }
 
     /**
@@ -383,11 +347,9 @@ public class SensorUploadService extends GcmTaskService {
      */
     private void relogin() {
 
-        final PreferenceProvider preferenceProvider = PreferenceProvider.getInstance(getApplicationContext());
-
-        String email = preferenceProvider.getUserEmail();
-        String password = preferenceProvider.getUserPassword();
-        long serverDeviceId = preferenceProvider.getServerDeviceId();
+        String email = mPreferenceProvider.getUserEmail();
+        String password = mPreferenceProvider.getUserPassword();
+        long serverDeviceId = mPreferenceProvider.getServerDeviceId();
 
         UserDeviceDto userDevice = new UserDeviceDto();
 
@@ -406,38 +368,98 @@ public class SensorUploadService extends GcmTaskService {
         LoginApi userEndpoint = ApiGenerator.getInstance(getApplicationContext())
                 .create(LoginApi.class);
 
-        subUserLogin = userEndpoint.loginUser(loginRequest)
+        userLoginSubscription = userEndpoint.loginUser(loginRequest)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<LoginResponseDto>() {
+                .subscribe(new UserLoginSubscriber());
+    }
 
-                    @Override
-                    public void onCompleted() {
-                        // do nothing
+    /**
+     * Class to upload sensor data with RxJava
+     */
+    private class SensorUploadSubscriber extends Subscriber<Void> {
+
+        @Override
+        public void onCompleted() {
+            // empty
+        }
+
+        @Override
+        public void onError(Throwable e) {
+
+            if (e instanceof RetrofitError) {
+
+                RetrofitError error = (RetrofitError) e;
+
+                Log.d(TAG, "Server returned error! Kind: " + error.getKind().name());
+
+                Response response = error.getResponse();
+
+                if (response != null) {
+
+                    // user need relogin
+                    if (response.getStatus() == 401) {
+                        relogin();
                     }
+                }
 
-                    @Override
-                    public void onError(Throwable e) {
-                        if (e instanceof RetrofitError) {
-                            // ignore by now
-                            Log.d(TAG, "login function failed. server status: " +
-                                    ((RetrofitError) e).getResponse().getStatus());
-                        }
-                    }
+                // fallbacking periodic request
+                if (!isNeedInConnectionFallback) {
+                    isNeedInConnectionFallback = true;
 
-                    @Override
-                    public void onNext(LoginResponseDto response) {
+                    rescheduleFallbackPeriodicTask();
+                }
+            }
+        }
 
-                        if (response != null) {
-                            Log.d(TAG, "User token received: " + response.getUserToken());
+        @Override
+        public void onNext(Void aVoid) {
 
-                            preferenceProvider.setUserToken(response.getUserToken());
+            Log.d(TAG, "OK response from server received");
 
-                        } else {
-                            Log.d(TAG, "apiResponse is NULL");
-                        }
-                    }
-                });
+            // successful transmission of event data -> remove that data from db
+            handleSentEvents();
+
+            // reschedule default periodic task
+            if (isNeedInConnectionFallback) {
+                isNeedInConnectionFallback = false;
+
+                rescheduleDefaultPeriodicTask();
+            }
+        }
+    }
+
+    /**
+     * Subscriber for user to auto login with RxJava
+     */
+    private class UserLoginSubscriber extends Subscriber<LoginResponseDto> {
+
+        @Override
+        public void onCompleted() {
+            // do nothing
+        }
+
+        @Override
+        public void onError(Throwable e) {
+            if (e instanceof RetrofitError) {
+                // ignore by now
+                Log.d(TAG, "login function failed. server status: " +
+                        ((RetrofitError) e).getResponse().getStatus());
+            }
+        }
+
+        @Override
+        public void onNext(LoginResponseDto response) {
+
+            if (response != null) {
+                Log.d(TAG, "User token received: " + response.getUserToken());
+
+                mPreferenceProvider.setUserToken(response.getUserToken());
+
+            } else {
+                Log.d(TAG, "apiResponse is NULL");
+            }
+        }
     }
 
     /**
@@ -1338,11 +1360,8 @@ public class SensorUploadService extends GcmTaskService {
 
     @Override
     public void onDestroy() {
-
-        if (subUserLogin != null) {
-            subUserLogin.unsubscribe();
-        }
-
+        RxUtils.unsubscribe(userLoginSubscription);
+        RxUtils.unsubscribe(sensorUploadSubscription);
         super.onDestroy();
     }
 }

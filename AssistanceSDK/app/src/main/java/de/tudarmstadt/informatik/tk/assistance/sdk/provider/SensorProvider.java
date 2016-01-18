@@ -785,7 +785,7 @@ public class SensorProvider {
     }
 
     /**
-     * Synchronizes runninng sensors with DB entries
+     * Synchronizes running sensors with DB entries
      */
     public void synchronizeRunningSensorsWithDb() {
 

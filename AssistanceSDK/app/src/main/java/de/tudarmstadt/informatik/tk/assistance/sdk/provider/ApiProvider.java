@@ -4,6 +4,7 @@ import android.content.Context;
 
 import de.tudarmstadt.informatik.tk.assistance.sdk.provider.api.DeviceApiProvider;
 import de.tudarmstadt.informatik.tk.assistance.sdk.provider.api.ModuleApiProvider;
+import de.tudarmstadt.informatik.tk.assistance.sdk.provider.api.SensorUploadApiProvider;
 
 /**
  * @author Wladimir Schmidt (wlsc.dev@gmail.com)
@@ -46,5 +47,14 @@ public class ApiProvider {
      */
     public ModuleApiProvider getModuleApiProvider() {
         return ModuleApiProvider.getInstance(mContext);
+    }
+
+    /**
+     * SensorUploadApiProvider
+     *
+     * @return
+     */
+    public SensorUploadApiProvider getSensorUploadApiProvider() {
+        return SensorUploadApiProvider.getInstance(mContext);
     }
 }
