@@ -1,11 +1,14 @@
 package de.tudarmstadt.informatik.tk.assistance.sdk.db;
 
+import java.util.List;
+import java.util.ArrayList;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteStatement;
 
 import de.greenrobot.dao.AbstractDao;
 import de.greenrobot.dao.Property;
+import de.greenrobot.dao.internal.SqlUtils;
 import de.greenrobot.dao.internal.DaoConfig;
 
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbContactSensor;
@@ -37,6 +40,7 @@ public class DbContactSensorDao extends AbstractDao<DbContactSensor, Long> {
         public final static Property IsUpdated = new Property(11, Boolean.class, "isUpdated", false, "IS_UPDATED");
         public final static Property IsDeleted = new Property(12, Boolean.class, "isDeleted", false, "IS_DELETED");
         public final static Property Created = new Property(13, String.class, "created", false, "CREATED");
+        public final static Property DeviceId = new Property(14, Long.class, "deviceId", false, "DEVICE_ID");
     };
 
     private DaoSession daoSession;
@@ -68,10 +72,13 @@ public class DbContactSensorDao extends AbstractDao<DbContactSensor, Long> {
                 "\"IS_NEW\" INTEGER," + // 10: isNew
                 "\"IS_UPDATED\" INTEGER," + // 11: isUpdated
                 "\"IS_DELETED\" INTEGER," + // 12: isDeleted
-                "\"CREATED\" TEXT NOT NULL );"); // 13: created
+                "\"CREATED\" TEXT NOT NULL ," + // 13: created
+                "\"DEVICE_ID\" INTEGER);"); // 14: deviceId
         // Add Indexes
         db.execSQL("CREATE INDEX " + constraint + "IDX_contact_sensor__id ON contact_sensor" +
                 " (\"_id\");");
+        db.execSQL("CREATE INDEX " + constraint + "IDX_contact_sensor_DEVICE_ID ON contact_sensor" +
+                " (\"DEVICE_ID\");");
     }
 
     /** Drops the underlying database table. */
@@ -150,6 +157,11 @@ public class DbContactSensorDao extends AbstractDao<DbContactSensor, Long> {
             stmt.bindLong(13, isDeleted ? 1L: 0L);
         }
         stmt.bindString(14, entity.getCreated());
+ 
+        Long deviceId = entity.getDeviceId();
+        if (deviceId != null) {
+            stmt.bindLong(15, deviceId);
+        }
     }
 
     @Override
@@ -181,7 +193,8 @@ public class DbContactSensorDao extends AbstractDao<DbContactSensor, Long> {
             cursor.isNull(offset + 10) ? null : cursor.getShort(offset + 10) != 0, // isNew
             cursor.isNull(offset + 11) ? null : cursor.getShort(offset + 11) != 0, // isUpdated
             cursor.isNull(offset + 12) ? null : cursor.getShort(offset + 12) != 0, // isDeleted
-            cursor.getString(offset + 13) // created
+            cursor.getString(offset + 13), // created
+            cursor.isNull(offset + 14) ? null : cursor.getLong(offset + 14) // deviceId
         );
         return entity;
     }
@@ -203,6 +216,7 @@ public class DbContactSensorDao extends AbstractDao<DbContactSensor, Long> {
         entity.setIsUpdated(cursor.isNull(offset + 11) ? null : cursor.getShort(offset + 11) != 0);
         entity.setIsDeleted(cursor.isNull(offset + 12) ? null : cursor.getShort(offset + 12) != 0);
         entity.setCreated(cursor.getString(offset + 13));
+        entity.setDeviceId(cursor.isNull(offset + 14) ? null : cursor.getLong(offset + 14));
      }
     
     /** @inheritdoc */
@@ -228,4 +242,95 @@ public class DbContactSensorDao extends AbstractDao<DbContactSensor, Long> {
         return true;
     }
     
+    private String selectDeep;
+
+    protected String getSelectDeep() {
+        if (selectDeep == null) {
+            StringBuilder builder = new StringBuilder("SELECT ");
+            SqlUtils.appendColumns(builder, "T", getAllColumns());
+            builder.append(',');
+            SqlUtils.appendColumns(builder, "T0", daoSession.getDbDeviceDao().getAllColumns());
+            builder.append(" FROM contact_sensor T");
+            builder.append(" LEFT JOIN device T0 ON T.\"DEVICE_ID\"=T0.\"_id\"");
+            builder.append(' ');
+            selectDeep = builder.toString();
+        }
+        return selectDeep;
+    }
+    
+    protected DbContactSensor loadCurrentDeep(Cursor cursor, boolean lock) {
+        DbContactSensor entity = loadCurrent(cursor, 0, lock);
+        int offset = getAllColumns().length;
+
+        DbDevice dbDevice = loadCurrentOther(daoSession.getDbDeviceDao(), cursor, offset);
+        entity.setDbDevice(dbDevice);
+
+        return entity;    
+    }
+
+    public DbContactSensor loadDeep(Long key) {
+        assertSinglePk();
+        if (key == null) {
+            return null;
+        }
+
+        StringBuilder builder = new StringBuilder(getSelectDeep());
+        builder.append("WHERE ");
+        SqlUtils.appendColumnsEqValue(builder, "T", getPkColumns());
+        String sql = builder.toString();
+        
+        String[] keyArray = new String[] { key.toString() };
+        Cursor cursor = db.rawQuery(sql, keyArray);
+        
+        try {
+            boolean available = cursor.moveToFirst();
+            if (!available) {
+                return null;
+            } else if (!cursor.isLast()) {
+                throw new IllegalStateException("Expected unique result, but count was " + cursor.getCount());
+            }
+            return loadCurrentDeep(cursor, true);
+        } finally {
+            cursor.close();
+        }
+    }
+    
+    /** Reads all available rows from the given cursor and returns a list of new ImageTO objects. */
+    public List<DbContactSensor> loadAllDeepFromCursor(Cursor cursor) {
+        int count = cursor.getCount();
+        List<DbContactSensor> list = new ArrayList<DbContactSensor>(count);
+        
+        if (cursor.moveToFirst()) {
+            if (identityScope != null) {
+                identityScope.lock();
+                identityScope.reserveRoom(count);
+            }
+            try {
+                do {
+                    list.add(loadCurrentDeep(cursor, false));
+                } while (cursor.moveToNext());
+            } finally {
+                if (identityScope != null) {
+                    identityScope.unlock();
+                }
+            }
+        }
+        return list;
+    }
+    
+    protected List<DbContactSensor> loadDeepAllAndCloseCursor(Cursor cursor) {
+        try {
+            return loadAllDeepFromCursor(cursor);
+        } finally {
+            cursor.close();
+        }
+    }
+    
+
+    /** A raw-style query where you can pass any WHERE clause and arguments. */
+    public List<DbContactSensor> queryDeep(String where, String... selectionArg) {
+        Cursor cursor = db.rawQuery(getSelectDeep() + where, selectionArg);
+        return loadDeepAllAndCloseCursor(cursor);
+    }
+ 
 }

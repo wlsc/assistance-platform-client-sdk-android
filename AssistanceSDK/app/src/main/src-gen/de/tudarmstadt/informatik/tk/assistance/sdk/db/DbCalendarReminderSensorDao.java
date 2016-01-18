@@ -1,11 +1,14 @@
 package de.tudarmstadt.informatik.tk.assistance.sdk.db;
 
+import java.util.List;
+import java.util.ArrayList;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteStatement;
 
 import de.greenrobot.dao.AbstractDao;
 import de.greenrobot.dao.Property;
+import de.greenrobot.dao.internal.SqlUtils;
 import de.greenrobot.dao.internal.DaoConfig;
 
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbCalendarReminderSensor;
@@ -32,7 +35,10 @@ public class DbCalendarReminderSensorDao extends AbstractDao<DbCalendarReminderS
         public final static Property IsUpdated = new Property(6, Boolean.class, "isUpdated", false, "IS_UPDATED");
         public final static Property IsDeleted = new Property(7, Boolean.class, "isDeleted", false, "IS_DELETED");
         public final static Property Created = new Property(8, String.class, "created", false, "CREATED");
+        public final static Property DeviceId = new Property(9, Long.class, "deviceId", false, "DEVICE_ID");
     };
+
+    private DaoSession daoSession;
 
 
     public DbCalendarReminderSensorDao(DaoConfig config) {
@@ -41,6 +47,7 @@ public class DbCalendarReminderSensorDao extends AbstractDao<DbCalendarReminderS
     
     public DbCalendarReminderSensorDao(DaoConfig config, DaoSession daoSession) {
         super(config, daoSession);
+        this.daoSession = daoSession;
     }
 
     /** Creates the underlying database table. */
@@ -55,12 +62,15 @@ public class DbCalendarReminderSensorDao extends AbstractDao<DbCalendarReminderS
                 "\"IS_NEW\" INTEGER," + // 5: isNew
                 "\"IS_UPDATED\" INTEGER," + // 6: isUpdated
                 "\"IS_DELETED\" INTEGER," + // 7: isDeleted
-                "\"CREATED\" TEXT NOT NULL );"); // 8: created
+                "\"CREATED\" TEXT NOT NULL ," + // 8: created
+                "\"DEVICE_ID\" INTEGER);"); // 9: deviceId
         // Add Indexes
         db.execSQL("CREATE INDEX " + constraint + "IDX_calendar_reminder_sensor__id ON calendar_reminder_sensor" +
                 " (\"_id\");");
         db.execSQL("CREATE INDEX " + constraint + "IDX_calendar_reminder_sensor_REMINDER_ID ON calendar_reminder_sensor" +
                 " (\"REMINDER_ID\");");
+        db.execSQL("CREATE INDEX " + constraint + "IDX_calendar_reminder_sensor_DEVICE_ID ON calendar_reminder_sensor" +
+                " (\"DEVICE_ID\");");
     }
 
     /** Drops the underlying database table. */
@@ -110,6 +120,17 @@ public class DbCalendarReminderSensorDao extends AbstractDao<DbCalendarReminderS
             stmt.bindLong(8, isDeleted ? 1L: 0L);
         }
         stmt.bindString(9, entity.getCreated());
+ 
+        Long deviceId = entity.getDeviceId();
+        if (deviceId != null) {
+            stmt.bindLong(10, deviceId);
+        }
+    }
+
+    @Override
+    protected void attachEntity(DbCalendarReminderSensor entity) {
+        super.attachEntity(entity);
+        entity.__setDaoSession(daoSession);
     }
 
     /** @inheritdoc */
@@ -130,7 +151,8 @@ public class DbCalendarReminderSensorDao extends AbstractDao<DbCalendarReminderS
             cursor.isNull(offset + 5) ? null : cursor.getShort(offset + 5) != 0, // isNew
             cursor.isNull(offset + 6) ? null : cursor.getShort(offset + 6) != 0, // isUpdated
             cursor.isNull(offset + 7) ? null : cursor.getShort(offset + 7) != 0, // isDeleted
-            cursor.getString(offset + 8) // created
+            cursor.getString(offset + 8), // created
+            cursor.isNull(offset + 9) ? null : cursor.getLong(offset + 9) // deviceId
         );
         return entity;
     }
@@ -147,6 +169,7 @@ public class DbCalendarReminderSensorDao extends AbstractDao<DbCalendarReminderS
         entity.setIsUpdated(cursor.isNull(offset + 6) ? null : cursor.getShort(offset + 6) != 0);
         entity.setIsDeleted(cursor.isNull(offset + 7) ? null : cursor.getShort(offset + 7) != 0);
         entity.setCreated(cursor.getString(offset + 8));
+        entity.setDeviceId(cursor.isNull(offset + 9) ? null : cursor.getLong(offset + 9));
      }
     
     /** @inheritdoc */
@@ -172,4 +195,95 @@ public class DbCalendarReminderSensorDao extends AbstractDao<DbCalendarReminderS
         return true;
     }
     
+    private String selectDeep;
+
+    protected String getSelectDeep() {
+        if (selectDeep == null) {
+            StringBuilder builder = new StringBuilder("SELECT ");
+            SqlUtils.appendColumns(builder, "T", getAllColumns());
+            builder.append(',');
+            SqlUtils.appendColumns(builder, "T0", daoSession.getDbDeviceDao().getAllColumns());
+            builder.append(" FROM calendar_reminder_sensor T");
+            builder.append(" LEFT JOIN device T0 ON T.\"DEVICE_ID\"=T0.\"_id\"");
+            builder.append(' ');
+            selectDeep = builder.toString();
+        }
+        return selectDeep;
+    }
+    
+    protected DbCalendarReminderSensor loadCurrentDeep(Cursor cursor, boolean lock) {
+        DbCalendarReminderSensor entity = loadCurrent(cursor, 0, lock);
+        int offset = getAllColumns().length;
+
+        DbDevice dbDevice = loadCurrentOther(daoSession.getDbDeviceDao(), cursor, offset);
+        entity.setDbDevice(dbDevice);
+
+        return entity;    
+    }
+
+    public DbCalendarReminderSensor loadDeep(Long key) {
+        assertSinglePk();
+        if (key == null) {
+            return null;
+        }
+
+        StringBuilder builder = new StringBuilder(getSelectDeep());
+        builder.append("WHERE ");
+        SqlUtils.appendColumnsEqValue(builder, "T", getPkColumns());
+        String sql = builder.toString();
+        
+        String[] keyArray = new String[] { key.toString() };
+        Cursor cursor = db.rawQuery(sql, keyArray);
+        
+        try {
+            boolean available = cursor.moveToFirst();
+            if (!available) {
+                return null;
+            } else if (!cursor.isLast()) {
+                throw new IllegalStateException("Expected unique result, but count was " + cursor.getCount());
+            }
+            return loadCurrentDeep(cursor, true);
+        } finally {
+            cursor.close();
+        }
+    }
+    
+    /** Reads all available rows from the given cursor and returns a list of new ImageTO objects. */
+    public List<DbCalendarReminderSensor> loadAllDeepFromCursor(Cursor cursor) {
+        int count = cursor.getCount();
+        List<DbCalendarReminderSensor> list = new ArrayList<DbCalendarReminderSensor>(count);
+        
+        if (cursor.moveToFirst()) {
+            if (identityScope != null) {
+                identityScope.lock();
+                identityScope.reserveRoom(count);
+            }
+            try {
+                do {
+                    list.add(loadCurrentDeep(cursor, false));
+                } while (cursor.moveToNext());
+            } finally {
+                if (identityScope != null) {
+                    identityScope.unlock();
+                }
+            }
+        }
+        return list;
+    }
+    
+    protected List<DbCalendarReminderSensor> loadDeepAllAndCloseCursor(Cursor cursor) {
+        try {
+            return loadAllDeepFromCursor(cursor);
+        } finally {
+            cursor.close();
+        }
+    }
+    
+
+    /** A raw-style query where you can pass any WHERE clause and arguments. */
+    public List<DbCalendarReminderSensor> queryDeep(String where, String... selectionArg) {
+        Cursor cursor = db.rawQuery(getSelectDeep() + where, selectionArg);
+        return loadDeepAllAndCloseCursor(cursor);
+    }
+ 
 }

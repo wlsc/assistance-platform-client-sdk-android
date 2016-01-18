@@ -1,11 +1,14 @@
 package de.tudarmstadt.informatik.tk.assistance.sdk.db;
 
+import java.util.List;
+import java.util.ArrayList;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteStatement;
 
 import de.greenrobot.dao.AbstractDao;
 import de.greenrobot.dao.Property;
+import de.greenrobot.dao.internal.SqlUtils;
 import de.greenrobot.dao.internal.DaoConfig;
 
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbMobileConnectionSensor;
@@ -29,7 +32,10 @@ public class DbMobileConnectionSensorDao extends AbstractDao<DbMobileConnectionS
         public final static Property MobileNetworkCode = new Property(3, String.class, "mobileNetworkCode", false, "MOBILE_NETWORK_CODE");
         public final static Property Created = new Property(4, String.class, "created", false, "CREATED");
         public final static Property VoipAvailable = new Property(5, Boolean.class, "voipAvailable", false, "VOIP_AVAILABLE");
+        public final static Property DeviceId = new Property(6, Long.class, "deviceId", false, "DEVICE_ID");
     };
+
+    private DaoSession daoSession;
 
 
     public DbMobileConnectionSensorDao(DaoConfig config) {
@@ -38,6 +44,7 @@ public class DbMobileConnectionSensorDao extends AbstractDao<DbMobileConnectionS
     
     public DbMobileConnectionSensorDao(DaoConfig config, DaoSession daoSession) {
         super(config, daoSession);
+        this.daoSession = daoSession;
     }
 
     /** Creates the underlying database table. */
@@ -49,10 +56,13 @@ public class DbMobileConnectionSensorDao extends AbstractDao<DbMobileConnectionS
                 "\"MOBILE_COUNTRY_CODE\" TEXT," + // 2: mobileCountryCode
                 "\"MOBILE_NETWORK_CODE\" TEXT," + // 3: mobileNetworkCode
                 "\"CREATED\" TEXT NOT NULL ," + // 4: created
-                "\"VOIP_AVAILABLE\" INTEGER);"); // 5: voipAvailable
+                "\"VOIP_AVAILABLE\" INTEGER," + // 5: voipAvailable
+                "\"DEVICE_ID\" INTEGER);"); // 6: deviceId
         // Add Indexes
         db.execSQL("CREATE INDEX " + constraint + "IDX_mobile_connection_sensor__id ON mobile_connection_sensor" +
                 " (\"_id\");");
+        db.execSQL("CREATE INDEX " + constraint + "IDX_mobile_connection_sensor_DEVICE_ID ON mobile_connection_sensor" +
+                " (\"DEVICE_ID\");");
     }
 
     /** Drops the underlying database table. */
@@ -91,6 +101,17 @@ public class DbMobileConnectionSensorDao extends AbstractDao<DbMobileConnectionS
         if (voipAvailable != null) {
             stmt.bindLong(6, voipAvailable ? 1L: 0L);
         }
+ 
+        Long deviceId = entity.getDeviceId();
+        if (deviceId != null) {
+            stmt.bindLong(7, deviceId);
+        }
+    }
+
+    @Override
+    protected void attachEntity(DbMobileConnectionSensor entity) {
+        super.attachEntity(entity);
+        entity.__setDaoSession(daoSession);
     }
 
     /** @inheritdoc */
@@ -108,7 +129,8 @@ public class DbMobileConnectionSensorDao extends AbstractDao<DbMobileConnectionS
             cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // mobileCountryCode
             cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // mobileNetworkCode
             cursor.getString(offset + 4), // created
-            cursor.isNull(offset + 5) ? null : cursor.getShort(offset + 5) != 0 // voipAvailable
+            cursor.isNull(offset + 5) ? null : cursor.getShort(offset + 5) != 0, // voipAvailable
+            cursor.isNull(offset + 6) ? null : cursor.getLong(offset + 6) // deviceId
         );
         return entity;
     }
@@ -122,6 +144,7 @@ public class DbMobileConnectionSensorDao extends AbstractDao<DbMobileConnectionS
         entity.setMobileNetworkCode(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
         entity.setCreated(cursor.getString(offset + 4));
         entity.setVoipAvailable(cursor.isNull(offset + 5) ? null : cursor.getShort(offset + 5) != 0);
+        entity.setDeviceId(cursor.isNull(offset + 6) ? null : cursor.getLong(offset + 6));
      }
     
     /** @inheritdoc */
@@ -147,4 +170,95 @@ public class DbMobileConnectionSensorDao extends AbstractDao<DbMobileConnectionS
         return true;
     }
     
+    private String selectDeep;
+
+    protected String getSelectDeep() {
+        if (selectDeep == null) {
+            StringBuilder builder = new StringBuilder("SELECT ");
+            SqlUtils.appendColumns(builder, "T", getAllColumns());
+            builder.append(',');
+            SqlUtils.appendColumns(builder, "T0", daoSession.getDbDeviceDao().getAllColumns());
+            builder.append(" FROM mobile_connection_sensor T");
+            builder.append(" LEFT JOIN device T0 ON T.\"DEVICE_ID\"=T0.\"_id\"");
+            builder.append(' ');
+            selectDeep = builder.toString();
+        }
+        return selectDeep;
+    }
+    
+    protected DbMobileConnectionSensor loadCurrentDeep(Cursor cursor, boolean lock) {
+        DbMobileConnectionSensor entity = loadCurrent(cursor, 0, lock);
+        int offset = getAllColumns().length;
+
+        DbDevice dbDevice = loadCurrentOther(daoSession.getDbDeviceDao(), cursor, offset);
+        entity.setDbDevice(dbDevice);
+
+        return entity;    
+    }
+
+    public DbMobileConnectionSensor loadDeep(Long key) {
+        assertSinglePk();
+        if (key == null) {
+            return null;
+        }
+
+        StringBuilder builder = new StringBuilder(getSelectDeep());
+        builder.append("WHERE ");
+        SqlUtils.appendColumnsEqValue(builder, "T", getPkColumns());
+        String sql = builder.toString();
+        
+        String[] keyArray = new String[] { key.toString() };
+        Cursor cursor = db.rawQuery(sql, keyArray);
+        
+        try {
+            boolean available = cursor.moveToFirst();
+            if (!available) {
+                return null;
+            } else if (!cursor.isLast()) {
+                throw new IllegalStateException("Expected unique result, but count was " + cursor.getCount());
+            }
+            return loadCurrentDeep(cursor, true);
+        } finally {
+            cursor.close();
+        }
+    }
+    
+    /** Reads all available rows from the given cursor and returns a list of new ImageTO objects. */
+    public List<DbMobileConnectionSensor> loadAllDeepFromCursor(Cursor cursor) {
+        int count = cursor.getCount();
+        List<DbMobileConnectionSensor> list = new ArrayList<DbMobileConnectionSensor>(count);
+        
+        if (cursor.moveToFirst()) {
+            if (identityScope != null) {
+                identityScope.lock();
+                identityScope.reserveRoom(count);
+            }
+            try {
+                do {
+                    list.add(loadCurrentDeep(cursor, false));
+                } while (cursor.moveToNext());
+            } finally {
+                if (identityScope != null) {
+                    identityScope.unlock();
+                }
+            }
+        }
+        return list;
+    }
+    
+    protected List<DbMobileConnectionSensor> loadDeepAllAndCloseCursor(Cursor cursor) {
+        try {
+            return loadAllDeepFromCursor(cursor);
+        } finally {
+            cursor.close();
+        }
+    }
+    
+
+    /** A raw-style query where you can pass any WHERE clause and arguments. */
+    public List<DbMobileConnectionSensor> queryDeep(String where, String... selectionArg) {
+        Cursor cursor = db.rawQuery(getSelectDeep() + where, selectionArg);
+        return loadDeepAllAndCloseCursor(cursor);
+    }
+ 
 }

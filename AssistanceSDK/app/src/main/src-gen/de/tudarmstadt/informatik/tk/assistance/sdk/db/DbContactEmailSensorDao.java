@@ -37,6 +37,7 @@ public class DbContactEmailSensorDao extends AbstractDao<DbContactEmailSensor, L
         public final static Property IsDeleted = new Property(6, Boolean.class, "isDeleted", false, "IS_DELETED");
         public final static Property Created = new Property(7, String.class, "created", false, "CREATED");
         public final static Property ContactId = new Property(8, Long.class, "contactId", false, "CONTACT_ID");
+        public final static Property DeviceId = new Property(9, Long.class, "deviceId", false, "DEVICE_ID");
     };
 
     private DaoSession daoSession;
@@ -64,12 +65,15 @@ public class DbContactEmailSensorDao extends AbstractDao<DbContactEmailSensor, L
                 "\"IS_UPDATED\" INTEGER," + // 5: isUpdated
                 "\"IS_DELETED\" INTEGER," + // 6: isDeleted
                 "\"CREATED\" TEXT NOT NULL ," + // 7: created
-                "\"CONTACT_ID\" INTEGER);"); // 8: contactId
+                "\"CONTACT_ID\" INTEGER," + // 8: contactId
+                "\"DEVICE_ID\" INTEGER);"); // 9: deviceId
         // Add Indexes
         db.execSQL("CREATE INDEX " + constraint + "IDX_contact_email_sensor__id ON contact_email_sensor" +
                 " (\"_id\");");
         db.execSQL("CREATE INDEX " + constraint + "IDX_contact_email_sensor_CONTACT_ID ON contact_email_sensor" +
                 " (\"CONTACT_ID\");");
+        db.execSQL("CREATE INDEX " + constraint + "IDX_contact_email_sensor_DEVICE_ID ON contact_email_sensor" +
+                " (\"DEVICE_ID\");");
     }
 
     /** Drops the underlying database table. */
@@ -123,6 +127,11 @@ public class DbContactEmailSensorDao extends AbstractDao<DbContactEmailSensor, L
         if (contactId != null) {
             stmt.bindLong(9, contactId);
         }
+ 
+        Long deviceId = entity.getDeviceId();
+        if (deviceId != null) {
+            stmt.bindLong(10, deviceId);
+        }
     }
 
     @Override
@@ -149,7 +158,8 @@ public class DbContactEmailSensorDao extends AbstractDao<DbContactEmailSensor, L
             cursor.isNull(offset + 5) ? null : cursor.getShort(offset + 5) != 0, // isUpdated
             cursor.isNull(offset + 6) ? null : cursor.getShort(offset + 6) != 0, // isDeleted
             cursor.getString(offset + 7), // created
-            cursor.isNull(offset + 8) ? null : cursor.getLong(offset + 8) // contactId
+            cursor.isNull(offset + 8) ? null : cursor.getLong(offset + 8), // contactId
+            cursor.isNull(offset + 9) ? null : cursor.getLong(offset + 9) // deviceId
         );
         return entity;
     }
@@ -166,6 +176,7 @@ public class DbContactEmailSensorDao extends AbstractDao<DbContactEmailSensor, L
         entity.setIsDeleted(cursor.isNull(offset + 6) ? null : cursor.getShort(offset + 6) != 0);
         entity.setCreated(cursor.getString(offset + 7));
         entity.setContactId(cursor.isNull(offset + 8) ? null : cursor.getLong(offset + 8));
+        entity.setDeviceId(cursor.isNull(offset + 9) ? null : cursor.getLong(offset + 9));
      }
     
     /** @inheritdoc */
@@ -213,8 +224,11 @@ public class DbContactEmailSensorDao extends AbstractDao<DbContactEmailSensor, L
             SqlUtils.appendColumns(builder, "T", getAllColumns());
             builder.append(',');
             SqlUtils.appendColumns(builder, "T0", daoSession.getDbContactSensorDao().getAllColumns());
+            builder.append(',');
+            SqlUtils.appendColumns(builder, "T1", daoSession.getDbDeviceDao().getAllColumns());
             builder.append(" FROM contact_email_sensor T");
             builder.append(" LEFT JOIN contact_sensor T0 ON T.\"CONTACT_ID\"=T0.\"_id\"");
+            builder.append(" LEFT JOIN device T1 ON T.\"DEVICE_ID\"=T1.\"_id\"");
             builder.append(' ');
             selectDeep = builder.toString();
         }
@@ -227,6 +241,10 @@ public class DbContactEmailSensorDao extends AbstractDao<DbContactEmailSensor, L
 
         DbContactSensor dbContactSensor = loadCurrentOther(daoSession.getDbContactSensorDao(), cursor, offset);
         entity.setDbContactSensor(dbContactSensor);
+        offset += daoSession.getDbContactSensorDao().getAllColumns().length;
+
+        DbDevice dbDevice = loadCurrentOther(daoSession.getDbDeviceDao(), cursor, offset);
+        entity.setDbDevice(dbDevice);
 
         return entity;    
     }

@@ -19,6 +19,7 @@ public class DbContactEmailSensor implements de.tudarmstadt.informatik.tk.assist
     /** Not-null value. */
     private String created;
     private Long contactId;
+    private Long deviceId;
 
     /** Used to resolve relations */
     private transient DaoSession daoSession;
@@ -29,6 +30,9 @@ public class DbContactEmailSensor implements de.tudarmstadt.informatik.tk.assist
     private DbContactSensor dbContactSensor;
     private Long dbContactSensor__resolvedKey;
 
+    private DbDevice dbDevice;
+    private Long dbDevice__resolvedKey;
+
 
     public DbContactEmailSensor() {
     }
@@ -37,7 +41,7 @@ public class DbContactEmailSensor implements de.tudarmstadt.informatik.tk.assist
         this.id = id;
     }
 
-    public DbContactEmailSensor(Long id, Long mailId, String address, String type, Boolean isNew, Boolean isUpdated, Boolean isDeleted, String created, Long contactId) {
+    public DbContactEmailSensor(Long id, Long mailId, String address, String type, Boolean isNew, Boolean isUpdated, Boolean isDeleted, String created, Long contactId, Long deviceId) {
         this.id = id;
         this.mailId = mailId;
         this.address = address;
@@ -47,6 +51,7 @@ public class DbContactEmailSensor implements de.tudarmstadt.informatik.tk.assist
         this.isDeleted = isDeleted;
         this.created = created;
         this.contactId = contactId;
+        this.deviceId = deviceId;
     }
 
     /** called by internal mechanisms, do not call yourself. */
@@ -129,6 +134,14 @@ public class DbContactEmailSensor implements de.tudarmstadt.informatik.tk.assist
         this.contactId = contactId;
     }
 
+    public Long getDeviceId() {
+        return deviceId;
+    }
+
+    public void setDeviceId(Long deviceId) {
+        this.deviceId = deviceId;
+    }
+
     /** To-one relationship, resolved on first access. */
     public DbContactSensor getDbContactSensor() {
         Long __key = this.contactId;
@@ -151,6 +164,31 @@ public class DbContactEmailSensor implements de.tudarmstadt.informatik.tk.assist
             this.dbContactSensor = dbContactSensor;
             contactId = dbContactSensor == null ? null : dbContactSensor.getId();
             dbContactSensor__resolvedKey = contactId;
+        }
+    }
+
+    /** To-one relationship, resolved on first access. */
+    public DbDevice getDbDevice() {
+        Long __key = this.deviceId;
+        if (dbDevice__resolvedKey == null || !dbDevice__resolvedKey.equals(__key)) {
+            if (daoSession == null) {
+                throw new DaoException("Entity is detached from DAO context");
+            }
+            DbDeviceDao targetDao = daoSession.getDbDeviceDao();
+            DbDevice dbDeviceNew = targetDao.load(__key);
+            synchronized (this) {
+                dbDevice = dbDeviceNew;
+            	dbDevice__resolvedKey = __key;
+            }
+        }
+        return dbDevice;
+    }
+
+    public void setDbDevice(DbDevice dbDevice) {
+        synchronized (this) {
+            this.dbDevice = dbDevice;
+            deviceId = dbDevice == null ? null : dbDevice.getId();
+            dbDevice__resolvedKey = deviceId;
         }
     }
 

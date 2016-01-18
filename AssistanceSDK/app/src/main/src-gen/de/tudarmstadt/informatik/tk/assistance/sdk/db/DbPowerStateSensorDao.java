@@ -1,11 +1,14 @@
 package de.tudarmstadt.informatik.tk.assistance.sdk.db;
 
+import java.util.List;
+import java.util.ArrayList;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteStatement;
 
 import de.greenrobot.dao.AbstractDao;
 import de.greenrobot.dao.Property;
+import de.greenrobot.dao.internal.SqlUtils;
 import de.greenrobot.dao.internal.DaoConfig;
 
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbPowerStateSensor;
@@ -30,7 +33,10 @@ public class DbPowerStateSensorDao extends AbstractDao<DbPowerStateSensor, Long>
         public final static Property ChargingState = new Property(4, Integer.class, "chargingState", false, "CHARGING_STATE");
         public final static Property ChargingMode = new Property(5, Integer.class, "chargingMode", false, "CHARGING_MODE");
         public final static Property PowerSaveMode = new Property(6, Boolean.class, "powerSaveMode", false, "POWER_SAVE_MODE");
+        public final static Property DeviceId = new Property(7, Long.class, "deviceId", false, "DEVICE_ID");
     };
+
+    private DaoSession daoSession;
 
 
     public DbPowerStateSensorDao(DaoConfig config) {
@@ -39,6 +45,7 @@ public class DbPowerStateSensorDao extends AbstractDao<DbPowerStateSensor, Long>
     
     public DbPowerStateSensorDao(DaoConfig config, DaoSession daoSession) {
         super(config, daoSession);
+        this.daoSession = daoSession;
     }
 
     /** Creates the underlying database table. */
@@ -51,10 +58,13 @@ public class DbPowerStateSensorDao extends AbstractDao<DbPowerStateSensor, Long>
                 "\"CREATED\" TEXT NOT NULL ," + // 3: created
                 "\"CHARGING_STATE\" INTEGER," + // 4: chargingState
                 "\"CHARGING_MODE\" INTEGER," + // 5: chargingMode
-                "\"POWER_SAVE_MODE\" INTEGER);"); // 6: powerSaveMode
+                "\"POWER_SAVE_MODE\" INTEGER," + // 6: powerSaveMode
+                "\"DEVICE_ID\" INTEGER);"); // 7: deviceId
         // Add Indexes
         db.execSQL("CREATE INDEX " + constraint + "IDX_power_state_sensor__id ON power_state_sensor" +
                 " (\"_id\");");
+        db.execSQL("CREATE INDEX " + constraint + "IDX_power_state_sensor_DEVICE_ID ON power_state_sensor" +
+                " (\"DEVICE_ID\");");
     }
 
     /** Drops the underlying database table. */
@@ -98,6 +108,17 @@ public class DbPowerStateSensorDao extends AbstractDao<DbPowerStateSensor, Long>
         if (powerSaveMode != null) {
             stmt.bindLong(7, powerSaveMode ? 1L: 0L);
         }
+ 
+        Long deviceId = entity.getDeviceId();
+        if (deviceId != null) {
+            stmt.bindLong(8, deviceId);
+        }
+    }
+
+    @Override
+    protected void attachEntity(DbPowerStateSensor entity) {
+        super.attachEntity(entity);
+        entity.__setDaoSession(daoSession);
     }
 
     /** @inheritdoc */
@@ -116,7 +137,8 @@ public class DbPowerStateSensorDao extends AbstractDao<DbPowerStateSensor, Long>
             cursor.getString(offset + 3), // created
             cursor.isNull(offset + 4) ? null : cursor.getInt(offset + 4), // chargingState
             cursor.isNull(offset + 5) ? null : cursor.getInt(offset + 5), // chargingMode
-            cursor.isNull(offset + 6) ? null : cursor.getShort(offset + 6) != 0 // powerSaveMode
+            cursor.isNull(offset + 6) ? null : cursor.getShort(offset + 6) != 0, // powerSaveMode
+            cursor.isNull(offset + 7) ? null : cursor.getLong(offset + 7) // deviceId
         );
         return entity;
     }
@@ -131,6 +153,7 @@ public class DbPowerStateSensorDao extends AbstractDao<DbPowerStateSensor, Long>
         entity.setChargingState(cursor.isNull(offset + 4) ? null : cursor.getInt(offset + 4));
         entity.setChargingMode(cursor.isNull(offset + 5) ? null : cursor.getInt(offset + 5));
         entity.setPowerSaveMode(cursor.isNull(offset + 6) ? null : cursor.getShort(offset + 6) != 0);
+        entity.setDeviceId(cursor.isNull(offset + 7) ? null : cursor.getLong(offset + 7));
      }
     
     /** @inheritdoc */
@@ -156,4 +179,95 @@ public class DbPowerStateSensorDao extends AbstractDao<DbPowerStateSensor, Long>
         return true;
     }
     
+    private String selectDeep;
+
+    protected String getSelectDeep() {
+        if (selectDeep == null) {
+            StringBuilder builder = new StringBuilder("SELECT ");
+            SqlUtils.appendColumns(builder, "T", getAllColumns());
+            builder.append(',');
+            SqlUtils.appendColumns(builder, "T0", daoSession.getDbDeviceDao().getAllColumns());
+            builder.append(" FROM power_state_sensor T");
+            builder.append(" LEFT JOIN device T0 ON T.\"DEVICE_ID\"=T0.\"_id\"");
+            builder.append(' ');
+            selectDeep = builder.toString();
+        }
+        return selectDeep;
+    }
+    
+    protected DbPowerStateSensor loadCurrentDeep(Cursor cursor, boolean lock) {
+        DbPowerStateSensor entity = loadCurrent(cursor, 0, lock);
+        int offset = getAllColumns().length;
+
+        DbDevice dbDevice = loadCurrentOther(daoSession.getDbDeviceDao(), cursor, offset);
+        entity.setDbDevice(dbDevice);
+
+        return entity;    
+    }
+
+    public DbPowerStateSensor loadDeep(Long key) {
+        assertSinglePk();
+        if (key == null) {
+            return null;
+        }
+
+        StringBuilder builder = new StringBuilder(getSelectDeep());
+        builder.append("WHERE ");
+        SqlUtils.appendColumnsEqValue(builder, "T", getPkColumns());
+        String sql = builder.toString();
+        
+        String[] keyArray = new String[] { key.toString() };
+        Cursor cursor = db.rawQuery(sql, keyArray);
+        
+        try {
+            boolean available = cursor.moveToFirst();
+            if (!available) {
+                return null;
+            } else if (!cursor.isLast()) {
+                throw new IllegalStateException("Expected unique result, but count was " + cursor.getCount());
+            }
+            return loadCurrentDeep(cursor, true);
+        } finally {
+            cursor.close();
+        }
+    }
+    
+    /** Reads all available rows from the given cursor and returns a list of new ImageTO objects. */
+    public List<DbPowerStateSensor> loadAllDeepFromCursor(Cursor cursor) {
+        int count = cursor.getCount();
+        List<DbPowerStateSensor> list = new ArrayList<DbPowerStateSensor>(count);
+        
+        if (cursor.moveToFirst()) {
+            if (identityScope != null) {
+                identityScope.lock();
+                identityScope.reserveRoom(count);
+            }
+            try {
+                do {
+                    list.add(loadCurrentDeep(cursor, false));
+                } while (cursor.moveToNext());
+            } finally {
+                if (identityScope != null) {
+                    identityScope.unlock();
+                }
+            }
+        }
+        return list;
+    }
+    
+    protected List<DbPowerStateSensor> loadDeepAllAndCloseCursor(Cursor cursor) {
+        try {
+            return loadAllDeepFromCursor(cursor);
+        } finally {
+            cursor.close();
+        }
+    }
+    
+
+    /** A raw-style query where you can pass any WHERE clause and arguments. */
+    public List<DbPowerStateSensor> queryDeep(String where, String... selectionArg) {
+        Cursor cursor = db.rawQuery(getSelectDeep() + where, selectionArg);
+        return loadDeepAllAndCloseCursor(cursor);
+    }
+ 
 }

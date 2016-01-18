@@ -1,11 +1,14 @@
 package de.tudarmstadt.informatik.tk.assistance.sdk.db;
 
+import java.util.List;
+import java.util.ArrayList;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteStatement;
 
 import de.greenrobot.dao.AbstractDao;
 import de.greenrobot.dao.Property;
+import de.greenrobot.dao.internal.SqlUtils;
 import de.greenrobot.dao.internal.DaoConfig;
 
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbAccelerometerSensor;
@@ -29,7 +32,10 @@ public class DbAccelerometerSensorDao extends AbstractDao<DbAccelerometerSensor,
         public final static Property Z = new Property(3, Double.class, "z", false, "Z");
         public final static Property Created = new Property(4, String.class, "created", false, "CREATED");
         public final static Property Accuracy = new Property(5, Integer.class, "accuracy", false, "ACCURACY");
+        public final static Property DeviceId = new Property(6, Long.class, "deviceId", false, "DEVICE_ID");
     };
+
+    private DaoSession daoSession;
 
 
     public DbAccelerometerSensorDao(DaoConfig config) {
@@ -38,6 +44,7 @@ public class DbAccelerometerSensorDao extends AbstractDao<DbAccelerometerSensor,
     
     public DbAccelerometerSensorDao(DaoConfig config, DaoSession daoSession) {
         super(config, daoSession);
+        this.daoSession = daoSession;
     }
 
     /** Creates the underlying database table. */
@@ -49,10 +56,13 @@ public class DbAccelerometerSensorDao extends AbstractDao<DbAccelerometerSensor,
                 "\"Y\" REAL," + // 2: y
                 "\"Z\" REAL," + // 3: z
                 "\"CREATED\" TEXT NOT NULL ," + // 4: created
-                "\"ACCURACY\" INTEGER);"); // 5: accuracy
+                "\"ACCURACY\" INTEGER," + // 5: accuracy
+                "\"DEVICE_ID\" INTEGER);"); // 6: deviceId
         // Add Indexes
         db.execSQL("CREATE INDEX " + constraint + "IDX_accelerometer_sensor__id ON accelerometer_sensor" +
                 " (\"_id\");");
+        db.execSQL("CREATE INDEX " + constraint + "IDX_accelerometer_sensor_DEVICE_ID ON accelerometer_sensor" +
+                " (\"DEVICE_ID\");");
     }
 
     /** Drops the underlying database table. */
@@ -91,6 +101,17 @@ public class DbAccelerometerSensorDao extends AbstractDao<DbAccelerometerSensor,
         if (accuracy != null) {
             stmt.bindLong(6, accuracy);
         }
+ 
+        Long deviceId = entity.getDeviceId();
+        if (deviceId != null) {
+            stmt.bindLong(7, deviceId);
+        }
+    }
+
+    @Override
+    protected void attachEntity(DbAccelerometerSensor entity) {
+        super.attachEntity(entity);
+        entity.__setDaoSession(daoSession);
     }
 
     /** @inheritdoc */
@@ -108,7 +129,8 @@ public class DbAccelerometerSensorDao extends AbstractDao<DbAccelerometerSensor,
             cursor.isNull(offset + 2) ? null : cursor.getDouble(offset + 2), // y
             cursor.isNull(offset + 3) ? null : cursor.getDouble(offset + 3), // z
             cursor.getString(offset + 4), // created
-            cursor.isNull(offset + 5) ? null : cursor.getInt(offset + 5) // accuracy
+            cursor.isNull(offset + 5) ? null : cursor.getInt(offset + 5), // accuracy
+            cursor.isNull(offset + 6) ? null : cursor.getLong(offset + 6) // deviceId
         );
         return entity;
     }
@@ -122,6 +144,7 @@ public class DbAccelerometerSensorDao extends AbstractDao<DbAccelerometerSensor,
         entity.setZ(cursor.isNull(offset + 3) ? null : cursor.getDouble(offset + 3));
         entity.setCreated(cursor.getString(offset + 4));
         entity.setAccuracy(cursor.isNull(offset + 5) ? null : cursor.getInt(offset + 5));
+        entity.setDeviceId(cursor.isNull(offset + 6) ? null : cursor.getLong(offset + 6));
      }
     
     /** @inheritdoc */
@@ -147,4 +170,95 @@ public class DbAccelerometerSensorDao extends AbstractDao<DbAccelerometerSensor,
         return true;
     }
     
+    private String selectDeep;
+
+    protected String getSelectDeep() {
+        if (selectDeep == null) {
+            StringBuilder builder = new StringBuilder("SELECT ");
+            SqlUtils.appendColumns(builder, "T", getAllColumns());
+            builder.append(',');
+            SqlUtils.appendColumns(builder, "T0", daoSession.getDbDeviceDao().getAllColumns());
+            builder.append(" FROM accelerometer_sensor T");
+            builder.append(" LEFT JOIN device T0 ON T.\"DEVICE_ID\"=T0.\"_id\"");
+            builder.append(' ');
+            selectDeep = builder.toString();
+        }
+        return selectDeep;
+    }
+    
+    protected DbAccelerometerSensor loadCurrentDeep(Cursor cursor, boolean lock) {
+        DbAccelerometerSensor entity = loadCurrent(cursor, 0, lock);
+        int offset = getAllColumns().length;
+
+        DbDevice dbDevice = loadCurrentOther(daoSession.getDbDeviceDao(), cursor, offset);
+        entity.setDbDevice(dbDevice);
+
+        return entity;    
+    }
+
+    public DbAccelerometerSensor loadDeep(Long key) {
+        assertSinglePk();
+        if (key == null) {
+            return null;
+        }
+
+        StringBuilder builder = new StringBuilder(getSelectDeep());
+        builder.append("WHERE ");
+        SqlUtils.appendColumnsEqValue(builder, "T", getPkColumns());
+        String sql = builder.toString();
+        
+        String[] keyArray = new String[] { key.toString() };
+        Cursor cursor = db.rawQuery(sql, keyArray);
+        
+        try {
+            boolean available = cursor.moveToFirst();
+            if (!available) {
+                return null;
+            } else if (!cursor.isLast()) {
+                throw new IllegalStateException("Expected unique result, but count was " + cursor.getCount());
+            }
+            return loadCurrentDeep(cursor, true);
+        } finally {
+            cursor.close();
+        }
+    }
+    
+    /** Reads all available rows from the given cursor and returns a list of new ImageTO objects. */
+    public List<DbAccelerometerSensor> loadAllDeepFromCursor(Cursor cursor) {
+        int count = cursor.getCount();
+        List<DbAccelerometerSensor> list = new ArrayList<DbAccelerometerSensor>(count);
+        
+        if (cursor.moveToFirst()) {
+            if (identityScope != null) {
+                identityScope.lock();
+                identityScope.reserveRoom(count);
+            }
+            try {
+                do {
+                    list.add(loadCurrentDeep(cursor, false));
+                } while (cursor.moveToNext());
+            } finally {
+                if (identityScope != null) {
+                    identityScope.unlock();
+                }
+            }
+        }
+        return list;
+    }
+    
+    protected List<DbAccelerometerSensor> loadDeepAllAndCloseCursor(Cursor cursor) {
+        try {
+            return loadAllDeepFromCursor(cursor);
+        } finally {
+            cursor.close();
+        }
+    }
+    
+
+    /** A raw-style query where you can pass any WHERE clause and arguments. */
+    public List<DbAccelerometerSensor> queryDeep(String where, String... selectionArg) {
+        Cursor cursor = db.rawQuery(getSelectDeep() + where, selectionArg);
+        return loadDeepAllAndCloseCursor(cursor);
+    }
+ 
 }

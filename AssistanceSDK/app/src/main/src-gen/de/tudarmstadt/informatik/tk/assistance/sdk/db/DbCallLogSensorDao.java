@@ -1,11 +1,14 @@
 package de.tudarmstadt.informatik.tk.assistance.sdk.db;
 
+import java.util.List;
+import java.util.ArrayList;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteStatement;
 
 import de.greenrobot.dao.AbstractDao;
 import de.greenrobot.dao.Property;
+import de.greenrobot.dao.internal.SqlUtils;
 import de.greenrobot.dao.internal.DaoConfig;
 
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbCallLogSensor;
@@ -34,7 +37,10 @@ public class DbCallLogSensorDao extends AbstractDao<DbCallLogSensor, Long> {
         public final static Property IsUpdated = new Property(8, Boolean.class, "isUpdated", false, "IS_UPDATED");
         public final static Property IsDeleted = new Property(9, Boolean.class, "isDeleted", false, "IS_DELETED");
         public final static Property Created = new Property(10, String.class, "created", false, "CREATED");
+        public final static Property DeviceId = new Property(11, Long.class, "deviceId", false, "DEVICE_ID");
     };
+
+    private DaoSession daoSession;
 
 
     public DbCallLogSensorDao(DaoConfig config) {
@@ -43,6 +49,7 @@ public class DbCallLogSensorDao extends AbstractDao<DbCallLogSensor, Long> {
     
     public DbCallLogSensorDao(DaoConfig config, DaoSession daoSession) {
         super(config, daoSession);
+        this.daoSession = daoSession;
     }
 
     /** Creates the underlying database table. */
@@ -59,10 +66,13 @@ public class DbCallLogSensorDao extends AbstractDao<DbCallLogSensor, Long> {
                 "\"IS_NEW\" INTEGER," + // 7: isNew
                 "\"IS_UPDATED\" INTEGER," + // 8: isUpdated
                 "\"IS_DELETED\" INTEGER," + // 9: isDeleted
-                "\"CREATED\" TEXT NOT NULL );"); // 10: created
+                "\"CREATED\" TEXT NOT NULL ," + // 10: created
+                "\"DEVICE_ID\" INTEGER);"); // 11: deviceId
         // Add Indexes
         db.execSQL("CREATE INDEX " + constraint + "IDX_call_log_sensor__id ON call_log_sensor" +
                 " (\"_id\");");
+        db.execSQL("CREATE INDEX " + constraint + "IDX_call_log_sensor_DEVICE_ID ON call_log_sensor" +
+                " (\"DEVICE_ID\");");
     }
 
     /** Drops the underlying database table. */
@@ -126,6 +136,17 @@ public class DbCallLogSensorDao extends AbstractDao<DbCallLogSensor, Long> {
             stmt.bindLong(10, isDeleted ? 1L: 0L);
         }
         stmt.bindString(11, entity.getCreated());
+ 
+        Long deviceId = entity.getDeviceId();
+        if (deviceId != null) {
+            stmt.bindLong(12, deviceId);
+        }
+    }
+
+    @Override
+    protected void attachEntity(DbCallLogSensor entity) {
+        super.attachEntity(entity);
+        entity.__setDaoSession(daoSession);
     }
 
     /** @inheritdoc */
@@ -148,7 +169,8 @@ public class DbCallLogSensorDao extends AbstractDao<DbCallLogSensor, Long> {
             cursor.isNull(offset + 7) ? null : cursor.getShort(offset + 7) != 0, // isNew
             cursor.isNull(offset + 8) ? null : cursor.getShort(offset + 8) != 0, // isUpdated
             cursor.isNull(offset + 9) ? null : cursor.getShort(offset + 9) != 0, // isDeleted
-            cursor.getString(offset + 10) // created
+            cursor.getString(offset + 10), // created
+            cursor.isNull(offset + 11) ? null : cursor.getLong(offset + 11) // deviceId
         );
         return entity;
     }
@@ -167,6 +189,7 @@ public class DbCallLogSensorDao extends AbstractDao<DbCallLogSensor, Long> {
         entity.setIsUpdated(cursor.isNull(offset + 8) ? null : cursor.getShort(offset + 8) != 0);
         entity.setIsDeleted(cursor.isNull(offset + 9) ? null : cursor.getShort(offset + 9) != 0);
         entity.setCreated(cursor.getString(offset + 10));
+        entity.setDeviceId(cursor.isNull(offset + 11) ? null : cursor.getLong(offset + 11));
      }
     
     /** @inheritdoc */
@@ -192,4 +215,95 @@ public class DbCallLogSensorDao extends AbstractDao<DbCallLogSensor, Long> {
         return true;
     }
     
+    private String selectDeep;
+
+    protected String getSelectDeep() {
+        if (selectDeep == null) {
+            StringBuilder builder = new StringBuilder("SELECT ");
+            SqlUtils.appendColumns(builder, "T", getAllColumns());
+            builder.append(',');
+            SqlUtils.appendColumns(builder, "T0", daoSession.getDbDeviceDao().getAllColumns());
+            builder.append(" FROM call_log_sensor T");
+            builder.append(" LEFT JOIN device T0 ON T.\"DEVICE_ID\"=T0.\"_id\"");
+            builder.append(' ');
+            selectDeep = builder.toString();
+        }
+        return selectDeep;
+    }
+    
+    protected DbCallLogSensor loadCurrentDeep(Cursor cursor, boolean lock) {
+        DbCallLogSensor entity = loadCurrent(cursor, 0, lock);
+        int offset = getAllColumns().length;
+
+        DbDevice dbDevice = loadCurrentOther(daoSession.getDbDeviceDao(), cursor, offset);
+        entity.setDbDevice(dbDevice);
+
+        return entity;    
+    }
+
+    public DbCallLogSensor loadDeep(Long key) {
+        assertSinglePk();
+        if (key == null) {
+            return null;
+        }
+
+        StringBuilder builder = new StringBuilder(getSelectDeep());
+        builder.append("WHERE ");
+        SqlUtils.appendColumnsEqValue(builder, "T", getPkColumns());
+        String sql = builder.toString();
+        
+        String[] keyArray = new String[] { key.toString() };
+        Cursor cursor = db.rawQuery(sql, keyArray);
+        
+        try {
+            boolean available = cursor.moveToFirst();
+            if (!available) {
+                return null;
+            } else if (!cursor.isLast()) {
+                throw new IllegalStateException("Expected unique result, but count was " + cursor.getCount());
+            }
+            return loadCurrentDeep(cursor, true);
+        } finally {
+            cursor.close();
+        }
+    }
+    
+    /** Reads all available rows from the given cursor and returns a list of new ImageTO objects. */
+    public List<DbCallLogSensor> loadAllDeepFromCursor(Cursor cursor) {
+        int count = cursor.getCount();
+        List<DbCallLogSensor> list = new ArrayList<DbCallLogSensor>(count);
+        
+        if (cursor.moveToFirst()) {
+            if (identityScope != null) {
+                identityScope.lock();
+                identityScope.reserveRoom(count);
+            }
+            try {
+                do {
+                    list.add(loadCurrentDeep(cursor, false));
+                } while (cursor.moveToNext());
+            } finally {
+                if (identityScope != null) {
+                    identityScope.unlock();
+                }
+            }
+        }
+        return list;
+    }
+    
+    protected List<DbCallLogSensor> loadDeepAllAndCloseCursor(Cursor cursor) {
+        try {
+            return loadAllDeepFromCursor(cursor);
+        } finally {
+            cursor.close();
+        }
+    }
+    
+
+    /** A raw-style query where you can pass any WHERE clause and arguments. */
+    public List<DbCallLogSensor> queryDeep(String where, String... selectionArg) {
+        Cursor cursor = db.rawQuery(getSelectDeep() + where, selectionArg);
+        return loadDeepAllAndCloseCursor(cursor);
+    }
+ 
 }

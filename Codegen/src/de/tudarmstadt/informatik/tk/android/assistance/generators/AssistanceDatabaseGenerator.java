@@ -168,6 +168,9 @@ public class AssistanceDatabaseGenerator {
     positionSensor.addDoubleProperty("accuracyVertical");
     positionSensor.addIntProperty("course");
     positionSensor.addIntProperty("floor");
+    
+    Property positionfkDeviceEvent = positionSensor.addLongProperty("deviceId").index().getProperty();
+    positionSensor.addToOne(device, positionfkDeviceEvent);
 
     // ----- Gyroscope -----
     // REQUIRED
@@ -187,6 +190,9 @@ public class AssistanceDatabaseGenerator {
     gyroscopeSensor.addFloatProperty("xUncalibratedEstimatedDrift");
     gyroscopeSensor.addFloatProperty("yUncalibratedEstimatedDrift");
     gyroscopeSensor.addFloatProperty("zUncalibratedEstimatedDrift");
+    
+    Property gyroscopefkDeviceEvent = gyroscopeSensor.addLongProperty("deviceId").index().getProperty();
+    gyroscopeSensor.addToOne(device, gyroscopefkDeviceEvent);
 
     // ----- Accelerometer -----
     // REQUIRED
@@ -200,6 +206,9 @@ public class AssistanceDatabaseGenerator {
     accelerometerSensor.addStringProperty("created").notNull();
     // OPTIONAL
     accelerometerSensor.addIntProperty("accuracy");
+    
+    Property accelerometerfkDeviceEvent = accelerometerSensor.addLongProperty("deviceId").index().getProperty();
+    accelerometerSensor.addToOne(device, accelerometerfkDeviceEvent);
 
     // ----- Magnetic Field -----
     // REQUIRED
@@ -219,10 +228,10 @@ public class AssistanceDatabaseGenerator {
     magneticFieldSensor.addFloatProperty("xUncalibratedEstimatedIronBias");
     magneticFieldSensor.addFloatProperty("yUncalibratedEstimatedIronBias");
     magneticFieldSensor.addFloatProperty("zUncalibratedEstimatedIronBias");
+    
+    Property magneticFieldfkDeviceEvent = magneticFieldSensor.addLongProperty("deviceId").index().getProperty();
+    magneticFieldSensor.addToOne(device, magneticFieldfkDeviceEvent);
 
-    // ********************************
-    // ------------ EVENTS ------------
-    // ********************************
 
     // ----- Motion Activity -----
     // REQUIRED
@@ -241,6 +250,9 @@ public class AssistanceDatabaseGenerator {
     motionActivityEvent.addIntProperty("onFoot");
     motionActivityEvent.addIntProperty("tilting");
 
+    Property motionActivityfkDeviceEvent = motionActivityEvent.addLongProperty("deviceId").index().getProperty();
+    motionActivityEvent.addToOne(device, motionActivityfkDeviceEvent);
+    
     // ----- Connection -----
     // REQUIRED
     Entity connectionEvent = schema.addEntity("DbConnectionSensor");
@@ -252,8 +264,11 @@ public class AssistanceDatabaseGenerator {
     connectionEvent.addStringProperty("created").notNull();
     // OPTIONAL
     // none
+    
+    Property connectionfkDeviceEvent = connectionEvent.addLongProperty("deviceId").index().getProperty();
+    connectionEvent.addToOne(device, connectionfkDeviceEvent);
 
-    // ----- Connection -----
+    // ----- WIFI Connection -----
     // REQUIRED
     Entity wifiConnectionEvent = schema.addEntity("DbWifiConnectionSensor");
     wifiConnectionEvent.setTableName("wifi_connection_sensor");
@@ -268,6 +283,9 @@ public class AssistanceDatabaseGenerator {
     wifiConnectionEvent.addIntProperty("linkSpeed");
     wifiConnectionEvent.addIntProperty("signalStrength");
     wifiConnectionEvent.addIntProperty("networkId");
+    
+    Property wifiConnectionfkDeviceEvent = wifiConnectionEvent.addLongProperty("deviceId").index().getProperty();
+    wifiConnectionEvent.addToOne(device, wifiConnectionfkDeviceEvent);
 
     // ----- Mobile Connection -----
     // REQUIRED
@@ -282,6 +300,9 @@ public class AssistanceDatabaseGenerator {
     // OPTIONAL
     mobileConnectionEvent.addBooleanProperty("voipAvailable");
 
+    Property mobileConnectionfkDeviceEvent = mobileConnectionEvent.addLongProperty("deviceId").index().getProperty();
+    mobileConnectionEvent.addToOne(device, mobileConnectionfkDeviceEvent);
+    
     // ----- Loudness -----
     // REQUIRED
     Entity loudnessEvent = schema.addEntity("DbLoudnessSensor");
@@ -292,6 +313,9 @@ public class AssistanceDatabaseGenerator {
     loudnessEvent.addStringProperty("created").notNull();
     // OPTIONAL
     // none
+    
+    Property loudnessfkDeviceEvent = loudnessEvent.addLongProperty("deviceId").index().getProperty();
+    loudnessEvent.addToOne(device, loudnessfkDeviceEvent);
 
     // -------------------------------------------------------------------------------------------
     // -------------------------------------------------------------------------------------------
@@ -315,7 +339,10 @@ public class AssistanceDatabaseGenerator {
     foregroundEvent.addIntProperty("eventType");
     foregroundEvent.addIntProperty("keystrokes");
     foregroundEvent.addStringProperty("created").notNull();
-
+    
+    Property foregroundfkDeviceEvent = foregroundEvent.addLongProperty("deviceId").index().getProperty();
+    foregroundEvent.addToOne(device, foregroundfkDeviceEvent);
+    
     // ----- Light Sensor -----
     Entity lightSensor = schema.addEntity("DbLightSensor");
     lightSensor.setTableName("light_sensor");
@@ -325,6 +352,9 @@ public class AssistanceDatabaseGenerator {
     lightSensor.addFloatProperty("value");
     lightSensor.addStringProperty("created").notNull();
 
+    Property lightfkDeviceEvent = lightSensor.addLongProperty("deviceId").index().getProperty();
+    lightSensor.addToOne(device, lightfkDeviceEvent);
+    
     // ----- Ringtone Sensor -----
     Entity ringtoneEvent = schema.addEntity("DbRingtoneSensor");
     ringtoneEvent.setTableName("ringtone_sensor");
@@ -332,7 +362,10 @@ public class AssistanceDatabaseGenerator {
     ringtoneEvent.implementsInterface(Config.ASSISTANCE_PACKAGE_SENSOR);
     ringtoneEvent.addIntProperty("mode");
     ringtoneEvent.addStringProperty("created").notNull();
-
+    
+    Property ringtonefkDeviceEvent = ringtoneEvent.addLongProperty("deviceId").index().getProperty();
+    ringtoneEvent.addToOne(device, ringtonefkDeviceEvent);
+    
     // ----- Running Processes Sensor -----
     Entity runningProcessesEvent = schema.addEntity("DbRunningProcessesSensor");
     runningProcessesEvent.setTableName("running_processes_sensor");
@@ -341,6 +374,9 @@ public class AssistanceDatabaseGenerator {
     runningProcessesEvent.addStringProperty("name");
     runningProcessesEvent.addStringProperty("created").notNull();
 
+    Property runningProcessesfkDeviceEvent = runningProcessesEvent.addLongProperty("deviceId").index().getProperty();
+    runningProcessesEvent.addToOne(device, runningProcessesfkDeviceEvent);
+    
     // ----- Running Services Sensor -----
     Entity runningServicesEvent = schema.addEntity("DbRunningServicesSensor");
     runningServicesEvent.setTableName("running_services_sensor");
@@ -349,6 +385,9 @@ public class AssistanceDatabaseGenerator {
     runningServicesEvent.addStringProperty("packageName");
     runningServicesEvent.addStringProperty("className");
     runningServicesEvent.addStringProperty("created").notNull();
+    
+    Property runningServicesfkDeviceEvent = runningServicesEvent.addLongProperty("deviceId").index().getProperty();
+    runningServicesEvent.addToOne(device, runningServicesfkDeviceEvent);
 
     // ----- Running Tasks Sensor -----
     Entity runningTasksEvent = schema.addEntity("DbRunningTasksSensor");
@@ -359,6 +398,9 @@ public class AssistanceDatabaseGenerator {
     runningTasksEvent.addIntProperty("stackPosition");
     runningTasksEvent.addStringProperty("created").notNull();
 
+    Property runningTasksfkDeviceEvent = runningTasksEvent.addLongProperty("deviceId").index().getProperty();
+    runningTasksEvent.addToOne(device, runningTasksfkDeviceEvent);
+    
     // ----- Account Reader Sensor -----
     Entity accountReaderEvent = schema.addEntity("DbAccountReaderSensor");
     accountReaderEvent.setTableName("account_reader_sensor");
@@ -367,6 +409,9 @@ public class AssistanceDatabaseGenerator {
     accountReaderEvent.addStringProperty("types");
     accountReaderEvent.addStringProperty("created").notNull();
 
+    Property accountReaderfkDeviceEvent = accountReaderEvent.addLongProperty("deviceId").index().getProperty();
+    accountReaderEvent.addToOne(device, accountReaderfkDeviceEvent);
+    
     // ----- Network Traffic Sensor -----
     Entity networkTrafficEvent = schema.addEntity("DbNetworkTrafficSensor");
     networkTrafficEvent.setTableName("network_traffic_sensor");
@@ -379,7 +424,10 @@ public class AssistanceDatabaseGenerator {
     networkTrafficEvent.addDoubleProperty("longitude");
     networkTrafficEvent.addDoubleProperty("latitude");
     networkTrafficEvent.addStringProperty("created").notNull();
-
+      
+    Property networkTrafficfkDeviceEvent = networkTrafficEvent.addLongProperty("deviceId").index().getProperty();
+    networkTrafficEvent.addToOne(device, networkTrafficfkDeviceEvent);
+    
     // ----- Browser History Sensor -----
     Entity browserHistoryEvent = schema.addEntity("DbBrowserHistorySensor");
     browserHistoryEvent.setTableName("browser_history_sensor");
@@ -395,6 +443,9 @@ public class AssistanceDatabaseGenerator {
     browserHistoryEvent.addBooleanProperty("isDeleted");
     browserHistoryEvent.addStringProperty("created").notNull();
 
+    Property browserHistoryfkDeviceEvent = browserHistoryEvent.addLongProperty("deviceId").index().getProperty();
+    browserHistoryEvent.addToOne(device, browserHistoryfkDeviceEvent);
+    
     // ----- Call Log Sensor -----
     Entity callLogEvent = schema.addEntity("DbCallLogSensor");
     callLogEvent.setTableName("call_log_sensor");
@@ -411,6 +462,9 @@ public class AssistanceDatabaseGenerator {
     callLogEvent.addBooleanProperty("isDeleted");
     callLogEvent.addStringProperty("created").notNull();
 
+    Property callLogfkDeviceEvent = callLogEvent.addLongProperty("deviceId").index().getProperty();
+    callLogEvent.addToOne(device, callLogfkDeviceEvent);
+    
     // ----- Calendar Sensor -----
     Entity calendarEvent = schema.addEntity("DbCalendarSensor");
     calendarEvent.setTableName("calendar_sensor");
@@ -443,6 +497,9 @@ public class AssistanceDatabaseGenerator {
     calendarEvent.addBooleanProperty("isDeleted");
     calendarEvent.addStringProperty("created").notNull();
 
+    Property calendarfkDeviceEvent = calendarEvent.addLongProperty("deviceId").index().getProperty();
+    calendarEvent.addToOne(device, calendarfkDeviceEvent);
+    
     // ----- Calendar Reminder Sensor -----
     Entity calendarReminderEvent = schema.addEntity("DbCalendarReminderSensor");
     calendarReminderEvent.setTableName("calendar_reminder_sensor");
@@ -457,6 +514,9 @@ public class AssistanceDatabaseGenerator {
     calendarReminderEvent.addBooleanProperty("isDeleted");
     calendarReminderEvent.addStringProperty("created").notNull();
 
+    Property calendarReminderfkDeviceEvent = calendarReminderEvent.addLongProperty("deviceId").index().getProperty();
+    calendarReminderEvent.addToOne(device, calendarReminderfkDeviceEvent);
+    
     // ----- Contact Sensor -----
     Entity contactEvent = schema.addEntity("DbContactSensor");
     contactEvent.setTableName("contact_sensor");
@@ -476,6 +536,9 @@ public class AssistanceDatabaseGenerator {
     contactEvent.addBooleanProperty("isDeleted");
     contactEvent.addStringProperty("created").notNull();
 
+    Property contactfkDeviceEvent = contactEvent.addLongProperty("deviceId").index().getProperty();
+    contactEvent.addToOne(device, contactfkDeviceEvent);
+    
     // ----- Contact Numbers Sensor -----
     Entity contactNumbersEvent = schema.addEntity("DbContactNumberSensor");
     contactNumbersEvent.setTableName("contact_number_sensor");
@@ -493,6 +556,8 @@ public class AssistanceDatabaseGenerator {
         contactNumbersEvent.addLongProperty("contactId").index().getProperty();
     contactNumbersEvent.addToOne(contactEvent, contactNumberfkContactEvent);
     contactEvent.addToMany(contactNumbersEvent, contactNumberfkContactEvent);
+    Property contactNumbersfkDeviceEvent = contactNumbersEvent.addLongProperty("deviceId").index().getProperty();
+    contactNumbersEvent.addToOne(device, contactNumbersfkDeviceEvent);
 
     // ----- Contact Mail Addresses Sensor -----
     Entity contactMailEvent = schema.addEntity("DbContactEmailSensor");
@@ -511,6 +576,8 @@ public class AssistanceDatabaseGenerator {
         contactMailEvent.addLongProperty("contactId").index().getProperty();
     contactMailEvent.addToOne(contactEvent, contactNumberfkContactEvent);
     contactEvent.addToMany(contactMailEvent, contactNumberfkContactEvent);
+    Property contactMailfkDeviceEvent = contactMailEvent.addLongProperty("deviceId").index().getProperty();
+    contactMailEvent.addToOne(device, contactMailfkDeviceEvent);
     
     // ----- Power State Sensor -----
     // REQUIRED
@@ -526,6 +593,9 @@ public class AssistanceDatabaseGenerator {
     powerStatusEvent.addIntProperty("chargingMode");
     powerStatusEvent.addBooleanProperty("powerSaveMode");
     
+    Property powerStatusfkDeviceEvent = powerStatusEvent.addLongProperty("deviceId").index().getProperty();
+    powerStatusEvent.addToOne(device, powerStatusfkDeviceEvent);
+    
     // ----- Power Level Sensor -----
     // REQUIRED
     Entity powerLevelEvent = schema.addEntity("DbPowerLevelSensor");
@@ -534,6 +604,13 @@ public class AssistanceDatabaseGenerator {
     powerLevelEvent.implementsInterface(Config.ASSISTANCE_PACKAGE_SENSOR);
     powerLevelEvent.addFloatProperty("percent");
     powerLevelEvent.addStringProperty("created").notNull();
+    
+    Property powerLevelfkDeviceEvent = powerLevelEvent.addLongProperty("deviceId").index().getProperty();
+    powerLevelEvent.addToOne(device, powerLevelfkDeviceEvent);
+    
+    /**
+     * SOCIAL
+     */
     
     // ----- TUCaN Sensor -----
     // REQUIRED

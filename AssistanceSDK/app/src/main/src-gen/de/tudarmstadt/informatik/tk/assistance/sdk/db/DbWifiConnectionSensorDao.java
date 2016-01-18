@@ -1,11 +1,14 @@
 package de.tudarmstadt.informatik.tk.assistance.sdk.db;
 
+import java.util.List;
+import java.util.ArrayList;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteStatement;
 
 import de.greenrobot.dao.AbstractDao;
 import de.greenrobot.dao.Property;
+import de.greenrobot.dao.internal.SqlUtils;
 import de.greenrobot.dao.internal.DaoConfig;
 
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbWifiConnectionSensor;
@@ -32,7 +35,10 @@ public class DbWifiConnectionSensorDao extends AbstractDao<DbWifiConnectionSenso
         public final static Property LinkSpeed = new Property(6, Integer.class, "linkSpeed", false, "LINK_SPEED");
         public final static Property SignalStrength = new Property(7, Integer.class, "signalStrength", false, "SIGNAL_STRENGTH");
         public final static Property NetworkId = new Property(8, Integer.class, "networkId", false, "NETWORK_ID");
+        public final static Property DeviceId = new Property(9, Long.class, "deviceId", false, "DEVICE_ID");
     };
+
+    private DaoSession daoSession;
 
 
     public DbWifiConnectionSensorDao(DaoConfig config) {
@@ -41,6 +47,7 @@ public class DbWifiConnectionSensorDao extends AbstractDao<DbWifiConnectionSenso
     
     public DbWifiConnectionSensorDao(DaoConfig config, DaoSession daoSession) {
         super(config, daoSession);
+        this.daoSession = daoSession;
     }
 
     /** Creates the underlying database table. */
@@ -55,10 +62,13 @@ public class DbWifiConnectionSensorDao extends AbstractDao<DbWifiConnectionSenso
                 "\"FREQUENCY\" INTEGER," + // 5: frequency
                 "\"LINK_SPEED\" INTEGER," + // 6: linkSpeed
                 "\"SIGNAL_STRENGTH\" INTEGER," + // 7: signalStrength
-                "\"NETWORK_ID\" INTEGER);"); // 8: networkId
+                "\"NETWORK_ID\" INTEGER," + // 8: networkId
+                "\"DEVICE_ID\" INTEGER);"); // 9: deviceId
         // Add Indexes
         db.execSQL("CREATE INDEX " + constraint + "IDX_wifi_connection_sensor__id ON wifi_connection_sensor" +
                 " (\"_id\");");
+        db.execSQL("CREATE INDEX " + constraint + "IDX_wifi_connection_sensor_DEVICE_ID ON wifi_connection_sensor" +
+                " (\"DEVICE_ID\");");
     }
 
     /** Drops the underlying database table. */
@@ -112,6 +122,17 @@ public class DbWifiConnectionSensorDao extends AbstractDao<DbWifiConnectionSenso
         if (networkId != null) {
             stmt.bindLong(9, networkId);
         }
+ 
+        Long deviceId = entity.getDeviceId();
+        if (deviceId != null) {
+            stmt.bindLong(10, deviceId);
+        }
+    }
+
+    @Override
+    protected void attachEntity(DbWifiConnectionSensor entity) {
+        super.attachEntity(entity);
+        entity.__setDaoSession(daoSession);
     }
 
     /** @inheritdoc */
@@ -132,7 +153,8 @@ public class DbWifiConnectionSensorDao extends AbstractDao<DbWifiConnectionSenso
             cursor.isNull(offset + 5) ? null : cursor.getInt(offset + 5), // frequency
             cursor.isNull(offset + 6) ? null : cursor.getInt(offset + 6), // linkSpeed
             cursor.isNull(offset + 7) ? null : cursor.getInt(offset + 7), // signalStrength
-            cursor.isNull(offset + 8) ? null : cursor.getInt(offset + 8) // networkId
+            cursor.isNull(offset + 8) ? null : cursor.getInt(offset + 8), // networkId
+            cursor.isNull(offset + 9) ? null : cursor.getLong(offset + 9) // deviceId
         );
         return entity;
     }
@@ -149,6 +171,7 @@ public class DbWifiConnectionSensorDao extends AbstractDao<DbWifiConnectionSenso
         entity.setLinkSpeed(cursor.isNull(offset + 6) ? null : cursor.getInt(offset + 6));
         entity.setSignalStrength(cursor.isNull(offset + 7) ? null : cursor.getInt(offset + 7));
         entity.setNetworkId(cursor.isNull(offset + 8) ? null : cursor.getInt(offset + 8));
+        entity.setDeviceId(cursor.isNull(offset + 9) ? null : cursor.getLong(offset + 9));
      }
     
     /** @inheritdoc */
@@ -174,4 +197,95 @@ public class DbWifiConnectionSensorDao extends AbstractDao<DbWifiConnectionSenso
         return true;
     }
     
+    private String selectDeep;
+
+    protected String getSelectDeep() {
+        if (selectDeep == null) {
+            StringBuilder builder = new StringBuilder("SELECT ");
+            SqlUtils.appendColumns(builder, "T", getAllColumns());
+            builder.append(',');
+            SqlUtils.appendColumns(builder, "T0", daoSession.getDbDeviceDao().getAllColumns());
+            builder.append(" FROM wifi_connection_sensor T");
+            builder.append(" LEFT JOIN device T0 ON T.\"DEVICE_ID\"=T0.\"_id\"");
+            builder.append(' ');
+            selectDeep = builder.toString();
+        }
+        return selectDeep;
+    }
+    
+    protected DbWifiConnectionSensor loadCurrentDeep(Cursor cursor, boolean lock) {
+        DbWifiConnectionSensor entity = loadCurrent(cursor, 0, lock);
+        int offset = getAllColumns().length;
+
+        DbDevice dbDevice = loadCurrentOther(daoSession.getDbDeviceDao(), cursor, offset);
+        entity.setDbDevice(dbDevice);
+
+        return entity;    
+    }
+
+    public DbWifiConnectionSensor loadDeep(Long key) {
+        assertSinglePk();
+        if (key == null) {
+            return null;
+        }
+
+        StringBuilder builder = new StringBuilder(getSelectDeep());
+        builder.append("WHERE ");
+        SqlUtils.appendColumnsEqValue(builder, "T", getPkColumns());
+        String sql = builder.toString();
+        
+        String[] keyArray = new String[] { key.toString() };
+        Cursor cursor = db.rawQuery(sql, keyArray);
+        
+        try {
+            boolean available = cursor.moveToFirst();
+            if (!available) {
+                return null;
+            } else if (!cursor.isLast()) {
+                throw new IllegalStateException("Expected unique result, but count was " + cursor.getCount());
+            }
+            return loadCurrentDeep(cursor, true);
+        } finally {
+            cursor.close();
+        }
+    }
+    
+    /** Reads all available rows from the given cursor and returns a list of new ImageTO objects. */
+    public List<DbWifiConnectionSensor> loadAllDeepFromCursor(Cursor cursor) {
+        int count = cursor.getCount();
+        List<DbWifiConnectionSensor> list = new ArrayList<DbWifiConnectionSensor>(count);
+        
+        if (cursor.moveToFirst()) {
+            if (identityScope != null) {
+                identityScope.lock();
+                identityScope.reserveRoom(count);
+            }
+            try {
+                do {
+                    list.add(loadCurrentDeep(cursor, false));
+                } while (cursor.moveToNext());
+            } finally {
+                if (identityScope != null) {
+                    identityScope.unlock();
+                }
+            }
+        }
+        return list;
+    }
+    
+    protected List<DbWifiConnectionSensor> loadDeepAllAndCloseCursor(Cursor cursor) {
+        try {
+            return loadAllDeepFromCursor(cursor);
+        } finally {
+            cursor.close();
+        }
+    }
+    
+
+    /** A raw-style query where you can pass any WHERE clause and arguments. */
+    public List<DbWifiConnectionSensor> queryDeep(String where, String... selectionArg) {
+        Cursor cursor = db.rawQuery(getSelectDeep() + where, selectionArg);
+        return loadDeepAllAndCloseCursor(cursor);
+    }
+ 
 }

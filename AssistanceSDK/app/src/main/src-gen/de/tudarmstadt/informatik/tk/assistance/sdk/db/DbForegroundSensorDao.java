@@ -1,11 +1,14 @@
 package de.tudarmstadt.informatik.tk.assistance.sdk.db;
 
+import java.util.List;
+import java.util.ArrayList;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteStatement;
 
 import de.greenrobot.dao.AbstractDao;
 import de.greenrobot.dao.Property;
+import de.greenrobot.dao.internal.SqlUtils;
 import de.greenrobot.dao.internal.DaoConfig;
 
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbForegroundSensor;
@@ -33,7 +36,10 @@ public class DbForegroundSensorDao extends AbstractDao<DbForegroundSensor, Long>
         public final static Property EventType = new Property(7, Integer.class, "eventType", false, "EVENT_TYPE");
         public final static Property Keystrokes = new Property(8, Integer.class, "keystrokes", false, "KEYSTROKES");
         public final static Property Created = new Property(9, String.class, "created", false, "CREATED");
+        public final static Property DeviceId = new Property(10, Long.class, "deviceId", false, "DEVICE_ID");
     };
+
+    private DaoSession daoSession;
 
 
     public DbForegroundSensorDao(DaoConfig config) {
@@ -42,6 +48,7 @@ public class DbForegroundSensorDao extends AbstractDao<DbForegroundSensor, Long>
     
     public DbForegroundSensorDao(DaoConfig config, DaoSession daoSession) {
         super(config, daoSession);
+        this.daoSession = daoSession;
     }
 
     /** Creates the underlying database table. */
@@ -57,10 +64,13 @@ public class DbForegroundSensorDao extends AbstractDao<DbForegroundSensor, Long>
                 "\"URL\" TEXT," + // 6: url
                 "\"EVENT_TYPE\" INTEGER," + // 7: eventType
                 "\"KEYSTROKES\" INTEGER," + // 8: keystrokes
-                "\"CREATED\" TEXT NOT NULL );"); // 9: created
+                "\"CREATED\" TEXT NOT NULL ," + // 9: created
+                "\"DEVICE_ID\" INTEGER);"); // 10: deviceId
         // Add Indexes
         db.execSQL("CREATE INDEX " + constraint + "IDX_foreground_sensor__id ON foreground_sensor" +
                 " (\"_id\");");
+        db.execSQL("CREATE INDEX " + constraint + "IDX_foreground_sensor_DEVICE_ID ON foreground_sensor" +
+                " (\"DEVICE_ID\");");
     }
 
     /** Drops the underlying database table. */
@@ -119,6 +129,17 @@ public class DbForegroundSensorDao extends AbstractDao<DbForegroundSensor, Long>
             stmt.bindLong(9, keystrokes);
         }
         stmt.bindString(10, entity.getCreated());
+ 
+        Long deviceId = entity.getDeviceId();
+        if (deviceId != null) {
+            stmt.bindLong(11, deviceId);
+        }
+    }
+
+    @Override
+    protected void attachEntity(DbForegroundSensor entity) {
+        super.attachEntity(entity);
+        entity.__setDaoSession(daoSession);
     }
 
     /** @inheritdoc */
@@ -140,7 +161,8 @@ public class DbForegroundSensorDao extends AbstractDao<DbForegroundSensor, Long>
             cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6), // url
             cursor.isNull(offset + 7) ? null : cursor.getInt(offset + 7), // eventType
             cursor.isNull(offset + 8) ? null : cursor.getInt(offset + 8), // keystrokes
-            cursor.getString(offset + 9) // created
+            cursor.getString(offset + 9), // created
+            cursor.isNull(offset + 10) ? null : cursor.getLong(offset + 10) // deviceId
         );
         return entity;
     }
@@ -158,6 +180,7 @@ public class DbForegroundSensorDao extends AbstractDao<DbForegroundSensor, Long>
         entity.setEventType(cursor.isNull(offset + 7) ? null : cursor.getInt(offset + 7));
         entity.setKeystrokes(cursor.isNull(offset + 8) ? null : cursor.getInt(offset + 8));
         entity.setCreated(cursor.getString(offset + 9));
+        entity.setDeviceId(cursor.isNull(offset + 10) ? null : cursor.getLong(offset + 10));
      }
     
     /** @inheritdoc */
@@ -183,4 +206,95 @@ public class DbForegroundSensorDao extends AbstractDao<DbForegroundSensor, Long>
         return true;
     }
     
+    private String selectDeep;
+
+    protected String getSelectDeep() {
+        if (selectDeep == null) {
+            StringBuilder builder = new StringBuilder("SELECT ");
+            SqlUtils.appendColumns(builder, "T", getAllColumns());
+            builder.append(',');
+            SqlUtils.appendColumns(builder, "T0", daoSession.getDbDeviceDao().getAllColumns());
+            builder.append(" FROM foreground_sensor T");
+            builder.append(" LEFT JOIN device T0 ON T.\"DEVICE_ID\"=T0.\"_id\"");
+            builder.append(' ');
+            selectDeep = builder.toString();
+        }
+        return selectDeep;
+    }
+    
+    protected DbForegroundSensor loadCurrentDeep(Cursor cursor, boolean lock) {
+        DbForegroundSensor entity = loadCurrent(cursor, 0, lock);
+        int offset = getAllColumns().length;
+
+        DbDevice dbDevice = loadCurrentOther(daoSession.getDbDeviceDao(), cursor, offset);
+        entity.setDbDevice(dbDevice);
+
+        return entity;    
+    }
+
+    public DbForegroundSensor loadDeep(Long key) {
+        assertSinglePk();
+        if (key == null) {
+            return null;
+        }
+
+        StringBuilder builder = new StringBuilder(getSelectDeep());
+        builder.append("WHERE ");
+        SqlUtils.appendColumnsEqValue(builder, "T", getPkColumns());
+        String sql = builder.toString();
+        
+        String[] keyArray = new String[] { key.toString() };
+        Cursor cursor = db.rawQuery(sql, keyArray);
+        
+        try {
+            boolean available = cursor.moveToFirst();
+            if (!available) {
+                return null;
+            } else if (!cursor.isLast()) {
+                throw new IllegalStateException("Expected unique result, but count was " + cursor.getCount());
+            }
+            return loadCurrentDeep(cursor, true);
+        } finally {
+            cursor.close();
+        }
+    }
+    
+    /** Reads all available rows from the given cursor and returns a list of new ImageTO objects. */
+    public List<DbForegroundSensor> loadAllDeepFromCursor(Cursor cursor) {
+        int count = cursor.getCount();
+        List<DbForegroundSensor> list = new ArrayList<DbForegroundSensor>(count);
+        
+        if (cursor.moveToFirst()) {
+            if (identityScope != null) {
+                identityScope.lock();
+                identityScope.reserveRoom(count);
+            }
+            try {
+                do {
+                    list.add(loadCurrentDeep(cursor, false));
+                } while (cursor.moveToNext());
+            } finally {
+                if (identityScope != null) {
+                    identityScope.unlock();
+                }
+            }
+        }
+        return list;
+    }
+    
+    protected List<DbForegroundSensor> loadDeepAllAndCloseCursor(Cursor cursor) {
+        try {
+            return loadAllDeepFromCursor(cursor);
+        } finally {
+            cursor.close();
+        }
+    }
+    
+
+    /** A raw-style query where you can pass any WHERE clause and arguments. */
+    public List<DbForegroundSensor> queryDeep(String where, String... selectionArg) {
+        Cursor cursor = db.rawQuery(getSelectDeep() + where, selectionArg);
+        return loadDeepAllAndCloseCursor(cursor);
+    }
+ 
 }

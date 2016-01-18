@@ -1,11 +1,14 @@
 package de.tudarmstadt.informatik.tk.assistance.sdk.db;
 
+import java.util.List;
+import java.util.ArrayList;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteStatement;
 
 import de.greenrobot.dao.AbstractDao;
 import de.greenrobot.dao.Property;
+import de.greenrobot.dao.internal.SqlUtils;
 import de.greenrobot.dao.internal.DaoConfig;
 
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbMagneticFieldSensor;
@@ -35,7 +38,10 @@ public class DbMagneticFieldSensorDao extends AbstractDao<DbMagneticFieldSensor,
         public final static Property XUncalibratedEstimatedIronBias = new Property(9, Float.class, "xUncalibratedEstimatedIronBias", false, "X_UNCALIBRATED_ESTIMATED_IRON_BIAS");
         public final static Property YUncalibratedEstimatedIronBias = new Property(10, Float.class, "yUncalibratedEstimatedIronBias", false, "Y_UNCALIBRATED_ESTIMATED_IRON_BIAS");
         public final static Property ZUncalibratedEstimatedIronBias = new Property(11, Float.class, "zUncalibratedEstimatedIronBias", false, "Z_UNCALIBRATED_ESTIMATED_IRON_BIAS");
+        public final static Property DeviceId = new Property(12, Long.class, "deviceId", false, "DEVICE_ID");
     };
+
+    private DaoSession daoSession;
 
 
     public DbMagneticFieldSensorDao(DaoConfig config) {
@@ -44,6 +50,7 @@ public class DbMagneticFieldSensorDao extends AbstractDao<DbMagneticFieldSensor,
     
     public DbMagneticFieldSensorDao(DaoConfig config, DaoSession daoSession) {
         super(config, daoSession);
+        this.daoSession = daoSession;
     }
 
     /** Creates the underlying database table. */
@@ -61,10 +68,13 @@ public class DbMagneticFieldSensorDao extends AbstractDao<DbMagneticFieldSensor,
                 "\"Z_UNCALIBRATED_NO_HARD_IRON\" REAL," + // 8: zUncalibratedNoHardIron
                 "\"X_UNCALIBRATED_ESTIMATED_IRON_BIAS\" REAL," + // 9: xUncalibratedEstimatedIronBias
                 "\"Y_UNCALIBRATED_ESTIMATED_IRON_BIAS\" REAL," + // 10: yUncalibratedEstimatedIronBias
-                "\"Z_UNCALIBRATED_ESTIMATED_IRON_BIAS\" REAL);"); // 11: zUncalibratedEstimatedIronBias
+                "\"Z_UNCALIBRATED_ESTIMATED_IRON_BIAS\" REAL," + // 11: zUncalibratedEstimatedIronBias
+                "\"DEVICE_ID\" INTEGER);"); // 12: deviceId
         // Add Indexes
         db.execSQL("CREATE INDEX " + constraint + "IDX_magnetic_field_sensor__id ON magnetic_field_sensor" +
                 " (\"_id\");");
+        db.execSQL("CREATE INDEX " + constraint + "IDX_magnetic_field_sensor_DEVICE_ID ON magnetic_field_sensor" +
+                " (\"DEVICE_ID\");");
     }
 
     /** Drops the underlying database table. */
@@ -133,6 +143,17 @@ public class DbMagneticFieldSensorDao extends AbstractDao<DbMagneticFieldSensor,
         if (zUncalibratedEstimatedIronBias != null) {
             stmt.bindDouble(12, zUncalibratedEstimatedIronBias);
         }
+ 
+        Long deviceId = entity.getDeviceId();
+        if (deviceId != null) {
+            stmt.bindLong(13, deviceId);
+        }
+    }
+
+    @Override
+    protected void attachEntity(DbMagneticFieldSensor entity) {
+        super.attachEntity(entity);
+        entity.__setDaoSession(daoSession);
     }
 
     /** @inheritdoc */
@@ -156,7 +177,8 @@ public class DbMagneticFieldSensorDao extends AbstractDao<DbMagneticFieldSensor,
             cursor.isNull(offset + 8) ? null : cursor.getFloat(offset + 8), // zUncalibratedNoHardIron
             cursor.isNull(offset + 9) ? null : cursor.getFloat(offset + 9), // xUncalibratedEstimatedIronBias
             cursor.isNull(offset + 10) ? null : cursor.getFloat(offset + 10), // yUncalibratedEstimatedIronBias
-            cursor.isNull(offset + 11) ? null : cursor.getFloat(offset + 11) // zUncalibratedEstimatedIronBias
+            cursor.isNull(offset + 11) ? null : cursor.getFloat(offset + 11), // zUncalibratedEstimatedIronBias
+            cursor.isNull(offset + 12) ? null : cursor.getLong(offset + 12) // deviceId
         );
         return entity;
     }
@@ -176,6 +198,7 @@ public class DbMagneticFieldSensorDao extends AbstractDao<DbMagneticFieldSensor,
         entity.setXUncalibratedEstimatedIronBias(cursor.isNull(offset + 9) ? null : cursor.getFloat(offset + 9));
         entity.setYUncalibratedEstimatedIronBias(cursor.isNull(offset + 10) ? null : cursor.getFloat(offset + 10));
         entity.setZUncalibratedEstimatedIronBias(cursor.isNull(offset + 11) ? null : cursor.getFloat(offset + 11));
+        entity.setDeviceId(cursor.isNull(offset + 12) ? null : cursor.getLong(offset + 12));
      }
     
     /** @inheritdoc */
@@ -201,4 +224,95 @@ public class DbMagneticFieldSensorDao extends AbstractDao<DbMagneticFieldSensor,
         return true;
     }
     
+    private String selectDeep;
+
+    protected String getSelectDeep() {
+        if (selectDeep == null) {
+            StringBuilder builder = new StringBuilder("SELECT ");
+            SqlUtils.appendColumns(builder, "T", getAllColumns());
+            builder.append(',');
+            SqlUtils.appendColumns(builder, "T0", daoSession.getDbDeviceDao().getAllColumns());
+            builder.append(" FROM magnetic_field_sensor T");
+            builder.append(" LEFT JOIN device T0 ON T.\"DEVICE_ID\"=T0.\"_id\"");
+            builder.append(' ');
+            selectDeep = builder.toString();
+        }
+        return selectDeep;
+    }
+    
+    protected DbMagneticFieldSensor loadCurrentDeep(Cursor cursor, boolean lock) {
+        DbMagneticFieldSensor entity = loadCurrent(cursor, 0, lock);
+        int offset = getAllColumns().length;
+
+        DbDevice dbDevice = loadCurrentOther(daoSession.getDbDeviceDao(), cursor, offset);
+        entity.setDbDevice(dbDevice);
+
+        return entity;    
+    }
+
+    public DbMagneticFieldSensor loadDeep(Long key) {
+        assertSinglePk();
+        if (key == null) {
+            return null;
+        }
+
+        StringBuilder builder = new StringBuilder(getSelectDeep());
+        builder.append("WHERE ");
+        SqlUtils.appendColumnsEqValue(builder, "T", getPkColumns());
+        String sql = builder.toString();
+        
+        String[] keyArray = new String[] { key.toString() };
+        Cursor cursor = db.rawQuery(sql, keyArray);
+        
+        try {
+            boolean available = cursor.moveToFirst();
+            if (!available) {
+                return null;
+            } else if (!cursor.isLast()) {
+                throw new IllegalStateException("Expected unique result, but count was " + cursor.getCount());
+            }
+            return loadCurrentDeep(cursor, true);
+        } finally {
+            cursor.close();
+        }
+    }
+    
+    /** Reads all available rows from the given cursor and returns a list of new ImageTO objects. */
+    public List<DbMagneticFieldSensor> loadAllDeepFromCursor(Cursor cursor) {
+        int count = cursor.getCount();
+        List<DbMagneticFieldSensor> list = new ArrayList<DbMagneticFieldSensor>(count);
+        
+        if (cursor.moveToFirst()) {
+            if (identityScope != null) {
+                identityScope.lock();
+                identityScope.reserveRoom(count);
+            }
+            try {
+                do {
+                    list.add(loadCurrentDeep(cursor, false));
+                } while (cursor.moveToNext());
+            } finally {
+                if (identityScope != null) {
+                    identityScope.unlock();
+                }
+            }
+        }
+        return list;
+    }
+    
+    protected List<DbMagneticFieldSensor> loadDeepAllAndCloseCursor(Cursor cursor) {
+        try {
+            return loadAllDeepFromCursor(cursor);
+        } finally {
+            cursor.close();
+        }
+    }
+    
+
+    /** A raw-style query where you can pass any WHERE clause and arguments. */
+    public List<DbMagneticFieldSensor> queryDeep(String where, String... selectionArg) {
+        Cursor cursor = db.rawQuery(getSelectDeep() + where, selectionArg);
+        return loadDeepAllAndCloseCursor(cursor);
+    }
+ 
 }

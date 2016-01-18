@@ -25,12 +25,16 @@ public class DbContactSensor implements de.tudarmstadt.informatik.tk.assistance.
     private Boolean isDeleted;
     /** Not-null value. */
     private String created;
+    private Long deviceId;
 
     /** Used to resolve relations */
     private transient DaoSession daoSession;
 
     /** Used for active entity operations. */
     private transient DbContactSensorDao myDao;
+
+    private DbDevice dbDevice;
+    private Long dbDevice__resolvedKey;
 
     private List<DbContactNumberSensor> dbContactNumberSensorList;
     private List<DbContactEmailSensor> dbContactEmailSensorList;
@@ -42,7 +46,7 @@ public class DbContactSensor implements de.tudarmstadt.informatik.tk.assistance.
         this.id = id;
     }
 
-    public DbContactSensor(Long id, Long contactId, Long globalContactId, String displayName, String givenName, String familyName, Integer starred, Integer lastTimeContacted, Integer timesContacted, String note, Boolean isNew, Boolean isUpdated, Boolean isDeleted, String created) {
+    public DbContactSensor(Long id, Long contactId, Long globalContactId, String displayName, String givenName, String familyName, Integer starred, Integer lastTimeContacted, Integer timesContacted, String note, Boolean isNew, Boolean isUpdated, Boolean isDeleted, String created, Long deviceId) {
         this.id = id;
         this.contactId = contactId;
         this.globalContactId = globalContactId;
@@ -57,6 +61,7 @@ public class DbContactSensor implements de.tudarmstadt.informatik.tk.assistance.
         this.isUpdated = isUpdated;
         this.isDeleted = isDeleted;
         this.created = created;
+        this.deviceId = deviceId;
     }
 
     /** called by internal mechanisms, do not call yourself. */
@@ -177,6 +182,39 @@ public class DbContactSensor implements de.tudarmstadt.informatik.tk.assistance.
     /** Not-null value; ensure this value is available before it is saved to the database. */
     public void setCreated(String created) {
         this.created = created;
+    }
+
+    public Long getDeviceId() {
+        return deviceId;
+    }
+
+    public void setDeviceId(Long deviceId) {
+        this.deviceId = deviceId;
+    }
+
+    /** To-one relationship, resolved on first access. */
+    public DbDevice getDbDevice() {
+        Long __key = this.deviceId;
+        if (dbDevice__resolvedKey == null || !dbDevice__resolvedKey.equals(__key)) {
+            if (daoSession == null) {
+                throw new DaoException("Entity is detached from DAO context");
+            }
+            DbDeviceDao targetDao = daoSession.getDbDeviceDao();
+            DbDevice dbDeviceNew = targetDao.load(__key);
+            synchronized (this) {
+                dbDevice = dbDeviceNew;
+            	dbDevice__resolvedKey = __key;
+            }
+        }
+        return dbDevice;
+    }
+
+    public void setDbDevice(DbDevice dbDevice) {
+        synchronized (this) {
+            this.dbDevice = dbDevice;
+            deviceId = dbDevice == null ? null : dbDevice.getId();
+            dbDevice__resolvedKey = deviceId;
+        }
     }
 
     /** To-many relationship, resolved on first access (and after reset). Changes to to-many relations are not persisted, make changes to the target entity. */

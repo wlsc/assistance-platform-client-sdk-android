@@ -1,11 +1,14 @@
 package de.tudarmstadt.informatik.tk.assistance.sdk.db;
 
+import java.util.List;
+import java.util.ArrayList;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteStatement;
 
 import de.greenrobot.dao.AbstractDao;
 import de.greenrobot.dao.Property;
+import de.greenrobot.dao.internal.SqlUtils;
 import de.greenrobot.dao.internal.DaoConfig;
 
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbRunningServicesSensor;
@@ -27,7 +30,10 @@ public class DbRunningServicesSensorDao extends AbstractDao<DbRunningServicesSen
         public final static Property PackageName = new Property(1, String.class, "packageName", false, "PACKAGE_NAME");
         public final static Property ClassName = new Property(2, String.class, "className", false, "CLASS_NAME");
         public final static Property Created = new Property(3, String.class, "created", false, "CREATED");
+        public final static Property DeviceId = new Property(4, Long.class, "deviceId", false, "DEVICE_ID");
     };
+
+    private DaoSession daoSession;
 
 
     public DbRunningServicesSensorDao(DaoConfig config) {
@@ -36,6 +42,7 @@ public class DbRunningServicesSensorDao extends AbstractDao<DbRunningServicesSen
     
     public DbRunningServicesSensorDao(DaoConfig config, DaoSession daoSession) {
         super(config, daoSession);
+        this.daoSession = daoSession;
     }
 
     /** Creates the underlying database table. */
@@ -45,10 +52,13 @@ public class DbRunningServicesSensorDao extends AbstractDao<DbRunningServicesSen
                 "\"_id\" INTEGER PRIMARY KEY AUTOINCREMENT ," + // 0: id
                 "\"PACKAGE_NAME\" TEXT," + // 1: packageName
                 "\"CLASS_NAME\" TEXT," + // 2: className
-                "\"CREATED\" TEXT NOT NULL );"); // 3: created
+                "\"CREATED\" TEXT NOT NULL ," + // 3: created
+                "\"DEVICE_ID\" INTEGER);"); // 4: deviceId
         // Add Indexes
         db.execSQL("CREATE INDEX " + constraint + "IDX_running_services_sensor__id ON running_services_sensor" +
                 " (\"_id\");");
+        db.execSQL("CREATE INDEX " + constraint + "IDX_running_services_sensor_DEVICE_ID ON running_services_sensor" +
+                " (\"DEVICE_ID\");");
     }
 
     /** Drops the underlying database table. */
@@ -77,6 +87,17 @@ public class DbRunningServicesSensorDao extends AbstractDao<DbRunningServicesSen
             stmt.bindString(3, className);
         }
         stmt.bindString(4, entity.getCreated());
+ 
+        Long deviceId = entity.getDeviceId();
+        if (deviceId != null) {
+            stmt.bindLong(5, deviceId);
+        }
+    }
+
+    @Override
+    protected void attachEntity(DbRunningServicesSensor entity) {
+        super.attachEntity(entity);
+        entity.__setDaoSession(daoSession);
     }
 
     /** @inheritdoc */
@@ -92,7 +113,8 @@ public class DbRunningServicesSensorDao extends AbstractDao<DbRunningServicesSen
             cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0), // id
             cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1), // packageName
             cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // className
-            cursor.getString(offset + 3) // created
+            cursor.getString(offset + 3), // created
+            cursor.isNull(offset + 4) ? null : cursor.getLong(offset + 4) // deviceId
         );
         return entity;
     }
@@ -104,6 +126,7 @@ public class DbRunningServicesSensorDao extends AbstractDao<DbRunningServicesSen
         entity.setPackageName(cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1));
         entity.setClassName(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
         entity.setCreated(cursor.getString(offset + 3));
+        entity.setDeviceId(cursor.isNull(offset + 4) ? null : cursor.getLong(offset + 4));
      }
     
     /** @inheritdoc */
@@ -129,4 +152,95 @@ public class DbRunningServicesSensorDao extends AbstractDao<DbRunningServicesSen
         return true;
     }
     
+    private String selectDeep;
+
+    protected String getSelectDeep() {
+        if (selectDeep == null) {
+            StringBuilder builder = new StringBuilder("SELECT ");
+            SqlUtils.appendColumns(builder, "T", getAllColumns());
+            builder.append(',');
+            SqlUtils.appendColumns(builder, "T0", daoSession.getDbDeviceDao().getAllColumns());
+            builder.append(" FROM running_services_sensor T");
+            builder.append(" LEFT JOIN device T0 ON T.\"DEVICE_ID\"=T0.\"_id\"");
+            builder.append(' ');
+            selectDeep = builder.toString();
+        }
+        return selectDeep;
+    }
+    
+    protected DbRunningServicesSensor loadCurrentDeep(Cursor cursor, boolean lock) {
+        DbRunningServicesSensor entity = loadCurrent(cursor, 0, lock);
+        int offset = getAllColumns().length;
+
+        DbDevice dbDevice = loadCurrentOther(daoSession.getDbDeviceDao(), cursor, offset);
+        entity.setDbDevice(dbDevice);
+
+        return entity;    
+    }
+
+    public DbRunningServicesSensor loadDeep(Long key) {
+        assertSinglePk();
+        if (key == null) {
+            return null;
+        }
+
+        StringBuilder builder = new StringBuilder(getSelectDeep());
+        builder.append("WHERE ");
+        SqlUtils.appendColumnsEqValue(builder, "T", getPkColumns());
+        String sql = builder.toString();
+        
+        String[] keyArray = new String[] { key.toString() };
+        Cursor cursor = db.rawQuery(sql, keyArray);
+        
+        try {
+            boolean available = cursor.moveToFirst();
+            if (!available) {
+                return null;
+            } else if (!cursor.isLast()) {
+                throw new IllegalStateException("Expected unique result, but count was " + cursor.getCount());
+            }
+            return loadCurrentDeep(cursor, true);
+        } finally {
+            cursor.close();
+        }
+    }
+    
+    /** Reads all available rows from the given cursor and returns a list of new ImageTO objects. */
+    public List<DbRunningServicesSensor> loadAllDeepFromCursor(Cursor cursor) {
+        int count = cursor.getCount();
+        List<DbRunningServicesSensor> list = new ArrayList<DbRunningServicesSensor>(count);
+        
+        if (cursor.moveToFirst()) {
+            if (identityScope != null) {
+                identityScope.lock();
+                identityScope.reserveRoom(count);
+            }
+            try {
+                do {
+                    list.add(loadCurrentDeep(cursor, false));
+                } while (cursor.moveToNext());
+            } finally {
+                if (identityScope != null) {
+                    identityScope.unlock();
+                }
+            }
+        }
+        return list;
+    }
+    
+    protected List<DbRunningServicesSensor> loadDeepAllAndCloseCursor(Cursor cursor) {
+        try {
+            return loadAllDeepFromCursor(cursor);
+        } finally {
+            cursor.close();
+        }
+    }
+    
+
+    /** A raw-style query where you can pass any WHERE clause and arguments. */
+    public List<DbRunningServicesSensor> queryDeep(String where, String... selectionArg) {
+        Cursor cursor = db.rawQuery(getSelectDeep() + where, selectionArg);
+        return loadDeepAllAndCloseCursor(cursor);
+    }
+ 
 }
