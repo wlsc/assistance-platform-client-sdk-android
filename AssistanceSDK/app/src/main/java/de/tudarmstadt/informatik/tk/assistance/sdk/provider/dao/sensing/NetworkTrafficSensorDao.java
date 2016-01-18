@@ -3,7 +3,6 @@ package de.tudarmstadt.informatik.tk.assistance.sdk.provider.dao.sensing;
 import java.util.List;
 
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbNetworkTrafficSensor;
-import de.tudarmstadt.informatik.tk.assistance.sdk.provider.dao.sensing.common.CommonEventDao;
 
 /**
  * @author Wladimir Schmidt (wlsc.dev@gmail.com)

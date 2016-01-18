@@ -3,7 +3,7 @@ package de.tudarmstadt.informatik.tk.assistance.sdk.provider.dao.sensing.contact
 import java.util.List;
 
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbContactNumberSensor;
-import de.tudarmstadt.informatik.tk.assistance.sdk.provider.dao.sensing.common.CommonEventDao;
+import de.tudarmstadt.informatik.tk.assistance.sdk.provider.dao.sensing.CommonEventDao;
 
 /**
  * @author Wladimir Schmidt (wlsc.dev@gmail.com)

@@ -1,7 +1,7 @@
 package de.tudarmstadt.informatik.tk.assistance.sdk.provider.dao.sensing.connection;
 
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbMobileConnectionSensor;
-import de.tudarmstadt.informatik.tk.assistance.sdk.provider.dao.sensing.common.CommonEventDao;
+import de.tudarmstadt.informatik.tk.assistance.sdk.provider.dao.sensing.CommonEventDao;
 
 /**
  * @author Wladimir Schmidt (wlsc.dev@gmail.com)

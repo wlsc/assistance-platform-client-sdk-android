@@ -1,4 +1,4 @@
-package de.tudarmstadt.informatik.tk.assistance.sdk.provider.dao.sensing.common;
+package de.tudarmstadt.informatik.tk.assistance.sdk.provider.dao.sensing;
 
 import android.support.annotation.Nullable;
 

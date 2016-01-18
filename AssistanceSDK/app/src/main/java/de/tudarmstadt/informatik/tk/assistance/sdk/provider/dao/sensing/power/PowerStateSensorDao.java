@@ -1,7 +1,7 @@
 package de.tudarmstadt.informatik.tk.assistance.sdk.provider.dao.sensing.power;
 
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbPowerStateSensor;
-import de.tudarmstadt.informatik.tk.assistance.sdk.provider.dao.sensing.common.CommonEventDao;
+import de.tudarmstadt.informatik.tk.assistance.sdk.provider.dao.sensing.CommonEventDao;
 
 /**
  * @author Wladimir Schmidt (wlsc.dev@gmail.com)

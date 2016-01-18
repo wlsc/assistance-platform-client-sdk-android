@@ -5,7 +5,7 @@ import android.support.annotation.Nullable;
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DaoSession;
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbWifiConnectionSensor;
 import de.tudarmstadt.informatik.tk.assistance.sdk.model.api.sensing.sensor.WifiConnectionSensorDto;
-import de.tudarmstadt.informatik.tk.assistance.sdk.provider.dao.sensing.common.CommonEventDaoImpl;
+import de.tudarmstadt.informatik.tk.assistance.sdk.provider.dao.sensing.CommonEventDaoImpl;
 
 /**
  * @author Wladimir Schmidt (wlsc.dev@gmail.com)

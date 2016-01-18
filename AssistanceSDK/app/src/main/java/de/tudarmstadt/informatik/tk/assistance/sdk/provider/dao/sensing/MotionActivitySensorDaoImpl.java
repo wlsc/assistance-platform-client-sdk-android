@@ -5,7 +5,6 @@ import android.support.annotation.Nullable;
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DaoSession;
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbMotionActivitySensor;
 import de.tudarmstadt.informatik.tk.assistance.sdk.model.api.sensing.sensor.MotionActivitySensorDto;
-import de.tudarmstadt.informatik.tk.assistance.sdk.provider.dao.sensing.common.CommonEventDaoImpl;
 
 /**
  * @author Wladimir Schmidt (wlsc.dev@gmail.com)

@@ -8,7 +8,7 @@ import de.tudarmstadt.informatik.tk.assistance.sdk.db.DaoSession;
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbCalendarSensor;
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbCalendarSensorDao;
 import de.tudarmstadt.informatik.tk.assistance.sdk.model.api.sensing.sensor.calendar.CalendarSensorDto;
-import de.tudarmstadt.informatik.tk.assistance.sdk.provider.dao.sensing.common.CommonEventDaoImpl;
+import de.tudarmstadt.informatik.tk.assistance.sdk.provider.dao.sensing.CommonEventDaoImpl;
 import de.tudarmstadt.informatik.tk.assistance.sdk.util.DateUtils;
 
 /**
