@@ -59,7 +59,7 @@ public class AssistanceGcmListenerService extends GcmListenerService {
 
         NotificationCompat.Builder notificationBuilder = (NotificationCompat.Builder) new NotificationCompat.Builder(this)
                 .setSmallIcon(R.drawable.ic_kraken_service)
-                .setContentTitle("GCM Test Message")
+                .setContentTitle("GCM Action Message")
                 .setContentText(message)
                 .setAutoCancel(true);
 //                .setSound(defaultSoundUri)

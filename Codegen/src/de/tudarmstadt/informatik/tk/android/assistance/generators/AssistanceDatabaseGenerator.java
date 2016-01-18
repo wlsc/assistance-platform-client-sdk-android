@@ -556,6 +556,7 @@ public class AssistanceDatabaseGenerator {
     facebookEvent.addIdProperty().autoincrement().index();
     facebookEvent.implementsInterface(Config.ASSISTANCE_PACKAGE_SENSOR);
     facebookEvent.addStringProperty("oauthToken");
+    facebookEvent.addStringProperty("permissionsDeclined");
     facebookEvent.addStringProperty("permissions");
     facebookEvent.addBooleanProperty("wasChanged").notNull();
     facebookEvent.addStringProperty("created").notNull();

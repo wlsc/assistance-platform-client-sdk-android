@@ -1076,48 +1076,6 @@ public class SensorUploadService extends GcmTaskService {
                             .convertObjects(powerLevelList));
 
                     break;
-
-                case SensorApiType.UNI_TUCAN:
-
-                    TucanSensorDao tucanDao = daoProvider
-                            .getTucanSensorDao();
-
-                    DbTucanSensor tucanEntry = tucanDao.getIfChangedForUserId(user.getId());
-
-                    if (tucanEntry != null) {
-
-                        List<DbTucanSensor> tucanSensorList = new ArrayList<>(1);
-
-                        tucanSensorList.add(tucanEntry);
-
-                        dbEvents.put(type, tucanSensorList);
-                        requestEvents.put(type, daoProvider
-                                .getTucanSensorDao()
-                                .convertObjects(tucanSensorList));
-                    }
-
-                    break;
-
-                case SensorApiType.SOCIAL_FACEBOOK:
-
-                    FacebookSensorDao facebookDao = daoProvider
-                            .getFacebookSensorDao();
-
-                    DbFacebookSensor facebookEntry = facebookDao.getIfChangedForUserId(user.getId());
-
-                    if (facebookEntry != null) {
-
-                        List<DbFacebookSensor> facebookSensorList = new ArrayList<>(1);
-
-                        facebookSensorList.add(facebookEntry);
-
-                        dbEvents.put(type, facebookSensorList);
-                        requestEvents.put(type, daoProvider
-                                .getFacebookSensorDao()
-                                .convertObjects(facebookSensorList));
-                    }
-
-                    break;
             }
         }
 
@@ -1141,6 +1099,46 @@ public class SensorUploadService extends GcmTaskService {
         requestEvents.put(SensorApiType.POWER_STATE, daoProvider
                 .getPowerStateSensorDao()
                 .convertObjects(powerStateList));
+
+        /**
+         * TUCAN sensor
+         */
+        TucanSensorDao tucanDao = daoProvider
+                .getTucanSensorDao();
+
+        DbTucanSensor tucanEntry = tucanDao.getIfChangedForUserId(user.getId());
+
+        if (tucanEntry != null) {
+
+            List<DbTucanSensor> tucanSensorList = new ArrayList<>(1);
+
+            tucanSensorList.add(tucanEntry);
+
+            dbEvents.put(SensorApiType.UNI_TUCAN, tucanSensorList);
+            requestEvents.put(SensorApiType.UNI_TUCAN, daoProvider
+                    .getTucanSensorDao()
+                    .convertObjects(tucanSensorList));
+        }
+
+        /**
+         * FACEBOOK sensor
+         */
+        FacebookSensorDao facebookDao = daoProvider
+                .getFacebookSensorDao();
+
+        DbFacebookSensor facebookEntry = facebookDao.getIfChangedForUserId(user.getId());
+
+        if (facebookEntry != null) {
+
+            List<DbFacebookSensor> facebookSensorList = new ArrayList<>(1);
+
+            facebookSensorList.add(facebookEntry);
+
+            dbEvents.put(SensorApiType.SOCIAL_FACEBOOK, facebookSensorList);
+            requestEvents.put(SensorApiType.SOCIAL_FACEBOOK, daoProvider
+                    .getFacebookSensorDao()
+                    .convertObjects(facebookSensorList));
+        }
     }
 
     /**
