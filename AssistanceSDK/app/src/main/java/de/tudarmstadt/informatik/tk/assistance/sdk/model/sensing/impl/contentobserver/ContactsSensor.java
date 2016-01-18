@@ -564,9 +564,11 @@ public class ContactsSensor extends AbstractContentObserverSensor {
 
     private Map<Long, DbContactSensor> getAllExistingContacts() {
 
+        long deviceId = PreferenceProvider.getInstance(context).getCurrentDeviceId();
+
         Map<Long, DbContactSensor> result = new HashMap<>();
 
-        List<DbContactSensor> allContacts = daoProvider.getContactSensorDao().getAll();
+        List<DbContactSensor> allContacts = daoProvider.getContactSensorDao().getAll(deviceId);
 
         for (DbContactSensor event : allContacts) {
             result.put(event.getGlobalContactId(), event);

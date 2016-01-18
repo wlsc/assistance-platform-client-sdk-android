@@ -136,7 +136,7 @@ public class CalendarSensor extends AbstractContentObserverSensor {
 
             long deviceId = PreferenceProvider.getInstance(context).getCurrentDeviceId();
 
-            List<DbCalendarSensor> events = daoProvider.getCalendarSensorDao().getAll();
+            List<DbCalendarSensor> events = daoProvider.getCalendarSensorDao().getAll(deviceId);
 
             for (DbCalendarSensor event : events) {
                 allExistingEvents.put(event.getEventId(), event);
@@ -355,9 +355,11 @@ public class CalendarSensor extends AbstractContentObserverSensor {
      */
     private Map<Long, DbCalendarReminderSensor> getExistingReminders(long eventId) {
 
+        long deviceId = PreferenceProvider.getInstance(context).getCurrentDeviceId();
+
         List<DbCalendarReminderSensor> list = daoProvider
                 .getCalendarReminderSensorDao()
-                .getAllByEventId(eventId);
+                .getAllByEventId(eventId, deviceId);
 
         Map<Long, DbCalendarReminderSensor> map = new HashMap<>();
 
