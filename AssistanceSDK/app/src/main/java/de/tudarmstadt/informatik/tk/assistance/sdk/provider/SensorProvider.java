@@ -14,14 +14,48 @@ import java.util.Map;
 import java.util.Set;
 
 import de.greenrobot.event.EventBus;
+import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbAccelerometerSensor;
+import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbBrowserHistorySensor;
+import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbCalendarReminderSensor;
+import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbCalendarSensor;
+import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbCallLogSensor;
+import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbConnectionSensor;
+import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbContactEmailSensor;
+import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbContactNumberSensor;
+import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbContactSensor;
+import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbFacebookSensor;
+import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbForegroundSensor;
+import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbGyroscopeSensor;
+import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbLightSensor;
+import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbLoudnessSensor;
+import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbMagneticFieldSensor;
+import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbMobileConnectionSensor;
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbModule;
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbModuleCapability;
+import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbMotionActivitySensor;
+import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbNetworkTrafficSensor;
+import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbPositionSensor;
+import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbPowerLevelSensor;
+import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbPowerStateSensor;
+import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbRingtoneSensor;
+import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbRunningProcessesSensor;
+import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbRunningServicesSensor;
+import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbRunningTasksSensor;
+import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbTucanSensor;
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbUser;
+import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbWifiConnectionSensor;
 import de.tudarmstadt.informatik.tk.assistance.sdk.event.ShowAccessibilityServiceTutorialEvent;
 import de.tudarmstadt.informatik.tk.assistance.sdk.event.UpdateSensorIntervalEvent;
+import de.tudarmstadt.informatik.tk.assistance.sdk.interfaces.IDbSensor;
+import de.tudarmstadt.informatik.tk.assistance.sdk.model.api.SensorDto;
 import de.tudarmstadt.informatik.tk.assistance.sdk.model.api.sensing.SensorApiType;
+import de.tudarmstadt.informatik.tk.assistance.sdk.model.api.sensing.sensor.calendar.CalendarReminder;
+import de.tudarmstadt.informatik.tk.assistance.sdk.model.api.sensing.sensor.calendar.CalendarSensorDto;
+import de.tudarmstadt.informatik.tk.assistance.sdk.model.api.sensing.sensor.contact.ContactEmailNumber;
+import de.tudarmstadt.informatik.tk.assistance.sdk.model.api.sensing.sensor.contact.ContactSensorDto;
 import de.tudarmstadt.informatik.tk.assistance.sdk.model.enums.EPushType;
 import de.tudarmstadt.informatik.tk.assistance.sdk.model.sensing.ISensor;
+import de.tudarmstadt.informatik.tk.assistance.sdk.model.sensing.SensorUploadHolder;
 import de.tudarmstadt.informatik.tk.assistance.sdk.model.sensing.impl.contentobserver.BrowserHistorySensor;
 import de.tudarmstadt.informatik.tk.assistance.sdk.model.sensing.impl.contentobserver.CalendarSensor;
 import de.tudarmstadt.informatik.tk.assistance.sdk.model.sensing.impl.contentobserver.CallLogSensor;
@@ -44,6 +78,11 @@ import de.tudarmstadt.informatik.tk.assistance.sdk.model.sensing.impl.triggered.
 import de.tudarmstadt.informatik.tk.assistance.sdk.model.sensing.impl.triggered.LocationSensor;
 import de.tudarmstadt.informatik.tk.assistance.sdk.model.sensing.impl.triggered.MagneticFieldSensor;
 import de.tudarmstadt.informatik.tk.assistance.sdk.model.sensing.impl.triggered.MotionActivitySensor;
+import de.tudarmstadt.informatik.tk.assistance.sdk.provider.dao.sensing.calendar.CalendarReminderSensorDao;
+import de.tudarmstadt.informatik.tk.assistance.sdk.provider.dao.sensing.contact.ContactEmailSensorDao;
+import de.tudarmstadt.informatik.tk.assistance.sdk.provider.dao.sensing.contact.ContactNumberSensorDao;
+import de.tudarmstadt.informatik.tk.assistance.sdk.provider.dao.sensing.social.FacebookSensorDao;
+import de.tudarmstadt.informatik.tk.assistance.sdk.provider.dao.sensing.social.TucanSensorDao;
 import de.tudarmstadt.informatik.tk.assistance.sdk.util.logger.Log;
 
 /**
@@ -792,5 +831,664 @@ public class SensorProvider {
         Log.d(TAG, "Synchronizing with db...");
         clearRunningSensors();
         initEnabledSensors();
+    }
+
+    /**
+     * Returns events for upload to server
+     *
+     * @param numberOfElements
+     * @return
+     */
+    public SensorUploadHolder getEntriesForUpload(int numberOfElements) {
+
+        final SensorUploadHolder sensorUploadHolderHolder = new SensorUploadHolder(new SparseArray<>(), new SparseArray<>());
+
+        String userToken = preferenceProvider.getUserToken();
+        DbUser user = daoProvider.getUserDao().getByToken(userToken);
+
+        if (user == null) {
+            Log.d(TAG, "User is NULL. Aborting...");
+            return sensorUploadHolderHolder;
+        }
+
+        long deviceId = preferenceProvider.getCurrentDeviceId();
+
+        Map<Integer, ISensor> sensors = getRunningSensors();
+
+        SparseArray<List<? extends IDbSensor>> dbEvents = new SparseArray<>();
+        SparseArray<List<? extends SensorDto>> requestEvents = new SparseArray<>();
+
+        for (Map.Entry<Integer, ISensor> entry : sensors.entrySet()) {
+
+            ISensor sensor = entry.getValue();
+
+            if (sensor == null) {
+                continue;
+            }
+
+            int type = sensor.getType();
+
+            switch (type) {
+                case SensorApiType.ACCELEROMETER:
+
+                    List<DbAccelerometerSensor> accList;
+
+                    // give all
+                    if (numberOfElements == 0) {
+                        accList = daoProvider
+                                .getAccelerometerSensorDao()
+                                .getAll(deviceId);
+                    } else {
+                        accList = daoProvider
+                                .getAccelerometerSensorDao()
+                                .getFirstN(numberOfElements, deviceId);
+                    }
+
+                    dbEvents.put(type, accList);
+                    requestEvents.put(type, daoProvider
+                            .getAccelerometerSensorDao()
+                            .convertObjects(accList));
+
+                    break;
+
+                case SensorApiType.LOCATION:
+
+                    List<DbPositionSensor> posList;
+
+                    // give all
+                    if (numberOfElements == 0) {
+                        posList = daoProvider
+                                .getLocationSensorDao()
+                                .getAll(deviceId);
+                    } else {
+                        posList = daoProvider
+                                .getLocationSensorDao()
+                                .getFirstN(numberOfElements, deviceId);
+                    }
+
+                    dbEvents.put(type, posList);
+                    requestEvents.put(type, daoProvider
+                            .getLocationSensorDao()
+                            .convertObjects(posList));
+
+                    break;
+
+                case SensorApiType.MOTION_ACTIVITY:
+
+                    List<DbMotionActivitySensor> maList;
+
+                    // give all
+                    if (numberOfElements == 0) {
+                        maList = daoProvider
+                                .getMotionActivitySensorDao()
+                                .getAll(deviceId);
+                    } else {
+                        maList = daoProvider
+                                .getMotionActivitySensorDao()
+                                .getFirstN(numberOfElements, deviceId);
+                    }
+
+                    dbEvents.put(type, maList);
+                    requestEvents.put(type, daoProvider
+                            .getMotionActivitySensorDao()
+                            .convertObjects(maList));
+
+                    break;
+
+                case SensorApiType.FOREGROUND:
+
+                    List<DbForegroundSensor> feList;
+
+                    // give all
+                    if (numberOfElements == 0) {
+                        feList = daoProvider
+                                .getForegroundSensorDao()
+                                .getAll(deviceId);
+                    } else {
+                        feList = daoProvider
+                                .getForegroundSensorDao()
+                                .getFirstN(numberOfElements, deviceId);
+                    }
+
+                    dbEvents.put(type, feList);
+                    requestEvents.put(type, daoProvider
+                            .getForegroundSensorDao()
+                            .convertObjects(feList));
+
+                    break;
+
+                case SensorApiType.CONNECTION:
+
+                    // connection
+                    List<DbConnectionSensor> conList;
+
+                    // give all
+                    if (numberOfElements == 0) {
+                        conList = daoProvider
+                                .getConnectionSensorDao()
+                                .getAll(deviceId);
+                    } else {
+                        conList = daoProvider
+                                .getConnectionSensorDao()
+                                .getFirstN(numberOfElements, deviceId);
+                    }
+
+                    dbEvents.put(type, conList);
+                    requestEvents.put(type, daoProvider
+                            .getConnectionSensorDao()
+                            .convertObjects(conList));
+
+                    // mobile connection
+                    List<DbMobileConnectionSensor> mobConList;
+
+                    // give all
+                    if (numberOfElements == 0) {
+                        mobConList = daoProvider
+                                .getMobileConnectionSensorDao()
+                                .getAll(deviceId);
+                    } else {
+                        mobConList = daoProvider
+                                .getMobileConnectionSensorDao()
+                                .getFirstN(numberOfElements, deviceId);
+                    }
+
+                    dbEvents.put(SensorApiType.MOBILE_DATA_CONNECTION, mobConList);
+                    requestEvents.put(SensorApiType.MOBILE_DATA_CONNECTION, daoProvider
+                            .getMobileConnectionSensorDao()
+                            .convertObjects(mobConList));
+
+                    // wifi connection
+                    List<DbWifiConnectionSensor> wifiConList;
+
+                    // give all
+                    if (numberOfElements == 0) {
+                        wifiConList = daoProvider
+                                .getWifiConnectionSensorDao()
+                                .getAll(deviceId);
+                    } else {
+                        wifiConList = daoProvider
+                                .getWifiConnectionSensorDao()
+                                .getFirstN(numberOfElements, deviceId);
+                    }
+
+                    dbEvents.put(SensorApiType.WIFI_CONNECTION, wifiConList);
+                    requestEvents.put(SensorApiType.WIFI_CONNECTION, daoProvider
+                            .getWifiConnectionSensorDao()
+                            .convertObjects(wifiConList));
+
+                    break;
+
+                case SensorApiType.FOREGROUND_TRAFFIC:
+
+                    List<DbNetworkTrafficSensor> fteList;
+
+                    // give all
+                    if (numberOfElements == 0) {
+                        fteList = daoProvider
+                                .getNetworkTrafficSensorDao()
+                                .getAllForeground(deviceId);
+                    } else {
+                        fteList = daoProvider
+                                .getNetworkTrafficSensorDao()
+                                .getFirstNForeground(numberOfElements, deviceId);
+                    }
+
+                    dbEvents.put(type, fteList);
+                    requestEvents.put(type, daoProvider
+                            .getNetworkTrafficSensorDao()
+                            .convertObjects(fteList));
+
+                    break;
+
+                case SensorApiType.BACKGROUND_TRAFFIC:
+
+                    List<DbNetworkTrafficSensor> bteList;
+
+                    // give all
+                    if (numberOfElements == 0) {
+                        bteList = daoProvider
+                                .getNetworkTrafficSensorDao()
+                                .getAllBackground(deviceId);
+                    } else {
+                        bteList = daoProvider
+                                .getNetworkTrafficSensorDao()
+                                .getFirstNBackground(numberOfElements, deviceId);
+                    }
+
+                    dbEvents.put(type, bteList);
+                    requestEvents.put(type, daoProvider
+                            .getNetworkTrafficSensorDao()
+                            .convertObjects(bteList));
+
+                    break;
+
+                case SensorApiType.LIGHT:
+
+                    List<DbLightSensor> lightList;
+
+                    // give all
+                    if (numberOfElements == 0) {
+                        lightList = daoProvider
+                                .getLightSensorDao()
+                                .getAll(deviceId);
+                    } else {
+                        lightList = daoProvider
+                                .getLightSensorDao()
+                                .getFirstN(numberOfElements, deviceId);
+                    }
+
+                    dbEvents.put(type, lightList);
+                    requestEvents.put(type, daoProvider
+                            .getLightSensorDao()
+                            .convertObjects(lightList));
+
+                    break;
+
+                case SensorApiType.LOUDNESS:
+
+                    List<DbLoudnessSensor> loudnessList;
+
+                    // give all
+                    if (numberOfElements == 0) {
+                        loudnessList = daoProvider
+                                .getLoudnessSensorDao()
+                                .getAll(deviceId);
+                    } else {
+                        loudnessList = daoProvider
+                                .getLoudnessSensorDao()
+                                .getFirstN(numberOfElements, deviceId);
+                    }
+
+                    dbEvents.put(type, loudnessList);
+                    requestEvents.put(type, daoProvider
+                            .getLoudnessSensorDao()
+                            .convertObjects(loudnessList));
+
+                    break;
+
+                case SensorApiType.RUNNING_PROCESSES:
+
+                    List<DbRunningProcessesSensor> runProccessList;
+
+                    // give all
+                    if (numberOfElements == 0) {
+                        runProccessList = daoProvider
+                                .getRunningProcessesSensorDao()
+                                .getAll(deviceId);
+                    } else {
+                        runProccessList = daoProvider
+                                .getRunningProcessesSensorDao()
+                                .getFirstN(numberOfElements, deviceId);
+                    }
+
+                    dbEvents.put(type, runProccessList);
+                    requestEvents.put(type, daoProvider
+                            .getRunningProcessesSensorDao()
+                            .convertObjects(runProccessList));
+
+                    break;
+
+                case SensorApiType.RUNNING_SERVICES:
+
+                    List<DbRunningServicesSensor> runServiceList;
+
+                    // give all
+                    if (numberOfElements == 0) {
+                        runServiceList = daoProvider
+                                .getRunningServicesSensorDao()
+                                .getAll(deviceId);
+                    } else {
+                        runServiceList = daoProvider
+                                .getRunningServicesSensorDao()
+                                .getFirstN(numberOfElements, deviceId);
+                    }
+
+                    dbEvents.put(type, runServiceList);
+                    requestEvents.put(type, daoProvider
+                            .getRunningServicesSensorDao()
+                            .convertObjects(runServiceList));
+
+                    break;
+
+                case SensorApiType.RUNNING_TASKS:
+
+                    List<DbRunningTasksSensor> runTaskList;
+
+                    // give all
+                    if (numberOfElements == 0) {
+                        runTaskList = daoProvider
+                                .getRunningTasksSensorDao()
+                                .getAll(deviceId);
+                    } else {
+                        runTaskList = daoProvider
+                                .getRunningTasksSensorDao()
+                                .getFirstN(numberOfElements, deviceId);
+                    }
+
+                    dbEvents.put(type, runTaskList);
+                    requestEvents.put(type, daoProvider
+                            .getRunningTasksSensorDao()
+                            .convertObjects(runTaskList));
+
+                    break;
+
+                case SensorApiType.RINGTONE:
+
+                    List<DbRingtoneSensor> ringtoneList;
+
+                    // give all
+                    if (numberOfElements == 0) {
+                        ringtoneList = daoProvider
+                                .getRingtoneSensorDao()
+                                .getAll(deviceId);
+                    } else {
+                        ringtoneList = daoProvider
+                                .getRingtoneSensorDao()
+                                .getFirstN(numberOfElements, deviceId);
+                    }
+
+                    dbEvents.put(type, ringtoneList);
+                    requestEvents.put(type, daoProvider
+                            .getRingtoneSensorDao()
+                            .convertObjects(ringtoneList));
+
+                    break;
+
+                case SensorApiType.GYROSCOPE:
+
+                    List<DbGyroscopeSensor> gyroList;
+
+                    // give all
+                    if (numberOfElements == 0) {
+                        gyroList = daoProvider
+                                .getGyroscopeSensorDao()
+                                .getAll(deviceId);
+                    } else {
+                        gyroList = daoProvider
+                                .getGyroscopeSensorDao()
+                                .getFirstN(numberOfElements, deviceId);
+                    }
+
+                    dbEvents.put(type, gyroList);
+                    requestEvents.put(type, daoProvider
+                            .getGyroscopeSensorDao()
+                            .convertObjects(gyroList));
+
+                    break;
+
+                case SensorApiType.MAGNETIC_FIELD:
+
+                    List<DbMagneticFieldSensor> mfList;
+
+                    // give all
+                    if (numberOfElements == 0) {
+                        mfList = daoProvider
+                                .getMagneticFieldSensorDao()
+                                .getAll(deviceId);
+                    } else {
+                        mfList = daoProvider
+                                .getMagneticFieldSensorDao()
+                                .getFirstN(numberOfElements, deviceId);
+                    }
+
+                    dbEvents.put(type, mfList);
+                    requestEvents.put(type, daoProvider
+                            .getMagneticFieldSensorDao()
+                            .convertObjects(mfList));
+
+                    break;
+
+                case SensorApiType.BROWSER_HISTORY:
+
+                    List<DbBrowserHistorySensor> bhList;
+
+                    // give all
+                    if (numberOfElements == 0) {
+                        bhList = daoProvider
+                                .getBrowserHistorySensorDao()
+                                .getAll(deviceId);
+                    } else {
+                        bhList = daoProvider
+                                .getBrowserHistorySensorDao()
+                                .getFirstN(numberOfElements, deviceId);
+                    }
+
+                    dbEvents.put(type, bhList);
+                    requestEvents.put(type, daoProvider
+                            .getBrowserHistorySensorDao()
+                            .convertObjects(bhList));
+
+                    break;
+
+                case SensorApiType.CALENDAR:
+
+                    // retrieve all events
+                    List<DbCalendarSensor> calendarList = daoProvider
+                            .getCalendarSensorDao()
+                            .getAllUpdated(deviceId);
+
+                    List<SensorDto> calendarListConverted = daoProvider
+                            .getCalendarSensorDao()
+                            .convertObjects(calendarList);
+
+                    List<CalendarSensorDto> calendarListConvertedNew = new ArrayList<>(
+                            calendarListConverted.size());
+                    Set<CalendarReminder> eventRemindersConvertedNew = new HashSet<>();
+
+                    final CalendarReminderSensorDao calendarReminderSensorDao = daoProvider
+                            .getCalendarReminderSensorDao();
+
+                    for (SensorDto sensorDto : calendarListConverted) {
+
+                        if (sensorDto == null) {
+                            continue;
+                        }
+
+                        CalendarSensorDto calendarSensorDto = (CalendarSensorDto) sensorDto;
+                        List<DbCalendarReminderSensor> eventReminders = calendarReminderSensorDao
+                                .getAllByEventId(Long.valueOf(calendarSensorDto.getEventId()), deviceId);
+
+                        if (eventReminders == null || eventReminders.isEmpty()) {
+                            continue;
+                        }
+
+                        List<SensorDto> eventRemindersConverted = calendarReminderSensorDao
+                                .convertObjects(eventReminders);
+
+                        for (SensorDto sensorReminderDto : eventRemindersConverted) {
+                            eventRemindersConvertedNew.add((CalendarReminder) sensorReminderDto);
+                        }
+
+                        calendarSensorDto.setAlarms(eventRemindersConvertedNew);
+                        calendarListConvertedNew.add(calendarSensorDto);
+                    }
+
+                    dbEvents.put(type, calendarList);
+                    requestEvents.put(type, calendarListConvertedNew);
+
+                    break;
+
+                case SensorApiType.CALL_LOG:
+
+                    List<DbCallLogSensor> callLogList;
+
+                    // give all
+                    if (numberOfElements == 0) {
+                        callLogList = daoProvider
+                                .getCallLogSensorDao()
+                                .getAll(deviceId);
+                    } else {
+                        callLogList = daoProvider
+                                .getCallLogSensorDao()
+                                .getFirstN(numberOfElements, deviceId);
+                    }
+
+                    dbEvents.put(type, callLogList);
+                    requestEvents.put(type, daoProvider
+                            .getCallLogSensorDao()
+                            .convertObjects(callLogList));
+
+                    break;
+
+                case SensorApiType.CONTACT:
+
+                    // retrieve all events
+                    List<DbContactSensor> contactList = daoProvider
+                            .getContactSensorDao()
+                            .getAllUpdated(deviceId);
+
+                    List<SensorDto> contactListConverted = daoProvider
+                            .getContactSensorDao()
+                            .convertObjects(contactList);
+
+                    List<ContactSensorDto> contactListConvertedNew = new ArrayList<>(
+                            contactListConverted.size());
+                    Set<ContactEmailNumber> emailsConvertedNew = new HashSet<>();
+                    Set<ContactEmailNumber> numbersConvertedNew = new HashSet<>();
+
+                    final ContactEmailSensorDao contactEmailDao = daoProvider
+                            .getContactEmailSensorDao();
+                    final ContactNumberSensorDao contactNumberSensorDao = daoProvider
+                            .getContactNumberSensorDao();
+
+                    for (SensorDto sensorDto : contactListConverted) {
+
+                        if (sensorDto == null) {
+                            continue;
+                        }
+
+                        ContactSensorDto contactSensorDto = (ContactSensorDto) sensorDto;
+
+                        // EMAILS
+                        List<DbContactEmailSensor> eventEmails = contactEmailDao
+                                .getAll(Long.valueOf(contactSensorDto.getGlobalContactId()), deviceId);
+
+                        if (eventEmails == null || eventEmails.isEmpty()) {
+                            continue;
+                        }
+
+                        for (DbContactEmailSensor contactEmail : eventEmails) {
+                            emailsConvertedNew.add(
+                                    new ContactEmailNumber(
+                                            contactEmail.getType(),
+                                            contactEmail.getAddress()));
+                        }
+
+                        // NUMBERS
+                        List<DbContactNumberSensor> eventNumbers = contactNumberSensorDao
+                                .getAll(Long.valueOf(contactSensorDto.getGlobalContactId()), deviceId);
+
+                        if (eventNumbers == null || eventNumbers.isEmpty()) {
+                            continue;
+                        }
+
+                        for (DbContactNumberSensor contactNumber : eventNumbers) {
+                            numbersConvertedNew.add(
+                                    new ContactEmailNumber(
+                                            contactNumber.getType(),
+                                            contactNumber.getNumber()));
+                        }
+
+                        contactSensorDto.setEmailAddresses(emailsConvertedNew);
+                        contactSensorDto.setPhoneNumbers(numbersConvertedNew);
+
+                        contactListConvertedNew.add(contactSensorDto);
+                    }
+
+                    dbEvents.put(type, contactList);
+                    requestEvents.put(type, contactListConvertedNew);
+
+                    break;
+
+                case SensorApiType.POWER_LEVEL:
+
+                    List<DbPowerLevelSensor> powerLevelList;
+
+                    // give all
+                    if (numberOfElements == 0) {
+                        powerLevelList = daoProvider
+                                .getPowerLevelSensorDao()
+                                .getAll(deviceId);
+                    } else {
+                        powerLevelList = daoProvider
+                                .getPowerLevelSensorDao()
+                                .getFirstN(numberOfElements, deviceId);
+                    }
+
+                    dbEvents.put(type, powerLevelList);
+                    requestEvents.put(type, daoProvider
+                            .getPowerLevelSensorDao()
+                            .convertObjects(powerLevelList));
+
+                    break;
+            }
+        }
+
+        /**
+         * BATTERY STATUS
+         */
+        List<DbPowerStateSensor> powerStateList;
+
+        // give all
+        if (numberOfElements == 0) {
+            powerStateList = daoProvider
+                    .getPowerStateSensorDao()
+                    .getAll(deviceId);
+        } else {
+            powerStateList = daoProvider
+                    .getPowerStateSensorDao()
+                    .getFirstN(numberOfElements, deviceId);
+        }
+
+        dbEvents.put(SensorApiType.POWER_STATE, powerStateList);
+        requestEvents.put(SensorApiType.POWER_STATE, daoProvider
+                .getPowerStateSensorDao()
+                .convertObjects(powerStateList));
+
+        /**
+         * TUCAN sensor
+         */
+        TucanSensorDao tucanDao = daoProvider
+                .getTucanSensorDao();
+
+        DbTucanSensor tucanEntry = tucanDao.getIfChangedForUserId(user.getId());
+
+        if (tucanEntry != null) {
+
+            List<DbTucanSensor> tucanSensorList = new ArrayList<>(1);
+
+            tucanSensorList.add(tucanEntry);
+
+            dbEvents.put(SensorApiType.UNI_TUCAN, tucanSensorList);
+            requestEvents.put(SensorApiType.UNI_TUCAN, daoProvider
+                    .getTucanSensorDao()
+                    .convertObjects(tucanSensorList));
+        }
+
+        /**
+         * FACEBOOK sensor
+         */
+        FacebookSensorDao facebookDao = daoProvider
+                .getFacebookSensorDao();
+
+        DbFacebookSensor facebookEntry = facebookDao.getIfChangedForUserId(user.getId());
+
+        if (facebookEntry != null) {
+
+            List<DbFacebookSensor> facebookSensorList = new ArrayList<>(1);
+
+            facebookSensorList.add(facebookEntry);
+
+            dbEvents.put(SensorApiType.SOCIAL_FACEBOOK, facebookSensorList);
+            requestEvents.put(SensorApiType.SOCIAL_FACEBOOK, daoProvider
+                    .getFacebookSensorDao()
+                    .convertObjects(facebookSensorList));
+        }
+
+        sensorUploadHolderHolder.setDbEvents(dbEvents);
+        sensorUploadHolderHolder.setRequestEvents(requestEvents);
+
+        // FINALLY return result
+        return sensorUploadHolderHolder;
     }
 }
