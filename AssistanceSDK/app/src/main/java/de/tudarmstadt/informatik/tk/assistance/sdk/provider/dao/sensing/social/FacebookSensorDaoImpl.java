@@ -10,16 +10,16 @@ import java.util.Set;
 
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DaoSession;
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbFacebookSensor;
+import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbFacebookSensorDao;
 import de.tudarmstadt.informatik.tk.assistance.sdk.model.api.SensorDto;
 import de.tudarmstadt.informatik.tk.assistance.sdk.model.api.sensing.sensor.social.FacebookSensorDto;
-import de.tudarmstadt.informatik.tk.assistance.sdk.provider.dao.sensing.CommonEventDaoImpl;
 
 /**
  * @author Wladimir Schmidt (wlsc.dev@gmail.com)
  * @date 17.01.2016
  */
 public class FacebookSensorDaoImpl extends
-        CommonEventDaoImpl<DbFacebookSensor> implements
+        CommonSocialEventDaoImpl<DbFacebookSensor> implements
         FacebookSensorDao {
 
     private static final String TAG = FacebookSensorDaoImpl.class.getSimpleName();
@@ -62,5 +62,38 @@ public class FacebookSensorDaoImpl extends
         );
 
         return result;
+    }
+
+    @Nullable
+    @Override
+    public DbFacebookSensor getForUserId(Long userId) {
+
+        if (userId == null) {
+            return null;
+        }
+
+        return dao
+                .queryBuilder()
+                .where(DbFacebookSensorDao.Properties.UserId.eq(userId))
+                .limit(1)
+                .build()
+                .unique();
+    }
+
+    @Nullable
+    @Override
+    public DbFacebookSensor getIfChangedForUserId(Long userId) {
+
+        if (userId == null) {
+            return null;
+        }
+
+        return dao
+                .queryBuilder()
+                .where(DbFacebookSensorDao.Properties.UserId.eq(userId))
+                .where(DbFacebookSensorDao.Properties.WasChanged.eq(Boolean.TRUE))
+                .limit(1)
+                .build()
+                .unique();
     }
 }

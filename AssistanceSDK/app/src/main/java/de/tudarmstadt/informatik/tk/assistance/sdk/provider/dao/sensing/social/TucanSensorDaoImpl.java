@@ -4,16 +4,16 @@ import android.support.annotation.Nullable;
 
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DaoSession;
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbTucanSensor;
+import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbTucanSensorDao;
 import de.tudarmstadt.informatik.tk.assistance.sdk.model.api.SensorDto;
 import de.tudarmstadt.informatik.tk.assistance.sdk.model.api.sensing.sensor.uni.TucanSensorDto;
-import de.tudarmstadt.informatik.tk.assistance.sdk.provider.dao.sensing.CommonEventDaoImpl;
 
 /**
  * @author Wladimir Schmidt (wlsc.dev@gmail.com)
  * @date 17.01.2016
  */
 public class TucanSensorDaoImpl extends
-        CommonEventDaoImpl<DbTucanSensor> implements
+        CommonSocialEventDaoImpl<DbTucanSensor> implements
         TucanSensorDao {
 
     private static final String TAG = TucanSensorDaoImpl.class.getSimpleName();
@@ -47,5 +47,38 @@ public class TucanSensorDaoImpl extends
                 sensor.getCreated());
 
         return result;
+    }
+
+    @Nullable
+    @Override
+    public DbTucanSensor getForUserId(Long userId) {
+
+        if (userId == null) {
+            return null;
+        }
+
+        return dao
+                .queryBuilder()
+                .where(DbTucanSensorDao.Properties.UserId.eq(userId))
+                .limit(1)
+                .build()
+                .unique();
+    }
+
+    @Nullable
+    @Override
+    public DbTucanSensor getIfChangedForUserId(Long userId) {
+
+        if (userId == null) {
+            return null;
+        }
+
+        return dao
+                .queryBuilder()
+                .where(DbTucanSensorDao.Properties.UserId.eq(userId))
+                .where(DbTucanSensorDao.Properties.WasChanged.eq(Boolean.TRUE))
+                .limit(1)
+                .build()
+                .unique();
     }
 }

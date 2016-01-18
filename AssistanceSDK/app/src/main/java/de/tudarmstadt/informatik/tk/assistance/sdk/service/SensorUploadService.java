@@ -30,6 +30,7 @@ import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbConnectionSensor;
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbContactEmailSensor;
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbContactNumberSensor;
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbContactSensor;
+import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbFacebookSensor;
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbForegroundSensor;
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbGyroscopeSensor;
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbLightSensor;
@@ -45,6 +46,8 @@ import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbRingtoneSensor;
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbRunningProcessesSensor;
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbRunningServicesSensor;
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbRunningTasksSensor;
+import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbTucanSensor;
+import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbUser;
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbWifiConnectionSensor;
 import de.tudarmstadt.informatik.tk.assistance.sdk.interfaces.IDbSensor;
 import de.tudarmstadt.informatik.tk.assistance.sdk.model.api.ApiGenerator;
@@ -67,6 +70,8 @@ import de.tudarmstadt.informatik.tk.assistance.sdk.provider.SensorProvider;
 import de.tudarmstadt.informatik.tk.assistance.sdk.provider.dao.sensing.calendar.CalendarReminderSensorDao;
 import de.tudarmstadt.informatik.tk.assistance.sdk.provider.dao.sensing.contact.ContactEmailSensorDao;
 import de.tudarmstadt.informatik.tk.assistance.sdk.provider.dao.sensing.contact.ContactNumberSensorDao;
+import de.tudarmstadt.informatik.tk.assistance.sdk.provider.dao.sensing.social.FacebookSensorDao;
+import de.tudarmstadt.informatik.tk.assistance.sdk.provider.dao.sensing.social.TucanSensorDao;
 import de.tudarmstadt.informatik.tk.assistance.sdk.util.ConnectionUtils;
 import de.tudarmstadt.informatik.tk.assistance.sdk.util.GcmUtils;
 import de.tudarmstadt.informatik.tk.assistance.sdk.util.HardwareUtils;
@@ -498,6 +503,14 @@ public class SensorUploadService extends GcmTaskService {
     public void getEntriesForUpload(int numberOfElements) {
 
         DaoProvider daoProvider = DaoProvider.getInstance(getApplicationContext());
+        String userToken = PreferenceProvider.getInstance(getApplicationContext()).getUserToken();
+        DbUser user = daoProvider.getUserDao().getByToken(userToken);
+
+        if (user == null) {
+            Log.d(TAG, "User is NULL. Aborting...");
+            return;
+        }
+
         Map<Integer, ISensor> sensors = SensorProvider.getInstance(getApplicationContext()).getRunningSensors();
 
         for (Map.Entry<Integer, ISensor> entry : sensors.entrySet()) {
@@ -1063,6 +1076,48 @@ public class SensorUploadService extends GcmTaskService {
                             .convertObjects(powerLevelList));
 
                     break;
+
+                case SensorApiType.UNI_TUCAN:
+
+                    TucanSensorDao tucanDao = daoProvider
+                            .getTucanSensorDao();
+
+                    DbTucanSensor tucanEntry = tucanDao.getIfChangedForUserId(user.getId());
+
+                    if (tucanEntry != null) {
+
+                        List<DbTucanSensor> tucanSensorList = new ArrayList<>(1);
+
+                        tucanSensorList.add(tucanEntry);
+
+                        dbEvents.put(type, tucanSensorList);
+                        requestEvents.put(type, daoProvider
+                                .getTucanSensorDao()
+                                .convertObjects(tucanSensorList));
+                    }
+
+                    break;
+
+                case SensorApiType.SOCIAL_FACEBOOK:
+
+                    FacebookSensorDao facebookDao = daoProvider
+                            .getFacebookSensorDao();
+
+                    DbFacebookSensor facebookEntry = facebookDao.getIfChangedForUserId(user.getId());
+
+                    if (facebookEntry != null) {
+
+                        List<DbFacebookSensor> facebookSensorList = new ArrayList<>(1);
+
+                        facebookSensorList.add(facebookEntry);
+
+                        dbEvents.put(type, facebookSensorList);
+                        requestEvents.put(type, daoProvider
+                                .getFacebookSensorDao()
+                                .convertObjects(facebookSensorList));
+                    }
+
+                    break;
             }
         }
 
@@ -1211,6 +1266,34 @@ public class SensorUploadService extends GcmTaskService {
 
                     // update events state
                     daoProvider.getContactSensorDao().update(calendarSensors);
+                    break;
+
+                case SensorApiType.UNI_TUCAN:
+
+                    // marking as not changed
+                    List<DbTucanSensor> tucanSensors = (List<DbTucanSensor>) values;
+
+                    for (DbTucanSensor sensor : tucanSensors) {
+                        sensor.setWasChanged(Boolean.FALSE);
+                    }
+
+                    // update events state
+                    daoProvider.getTucanSensorDao().update(tucanSensors);
+
+                    break;
+
+                case SensorApiType.SOCIAL_FACEBOOK:
+
+                    // marking as not changed
+                    List<DbFacebookSensor> facebookSensors = (List<DbFacebookSensor>) values;
+
+                    for (DbFacebookSensor sensor : facebookSensors) {
+                        sensor.setWasChanged(Boolean.FALSE);
+                    }
+
+                    // update events state
+                    daoProvider.getFacebookSensorDao().update(facebookSensors);
+
                     break;
             }
         }
