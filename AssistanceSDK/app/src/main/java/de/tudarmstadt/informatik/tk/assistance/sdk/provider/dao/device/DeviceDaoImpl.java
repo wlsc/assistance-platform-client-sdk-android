@@ -97,22 +97,6 @@ public class DeviceDaoImpl extends
         }
     }
 
-    @Nullable
-    @Override
-    public DbDevice get(Long id) {
-
-        if (id == null) {
-            return null;
-        }
-
-        return dao
-                .queryBuilder()
-                .where(DbDeviceDao.Properties.Id.eq(id))
-                .limit(1)
-                .build()
-                .unique();
-    }
-
     @Override
     public List<DbDevice> getLastN(int amount) {
 

@@ -55,22 +55,6 @@ public class MobileConnectionSensorDaoImpl extends
         return result;
     }
 
-    @Nullable
-    @Override
-    public DbMobileConnectionSensor get(Long id) {
-
-        if (id == null) {
-            return null;
-        }
-
-        return dao
-                .queryBuilder()
-                .where(DbMobileConnectionSensorDao.Properties.Id.eq(id))
-                .limit(1)
-                .build()
-                .unique();
-    }
-
     @Override
     public List<DbMobileConnectionSensor> getLastN(int amount) {
 

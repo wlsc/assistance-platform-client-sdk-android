@@ -61,22 +61,6 @@ public class AccelerometerSensorDaoImpl extends
         return result;
     }
 
-    @Nullable
-    @Override
-    public DbAccelerometerSensor get(Long id) {
-
-        if (id == null) {
-            return null;
-        }
-
-        return dao
-                .queryBuilder()
-                .where(DbAccelerometerSensorDao.Properties.Id.eq(id))
-                .limit(1)
-                .build()
-                .unique();
-    }
-
     @Override
     public List<DbAccelerometerSensor> getLastN(int amount) {
 

@@ -63,22 +63,6 @@ public class LocationSensorDaoImpl extends
         return result;
     }
 
-    @Nullable
-    @Override
-    public DbPositionSensor get(Long id) {
-
-        if (id == null) {
-            return null;
-        }
-
-        return dao
-                .queryBuilder()
-                .where(DbPositionSensorDao.Properties.Id.eq(id))
-                .limit(1)
-                .build()
-                .unique();
-    }
-
     @Override
     public List<DbPositionSensor> getLastN(int amount) {
 

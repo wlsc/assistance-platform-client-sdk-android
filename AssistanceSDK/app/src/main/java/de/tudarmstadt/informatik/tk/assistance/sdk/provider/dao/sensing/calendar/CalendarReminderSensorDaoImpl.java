@@ -79,22 +79,6 @@ public class CalendarReminderSensorDaoImpl extends
                 .list();
     }
 
-    @Nullable
-    @Override
-    public DbCalendarReminderSensor get(Long id) {
-
-        if (id == null) {
-            return null;
-        }
-
-        return dao
-                .queryBuilder()
-                .where(DbCalendarReminderSensorDao.Properties.Id.eq(id))
-                .limit(1)
-                .build()
-                .unique();
-    }
-
     @Override
     public List<DbCalendarReminderSensor> getLastN(int amount) {
 

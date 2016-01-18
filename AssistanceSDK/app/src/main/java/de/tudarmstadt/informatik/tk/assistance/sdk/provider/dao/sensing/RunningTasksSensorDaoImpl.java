@@ -54,22 +54,6 @@ public class RunningTasksSensorDaoImpl extends
         return result;
     }
 
-    @Nullable
-    @Override
-    public DbRunningTasksSensor get(Long id) {
-
-        if (id == null) {
-            return null;
-        }
-
-        return dao
-                .queryBuilder()
-                .where(DbRunningTasksSensorDao.Properties.Id.eq(id))
-                .limit(1)
-                .build()
-                .unique();
-    }
-
     @Override
     public List<DbRunningTasksSensor> getLastN(int amount) {
 

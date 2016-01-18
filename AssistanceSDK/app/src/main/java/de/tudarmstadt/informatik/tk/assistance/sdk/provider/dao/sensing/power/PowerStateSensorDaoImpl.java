@@ -56,22 +56,6 @@ public class PowerStateSensorDaoImpl extends
         return result;
     }
 
-    @Nullable
-    @Override
-    public DbPowerStateSensor get(Long id) {
-
-        if (id == null) {
-            return null;
-        }
-
-        return dao
-                .queryBuilder()
-                .where(DbPowerStateSensorDao.Properties.Id.eq(id))
-                .limit(1)
-                .build()
-                .unique();
-    }
-
     @Override
     public List<DbPowerStateSensor> getLastN(int amount) {
 

@@ -61,22 +61,6 @@ public class GyroscopeSensorDaoImpl extends
         return result;
     }
 
-    @Nullable
-    @Override
-    public DbGyroscopeSensor get(Long id) {
-
-        if (id == null) {
-            return null;
-        }
-
-        return dao
-                .queryBuilder()
-                .where(DbGyroscopeSensorDao.Properties.Id.eq(id))
-                .limit(1)
-                .build()
-                .unique();
-    }
-
     @Override
     public List<DbGyroscopeSensor> getLastN(int amount) {
 

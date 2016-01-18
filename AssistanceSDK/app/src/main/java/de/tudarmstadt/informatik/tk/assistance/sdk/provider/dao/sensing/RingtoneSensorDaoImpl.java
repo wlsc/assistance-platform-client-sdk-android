@@ -53,22 +53,6 @@ public class RingtoneSensorDaoImpl extends
         return result;
     }
 
-    @Nullable
-    @Override
-    public DbRingtoneSensor get(Long id) {
-
-        if (id == null) {
-            return null;
-        }
-
-        return dao
-                .queryBuilder()
-                .where(DbRingtoneSensorDao.Properties.Id.eq(id))
-                .limit(1)
-                .build()
-                .unique();
-    }
-
     @Override
     public List<DbRingtoneSensor> getLastN(int amount) {
 

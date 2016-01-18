@@ -60,22 +60,6 @@ public class ForegroundSensorDaoImpl extends
         return result;
     }
 
-    @Nullable
-    @Override
-    public DbForegroundSensor get(Long id) {
-
-        if (id == null) {
-            return null;
-        }
-
-        return dao
-                .queryBuilder()
-                .where(DbForegroundSensorDao.Properties.Id.eq(id))
-                .limit(1)
-                .build()
-                .unique();
-    }
-
     @Override
     public List<DbForegroundSensor> getLastN(int amount) {
 

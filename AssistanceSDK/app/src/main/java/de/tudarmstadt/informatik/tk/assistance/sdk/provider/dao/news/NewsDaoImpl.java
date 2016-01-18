@@ -9,13 +9,13 @@ import com.google.gson.JsonSyntaxException;
 import java.util.Collections;
 import java.util.List;
 
+import de.tudarmstadt.informatik.tk.assistance.model.client.feedback.content.ClientFeedbackDto;
+import de.tudarmstadt.informatik.tk.assistance.model.client.feedback.content.ContentDto;
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DaoSession;
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbNews;
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbNewsDao;
 import de.tudarmstadt.informatik.tk.assistance.sdk.provider.dao.CommonDaoImpl;
 import de.tudarmstadt.informatik.tk.assistance.sdk.util.logger.Log;
-import de.tudarmstadt.informatik.tk.assistance.model.client.feedback.content.ClientFeedbackDto;
-import de.tudarmstadt.informatik.tk.assistance.model.client.feedback.content.ContentDto;
 
 /**
  * @author Wladimir Schmidt (wlsc.dev@gmail.com)
@@ -114,22 +114,6 @@ public class NewsDaoImpl extends
         }
 
         return result;
-    }
-
-    @Nullable
-    @Override
-    public DbNews get(Long id) {
-
-        if (id == null) {
-            return null;
-        }
-
-        return dao
-                .queryBuilder()
-                .where(DbNewsDao.Properties.Id.eq(id))
-                .limit(1)
-                .build()
-                .unique();
     }
 
     @Override

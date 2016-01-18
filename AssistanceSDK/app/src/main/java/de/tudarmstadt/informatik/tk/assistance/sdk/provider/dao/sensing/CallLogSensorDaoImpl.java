@@ -61,22 +61,6 @@ public class CallLogSensorDaoImpl extends
         return result;
     }
 
-    @Nullable
-    @Override
-    public DbCallLogSensor get(Long id) {
-
-        if (id == null) {
-            return null;
-        }
-
-        return dao
-                .queryBuilder()
-                .where(DbCallLogSensorDao.Properties.Id.eq(id))
-                .limit(1)
-                .build()
-                .unique();
-    }
-
     @Override
     public List<DbCallLogSensor> getLastN(int amount) {
 

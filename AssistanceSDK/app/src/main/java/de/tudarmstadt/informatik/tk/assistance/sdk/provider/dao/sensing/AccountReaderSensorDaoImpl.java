@@ -53,22 +53,6 @@ public class AccountReaderSensorDaoImpl extends
         return result;
     }
 
-    @Nullable
-    @Override
-    public DbAccountReaderSensor get(Long id) {
-
-        if (id == null) {
-            return null;
-        }
-
-        return dao
-                .queryBuilder()
-                .where(DbAccountReaderSensorDao.Properties.Id.eq(id))
-                .limit(1)
-                .build()
-                .unique();
-    }
-
     @Override
     public List<DbAccountReaderSensor> getLastN(int amount) {
 

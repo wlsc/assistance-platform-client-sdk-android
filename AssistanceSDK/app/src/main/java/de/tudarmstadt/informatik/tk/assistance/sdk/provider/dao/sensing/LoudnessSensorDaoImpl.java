@@ -53,22 +53,6 @@ public class LoudnessSensorDaoImpl extends
         return result;
     }
 
-    @Nullable
-    @Override
-    public DbLoudnessSensor get(Long id) {
-
-        if (id == null) {
-            return null;
-        }
-
-        return dao
-                .queryBuilder()
-                .where(DbLoudnessSensorDao.Properties.Id.eq(id))
-                .limit(1)
-                .build()
-                .unique();
-    }
-
     @Override
     public List<DbLoudnessSensor> getLastN(int amount) {
 

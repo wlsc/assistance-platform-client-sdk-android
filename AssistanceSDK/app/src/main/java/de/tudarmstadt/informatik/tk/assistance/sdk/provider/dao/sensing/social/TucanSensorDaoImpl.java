@@ -53,22 +53,6 @@ public class TucanSensorDaoImpl extends
         return result;
     }
 
-    @Nullable
-    @Override
-    public DbTucanSensor get(Long id) {
-
-        if (id == null) {
-            return null;
-        }
-
-        return dao
-                .queryBuilder()
-                .where(DbTucanSensorDao.Properties.Id.eq(id))
-                .limit(1)
-                .build()
-                .unique();
-    }
-
     @Override
     public List<DbTucanSensor> getLastN(int amount) {
 
@@ -82,5 +66,10 @@ public class TucanSensorDaoImpl extends
                 .limit(amount)
                 .build()
                 .list();
+    }
+
+    @Override
+    public DbTucanSensor getForUser(Long userId) {
+        return null;
     }
 }

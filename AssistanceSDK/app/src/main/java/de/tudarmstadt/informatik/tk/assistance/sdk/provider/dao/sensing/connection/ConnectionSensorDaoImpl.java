@@ -53,22 +53,6 @@ public class ConnectionSensorDaoImpl extends
         return result;
     }
 
-    @Nullable
-    @Override
-    public DbConnectionSensor get(Long id) {
-
-        if (id == null) {
-            return null;
-        }
-
-        return dao
-                .queryBuilder()
-                .where(DbConnectionSensorDao.Properties.Id.eq(id))
-                .limit(1)
-                .build()
-                .unique();
-    }
-
     @Override
     public List<DbConnectionSensor> getLastN(int amount) {
 

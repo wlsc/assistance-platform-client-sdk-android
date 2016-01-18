@@ -1,15 +1,20 @@
 package de.tudarmstadt.informatik.tk.assistance.sdk.provider.dao;
 
+import android.support.annotation.Nullable;
+
 import java.util.Collections;
 import java.util.List;
 
 import de.greenrobot.dao.AbstractDao;
+import de.greenrobot.dao.Property;
 
 /**
  * @author Wladimir Schmidt (wlsc.dev@gmail.com)
  * @date 22.11.2015
  */
 public abstract class CommonDaoImpl<T> implements CommonDao<T> {
+
+    protected Property idProperty;
 
     protected AbstractDao<T, Long> dao;
 
@@ -18,6 +23,25 @@ public abstract class CommonDaoImpl<T> implements CommonDao<T> {
         if (this.dao == null) {
             this.dao = dao;
         }
+
+        // general ID property of an SQLite table
+        this.idProperty = new Property(0, Long.class, "id", true, "_id");
+    }
+
+    @Nullable
+    @Override
+    public T get(Long id) {
+
+        if (id == null) {
+            return null;
+        }
+
+        return dao
+                .queryBuilder()
+                .where(idProperty.eq(id))
+                .limit(1)
+                .build()
+                .unique();
     }
 
     @Override

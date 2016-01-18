@@ -58,22 +58,6 @@ public class WifiConnectionSensorDaoImpl extends
         return result;
     }
 
-    @Nullable
-    @Override
-    public DbWifiConnectionSensor get(Long id) {
-
-        if (id == null) {
-            return null;
-        }
-
-        return dao
-                .queryBuilder()
-                .where(DbWifiConnectionSensorDao.Properties.Id.eq(id))
-                .limit(1)
-                .build()
-                .unique();
-    }
-
     @Override
     public List<DbWifiConnectionSensor> getLastN(int amount) {
 

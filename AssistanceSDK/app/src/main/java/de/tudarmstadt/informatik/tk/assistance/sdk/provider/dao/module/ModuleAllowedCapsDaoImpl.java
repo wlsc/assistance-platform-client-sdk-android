@@ -36,23 +36,6 @@ public class ModuleAllowedCapsDaoImpl extends
         return INSTANCE;
     }
 
-
-    @Nullable
-    @Override
-    public DbModuleAllowedCapabilities get(Long id) {
-
-        if (id == null) {
-            return null;
-        }
-
-        return dao
-                .queryBuilder()
-                .where(DbModuleAllowedCapabilitiesDao.Properties.Id.eq(id))
-                .limit(1)
-                .build()
-                .unique();
-    }
-
     @Override
     public List<DbModuleAllowedCapabilities> getLastN(int amount) {
 

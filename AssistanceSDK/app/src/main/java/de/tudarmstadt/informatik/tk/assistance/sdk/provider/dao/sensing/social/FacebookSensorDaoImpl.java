@@ -67,22 +67,6 @@ public class FacebookSensorDaoImpl extends
         return result;
     }
 
-    @Nullable
-    @Override
-    public DbFacebookSensor get(Long id) {
-
-        if (id == null) {
-            return null;
-        }
-
-        return dao
-                .queryBuilder()
-                .where(DbFacebookSensorDao.Properties.Id.eq(id))
-                .limit(1)
-                .build()
-                .unique();
-    }
-
     @Override
     public List<DbFacebookSensor> getLastN(int amount) {
 

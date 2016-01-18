@@ -72,22 +72,6 @@ public class CalendarSensorDaoImpl extends
         return result;
     }
 
-    @Nullable
-    @Override
-    public DbCalendarSensor get(Long id) {
-
-        if (id == null) {
-            return null;
-        }
-
-        return dao
-                .queryBuilder()
-                .where(DbCalendarSensorDao.Properties.Id.eq(id))
-                .limit(1)
-                .build()
-                .unique();
-    }
-
     @Override
     public List<DbCalendarSensor> getLastN(int amount) {
 

@@ -53,22 +53,6 @@ public class PowerLevelSensorDaoImpl extends
         return result;
     }
 
-    @Nullable
-    @Override
-    public DbPowerLevelSensor get(Long id) {
-
-        if (id == null) {
-            return null;
-        }
-
-        return dao
-                .queryBuilder()
-                .where(DbPowerLevelSensorDao.Properties.Id.eq(id))
-                .limit(1)
-                .build()
-                .unique();
-    }
-
     @Override
     public List<DbPowerLevelSensor> getLastN(int amount) {
 

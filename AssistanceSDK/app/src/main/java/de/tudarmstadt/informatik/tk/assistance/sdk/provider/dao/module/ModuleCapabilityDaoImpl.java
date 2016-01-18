@@ -1,7 +1,5 @@
 package de.tudarmstadt.informatik.tk.assistance.sdk.provider.dao.module;
 
-import android.support.annotation.Nullable;
-
 import java.util.Collections;
 import java.util.List;
 
@@ -33,22 +31,6 @@ public class ModuleCapabilityDaoImpl extends
         }
 
         return INSTANCE;
-    }
-
-    @Nullable
-    @Override
-    public DbModuleCapability get(Long id) {
-
-        if (id == null) {
-            return null;
-        }
-
-        return dao
-                .queryBuilder()
-                .where(DbModuleCapabilityDao.Properties.Id.eq(id))
-                .limit(1)
-                .build()
-                .unique();
     }
 
     @Override

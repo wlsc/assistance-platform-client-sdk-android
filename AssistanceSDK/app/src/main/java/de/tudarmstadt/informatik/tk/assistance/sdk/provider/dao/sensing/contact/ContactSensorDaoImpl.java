@@ -101,22 +101,6 @@ public class ContactSensorDaoImpl extends
         return result;
     }
 
-    @Nullable
-    @Override
-    public DbContactSensor get(Long id) {
-
-        if (id == null) {
-            return null;
-        }
-
-        return dao
-                .queryBuilder()
-                .where(DbContactSensorDao.Properties.Id.eq(id))
-                .limit(1)
-                .build()
-                .unique();
-    }
-
     @Override
     public List<DbContactSensor> getLastN(int amount) {
 
