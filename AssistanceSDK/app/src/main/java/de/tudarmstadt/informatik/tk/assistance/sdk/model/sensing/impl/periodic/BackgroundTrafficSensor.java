@@ -51,6 +51,8 @@ public class BackgroundTrafficSensor extends AbstractPeriodicSensor {
 
         packageManager = context.getPackageManager();
 
+        long deviceId = PreferenceProvider.getInstance(context).getCurrentDeviceId();
+
         //initial Data
         DbNetworkTrafficSensor networkTrafficEvent = new DbNetworkTrafficSensor();
 
@@ -68,6 +70,8 @@ public class BackgroundTrafficSensor extends AbstractPeriodicSensor {
         if (lastLongitude != 0) {
             networkTrafficEvent.setLongitude(lastLongitude);
         }
+
+        networkTrafficEvent.setDeviceId(deviceId);
 
         Log.d(TAG, "Insert entry");
 
@@ -139,6 +143,8 @@ public class BackgroundTrafficSensor extends AbstractPeriodicSensor {
                 if (lastLongitude != 0) {
                     networkTrafficEvent.setLongitude(lastLongitude);
                 }
+
+                networkTrafficEvent.setDeviceId(preferenceProvider.getCurrentDeviceId());
 
                 // speed optimization
                 insertList.add(networkTrafficEvent);

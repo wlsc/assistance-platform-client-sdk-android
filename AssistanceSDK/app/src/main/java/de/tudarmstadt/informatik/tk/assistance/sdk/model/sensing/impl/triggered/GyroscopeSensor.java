@@ -13,6 +13,7 @@ import java.util.Locale;
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbGyroscopeSensor;
 import de.tudarmstadt.informatik.tk.assistance.sdk.model.api.sensing.SensorApiType;
 import de.tudarmstadt.informatik.tk.assistance.sdk.model.sensing.impl.AbstractTriggeredSensor;
+import de.tudarmstadt.informatik.tk.assistance.sdk.provider.PreferenceProvider;
 import de.tudarmstadt.informatik.tk.assistance.sdk.util.DateUtils;
 import de.tudarmstadt.informatik.tk.assistance.sdk.util.logger.Log;
 
@@ -226,6 +227,8 @@ public class GyroscopeSensor extends
     @Override
     public void dumpData() {
 
+        long deviceId = PreferenceProvider.getInstance(context).getCurrentDeviceId();
+
         DbGyroscopeSensor gyroscopeSensor = new DbGyroscopeSensor();
 
         /**
@@ -274,6 +277,7 @@ public class GyroscopeSensor extends
 
         gyroscopeSensor.setAccuracy(accuracy);
         gyroscopeSensor.setCreated(DateUtils.dateToISO8601String(new Date(), Locale.getDefault()));
+        gyroscopeSensor.setDeviceId(deviceId);
 
         Log.d(TAG, "Insert entry");
 

@@ -12,6 +12,7 @@ import java.util.Locale;
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbRunningProcessesSensor;
 import de.tudarmstadt.informatik.tk.assistance.sdk.model.api.sensing.SensorApiType;
 import de.tudarmstadt.informatik.tk.assistance.sdk.model.sensing.impl.AbstractPeriodicSensor;
+import de.tudarmstadt.informatik.tk.assistance.sdk.provider.PreferenceProvider;
 import de.tudarmstadt.informatik.tk.assistance.sdk.util.DateUtils;
 import de.tudarmstadt.informatik.tk.assistance.sdk.util.logger.Log;
 
@@ -58,10 +59,13 @@ public class RunningProcessesReaderSensor extends AbstractPeriodicSensor {
     @Override
     public void dumpData() {
 
+        long deviceId = PreferenceProvider.getInstance(context).getCurrentDeviceId();
+
         DbRunningProcessesSensor runningProcessesEvent = new DbRunningProcessesSensor();
 
         runningProcessesEvent.setName(currentProcessName);
         runningProcessesEvent.setCreated(DateUtils.dateToISO8601String(new Date(), Locale.getDefault()));
+        runningProcessesEvent.setDeviceId(deviceId);
 
         Log.d(TAG, "Insert entry");
 

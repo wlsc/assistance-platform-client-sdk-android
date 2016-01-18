@@ -23,6 +23,7 @@ import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbCalendarReminderSensor;
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbCalendarSensor;
 import de.tudarmstadt.informatik.tk.assistance.sdk.model.api.sensing.SensorApiType;
 import de.tudarmstadt.informatik.tk.assistance.sdk.model.sensing.impl.AbstractContentObserverSensor;
+import de.tudarmstadt.informatik.tk.assistance.sdk.provider.PreferenceProvider;
 import de.tudarmstadt.informatik.tk.assistance.sdk.util.DateUtils;
 import de.tudarmstadt.informatik.tk.assistance.sdk.util.logger.Log;
 
@@ -133,6 +134,8 @@ public class CalendarSensor extends AbstractContentObserverSensor {
 
         try {
 
+            long deviceId = PreferenceProvider.getInstance(context).getCurrentDeviceId();
+
             List<DbCalendarSensor> events = daoProvider.getCalendarSensorDao().getAll();
 
             for (DbCalendarSensor event : events) {
@@ -172,6 +175,7 @@ public class CalendarSensor extends AbstractContentObserverSensor {
                 event.setIsNew(Boolean.TRUE);
                 event.setIsDeleted(Boolean.FALSE);
                 event.setIsUpdated(Boolean.FALSE);
+                event.setDeviceId(deviceId);
                 event.setCreated(created);
 
                 // checking for any changes
@@ -227,6 +231,8 @@ public class CalendarSensor extends AbstractContentObserverSensor {
 
             try {
 
+                long deviceId = PreferenceProvider.getInstance(context).getCurrentDeviceId();
+
                 cur = cr.query(URI_REMINDER, PROJECTION_REMINDERS, selection, selectionArgs, null);
 
                 if (cur == null) {
@@ -248,10 +254,10 @@ public class CalendarSensor extends AbstractContentObserverSensor {
                     reminder.setIsNew(Boolean.TRUE);
                     reminder.setIsDeleted(Boolean.FALSE);
                     reminder.setIsUpdated(Boolean.FALSE);
+                    reminder.setDeviceId(deviceId);
                     reminder.setCreated(created);
 
                     if (checkForReminderChange(mapExistingReminders, reminder)) {
-
                         entriesToInsert.add(reminder);
                     }
                 }

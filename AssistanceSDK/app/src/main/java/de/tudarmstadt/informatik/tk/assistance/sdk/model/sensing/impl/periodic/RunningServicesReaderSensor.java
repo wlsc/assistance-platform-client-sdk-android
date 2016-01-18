@@ -12,6 +12,8 @@ import java.util.Locale;
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbRunningServicesSensor;
 import de.tudarmstadt.informatik.tk.assistance.sdk.model.api.sensing.SensorApiType;
 import de.tudarmstadt.informatik.tk.assistance.sdk.model.sensing.impl.AbstractPeriodicSensor;
+import de.tudarmstadt.informatik.tk.assistance.sdk.provider.PreferenceProvider;
+import de.tudarmstadt.informatik.tk.assistance.sdk.provider.dao.sensing.RunningServicesSensorDao;
 import de.tudarmstadt.informatik.tk.assistance.sdk.util.DateUtils;
 import de.tudarmstadt.informatik.tk.assistance.sdk.util.ServiceUtils;
 import de.tudarmstadt.informatik.tk.assistance.sdk.util.logger.Log;
@@ -60,6 +62,9 @@ public class RunningServicesReaderSensor extends AbstractPeriodicSensor {
 
         Log.d(TAG, "Insert entries");
 
+        long deviceId = PreferenceProvider.getInstance(context).getCurrentDeviceId();
+        RunningServicesSensorDao dao = daoProvider.getRunningServicesSensorDao();
+
         final Date nowDate = new Date();
 
         for (int i = 0, size = lastServicePackageNames.size(); i < size; i++) {
@@ -69,8 +74,9 @@ public class RunningServicesReaderSensor extends AbstractPeriodicSensor {
             runningServicesEvent.setPackageName(lastServicePackageNames.get(i));
             runningServicesEvent.setClassName(lastServiceClassNames.get(i));
             runningServicesEvent.setCreated(DateUtils.dateToISO8601String(nowDate, Locale.getDefault()));
+            runningServicesEvent.setDeviceId(deviceId);
 
-            daoProvider.getRunningServicesSensorDao().insert(runningServicesEvent);
+            dao.insert(runningServicesEvent);
         }
 
         Log.d(TAG, "Finished");

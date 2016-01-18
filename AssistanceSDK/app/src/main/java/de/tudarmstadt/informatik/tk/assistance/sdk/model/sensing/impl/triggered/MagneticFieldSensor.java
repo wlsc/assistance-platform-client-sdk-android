@@ -13,6 +13,7 @@ import java.util.Locale;
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbMagneticFieldSensor;
 import de.tudarmstadt.informatik.tk.assistance.sdk.model.api.sensing.SensorApiType;
 import de.tudarmstadt.informatik.tk.assistance.sdk.model.sensing.impl.AbstractTriggeredSensor;
+import de.tudarmstadt.informatik.tk.assistance.sdk.provider.PreferenceProvider;
 import de.tudarmstadt.informatik.tk.assistance.sdk.util.DateUtils;
 import de.tudarmstadt.informatik.tk.assistance.sdk.util.logger.Log;
 
@@ -222,6 +223,8 @@ public class MagneticFieldSensor extends AbstractTriggeredSensor implements Sens
     @Override
     public void dumpData() {
 
+        long deviceId = PreferenceProvider.getInstance(context).getCurrentDeviceId();
+
         DbMagneticFieldSensor magneticFieldSensor = new DbMagneticFieldSensor();
 
         /**
@@ -269,6 +272,7 @@ public class MagneticFieldSensor extends AbstractTriggeredSensor implements Sens
 
         magneticFieldSensor.setAccuracy(accuracy);
         magneticFieldSensor.setCreated(DateUtils.dateToISO8601String(new Date(), Locale.getDefault()));
+        magneticFieldSensor.setDeviceId(deviceId);
 
         Log.d(TAG, "Insert entry");
 

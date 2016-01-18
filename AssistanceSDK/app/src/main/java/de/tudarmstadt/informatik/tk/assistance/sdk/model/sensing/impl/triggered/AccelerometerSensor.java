@@ -12,6 +12,7 @@ import java.util.Locale;
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbAccelerometerSensor;
 import de.tudarmstadt.informatik.tk.assistance.sdk.model.api.sensing.SensorApiType;
 import de.tudarmstadt.informatik.tk.assistance.sdk.model.sensing.impl.AbstractTriggeredSensor;
+import de.tudarmstadt.informatik.tk.assistance.sdk.provider.PreferenceProvider;
 import de.tudarmstadt.informatik.tk.assistance.sdk.util.DateUtils;
 import de.tudarmstadt.informatik.tk.assistance.sdk.util.logger.Log;
 
@@ -71,17 +72,20 @@ public class AccelerometerSensor extends
 
         if (numValues > 0) {
 
-            DbAccelerometerSensor dbAccelerometerSensor = new DbAccelerometerSensor();
+            long deviceId = PreferenceProvider.getInstance(context).getCurrentDeviceId();
 
-            dbAccelerometerSensor.setX((double) (sumAccelerationX / numValues));
-            dbAccelerometerSensor.setY((double) (sumAccelerationY / numValues));
-            dbAccelerometerSensor.setZ((double) (sumAccelerationZ / numValues));
-            dbAccelerometerSensor.setAccuracy(accuracy);
-            dbAccelerometerSensor.setCreated(DateUtils.dateToISO8601String(new Date(), Locale.getDefault()));
+            DbAccelerometerSensor sensor = new DbAccelerometerSensor();
+
+            sensor.setX((double) (sumAccelerationX / numValues));
+            sensor.setY((double) (sumAccelerationY / numValues));
+            sensor.setZ((double) (sumAccelerationZ / numValues));
+            sensor.setAccuracy(accuracy);
+            sensor.setCreated(DateUtils.dateToISO8601String(new Date(), Locale.getDefault()));
+            sensor.setDeviceId(deviceId);
 
             Log.d(TAG, "Insert entry");
 
-            daoProvider.getAccelerometerSensorDao().insert(dbAccelerometerSensor);
+            daoProvider.getAccelerometerSensorDao().insert(sensor);
 
             Log.d(TAG, "Finished");
         }

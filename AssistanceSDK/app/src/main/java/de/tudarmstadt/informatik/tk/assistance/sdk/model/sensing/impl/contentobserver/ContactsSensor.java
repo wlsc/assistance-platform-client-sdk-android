@@ -28,6 +28,7 @@ import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbContactSensor;
 import de.tudarmstadt.informatik.tk.assistance.sdk.model.api.sensing.SensorApiType;
 import de.tudarmstadt.informatik.tk.assistance.sdk.model.enums.EPushType;
 import de.tudarmstadt.informatik.tk.assistance.sdk.model.sensing.impl.AbstractContentObserverSensor;
+import de.tudarmstadt.informatik.tk.assistance.sdk.provider.PreferenceProvider;
 import de.tudarmstadt.informatik.tk.assistance.sdk.util.DateUtils;
 import de.tudarmstadt.informatik.tk.assistance.sdk.util.logger.Log;
 
@@ -90,6 +91,8 @@ public class ContactsSensor extends AbstractContentObserverSensor {
 
             return;
         }
+
+        long deviceId = PreferenceProvider.getInstance(context).getCurrentDeviceId();
 
         //Cursor cursor = context.getContentResolver().query(URI_RAW_CONTACTS, null, "deleted=?", new String[] { "0" }, null);
 
@@ -157,6 +160,7 @@ public class ContactsSensor extends AbstractContentObserverSensor {
                 sensorContact.setIsDeleted(Boolean.FALSE);
                 sensorContact.setIsUpdated(Boolean.FALSE);
                 sensorContact.setCreated(created);
+                sensorContact.setDeviceId(deviceId);
 
                 if (checkForContactChange(allExistingContacts, sensorContact)) {
 
@@ -300,6 +304,7 @@ public class ContactsSensor extends AbstractContentObserverSensor {
 
     private void syncMails(DbContactSensor sensorContact) {
 
+        long deviceId = PreferenceProvider.getInstance(context).getCurrentDeviceId();
         long longContactId = sensorContact.getContactId();
         Map<String, DbContactEmailSensor> mapExistingMails = getExistingMails(longContactId);
 
@@ -340,6 +345,7 @@ public class ContactsSensor extends AbstractContentObserverSensor {
                 sensorContactMail.setIsDeleted(Boolean.FALSE);
                 sensorContactMail.setIsUpdated(Boolean.FALSE);
                 sensorContactMail.setCreated(created);
+                sensorContactMail.setDeviceId(deviceId);
 
                 if (checkForContactMailChange(mapExistingMails, sensorContactMail)) {
 
@@ -402,6 +408,7 @@ public class ContactsSensor extends AbstractContentObserverSensor {
 
     private void syncNumbers(DbContactSensor sensorContact) {
 
+        long deviceId = PreferenceProvider.getInstance(context).getCurrentDeviceId();
         long longContactId = sensorContact.getGlobalContactId();
         Map<String, DbContactNumberSensor> mapExistingNumbers = getExistingNumbers(longContactId);
 
@@ -437,6 +444,7 @@ public class ContactsSensor extends AbstractContentObserverSensor {
                 sensorContactNumber.setIsDeleted(Boolean.FALSE);
                 sensorContactNumber.setIsUpdated(Boolean.FALSE);
                 sensorContactNumber.setCreated(created);
+                sensorContactNumber.setDeviceId(deviceId);
 
                 if (checkForContactNumberChange(mapExistingNumbers, sensorContactNumber)) {
 

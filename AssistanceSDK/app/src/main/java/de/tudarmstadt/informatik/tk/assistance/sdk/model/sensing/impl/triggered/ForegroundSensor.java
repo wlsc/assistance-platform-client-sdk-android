@@ -22,6 +22,7 @@ import de.tudarmstadt.informatik.tk.assistance.sdk.model.api.sensing.SensorApiTy
 import de.tudarmstadt.informatik.tk.assistance.sdk.model.enums.EPushType;
 import de.tudarmstadt.informatik.tk.assistance.sdk.model.sensing.impl.AbstractTriggeredSensor;
 import de.tudarmstadt.informatik.tk.assistance.sdk.provider.DaoProvider;
+import de.tudarmstadt.informatik.tk.assistance.sdk.provider.PreferenceProvider;
 import de.tudarmstadt.informatik.tk.assistance.sdk.util.AccessibilityEventFilterUtils;
 import de.tudarmstadt.informatik.tk.assistance.sdk.util.DateUtils;
 import de.tudarmstadt.informatik.tk.assistance.sdk.util.ImageUtils;
@@ -103,10 +104,13 @@ public class ForegroundSensor extends AbstractTriggeredSensor {
             setRunning(false);
         } finally {
 
+            long deviceId = PreferenceProvider.getInstance(context).getCurrentDeviceId();
+
             DbForegroundSensor dbForegroundEvent = new DbForegroundSensor();
 
             dbForegroundEvent.setEventType(EVENT_ASSISTANCE_START);
             dbForegroundEvent.setCreated(DateUtils.dateToISO8601String(new Date(), Locale.getDefault()));
+            dbForegroundEvent.setDeviceId(deviceId);
 
             Log.d(TAG, "Insert entry");
 
@@ -134,10 +138,13 @@ public class ForegroundSensor extends AbstractTriggeredSensor {
                 daoProvider = DaoProvider.getInstance(context);
             }
 
+            long deviceId = PreferenceProvider.getInstance(context).getCurrentDeviceId();
+
             DbForegroundSensor dbForegroundEvent = new DbForegroundSensor();
 
             dbForegroundEvent.setEventType(EVENT_ASSISTANCE_STOP);
             dbForegroundEvent.setCreated(DateUtils.dateToISO8601String(new Date(), Locale.getDefault()));
+            dbForegroundEvent.setDeviceId(deviceId);
 
             Log.d(TAG, "Insert entry");
 
@@ -155,6 +162,8 @@ public class ForegroundSensor extends AbstractTriggeredSensor {
 
         if (isRunning()) {
 
+            long deviceId = PreferenceProvider.getInstance(context).getCurrentDeviceId();
+
             DbForegroundSensor foregroundEvent = mEventFilter.filter(event);
 
             if (foregroundEvent != null) {
@@ -164,6 +173,8 @@ public class ForegroundSensor extends AbstractTriggeredSensor {
                 if (color != null) {
                     foregroundEvent.setColor(color);
                 }
+
+                foregroundEvent.setDeviceId(deviceId);
 
                 Log.d(TAG, "Insert entry");
 
@@ -282,6 +293,8 @@ public class ForegroundSensor extends AbstractTriggeredSensor {
 
             Log.d(TAG, "action: " + intent.getAction());
 
+            long deviceId = PreferenceProvider.getInstance(context).getCurrentDeviceId();
+
             DbForegroundSensor foregroundEvent = new DbForegroundSensor();
 
             if (intent.getAction().equals(Intent.ACTION_SCREEN_OFF)) {
@@ -293,6 +306,7 @@ public class ForegroundSensor extends AbstractTriggeredSensor {
             }
 
             foregroundEvent.setCreated(DateUtils.dateToISO8601String(new Date(), Locale.getDefault()));
+            foregroundEvent.setDeviceId(deviceId);
 
             Log.d(TAG, "Insert entry");
 

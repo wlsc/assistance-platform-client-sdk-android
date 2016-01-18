@@ -18,6 +18,7 @@ import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbMobileConnectionSensor;
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbWifiConnectionSensor;
 import de.tudarmstadt.informatik.tk.assistance.sdk.model.api.sensing.SensorApiType;
 import de.tudarmstadt.informatik.tk.assistance.sdk.model.sensing.impl.AbstractTriggeredSensor;
+import de.tudarmstadt.informatik.tk.assistance.sdk.provider.PreferenceProvider;
 import de.tudarmstadt.informatik.tk.assistance.sdk.util.ConnectionUtils;
 import de.tudarmstadt.informatik.tk.assistance.sdk.util.DateUtils;
 import de.tudarmstadt.informatik.tk.assistance.sdk.util.StringUtils;
@@ -84,6 +85,7 @@ public class ConnectionSensor extends AbstractTriggeredSensor {
     public void dumpData() {
 
         String created = DateUtils.dateToISO8601String(new Date(), Locale.getDefault());
+        long deviceId = PreferenceProvider.getInstance(context).getCurrentDeviceId();
 
         /**
          * Connection event
@@ -93,6 +95,7 @@ public class ConnectionSensor extends AbstractTriggeredSensor {
         connectionEvent.setIsMobile(isMobileDataAvailable);
         connectionEvent.setIsWifi(isWifiDataAvailable);
         connectionEvent.setCreated(created);
+        connectionEvent.setDeviceId(deviceId);
 
         Log.d(TAG, "Insert entry");
 
@@ -114,6 +117,7 @@ public class ConnectionSensor extends AbstractTriggeredSensor {
             mobileConnectionEvent.setMobileCountryCode(mobileCarrierCode);
             mobileConnectionEvent.setMobileNetworkCode(mobileNetworkCode);
             mobileConnectionEvent.setCreated(created);
+            mobileConnectionEvent.setDeviceId(deviceId);
 
             Log.d(TAG, "MOBILE: Insert entry");
 
@@ -142,6 +146,7 @@ public class ConnectionSensor extends AbstractTriggeredSensor {
             wifiConnectionEvent.setSignalStrength(signalStrength);
             wifiConnectionEvent.setNetworkId(networkId);
             wifiConnectionEvent.setCreated(created);
+            wifiConnectionEvent.setDeviceId(deviceId);
 
             Log.d(TAG, "WIFI: Insert entry");
 

@@ -111,19 +111,22 @@ public class LocationSensor extends
     @Override
     public void dumpData() {
 
-        DbPositionSensor dbPositionSensor = new DbPositionSensor();
+        long deviceId = PreferenceProvider.getInstance(context).getCurrentDeviceId();
 
-        dbPositionSensor.setLatitude(latitude);
-        dbPositionSensor.setLongitude(longitude);
-        dbPositionSensor.setAccuracyHorizontal(accuracyHorizontal);
-        dbPositionSensor.setAccuracyVertical(accuracyVertical);
-        dbPositionSensor.setAltitude(altitude);
-        dbPositionSensor.setSpeed(speed);
-        dbPositionSensor.setCreated(DateUtils.dateToISO8601String(new Date(), Locale.getDefault()));
+        DbPositionSensor positionSensor = new DbPositionSensor();
+
+        positionSensor.setLatitude(latitude);
+        positionSensor.setLongitude(longitude);
+        positionSensor.setAccuracyHorizontal(accuracyHorizontal);
+        positionSensor.setAccuracyVertical(accuracyVertical);
+        positionSensor.setAltitude(altitude);
+        positionSensor.setSpeed(speed);
+        positionSensor.setCreated(DateUtils.dateToISO8601String(new Date(), Locale.getDefault()));
+        positionSensor.setDeviceId(deviceId);
 
         Log.d(TAG, "Insert entry");
 
-        daoProvider.getLocationSensorDao().insert(dbPositionSensor);
+        daoProvider.getLocationSensorDao().insert(positionSensor);
 
         Log.d(TAG, "Finished");
     }

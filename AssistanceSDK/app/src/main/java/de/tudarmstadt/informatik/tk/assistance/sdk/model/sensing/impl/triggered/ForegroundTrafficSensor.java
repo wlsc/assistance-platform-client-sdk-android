@@ -23,6 +23,7 @@ import de.tudarmstadt.informatik.tk.assistance.sdk.model.enums.EPushType;
 import de.tudarmstadt.informatik.tk.assistance.sdk.model.sensing.impl.AbstractTriggeredSensor;
 import de.tudarmstadt.informatik.tk.assistance.sdk.provider.DaoProvider;
 import de.tudarmstadt.informatik.tk.assistance.sdk.provider.PreferenceProvider;
+import de.tudarmstadt.informatik.tk.assistance.sdk.provider.dao.sensing.NetworkTrafficSensorDao;
 import de.tudarmstadt.informatik.tk.assistance.sdk.util.AccessibilityEventFilterUtils;
 import de.tudarmstadt.informatik.tk.assistance.sdk.util.DateUtils;
 import de.tudarmstadt.informatik.tk.assistance.sdk.util.logger.Log;
@@ -311,6 +312,10 @@ public class ForegroundTrafficSensor extends AbstractTriggeredSensor {
             daoProvider = DaoProvider.getInstance(context);
         }
 
+        NetworkTrafficSensorDao networkTrafficSensorDao = daoProvider.getNetworkTrafficSensorDao();
+
+        long deviceId = PreferenceProvider.getInstance(context).getCurrentDeviceId();
+
         DbNetworkTrafficSensor networkTrafficEvent = new DbNetworkTrafficSensor();
 
         networkTrafficEvent.setAppName(event.getPackageName());
@@ -339,10 +344,11 @@ public class ForegroundTrafficSensor extends AbstractTriggeredSensor {
 
                 networkTrafficEvent.setBackground(Boolean.FALSE);
                 networkTrafficEvent.setCreated(DateUtils.dateToISO8601String(new Date(), Locale.getDefault()));
+                networkTrafficEvent.setDeviceId(deviceId);
 
                 Log.d(TAG, "Insert entry");
 
-                daoProvider.getNetworkTrafficSensorDao().insert(networkTrafficEvent);
+                networkTrafficSensorDao.insert(networkTrafficEvent);
 
                 Log.d(TAG, "Finished");
 
@@ -370,6 +376,8 @@ public class ForegroundTrafficSensor extends AbstractTriggeredSensor {
                 daoProvider = DaoProvider.getInstance(context);
             }
 
+            long deviceId = PreferenceProvider.getInstance(context).getCurrentDeviceId();
+
             DbNetworkTrafficSensor networkTrafficEvent = new DbNetworkTrafficSensor();
 
             if (intent.getAction().equals(Intent.ACTION_SCREEN_OFF)) {
@@ -393,6 +401,7 @@ public class ForegroundTrafficSensor extends AbstractTriggeredSensor {
 
             networkTrafficEvent.setBackground(Boolean.FALSE);
             networkTrafficEvent.setCreated(DateUtils.dateToISO8601String(new Date(), Locale.getDefault()));
+            networkTrafficEvent.setDeviceId(deviceId);
 
             Log.d(TAG, "Insert entry");
 

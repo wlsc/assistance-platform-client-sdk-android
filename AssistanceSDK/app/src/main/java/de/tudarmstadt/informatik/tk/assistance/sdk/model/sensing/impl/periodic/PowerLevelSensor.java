@@ -8,6 +8,7 @@ import java.util.Locale;
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbPowerLevelSensor;
 import de.tudarmstadt.informatik.tk.assistance.sdk.model.api.sensing.SensorApiType;
 import de.tudarmstadt.informatik.tk.assistance.sdk.model.sensing.impl.AbstractPeriodicSensor;
+import de.tudarmstadt.informatik.tk.assistance.sdk.provider.PreferenceProvider;
 import de.tudarmstadt.informatik.tk.assistance.sdk.util.BatteryUtils;
 import de.tudarmstadt.informatik.tk.assistance.sdk.util.DateUtils;
 import de.tudarmstadt.informatik.tk.assistance.sdk.util.logger.Log;
@@ -71,10 +72,13 @@ public class PowerLevelSensor extends AbstractPeriodicSensor {
     @Override
     public void dumpData() {
 
+        long deviceId = PreferenceProvider.getInstance(context).getCurrentDeviceId();
+
         DbPowerLevelSensor powerLevelEvent = new DbPowerLevelSensor();
 
         powerLevelEvent.setPercent(lastPercentValue);
         powerLevelEvent.setCreated(DateUtils.dateToISO8601String(new Date(), Locale.getDefault()));
+        powerLevelEvent.setDeviceId(deviceId);
 
         Log.d(TAG, "Insert entry");
 
