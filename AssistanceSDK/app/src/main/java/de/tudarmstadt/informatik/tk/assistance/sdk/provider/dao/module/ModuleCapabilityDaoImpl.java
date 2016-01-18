@@ -34,21 +34,6 @@ public class ModuleCapabilityDaoImpl extends
     }
 
     @Override
-    public List<DbModuleCapability> getLastN(int amount) {
-
-        if (amount <= 0) {
-            return Collections.emptyList();
-        }
-
-        return dao
-                .queryBuilder()
-                .orderDesc(DbModuleCapabilityDao.Properties.Id)
-                .limit(amount)
-                .build()
-                .list();
-    }
-
-    @Override
     public List<DbModuleCapability> getAllActive(Long moduleId) {
 
         if (moduleId == null || moduleId < 0) {

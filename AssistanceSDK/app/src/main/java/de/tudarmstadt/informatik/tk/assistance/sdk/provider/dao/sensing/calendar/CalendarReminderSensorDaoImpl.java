@@ -78,19 +78,4 @@ public class CalendarReminderSensorDaoImpl extends
                 .build()
                 .list();
     }
-
-    @Override
-    public List<DbCalendarReminderSensor> getLastN(int amount) {
-
-        if (amount <= 0) {
-            return Collections.emptyList();
-        }
-
-        return dao
-                .queryBuilder()
-                .orderDesc(DbCalendarReminderSensorDao.Properties.Id)
-                .limit(amount)
-                .build()
-                .list();
-    }
 }

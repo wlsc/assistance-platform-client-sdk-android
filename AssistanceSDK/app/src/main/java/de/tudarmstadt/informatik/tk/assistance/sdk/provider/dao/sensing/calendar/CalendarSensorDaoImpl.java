@@ -2,7 +2,6 @@ package de.tudarmstadt.informatik.tk.assistance.sdk.provider.dao.sensing.calenda
 
 import android.support.annotation.Nullable;
 
-import java.util.Collections;
 import java.util.List;
 
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DaoSession;
@@ -70,21 +69,6 @@ public class CalendarSensorDaoImpl extends
         result.setCreated(sensor.getCreated());
 
         return result;
-    }
-
-    @Override
-    public List<DbCalendarSensor> getLastN(int amount) {
-
-        if (amount <= 0) {
-            return Collections.emptyList();
-        }
-
-        return dao
-                .queryBuilder()
-                .orderDesc(DbCalendarSensorDao.Properties.Id)
-                .limit(amount)
-                .build()
-                .list();
     }
 
     @Override

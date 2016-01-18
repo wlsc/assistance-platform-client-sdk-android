@@ -115,19 +115,4 @@ public class NewsDaoImpl extends
 
         return result;
     }
-
-    @Override
-    public List<DbNews> getLastN(int amount) {
-
-        if (amount <= 0) {
-            return Collections.emptyList();
-        }
-
-        return dao
-                .queryBuilder()
-                .orderDesc(DbNewsDao.Properties.Id)
-                .limit(amount)
-                .build()
-                .list();
-    }
 }

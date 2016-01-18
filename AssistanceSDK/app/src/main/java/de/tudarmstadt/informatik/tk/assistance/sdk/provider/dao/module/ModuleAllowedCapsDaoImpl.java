@@ -2,9 +2,6 @@ package de.tudarmstadt.informatik.tk.assistance.sdk.provider.dao.module;
 
 import android.support.annotation.Nullable;
 
-import java.util.Collections;
-import java.util.List;
-
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DaoSession;
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbModuleAllowedCapabilities;
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbModuleAllowedCapabilitiesDao;
@@ -34,21 +31,6 @@ public class ModuleAllowedCapsDaoImpl extends
         }
 
         return INSTANCE;
-    }
-
-    @Override
-    public List<DbModuleAllowedCapabilities> getLastN(int amount) {
-
-        if (amount <= 0) {
-            return Collections.emptyList();
-        }
-
-        return dao
-                .queryBuilder()
-                .orderDesc(DbModuleAllowedCapabilitiesDao.Properties.Id)
-                .limit(amount)
-                .build()
-                .list();
     }
 
     @Nullable

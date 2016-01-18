@@ -5,14 +5,11 @@ import android.support.annotation.Nullable;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
-import java.util.Collections;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DaoSession;
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbFacebookSensor;
-import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbFacebookSensorDao;
 import de.tudarmstadt.informatik.tk.assistance.sdk.model.api.SensorDto;
 import de.tudarmstadt.informatik.tk.assistance.sdk.model.api.sensing.sensor.social.FacebookSensorDto;
 import de.tudarmstadt.informatik.tk.assistance.sdk.provider.dao.sensing.common.CommonEventDaoImpl;
@@ -65,20 +62,5 @@ public class FacebookSensorDaoImpl extends
         );
 
         return result;
-    }
-
-    @Override
-    public List<DbFacebookSensor> getLastN(int amount) {
-
-        if (amount <= 0) {
-            return Collections.emptyList();
-        }
-
-        return dao
-                .queryBuilder()
-                .orderDesc(DbFacebookSensorDao.Properties.Id)
-                .limit(amount)
-                .build()
-                .list();
     }
 }

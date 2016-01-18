@@ -58,21 +58,6 @@ public class NetworkTrafficSensorDaoImpl extends
     }
 
     @Override
-    public List<DbNetworkTrafficSensor> getLastN(int amount) {
-
-        if (amount <= 0) {
-            return Collections.emptyList();
-        }
-
-        return dao
-                .queryBuilder()
-                .orderDesc(DbNetworkTrafficSensorDao.Properties.Id)
-                .limit(amount)
-                .build()
-                .list();
-    }
-
-    @Override
     public List<DbNetworkTrafficSensor> getAllBackground() {
         return dao
                 .queryBuilder()

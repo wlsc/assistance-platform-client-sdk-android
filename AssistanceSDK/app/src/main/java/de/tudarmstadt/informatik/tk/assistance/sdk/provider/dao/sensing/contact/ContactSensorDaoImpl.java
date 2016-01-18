@@ -2,7 +2,6 @@ package de.tudarmstadt.informatik.tk.assistance.sdk.provider.dao.sensing.contact
 
 import android.support.annotation.Nullable;
 
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -99,21 +98,6 @@ public class ContactSensorDaoImpl extends
         }
 
         return result;
-    }
-
-    @Override
-    public List<DbContactSensor> getLastN(int amount) {
-
-        if (amount <= 0) {
-            return Collections.emptyList();
-        }
-
-        return dao
-                .queryBuilder()
-                .orderDesc(DbContactSensorDao.Properties.Id)
-                .limit(amount)
-                .build()
-                .list();
     }
 
     @Override

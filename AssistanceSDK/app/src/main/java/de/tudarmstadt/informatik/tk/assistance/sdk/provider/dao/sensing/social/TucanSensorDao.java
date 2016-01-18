@@ -8,12 +8,4 @@ import de.tudarmstadt.informatik.tk.assistance.sdk.provider.dao.sensing.common.C
  * @date 17.01.2016
  */
 public interface TucanSensorDao extends CommonEventDao<DbTucanSensor> {
-
-    /**
-     * Gets item for supplied userId
-     *
-     * @param userId
-     * @return
-     */
-    DbTucanSensor getForUser(Long userId);
 }

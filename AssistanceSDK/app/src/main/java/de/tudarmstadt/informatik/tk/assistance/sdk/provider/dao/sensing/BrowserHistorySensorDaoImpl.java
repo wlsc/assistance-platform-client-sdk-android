@@ -2,12 +2,8 @@ package de.tudarmstadt.informatik.tk.assistance.sdk.provider.dao.sensing;
 
 import android.support.annotation.Nullable;
 
-import java.util.Collections;
-import java.util.List;
-
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DaoSession;
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbBrowserHistorySensor;
-import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbBrowserHistorySensorDao;
 import de.tudarmstadt.informatik.tk.assistance.sdk.model.api.SensorDto;
 import de.tudarmstadt.informatik.tk.assistance.sdk.model.api.sensing.sensor.BrowserHistorySensorDto;
 import de.tudarmstadt.informatik.tk.assistance.sdk.provider.dao.sensing.common.CommonEventDaoImpl;
@@ -58,20 +54,5 @@ public class BrowserHistorySensorDaoImpl extends
         result.setCreated(sensor.getCreated());
 
         return result;
-    }
-
-    @Override
-    public List<DbBrowserHistorySensor> getLastN(int amount) {
-
-        if (amount <= 0) {
-            return Collections.emptyList();
-        }
-
-        return dao
-                .queryBuilder()
-                .orderDesc(DbBrowserHistorySensorDao.Properties.Id)
-                .limit(amount)
-                .build()
-                .list();
     }
 }

@@ -2,12 +2,8 @@ package de.tudarmstadt.informatik.tk.assistance.sdk.provider.dao.sensing;
 
 import android.support.annotation.Nullable;
 
-import java.util.Collections;
-import java.util.List;
-
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DaoSession;
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbMotionActivitySensor;
-import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbMotionActivitySensorDao;
 import de.tudarmstadt.informatik.tk.assistance.sdk.model.api.sensing.sensor.MotionActivitySensorDto;
 import de.tudarmstadt.informatik.tk.assistance.sdk.provider.dao.sensing.common.CommonEventDaoImpl;
 
@@ -57,20 +53,5 @@ public class MotionActivitySensorDaoImpl extends
         result.setCreated(sensor.getCreated());
 
         return result;
-    }
-
-    @Override
-    public List<DbMotionActivitySensor> getLastN(int amount) {
-
-        if (amount <= 0) {
-            return Collections.emptyList();
-        }
-
-        return dao
-                .queryBuilder()
-                .orderDesc(DbMotionActivitySensorDao.Properties.Id)
-                .limit(amount)
-                .build()
-                .list();
     }
 }

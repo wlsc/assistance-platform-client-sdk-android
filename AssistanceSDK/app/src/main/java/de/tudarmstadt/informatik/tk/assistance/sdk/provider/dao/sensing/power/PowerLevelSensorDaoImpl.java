@@ -2,12 +2,8 @@ package de.tudarmstadt.informatik.tk.assistance.sdk.provider.dao.sensing.power;
 
 import android.support.annotation.Nullable;
 
-import java.util.Collections;
-import java.util.List;
-
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DaoSession;
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbPowerLevelSensor;
-import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbPowerLevelSensorDao;
 import de.tudarmstadt.informatik.tk.assistance.sdk.model.api.SensorDto;
 import de.tudarmstadt.informatik.tk.assistance.sdk.model.api.sensing.sensor.PowerLevelSensorDto;
 import de.tudarmstadt.informatik.tk.assistance.sdk.provider.dao.sensing.common.CommonEventDaoImpl;
@@ -51,20 +47,5 @@ public class PowerLevelSensorDaoImpl extends
         result.setCreated(sensor.getCreated());
 
         return result;
-    }
-
-    @Override
-    public List<DbPowerLevelSensor> getLastN(int amount) {
-
-        if (amount <= 0) {
-            return Collections.emptyList();
-        }
-
-        return dao
-                .queryBuilder()
-                .orderDesc(DbPowerLevelSensorDao.Properties.Id)
-                .limit(amount)
-                .build()
-                .list();
     }
 }

@@ -2,12 +2,8 @@ package de.tudarmstadt.informatik.tk.assistance.sdk.provider.dao.sensing;
 
 import android.support.annotation.Nullable;
 
-import java.util.Collections;
-import java.util.List;
-
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DaoSession;
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbRunningServicesSensor;
-import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbRunningServicesSensorDao;
 import de.tudarmstadt.informatik.tk.assistance.sdk.model.api.SensorDto;
 import de.tudarmstadt.informatik.tk.assistance.sdk.model.api.sensing.sensor.RunningServiceSensorDto;
 import de.tudarmstadt.informatik.tk.assistance.sdk.provider.dao.sensing.common.CommonEventDaoImpl;
@@ -52,20 +48,5 @@ public class RunningServicesSensorDaoImpl extends
         result.setCreated(sensor.getCreated());
 
         return result;
-    }
-
-    @Override
-    public List<DbRunningServicesSensor> getLastN(int amount) {
-
-        if (amount <= 0) {
-            return Collections.emptyList();
-        }
-
-        return dao
-                .queryBuilder()
-                .orderDesc(DbRunningServicesSensorDao.Properties.Id)
-                .limit(amount)
-                .build()
-                .list();
     }
 }

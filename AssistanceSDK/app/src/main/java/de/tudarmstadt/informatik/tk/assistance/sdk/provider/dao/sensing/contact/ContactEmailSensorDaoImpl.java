@@ -62,21 +62,6 @@ public class ContactEmailSensorDaoImpl extends
     }
 
     @Override
-    public List<DbContactEmailSensor> getLastN(int amount) {
-
-        if (amount <= 0) {
-            return Collections.emptyList();
-        }
-
-        return dao
-                .queryBuilder()
-                .orderDesc(DbContactEmailSensorDao.Properties.Id)
-                .limit(amount)
-                .build()
-                .list();
-    }
-
-    @Override
     public List<DbContactEmailSensor> getAll(Long contactId) {
 
         if (contactId == null) {

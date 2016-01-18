@@ -67,6 +67,21 @@ public abstract class CommonDaoImpl<T> implements CommonDao<T> {
     }
 
     @Override
+    public List<T> getLastN(int amount) {
+
+        if (amount <= 0) {
+            return Collections.emptyList();
+        }
+
+        return dao
+                .queryBuilder()
+                .orderDesc(idProperty)
+                .limit(amount)
+                .build()
+                .list();
+    }
+
+    @Override
     public long insert(T dbItem) {
 
         if (dbItem == null) {

@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.greenrobot.dao.AbstractDao;
-import de.greenrobot.dao.Property;
 import de.tudarmstadt.informatik.tk.assistance.sdk.model.api.SensorDto;
 import de.tudarmstadt.informatik.tk.assistance.sdk.provider.dao.CommonDaoImpl;
 
@@ -16,13 +15,8 @@ public abstract class CommonEventDaoImpl<T> extends
         CommonDaoImpl<T> implements
         CommonEventDao<T> {
 
-    protected Property deviceIdProperty;
-
     public CommonEventDaoImpl(AbstractDao<T, Long> dao) {
         super(dao);
-
-        // general deviceId property of an SQLite table
-//        this.deviceIdProperty = new WhereCondition.StringCondition()
     }
 
     @Override
@@ -38,21 +32,5 @@ public abstract class CommonEventDaoImpl<T> extends
         }
 
         return result;
-    }
-
-
-    @Override
-    public T getForDevice(Long deviceId) {
-
-        if (deviceId == null) {
-            return null;
-        }
-
-        return dao
-                .queryBuilder()
-//                .where(idPr.Id.eq())
-                .limit(1)
-                .build()
-                .unique();
     }
 }

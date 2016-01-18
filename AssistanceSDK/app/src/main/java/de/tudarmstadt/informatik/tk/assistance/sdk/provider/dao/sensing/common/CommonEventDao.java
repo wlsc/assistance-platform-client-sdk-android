@@ -24,5 +24,5 @@ public interface CommonEventDao<T> extends CommonDao<T> {
      * @param deviceId
      * @return
      */
-    T getForDevice(Long deviceId);
+//    T getForDevice(Long deviceId);
 }

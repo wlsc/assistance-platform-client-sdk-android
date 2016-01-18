@@ -2,9 +2,6 @@ package de.tudarmstadt.informatik.tk.assistance.sdk.provider.dao.device;
 
 import android.support.annotation.Nullable;
 
-import java.util.Collections;
-import java.util.List;
-
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DaoSession;
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbDevice;
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbDeviceDao;
@@ -95,20 +92,5 @@ public class DeviceDaoImpl extends
 
             return true;
         }
-    }
-
-    @Override
-    public List<DbDevice> getLastN(int amount) {
-
-        if (amount <= 0) {
-            return Collections.emptyList();
-        }
-
-        return dao
-                .queryBuilder()
-                .orderDesc(DbDeviceDao.Properties.Id)
-                .limit(amount)
-                .build()
-                .list();
     }
 }

@@ -2,12 +2,8 @@ package de.tudarmstadt.informatik.tk.assistance.sdk.provider.dao.sensing.connect
 
 import android.support.annotation.Nullable;
 
-import java.util.Collections;
-import java.util.List;
-
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DaoSession;
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbWifiConnectionSensor;
-import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbWifiConnectionSensorDao;
 import de.tudarmstadt.informatik.tk.assistance.sdk.model.api.sensing.sensor.WifiConnectionSensorDto;
 import de.tudarmstadt.informatik.tk.assistance.sdk.provider.dao.sensing.common.CommonEventDaoImpl;
 
@@ -56,20 +52,5 @@ public class WifiConnectionSensorDaoImpl extends
         result.setCreated(sensor.getCreated());
 
         return result;
-    }
-
-    @Override
-    public List<DbWifiConnectionSensor> getLastN(int amount) {
-
-        if (amount <= 0) {
-            return Collections.emptyList();
-        }
-
-        return dao
-                .queryBuilder()
-                .orderDesc(DbWifiConnectionSensorDao.Properties.Id)
-                .limit(amount)
-                .build()
-                .list();
     }
 }

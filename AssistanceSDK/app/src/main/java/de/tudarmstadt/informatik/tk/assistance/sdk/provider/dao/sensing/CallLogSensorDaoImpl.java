@@ -2,9 +2,6 @@ package de.tudarmstadt.informatik.tk.assistance.sdk.provider.dao.sensing;
 
 import android.support.annotation.Nullable;
 
-import java.util.Collections;
-import java.util.List;
-
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DaoSession;
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbCallLogSensor;
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbCallLogSensorDao;
@@ -59,21 +56,6 @@ public class CallLogSensorDaoImpl extends
         result.setCreated(sensor.getCreated());
 
         return result;
-    }
-
-    @Override
-    public List<DbCallLogSensor> getLastN(int amount) {
-
-        if (amount <= 0) {
-            return Collections.emptyList();
-        }
-
-        return dao
-                .queryBuilder()
-                .orderDesc(DbCallLogSensorDao.Properties.Id)
-                .limit(amount)
-                .build()
-                .list();
     }
 
     /**

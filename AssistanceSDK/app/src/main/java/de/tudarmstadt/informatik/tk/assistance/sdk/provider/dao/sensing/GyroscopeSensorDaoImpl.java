@@ -2,12 +2,8 @@ package de.tudarmstadt.informatik.tk.assistance.sdk.provider.dao.sensing;
 
 import android.support.annotation.Nullable;
 
-import java.util.Collections;
-import java.util.List;
-
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DaoSession;
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbGyroscopeSensor;
-import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbGyroscopeSensorDao;
 import de.tudarmstadt.informatik.tk.assistance.sdk.model.api.sensing.sensor.GyroscopeSensorDto;
 import de.tudarmstadt.informatik.tk.assistance.sdk.provider.dao.sensing.common.CommonEventDaoImpl;
 
@@ -59,20 +55,5 @@ public class GyroscopeSensorDaoImpl extends
         result.setCreated(sensor.getCreated());
 
         return result;
-    }
-
-    @Override
-    public List<DbGyroscopeSensor> getLastN(int amount) {
-
-        if (amount <= 0) {
-            return Collections.emptyList();
-        }
-
-        return dao
-                .queryBuilder()
-                .orderDesc(DbGyroscopeSensorDao.Properties.Id)
-                .limit(amount)
-                .build()
-                .list();
     }
 }
