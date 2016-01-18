@@ -36,7 +36,7 @@ public class SocialProvider {
      *
      * @return
      */
-    public static FacebookProvider getFacebookProvider() {
+    public FacebookProvider getFacebookProvider() {
         return FacebookProvider.getInstance(mContext);
     }
 }
