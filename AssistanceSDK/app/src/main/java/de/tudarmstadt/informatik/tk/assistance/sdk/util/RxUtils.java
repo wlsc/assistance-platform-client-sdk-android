@@ -1,6 +1,7 @@
 package de.tudarmstadt.informatik.tk.assistance.sdk.util;
 
 import rx.Subscription;
+import rx.subscriptions.CompositeSubscription;
 
 /**
  * @author Wladimir Schmidt (wlsc.dev@gmail.com)
@@ -20,6 +21,18 @@ public class RxUtils {
 
         if (subscription != null) {
             subscription.unsubscribe();
+        }
+    }
+
+    /**
+     * Unsubscribes group of subscription
+     *
+     * @param subscriptions
+     */
+    public static void unsubscribe(CompositeSubscription subscriptions) {
+
+        if (subscriptions != null) {
+            subscriptions.unsubscribe();
         }
     }
 }
