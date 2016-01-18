@@ -543,11 +543,11 @@ public class AssistanceDatabaseGenerator {
     tucanEvent.implementsInterface(Config.ASSISTANCE_PACKAGE_SENSOR);
     tucanEvent.addStringProperty("username").notNull();
     tucanEvent.addStringProperty("password").notNull();
+    tucanEvent.addBooleanProperty("wasChanged").notNull();
     tucanEvent.addStringProperty("created").notNull();
     
     Property tucanfkUserEvent = tucanEvent.addLongProperty("userId").index().getProperty();
     tucanEvent.addToOne(user, tucanfkUserEvent);
-//    user.addToMany(tucanEvent, tucanfkUserEvent);
     
     // ----- Facebook Sensor -----
     // REQUIRED
@@ -557,11 +557,11 @@ public class AssistanceDatabaseGenerator {
     facebookEvent.implementsInterface(Config.ASSISTANCE_PACKAGE_SENSOR);
     facebookEvent.addStringProperty("oauthToken");
     facebookEvent.addStringProperty("permissions");
+    facebookEvent.addBooleanProperty("wasChanged").notNull();
     facebookEvent.addStringProperty("created").notNull();
     
     Property facebookfkUserEvent = facebookEvent.addLongProperty("userId").index().getProperty();
     facebookEvent.addToOne(user, facebookfkUserEvent);
-//    user.addToMany(tucanEvent, tucanfkUserEvent);
    
 
     // **************************

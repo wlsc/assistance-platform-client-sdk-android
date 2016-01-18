@@ -29,8 +29,9 @@ public class DbTucanSensorDao extends AbstractDao<DbTucanSensor, Long> {
         public final static Property Id = new Property(0, Long.class, "id", true, "_id");
         public final static Property Username = new Property(1, String.class, "username", false, "USERNAME");
         public final static Property Password = new Property(2, String.class, "password", false, "PASSWORD");
-        public final static Property Created = new Property(3, String.class, "created", false, "CREATED");
-        public final static Property UserId = new Property(4, Long.class, "userId", false, "USER_ID");
+        public final static Property WasChanged = new Property(3, boolean.class, "wasChanged", false, "WAS_CHANGED");
+        public final static Property Created = new Property(4, String.class, "created", false, "CREATED");
+        public final static Property UserId = new Property(5, Long.class, "userId", false, "USER_ID");
     };
 
     private DaoSession daoSession;
@@ -52,8 +53,9 @@ public class DbTucanSensorDao extends AbstractDao<DbTucanSensor, Long> {
                 "\"_id\" INTEGER PRIMARY KEY AUTOINCREMENT ," + // 0: id
                 "\"USERNAME\" TEXT NOT NULL ," + // 1: username
                 "\"PASSWORD\" TEXT NOT NULL ," + // 2: password
-                "\"CREATED\" TEXT NOT NULL ," + // 3: created
-                "\"USER_ID\" INTEGER);"); // 4: userId
+                "\"WAS_CHANGED\" INTEGER NOT NULL ," + // 3: wasChanged
+                "\"CREATED\" TEXT NOT NULL ," + // 4: created
+                "\"USER_ID\" INTEGER);"); // 5: userId
         // Add Indexes
         db.execSQL("CREATE INDEX " + constraint + "IDX_tucan_sensor__id ON tucan_sensor" +
                 " (\"_id\");");
@@ -78,11 +80,12 @@ public class DbTucanSensorDao extends AbstractDao<DbTucanSensor, Long> {
         }
         stmt.bindString(2, entity.getUsername());
         stmt.bindString(3, entity.getPassword());
-        stmt.bindString(4, entity.getCreated());
+        stmt.bindLong(4, entity.getWasChanged() ? 1L: 0L);
+        stmt.bindString(5, entity.getCreated());
  
         Long userId = entity.getUserId();
         if (userId != null) {
-            stmt.bindLong(5, userId);
+            stmt.bindLong(6, userId);
         }
     }
 
@@ -105,8 +108,9 @@ public class DbTucanSensorDao extends AbstractDao<DbTucanSensor, Long> {
             cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0), // id
             cursor.getString(offset + 1), // username
             cursor.getString(offset + 2), // password
-            cursor.getString(offset + 3), // created
-            cursor.isNull(offset + 4) ? null : cursor.getLong(offset + 4) // userId
+            cursor.getShort(offset + 3) != 0, // wasChanged
+            cursor.getString(offset + 4), // created
+            cursor.isNull(offset + 5) ? null : cursor.getLong(offset + 5) // userId
         );
         return entity;
     }
@@ -117,8 +121,9 @@ public class DbTucanSensorDao extends AbstractDao<DbTucanSensor, Long> {
         entity.setId(cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0));
         entity.setUsername(cursor.getString(offset + 1));
         entity.setPassword(cursor.getString(offset + 2));
-        entity.setCreated(cursor.getString(offset + 3));
-        entity.setUserId(cursor.isNull(offset + 4) ? null : cursor.getLong(offset + 4));
+        entity.setWasChanged(cursor.getShort(offset + 3) != 0);
+        entity.setCreated(cursor.getString(offset + 4));
+        entity.setUserId(cursor.isNull(offset + 5) ? null : cursor.getLong(offset + 5));
      }
     
     /** @inheritdoc */

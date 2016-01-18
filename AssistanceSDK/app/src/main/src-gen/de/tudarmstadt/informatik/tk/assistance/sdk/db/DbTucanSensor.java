@@ -14,6 +14,7 @@ public class DbTucanSensor implements de.tudarmstadt.informatik.tk.assistance.sd
     private String username;
     /** Not-null value. */
     private String password;
+    private boolean wasChanged;
     /** Not-null value. */
     private String created;
     private Long userId;
@@ -35,10 +36,11 @@ public class DbTucanSensor implements de.tudarmstadt.informatik.tk.assistance.sd
         this.id = id;
     }
 
-    public DbTucanSensor(Long id, String username, String password, String created, Long userId) {
+    public DbTucanSensor(Long id, String username, String password, boolean wasChanged, String created, Long userId) {
         this.id = id;
         this.username = username;
         this.password = password;
+        this.wasChanged = wasChanged;
         this.created = created;
         this.userId = userId;
     }
@@ -75,6 +77,14 @@ public class DbTucanSensor implements de.tudarmstadt.informatik.tk.assistance.sd
     /** Not-null value; ensure this value is available before it is saved to the database. */
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public boolean getWasChanged() {
+        return wasChanged;
+    }
+
+    public void setWasChanged(boolean wasChanged) {
+        this.wasChanged = wasChanged;
     }
 
     /** Not-null value. */

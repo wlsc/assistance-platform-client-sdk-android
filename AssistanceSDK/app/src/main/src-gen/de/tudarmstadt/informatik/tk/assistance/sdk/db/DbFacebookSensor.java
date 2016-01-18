@@ -12,6 +12,7 @@ public class DbFacebookSensor implements de.tudarmstadt.informatik.tk.assistance
     private Long id;
     private String oauthToken;
     private String permissions;
+    private boolean wasChanged;
     /** Not-null value. */
     private String created;
     private Long userId;
@@ -33,10 +34,11 @@ public class DbFacebookSensor implements de.tudarmstadt.informatik.tk.assistance
         this.id = id;
     }
 
-    public DbFacebookSensor(Long id, String oauthToken, String permissions, String created, Long userId) {
+    public DbFacebookSensor(Long id, String oauthToken, String permissions, boolean wasChanged, String created, Long userId) {
         this.id = id;
         this.oauthToken = oauthToken;
         this.permissions = permissions;
+        this.wasChanged = wasChanged;
         this.created = created;
         this.userId = userId;
     }
@@ -69,6 +71,14 @@ public class DbFacebookSensor implements de.tudarmstadt.informatik.tk.assistance
 
     public void setPermissions(String permissions) {
         this.permissions = permissions;
+    }
+
+    public boolean getWasChanged() {
+        return wasChanged;
+    }
+
+    public void setWasChanged(boolean wasChanged) {
+        this.wasChanged = wasChanged;
     }
 
     /** Not-null value. */

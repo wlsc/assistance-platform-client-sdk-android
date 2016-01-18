@@ -29,8 +29,9 @@ public class DbFacebookSensorDao extends AbstractDao<DbFacebookSensor, Long> {
         public final static Property Id = new Property(0, Long.class, "id", true, "_id");
         public final static Property OauthToken = new Property(1, String.class, "oauthToken", false, "OAUTH_TOKEN");
         public final static Property Permissions = new Property(2, String.class, "permissions", false, "PERMISSIONS");
-        public final static Property Created = new Property(3, String.class, "created", false, "CREATED");
-        public final static Property UserId = new Property(4, Long.class, "userId", false, "USER_ID");
+        public final static Property WasChanged = new Property(3, boolean.class, "wasChanged", false, "WAS_CHANGED");
+        public final static Property Created = new Property(4, String.class, "created", false, "CREATED");
+        public final static Property UserId = new Property(5, Long.class, "userId", false, "USER_ID");
     };
 
     private DaoSession daoSession;
@@ -52,8 +53,9 @@ public class DbFacebookSensorDao extends AbstractDao<DbFacebookSensor, Long> {
                 "\"_id\" INTEGER PRIMARY KEY AUTOINCREMENT ," + // 0: id
                 "\"OAUTH_TOKEN\" TEXT," + // 1: oauthToken
                 "\"PERMISSIONS\" TEXT," + // 2: permissions
-                "\"CREATED\" TEXT NOT NULL ," + // 3: created
-                "\"USER_ID\" INTEGER);"); // 4: userId
+                "\"WAS_CHANGED\" INTEGER NOT NULL ," + // 3: wasChanged
+                "\"CREATED\" TEXT NOT NULL ," + // 4: created
+                "\"USER_ID\" INTEGER);"); // 5: userId
         // Add Indexes
         db.execSQL("CREATE INDEX " + constraint + "IDX_facebook_sensor__id ON facebook_sensor" +
                 " (\"_id\");");
@@ -86,11 +88,12 @@ public class DbFacebookSensorDao extends AbstractDao<DbFacebookSensor, Long> {
         if (permissions != null) {
             stmt.bindString(3, permissions);
         }
-        stmt.bindString(4, entity.getCreated());
+        stmt.bindLong(4, entity.getWasChanged() ? 1L: 0L);
+        stmt.bindString(5, entity.getCreated());
  
         Long userId = entity.getUserId();
         if (userId != null) {
-            stmt.bindLong(5, userId);
+            stmt.bindLong(6, userId);
         }
     }
 
@@ -113,8 +116,9 @@ public class DbFacebookSensorDao extends AbstractDao<DbFacebookSensor, Long> {
             cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0), // id
             cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1), // oauthToken
             cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // permissions
-            cursor.getString(offset + 3), // created
-            cursor.isNull(offset + 4) ? null : cursor.getLong(offset + 4) // userId
+            cursor.getShort(offset + 3) != 0, // wasChanged
+            cursor.getString(offset + 4), // created
+            cursor.isNull(offset + 5) ? null : cursor.getLong(offset + 5) // userId
         );
         return entity;
     }
@@ -125,8 +129,9 @@ public class DbFacebookSensorDao extends AbstractDao<DbFacebookSensor, Long> {
         entity.setId(cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0));
         entity.setOauthToken(cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1));
         entity.setPermissions(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
-        entity.setCreated(cursor.getString(offset + 3));
-        entity.setUserId(cursor.isNull(offset + 4) ? null : cursor.getLong(offset + 4));
+        entity.setWasChanged(cursor.getShort(offset + 3) != 0);
+        entity.setCreated(cursor.getString(offset + 4));
+        entity.setUserId(cursor.isNull(offset + 5) ? null : cursor.getLong(offset + 5));
      }
     
     /** @inheritdoc */
