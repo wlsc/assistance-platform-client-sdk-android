@@ -5,6 +5,7 @@ import android.support.annotation.Nullable;
 import java.util.Collections;
 import java.util.List;
 
+import de.greenrobot.dao.Property;
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DaoSession;
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbContactEmailSensor;
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbContactEmailSensorDao;
@@ -62,16 +63,23 @@ public class ContactEmailSensorDaoImpl extends
     }
 
     @Override
-    public List<DbContactEmailSensor> getAll(Long contactId) {
+    public List<DbContactEmailSensor> getAll(Long contactId, long deviceId) {
 
-        if (contactId == null) {
+        if (contactId == null || deviceId < 0) {
             return Collections.emptyList();
         }
 
-        return dao
-                .queryBuilder()
-                .where(DbContactEmailSensorDao.Properties.ContactId.eq(contactId))
-                .build()
-                .list();
+        for (Property property : properties) {
+            if (property.name.equals(DEVICE_ID_FIELD_NAME)) {
+                return dao
+                        .queryBuilder()
+                        .where(DbContactEmailSensorDao.Properties.ContactId.eq(contactId))
+                        .where(property.eq(deviceId))
+                        .build()
+                        .list();
+            }
+        }
+
+        return Collections.emptyList();
     }
 }

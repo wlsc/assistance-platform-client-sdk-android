@@ -11,5 +11,5 @@ import de.tudarmstadt.informatik.tk.assistance.sdk.provider.dao.sensing.CommonEv
  */
 public interface ContactEmailSensorDao extends CommonEventDao<DbContactEmailSensor> {
 
-    List<DbContactEmailSensor> getAll(Long contactId);
+    List<DbContactEmailSensor> getAll(Long contactId, long deviceId);
 }

@@ -2,10 +2,12 @@ package de.tudarmstadt.informatik.tk.assistance.sdk.provider.dao.sensing.contact
 
 import android.support.annotation.Nullable;
 
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import de.greenrobot.dao.Property;
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DaoSession;
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbContactEmailSensor;
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbContactNumberSensor;
@@ -101,11 +103,23 @@ public class ContactSensorDaoImpl extends
     }
 
     @Override
-    public List<DbContactSensor> getAllUpdated() {
-        return dao
-                .queryBuilder()
-                .where(DbContactSensorDao.Properties.IsUpdated.eq(1))
-                .build()
-                .list();
+    public List<DbContactSensor> getAllUpdated(long deviceId) {
+
+        if (deviceId < 0) {
+            return Collections.emptyList();
+        }
+
+        for (Property property : properties) {
+            if (property.name.equals(DEVICE_ID_FIELD_NAME)) {
+                return dao
+                        .queryBuilder()
+                        .where(DbContactSensorDao.Properties.IsUpdated.eq(1))
+                        .where(property.eq(deviceId))
+                        .build()
+                        .list();
+            }
+        }
+
+        return Collections.emptyList();
     }
 }

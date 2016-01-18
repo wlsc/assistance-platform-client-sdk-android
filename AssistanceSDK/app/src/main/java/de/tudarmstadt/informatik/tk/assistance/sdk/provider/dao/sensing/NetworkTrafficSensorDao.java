@@ -10,12 +10,11 @@ import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbNetworkTrafficSensor;
  */
 public interface NetworkTrafficSensorDao extends CommonEventDao<DbNetworkTrafficSensor> {
 
-    List<DbNetworkTrafficSensor> getAllBackground();
+    List<DbNetworkTrafficSensor> getAllBackground(long deviceId);
 
-    List<DbNetworkTrafficSensor> getAllForeground();
+    List<DbNetworkTrafficSensor> getAllForeground(long deviceId);
 
-    List<DbNetworkTrafficSensor> getFirstNBackground(int amount);
+    List<DbNetworkTrafficSensor> getFirstNBackground(int amount, long deviceId);
 
-    List<DbNetworkTrafficSensor> getFirstNForeground(int amount);
-
+    List<DbNetworkTrafficSensor> getFirstNForeground(int amount, long deviceId);
 }

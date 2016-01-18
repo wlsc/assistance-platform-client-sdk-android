@@ -11,5 +11,5 @@ import de.tudarmstadt.informatik.tk.assistance.sdk.provider.dao.sensing.CommonEv
  */
 public interface CalendarSensorDao extends CommonEventDao<DbCalendarSensor> {
 
-    List<DbCalendarSensor> getAllUpdated();
+    List<DbCalendarSensor> getAllUpdated(long deviceId);
 }

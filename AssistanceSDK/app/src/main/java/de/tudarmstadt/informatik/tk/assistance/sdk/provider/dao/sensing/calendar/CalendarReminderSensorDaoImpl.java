@@ -5,6 +5,7 @@ import android.support.annotation.Nullable;
 import java.util.Collections;
 import java.util.List;
 
+import de.greenrobot.dao.Property;
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DaoSession;
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbCalendarReminderSensor;
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbCalendarReminderSensorDao;
@@ -66,16 +67,23 @@ public class CalendarReminderSensorDaoImpl extends
     }
 
     @Override
-    public List<DbCalendarReminderSensor> getAllByEventId(long eventId) {
+    public List<DbCalendarReminderSensor> getAllByEventId(long eventId, long deviceId) {
 
-        if (eventId <= 0) {
+        if (eventId <= 0 || deviceId < 0) {
             return Collections.emptyList();
         }
 
-        return dao
-                .queryBuilder()
-                .where(DbCalendarReminderSensorDao.Properties.EventId.eq(eventId))
-                .build()
-                .list();
+        for (Property property : properties) {
+            if (property.name.equals(DEVICE_ID_FIELD_NAME)) {
+                return dao
+                        .queryBuilder()
+                        .where(DbCalendarReminderSensorDao.Properties.EventId.eq(eventId))
+                        .where(property.eq(deviceId))
+                        .build()
+                        .list();
+            }
+        }
+
+        return Collections.emptyList();
     }
 }

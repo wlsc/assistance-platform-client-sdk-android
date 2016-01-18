@@ -2,8 +2,10 @@ package de.tudarmstadt.informatik.tk.assistance.sdk.provider.dao.sensing.calenda
 
 import android.support.annotation.Nullable;
 
+import java.util.Collections;
 import java.util.List;
 
+import de.greenrobot.dao.Property;
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DaoSession;
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbCalendarSensor;
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbCalendarSensorDao;
@@ -72,11 +74,23 @@ public class CalendarSensorDaoImpl extends
     }
 
     @Override
-    public List<DbCalendarSensor> getAllUpdated() {
-        return dao
-                .queryBuilder()
-                .where(DbCalendarSensorDao.Properties.IsUpdated.eq(1))
-                .build()
-                .list();
+    public List<DbCalendarSensor> getAllUpdated(long deviceId) {
+
+        if (deviceId < 0) {
+            return Collections.emptyList();
+        }
+
+        for (Property property : properties) {
+            if (property.name.equals(DEVICE_ID_FIELD_NAME)) {
+                return dao
+                        .queryBuilder()
+                        .where(DbCalendarSensorDao.Properties.IsUpdated.eq(1))
+                        .where(property.eq(deviceId))
+                        .build()
+                        .list();
+            }
+        }
+
+        return Collections.emptyList();
     }
 }

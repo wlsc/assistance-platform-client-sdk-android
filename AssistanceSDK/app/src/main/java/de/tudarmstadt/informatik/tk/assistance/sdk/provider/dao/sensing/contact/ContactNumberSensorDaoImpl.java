@@ -5,6 +5,7 @@ import android.support.annotation.Nullable;
 import java.util.Collections;
 import java.util.List;
 
+import de.greenrobot.dao.Property;
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DaoSession;
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbContactNumberSensor;
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbContactNumberSensorDao;
@@ -62,31 +63,23 @@ public class ContactNumberSensorDaoImpl extends
     }
 
     @Override
-    public List<DbContactNumberSensor> getLastN(int amount) {
+    public List<DbContactNumberSensor> getAll(Long contactId, long deviceId) {
 
-        if (amount <= 0) {
+        if (contactId == null || deviceId < 0) {
             return Collections.emptyList();
         }
 
-        return dao
-                .queryBuilder()
-                .orderDesc(DbContactNumberSensorDao.Properties.Id)
-                .limit(amount)
-                .build()
-                .list();
-    }
-
-    @Override
-    public List<DbContactNumberSensor> getAll(Long contactId) {
-
-        if (contactId == null) {
-            return Collections.emptyList();
+        for (Property property : properties) {
+            if (property.name.equals(DEVICE_ID_FIELD_NAME)) {
+                return dao
+                        .queryBuilder()
+                        .where(DbContactNumberSensorDao.Properties.ContactId.eq(contactId))
+                        .where(property.eq(deviceId))
+                        .build()
+                        .list();
+            }
         }
 
-        return dao
-                .queryBuilder()
-                .where(DbContactNumberSensorDao.Properties.ContactId.eq(contactId))
-                .build()
-                .list();
+        return Collections.emptyList();
     }
 }

@@ -5,6 +5,7 @@ import android.support.annotation.Nullable;
 import java.util.Collections;
 import java.util.List;
 
+import de.greenrobot.dao.Property;
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DaoSession;
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbNetworkTrafficSensor;
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbNetworkTrafficSensorDao;
@@ -57,50 +58,88 @@ public class NetworkTrafficSensorDaoImpl extends
     }
 
     @Override
-    public List<DbNetworkTrafficSensor> getAllBackground() {
-        return dao
-                .queryBuilder()
-                .where(DbNetworkTrafficSensorDao.Properties.Background.eq(Boolean.TRUE))
-                .build()
-                .list();
-    }
+    public List<DbNetworkTrafficSensor> getAllBackground(long deviceId) {
 
-    @Override
-    public List<DbNetworkTrafficSensor> getAllForeground() {
-        return dao
-                .queryBuilder()
-                .where(DbNetworkTrafficSensorDao.Properties.Background.eq(Boolean.FALSE))
-                .build()
-                .list();
-    }
-
-    @Override
-    public List<DbNetworkTrafficSensor> getFirstNBackground(int amount) {
-
-        if (amount <= 0) {
+        if (deviceId < 0) {
             return Collections.emptyList();
         }
 
-        return dao
-                .queryBuilder()
-                .where(DbNetworkTrafficSensorDao.Properties.Background.eq(Boolean.TRUE))
-                .limit(amount)
-                .build()
-                .list();
+        for (Property property : properties) {
+            if (property.name.equals(DEVICE_ID_FIELD_NAME)) {
+                return dao
+                        .queryBuilder()
+                        .where(DbNetworkTrafficSensorDao.Properties.Background.eq(Boolean.TRUE))
+                        .where(property.eq(deviceId))
+                        .build()
+                        .list();
+            }
+        }
+
+        return Collections.emptyList();
     }
 
     @Override
-    public List<DbNetworkTrafficSensor> getFirstNForeground(int amount) {
+    public List<DbNetworkTrafficSensor> getAllForeground(long deviceId) {
 
-        if (amount <= 0) {
+        if (deviceId < 0) {
             return Collections.emptyList();
         }
 
-        return dao
-                .queryBuilder()
-                .where(DbNetworkTrafficSensorDao.Properties.Background.eq(Boolean.FALSE))
-                .limit(amount)
-                .build()
-                .list();
+        for (Property property : properties) {
+            if (property.name.equals(DEVICE_ID_FIELD_NAME)) {
+                return dao
+                        .queryBuilder()
+                        .where(DbNetworkTrafficSensorDao.Properties.Background.eq(Boolean.FALSE))
+                        .where(property.eq(deviceId))
+                        .build()
+                        .list();
+            }
+        }
+
+        return Collections.emptyList();
+    }
+
+    @Override
+    public List<DbNetworkTrafficSensor> getFirstNBackground(int amount, long deviceId) {
+
+        if (amount <= 0 || deviceId < 0) {
+            return Collections.emptyList();
+        }
+
+        for (Property property : properties) {
+            if (property.name.equals(DEVICE_ID_FIELD_NAME)) {
+                return dao
+                        .queryBuilder()
+                        .where(DbNetworkTrafficSensorDao.Properties.Background.eq(Boolean.TRUE))
+                        .where(property.eq(deviceId))
+                        .limit(amount)
+                        .build()
+                        .list();
+            }
+        }
+
+        return Collections.emptyList();
+    }
+
+    @Override
+    public List<DbNetworkTrafficSensor> getFirstNForeground(int amount, long deviceId) {
+
+        if (amount <= 0 || deviceId < 0) {
+            return Collections.emptyList();
+        }
+
+        for (Property property : properties) {
+            if (property.name.equals(DEVICE_ID_FIELD_NAME)) {
+                return dao
+                        .queryBuilder()
+                        .where(DbNetworkTrafficSensorDao.Properties.Background.eq(Boolean.FALSE))
+                        .where(property.eq(deviceId))
+                        .limit(amount)
+                        .build()
+                        .list();
+            }
+        }
+
+        return Collections.emptyList();
     }
 }

@@ -511,6 +511,8 @@ public class SensorUploadService extends GcmTaskService {
             return;
         }
 
+        long deviceId = PreferenceProvider.getInstance(getApplicationContext()).getCurrentDeviceId();
+
         Map<Integer, ISensor> sensors = SensorProvider.getInstance(getApplicationContext()).getRunningSensors();
 
         for (Map.Entry<Integer, ISensor> entry : sensors.entrySet()) {
@@ -532,11 +534,11 @@ public class SensorUploadService extends GcmTaskService {
                     if (numberOfElements == 0) {
                         accList = daoProvider
                                 .getAccelerometerSensorDao()
-                                .getAll();
+                                .getAll(deviceId);
                     } else {
                         accList = daoProvider
                                 .getAccelerometerSensorDao()
-                                .getFirstN(numberOfElements);
+                                .getFirstN(numberOfElements, deviceId);
                     }
 
                     dbEvents.put(type, accList);
@@ -554,11 +556,11 @@ public class SensorUploadService extends GcmTaskService {
                     if (numberOfElements == 0) {
                         posList = daoProvider
                                 .getLocationSensorDao()
-                                .getAll();
+                                .getAll(deviceId);
                     } else {
                         posList = daoProvider
                                 .getLocationSensorDao()
-                                .getFirstN(numberOfElements);
+                                .getFirstN(numberOfElements, deviceId);
                     }
 
                     dbEvents.put(type, posList);
@@ -576,11 +578,11 @@ public class SensorUploadService extends GcmTaskService {
                     if (numberOfElements == 0) {
                         maList = daoProvider
                                 .getMotionActivitySensorDao()
-                                .getAll();
+                                .getAll(deviceId);
                     } else {
                         maList = daoProvider
                                 .getMotionActivitySensorDao()
-                                .getFirstN(numberOfElements);
+                                .getFirstN(numberOfElements, deviceId);
                     }
 
                     dbEvents.put(type, maList);
@@ -598,11 +600,11 @@ public class SensorUploadService extends GcmTaskService {
                     if (numberOfElements == 0) {
                         feList = daoProvider
                                 .getForegroundSensorDao()
-                                .getAll();
+                                .getAll(deviceId);
                     } else {
                         feList = daoProvider
                                 .getForegroundSensorDao()
-                                .getFirstN(numberOfElements);
+                                .getFirstN(numberOfElements, deviceId);
                     }
 
                     dbEvents.put(type, feList);
@@ -621,11 +623,11 @@ public class SensorUploadService extends GcmTaskService {
                     if (numberOfElements == 0) {
                         conList = daoProvider
                                 .getConnectionSensorDao()
-                                .getAll();
+                                .getAll(deviceId);
                     } else {
                         conList = daoProvider
                                 .getConnectionSensorDao()
-                                .getFirstN(numberOfElements);
+                                .getFirstN(numberOfElements, deviceId);
                     }
 
                     dbEvents.put(type, conList);
@@ -640,11 +642,11 @@ public class SensorUploadService extends GcmTaskService {
                     if (numberOfElements == 0) {
                         mobConList = daoProvider
                                 .getMobileConnectionSensorDao()
-                                .getAll();
+                                .getAll(deviceId);
                     } else {
                         mobConList = daoProvider
                                 .getMobileConnectionSensorDao()
-                                .getFirstN(numberOfElements);
+                                .getFirstN(numberOfElements, deviceId);
                     }
 
                     dbEvents.put(SensorApiType.MOBILE_DATA_CONNECTION, mobConList);
@@ -659,11 +661,11 @@ public class SensorUploadService extends GcmTaskService {
                     if (numberOfElements == 0) {
                         wifiConList = daoProvider
                                 .getWifiConnectionSensorDao()
-                                .getAll();
+                                .getAll(deviceId);
                     } else {
                         wifiConList = daoProvider
                                 .getWifiConnectionSensorDao()
-                                .getFirstN(numberOfElements);
+                                .getFirstN(numberOfElements, deviceId);
                     }
 
                     dbEvents.put(SensorApiType.WIFI_CONNECTION, wifiConList);
@@ -681,11 +683,11 @@ public class SensorUploadService extends GcmTaskService {
                     if (numberOfElements == 0) {
                         fteList = daoProvider
                                 .getNetworkTrafficSensorDao()
-                                .getAllForeground();
+                                .getAllForeground(deviceId);
                     } else {
                         fteList = daoProvider
                                 .getNetworkTrafficSensorDao()
-                                .getFirstNForeground(numberOfElements);
+                                .getFirstNForeground(numberOfElements, deviceId);
                     }
 
                     dbEvents.put(type, fteList);
@@ -703,11 +705,11 @@ public class SensorUploadService extends GcmTaskService {
                     if (numberOfElements == 0) {
                         bteList = daoProvider
                                 .getNetworkTrafficSensorDao()
-                                .getAllBackground();
+                                .getAllBackground(deviceId);
                     } else {
                         bteList = daoProvider
                                 .getNetworkTrafficSensorDao()
-                                .getFirstNBackground(numberOfElements);
+                                .getFirstNBackground(numberOfElements, deviceId);
                     }
 
                     dbEvents.put(type, bteList);
@@ -725,11 +727,11 @@ public class SensorUploadService extends GcmTaskService {
                     if (numberOfElements == 0) {
                         lightList = daoProvider
                                 .getLightSensorDao()
-                                .getAll();
+                                .getAll(deviceId);
                     } else {
                         lightList = daoProvider
                                 .getLightSensorDao()
-                                .getFirstN(numberOfElements);
+                                .getFirstN(numberOfElements, deviceId);
                     }
 
                     dbEvents.put(type, lightList);
@@ -747,11 +749,11 @@ public class SensorUploadService extends GcmTaskService {
                     if (numberOfElements == 0) {
                         loudnessList = daoProvider
                                 .getLoudnessSensorDao()
-                                .getAll();
+                                .getAll(deviceId);
                     } else {
                         loudnessList = daoProvider
                                 .getLoudnessSensorDao()
-                                .getFirstN(numberOfElements);
+                                .getFirstN(numberOfElements, deviceId);
                     }
 
                     dbEvents.put(type, loudnessList);
@@ -769,11 +771,11 @@ public class SensorUploadService extends GcmTaskService {
                     if (numberOfElements == 0) {
                         runProccessList = daoProvider
                                 .getRunningProcessesSensorDao()
-                                .getAll();
+                                .getAll(deviceId);
                     } else {
                         runProccessList = daoProvider
                                 .getRunningProcessesSensorDao()
-                                .getFirstN(numberOfElements);
+                                .getFirstN(numberOfElements, deviceId);
                     }
 
                     dbEvents.put(type, runProccessList);
@@ -791,11 +793,11 @@ public class SensorUploadService extends GcmTaskService {
                     if (numberOfElements == 0) {
                         runServiceList = daoProvider
                                 .getRunningServicesSensorDao()
-                                .getAll();
+                                .getAll(deviceId);
                     } else {
                         runServiceList = daoProvider
                                 .getRunningServicesSensorDao()
-                                .getFirstN(numberOfElements);
+                                .getFirstN(numberOfElements, deviceId);
                     }
 
                     dbEvents.put(type, runServiceList);
@@ -813,11 +815,11 @@ public class SensorUploadService extends GcmTaskService {
                     if (numberOfElements == 0) {
                         runTaskList = daoProvider
                                 .getRunningTasksSensorDao()
-                                .getAll();
+                                .getAll(deviceId);
                     } else {
                         runTaskList = daoProvider
                                 .getRunningTasksSensorDao()
-                                .getFirstN(numberOfElements);
+                                .getFirstN(numberOfElements, deviceId);
                     }
 
                     dbEvents.put(type, runTaskList);
@@ -835,11 +837,11 @@ public class SensorUploadService extends GcmTaskService {
                     if (numberOfElements == 0) {
                         ringtoneList = daoProvider
                                 .getRingtoneSensorDao()
-                                .getAll();
+                                .getAll(deviceId);
                     } else {
                         ringtoneList = daoProvider
                                 .getRingtoneSensorDao()
-                                .getFirstN(numberOfElements);
+                                .getFirstN(numberOfElements, deviceId);
                     }
 
                     dbEvents.put(type, ringtoneList);
@@ -857,11 +859,11 @@ public class SensorUploadService extends GcmTaskService {
                     if (numberOfElements == 0) {
                         gyroList = daoProvider
                                 .getGyroscopeSensorDao()
-                                .getAll();
+                                .getAll(deviceId);
                     } else {
                         gyroList = daoProvider
                                 .getGyroscopeSensorDao()
-                                .getFirstN(numberOfElements);
+                                .getFirstN(numberOfElements, deviceId);
                     }
 
                     dbEvents.put(type, gyroList);
@@ -879,11 +881,11 @@ public class SensorUploadService extends GcmTaskService {
                     if (numberOfElements == 0) {
                         mfList = daoProvider
                                 .getMagneticFieldSensorDao()
-                                .getAll();
+                                .getAll(deviceId);
                     } else {
                         mfList = daoProvider
                                 .getMagneticFieldSensorDao()
-                                .getFirstN(numberOfElements);
+                                .getFirstN(numberOfElements, deviceId);
                     }
 
                     dbEvents.put(type, mfList);
@@ -901,11 +903,11 @@ public class SensorUploadService extends GcmTaskService {
                     if (numberOfElements == 0) {
                         bhList = daoProvider
                                 .getBrowserHistorySensorDao()
-                                .getAll();
+                                .getAll(deviceId);
                     } else {
                         bhList = daoProvider
                                 .getBrowserHistorySensorDao()
-                                .getFirstN(numberOfElements);
+                                .getFirstN(numberOfElements, deviceId);
                     }
 
                     dbEvents.put(type, bhList);
@@ -920,7 +922,7 @@ public class SensorUploadService extends GcmTaskService {
                     // retrieve all events
                     List<DbCalendarSensor> calendarList = daoProvider
                             .getCalendarSensorDao()
-                            .getAllUpdated();
+                            .getAllUpdated(deviceId);
 
                     List<SensorDto> calendarListConverted = daoProvider
                             .getCalendarSensorDao()
@@ -941,7 +943,7 @@ public class SensorUploadService extends GcmTaskService {
 
                         CalendarSensorDto calendarSensorDto = (CalendarSensorDto) sensorDto;
                         List<DbCalendarReminderSensor> eventReminders = calendarReminderSensorDao
-                                .getAllByEventId(Long.valueOf(calendarSensorDto.getEventId()));
+                                .getAllByEventId(Long.valueOf(calendarSensorDto.getEventId()), deviceId);
 
                         if (eventReminders == null || eventReminders.isEmpty()) {
                             continue;
@@ -971,11 +973,11 @@ public class SensorUploadService extends GcmTaskService {
                     if (numberOfElements == 0) {
                         callLogList = daoProvider
                                 .getCallLogSensorDao()
-                                .getAll();
+                                .getAll(deviceId);
                     } else {
                         callLogList = daoProvider
                                 .getCallLogSensorDao()
-                                .getFirstN(numberOfElements);
+                                .getFirstN(numberOfElements, deviceId);
                     }
 
                     dbEvents.put(type, callLogList);
@@ -990,7 +992,7 @@ public class SensorUploadService extends GcmTaskService {
                     // retrieve all events
                     List<DbContactSensor> contactList = daoProvider
                             .getContactSensorDao()
-                            .getAllUpdated();
+                            .getAllUpdated(deviceId);
 
                     List<SensorDto> contactListConverted = daoProvider
                             .getContactSensorDao()
@@ -1016,7 +1018,7 @@ public class SensorUploadService extends GcmTaskService {
 
                         // EMAILS
                         List<DbContactEmailSensor> eventEmails = contactEmailDao
-                                .getAll(Long.valueOf(contactSensorDto.getGlobalContactId()));
+                                .getAll(Long.valueOf(contactSensorDto.getGlobalContactId()), deviceId);
 
                         if (eventEmails == null || eventEmails.isEmpty()) {
                             continue;
@@ -1031,7 +1033,7 @@ public class SensorUploadService extends GcmTaskService {
 
                         // NUMBERS
                         List<DbContactNumberSensor> eventNumbers = contactNumberSensorDao
-                                .getAll(Long.valueOf(contactSensorDto.getGlobalContactId()));
+                                .getAll(Long.valueOf(contactSensorDto.getGlobalContactId()), deviceId);
 
                         if (eventNumbers == null || eventNumbers.isEmpty()) {
                             continue;
@@ -1063,11 +1065,11 @@ public class SensorUploadService extends GcmTaskService {
                     if (numberOfElements == 0) {
                         powerLevelList = daoProvider
                                 .getPowerLevelSensorDao()
-                                .getAll();
+                                .getAll(deviceId);
                     } else {
                         powerLevelList = daoProvider
                                 .getPowerLevelSensorDao()
-                                .getFirstN(numberOfElements);
+                                .getFirstN(numberOfElements, deviceId);
                     }
 
                     dbEvents.put(type, powerLevelList);
@@ -1088,11 +1090,11 @@ public class SensorUploadService extends GcmTaskService {
         if (numberOfElements == 0) {
             powerStateList = daoProvider
                     .getPowerStateSensorDao()
-                    .getAll();
+                    .getAll(deviceId);
         } else {
             powerStateList = daoProvider
                     .getPowerStateSensorDao()
-                    .getFirstN(numberOfElements);
+                    .getFirstN(numberOfElements, deviceId);
         }
 
         dbEvents.put(SensorApiType.POWER_STATE, powerStateList);

@@ -18,11 +18,7 @@ public interface CommonEventDao<T> extends CommonDao<T> {
 
     List<SensorDto> convertObjects(List<T> dbSensors);
 
-    /**
-     * Gets item for deviceId
-     *
-     * @param deviceId
-     * @return
-     */
-//    T getForDevice(Long deviceId);
+    List<T> getAll(long deviceId);
+
+    List<T> getFirstN(int amount, long deviceId);
 }
