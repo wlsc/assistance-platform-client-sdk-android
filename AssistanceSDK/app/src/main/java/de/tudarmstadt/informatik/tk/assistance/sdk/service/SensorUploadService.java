@@ -36,8 +36,6 @@ import retrofit.RetrofitError;
 import retrofit.client.Response;
 import rx.Subscriber;
 import rx.Subscription;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
 
 /**
  * @author Wladimir Schmidt (wlsc.dev@gmail.com)
@@ -296,10 +294,7 @@ public class SensorUploadService extends GcmTaskService {
          */
         String userToken = mPreferenceProvider.getUserToken();
 
-        sensorUploadSubscription = sensorApi
-                .uploadData(userToken, eventUploadRequest)
-                .subscribeOn(Schedulers.newThread())
-                .observeOn(AndroidSchedulers.mainThread())
+        sensorUploadSubscription = sensorApi.uploadData(userToken, eventUploadRequest)
                 .subscribe(new SensorUploadSubscriber());
     }
 

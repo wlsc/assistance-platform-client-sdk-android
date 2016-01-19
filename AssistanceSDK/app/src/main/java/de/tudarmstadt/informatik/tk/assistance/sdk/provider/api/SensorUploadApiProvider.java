@@ -43,7 +43,7 @@ public class SensorUploadApiProvider {
      */
     public Observable<Void> uploadData(String userToken, SensorUploadDto sensorUploadDto) {
         return api.uploadData(userToken, sensorUploadDto)
-                .subscribeOn(Schedulers.io())
+                .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread());
     }
 }
