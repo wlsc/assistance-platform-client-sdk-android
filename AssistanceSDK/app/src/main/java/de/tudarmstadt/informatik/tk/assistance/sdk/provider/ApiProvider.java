@@ -6,6 +6,7 @@ import de.tudarmstadt.informatik.tk.assistance.sdk.provider.api.DeviceApiProvide
 import de.tudarmstadt.informatik.tk.assistance.sdk.provider.api.LoginApiProvider;
 import de.tudarmstadt.informatik.tk.assistance.sdk.provider.api.ModuleApiProvider;
 import de.tudarmstadt.informatik.tk.assistance.sdk.provider.api.SensorUploadApiProvider;
+import de.tudarmstadt.informatik.tk.assistance.sdk.provider.api.UserApiProvider;
 
 /**
  * @author Wladimir Schmidt (wlsc.dev@gmail.com)
@@ -39,6 +40,15 @@ public class ApiProvider {
      */
     public LoginApiProvider getLoginApiProvider() {
         return LoginApiProvider.getInstance(mContext);
+    }
+
+    /**
+     * UserApiProvider
+     *
+     * @return
+     */
+    public UserApiProvider getUserApiProvider() {
+        return UserApiProvider.getInstance(mContext);
     }
 
     /**
