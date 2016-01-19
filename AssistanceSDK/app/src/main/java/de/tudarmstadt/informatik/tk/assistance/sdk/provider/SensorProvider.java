@@ -159,7 +159,8 @@ public class SensorProvider {
         ForegroundSensor foregroundSensor = ForegroundSensor.getInstance(mContext);
         availableSensors.put(foregroundSensor.getType(), foregroundSensor);
 
-        ForegroundTrafficSensor foregroundTrafficSensor = ForegroundTrafficSensor.getInstance(mContext);
+        ForegroundTrafficSensor foregroundTrafficSensor = ForegroundTrafficSensor
+                .getInstance(mContext, ForegroundTrafficSensor.Mode.PERIODIC);
         availableSensors.put(foregroundTrafficSensor.getType(), foregroundTrafficSensor);
 
         GyroscopeSensor gyroscopeSensor = GyroscopeSensor.getInstance(mContext);
