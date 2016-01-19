@@ -42,7 +42,7 @@ public class MotionActivitySensor extends
     private int UPDATE_INTERVAL_IN_SEC = 5;
     // -----------------------------------------------------
 
-    private GoogleApiClient mGoogleApiClient;
+    private static GoogleApiClient mGoogleApiClient;
 
     private PendingIntent mActivityRecognitionPendingIntent;
 
@@ -271,6 +271,10 @@ public class MotionActivitySensor extends
         Log.d(TAG, "New update interval: " + newUpdateIntervalInSec + " sec");
 
         UPDATE_INTERVAL_IN_SEC = newUpdateIntervalInSec;
+
+        if (mGoogleApiClient == null) {
+            mGoogleApiClient = getGoogleApiClient();
+        }
 
         if (mGoogleApiClient.isConnected()) {
 
