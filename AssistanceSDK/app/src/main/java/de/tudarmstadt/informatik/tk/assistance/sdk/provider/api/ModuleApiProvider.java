@@ -4,14 +4,17 @@ import android.content.Context;
 
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
+import de.tudarmstadt.informatik.tk.assistance.model.client.feedback.content.ClientFeedbackDto;
 import de.tudarmstadt.informatik.tk.assistance.sdk.model.api.ApiGenerator;
 import de.tudarmstadt.informatik.tk.assistance.sdk.model.api.module.ActivatedModulesResponse;
 import de.tudarmstadt.informatik.tk.assistance.sdk.model.api.module.ModuleApi;
 import de.tudarmstadt.informatik.tk.assistance.sdk.model.api.module.ModuleResponseDto;
 import de.tudarmstadt.informatik.tk.assistance.sdk.model.api.module.ToggleModuleRequestDto;
-import de.tudarmstadt.informatik.tk.assistance.model.client.feedback.content.ClientFeedbackDto;
 import rx.Observable;
+import rx.Scheduler;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
@@ -22,6 +25,10 @@ import rx.schedulers.Schedulers;
 public class ModuleApiProvider {
 
     private static final String TAG = ModuleApiProvider.class.getSimpleName();
+
+    private static final long FEEDBACK_POLLING_RATE = 10;
+    private static final TimeUnit FEEDBACK_TIME_UNIT = TimeUnit.SECONDS;
+    public static final int FEEDBACK_RETRY_NUMBER = 3;
 
     private static ModuleApiProvider INSTANCE;
 
@@ -116,6 +123,25 @@ public class ModuleApiProvider {
                                                               final Long deviceId) {
         return api.getModuleFeedback(userToken, deviceId)
                 .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    /**
+     * Returns subscription for periodic to module feedback channel
+     *
+     * @param userToken
+     * @param deviceId
+     * @return
+     */
+    public Observable<List<ClientFeedbackDto>> moduleFeedbackPeriodic(final String userToken,
+                                                                      final Long deviceId) {
+        Scheduler scheduler = Schedulers.from(Executors.newSingleThreadExecutor());
+
+        return Observable.interval(FEEDBACK_POLLING_RATE, FEEDBACK_TIME_UNIT)
+                .flatMap(f ->
+                        api.getModuleFeedback(userToken, deviceId)
+                                .retry(FEEDBACK_RETRY_NUMBER)
+                                .subscribeOn(scheduler))
                 .observeOn(AndroidSchedulers.mainThread());
     }
 }
