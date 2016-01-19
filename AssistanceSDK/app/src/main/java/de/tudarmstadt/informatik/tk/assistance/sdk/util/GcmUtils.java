@@ -2,7 +2,6 @@ package de.tudarmstadt.informatik.tk.assistance.sdk.util;
 
 import android.app.Activity;
 import android.content.Context;
-import android.support.annotation.NonNull;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
@@ -52,22 +51,28 @@ public class GcmUtils {
     }
 
     /**
-     * Starts a periodic task with GCM
+     * Starts a periodic task with GCM Network Manager
      *
      * @param context
+     * @param clazz
+     * @param taskId
      * @param periodSecs
      * @param flexSecs
-     * @param tag
      */
-    public static void startPeriodicTask(Context context, Class clazz, long periodSecs, long flexSecs, String tag) {
+    public static void startPeriodicTask(Context context, Class clazz, long taskId, long periodSecs, long flexSecs) {
 
         Log.d(TAG, "Scheduling periodic task...");
+
+        String taskTag = "periodic | " +
+                taskId + ": " +
+                periodSecs + "s, f:" +
+                flexSecs;
 
         PeriodicTask task = new PeriodicTask.Builder()
                 .setService(clazz)
                 .setPeriod(periodSecs)
                 .setFlex(flexSecs)
-                .setTag(tag)
+                .setTag(taskTag)
                 .setPersisted(true)
                 .setUpdateCurrent(true)
                 .setRequiredNetwork(Task.NETWORK_STATE_ANY)
@@ -96,7 +101,17 @@ public class GcmUtils {
     /**
      * Cancels GCM Network Manager periodic task
      */
-    public static void cancelByTag(Context context, @NonNull String tag, Class clazz) {
-        GcmNetworkManager.getInstance(context).cancelTask(tag, clazz);
+    public static void cancelPeriodicByTag(Context context,
+                                           Class clazz,
+                                           long taskId,
+                                           long periodSecs,
+                                           long flexSecs) {
+
+        String taskTag = "periodic | " +
+                taskId + ": " +
+                periodSecs + "s, f:" +
+                flexSecs;
+
+        GcmNetworkManager.getInstance(context).cancelTask(taskTag, clazz);
     }
 }

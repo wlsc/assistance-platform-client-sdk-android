@@ -15,6 +15,7 @@ import com.google.common.collect.Lists;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import de.tudarmstadt.informatik.tk.assistance.sdk.Config;
 import de.tudarmstadt.informatik.tk.assistance.sdk.model.api.SensorDto;
@@ -45,6 +46,8 @@ public class SensorUploadService extends GcmTaskService {
 
     private static final String TAG = SensorUploadService.class.getSimpleName();
 
+    private Random random = new Random();
+
     private static final int EVENTS_NUMBER_TO_SPLIT_AFTER = 500;
     private static final int PUSH_NUMBER_OF_EACH_ELEMENTS = 80;
 
@@ -52,30 +55,21 @@ public class SensorUploadService extends GcmTaskService {
     private static final long taskID = 998;
     // the task should be executed every N seconds
     private static final long periodSecs = 60l;
-    // fallback for period in case of server is not available
-    private static final long periodServerNotAvailableFallbackSecs = 300l;
     // the task can run as early as N seconds from the scheduled time
     private static final long flexSecs = 15l;
+
+    /**
+     * In case of errors -> fallback strategy
+     */
+    private static final int fallbackMultiplier = 2;
+    // fallback for period in case of server is not available
+    private static long periodServerNotAvailableFallbackSecs = periodSecs * fallbackMultiplier;
     // fallback for flexibility in case of server not available
-    private static final long flexServerNotAvailableFallbackSecs = 100l;
+    private static long flexServerNotAvailableFallbackSecs = periodSecs * fallbackMultiplier;
 
-    // an unique default task identifier
-    @NonNull
-    private static String taskTagDefault = "periodic | " +
-            taskID + ": " +
-            periodSecs + "s, f:" +
-            flexSecs;
-
-    // an unique connection fallback task identifier
-    @NonNull
-    private static String taskTagFallback = "periodic | " +
-            taskID + ": " +
-            periodServerNotAvailableFallbackSecs +
-            "s, f:" +
-            flexServerNotAvailableFallbackSecs;
 
     private static final String UPLOAD_ALL_FLAG_NAME = "UPLOAD_ALL";
-    private static final int UPLOAD_ALL_FLAG = 1;
+    private static final int UPLOAD_ALL_FLAG_VALUE = 1;
 
     private static SensorProvider sensorProvider;
     private static PreferenceProvider mPreferenceProvider;
@@ -95,26 +89,26 @@ public class SensorUploadService extends GcmTaskService {
         Log.d(TAG, "Initializing...");
 
         if (sensorProvider == null) {
-            sensorProvider = SensorProvider.getInstance(getApplicationContext());
+            sensorProvider = SensorProvider.getInstance(this);
         }
 
         if (mPreferenceProvider == null) {
-            mPreferenceProvider = PreferenceProvider.getInstance(getApplicationContext());
+            mPreferenceProvider = PreferenceProvider.getInstance(this);
         }
 
         String userToken = mPreferenceProvider.getUserToken();
 
         if (userToken != null && !userToken.isEmpty()) {
 
-            GcmUtils.cancelAllTasks(getApplicationContext(), SensorUploadService.class);
+            GcmUtils.cancelAllTasks(this, SensorUploadService.class);
 
             if (isNeedInConnectionFallback) {
-                schedulePeriodicTask(getApplicationContext(),
+                schedulePeriodicTask(this,
+                        taskID,
                         periodServerNotAvailableFallbackSecs,
-                        flexServerNotAvailableFallbackSecs,
-                        taskTagFallback);
+                        flexServerNotAvailableFallbackSecs);
             } else {
-                schedulePeriodicTask(getApplicationContext(), periodSecs, flexSecs, taskTagDefault);
+                schedulePeriodicTask(this, taskID, periodSecs, flexSecs);
             }
         } else {
             Log.d(TAG, "User is not logged in. Scheduled task won't start");
@@ -129,23 +123,23 @@ public class SensorUploadService extends GcmTaskService {
         Log.d(TAG, "Task uploader has started");
 
         // check Airplane Mode enabled
-        if (ConnectionUtils.isAirplaneModeEnabled(getApplicationContext())) {
+        if (ConnectionUtils.isAirplaneModeEnabled(this)) {
             Log.d(TAG, "Airplane Mode enabled. Upload request ignored");
             return GcmNetworkManager.RESULT_FAILURE;
         }
 
         // device is not online
-        if (!ConnectionUtils.isOnline(getApplicationContext())) {
+        if (!ConnectionUtils.isOnline(this)) {
             Log.d(TAG, "Device is not online. Upload request ignored");
             return GcmNetworkManager.RESULT_FAILURE;
         }
 
         if (sensorProvider == null) {
-            sensorProvider = SensorProvider.getInstance(getApplicationContext());
+            sensorProvider = SensorProvider.getInstance(this);
         }
 
         if (mPreferenceProvider == null) {
-            mPreferenceProvider = PreferenceProvider.getInstance(getApplicationContext());
+            mPreferenceProvider = PreferenceProvider.getInstance(this);
         }
 
         String userToken = mPreferenceProvider.getUserToken();
@@ -166,7 +160,7 @@ public class SensorUploadService extends GcmTaskService {
                 int value = extras.getInt(UPLOAD_ALL_FLAG_NAME, 0);
 
                 // upload all data at once
-                if (value == UPLOAD_ALL_FLAG) {
+                if (value == UPLOAD_ALL_FLAG_VALUE) {
 
                     isPeriodic = false;
 
@@ -200,7 +194,7 @@ public class SensorUploadService extends GcmTaskService {
         // user logged out
         if (serverDeviceId == -1) {
             Log.d(TAG, "User logged out -- all tasks has been canceled!");
-            GcmUtils.cancelAllTasks(getApplicationContext(), SensorUploadService.class);
+            GcmUtils.cancelAllTasks(this, SensorUploadService.class);
             return;
         }
 
@@ -391,13 +385,18 @@ public class SensorUploadService extends GcmTaskService {
         Log.d(TAG, "Rescheduling default periodic task...");
 
         // cancelling fallback periodic task
-        GcmUtils.cancelByTag(getApplicationContext(), taskTagFallback, SensorUploadService.class);
+        GcmUtils.cancelPeriodicByTag(
+                this,
+                SensorUploadService.class,
+                taskID,
+                periodServerNotAvailableFallbackSecs,
+                flexServerNotAvailableFallbackSecs);
 
         // reschedule periodic task with default timings
-        schedulePeriodicTask(getApplicationContext(),
+        schedulePeriodicTask(this,
+                taskID,
                 periodSecs,
-                flexSecs,
-                taskTagDefault);
+                flexSecs);
     }
 
     /**
@@ -408,13 +407,18 @@ public class SensorUploadService extends GcmTaskService {
         Log.d(TAG, "Rescheduling fallback periodic task...");
 
         // cancelling default periodic task
-        GcmUtils.cancelByTag(getApplicationContext(), taskTagDefault, SensorUploadService.class);
+        GcmUtils.cancelPeriodicByTag(
+                this,
+                SensorUploadService.class,
+                taskID,
+                periodSecs,
+                flexSecs);
 
         // reschedule periodic task with fallback timings
-        schedulePeriodicTask(getApplicationContext(),
+        schedulePeriodicTask(this,
+                taskID,
                 periodServerNotAvailableFallbackSecs,
-                flexServerNotAvailableFallbackSecs,
-                taskTagFallback);
+                flexServerNotAvailableFallbackSecs);
     }
 
     @Override
@@ -423,15 +427,20 @@ public class SensorUploadService extends GcmTaskService {
         Log.d(TAG, "Reinitialize periodic task...");
 
         // first cancel any running event uploader tasks
-        GcmUtils.cancelAllTasks(getApplicationContext(), SensorUploadService.class);
+        GcmUtils.cancelAllTasks(this, SensorUploadService.class);
 
         if (isNeedInConnectionFallback) {
-            schedulePeriodicTask(getApplicationContext(),
+            schedulePeriodicTask(
+                    this,
+                    taskID,
                     periodServerNotAvailableFallbackSecs,
-                    flexServerNotAvailableFallbackSecs,
-                    taskTagFallback);
+                    flexServerNotAvailableFallbackSecs);
         } else {
-            schedulePeriodicTask(getApplicationContext(), periodSecs, flexSecs, taskTagDefault);
+            schedulePeriodicTask(
+                    this,
+                    taskID,
+                    periodSecs,
+                    flexSecs);
         }
 
         super.onInitializeTasks();
@@ -440,8 +449,8 @@ public class SensorUploadService extends GcmTaskService {
     /**
      * Schedules an periodic upload task
      */
-    public static void schedulePeriodicTask(Context context, long paramPeriodSecs, long paramFlexSecs, String tag) {
-        GcmUtils.startPeriodicTask(context, SensorUploadService.class, paramPeriodSecs, paramFlexSecs, tag);
+    public static void schedulePeriodicTask(Context context, long taskId, long paramPeriodSecs, long paramFlexSecs) {
+        GcmUtils.startPeriodicTask(context, SensorUploadService.class, taskId, paramPeriodSecs, paramFlexSecs);
     }
 
     /**
@@ -452,7 +461,7 @@ public class SensorUploadService extends GcmTaskService {
         Log.d(TAG, "Scheduling one time task...");
 
         Bundle bundle = new Bundle();
-        bundle.putInt(UPLOAD_ALL_FLAG_NAME, UPLOAD_ALL_FLAG);
+        bundle.putInt(UPLOAD_ALL_FLAG_NAME, UPLOAD_ALL_FLAG_VALUE);
 
         OneoffTask oneTimeTask = new OneoffTask.Builder()
                 .setService(SensorUploadService.class)

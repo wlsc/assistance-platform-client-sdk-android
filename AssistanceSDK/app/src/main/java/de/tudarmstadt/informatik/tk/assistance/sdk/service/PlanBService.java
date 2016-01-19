@@ -28,19 +28,18 @@ public class PlanBService extends GcmTaskService {
     // the task can run as early as N seconds from the scheduled time
     private static final long flexSecs = 9900l;
 
-    // an unique task identifier
-    private static String taskTag = "periodic | " +
-            taskID + ": " +
-            periodSecs + "s, f:" +
-            flexSecs;
-
     @Override
     public void onCreate() {
         super.onCreate();
         Log.d(TAG, "PlanB Service starting...");
 
         // schedule service to repeat itself
-        GcmUtils.startPeriodicTask(getApplicationContext(), PlanBService.class, periodSecs, flexSecs, taskTag);
+        GcmUtils.startPeriodicTask(
+                getApplicationContext(),
+                PlanBService.class,
+                taskID,
+                periodSecs,
+                flexSecs);
     }
 
     @Override
