@@ -334,7 +334,7 @@ public class SensorUploadService extends GcmTaskService {
 
             } else {
 
-                Log.d(TAG, "Roundtrip is NORMAL than upload period");
+                Log.d(TAG, "Roundtrip time is NORMAL");
 
                 // gracefully return to prev values
                 EVENTS_NUMBER_TO_SPLIT_AFTER += trueFallbackTolerance;
