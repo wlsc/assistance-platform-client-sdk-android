@@ -309,11 +309,10 @@ public class SensorProvider {
                     continue;
                 }
 
-                eventBus.post(
-                        new UpdateSensorIntervalEvent(
-                                sensorIntervals.keyAt(i),
-                                sensorIntervals.valueAt(i)
-                        ));
+                eventBus.post(new UpdateSensorIntervalEvent(
+                        sensorIntervals.keyAt(i),
+                        sensorIntervals.valueAt(i)
+                ));
             }
 
             Log.d(TAG, "Sent event to: " + sensorIntervals.size());
@@ -543,7 +542,7 @@ public class SensorProvider {
 
     /**
      * Returns minimum of required update interval
-     * for each sensor type
+     * for given sensor type
      *
      * @param sensorType
      * @return
@@ -581,13 +580,59 @@ public class SensorProvider {
             for (DbModuleCapability cap : capabilities) {
 
                 // we found our active capability type
-                if (cap.getActive() && cap.getType().equals(sensorType)) {
+                if (cap.getActive() && cap.getType().equals(sensorType) && cap.getUpdateInterval() != null) {
 
                     // take the minimum
                     result = Math.min(cap.getUpdateInterval(), result);
 
                     // don't need to continue here
                     break;
+                }
+            }
+        }
+
+        return result;
+    }
+
+    /**
+     * Returns minimum of required upload interval
+     * for each sensor type
+     *
+     * @return
+     */
+    public Double getMinSensorUploadInterval() {
+
+        String userToken = preferenceProvider.getUserToken();
+
+        DbUser user = daoProvider.getUserDao().getByToken(userToken);
+
+        if (user == null) {
+            return null;
+        }
+
+        List<DbModule> modules = daoProvider.getModuleDao().getAllActive(user.getId());
+
+        if (modules.isEmpty()) {
+            return null;
+        }
+
+        Double result = Double.MAX_VALUE;
+
+        for (DbModule module : modules) {
+
+            List<DbModuleCapability> capabilities = module.getDbModuleCapabilityList();
+
+            if (capabilities.isEmpty()) {
+                continue;
+            }
+
+            for (DbModuleCapability cap : capabilities) {
+
+                // we found our active capability type
+                if (cap.getActive() && cap.getUpdateInterval() != null) {
+
+                    // take the minimum
+                    result = Math.min(cap.getUpdateInterval(), result);
                 }
             }
         }

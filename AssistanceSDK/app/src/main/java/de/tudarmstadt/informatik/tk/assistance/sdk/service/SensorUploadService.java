@@ -15,7 +15,6 @@ import com.google.common.collect.Lists;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
 import de.tudarmstadt.informatik.tk.assistance.sdk.Config;
@@ -33,6 +32,7 @@ import de.tudarmstadt.informatik.tk.assistance.sdk.provider.api.SensorUploadApiP
 import de.tudarmstadt.informatik.tk.assistance.sdk.util.ConnectionUtils;
 import de.tudarmstadt.informatik.tk.assistance.sdk.util.GcmUtils;
 import de.tudarmstadt.informatik.tk.assistance.sdk.util.HardwareUtils;
+import de.tudarmstadt.informatik.tk.assistance.sdk.util.StringUtils;
 import de.tudarmstadt.informatik.tk.assistance.sdk.util.logger.Log;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
@@ -47,8 +47,6 @@ public class SensorUploadService extends GcmTaskService {
 
     private static final String TAG = SensorUploadService.class.getSimpleName();
 
-    private Random random = new Random();
-
     private static final int EVENTS_NUMBER_TO_SPLIT_AFTER_DEFAULT = 500;
     private static final int PUSH_NUMBER_OF_EACH_ELEMENTS_DEFAULT = 80;
     private static int EVENTS_NUMBER_TO_SPLIT_AFTER = 500;
@@ -57,9 +55,11 @@ public class SensorUploadService extends GcmTaskService {
     // task identifier
     private static final long taskID = 998;
     // the task should be executed every N seconds
-    private static final long periodSecs = 60l;
+    private static final long periodSecsDefault = 60l;
+    private static long periodSecs = 60l;
     // the task can run as early as N seconds from the scheduled time
-    private static final long flexSecs = 15l;
+    private static final long flexSecsDefault = 15l;
+    private static long flexSecs = 15l;
 
     /**
      * In case of errors -> fallback strategy
@@ -107,7 +107,30 @@ public class SensorUploadService extends GcmTaskService {
 
         String userToken = mPreferenceProvider.getUserToken();
 
-        if (userToken != null && !userToken.isEmpty()) {
+        if (StringUtils.isNotNullAndEmpty(userToken)) {
+
+            Double minUploadInterval = sensorProvider.getMinSensorUploadInterval();
+
+            if (minUploadInterval != null) {
+
+                long minUpload = minUploadInterval.longValue();
+
+                Log.d(TAG, "Setting up new upload interval: " + minUpload);
+
+                long trueFallbackTolerance = (long) Math.ceil(
+                        FALLBACK_TOLERANCE * minUpload / 100);
+
+                Log.d(TAG, "Calculated fallback tolerance: " + trueFallbackTolerance);
+
+                // set normal values
+                periodSecs = minUpload;
+                flexSecs = minUpload + trueFallbackTolerance;
+                // set fallback values
+                periodFallbackSecs = periodSecs;
+                flexFallbackSecs = flexSecs;
+
+                Log.d(TAG, "New upload rates: period is " + periodSecs + " and flex is " + flexSecs);
+            }
 
             GcmUtils.cancelAllTasks(this, SensorUploadService.class);
 
