@@ -17,9 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.tudarmstadt.informatik.tk.assistance.sdk.Config;
-import de.tudarmstadt.informatik.tk.assistance.sdk.model.api.ApiGenerator;
 import de.tudarmstadt.informatik.tk.assistance.sdk.model.api.SensorDto;
-import de.tudarmstadt.informatik.tk.assistance.sdk.model.api.login.LoginApi;
 import de.tudarmstadt.informatik.tk.assistance.sdk.model.api.login.LoginRequestDto;
 import de.tudarmstadt.informatik.tk.assistance.sdk.model.api.login.LoginResponseDto;
 import de.tudarmstadt.informatik.tk.assistance.sdk.model.api.login.UserDeviceDto;
@@ -28,6 +26,7 @@ import de.tudarmstadt.informatik.tk.assistance.sdk.model.sensing.SensorUploadHol
 import de.tudarmstadt.informatik.tk.assistance.sdk.provider.ApiProvider;
 import de.tudarmstadt.informatik.tk.assistance.sdk.provider.PreferenceProvider;
 import de.tudarmstadt.informatik.tk.assistance.sdk.provider.SensorProvider;
+import de.tudarmstadt.informatik.tk.assistance.sdk.provider.api.LoginApiProvider;
 import de.tudarmstadt.informatik.tk.assistance.sdk.provider.api.SensorUploadApiProvider;
 import de.tudarmstadt.informatik.tk.assistance.sdk.util.ConnectionUtils;
 import de.tudarmstadt.informatik.tk.assistance.sdk.util.GcmUtils;
@@ -325,14 +324,13 @@ public class SensorUploadService extends GcmTaskService {
             userDevice.setDeviceId(HardwareUtils.getAndroidId(this));
         }
 
+        ApiProvider apiProvider = ApiProvider.getInstance(this);
+        LoginApiProvider userApiProvider = apiProvider.getLoginApiProvider();
+
         LoginRequestDto loginRequest = new LoginRequestDto(email, password, userDevice);
 
-        LoginApi userEndpoint = ApiGenerator.getInstance(getApplicationContext())
-                .create(LoginApi.class);
-
-        userLoginSubscription = userEndpoint.loginUser(loginRequest)
-                .subscribeOn(Schedulers.newThread())
-                .observeOn(AndroidSchedulers.mainThread())
+        userLoginSubscription = userApiProvider
+                .loginUser(loginRequest)
                 .subscribe(new UserLoginSubscriber());
     }
 

@@ -43,7 +43,7 @@ public class DeviceApiProvider {
      */
     public Observable<Void> deviceRegistration(String userToken, DeviceRegistrationRequestDto deviceRegistrationRequestDto) {
         return api.registerDevice(userToken, deviceRegistrationRequestDto)
-                .subscribeOn(Schedulers.io())
+                .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread());
     }
 }

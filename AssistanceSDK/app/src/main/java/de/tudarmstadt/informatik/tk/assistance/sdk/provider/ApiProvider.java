@@ -3,6 +3,7 @@ package de.tudarmstadt.informatik.tk.assistance.sdk.provider;
 import android.content.Context;
 
 import de.tudarmstadt.informatik.tk.assistance.sdk.provider.api.DeviceApiProvider;
+import de.tudarmstadt.informatik.tk.assistance.sdk.provider.api.LoginApiProvider;
 import de.tudarmstadt.informatik.tk.assistance.sdk.provider.api.ModuleApiProvider;
 import de.tudarmstadt.informatik.tk.assistance.sdk.provider.api.SensorUploadApiProvider;
 
@@ -29,6 +30,15 @@ public class ApiProvider {
         }
 
         return INSTANCE;
+    }
+
+    /**
+     * LoginApiProvider
+     *
+     * @return
+     */
+    public LoginApiProvider getLoginApiProvider() {
+        return LoginApiProvider.getInstance(mContext);
     }
 
     /**
