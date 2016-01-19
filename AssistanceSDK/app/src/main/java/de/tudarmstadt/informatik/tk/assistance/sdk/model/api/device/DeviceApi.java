@@ -3,7 +3,6 @@ package de.tudarmstadt.informatik.tk.assistance.sdk.model.api.device;
 import java.util.List;
 
 import de.tudarmstadt.informatik.tk.assistance.sdk.Config;
-import retrofit.Callback;
 import retrofit.http.Body;
 import retrofit.http.GET;
 import retrofit.http.Header;
@@ -23,12 +22,10 @@ public interface DeviceApi {
                                     @Body DeviceRegistrationRequestDto body);
 
     @GET(Config.DEVICE_LIST_ENDPOINT)
-    void getDeviceList(@Header("X-AUTH-TOKEN") String userToken,
-                       Callback<List<DeviceListResponseDto>> callback);
+    Observable<List<DeviceListResponseDto>> getDeviceList(
+            @Header("X-AUTH-TOKEN") String userToken);
 
     @POST(Config.DEVICE_SET_USER_DEFINED_NAME_ENDPOINT)
-    void setUserDefinedName(@Header("X-AUTH-TOKEN") String userToken,
-                            @Body DeviceUserDefinedNameRequestDto body,
-                            Callback<Void> callback);
-
+    Observable<Void> setUserDefinedName(@Header("X-AUTH-TOKEN") String userToken,
+                                        @Body DeviceUserDefinedNameRequestDto body);
 }

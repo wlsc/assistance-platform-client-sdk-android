@@ -122,43 +122,9 @@ public class GcmRegistrationIntentService extends IntentService {
 
         Observable<Void> subscription = ApiProvider.getInstance(getApplicationContext())
                 .getDeviceApiProvider()
-                .deviceRegistration(userToken, deviceRegistrationRequest);
+                .registerDevice(userToken, deviceRegistrationRequest);
 
-        gcmRegistrationSubscriber = subscription.subscribe(new Subscriber<Void>() {
-
-            @Override
-            public void onCompleted() {
-                Log.d(TAG, "gcmRegistrationSubscriber: onCompleted");
-            }
-
-            @Override
-            public void onError(Throwable e) {
-                Log.d(TAG, "gcmRegistrationSubscriber: onError");
-            }
-
-            @Override
-            public void onNext(Void aVoid) {
-
-                // persist registration
-                final String userToken = preferenceProvider.getUserToken();
-                DbUser user = daoProvider.getUserDao().getByToken(userToken);
-
-                if (user == null) {
-                    Log.d(TAG, "No such user found! Token: " + userToken);
-                    return;
-                } else {
-
-                    Log.d(TAG, "Saving GCM registration ID into DB...");
-
-                    final long serverDeviceId = preferenceProvider.getServerDeviceId();
-
-                    daoProvider.getDeviceDao().saveRegistrationTokenToDb(
-                            token,
-                            user.getId(),
-                            serverDeviceId);
-                }
-            }
-        });
+        gcmRegistrationSubscriber = subscription.subscribe(new GcmRegistrationSubscriber(token));
     }
 
     @Override
@@ -180,6 +146,51 @@ public class GcmRegistrationIntentService extends IntentService {
 
         for (String topic : TOPICS) {
             pubSub.subscribe(token, TOPICS_SERVICE + topic, null);
+        }
+    }
+
+    /**
+     * Gcm registration subscriber
+     */
+    private class GcmRegistrationSubscriber extends Subscriber<Void> {
+
+        private final String token;
+
+        public GcmRegistrationSubscriber(String token) {
+            this.token = token;
+        }
+
+        @Override
+        public void onCompleted() {
+            Log.d(TAG, "gcmRegistrationSubscriber: onCompleted");
+        }
+
+        @Override
+        public void onError(Throwable e) {
+            Log.d(TAG, "gcmRegistrationSubscriber: onError");
+        }
+
+        @Override
+        public void onNext(Void aVoid) {
+
+            // persist registration
+            final String userToken = preferenceProvider.getUserToken();
+            DbUser user = daoProvider.getUserDao().getByToken(userToken);
+
+            if (user == null) {
+                Log.d(TAG, "No such user found! Token: " + userToken);
+                return;
+            } else {
+
+                Log.d(TAG, "Saving GCM registration ID into DB...");
+
+                final long serverDeviceId = preferenceProvider.getServerDeviceId();
+
+                daoProvider.getDeviceDao().saveRegistrationTokenToDb(
+                        token,
+                        user.getId(),
+                        serverDeviceId);
+            }
         }
     }
 }

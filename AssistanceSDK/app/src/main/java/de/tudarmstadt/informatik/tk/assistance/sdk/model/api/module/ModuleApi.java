@@ -3,8 +3,8 @@ package de.tudarmstadt.informatik.tk.assistance.sdk.model.api.module;
 import java.util.List;
 import java.util.Set;
 
-import de.tudarmstadt.informatik.tk.assistance.sdk.Config;
 import de.tudarmstadt.informatik.tk.assistance.model.client.feedback.content.ClientFeedbackDto;
+import de.tudarmstadt.informatik.tk.assistance.sdk.Config;
 import retrofit.http.Body;
 import retrofit.http.GET;
 import retrofit.http.Header;
@@ -22,13 +22,10 @@ public interface ModuleApi {
 
     @GET(Config.ASSISTANCE_MODULE_LIST_ENDPOINT)
     Observable<List<ModuleResponseDto>> getAvailableModules(
-            @Header("X-AUTH-TOKEN") String userToken
-    );
+            @Header("X-AUTH-TOKEN") String userToken);
 
     @GET(Config.ASSISTANCE_MODULE_ACTIVE_ENDPOINT)
-    Observable<Set<String>> getActiveModules(
-            @Header("X-AUTH-TOKEN") String userToken
-    );
+    Observable<Set<String>> getActiveModules(@Header("X-AUTH-TOKEN") String userToken);
 
     @POST(Config.ASSISTANCE_MODULE_ACTIVATE_ENDPOINT)
     Observable<Void> activateModule(@Header("X-AUTH-TOKEN") String userToken,
