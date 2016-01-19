@@ -16,6 +16,7 @@ import com.google.common.collect.Lists;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.concurrent.TimeUnit;
 
 import de.tudarmstadt.informatik.tk.assistance.sdk.Config;
 import de.tudarmstadt.informatik.tk.assistance.sdk.model.api.SensorDto;
@@ -48,8 +49,10 @@ public class SensorUploadService extends GcmTaskService {
 
     private Random random = new Random();
 
-    private static final int EVENTS_NUMBER_TO_SPLIT_AFTER = 500;
-    private static final int PUSH_NUMBER_OF_EACH_ELEMENTS = 80;
+    private static final int EVENTS_NUMBER_TO_SPLIT_AFTER_DEFAULT = 500;
+    private static final int PUSH_NUMBER_OF_EACH_ELEMENTS_DEFAULT = 80;
+    private static int EVENTS_NUMBER_TO_SPLIT_AFTER = 500;
+    private static int PUSH_NUMBER_OF_EACH_ELEMENTS = 80;
 
     // task identifier
     private static final long taskID = 998;
@@ -61,11 +64,14 @@ public class SensorUploadService extends GcmTaskService {
     /**
      * In case of errors -> fallback strategy
      */
+    // it's +-10% of tolerance
+    private static final int FALLBACK_TOLERANCE = 10;
+    // this value is multiplied with fallback's periodSecs and flexPeriod values
     private static final int fallbackMultiplier = 2;
     // fallback for period in case of server is not available
-    private static long periodServerNotAvailableFallbackSecs = periodSecs * fallbackMultiplier;
+    private static long periodFallbackSecs = periodSecs;
     // fallback for flexibility in case of server not available
-    private static long flexServerNotAvailableFallbackSecs = periodSecs * fallbackMultiplier;
+    private static long flexFallbackSecs = flexSecs;
 
 
     private static final String UPLOAD_ALL_FLAG_NAME = "UPLOAD_ALL";
@@ -80,7 +86,10 @@ public class SensorUploadService extends GcmTaskService {
     @NonNull
     private SensorUploadHolder sensorData;
 
-    private static boolean isNeedInConnectionFallback;
+    private static boolean shouldUseConnectionFallback;
+
+    private static long startRequestTime;
+    private static long elapsedRequestTime;
 
     @Override
     public void onCreate() {
@@ -102,11 +111,11 @@ public class SensorUploadService extends GcmTaskService {
 
             GcmUtils.cancelAllTasks(this, SensorUploadService.class);
 
-            if (isNeedInConnectionFallback) {
+            if (shouldUseConnectionFallback) {
                 schedulePeriodicTask(this,
                         taskID,
-                        periodServerNotAvailableFallbackSecs,
-                        flexServerNotAvailableFallbackSecs);
+                        periodFallbackSecs,
+                        flexFallbackSecs);
             } else {
                 schedulePeriodicTask(this, taskID, periodSecs, flexSecs);
             }
@@ -148,6 +157,8 @@ public class SensorUploadService extends GcmTaskService {
             Log.d(TAG, "User is not logged in. Upload request ignored");
             return GcmNetworkManager.RESULT_FAILURE;
         }
+
+        startRequestTime = System.nanoTime();
 
         boolean isPeriodic = true;
 
@@ -296,7 +307,50 @@ public class SensorUploadService extends GcmTaskService {
 
         @Override
         public void onCompleted() {
-            // empty
+
+            // check if time is not exeeding periodSecs (else -> we cannot promise data in time)
+            elapsedRequestTime = System.nanoTime() - startRequestTime;
+            long elapsedRequestTimeInSec = TimeUnit.SECONDS.convert(
+                    elapsedRequestTime, TimeUnit.NANOSECONDS);
+
+            Log.d(TAG, "Calculated elapsed time in seconds: " + elapsedRequestTimeInSec);
+
+            long trueFallbackTolerance = (long) Math.ceil(
+                    FALLBACK_TOLERANCE * EVENTS_NUMBER_TO_SPLIT_AFTER / 100);
+
+            Log.d(TAG, "Calculated fallback tolerance: " + trueFallbackTolerance);
+
+            if (periodSecs < elapsedRequestTimeInSec) {
+
+                Log.d(TAG, "Roundtrip is greater than upload period");
+
+                // change packet size -> apply fallback tolerance percentage
+                EVENTS_NUMBER_TO_SPLIT_AFTER -= trueFallbackTolerance;
+                PUSH_NUMBER_OF_EACH_ELEMENTS -= trueFallbackTolerance;
+
+                Log.d(TAG, "New upload period: events " +
+                        EVENTS_NUMBER_TO_SPLIT_AFTER + " and push " +
+                        PUSH_NUMBER_OF_EACH_ELEMENTS);
+
+            } else {
+
+                Log.d(TAG, "Roundtrip is NORMAL than upload period");
+
+                // gracefully return to prev values
+                EVENTS_NUMBER_TO_SPLIT_AFTER += trueFallbackTolerance;
+                PUSH_NUMBER_OF_EACH_ELEMENTS += trueFallbackTolerance;
+
+                // in case it will be greater than standard default values
+                if (EVENTS_NUMBER_TO_SPLIT_AFTER > EVENTS_NUMBER_TO_SPLIT_AFTER_DEFAULT) {
+                    EVENTS_NUMBER_TO_SPLIT_AFTER = EVENTS_NUMBER_TO_SPLIT_AFTER_DEFAULT;
+                }
+
+                if (PUSH_NUMBER_OF_EACH_ELEMENTS > PUSH_NUMBER_OF_EACH_ELEMENTS_DEFAULT) {
+                    PUSH_NUMBER_OF_EACH_ELEMENTS = PUSH_NUMBER_OF_EACH_ELEMENTS_DEFAULT;
+                }
+            }
+
+            startRequestTime = 0;
         }
 
         @Override
@@ -315,15 +369,17 @@ public class SensorUploadService extends GcmTaskService {
                     // user need relogin
                     if (response.getStatus() == 401) {
                         relogin();
+                        // dont need to continue here
+                        return;
                     }
                 }
+            }
 
-                // fallbacking periodic request
-                if (!isNeedInConnectionFallback) {
-                    isNeedInConnectionFallback = true;
+            // fallbacking periodic request
+            if (!shouldUseConnectionFallback) {
+                shouldUseConnectionFallback = true;
 
-                    rescheduleFallbackPeriodicTask();
-                }
+                rescheduleFallbackPeriodicTask();
             }
         }
 
@@ -336,10 +392,10 @@ public class SensorUploadService extends GcmTaskService {
             sensorProvider.handleSentEvents(sensorData.getDbEvents());
 
             // reschedule default periodic task
-            if (isNeedInConnectionFallback) {
-                isNeedInConnectionFallback = false;
+            if (shouldUseConnectionFallback) {
+                shouldUseConnectionFallback = false;
 
-                rescheduleDefaultPeriodicTask();
+                rescheduleNormalPeriodicTask();
             }
         }
     }
@@ -378,21 +434,20 @@ public class SensorUploadService extends GcmTaskService {
     }
 
     /**
-     * Rescheduling default task by canceling fallback one
+     * Rescheduling normal periodic task by canceling fallback task
      */
-    private void rescheduleDefaultPeriodicTask() {
+    private void rescheduleNormalPeriodicTask() {
 
-        Log.d(TAG, "Rescheduling default periodic task...");
+        Log.d(TAG, "Rescheduling normal periodic task...");
 
-        // cancelling fallback periodic task
-        GcmUtils.cancelPeriodicByTag(
-                this,
-                SensorUploadService.class,
-                taskID,
-                periodServerNotAvailableFallbackSecs,
-                flexServerNotAvailableFallbackSecs);
+        // cancelling all tasks
+        GcmUtils.cancelAllTasks(this, SensorUploadService.class);
 
-        // reschedule periodic task with default timings
+        // return to default values
+        periodFallbackSecs = periodSecs;
+        flexFallbackSecs = periodFallbackSecs;
+
+        // reschedule normal periodic task
         schedulePeriodicTask(this,
                 taskID,
                 periodSecs,
@@ -400,25 +455,25 @@ public class SensorUploadService extends GcmTaskService {
     }
 
     /**
-     * Rescheduling fallback task by canceling default one
+     * Rescheduling fallback task by canceling normal task
      */
     private void rescheduleFallbackPeriodicTask() {
 
         Log.d(TAG, "Rescheduling fallback periodic task...");
 
-        // cancelling default periodic task
-        GcmUtils.cancelPeriodicByTag(
-                this,
-                SensorUploadService.class,
-                taskID,
-                periodSecs,
-                flexSecs);
+        // cancelling all tasks
+        GcmUtils.cancelAllTasks(this, SensorUploadService.class);
+
+        // increase fallback with +-10%
+        long trueFallbackTolerance = (long) Math.ceil(FALLBACK_TOLERANCE * periodFallbackSecs / 100);
+        periodFallbackSecs = (periodFallbackSecs * fallbackMultiplier) + trueFallbackTolerance;
+        flexFallbackSecs = flexFallbackSecs * fallbackMultiplier;
 
         // reschedule periodic task with fallback timings
         schedulePeriodicTask(this,
                 taskID,
-                periodServerNotAvailableFallbackSecs,
-                flexServerNotAvailableFallbackSecs);
+                periodFallbackSecs,
+                flexFallbackSecs);
     }
 
     @Override
@@ -426,15 +481,15 @@ public class SensorUploadService extends GcmTaskService {
 
         Log.d(TAG, "Reinitialize periodic task...");
 
-        // first cancel any running event uploader tasks
+        // first cancel any running tasks
         GcmUtils.cancelAllTasks(this, SensorUploadService.class);
 
-        if (isNeedInConnectionFallback) {
+        if (shouldUseConnectionFallback) {
             schedulePeriodicTask(
                     this,
                     taskID,
-                    periodServerNotAvailableFallbackSecs,
-                    flexServerNotAvailableFallbackSecs);
+                    periodFallbackSecs,
+                    flexFallbackSecs);
         } else {
             schedulePeriodicTask(
                     this,
