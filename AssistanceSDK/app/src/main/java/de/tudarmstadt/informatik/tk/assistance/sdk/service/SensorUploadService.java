@@ -171,48 +171,7 @@ public class SensorUploadService extends GcmTaskService {
                     isPeriodic = false;
 
                     Handler handler = new Handler(getMainLooper());
-                    handler.post(() -> {
-
-                        final long serverDeviceId = mPreferenceProvider.getServerDeviceId();
-
-                        Log.d(TAG, "Sync server device id: " + serverDeviceId);
-
-                        // user logged out
-                        if (serverDeviceId == -1) {
-                            Log.d(TAG, "User logged out -- all tasks has been canceled!");
-                            GcmUtils.cancelAllTasks(getApplicationContext(), SensorUploadService.class);
-                            return;
-                        }
-
-                        sensorData = sensorProvider.getEntriesForUpload(0);
-
-                        final List<SensorDto> eventsAsList = new ArrayList<>();
-
-                        for (int i = 0, eventsSize = sensorData.getRequestEvents().size(); i < eventsSize; i++) {
-                            eventsAsList.addAll(sensorData.getRequestEvents().valueAt(i));
-                        }
-
-                        Log.d(TAG, "There are " + eventsAsList.size() + " events to upload");
-
-                        // send partial data with many requests
-                        List<List<SensorDto>> eventParts = Lists
-                                .partition(eventsAsList, EVENTS_NUMBER_TO_SPLIT_AFTER);
-
-                        Handler uploadHandler = new Handler(getMainLooper());
-
-                        for (final List<SensorDto> partEvent : eventParts) {
-
-                            uploadHandler.post(() -> {
-
-                                SensorUploadDto eventUploadRequest = new SensorUploadDto(
-                                        serverDeviceId,
-                                        partEvent
-                                );
-
-                                doUploadEventData(eventUploadRequest);
-                            });
-                        }
-                    });
+                    handler.post(() -> prepareSensorData(0));
                 }
             }
         }
@@ -221,51 +180,58 @@ public class SensorUploadService extends GcmTaskService {
         if (isPeriodic) {
 
             Handler handler = new Handler(getMainLooper());
-            handler.post(() -> {
-
-                final long serverDeviceId = mPreferenceProvider.getServerDeviceId();
-
-                Log.d(TAG, "Sync server device id: " + serverDeviceId);
-
-                // user logged out
-                if (serverDeviceId == -1) {
-                    Log.d(TAG, "User logged out -- all tasks has been canceled!");
-                    GcmUtils.cancelAllTasks(getApplicationContext(), SensorUploadService.class);
-                    return;
-                }
-
-                sensorData = sensorProvider.getEntriesForUpload(PUSH_NUMBER_OF_EACH_ELEMENTS);
-
-                final List<SensorDto> eventsAsList = new ArrayList<>();
-
-                for (int i = 0, eventsSize = sensorData.getRequestEvents().size(); i < eventsSize; i++) {
-                    eventsAsList.addAll(sensorData.getRequestEvents().valueAt(i));
-                }
-
-                Log.d(TAG, "There are " + eventsAsList.size() + " events to upload");
-
-                // send partial with many requests
-                List<List<SensorDto>> eventParts = Lists
-                        .partition(eventsAsList, EVENTS_NUMBER_TO_SPLIT_AFTER);
-
-                Handler uploadHandler = new Handler(getMainLooper());
-
-                for (final List<SensorDto> eventPart : eventParts) {
-
-                    uploadHandler.post(() -> {
-
-                        SensorUploadDto eventUploadRequest = new SensorUploadDto(
-                                serverDeviceId,
-                                eventPart
-                        );
-
-                        doUploadEventData(eventUploadRequest);
-                    });
-                }
-            });
+            handler.post(() -> prepareSensorData(PUSH_NUMBER_OF_EACH_ELEMENTS));
         }
 
         return GcmNetworkManager.RESULT_SUCCESS;
+    }
+
+    /**
+     * Prepares the sensor data to be uploaded and calls the upload
+     *
+     * @param amountOfData
+     */
+    private void prepareSensorData(int amountOfData) {
+
+        final long serverDeviceId = mPreferenceProvider.getServerDeviceId();
+
+        Log.d(TAG, "Sync server device id: " + serverDeviceId);
+
+        // user logged out
+        if (serverDeviceId == -1) {
+            Log.d(TAG, "User logged out -- all tasks has been canceled!");
+            GcmUtils.cancelAllTasks(getApplicationContext(), SensorUploadService.class);
+            return;
+        }
+
+        sensorData = sensorProvider.getEntriesForUpload(amountOfData);
+
+        final List<SensorDto> eventsAsList = new ArrayList<>();
+
+        for (int i = 0, eventsSize = sensorData.getRequestEvents().size(); i < eventsSize; i++) {
+            eventsAsList.addAll(sensorData.getRequestEvents().valueAt(i));
+        }
+
+        Log.d(TAG, "There are " + eventsAsList.size() + " events to upload");
+
+        // send partial with many requests
+        List<List<SensorDto>> eventParts = Lists
+                .partition(eventsAsList, EVENTS_NUMBER_TO_SPLIT_AFTER);
+
+        Handler uploadHandler = new Handler(getMainLooper());
+
+        for (final List<SensorDto> eventPart : eventParts) {
+
+            uploadHandler.post(() -> {
+
+                SensorUploadDto eventUploadRequest = new SensorUploadDto(
+                        serverDeviceId,
+                        eventPart
+                );
+
+                doUploadEventData(eventUploadRequest);
+            });
+        }
     }
 
     /**
