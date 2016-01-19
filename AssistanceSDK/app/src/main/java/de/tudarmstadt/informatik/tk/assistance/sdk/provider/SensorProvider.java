@@ -1491,4 +1491,160 @@ public class SensorProvider {
         // FINALLY return result
         return sensorUploadHolderHolder;
     }
+
+    /**
+     * Removes successful transmitted entries from database
+     */
+    public void handleSentEvents(SparseArray<List<? extends IDbSensor>> dbEvents) {
+
+        Log.d(TAG, "Handling sent events...");
+
+        for (int i = 0, dbEventsSize = dbEvents.size(); i < dbEventsSize; i++) {
+
+            int type = dbEvents.keyAt(i);
+            List<? extends IDbSensor> values = dbEvents.valueAt(i);
+
+            if (values == null || values.isEmpty()) {
+                continue;
+            }
+
+            switch (type) {
+                case SensorApiType.ACCELEROMETER:
+                    daoProvider.getAccelerometerSensorDao().delete((List<DbAccelerometerSensor>) values);
+                    break;
+
+                case SensorApiType.LOCATION:
+                    daoProvider.getLocationSensorDao().delete((List<DbPositionSensor>) values);
+                    break;
+
+                case SensorApiType.MOTION_ACTIVITY:
+                    daoProvider.getMotionActivitySensorDao().delete((List<DbMotionActivitySensor>) values);
+                    break;
+
+                case SensorApiType.FOREGROUND:
+                    daoProvider.getForegroundSensorDao().delete((List<DbForegroundSensor>) values);
+                    break;
+
+                case SensorApiType.FOREGROUND_TRAFFIC:
+                    daoProvider.getNetworkTrafficSensorDao().delete((List<DbNetworkTrafficSensor>) values);
+                    break;
+
+                case SensorApiType.BACKGROUND_TRAFFIC:
+                    daoProvider.getNetworkTrafficSensorDao().delete((List<DbNetworkTrafficSensor>) values);
+                    break;
+
+                case SensorApiType.CONNECTION:
+                    daoProvider.getConnectionSensorDao().delete((List<DbConnectionSensor>) values);
+                    break;
+
+                case SensorApiType.MOBILE_DATA_CONNECTION:
+                    daoProvider.getMobileConnectionSensorDao().delete((List<DbMobileConnectionSensor>) values);
+                    break;
+
+                case SensorApiType.WIFI_CONNECTION:
+                    daoProvider.getWifiConnectionSensorDao().delete((List<DbWifiConnectionSensor>) values);
+                    break;
+
+                case SensorApiType.LIGHT:
+                    daoProvider.getLightSensorDao().delete((List<DbLightSensor>) values);
+                    break;
+
+                case SensorApiType.LOUDNESS:
+                    daoProvider.getLoudnessSensorDao().delete((List<DbLoudnessSensor>) values);
+                    break;
+
+                case SensorApiType.RUNNING_PROCESSES:
+                    daoProvider.getRunningProcessesSensorDao().delete((List<DbRunningProcessesSensor>) values);
+                    break;
+
+                case SensorApiType.RUNNING_SERVICES:
+                    daoProvider.getRunningServicesSensorDao().delete((List<DbRunningServicesSensor>) values);
+                    break;
+
+                case SensorApiType.RUNNING_TASKS:
+                    daoProvider.getRunningTasksSensorDao().delete((List<DbRunningTasksSensor>) values);
+                    break;
+
+                case SensorApiType.RINGTONE:
+                    daoProvider.getRingtoneSensorDao().delete((List<DbRingtoneSensor>) values);
+                    break;
+
+                case SensorApiType.GYROSCOPE:
+                    daoProvider.getGyroscopeSensorDao().delete((List<DbGyroscopeSensor>) values);
+                    break;
+
+                case SensorApiType.MAGNETIC_FIELD:
+                    daoProvider.getMagneticFieldSensorDao().delete((List<DbMagneticFieldSensor>) values);
+                    break;
+
+                case SensorApiType.BROWSER_HISTORY:
+                    daoProvider.getBrowserHistorySensorDao().delete((List<DbBrowserHistorySensor>) values);
+                    break;
+
+                case SensorApiType.CALL_LOG:
+                    daoProvider.getCallLogSensorDao().delete((List<DbCallLogSensor>) values);
+                    break;
+
+                case SensorApiType.POWER_STATE:
+                    daoProvider.getPowerStateSensorDao().delete((List<DbPowerStateSensor>) values);
+                    break;
+
+                case SensorApiType.POWER_LEVEL:
+                    daoProvider.getPowerLevelSensorDao().delete((List<DbPowerLevelSensor>) values);
+                    break;
+
+                case SensorApiType.CALENDAR:
+                    List<DbCalendarSensor> calendarEvents = (List<DbCalendarSensor>) values;
+
+                    for (DbCalendarSensor calEvent : calendarEvents) {
+                        calEvent.setIsNew(Boolean.FALSE);
+                    }
+
+                    // update events state
+                    daoProvider.getCalendarSensorDao().update(calendarEvents);
+                    break;
+
+                case SensorApiType.CONTACT:
+                    List<DbContactSensor> calendarSensors = (List<DbContactSensor>) values;
+
+                    for (DbContactSensor contactEvent : calendarSensors) {
+                        contactEvent.setIsNew(Boolean.FALSE);
+                    }
+
+                    // update events state
+                    daoProvider.getContactSensorDao().update(calendarSensors);
+                    break;
+
+                case SensorApiType.UNI_TUCAN:
+
+                    // marking as not changed
+                    List<DbTucanSensor> tucanSensors = (List<DbTucanSensor>) values;
+
+                    for (DbTucanSensor sensor : tucanSensors) {
+                        sensor.setWasChanged(Boolean.FALSE);
+                    }
+
+                    // update events state
+                    daoProvider.getTucanSensorDao().update(tucanSensors);
+
+                    break;
+
+                case SensorApiType.SOCIAL_FACEBOOK:
+
+                    // marking as not changed
+                    List<DbFacebookSensor> facebookSensors = (List<DbFacebookSensor>) values;
+
+                    for (DbFacebookSensor sensor : facebookSensors) {
+                        sensor.setWasChanged(Boolean.FALSE);
+                    }
+
+                    // update events state
+                    daoProvider.getFacebookSensorDao().update(facebookSensors);
+
+                    break;
+            }
+        }
+
+        Log.d(TAG, "Finished removing data from db");
+    }
 }

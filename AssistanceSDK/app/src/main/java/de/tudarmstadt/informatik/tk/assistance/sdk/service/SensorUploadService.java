@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.util.SparseArray;
 
 import com.google.android.gms.gcm.GcmNetworkManager;
 import com.google.android.gms.gcm.GcmTaskService;
@@ -18,49 +17,21 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.tudarmstadt.informatik.tk.assistance.sdk.Config;
-import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbAccelerometerSensor;
-import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbBrowserHistorySensor;
-import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbCalendarSensor;
-import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbCallLogSensor;
-import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbConnectionSensor;
-import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbContactSensor;
-import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbFacebookSensor;
-import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbForegroundSensor;
-import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbGyroscopeSensor;
-import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbLightSensor;
-import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbLoudnessSensor;
-import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbMagneticFieldSensor;
-import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbMobileConnectionSensor;
-import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbMotionActivitySensor;
-import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbNetworkTrafficSensor;
-import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbPositionSensor;
-import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbPowerLevelSensor;
-import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbPowerStateSensor;
-import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbRingtoneSensor;
-import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbRunningProcessesSensor;
-import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbRunningServicesSensor;
-import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbRunningTasksSensor;
-import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbTucanSensor;
-import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbWifiConnectionSensor;
-import de.tudarmstadt.informatik.tk.assistance.sdk.interfaces.IDbSensor;
 import de.tudarmstadt.informatik.tk.assistance.sdk.model.api.ApiGenerator;
 import de.tudarmstadt.informatik.tk.assistance.sdk.model.api.SensorDto;
 import de.tudarmstadt.informatik.tk.assistance.sdk.model.api.login.LoginApi;
 import de.tudarmstadt.informatik.tk.assistance.sdk.model.api.login.LoginRequestDto;
 import de.tudarmstadt.informatik.tk.assistance.sdk.model.api.login.LoginResponseDto;
 import de.tudarmstadt.informatik.tk.assistance.sdk.model.api.login.UserDeviceDto;
-import de.tudarmstadt.informatik.tk.assistance.sdk.model.api.sensing.SensorApiType;
 import de.tudarmstadt.informatik.tk.assistance.sdk.model.api.sensing.SensorUploadDto;
 import de.tudarmstadt.informatik.tk.assistance.sdk.model.sensing.SensorUploadHolder;
 import de.tudarmstadt.informatik.tk.assistance.sdk.provider.ApiProvider;
-import de.tudarmstadt.informatik.tk.assistance.sdk.provider.DaoProvider;
 import de.tudarmstadt.informatik.tk.assistance.sdk.provider.PreferenceProvider;
 import de.tudarmstadt.informatik.tk.assistance.sdk.provider.SensorProvider;
 import de.tudarmstadt.informatik.tk.assistance.sdk.provider.api.SensorUploadApiProvider;
 import de.tudarmstadt.informatik.tk.assistance.sdk.util.ConnectionUtils;
 import de.tudarmstadt.informatik.tk.assistance.sdk.util.GcmUtils;
 import de.tudarmstadt.informatik.tk.assistance.sdk.util.HardwareUtils;
-import de.tudarmstadt.informatik.tk.assistance.sdk.util.RxUtils;
 import de.tudarmstadt.informatik.tk.assistance.sdk.util.logger.Log;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
@@ -409,7 +380,7 @@ public class SensorUploadService extends GcmTaskService {
             Log.d(TAG, "OK response from server received");
 
             // successful transmission of event data -> remove that data from db
-            handleSentEvents();
+            sensorProvider.handleSentEvents(sensorData.getDbEvents());
 
             // reschedule default periodic task
             if (isNeedInConnectionFallback) {
@@ -508,166 +479,6 @@ public class SensorUploadService extends GcmTaskService {
     }
 
     /**
-     * Removes successful transmitted entries from database
-     */
-    public void handleSentEvents() {
-
-        Log.d(TAG, "Handling sent events...");
-
-        DaoProvider daoProvider = DaoProvider.getInstance(getApplicationContext());
-
-        SparseArray<List<? extends IDbSensor>> dbEvents = sensorData.getDbEvents();
-
-        for (int i = 0, dbEventsSize = dbEvents.size(); i < dbEventsSize; i++) {
-
-            int type = dbEvents.keyAt(i);
-            List<? extends IDbSensor> values = dbEvents.valueAt(i);
-
-            if (values == null || values.isEmpty()) {
-                continue;
-            }
-
-            switch (type) {
-                case SensorApiType.ACCELEROMETER:
-                    daoProvider.getAccelerometerSensorDao().delete((List<DbAccelerometerSensor>) values);
-                    break;
-
-                case SensorApiType.LOCATION:
-                    daoProvider.getLocationSensorDao().delete((List<DbPositionSensor>) values);
-                    break;
-
-                case SensorApiType.MOTION_ACTIVITY:
-                    daoProvider.getMotionActivitySensorDao().delete((List<DbMotionActivitySensor>) values);
-                    break;
-
-                case SensorApiType.FOREGROUND:
-                    daoProvider.getForegroundSensorDao().delete((List<DbForegroundSensor>) values);
-                    break;
-
-                case SensorApiType.FOREGROUND_TRAFFIC:
-                    daoProvider.getNetworkTrafficSensorDao().delete((List<DbNetworkTrafficSensor>) values);
-                    break;
-
-                case SensorApiType.BACKGROUND_TRAFFIC:
-                    daoProvider.getNetworkTrafficSensorDao().delete((List<DbNetworkTrafficSensor>) values);
-                    break;
-
-                case SensorApiType.CONNECTION:
-                    daoProvider.getConnectionSensorDao().delete((List<DbConnectionSensor>) values);
-                    break;
-
-                case SensorApiType.MOBILE_DATA_CONNECTION:
-                    daoProvider.getMobileConnectionSensorDao().delete((List<DbMobileConnectionSensor>) values);
-                    break;
-
-                case SensorApiType.WIFI_CONNECTION:
-                    daoProvider.getWifiConnectionSensorDao().delete((List<DbWifiConnectionSensor>) values);
-                    break;
-
-                case SensorApiType.LIGHT:
-                    daoProvider.getLightSensorDao().delete((List<DbLightSensor>) values);
-                    break;
-
-                case SensorApiType.LOUDNESS:
-                    daoProvider.getLoudnessSensorDao().delete((List<DbLoudnessSensor>) values);
-                    break;
-
-                case SensorApiType.RUNNING_PROCESSES:
-                    daoProvider.getRunningProcessesSensorDao().delete((List<DbRunningProcessesSensor>) values);
-                    break;
-
-                case SensorApiType.RUNNING_SERVICES:
-                    daoProvider.getRunningServicesSensorDao().delete((List<DbRunningServicesSensor>) values);
-                    break;
-
-                case SensorApiType.RUNNING_TASKS:
-                    daoProvider.getRunningTasksSensorDao().delete((List<DbRunningTasksSensor>) values);
-                    break;
-
-                case SensorApiType.RINGTONE:
-                    daoProvider.getRingtoneSensorDao().delete((List<DbRingtoneSensor>) values);
-                    break;
-
-                case SensorApiType.GYROSCOPE:
-                    daoProvider.getGyroscopeSensorDao().delete((List<DbGyroscopeSensor>) values);
-                    break;
-
-                case SensorApiType.MAGNETIC_FIELD:
-                    daoProvider.getMagneticFieldSensorDao().delete((List<DbMagneticFieldSensor>) values);
-                    break;
-
-                case SensorApiType.BROWSER_HISTORY:
-                    daoProvider.getBrowserHistorySensorDao().delete((List<DbBrowserHistorySensor>) values);
-                    break;
-
-                case SensorApiType.CALL_LOG:
-                    daoProvider.getCallLogSensorDao().delete((List<DbCallLogSensor>) values);
-                    break;
-
-                case SensorApiType.POWER_STATE:
-                    daoProvider.getPowerStateSensorDao().delete((List<DbPowerStateSensor>) values);
-                    break;
-
-                case SensorApiType.POWER_LEVEL:
-                    daoProvider.getPowerLevelSensorDao().delete((List<DbPowerLevelSensor>) values);
-                    break;
-
-                case SensorApiType.CALENDAR:
-                    List<DbCalendarSensor> calendarEvents = (List<DbCalendarSensor>) values;
-
-                    for (DbCalendarSensor calEvent : calendarEvents) {
-                        calEvent.setIsNew(Boolean.FALSE);
-                    }
-
-                    // update events state
-                    daoProvider.getCalendarSensorDao().update(calendarEvents);
-                    break;
-
-                case SensorApiType.CONTACT:
-                    List<DbContactSensor> calendarSensors = (List<DbContactSensor>) values;
-
-                    for (DbContactSensor contactEvent : calendarSensors) {
-                        contactEvent.setIsNew(Boolean.FALSE);
-                    }
-
-                    // update events state
-                    daoProvider.getContactSensorDao().update(calendarSensors);
-                    break;
-
-                case SensorApiType.UNI_TUCAN:
-
-                    // marking as not changed
-                    List<DbTucanSensor> tucanSensors = (List<DbTucanSensor>) values;
-
-                    for (DbTucanSensor sensor : tucanSensors) {
-                        sensor.setWasChanged(Boolean.FALSE);
-                    }
-
-                    // update events state
-                    daoProvider.getTucanSensorDao().update(tucanSensors);
-
-                    break;
-
-                case SensorApiType.SOCIAL_FACEBOOK:
-
-                    // marking as not changed
-                    List<DbFacebookSensor> facebookSensors = (List<DbFacebookSensor>) values;
-
-                    for (DbFacebookSensor sensor : facebookSensors) {
-                        sensor.setWasChanged(Boolean.FALSE);
-                    }
-
-                    // update events state
-                    daoProvider.getFacebookSensorDao().update(facebookSensors);
-
-                    break;
-            }
-        }
-
-        Log.d(TAG, "Finished removing data from db");
-    }
-
-    /**
      * Schedules an periodic upload task
      */
     public static void schedulePeriodicTask(Context context, long paramPeriodSecs, long paramFlexSecs, String tag) {
@@ -702,8 +513,10 @@ public class SensorUploadService extends GcmTaskService {
 
     @Override
     public void onDestroy() {
-        RxUtils.unsubscribe(userLoginSubscription);
-        RxUtils.unsubscribe(sensorUploadSubscription);
+        Log.d(TAG, "onDestroy: Destroying upload task");
+        // XXX: dont unsubscribe in onDestroy. its because onDestroy is faster than sending data
+//        RxUtils.unsubscribe(userLoginSubscription);
+//        RxUtils.unsubscribe(sensorUploadSubscription);
         super.onDestroy();
     }
 }
