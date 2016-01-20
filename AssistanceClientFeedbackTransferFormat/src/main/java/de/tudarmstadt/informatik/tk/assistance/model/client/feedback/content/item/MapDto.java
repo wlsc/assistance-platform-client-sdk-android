@@ -6,12 +6,17 @@ package de.tudarmstadt.informatik.tk.assistance.model.client.feedback.content.it
 import java.util.Arrays;
 
 import de.tudarmstadt.informatik.tk.assistance.model.client.feedback.content.ContentDto;
+import de.tudarmstadt.informatik.tk.assistance.model.client.feedback.content.enums.FeedbackItemType;
 
 /**
  * @author Wladimir Schmidt (wlsc.dev@gmail.com)
  * @date 06.12.2015
  */
 public class MapDto extends ContentDto {
+
+  public MapDto() {
+    this.type = FeedbackItemType.MAP.getValue();
+  }
 
   public Double[][] getPoints() {
     return points;

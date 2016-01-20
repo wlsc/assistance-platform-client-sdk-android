@@ -6,12 +6,17 @@ package de.tudarmstadt.informatik.tk.assistance.model.client.feedback.content.it
 import java.util.Arrays;
 
 import de.tudarmstadt.informatik.tk.assistance.model.client.feedback.content.ContentDto;
+import de.tudarmstadt.informatik.tk.assistance.model.client.feedback.content.enums.FeedbackItemType;
 
 /**
  * @author Wladimir Schmidt (wlsc.dev@gmail.com)
  * @date 06.12.2015
  */
 public class TextDto extends ContentDto {
+
+  public TextDto() {
+    this.type = FeedbackItemType.TEXT.getValue();
+  }
 
   public String getCaption() {
     return caption;
