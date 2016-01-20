@@ -1,7 +1,9 @@
 package de.tudarmstadt.informatik.tk.assistance.sdk.util;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -77,5 +79,33 @@ public class AppUtils {
         }
 
         return sb.toString();
+    }
+
+    /**
+     * Opens an APP by package name
+     *
+     * @param context
+     * @param packageName
+     * @return
+     */
+    public static boolean openApp(Context context, String packageName) {
+
+        PackageManager packageManager = context.getPackageManager();
+
+        try {
+            Intent intent = packageManager.getLaunchIntentForPackage(packageName);
+
+            if (intent == null) {
+                return false;
+            }
+
+            intent.addCategory(Intent.CATEGORY_LAUNCHER);
+            context.startActivity(intent);
+
+            return true;
+
+        } catch (RuntimeException e) {
+            return false;
+        }
     }
 }
