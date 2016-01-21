@@ -251,7 +251,6 @@ public class SensorProvider {
 
         if (activeModules.isEmpty()) {
             Log.d(TAG, "User has no active modules!");
-            HarvesterServiceProvider.getInstance(mContext).stopSensingService();
             return;
         }
 
