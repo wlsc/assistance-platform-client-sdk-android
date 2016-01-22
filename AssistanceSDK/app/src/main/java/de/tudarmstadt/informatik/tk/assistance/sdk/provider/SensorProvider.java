@@ -446,12 +446,30 @@ public class SensorProvider {
      */
     public void setContextToSensors(Context context) {
 
+        if (context == null) {
+            return;
+        }
+
         for (Map.Entry<Integer, ISensor> entry : availableSensors.entrySet()) {
-            entry.getValue().setContext(context);
+
+            ISensor sensor = entry.getValue();
+
+            if (sensor == null) {
+                continue;
+            }
+
+            sensor.setContext(context);
         }
 
         for (Map.Entry<Integer, ISensor> entry : runningSensors.entrySet()) {
-            entry.getValue().setContext(context);
+
+            ISensor sensor = entry.getValue();
+
+            if (sensor == null) {
+                continue;
+            }
+
+            sensor.setContext(context);
         }
 
         mContext = context;
@@ -476,6 +494,10 @@ public class SensorProvider {
         for (Map.Entry<Integer, ISensor> entry : availableSensors.entrySet()) {
 
             ISensor sensor = entry.getValue();
+
+            if (sensor == null) {
+                continue;
+            }
 
             if (sensor.getType() == dtoType) {
                 result = sensor;
