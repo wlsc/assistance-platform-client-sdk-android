@@ -275,13 +275,23 @@ public class SensorProvider {
         // measure intervals by their DTO type
         SparseArray<Double> sensorIntervals = new SparseArray<>();
 
+        EventBus eventBus = EventBus.getDefault();
+
         /*
          * Save them in map for further fast access
          */
         for (DbModuleCapability cap : activeModuleCapabilities) {
 
+            if (cap == null) {
+                continue;
+            }
+
             int capType = SensorApiType.getDtoType(cap.getType());
             ISensor sensor = availableSensors.get(capType);
+
+            if (sensor == null) {
+                continue;
+            }
 
             // haven't seen that sensor yet
             if (runningSensors.get(capType) == null) {
@@ -292,13 +302,13 @@ public class SensorProvider {
                 sensorIntervals.put(capType, Math.min(oldCollectionFreq, cap.getCollectionInterval()));
             }
 
-            if (!EventBus.getDefault().isRegistered(sensor)) {
-                EventBus.getDefault().register(sensor);
+            if (!eventBus.isRegistered(sensor)) {
+                eventBus.register(sensor);
             }
         }
 
         // send only if we have subscribers
-        if (EventBus.getDefault().hasSubscriberForEvent(UpdateSensorIntervalEvent.class)) {
+        if (eventBus.hasSubscriberForEvent(UpdateSensorIntervalEvent.class)) {
 
             // send collection interval updates to sensor/events
             for (int i = 0, sensorIntervalsSize = sensorIntervals.size(); i < sensorIntervalsSize; i++) {
@@ -307,7 +317,7 @@ public class SensorProvider {
                     continue;
                 }
 
-                EventBus.getDefault().post(new UpdateSensorIntervalEvent(
+                eventBus.post(new UpdateSensorIntervalEvent(
                         sensorIntervals.keyAt(i),
                         sensorIntervals.valueAt(i)
                 ));
@@ -330,8 +340,8 @@ public class SensorProvider {
                 String foregroundTrafficTypeName = SensorApiType.getApiName(SensorApiType.FOREGROUND_TRAFFIC);
 
                 if (cap.getType().equals(foregroundTypeName) || cap.getType().equals(foregroundTrafficTypeName)) {
-                    if (EventBus.getDefault().hasSubscriberForEvent(ShowAccessibilityServiceTutorialEvent.class)) {
-                        EventBus.getDefault().post(new ShowAccessibilityServiceTutorialEvent());
+                    if (eventBus.hasSubscriberForEvent(ShowAccessibilityServiceTutorialEvent.class)) {
+                        eventBus.post(new ShowAccessibilityServiceTutorialEvent());
                     }
                 }
             }
@@ -640,6 +650,10 @@ public class SensorProvider {
 
         for (DbModule module : modules) {
 
+            if (module == null) {
+                continue;
+            }
+
             List<DbModuleCapability> capabilities = module.getDbModuleCapabilityList();
 
             if (capabilities.isEmpty()) {
@@ -647,6 +661,10 @@ public class SensorProvider {
             }
 
             for (DbModuleCapability cap : capabilities) {
+
+                if (cap == null) {
+                    continue;
+                }
 
                 // we found our active capability type
                 if (cap.getActive() && cap.getUpdateInterval() != null) {
@@ -668,13 +686,21 @@ public class SensorProvider {
         Log.d(TAG, "Starting all stopped sensors...");
 
         if (runningSensors == null) {
+            Log.d(TAG, "Running sensors is null");
             return;
         }
 
         Log.d(TAG, "Running sensors size: " + runningSensors.size());
 
         for (Map.Entry<Integer, ISensor> entry : runningSensors.entrySet()) {
-            entry.getValue().startSensor();
+
+            ISensor sensor = entry.getValue();
+
+            if (sensor == null) {
+                continue;
+            }
+
+            sensor.startSensor();
         }
     }
 
@@ -691,7 +717,14 @@ public class SensorProvider {
         }
 
         for (Map.Entry<Integer, ISensor> entry : runningSensors.entrySet()) {
-            entry.getValue().stopSensor();
+
+            ISensor sensor = entry.getValue();
+
+            if (sensor == null) {
+                continue;
+            }
+
+            sensor.stopSensor();
         }
     }
 
