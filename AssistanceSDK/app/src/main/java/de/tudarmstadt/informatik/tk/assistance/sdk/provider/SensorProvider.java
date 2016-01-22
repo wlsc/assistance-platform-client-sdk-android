@@ -275,8 +275,6 @@ public class SensorProvider {
         // measure intervals by their DTO type
         SparseArray<Double> sensorIntervals = new SparseArray<>();
 
-        EventBus eventBus = EventBus.getDefault();
-
         /*
          * Save them in map for further fast access
          */
@@ -294,13 +292,13 @@ public class SensorProvider {
                 sensorIntervals.put(capType, Math.min(oldCollectionFreq, cap.getCollectionInterval()));
             }
 
-            if (!eventBus.isRegistered(sensor)) {
-                eventBus.register(sensor);
+            if (!EventBus.getDefault().isRegistered(sensor)) {
+                EventBus.getDefault().register(sensor);
             }
         }
 
         // send only if we have subscribers
-        if (eventBus.hasSubscriberForEvent(UpdateSensorIntervalEvent.class)) {
+        if (EventBus.getDefault().hasSubscriberForEvent(UpdateSensorIntervalEvent.class)) {
 
             // send collection interval updates to sensor/events
             for (int i = 0, sensorIntervalsSize = sensorIntervals.size(); i < sensorIntervalsSize; i++) {
@@ -309,7 +307,7 @@ public class SensorProvider {
                     continue;
                 }
 
-                eventBus.post(new UpdateSensorIntervalEvent(
+                EventBus.getDefault().post(new UpdateSensorIntervalEvent(
                         sensorIntervals.keyAt(i),
                         sensorIntervals.valueAt(i)
                 ));
@@ -332,8 +330,8 @@ public class SensorProvider {
                 String foregroundTrafficTypeName = SensorApiType.getApiName(SensorApiType.FOREGROUND_TRAFFIC);
 
                 if (cap.getType().equals(foregroundTypeName) || cap.getType().equals(foregroundTrafficTypeName)) {
-                    if (eventBus.hasSubscriberForEvent(ShowAccessibilityServiceTutorialEvent.class)) {
-                        eventBus.post(new ShowAccessibilityServiceTutorialEvent());
+                    if (EventBus.getDefault().hasSubscriberForEvent(ShowAccessibilityServiceTutorialEvent.class)) {
+                        EventBus.getDefault().post(new ShowAccessibilityServiceTutorialEvent());
                     }
                 }
             }
