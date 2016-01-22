@@ -114,14 +114,6 @@ public class LoudnessSensor extends AbstractPeriodicSensor implements Callback {
         super(context);
 
         setDataIntervalInSec(UPDATE_INTERVAL_IN_SEC);
-        TelephonyManager tManager = (TelephonyManager) context
-                .getSystemService(Context.TELEPHONY_SERVICE);
-
-        mPhoneListener = new PhoneListener(this);
-
-        if (tManager != null) {
-            tManager.listen(mPhoneListener, PhoneStateListener.LISTEN_CALL_STATE);
-        }
     }
 
     /**
@@ -203,15 +195,21 @@ public class LoudnessSensor extends AbstractPeriodicSensor implements Callback {
                 !isPaused) {
 
             isPaused = true;
-            mAudioRecorder.killThread();
+
+            if (mAudioRecorder != null) {
+                mAudioRecorder.killThread();
+            }
 
         } else {
             if (status == TelephonyManager.CALL_STATE_IDLE && isPaused) {
 
                 isPaused = false;
                 mAudioRecorder = new AudioRecorder(this);
-                mAudioRecorder.setName("AudioRecorderThread");
-                mAudioRecorder.start();
+
+                if (mAudioRecorder != null) {
+                    mAudioRecorder.setName("AudioRecorderThread");
+                    mAudioRecorder.start();
+                }
             }
         }
     }
@@ -231,6 +229,18 @@ public class LoudnessSensor extends AbstractPeriodicSensor implements Callback {
     public void startSensor() {
 
         try {
+
+            TelephonyManager tManager = (TelephonyManager) context
+                    .getSystemService(Context.TELEPHONY_SERVICE);
+
+            if (tManager == null) {
+                Log.d(TAG, "TelephonyManager is NULL!");
+                return;
+            }
+
+            mPhoneListener = new PhoneListener(this);
+
+            tManager.listen(mPhoneListener, PhoneStateListener.LISTEN_CALL_STATE);
 
             isPaused = false;
             mAudioRecorder = new AudioRecorder(this);
