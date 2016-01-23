@@ -266,6 +266,10 @@ public class SensorProvider {
 
             for (DbModuleCapability cap : caps) {
 
+                if (cap == null) {
+                    continue;
+                }
+
                 if (cap.getActive()) {
                     activeModuleCapabilities.add(cap);
                 }
@@ -311,7 +315,7 @@ public class SensorProvider {
         if (eventBus.hasSubscriberForEvent(UpdateSensorIntervalEvent.class)) {
 
             // send collection interval updates to sensor/events
-            for (int i = 0, sensorIntervalsSize = sensorIntervals.size(); i < sensorIntervalsSize; i++) {
+            for (int i = 0, size = sensorIntervals.size(); i < size; i++) {
 
                 if (sensorIntervals.valueAt(i) == null) {
                     continue;
@@ -330,6 +334,12 @@ public class SensorProvider {
         // if not, then show tutorial
         if (!PreferenceProvider.getInstance(mContext).getAccessibilityServiceIgnoredByUser()) {
 
+            boolean isActivated = PreferenceProvider
+                    .getInstance(mContext)
+                    .getActivated();
+
+            boolean isAccessibilityTutorialWasShown = false;
+
             for (DbModuleCapability cap : activeModuleCapabilities) {
 
                 if (cap == null || cap.getType() == null) {
@@ -340,7 +350,9 @@ public class SensorProvider {
                 String foregroundTrafficTypeName = SensorApiType.getApiName(SensorApiType.FOREGROUND_TRAFFIC);
 
                 if (cap.getType().equals(foregroundTypeName) || cap.getType().equals(foregroundTrafficTypeName)) {
-                    if (eventBus.hasSubscriberForEvent(ShowAccessibilityServiceTutorialEvent.class)) {
+
+                    if (!isAccessibilityTutorialWasShown && !isActivated && eventBus.hasSubscriberForEvent(ShowAccessibilityServiceTutorialEvent.class)) {
+                        isAccessibilityTutorialWasShown = true;
                         eventBus.post(new ShowAccessibilityServiceTutorialEvent());
                     }
                 }
