@@ -162,6 +162,10 @@ public class ForegroundTrafficSensor extends AbstractTriggeredSensor {
             } finally {
                 setRunning(false);
                 mReceiver = null;
+                if (taskExecutor != null) {
+                    taskExecutor.shutdown();
+                    taskExecutor = null;
+                }
             }
         }
     }
