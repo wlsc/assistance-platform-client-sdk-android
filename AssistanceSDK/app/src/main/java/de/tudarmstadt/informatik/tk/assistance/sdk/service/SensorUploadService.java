@@ -490,24 +490,23 @@ public class SensorUploadService extends GcmTaskService {
         @Override
         public void onNext(com.squareup.okhttp.Response response) {
 
+            Log.d(TAG, "OK response from server received");
+
+            // successful transmission of event data -> remove that data from db
+            sensorProvider.handleSentEvents(sensorData.getDbEvents());
+
+            // reschedule default periodic task
+            if (shouldUseConnectionFallback) {
+                shouldUseConnectionFallback = false;
+
+                rescheduleNormalPeriodicTask();
+            }
+
+            /**
+             *  insert logs data into db
+             */
+
             if (response != null) {
-
-                Log.d(TAG, "OK response from server received");
-
-                // successful transmission of event data -> remove that data from db
-                sensorProvider.handleSentEvents(sensorData.getDbEvents());
-
-                // reschedule default periodic task
-                if (shouldUseConnectionFallback) {
-                    shouldUseConnectionFallback = false;
-
-                    rescheduleNormalPeriodicTask();
-                }
-
-                /**
-                 *  insert logs data into db
-                 */
-
                 try {
 
                     String bodyStr = response.body().string();
@@ -533,7 +532,7 @@ public class SensorUploadService extends GcmTaskService {
                 Log.d(TAG, "Done");
 
             } else {
-                Log.d(TAG, "Somehow response is empty");
+                Log.d(TAG, "Somehow response is NULL");
             }
         }
     }
