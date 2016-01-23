@@ -15,7 +15,7 @@ import rx.Observable;
  */
 public interface SensorUploadApi {
 
-    @POST(Config.ASSISTANCE_EVENT_UPLOAD_SERVICE_ENDPOINT)
+    @POST(Config.ASSISTANCE_SENSOR_UPLOAD_SERVICE_ENDPOINT)
     Observable<Response> uploadData(@Header("X-AUTH-TOKEN") String userToken,
                                     @Body SensorUploadRequestDto body);
 }

@@ -6,6 +6,10 @@ import android.content.Intent;
 import android.os.Handler;
 import android.os.Looper;
 
+import com.google.android.gms.gcm.GcmNetworkManager;
+import com.google.android.gms.gcm.OneoffTask;
+import com.google.android.gms.gcm.Task;
+
 import de.tudarmstadt.informatik.tk.assistance.sdk.provider.PreferenceProvider;
 import de.tudarmstadt.informatik.tk.assistance.sdk.service.SensorUploadService;
 import de.tudarmstadt.informatik.tk.assistance.sdk.util.ConnectionUtils;
@@ -61,6 +65,11 @@ public class WifiStateReceiver extends BroadcastReceiver {
                     uploadAllEvents(context.getApplicationContext());
                 });
 
+                /**
+                 * Send all sensor upload logs
+                 */
+                scheduleSensorLogsUploadTask(context.getApplicationContext());
+
             } else {
                 Log.d(TAG, "Internet is OFFLINE");
             }
@@ -84,7 +93,7 @@ public class WifiStateReceiver extends BroadcastReceiver {
         String userToken = mPreferenceProvider.getUserToken();
 
         if (userToken != null && !userToken.isEmpty()) {
-            scheduleTask(context);
+            scheduleSensorDataUploadTask(context);
         } else {
             Log.d(TAG, "User is not logged in. Scheduled task won't start");
         }
@@ -93,15 +102,40 @@ public class WifiStateReceiver extends BroadcastReceiver {
     }
 
     /**
-     * Starts scheduling of one time task
+     * Schedule all sensor data upload one time task
      *
      * @param context
      */
-    private void scheduleTask(Context context) {
+    private void scheduleSensorDataUploadTask(Context context) {
 
         SensorUploadService.scheduleOneTimeTask(context,
                 WifiStateReceiver.UPLOAD_ALL_TASKS_START_SECS,
                 WifiStateReceiver.UPLOAD_ALL_TASKS_END_SECS,
                 "onetimetag | 1");
+    }
+
+    /**
+     * Schedule all sensor LOGS upload one time task
+     *
+     * @param context
+     */
+    private void scheduleSensorLogsUploadTask(Context context) {
+
+        Log.d(TAG, "Scheduling logs upload one time task...");
+
+        OneoffTask oneTimeTask = new OneoffTask.Builder()
+                .setService(SensorUploadService.class)
+                .setExecutionWindow(WifiStateReceiver.UPLOAD_ALL_TASKS_START_SECS,
+                        WifiStateReceiver.UPLOAD_ALL_TASKS_END_SECS)
+                .setTag("onetimetag | 2")
+                .setPersisted(true)
+                .setUpdateCurrent(true)
+                .setRequiredNetwork(Task.NETWORK_STATE_ANY)
+                .setRequiresCharging(false)
+                .build();
+
+        GcmNetworkManager.getInstance(context).schedule(oneTimeTask);
+
+        Log.d(TAG, "Logs upload task was scheduled!");
     }
 }

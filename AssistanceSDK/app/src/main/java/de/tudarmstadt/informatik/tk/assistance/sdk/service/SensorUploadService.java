@@ -480,11 +480,11 @@ public class SensorUploadService extends GcmTaskService {
             }
 
             // fallbacking periodic request
-            if (!shouldUseConnectionFallback) {
-                shouldUseConnectionFallback = true;
+//            if (!shouldUseConnectionFallback) {
+//                shouldUseConnectionFallback = true;
 
-                rescheduleFallbackPeriodicTask();
-            }
+            rescheduleFallbackPeriodicTask();
+//            }
         }
 
         @Override

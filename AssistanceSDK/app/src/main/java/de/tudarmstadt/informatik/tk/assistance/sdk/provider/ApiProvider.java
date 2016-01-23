@@ -4,6 +4,7 @@ import android.content.Context;
 
 import de.tudarmstadt.informatik.tk.assistance.sdk.provider.api.DeviceApiProvider;
 import de.tudarmstadt.informatik.tk.assistance.sdk.provider.api.LoginApiProvider;
+import de.tudarmstadt.informatik.tk.assistance.sdk.provider.api.LogsApiProvider;
 import de.tudarmstadt.informatik.tk.assistance.sdk.provider.api.ModuleApiProvider;
 import de.tudarmstadt.informatik.tk.assistance.sdk.provider.api.SensorUploadApiProvider;
 import de.tudarmstadt.informatik.tk.assistance.sdk.provider.api.UserApiProvider;
@@ -76,5 +77,14 @@ public class ApiProvider {
      */
     public SensorUploadApiProvider getSensorUploadApiProvider() {
         return SensorUploadApiProvider.getInstance(mContext);
+    }
+
+    /**
+     * LogsApiProvider
+     *
+     * @return
+     */
+    public LogsApiProvider getLogsApiProvider() {
+        return LogsApiProvider.getInstance(mContext);
     }
 }
