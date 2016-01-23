@@ -279,6 +279,11 @@ public class ConnectionSensor extends AbstractTriggeredSensor {
                 WifiInfo info = wifiManager.getConnectionInfo();
 
                 ssid = info.getSSID();
+
+                if (ssid != null) {
+                    ssid = ssid.replaceAll("^\"|\"$", "");
+                }
+
                 bssid = info.getBSSID();
 
                 // TODO: find a way to get a channel
