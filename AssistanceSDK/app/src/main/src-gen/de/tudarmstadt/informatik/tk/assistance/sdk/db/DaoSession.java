@@ -16,6 +16,7 @@ import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbModule;
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbModuleCapability;
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbModuleAllowedCapabilities;
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbNews;
+import de.tudarmstadt.informatik.tk.assistance.sdk.db.LogsSensorUpload;
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbPositionSensor;
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbGyroscopeSensor;
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbAccelerometerSensor;
@@ -52,6 +53,7 @@ import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbModuleDao;
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbModuleCapabilityDao;
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbModuleAllowedCapabilitiesDao;
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbNewsDao;
+import de.tudarmstadt.informatik.tk.assistance.sdk.db.LogsSensorUploadDao;
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbPositionSensorDao;
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbGyroscopeSensorDao;
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbAccelerometerSensorDao;
@@ -97,6 +99,7 @@ public class DaoSession extends AbstractDaoSession {
     private final DaoConfig dbModuleCapabilityDaoConfig;
     private final DaoConfig dbModuleAllowedCapabilitiesDaoConfig;
     private final DaoConfig dbNewsDaoConfig;
+    private final DaoConfig logsSensorUploadDaoConfig;
     private final DaoConfig dbPositionSensorDaoConfig;
     private final DaoConfig dbGyroscopeSensorDaoConfig;
     private final DaoConfig dbAccelerometerSensorDaoConfig;
@@ -133,6 +136,7 @@ public class DaoSession extends AbstractDaoSession {
     private final DbModuleCapabilityDao dbModuleCapabilityDao;
     private final DbModuleAllowedCapabilitiesDao dbModuleAllowedCapabilitiesDao;
     private final DbNewsDao dbNewsDao;
+    private final LogsSensorUploadDao logsSensorUploadDao;
     private final DbPositionSensorDao dbPositionSensorDao;
     private final DbGyroscopeSensorDao dbGyroscopeSensorDao;
     private final DbAccelerometerSensorDao dbAccelerometerSensorDao;
@@ -186,6 +190,9 @@ public class DaoSession extends AbstractDaoSession {
 
         dbNewsDaoConfig = daoConfigMap.get(DbNewsDao.class).clone();
         dbNewsDaoConfig.initIdentityScope(type);
+
+        logsSensorUploadDaoConfig = daoConfigMap.get(LogsSensorUploadDao.class).clone();
+        logsSensorUploadDaoConfig.initIdentityScope(type);
 
         dbPositionSensorDaoConfig = daoConfigMap.get(DbPositionSensorDao.class).clone();
         dbPositionSensorDaoConfig.initIdentityScope(type);
@@ -278,6 +285,7 @@ public class DaoSession extends AbstractDaoSession {
         dbModuleCapabilityDao = new DbModuleCapabilityDao(dbModuleCapabilityDaoConfig, this);
         dbModuleAllowedCapabilitiesDao = new DbModuleAllowedCapabilitiesDao(dbModuleAllowedCapabilitiesDaoConfig, this);
         dbNewsDao = new DbNewsDao(dbNewsDaoConfig, this);
+        logsSensorUploadDao = new LogsSensorUploadDao(logsSensorUploadDaoConfig, this);
         dbPositionSensorDao = new DbPositionSensorDao(dbPositionSensorDaoConfig, this);
         dbGyroscopeSensorDao = new DbGyroscopeSensorDao(dbGyroscopeSensorDaoConfig, this);
         dbAccelerometerSensorDao = new DbAccelerometerSensorDao(dbAccelerometerSensorDaoConfig, this);
@@ -314,6 +322,7 @@ public class DaoSession extends AbstractDaoSession {
         registerDao(DbModuleCapability.class, dbModuleCapabilityDao);
         registerDao(DbModuleAllowedCapabilities.class, dbModuleAllowedCapabilitiesDao);
         registerDao(DbNews.class, dbNewsDao);
+        registerDao(LogsSensorUpload.class, logsSensorUploadDao);
         registerDao(DbPositionSensor.class, dbPositionSensorDao);
         registerDao(DbGyroscopeSensor.class, dbGyroscopeSensorDao);
         registerDao(DbAccelerometerSensor.class, dbAccelerometerSensorDao);
@@ -352,6 +361,7 @@ public class DaoSession extends AbstractDaoSession {
         dbModuleCapabilityDaoConfig.getIdentityScope().clear();
         dbModuleAllowedCapabilitiesDaoConfig.getIdentityScope().clear();
         dbNewsDaoConfig.getIdentityScope().clear();
+        logsSensorUploadDaoConfig.getIdentityScope().clear();
         dbPositionSensorDaoConfig.getIdentityScope().clear();
         dbGyroscopeSensorDaoConfig.getIdentityScope().clear();
         dbAccelerometerSensorDaoConfig.getIdentityScope().clear();
@@ -408,6 +418,10 @@ public class DaoSession extends AbstractDaoSession {
 
     public DbNewsDao getDbNewsDao() {
         return dbNewsDao;
+    }
+
+    public LogsSensorUploadDao getLogsSensorUploadDao() {
+        return logsSensorUploadDao;
     }
 
     public DbPositionSensorDao getDbPositionSensorDao() {

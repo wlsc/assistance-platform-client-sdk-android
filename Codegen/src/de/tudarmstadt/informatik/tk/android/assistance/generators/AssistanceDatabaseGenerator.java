@@ -147,6 +147,24 @@ public class AssistanceDatabaseGenerator {
     module.addToMany(assistanceNews, newsFKModuleProperty);
     assistanceNews.addToOne(user, newsFKUserProperty);
     user.addToMany(assistanceNews, newsFKUserProperty);
+      
+    // ****************************************
+    // ---- LOGS AND INTERNAL MEASUREMENTS ----
+    // ****************************************
+    
+    // ----- Logs: Sensor Upload -----
+    Entity logsSensorUpload = schema.addEntity("LogsSensorUpload");
+    logsSensorUpload.setTableName("logs_sensor_upload");
+    logsSensorUpload.addIdProperty().autoincrement().index();
+    logsSensorUpload.addLongProperty("startTime");
+    logsSensorUpload.addLongProperty("processingTime");
+    logsSensorUpload.addLongProperty("responseTime");
+    logsSensorUpload.addStringProperty("networkType");
+    logsSensorUpload.addIntProperty("eventsNumber");
+    logsSensorUpload.addLongProperty("bodySize");
+    
+    Property logsSensorUploadfkDeviceEvent = logsSensorUpload.addLongProperty("userId").index().getProperty();
+    logsSensorUpload.addToOne(user, logsSensorUploadfkDeviceEvent);
     
     // ****************************************
     // ------------ COMMON SENSORS ------------
