@@ -11,6 +11,9 @@ import de.greenrobot.dao.DaoException;
 public class DbUser {
 
     private Long id;
+    /** Not-null value. */
+    private String login;
+    /** Not-null value. */
     private String token;
     private String firstname;
     private String lastname;
@@ -42,8 +45,9 @@ public class DbUser {
         this.id = id;
     }
 
-    public DbUser(Long id, String token, String firstname, String lastname, String primaryEmail, String userpicFilename, String lastLogin, String joinedSince, String uuid, String created) {
+    public DbUser(Long id, String login, String token, String firstname, String lastname, String primaryEmail, String userpicFilename, String lastLogin, String joinedSince, String uuid, String created) {
         this.id = id;
+        this.login = login;
         this.token = token;
         this.firstname = firstname;
         this.lastname = lastname;
@@ -69,10 +73,22 @@ public class DbUser {
         this.id = id;
     }
 
+    /** Not-null value. */
+    public String getLogin() {
+        return login;
+    }
+
+    /** Not-null value; ensure this value is available before it is saved to the database. */
+    public void setLogin(String login) {
+        this.login = login;
+    }
+
+    /** Not-null value. */
     public String getToken() {
         return token;
     }
 
+    /** Not-null value; ensure this value is available before it is saved to the database. */
     public void setToken(String token) {
         this.token = token;
     }

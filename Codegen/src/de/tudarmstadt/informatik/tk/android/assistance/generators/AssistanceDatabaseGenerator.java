@@ -39,7 +39,8 @@ public class AssistanceDatabaseGenerator {
     Entity user = schema.addEntity("DbUser");
     user.setTableName("user");
     user.addIdProperty().autoincrement().index();
-    user.addStringProperty("token").index();
+    user.addStringProperty("login").notNull().index();
+    user.addStringProperty("token").notNull().index();
     user.addStringProperty("firstname");
     user.addStringProperty("lastname");
     user.addStringProperty("primaryEmail").notNull().index();
