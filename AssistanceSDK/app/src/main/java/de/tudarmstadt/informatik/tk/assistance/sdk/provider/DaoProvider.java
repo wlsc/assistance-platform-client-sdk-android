@@ -10,6 +10,8 @@ import de.tudarmstadt.informatik.tk.assistance.sdk.db.DaoMaster;
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DaoSession;
 import de.tudarmstadt.informatik.tk.assistance.sdk.provider.dao.device.DeviceDao;
 import de.tudarmstadt.informatik.tk.assistance.sdk.provider.dao.device.DeviceDaoImpl;
+import de.tudarmstadt.informatik.tk.assistance.sdk.provider.dao.logs.upload.sensor.SensorUploadLogsDao;
+import de.tudarmstadt.informatik.tk.assistance.sdk.provider.dao.logs.upload.sensor.SensorUploadLogsDaoImpl;
 import de.tudarmstadt.informatik.tk.assistance.sdk.provider.dao.module.ModuleAllowedCapsDao;
 import de.tudarmstadt.informatik.tk.assistance.sdk.provider.dao.module.ModuleAllowedCapsDaoImpl;
 import de.tudarmstadt.informatik.tk.assistance.sdk.provider.dao.module.ModuleCapabilityDao;
@@ -175,6 +177,21 @@ public class DaoProvider {
      */
     public NewsDao getNewsDao() {
         return NewsDaoImpl.getInstance(mDaoSession);
+    }
+
+    /**
+     * ************************************************************
+     * ******************** LOGS & MEASUREMENTS *******************
+     * ************************************************************
+     */
+
+    /**
+     * SensorUploadLogsDao
+     *
+     * @return
+     */
+    public SensorUploadLogsDao getSensorUploadLogsDao() {
+        return SensorUploadLogsDaoImpl.getInstance(mDaoSession);
     }
 
     /**
