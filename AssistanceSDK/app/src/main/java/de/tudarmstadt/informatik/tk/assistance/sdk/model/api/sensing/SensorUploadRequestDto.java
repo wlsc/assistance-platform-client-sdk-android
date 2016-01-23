@@ -13,7 +13,7 @@ import de.tudarmstadt.informatik.tk.assistance.sdk.model.api.SensorDto;
  * @author Wladimir Schmidt (wlsc.dev@gmail.com)
  * @date 18.09.2015
  */
-public class SensorUploadDto {
+public class SensorUploadRequestDto {
 
     @SerializedName("device_id")
     @Expose
@@ -23,7 +23,7 @@ public class SensorUploadDto {
     @Expose
     private final List<SensorDto> dataEvents;
 
-    public SensorUploadDto(Long serverDeviceId, List<SensorDto> dataEvents) {
+    public SensorUploadRequestDto(Long serverDeviceId, List<SensorDto> dataEvents) {
         this.serverDeviceId = serverDeviceId;
         this.dataEvents = dataEvents;
     }
@@ -38,7 +38,7 @@ public class SensorUploadDto {
 
     @Override
     public String toString() {
-        return "SensorUploadDto{" +
+        return "SensorUploadRequestDto{" +
                 "serverDeviceId=" + serverDeviceId +
                 ", dataEvents=" + dataEvents +
                 '}';

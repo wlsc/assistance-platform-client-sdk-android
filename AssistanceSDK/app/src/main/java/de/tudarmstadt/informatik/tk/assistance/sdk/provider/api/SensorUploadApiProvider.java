@@ -4,7 +4,7 @@ import android.content.Context;
 
 import de.tudarmstadt.informatik.tk.assistance.sdk.model.api.ApiGenerator;
 import de.tudarmstadt.informatik.tk.assistance.sdk.model.api.sensing.SensorUploadApi;
-import de.tudarmstadt.informatik.tk.assistance.sdk.model.api.sensing.SensorUploadDto;
+import de.tudarmstadt.informatik.tk.assistance.sdk.model.api.sensing.SensorUploadRequestDto;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
@@ -38,11 +38,11 @@ public class SensorUploadApiProvider {
      * Returns subscription for sensor upload request
      *
      * @param userToken
-     * @param sensorUploadDto
+     * @param sensorUploadRequestDto
      * @return
      */
-    public Observable<Void> uploadData(String userToken, SensorUploadDto sensorUploadDto) {
-        return api.uploadData(userToken, sensorUploadDto)
+    public Observable<com.squareup.okhttp.Response> uploadData(String userToken, SensorUploadRequestDto sensorUploadRequestDto) {
+        return api.uploadData(userToken, sensorUploadRequestDto)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread());
     }

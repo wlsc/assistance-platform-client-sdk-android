@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.telephony.TelephonyManager;
 
 import com.google.android.gms.gcm.GcmNetworkManager;
 import com.google.android.gms.gcm.GcmTaskService;
@@ -13,25 +14,32 @@ import com.google.android.gms.gcm.Task;
 import com.google.android.gms.gcm.TaskParams;
 import com.google.common.collect.Lists;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import de.tudarmstadt.informatik.tk.assistance.sdk.Config;
+import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbUser;
+import de.tudarmstadt.informatik.tk.assistance.sdk.db.LogsSensorUpload;
 import de.tudarmstadt.informatik.tk.assistance.sdk.model.api.SensorDto;
 import de.tudarmstadt.informatik.tk.assistance.sdk.model.api.login.LoginRequestDto;
 import de.tudarmstadt.informatik.tk.assistance.sdk.model.api.login.LoginResponseDto;
 import de.tudarmstadt.informatik.tk.assistance.sdk.model.api.login.UserDeviceDto;
-import de.tudarmstadt.informatik.tk.assistance.sdk.model.api.sensing.SensorUploadDto;
+import de.tudarmstadt.informatik.tk.assistance.sdk.model.api.sensing.SensorUploadRequestDto;
+import de.tudarmstadt.informatik.tk.assistance.sdk.model.api.sensing.SensorUploadResponseDto;
 import de.tudarmstadt.informatik.tk.assistance.sdk.model.sensing.SensorUploadHolder;
 import de.tudarmstadt.informatik.tk.assistance.sdk.provider.ApiProvider;
+import de.tudarmstadt.informatik.tk.assistance.sdk.provider.DaoProvider;
 import de.tudarmstadt.informatik.tk.assistance.sdk.provider.PreferenceProvider;
 import de.tudarmstadt.informatik.tk.assistance.sdk.provider.SensorProvider;
 import de.tudarmstadt.informatik.tk.assistance.sdk.provider.api.LoginApiProvider;
 import de.tudarmstadt.informatik.tk.assistance.sdk.provider.api.SensorUploadApiProvider;
+import de.tudarmstadt.informatik.tk.assistance.sdk.provider.dao.logs.upload.sensor.SensorUploadLogsDao;
 import de.tudarmstadt.informatik.tk.assistance.sdk.util.ConnectionUtils;
 import de.tudarmstadt.informatik.tk.assistance.sdk.util.GcmUtils;
 import de.tudarmstadt.informatik.tk.assistance.sdk.util.HardwareUtils;
+import de.tudarmstadt.informatik.tk.assistance.sdk.util.JsonUtils;
 import de.tudarmstadt.informatik.tk.assistance.sdk.util.StringUtils;
 import de.tudarmstadt.informatik.tk.assistance.sdk.util.logger.Log;
 import retrofit.RetrofitError;
@@ -72,7 +80,7 @@ public class SensorUploadService extends GcmTaskService {
     private static long periodFallbackSecs = periodSecs;
     // fallback for flexibility in case of server not available
     private static long flexFallbackSecs = flexSecs;
-
+    //--------------------------------------------------------
 
     private static final String UPLOAD_ALL_FLAG_NAME = "UPLOAD_ALL";
     private static final int UPLOAD_ALL_FLAG_VALUE = 1;
@@ -123,8 +131,8 @@ public class SensorUploadService extends GcmTaskService {
                 Log.d(TAG, "Calculated fallback tolerance: " + trueFallbackTolerance);
 
                 // set normal values
-                periodSecs = minUpload;
-                flexSecs = minUpload + trueFallbackTolerance;
+                periodSecs = minUpload + trueFallbackTolerance;
+                flexSecs = minUpload;
                 // set fallback values
                 periodFallbackSecs = periodSecs;
                 flexFallbackSecs = flexSecs;
@@ -252,7 +260,7 @@ public class SensorUploadService extends GcmTaskService {
 
             uploadHandler.post(() -> {
 
-                SensorUploadDto eventUploadRequest = new SensorUploadDto(
+                SensorUploadRequestDto eventUploadRequest = new SensorUploadRequestDto(
                         serverDeviceId,
                         eventPart
                 );
@@ -267,7 +275,7 @@ public class SensorUploadService extends GcmTaskService {
      *
      * @param eventUploadRequest
      */
-    private void doUploadEventData(@Nullable final SensorUploadDto eventUploadRequest) {
+    private void doUploadEventData(@Nullable final SensorUploadRequestDto eventUploadRequest) {
 
         Log.d(TAG, "Uploading data...");
 
@@ -289,7 +297,7 @@ public class SensorUploadService extends GcmTaskService {
         String userToken = mPreferenceProvider.getUserToken();
 
         sensorUploadSubscription = sensorApi.uploadData(userToken, eventUploadRequest)
-                .subscribe(new SensorUploadSubscriber());
+                .subscribe(new SensorUploadSubscriber(eventUploadRequest));
     }
 
     /**
@@ -326,7 +334,79 @@ public class SensorUploadService extends GcmTaskService {
     /**
      * Class to upload sensor data with RxJava
      */
-    private class SensorUploadSubscriber extends Subscriber<Void> {
+    private class SensorUploadSubscriber extends Subscriber<com.squareup.okhttp.Response> {
+
+        private final JsonUtils jsonUtils;
+        private final DbUser user;
+        private final SensorUploadRequestDto eventUploadRequest;
+        private final SensorUploadLogsDao sensorUploadLogsDao;
+        private long requestStartTimeMillis;
+        private LogsSensorUpload logsSensorUpload;
+
+        public SensorUploadSubscriber(SensorUploadRequestDto eventUploadRequest) {
+
+            this.eventUploadRequest = eventUploadRequest;
+            this.logsSensorUpload = new LogsSensorUpload();
+            this.jsonUtils = JsonUtils.getInstance();
+            String userToken = mPreferenceProvider.getUserToken();
+            this.user = DaoProvider.getInstance(getApplicationContext())
+                    .getUserDao()
+                    .getByToken(userToken);
+            this.sensorUploadLogsDao = DaoProvider.getInstance(getApplicationContext()).getSensorUploadLogsDao();
+            this.requestStartTimeMillis = System.currentTimeMillis();
+        }
+
+        @Override
+        public void onStart() {
+            super.onStart();
+
+            logsSensorUpload.setStartTime(requestStartTimeMillis);
+
+            boolean isWifi = ConnectionUtils.isConnectedWifi(getApplicationContext());
+            boolean isMobile = ConnectionUtils.isConnectedMobile(getApplicationContext());
+
+            if (isMobile) {
+
+                int type = ConnectionUtils.getConnectionType(getApplicationContext());
+                String mobileType = "";
+
+                switch (type) {
+                    case TelephonyManager.NETWORK_TYPE_LTE:
+                        mobileType = "4g";
+                        break;
+                    case TelephonyManager.NETWORK_TYPE_HSPA:
+                        mobileType = "4g";
+                        break;
+                    case TelephonyManager.NETWORK_TYPE_HSPAP:
+                        mobileType = "3g";
+                        break;
+                    case TelephonyManager.NETWORK_TYPE_HSDPA:
+                        mobileType = "3g";
+                        break;
+                    case TelephonyManager.NETWORK_TYPE_EDGE:
+                        mobileType = "2g";
+                        break;
+                    case TelephonyManager.NETWORK_TYPE_GPRS:
+                        mobileType = "2g";
+                        break;
+                    case TelephonyManager.NETWORK_TYPE_CDMA:
+                        mobileType = "3g";
+                        break;
+                    case TelephonyManager.NETWORK_TYPE_UMTS:
+                        mobileType = "3g";
+                        break;
+                }
+
+                logsSensorUpload.setNetworkType(mobileType);
+            }
+
+            if (isWifi) {
+                logsSensorUpload.setNetworkType("wlan");
+            }
+
+            logsSensorUpload.setDbUser(user);
+            logsSensorUpload.setEventsNumber(eventUploadRequest.getDataEvents().size());
+        }
 
         @Override
         public void onCompleted() {
@@ -368,6 +448,7 @@ public class SensorUploadService extends GcmTaskService {
                     EVENTS_NUMBER_TO_SPLIT_AFTER = EVENTS_NUMBER_TO_SPLIT_AFTER_DEFAULT;
                 }
 
+                // in case it will be greater than standard default values
                 if (PUSH_NUMBER_OF_EACH_ELEMENTS > PUSH_NUMBER_OF_EACH_ELEMENTS_DEFAULT) {
                     PUSH_NUMBER_OF_EACH_ELEMENTS = PUSH_NUMBER_OF_EACH_ELEMENTS_DEFAULT;
                 }
@@ -407,18 +488,52 @@ public class SensorUploadService extends GcmTaskService {
         }
 
         @Override
-        public void onNext(Void aVoid) {
+        public void onNext(com.squareup.okhttp.Response response) {
 
-            Log.d(TAG, "OK response from server received");
+            if (response != null) {
 
-            // successful transmission of event data -> remove that data from db
-            sensorProvider.handleSentEvents(sensorData.getDbEvents());
+                Log.d(TAG, "OK response from server received");
 
-            // reschedule default periodic task
-            if (shouldUseConnectionFallback) {
-                shouldUseConnectionFallback = false;
+                // successful transmission of event data -> remove that data from db
+                sensorProvider.handleSentEvents(sensorData.getDbEvents());
 
-                rescheduleNormalPeriodicTask();
+                // reschedule default periodic task
+                if (shouldUseConnectionFallback) {
+                    shouldUseConnectionFallback = false;
+
+                    rescheduleNormalPeriodicTask();
+                }
+
+                /**
+                 *  insert logs data into db
+                 */
+
+                try {
+
+                    String bodyStr = response.body().string();
+                    SensorUploadResponseDto responseDto = jsonUtils.getGson()
+                            .fromJson(bodyStr, SensorUploadResponseDto.class);
+
+                    if (responseDto != null) {
+                        logsSensorUpload.setProcessingTime(responseDto.getProcessingTime());
+                    }
+
+                    logsSensorUpload.setBodySize(response.request().body().contentLength());
+
+                } catch (IOException e) {
+                    logsSensorUpload.setProcessingTime(null);
+                } catch (Exception e) {
+                    logsSensorUpload.setProcessingTime(null);
+                }
+
+                logsSensorUpload.setResponseTime(System.currentTimeMillis() - requestStartTimeMillis);
+
+                Log.d(TAG, "Sensor upload logs inserting...");
+                sensorUploadLogsDao.insert(logsSensorUpload);
+                Log.d(TAG, "Done");
+
+            } else {
+                Log.d(TAG, "Somehow response is empty");
             }
         }
     }

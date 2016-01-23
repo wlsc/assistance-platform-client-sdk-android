@@ -143,9 +143,6 @@ public class ConnectionUtils {
         int networkType = networkInfo.getType();
 
         switch (networkType) {
-            case ConnectivityManager.TYPE_WIFI:
-                result = ConnectivityManager.TYPE_WIFI;
-                break;
             case ConnectivityManager.TYPE_WIMAX:
                 result = ConnectivityManager.TYPE_WIMAX;
                 break;
