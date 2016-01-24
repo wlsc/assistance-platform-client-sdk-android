@@ -19,8 +19,9 @@ import java.util.concurrent.TimeUnit;
 
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbPositionSensor;
 import de.tudarmstadt.informatik.tk.assistance.sdk.model.api.sensing.SensorApiType;
-import de.tudarmstadt.informatik.tk.assistance.sdk.sensing.impl.AbstractTriggeredSensor;
 import de.tudarmstadt.informatik.tk.assistance.sdk.provider.PreferenceProvider;
+import de.tudarmstadt.informatik.tk.assistance.sdk.sensing.impl.AbstractTriggeredSensor;
+import de.tudarmstadt.informatik.tk.assistance.sdk.util.ConnectionUtils;
 import de.tudarmstadt.informatik.tk.assistance.sdk.util.DateUtils;
 import de.tudarmstadt.informatik.tk.assistance.sdk.util.logger.Log;
 
@@ -246,8 +247,9 @@ public class LocationSensor extends
         locationRequest.setFastestInterval(FASTEST_INTERVAL_IN_SEC * 1_000);
         // use high accuracy always if update interval is less or equal to 5
         // else use supplied accuracy
-        locationRequest.setPriority(
-                FASTEST_INTERVAL_IN_SEC <= TURN_GPS_AFTER_THRESHOLD_IN_SEC ? HIGH_ACCURACY : accuracy);
+//        locationRequest.setPriority(
+//                FASTEST_INTERVAL_IN_SEC <= TURN_GPS_AFTER_THRESHOLD_IN_SEC ? HIGH_ACCURACY : accuracy);
+        locationRequest.setPriority(accuracy);
 
         return locationRequest;
     }
@@ -420,22 +422,28 @@ public class LocationSensor extends
             } else {
 
                 Log.d(TAG, "Location accuracy (" + location.getAccuracy() + ") is unacceptable!");
-                Log.d(TAG, "Setting up GPS...");
 
-                if (mGoogleApiClient.isConnected()) {
+                if (!ConnectionUtils.isConnectedWifi(context)) {
 
-                    try {
-                        LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient,
-                                getNewLocationRequest(HIGH_ACCURACY),
-                                this);
-                        isGpsActive = true;
+                    Log.d(TAG, "Setting up GPS...");
 
-                    } catch (SecurityException ex) {
-                        Log.d(TAG, "SecurityException: user disabled GPS location permission!");
-                        stopSensor();
+                    if (mGoogleApiClient.isConnected()) {
+
+                        try {
+                            LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient,
+                                    getNewLocationRequest(HIGH_ACCURACY),
+                                    this);
+                            isGpsActive = true;
+
+                        } catch (SecurityException ex) {
+                            Log.d(TAG, "SecurityException: user disabled GPS location permission!");
+                            stopSensor();
+                        }
+                    } else {
+                        Log.d(TAG, "Api client is not connected");
                     }
                 } else {
-                    Log.d(TAG, "Api client is not connected");
+                    Log.d(TAG, "You have WIFI connection. GPS won't start!");
                 }
             }
         }
