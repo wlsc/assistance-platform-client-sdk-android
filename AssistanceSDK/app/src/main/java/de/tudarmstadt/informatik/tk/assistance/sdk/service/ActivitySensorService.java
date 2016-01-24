@@ -5,7 +5,7 @@ import android.content.Intent;
 
 import com.google.android.gms.location.ActivityRecognitionResult;
 
-import de.tudarmstadt.informatik.tk.assistance.sdk.model.sensing.impl.triggered.MotionActivitySensor;
+import de.tudarmstadt.informatik.tk.assistance.sdk.sensing.impl.triggered.MotionActivitySensor;
 import de.tudarmstadt.informatik.tk.assistance.sdk.util.logger.Log;
 
 public class ActivitySensorService extends IntentService {

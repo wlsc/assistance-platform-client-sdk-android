@@ -27,7 +27,7 @@ import de.tudarmstadt.informatik.tk.assistance.sdk.model.api.login.LoginResponse
 import de.tudarmstadt.informatik.tk.assistance.sdk.model.api.login.UserDeviceDto;
 import de.tudarmstadt.informatik.tk.assistance.sdk.model.api.sensing.SensorUploadRequestDto;
 import de.tudarmstadt.informatik.tk.assistance.sdk.model.api.sensing.SensorUploadResponseDto;
-import de.tudarmstadt.informatik.tk.assistance.sdk.model.sensing.SensorUploadHolder;
+import de.tudarmstadt.informatik.tk.assistance.sdk.sensing.SensorUploadHolder;
 import de.tudarmstadt.informatik.tk.assistance.sdk.provider.ApiProvider;
 import de.tudarmstadt.informatik.tk.assistance.sdk.provider.DaoProvider;
 import de.tudarmstadt.informatik.tk.assistance.sdk.provider.PreferenceProvider;

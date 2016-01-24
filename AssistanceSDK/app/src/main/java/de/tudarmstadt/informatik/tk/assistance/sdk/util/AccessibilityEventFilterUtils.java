@@ -14,7 +14,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbForegroundSensor;
-import de.tudarmstadt.informatik.tk.assistance.sdk.model.sensing.impl.triggered.ForegroundSensor;
+import de.tudarmstadt.informatik.tk.assistance.sdk.sensing.impl.triggered.ForegroundSensor;
 import de.tudarmstadt.informatik.tk.assistance.sdk.util.logger.Log;
 
 import static android.content.pm.PackageManager.NameNotFoundException;

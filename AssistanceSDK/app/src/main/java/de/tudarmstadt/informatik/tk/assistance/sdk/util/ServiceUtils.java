@@ -9,7 +9,7 @@ import java.util.Map;
 
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbModule;
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbUser;
-import de.tudarmstadt.informatik.tk.assistance.sdk.model.sensing.ISensor;
+import de.tudarmstadt.informatik.tk.assistance.sdk.sensing.ISensor;
 import de.tudarmstadt.informatik.tk.assistance.sdk.provider.DaoProvider;
 import de.tudarmstadt.informatik.tk.assistance.sdk.provider.PreferenceProvider;
 import de.tudarmstadt.informatik.tk.assistance.sdk.provider.SensorProvider;

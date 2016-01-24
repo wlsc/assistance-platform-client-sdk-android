@@ -5,8 +5,8 @@ import android.content.Intent;
 import android.view.accessibility.AccessibilityEvent;
 
 import de.tudarmstadt.informatik.tk.assistance.sdk.model.api.sensing.SensorApiType;
-import de.tudarmstadt.informatik.tk.assistance.sdk.model.sensing.impl.triggered.ForegroundSensor;
-import de.tudarmstadt.informatik.tk.assistance.sdk.model.sensing.impl.triggered.ForegroundTrafficSensor;
+import de.tudarmstadt.informatik.tk.assistance.sdk.sensing.impl.triggered.ForegroundSensor;
+import de.tudarmstadt.informatik.tk.assistance.sdk.sensing.impl.triggered.ForegroundTrafficSensor;
 import de.tudarmstadt.informatik.tk.assistance.sdk.provider.PreferenceProvider;
 import de.tudarmstadt.informatik.tk.assistance.sdk.provider.SensorProvider;
 import de.tudarmstadt.informatik.tk.assistance.sdk.util.logger.Log;
