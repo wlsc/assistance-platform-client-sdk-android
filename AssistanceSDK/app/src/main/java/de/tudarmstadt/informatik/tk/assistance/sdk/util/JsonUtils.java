@@ -3,6 +3,7 @@ package de.tudarmstadt.informatik.tk.assistance.sdk.util;
 import android.support.annotation.Nullable;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import com.google.gson.JsonSyntaxException;
@@ -21,7 +22,8 @@ public class JsonUtils {
     private static Gson gson;
 
     private JsonUtils() {
-        gson = new Gson();
+        GsonBuilder gsonBuilder = new GsonBuilder().excludeFieldsWithoutExposeAnnotation();
+        gson = gsonBuilder.create();
     }
 
     public static JsonUtils getInstance() {

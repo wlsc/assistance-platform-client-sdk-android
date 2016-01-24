@@ -1,8 +1,6 @@
 package de.tudarmstadt.informatik.tk.assistance.sdk.model.api.sensing;
 
 
-import com.squareup.okhttp.Response;
-
 import de.tudarmstadt.informatik.tk.assistance.sdk.Config;
 import retrofit.http.Body;
 import retrofit.http.Header;
@@ -16,6 +14,6 @@ import rx.Observable;
 public interface SensorUploadApi {
 
     @POST(Config.ASSISTANCE_SENSOR_UPLOAD_SERVICE_ENDPOINT)
-    Observable<Response> uploadData(@Header("X-AUTH-TOKEN") String userToken,
-                                    @Body SensorUploadRequestDto body);
+    Observable<SensorUploadResponseDto> uploadData(@Header("X-AUTH-TOKEN") String userToken,
+                                                   @Body SensorUploadRequestDto body);
 }

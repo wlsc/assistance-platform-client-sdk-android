@@ -14,7 +14,6 @@ import com.google.android.gms.gcm.Task;
 import com.google.android.gms.gcm.TaskParams;
 import com.google.common.collect.Lists;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -334,7 +333,7 @@ public class SensorUploadService extends GcmTaskService {
     /**
      * Class to upload sensor data with RxJava
      */
-    private class SensorUploadSubscriber extends Subscriber<com.squareup.okhttp.Response> {
+    private class SensorUploadSubscriber extends Subscriber<SensorUploadResponseDto> {
 
         private final JsonUtils jsonUtils;
         private final DbUser user;
@@ -361,6 +360,7 @@ public class SensorUploadService extends GcmTaskService {
             super.onStart();
 
             logsSensorUpload.setStartTime(requestStartTimeMillis);
+            logsSensorUpload.setBodySize(Long.valueOf(jsonUtils.getGson().toJson(eventUploadRequest).length()));
 
             boolean isWifi = ConnectionUtils.isConnectedWifi(getApplicationContext());
             boolean isMobile = ConnectionUtils.isConnectedMobile(getApplicationContext());
@@ -488,7 +488,7 @@ public class SensorUploadService extends GcmTaskService {
         }
 
         @Override
-        public void onNext(com.squareup.okhttp.Response response) {
+        public void onNext(SensorUploadResponseDto responseDto) {
 
             Log.d(TAG, "OK response from server received");
 
@@ -505,35 +505,15 @@ public class SensorUploadService extends GcmTaskService {
             /**
              *  insert logs data into db
              */
-
-            if (response != null) {
-                try {
-
-                    String bodyStr = response.body().string();
-                    SensorUploadResponseDto responseDto = jsonUtils.getGson()
-                            .fromJson(bodyStr, SensorUploadResponseDto.class);
-
-                    if (responseDto != null) {
-                        logsSensorUpload.setProcessingTime(responseDto.getProcessingTime());
-                    }
-
-                    logsSensorUpload.setBodySize(response.request().body().contentLength());
-
-                } catch (IOException e) {
-                    logsSensorUpload.setProcessingTime(null);
-                } catch (Exception e) {
-                    logsSensorUpload.setProcessingTime(null);
-                }
-
-                logsSensorUpload.setResponseTime(System.currentTimeMillis() - requestStartTimeMillis);
-
-                Log.d(TAG, "Sensor upload logs inserting...");
-                sensorUploadLogsDao.insert(logsSensorUpload);
-                Log.d(TAG, "Done");
-
-            } else {
-                Log.d(TAG, "Somehow response is NULL");
+            if (responseDto != null) {
+                logsSensorUpload.setProcessingTime(responseDto.getProcessingTime());
             }
+
+            logsSensorUpload.setResponseTime(System.currentTimeMillis() - requestStartTimeMillis);
+
+            Log.d(TAG, "Sensor upload logs inserting...");
+            sensorUploadLogsDao.insert(logsSensorUpload);
+            Log.d(TAG, "Done");
         }
     }
 
