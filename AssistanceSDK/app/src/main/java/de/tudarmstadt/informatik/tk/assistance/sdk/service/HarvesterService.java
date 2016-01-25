@@ -209,7 +209,7 @@ public class HarvesterService extends Service implements Callback {
 
         NotificationCompat.Builder mBuilder =
                 new NotificationCompat.Builder(this)
-                        .setSmallIcon(R.drawable.ic_kraken_service)
+                        .setSmallIcon(R.drawable.ic_assistance_service)
                         .setContentTitle(getString(R.string.service_running_notification_title))
                         .setContentText(getString(R.string.service_running_notification_text))
                         .setContentIntent(pendingIntent)

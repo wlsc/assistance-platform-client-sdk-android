@@ -45,7 +45,7 @@ public class ServiceNotificationCreator extends AbstractNotificationCreator {
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context)
                 .setOngoing(isOngoing)
-                .setSmallIcon(R.drawable.ic_kraken_service)
+                .setSmallIcon(R.drawable.ic_assistance_service)
                 .setContentTitle(context.getText(R.string.service_running_notification_title))
                 .setContentText(context.getText(R.string.service_running_notification_text))
                 .setGroup(Config.DEFAULT_NOTIFICATION_GROUP)
