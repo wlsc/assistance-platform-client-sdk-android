@@ -33,6 +33,7 @@ public class LogsUploadService extends GcmTaskService {
     private DaoProvider daoProvider;
 
     private Subscription logsSubscription;
+    private static List<LogsSensorUpload> sensorUploadLogs;
 
     @Override
     public int onRunTask(TaskParams taskParams) {
@@ -75,7 +76,7 @@ public class LogsUploadService extends GcmTaskService {
 
         long deviceId = PreferenceProvider.getInstance(getApplicationContext()).getCurrentDeviceId();
 
-        List<LogsSensorUpload> sensorUploadLogs = daoProvider.getSensorUploadLogsDao().getAll();
+        sensorUploadLogs = daoProvider.getSensorUploadLogsDao().getAll();
 
         if (sensorUploadLogs.isEmpty()) {
             Log.d(TAG, "Not sensor logs to upload");
@@ -113,6 +114,11 @@ public class LogsUploadService extends GcmTaskService {
 
         @Override
         public void onCompleted() {
+
+            // remove transmitted logs
+            if (sensorUploadLogs != null && !sensorUploadLogs.isEmpty()) {
+                daoProvider.getSensorUploadLogsDao().delete(sensorUploadLogs);
+            }
 
             RxUtils.unsubscribe(logsSubscription);
         }
