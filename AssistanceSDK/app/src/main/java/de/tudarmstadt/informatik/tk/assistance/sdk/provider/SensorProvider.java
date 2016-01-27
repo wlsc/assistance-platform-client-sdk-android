@@ -239,8 +239,8 @@ public class SensorProvider {
 
         Log.d(TAG, "Initializing ENABLED sensors...");
 
-        String userToken = preferenceProvider.getUserToken();
-        DbUser user = daoProvider.getUserDao().getByToken(userToken);
+        String userEmail = preferenceProvider.getUserEmail();
+        DbUser user = daoProvider.getUserDao().getByEmail(userEmail);
 
         if (user == null) {
             Log.d(TAG, "user token or user is NULL!");

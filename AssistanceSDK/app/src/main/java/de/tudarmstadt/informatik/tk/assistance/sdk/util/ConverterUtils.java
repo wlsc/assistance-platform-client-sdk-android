@@ -6,6 +6,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -165,5 +166,74 @@ public class ConverterUtils {
         moduleCapability.setCreated(DateUtils.dateToISO8601String(new Date(), Locale.getDefault()));
 
         return moduleCapability;
+    }
+
+    /**
+     * Converts a list of module caps response
+     *
+     * @param moduleCapabilityResponses
+     * @return
+     */
+    public static List<DbModuleCapability> convertModuleCapability(List<ModuleCapabilityResponseDto> moduleCapabilityResponses) {
+
+        if (moduleCapabilityResponses == null) {
+            return Collections.emptyList();
+        }
+
+        List<DbModuleCapability> result = new ArrayList<>(moduleCapabilityResponses.size());
+
+        for (ModuleCapabilityResponseDto resp : moduleCapabilityResponses) {
+            result.add(convertModuleCapability(resp));
+        }
+
+        return result;
+    }
+
+    /**
+     * Converts a list of module caps response
+     *
+     * @param reqCapabilityResponses
+     * @return
+     */
+    public static List<DbModuleCapability> convertModuleCapability(List<ModuleCapabilityResponseDto> reqCapabilityResponses,
+                                                                   List<ModuleCapabilityResponseDto> optCapabilityResponses) {
+
+        if (reqCapabilityResponses == null && optCapabilityResponses == null) {
+            return Collections.emptyList();
+        }
+
+        List<DbModuleCapability> result = new ArrayList<>();
+
+        if (reqCapabilityResponses != null) {
+            for (ModuleCapabilityResponseDto resp : reqCapabilityResponses) {
+
+                DbModuleCapability converted = convertModuleCapability(resp);
+
+                if (converted == null) {
+                    continue;
+                }
+
+                converted.setRequired(true);
+
+                result.add(converted);
+            }
+        }
+
+        if (optCapabilityResponses != null) {
+            for (ModuleCapabilityResponseDto resp : optCapabilityResponses) {
+
+                DbModuleCapability converted = convertModuleCapability(resp);
+
+                if (converted == null) {
+                    continue;
+                }
+
+                converted.setRequired(false);
+
+                result.add(converted);
+            }
+        }
+
+        return result;
     }
 }
