@@ -7,10 +7,8 @@ import android.util.SparseArray;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import de.greenrobot.event.EventBus;
@@ -54,6 +52,11 @@ import de.tudarmstadt.informatik.tk.assistance.sdk.model.api.sensing.sensor.cale
 import de.tudarmstadt.informatik.tk.assistance.sdk.model.api.sensing.sensor.contact.ContactEmailNumber;
 import de.tudarmstadt.informatik.tk.assistance.sdk.model.api.sensing.sensor.contact.ContactSensorDto;
 import de.tudarmstadt.informatik.tk.assistance.sdk.model.enums.EPushType;
+import de.tudarmstadt.informatik.tk.assistance.sdk.provider.dao.sensing.calendar.CalendarReminderSensorDao;
+import de.tudarmstadt.informatik.tk.assistance.sdk.provider.dao.sensing.contact.ContactEmailSensorDao;
+import de.tudarmstadt.informatik.tk.assistance.sdk.provider.dao.sensing.contact.ContactNumberSensorDao;
+import de.tudarmstadt.informatik.tk.assistance.sdk.provider.dao.sensing.social.FacebookSensorDao;
+import de.tudarmstadt.informatik.tk.assistance.sdk.provider.dao.sensing.social.TucanSensorDao;
 import de.tudarmstadt.informatik.tk.assistance.sdk.sensing.ISensor;
 import de.tudarmstadt.informatik.tk.assistance.sdk.sensing.SensorUploadHolder;
 import de.tudarmstadt.informatik.tk.assistance.sdk.sensing.impl.contentobserver.BrowserHistorySensor;
@@ -78,11 +81,6 @@ import de.tudarmstadt.informatik.tk.assistance.sdk.sensing.impl.triggered.LightS
 import de.tudarmstadt.informatik.tk.assistance.sdk.sensing.impl.triggered.LocationSensor;
 import de.tudarmstadt.informatik.tk.assistance.sdk.sensing.impl.triggered.MagneticFieldSensor;
 import de.tudarmstadt.informatik.tk.assistance.sdk.sensing.impl.triggered.MotionActivitySensor;
-import de.tudarmstadt.informatik.tk.assistance.sdk.provider.dao.sensing.calendar.CalendarReminderSensorDao;
-import de.tudarmstadt.informatik.tk.assistance.sdk.provider.dao.sensing.contact.ContactEmailSensorDao;
-import de.tudarmstadt.informatik.tk.assistance.sdk.provider.dao.sensing.contact.ContactNumberSensorDao;
-import de.tudarmstadt.informatik.tk.assistance.sdk.provider.dao.sensing.social.FacebookSensorDao;
-import de.tudarmstadt.informatik.tk.assistance.sdk.provider.dao.sensing.social.TucanSensorDao;
 import de.tudarmstadt.informatik.tk.assistance.sdk.util.logger.Log;
 
 /**
@@ -96,10 +94,10 @@ public class SensorProvider {
     private static final String TAG = SensorProvider.class.getSimpleName();
 
     // general availability of sensors
-    private Map<Integer, ISensor> availableSensors = new HashMap<>();
+    private SparseArray<ISensor> availableSensors = new SparseArray<>();
 
     // running sensors
-    private Map<Integer, ISensor> runningSensors = new HashMap<>();
+    private SparseArray<ISensor> runningSensors = new SparseArray<>();
 
     private static SensorProvider INSTANCE;
 
@@ -393,9 +391,9 @@ public class SensorProvider {
             return result;
         }
 
-        for (Map.Entry<Integer, ISensor> entry : availableSensors.entrySet()) {
+        for (int i = 0, size = availableSensors.size(); i < size; i++) {
 
-            ISensor sensor = entry.getValue();
+            ISensor sensor = availableSensors.valueAt(i);
 
             if (sensor.getPushType().equals(pushType)) {
                 result.add(sensor);
@@ -408,7 +406,7 @@ public class SensorProvider {
     /**
      * Returns all available sensors in the system
      */
-    public Map<Integer, ISensor> getAvailableSensors() {
+    public SparseArray<ISensor> getAvailableSensors() {
         return availableSensors;
     }
 
@@ -427,7 +425,7 @@ public class SensorProvider {
      *
      * @return
      */
-    public Map<Integer, ISensor> getRunningSensors() {
+    public SparseArray<ISensor> getRunningSensors() {
         Log.d(TAG, "Running sensors: " + runningSensors.size());
         return runningSensors;
     }
@@ -470,9 +468,9 @@ public class SensorProvider {
             return;
         }
 
-        for (Map.Entry<Integer, ISensor> entry : availableSensors.entrySet()) {
+        for (int i = 0, size = availableSensors.size(); i < size; i++) {
 
-            ISensor sensor = entry.getValue();
+            ISensor sensor = availableSensors.valueAt(i);
 
             if (sensor == null) {
                 continue;
@@ -481,9 +479,9 @@ public class SensorProvider {
             sensor.setContext(context);
         }
 
-        for (Map.Entry<Integer, ISensor> entry : runningSensors.entrySet()) {
+        for (int i = 0, size = runningSensors.size(); i < size; i++) {
 
-            ISensor sensor = entry.getValue();
+            ISensor sensor = runningSensors.valueAt(i);
 
             if (sensor == null) {
                 continue;
@@ -511,9 +509,9 @@ public class SensorProvider {
 
         int dtoType = SensorApiType.getDtoType(apiDtoType);
 
-        for (Map.Entry<Integer, ISensor> entry : availableSensors.entrySet()) {
+        for (int i = 0, size = availableSensors.size(); i < size; i++) {
 
-            ISensor sensor = entry.getValue();
+            ISensor sensor = availableSensors.valueAt(i);
 
             if (sensor == null) {
                 continue;
@@ -704,9 +702,9 @@ public class SensorProvider {
 
         Log.d(TAG, "Running sensors size: " + runningSensors.size());
 
-        for (Map.Entry<Integer, ISensor> entry : runningSensors.entrySet()) {
+        for (int i = 0, size = runningSensors.size(); i < size; i++) {
 
-            ISensor sensor = entry.getValue();
+            ISensor sensor = runningSensors.valueAt(i);
 
             if (sensor == null) {
                 continue;
@@ -728,9 +726,9 @@ public class SensorProvider {
             return;
         }
 
-        for (Map.Entry<Integer, ISensor> entry : runningSensors.entrySet()) {
+        for (int i = 0, size = runningSensors.size(); i < size; i++) {
 
-            ISensor sensor = entry.getValue();
+            ISensor sensor = runningSensors.valueAt(i);
 
             if (sensor == null) {
                 continue;
@@ -964,14 +962,14 @@ public class SensorProvider {
 
         long deviceId = preferenceProvider.getCurrentDeviceId();
 
-        Map<Integer, ISensor> sensors = getRunningSensors();
+        SparseArray<ISensor> sensors = getRunningSensors();
 
         SparseArray<List<? extends IDbSensor>> dbEvents = new SparseArray<>();
         SparseArray<List<? extends SensorDto>> requestEvents = new SparseArray<>();
 
-        for (Map.Entry<Integer, ISensor> entry : sensors.entrySet()) {
+        for (int i = 0, size = sensors.size(); i < size; i++) {
 
-            ISensor sensor = entry.getValue();
+            ISensor sensor = sensors.valueAt(i);
 
             if (sensor == null) {
                 continue;

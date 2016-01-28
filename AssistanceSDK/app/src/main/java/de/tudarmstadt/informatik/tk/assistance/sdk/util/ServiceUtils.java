@@ -2,17 +2,17 @@ package de.tudarmstadt.informatik.tk.assistance.sdk.util;
 
 import android.app.ActivityManager;
 import android.content.Context;
+import android.util.SparseArray;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbModule;
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbUser;
-import de.tudarmstadt.informatik.tk.assistance.sdk.sensing.ISensor;
 import de.tudarmstadt.informatik.tk.assistance.sdk.provider.DaoProvider;
 import de.tudarmstadt.informatik.tk.assistance.sdk.provider.PreferenceProvider;
 import de.tudarmstadt.informatik.tk.assistance.sdk.provider.SensorProvider;
+import de.tudarmstadt.informatik.tk.assistance.sdk.sensing.ISensor;
 import de.tudarmstadt.informatik.tk.assistance.sdk.util.logger.Log;
 
 /**
@@ -53,9 +53,9 @@ public class ServiceUtils {
                 .getModuleDao()
                 .getAllActive(user.getId());
 
-        Map<Integer, ISensor> runningSensors = SensorProvider.getInstance(context).getRunningSensors();
+        SparseArray<ISensor> runningSensors = SensorProvider.getInstance(context).getRunningSensors();
 
-        return activeModules != null && !activeModules.isEmpty() && !runningSensors.isEmpty();
+        return activeModules != null && !activeModules.isEmpty() && runningSensors.size() > 0;
     }
 
     /**
