@@ -188,8 +188,13 @@ public class ContactsSensor extends AbstractContentObserverSensor {
 
                 DbContactSensor contact = entry.getValue();
 
-                syncNumbers(contact);
-                syncMails(contact);
+                new Handler(Looper.getMainLooper()).post(() -> {
+                    syncNumbers(contact);
+                });
+
+                new Handler(Looper.getMainLooper()).post(() -> {
+                    syncMails(contact);
+                });
             }
 
             // remaining contacts are deleted

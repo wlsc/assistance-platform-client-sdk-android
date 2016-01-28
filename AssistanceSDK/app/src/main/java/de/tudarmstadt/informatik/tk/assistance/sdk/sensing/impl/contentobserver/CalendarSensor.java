@@ -22,8 +22,8 @@ import java.util.Map;
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbCalendarReminderSensor;
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbCalendarSensor;
 import de.tudarmstadt.informatik.tk.assistance.sdk.model.api.sensing.SensorApiType;
-import de.tudarmstadt.informatik.tk.assistance.sdk.sensing.impl.AbstractContentObserverSensor;
 import de.tudarmstadt.informatik.tk.assistance.sdk.provider.PreferenceProvider;
+import de.tudarmstadt.informatik.tk.assistance.sdk.sensing.impl.AbstractContentObserverSensor;
 import de.tudarmstadt.informatik.tk.assistance.sdk.util.DateUtils;
 import de.tudarmstadt.informatik.tk.assistance.sdk.util.logger.Log;
 
@@ -183,7 +183,9 @@ public class CalendarSensor extends AbstractContentObserverSensor {
                     entriesToInsert.add(event);
                 }
 
-                syncReminders(event);
+                new Handler(Looper.getMainLooper()).post(() -> {
+                    syncReminders(event);
+                });
             }
 
             if (!entriesToInsert.isEmpty()) {
@@ -201,7 +203,9 @@ public class CalendarSensor extends AbstractContentObserverSensor {
                     break;
                 }
 
-                syncReminders(entry.getValue());
+                new Handler(Looper.getMainLooper()).post(() -> {
+                    syncReminders(entry.getValue());
+                });
             }
 
         } catch (Exception e) {
