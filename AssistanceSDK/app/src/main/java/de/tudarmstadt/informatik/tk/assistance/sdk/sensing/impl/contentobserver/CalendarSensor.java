@@ -11,6 +11,7 @@ import android.os.Looper;
 import android.provider.CalendarContract.Events;
 import android.provider.CalendarContract.Reminders;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.util.LongSparseArray;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -130,7 +131,7 @@ public class CalendarSensor extends AbstractContentObserverSensor {
             return;
         }
 
-        Map<Long, DbCalendarSensor> allExistingEvents = new HashMap<>();
+        LongSparseArray<DbCalendarSensor> allExistingEvents = new LongSparseArray<>();
 
         try {
 
@@ -197,14 +198,16 @@ public class CalendarSensor extends AbstractContentObserverSensor {
             /**
              * Sync reminder at this point
              */
-            for (Map.Entry<Long, DbCalendarSensor> entry : allExistingEvents.entrySet()) {
+            for (int i = 0, size = allExistingEvents.size(); i < size; i++) {
 
                 if (!isRunning()) {
                     break;
                 }
 
+                DbCalendarSensor existingEvent = allExistingEvents.valueAt(i);
+
                 new Handler(Looper.getMainLooper()).post(() -> {
-                    syncReminders(entry.getValue());
+                    syncReminders(existingEvent);
                 });
             }
 
@@ -281,7 +284,7 @@ public class CalendarSensor extends AbstractContentObserverSensor {
         }
     }
 
-    private boolean checkForChange(Map<Long, DbCalendarSensor> map, DbCalendarSensor newItem) {
+    private boolean checkForChange(LongSparseArray<DbCalendarSensor> map, DbCalendarSensor newItem) {
 
         Long eventId = newItem.getEventId();
 
@@ -289,7 +292,8 @@ public class CalendarSensor extends AbstractContentObserverSensor {
             return false;
         }
 
-        DbCalendarSensor existingItem = map.remove(eventId);
+        DbCalendarSensor existingItem = map.get(eventId);
+        map.delete(eventId);
 
         if (existingItem == null) {
 

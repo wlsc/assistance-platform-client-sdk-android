@@ -14,6 +14,7 @@ import android.provider.ContactsContract.CommonDataKinds.Note;
 import android.provider.ContactsContract.CommonDataKinds.Phone;
 import android.provider.ContactsContract.Data;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.util.LongSparseArray;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -109,7 +110,7 @@ public class ContactsSensor extends AbstractContentObserverSensor {
             }
 
             String created = DateUtils.dateToISO8601String(new Date(), Locale.getDefault());
-            Map<Long, DbContactSensor> allExistingContacts = getAllExistingContacts();
+            LongSparseArray<DbContactSensor> allExistingContacts = getAllExistingContacts();
 
             while (cursor.moveToNext() && isRunning()) {
 
@@ -180,13 +181,13 @@ public class ContactsSensor extends AbstractContentObserverSensor {
             }
 
             // this deletes implicitly all numbers and mails which have no contact anymore
-            for (Map.Entry<Long, DbContactSensor> entry : allExistingContacts.entrySet()) {
+            for (int i = 0, size = allExistingContacts.size(); i < size; i++) {
 
                 if (!isRunning()) {
                     return;
                 }
 
-                DbContactSensor contact = entry.getValue();
+                DbContactSensor contact = allExistingContacts.valueAt(i);
 
                 new Handler(Looper.getMainLooper()).post(() -> {
                     syncNumbers(contact);
@@ -218,19 +219,19 @@ public class ContactsSensor extends AbstractContentObserverSensor {
         }
     }
 
-    private boolean deleteRemainingEntries(Map<Long, DbContactSensor> allExistingContacts, boolean b) {
+    private boolean deleteRemainingEntries(LongSparseArray<DbContactSensor> allExistingContacts, boolean b) {
 
         boolean bSomethingDeleted = false;
 
         List<DbContactSensor> entriesToDelete = new ArrayList<>();
 
-        for (Map.Entry<Long, DbContactSensor> entry : allExistingContacts.entrySet()) {
+        for (int i = 0, size = allExistingContacts.size(); i < size; i++) {
 
             if (b && !isRunning()) {
                 return bSomethingDeleted;
             }
 
-            DbContactSensor dbContact = entry.getValue();
+            DbContactSensor dbContact = allExistingContacts.valueAt(i);
 
             dbContact.setIsDeleted(Boolean.TRUE);
             dbContact.setIsNew(Boolean.FALSE);
@@ -516,14 +517,15 @@ public class ContactsSensor extends AbstractContentObserverSensor {
 
     }
 
-    private boolean checkForContactChange(Map<Long, DbContactSensor> map, DbContactSensor newItem) {
+    private boolean checkForContactChange(LongSparseArray<DbContactSensor> map, DbContactSensor newItem) {
 
         long id = newItem.getContactId();
         DbContactSensor existingReminder = map.get(id);
 
         boolean result = false;
 
-        DbContactSensor existingItem = map.remove(id);
+        DbContactSensor existingItem = map.get(id);
+        map.delete(id);
 
         if (existingItem == null) {
 
@@ -571,13 +573,12 @@ public class ContactsSensor extends AbstractContentObserverSensor {
         return false;
     }
 
-    private Map<Long, DbContactSensor> getAllExistingContacts() {
+    private LongSparseArray<DbContactSensor> getAllExistingContacts() {
 
         long deviceId = PreferenceProvider.getInstance(context).getCurrentDeviceId();
 
-        Map<Long, DbContactSensor> result = new HashMap<>();
-
         List<DbContactSensor> allContacts = daoProvider.getContactSensorDao().getAll(deviceId);
+        LongSparseArray<DbContactSensor> result = new LongSparseArray<>(allContacts.size());
 
         for (DbContactSensor event : allContacts) {
             result.put(event.getGlobalContactId(), event);

@@ -20,7 +20,7 @@ public abstract class AbstractContentObserverSensor extends AbstractSensor {
     private static final int TIME_TO_WAIT_BEFORE_SYNCING_IN_SEC = 120;
     // -----------------------------------------------------
 
-    private SyncTimer mTimerTask = null;
+    private SyncTimer mTimerTask;
     private Timer mTimer = new Timer();
     protected Observer mObserver = new Observer();
 
@@ -83,7 +83,7 @@ public abstract class AbstractContentObserverSensor extends AbstractSensor {
         return EPushType.MANUALLY_WLAN_ONLY;
     }
 
-    abstract protected void syncData();
+    protected abstract void syncData();
 
     private class Observer extends ContentObserver {
 

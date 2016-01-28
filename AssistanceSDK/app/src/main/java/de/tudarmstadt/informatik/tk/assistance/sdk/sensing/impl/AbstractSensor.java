@@ -59,8 +59,6 @@ public abstract class AbstractSensor implements ISensor {
     @Override
     public void setDisabledByUser(boolean isDisabled) {
         isDisabledByUser = isDisabled;
-//        SharedPreferences sharedPreferences = context.getApplicationContext().getSharedPreferences(PreferenceProvider.PREFERENCES_NAME, Context.MODE_PRIVATE);
-//        sharedPreferences.edit().putBoolean(SensorType.getApiName(getType()) + PreferenceProvider.PREFERENCES_SENSOR_DISABLED_BY_USER_POSTFIX, isDisabled).apply();
     }
 
     @Override
