@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.BatteryManager;
 import android.os.Build;
+import android.os.PowerManager;
 
 /**
  * @author Wladimir Schmidt (wlsc.dev@gmail.com)
@@ -106,5 +107,30 @@ public class BatteryUtils {
         float batteryPct = level / (float) scale;
 
         return batteryPct;
+    }
+
+    /**
+     * Checks of power save mode is enabled
+     *
+     * @param context
+     * @return
+     */
+    public static boolean isPowerSaveMode(Context context) {
+
+        if (context == null) {
+            return false;
+        }
+
+        PowerManager pm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
+
+        if (pm == null) {
+            return false;
+        }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            return pm.isPowerSaveMode();
+        } else {
+            return false;
+        }
     }
 }

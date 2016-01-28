@@ -54,6 +54,7 @@ public class PowerStatusReceiver extends BroadcastReceiver {
         // default
         powerStateEvent.setChargingState(PowerChargingStatus.NONE);
         powerStateEvent.setPercent(BatteryUtils.getBatteryPercentage(context.getApplicationContext()));
+        powerStateEvent.setPowerSaveMode(BatteryUtils.isPowerSaveMode(context.getApplicationContext()));
         powerStateEvent.setCreated(DateUtils.dateToISO8601String(new Date(), Locale.getDefault()));
 
         boolean isAc = BatteryUtils.isPluggedInWithAc(context.getApplicationContext());
