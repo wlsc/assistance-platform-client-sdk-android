@@ -18,8 +18,8 @@ import java.util.Locale;
 
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbCallLogSensor;
 import de.tudarmstadt.informatik.tk.assistance.sdk.model.api.sensing.SensorApiType;
-import de.tudarmstadt.informatik.tk.assistance.sdk.sensing.impl.AbstractContentObserverSensor;
 import de.tudarmstadt.informatik.tk.assistance.sdk.provider.PreferenceProvider;
+import de.tudarmstadt.informatik.tk.assistance.sdk.sensing.impl.AbstractContentObserverSensor;
 import de.tudarmstadt.informatik.tk.assistance.sdk.util.DateUtils;
 import de.tudarmstadt.informatik.tk.assistance.sdk.util.logger.Log;
 
@@ -163,7 +163,7 @@ public class CallLogSensor extends AbstractContentObserverSensor {
                 callLogEvent.setDuration(getLongByColumnName(cur, CallLog.Calls.DURATION));
                 callLogEvent.setIsNew(Boolean.TRUE);
                 callLogEvent.setIsDeleted(Boolean.FALSE);
-                callLogEvent.setIsUpdated(Boolean.FALSE);
+                callLogEvent.setIsUpdated(Boolean.TRUE);
                 callLogEvent.setDeviceId(deviceId);
                 callLogEvent.setCreated(DateUtils.dateToISO8601String(new Date(), Locale.getDefault()));
 

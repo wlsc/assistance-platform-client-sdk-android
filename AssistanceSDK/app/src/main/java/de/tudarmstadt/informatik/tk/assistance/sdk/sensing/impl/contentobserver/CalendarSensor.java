@@ -174,7 +174,7 @@ public class CalendarSensor extends AbstractContentObserverSensor {
                 event.setTitle(getStringByColumnName(cur, Events.TITLE));
                 event.setIsNew(Boolean.TRUE);
                 event.setIsDeleted(Boolean.FALSE);
-                event.setIsUpdated(Boolean.FALSE);
+                event.setIsUpdated(Boolean.TRUE);
                 event.setDeviceId(deviceId);
                 event.setCreated(created);
 
@@ -253,7 +253,7 @@ public class CalendarSensor extends AbstractContentObserverSensor {
                     reminder.setMinutes(getIntByColumnName(cur, Reminders.MINUTES));
                     reminder.setIsNew(Boolean.TRUE);
                     reminder.setIsDeleted(Boolean.FALSE);
-                    reminder.setIsUpdated(Boolean.FALSE);
+                    reminder.setIsUpdated(Boolean.TRUE);
                     reminder.setDeviceId(deviceId);
                     reminder.setCreated(created);
 
@@ -290,7 +290,7 @@ public class CalendarSensor extends AbstractContentObserverSensor {
         if (existingItem == null) {
 
             newItem.setIsNew(Boolean.TRUE);
-            newItem.setIsUpdated(Boolean.FALSE);
+            newItem.setIsUpdated(Boolean.TRUE);
             newItem.setIsDeleted(Boolean.FALSE);
 
             return true;
@@ -327,7 +327,7 @@ public class CalendarSensor extends AbstractContentObserverSensor {
         if (existingItem == null) {
 
             newItem.setIsNew(Boolean.TRUE);
-            newItem.setIsUpdated(Boolean.FALSE);
+            newItem.setIsUpdated(Boolean.TRUE);
             newItem.setIsDeleted(Boolean.FALSE);
 
             return true;
