@@ -1419,23 +1419,17 @@ public class SensorProvider {
 
                 case SensorApiType.CALL_LOG:
 
-                    List<DbCallLogSensor> callLogList;
-
-                    // give all
-                    if (numberOfElements == 0) {
-                        callLogList = daoProvider
-                                .getCallLogSensorDao()
-                                .getAll(deviceId);
-                    } else {
-                        callLogList = daoProvider
-                                .getCallLogSensorDao()
-                                .getFirstN(numberOfElements, deviceId);
-                    }
-
-                    dbEvents.put(type, callLogList);
-                    requestEvents.put(type, daoProvider
+                    // retrieve all events
+                    List<DbCallLogSensor> callogList = daoProvider
                             .getCallLogSensorDao()
-                            .convertObjects(callLogList));
+                            .getAllUpdated(deviceId);
+
+                    List<SensorDto> calllogListConverted = daoProvider
+                            .getCallLogSensorDao()
+                            .convertObjects(callogList);
+
+                    dbEvents.put(type, callogList);
+                    requestEvents.put(type, calllogListConverted);
 
                     break;
 
@@ -1691,7 +1685,16 @@ public class SensorProvider {
                     break;
 
                 case SensorApiType.CALL_LOG:
-                    daoProvider.getCallLogSensorDao().delete((List<DbCallLogSensor>) values);
+
+                    List<DbCallLogSensor> calllogEvents = (List<DbCallLogSensor>) values;
+
+                    for (DbCallLogSensor logEvent : calllogEvents) {
+                        logEvent.setIsNew(Boolean.FALSE);
+                        logEvent.setIsUpdated(Boolean.FALSE);
+                    }
+
+                    // update events state
+                    daoProvider.getCallLogSensorDao().update(calllogEvents);
                     break;
 
                 case SensorApiType.POWER_STATE:
@@ -1707,6 +1710,7 @@ public class SensorProvider {
 
                     for (DbCalendarSensor calEvent : calendarEvents) {
                         calEvent.setIsNew(Boolean.FALSE);
+                        calEvent.setIsUpdated(Boolean.FALSE);
                     }
 
                     // update events state
@@ -1718,6 +1722,7 @@ public class SensorProvider {
 
                     for (DbContactSensor contactEvent : calendarSensors) {
                         contactEvent.setIsNew(Boolean.FALSE);
+                        contactEvent.setIsUpdated(Boolean.FALSE);
                     }
 
                     // update events state

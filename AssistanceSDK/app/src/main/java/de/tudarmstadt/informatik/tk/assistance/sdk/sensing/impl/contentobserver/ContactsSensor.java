@@ -27,8 +27,8 @@ import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbContactNumberSensor;
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbContactSensor;
 import de.tudarmstadt.informatik.tk.assistance.sdk.model.api.sensing.SensorApiType;
 import de.tudarmstadt.informatik.tk.assistance.sdk.model.enums.EPushType;
-import de.tudarmstadt.informatik.tk.assistance.sdk.sensing.impl.AbstractContentObserverSensor;
 import de.tudarmstadt.informatik.tk.assistance.sdk.provider.PreferenceProvider;
+import de.tudarmstadt.informatik.tk.assistance.sdk.sensing.impl.AbstractContentObserverSensor;
 import de.tudarmstadt.informatik.tk.assistance.sdk.util.DateUtils;
 import de.tudarmstadt.informatik.tk.assistance.sdk.util.logger.Log;
 
@@ -158,7 +158,7 @@ public class ContactsSensor extends AbstractContentObserverSensor {
                 sensorContact.setNote(getNote(strContactId));
                 sensorContact.setIsNew(Boolean.TRUE);
                 sensorContact.setIsDeleted(Boolean.FALSE);
-                sensorContact.setIsUpdated(Boolean.FALSE);
+                sensorContact.setIsUpdated(Boolean.TRUE);
                 sensorContact.setCreated(created);
                 sensorContact.setDeviceId(deviceId);
 
@@ -170,10 +170,14 @@ public class ContactsSensor extends AbstractContentObserverSensor {
                 }
 
                 // get extra data
-                syncNumbers(sensorContact);
-                syncMails(sensorContact);
-            }
+                new Handler(Looper.getMainLooper()).post(() -> {
+                    syncNumbers(sensorContact);
+                });
 
+                new Handler(Looper.getMainLooper()).post(() -> {
+                    syncMails(sensorContact);
+                });
+            }
 
             // this deletes implicitly all numbers and mails which have no contact anymore
             for (Map.Entry<Long, DbContactSensor> entry : allExistingContacts.entrySet()) {
@@ -225,7 +229,7 @@ public class ContactsSensor extends AbstractContentObserverSensor {
 
             dbContact.setIsDeleted(Boolean.TRUE);
             dbContact.setIsNew(Boolean.FALSE);
-            dbContact.setIsUpdated(Boolean.FALSE);
+            dbContact.setIsUpdated(Boolean.TRUE);
 
             entriesToDelete.add(dbContact);
 
@@ -256,7 +260,7 @@ public class ContactsSensor extends AbstractContentObserverSensor {
 
             dbContactEmail.setIsDeleted(Boolean.TRUE);
             dbContactEmail.setIsNew(Boolean.FALSE);
-            dbContactEmail.setIsUpdated(Boolean.FALSE);
+            dbContactEmail.setIsUpdated(Boolean.TRUE);
 
             entriesToDelete.add(dbContactEmail);
 
@@ -287,7 +291,7 @@ public class ContactsSensor extends AbstractContentObserverSensor {
 
             dbContactNumber.setIsDeleted(Boolean.TRUE);
             dbContactNumber.setIsNew(Boolean.FALSE);
-            dbContactNumber.setIsUpdated(Boolean.FALSE);
+            dbContactNumber.setIsUpdated(Boolean.TRUE);
 
             entriesToDelete.add(dbContactNumber);
 
@@ -343,7 +347,7 @@ public class ContactsSensor extends AbstractContentObserverSensor {
                 sensorContactMail.setType(getStringByColumnName(emails, Email.TYPE));
                 sensorContactMail.setIsNew(Boolean.TRUE);
                 sensorContactMail.setIsDeleted(Boolean.FALSE);
-                sensorContactMail.setIsUpdated(Boolean.FALSE);
+                sensorContactMail.setIsUpdated(Boolean.TRUE);
                 sensorContactMail.setCreated(created);
                 sensorContactMail.setDeviceId(deviceId);
 
@@ -378,7 +382,7 @@ public class ContactsSensor extends AbstractContentObserverSensor {
         if (existingItem == null) {
 
             newItem.setIsNew(Boolean.TRUE);
-            newItem.setIsUpdated(Boolean.FALSE);
+            newItem.setIsUpdated(Boolean.TRUE);
             newItem.setIsDeleted(Boolean.FALSE);
 
             return true;
@@ -442,7 +446,7 @@ public class ContactsSensor extends AbstractContentObserverSensor {
                 sensorContactNumber.setType(getStringByColumnName(curPhones, Phone.TYPE));
                 sensorContactNumber.setIsNew(Boolean.TRUE);
                 sensorContactNumber.setIsDeleted(Boolean.FALSE);
-                sensorContactNumber.setIsUpdated(Boolean.FALSE);
+                sensorContactNumber.setIsUpdated(Boolean.TRUE);
                 sensorContactNumber.setCreated(created);
                 sensorContactNumber.setDeviceId(deviceId);
 
@@ -479,7 +483,7 @@ public class ContactsSensor extends AbstractContentObserverSensor {
         if (existingItem == null) {
 
             newItem.setIsNew(Boolean.TRUE);
-            newItem.setIsUpdated(Boolean.FALSE);
+            newItem.setIsUpdated(Boolean.TRUE);
             newItem.setIsDeleted(Boolean.FALSE);
 
             return true;
@@ -519,7 +523,7 @@ public class ContactsSensor extends AbstractContentObserverSensor {
         if (existingItem == null) {
 
             newItem.setIsNew(Boolean.TRUE);
-            newItem.setIsUpdated(Boolean.FALSE);
+            newItem.setIsUpdated(Boolean.TRUE);
             newItem.setIsDeleted(Boolean.FALSE);
 
             result = true;

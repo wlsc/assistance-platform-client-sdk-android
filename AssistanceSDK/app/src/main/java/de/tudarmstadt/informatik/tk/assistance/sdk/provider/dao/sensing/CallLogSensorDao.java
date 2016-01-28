@@ -1,5 +1,7 @@
 package de.tudarmstadt.informatik.tk.assistance.sdk.provider.dao.sensing;
 
+import java.util.List;
+
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbCallLogSensor;
 
 /**
@@ -10,4 +12,5 @@ public interface CallLogSensorDao extends CommonEventDao<DbCallLogSensor> {
 
     DbCallLogSensor getLastCallLogEvent();
 
+    List<DbCallLogSensor> getAllUpdated(long deviceId);
 }

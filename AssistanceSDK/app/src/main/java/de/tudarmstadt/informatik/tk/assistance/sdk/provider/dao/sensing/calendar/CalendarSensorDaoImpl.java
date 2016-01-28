@@ -84,7 +84,7 @@ public class CalendarSensorDaoImpl extends
             if (property.name.equals(DEVICE_ID_FIELD_NAME)) {
                 return dao
                         .queryBuilder()
-                        .where(DbCalendarSensorDao.Properties.IsUpdated.eq(1))
+                        .where(DbCalendarSensorDao.Properties.IsUpdated.eq(Boolean.TRUE))
                         .where(property.eq(deviceId))
                         .build()
                         .list();

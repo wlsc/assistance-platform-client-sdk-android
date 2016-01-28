@@ -113,7 +113,7 @@ public class ContactSensorDaoImpl extends
             if (property.name.equals(DEVICE_ID_FIELD_NAME)) {
                 return dao
                         .queryBuilder()
-                        .where(DbContactSensorDao.Properties.IsUpdated.eq(1))
+                        .where(DbContactSensorDao.Properties.IsUpdated.eq(Boolean.TRUE))
                         .where(property.eq(deviceId))
                         .build()
                         .list();
