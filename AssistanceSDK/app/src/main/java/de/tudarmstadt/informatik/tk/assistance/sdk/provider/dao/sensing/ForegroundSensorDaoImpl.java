@@ -49,7 +49,7 @@ public class ForegroundSensorDaoImpl extends
         result.setKeystrokes(sensor.getKeystrokes());
         result.setPackageName(sensor.getPackageName());
         result.setUrl(sensor.getUrl());
-        result.setEventType(SensorApiType.getApiName(sensor.getEventType()));
+        result.setEventType(SensorApiType.getApiName(sensor.getEventType() == null ? -1 : sensor.getEventType()));
         result.setCreated(sensor.getCreated());
 
         return result;
