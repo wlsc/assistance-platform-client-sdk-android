@@ -112,6 +112,8 @@ public class ContactsSensor extends AbstractContentObserverSensor {
             String created = DateUtils.dateToISO8601String(new Date(), Locale.getDefault());
             LongSparseArray<DbContactSensor> allExistingContacts = getAllExistingContacts();
 
+            List<DbContactSensor> entriesToInsert = new ArrayList<>();
+
             while (cursor.moveToNext() && isRunning()) {
 
                 String strContactId = getStringByColumnName(cursor, BaseColumns._ID);
@@ -164,20 +166,20 @@ public class ContactsSensor extends AbstractContentObserverSensor {
                 sensorContact.setDeviceId(deviceId);
 
                 if (checkForContactChange(allExistingContacts, sensorContact)) {
-
-                    Log.d(TAG, "Insert entry");
-                    daoProvider.getContactSensorDao().insert(sensorContact);
-                    Log.d(TAG, "Finished");
+                    entriesToInsert.add(sensorContact);
                 }
 
                 // get extra data
-                new Handler(Looper.getMainLooper()).post(() -> {
-                    syncNumbers(sensorContact);
-                });
+                new Handler(Looper.getMainLooper()).post(() -> syncNumbers(sensorContact));
+                new Handler(Looper.getMainLooper()).post(() -> syncMails(sensorContact));
+            }
 
-                new Handler(Looper.getMainLooper()).post(() -> {
-                    syncMails(sensorContact);
-                });
+            // insert sensor data in Tx
+            if (!entriesToInsert.isEmpty()) {
+
+                Log.d(TAG, "Inserting entries...");
+                daoProvider.getContactSensorDao().insert(entriesToInsert);
+                Log.d(TAG, "Finished");
             }
 
             // this deletes implicitly all numbers and mails which have no contact anymore
@@ -189,13 +191,8 @@ public class ContactsSensor extends AbstractContentObserverSensor {
 
                 DbContactSensor contact = allExistingContacts.valueAt(i);
 
-                new Handler(Looper.getMainLooper()).post(() -> {
-                    syncNumbers(contact);
-                });
-
-                new Handler(Looper.getMainLooper()).post(() -> {
-                    syncMails(contact);
-                });
+                new Handler(Looper.getMainLooper()).post(() -> syncNumbers(contact));
+                new Handler(Looper.getMainLooper()).post(() -> syncMails(contact));
             }
 
             // remaining contacts are deleted
