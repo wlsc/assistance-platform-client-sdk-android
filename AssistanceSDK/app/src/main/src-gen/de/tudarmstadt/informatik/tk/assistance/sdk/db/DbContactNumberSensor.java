@@ -10,7 +10,7 @@ import de.greenrobot.dao.DaoException;
 public class DbContactNumberSensor implements de.tudarmstadt.informatik.tk.assistance.sdk.interfaces.IDbUpdatableSensor {
 
     private Long id;
-    private Long numberId;
+    private long numberId;
     private String type;
     private String number;
     private Boolean isNew;
@@ -18,7 +18,7 @@ public class DbContactNumberSensor implements de.tudarmstadt.informatik.tk.assis
     private Boolean isDeleted;
     /** Not-null value. */
     private String created;
-    private Long contactId;
+    private long contactId;
     private Long deviceId;
 
     /** Used to resolve relations */
@@ -41,7 +41,7 @@ public class DbContactNumberSensor implements de.tudarmstadt.informatik.tk.assis
         this.id = id;
     }
 
-    public DbContactNumberSensor(Long id, Long numberId, String type, String number, Boolean isNew, Boolean isUpdated, Boolean isDeleted, String created, Long contactId, Long deviceId) {
+    public DbContactNumberSensor(Long id, long numberId, String type, String number, Boolean isNew, Boolean isUpdated, Boolean isDeleted, String created, long contactId, Long deviceId) {
         this.id = id;
         this.numberId = numberId;
         this.type = type;
@@ -68,11 +68,11 @@ public class DbContactNumberSensor implements de.tudarmstadt.informatik.tk.assis
         this.id = id;
     }
 
-    public Long getNumberId() {
+    public long getNumberId() {
         return numberId;
     }
 
-    public void setNumberId(Long numberId) {
+    public void setNumberId(long numberId) {
         this.numberId = numberId;
     }
 
@@ -126,11 +126,11 @@ public class DbContactNumberSensor implements de.tudarmstadt.informatik.tk.assis
         this.created = created;
     }
 
-    public Long getContactId() {
+    public long getContactId() {
         return contactId;
     }
 
-    public void setContactId(Long contactId) {
+    public void setContactId(long contactId) {
         this.contactId = contactId;
     }
 
@@ -144,7 +144,7 @@ public class DbContactNumberSensor implements de.tudarmstadt.informatik.tk.assis
 
     /** To-one relationship, resolved on first access. */
     public DbContactSensor getDbContactSensor() {
-        Long __key = this.contactId;
+        long __key = this.contactId;
         if (dbContactSensor__resolvedKey == null || !dbContactSensor__resolvedKey.equals(__key)) {
             if (daoSession == null) {
                 throw new DaoException("Entity is detached from DAO context");
@@ -160,9 +160,12 @@ public class DbContactNumberSensor implements de.tudarmstadt.informatik.tk.assis
     }
 
     public void setDbContactSensor(DbContactSensor dbContactSensor) {
+        if (dbContactSensor == null) {
+            throw new DaoException("To-one property 'contactId' has not-null constraint; cannot set to-one to null");
+        }
         synchronized (this) {
             this.dbContactSensor = dbContactSensor;
-            contactId = dbContactSensor == null ? null : dbContactSensor.getId();
+            contactId = dbContactSensor.getId();
             dbContactSensor__resolvedKey = contactId;
         }
     }

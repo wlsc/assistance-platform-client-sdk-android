@@ -18,8 +18,8 @@ public class DbContactEmailSensor implements de.tudarmstadt.informatik.tk.assist
     private Boolean isDeleted;
     /** Not-null value. */
     private String created;
-    private Long contactId;
-    private Long deviceId;
+    private long contactId;
+    private long deviceId;
 
     /** Used to resolve relations */
     private transient DaoSession daoSession;
@@ -41,7 +41,7 @@ public class DbContactEmailSensor implements de.tudarmstadt.informatik.tk.assist
         this.id = id;
     }
 
-    public DbContactEmailSensor(Long id, Long mailId, String address, String type, Boolean isNew, Boolean isUpdated, Boolean isDeleted, String created, Long contactId, Long deviceId) {
+    public DbContactEmailSensor(Long id, Long mailId, String address, String type, Boolean isNew, Boolean isUpdated, Boolean isDeleted, String created, long contactId, long deviceId) {
         this.id = id;
         this.mailId = mailId;
         this.address = address;
@@ -126,25 +126,25 @@ public class DbContactEmailSensor implements de.tudarmstadt.informatik.tk.assist
         this.created = created;
     }
 
-    public Long getContactId() {
+    public long getContactId() {
         return contactId;
     }
 
-    public void setContactId(Long contactId) {
+    public void setContactId(long contactId) {
         this.contactId = contactId;
     }
 
-    public Long getDeviceId() {
+    public long getDeviceId() {
         return deviceId;
     }
 
-    public void setDeviceId(Long deviceId) {
+    public void setDeviceId(long deviceId) {
         this.deviceId = deviceId;
     }
 
     /** To-one relationship, resolved on first access. */
     public DbContactSensor getDbContactSensor() {
-        Long __key = this.contactId;
+        long __key = this.contactId;
         if (dbContactSensor__resolvedKey == null || !dbContactSensor__resolvedKey.equals(__key)) {
             if (daoSession == null) {
                 throw new DaoException("Entity is detached from DAO context");
@@ -160,16 +160,19 @@ public class DbContactEmailSensor implements de.tudarmstadt.informatik.tk.assist
     }
 
     public void setDbContactSensor(DbContactSensor dbContactSensor) {
+        if (dbContactSensor == null) {
+            throw new DaoException("To-one property 'contactId' has not-null constraint; cannot set to-one to null");
+        }
         synchronized (this) {
             this.dbContactSensor = dbContactSensor;
-            contactId = dbContactSensor == null ? null : dbContactSensor.getId();
+            contactId = dbContactSensor.getId();
             dbContactSensor__resolvedKey = contactId;
         }
     }
 
     /** To-one relationship, resolved on first access. */
     public DbDevice getDbDevice() {
-        Long __key = this.deviceId;
+        long __key = this.deviceId;
         if (dbDevice__resolvedKey == null || !dbDevice__resolvedKey.equals(__key)) {
             if (daoSession == null) {
                 throw new DaoException("Entity is detached from DAO context");
@@ -185,9 +188,12 @@ public class DbContactEmailSensor implements de.tudarmstadt.informatik.tk.assist
     }
 
     public void setDbDevice(DbDevice dbDevice) {
+        if (dbDevice == null) {
+            throw new DaoException("To-one property 'deviceId' has not-null constraint; cannot set to-one to null");
+        }
         synchronized (this) {
             this.dbDevice = dbDevice;
-            deviceId = dbDevice == null ? null : dbDevice.getId();
+            deviceId = dbDevice.getId();
             dbDevice__resolvedKey = deviceId;
         }
     }

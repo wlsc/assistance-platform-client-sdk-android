@@ -29,14 +29,14 @@ public class DbContactNumberSensorDao extends AbstractDao<DbContactNumberSensor,
     */
     public static class Properties {
         public final static Property Id = new Property(0, Long.class, "id", true, "_id");
-        public final static Property NumberId = new Property(1, Long.class, "numberId", false, "NUMBER_ID");
+        public final static Property NumberId = new Property(1, long.class, "numberId", false, "NUMBER_ID");
         public final static Property Type = new Property(2, String.class, "type", false, "TYPE");
         public final static Property Number = new Property(3, String.class, "number", false, "NUMBER");
         public final static Property IsNew = new Property(4, Boolean.class, "isNew", false, "IS_NEW");
         public final static Property IsUpdated = new Property(5, Boolean.class, "isUpdated", false, "IS_UPDATED");
         public final static Property IsDeleted = new Property(6, Boolean.class, "isDeleted", false, "IS_DELETED");
         public final static Property Created = new Property(7, String.class, "created", false, "CREATED");
-        public final static Property ContactId = new Property(8, Long.class, "contactId", false, "CONTACT_ID");
+        public final static Property ContactId = new Property(8, long.class, "contactId", false, "CONTACT_ID");
         public final static Property DeviceId = new Property(9, Long.class, "deviceId", false, "DEVICE_ID");
     };
 
@@ -58,18 +58,20 @@ public class DbContactNumberSensorDao extends AbstractDao<DbContactNumberSensor,
         String constraint = ifNotExists? "IF NOT EXISTS ": "";
         db.execSQL("CREATE TABLE " + constraint + "\"contact_number_sensor\" (" + //
                 "\"_id\" INTEGER PRIMARY KEY AUTOINCREMENT ," + // 0: id
-                "\"NUMBER_ID\" INTEGER," + // 1: numberId
+                "\"NUMBER_ID\" INTEGER NOT NULL UNIQUE ," + // 1: numberId
                 "\"TYPE\" TEXT," + // 2: type
                 "\"NUMBER\" TEXT," + // 3: number
                 "\"IS_NEW\" INTEGER," + // 4: isNew
                 "\"IS_UPDATED\" INTEGER," + // 5: isUpdated
                 "\"IS_DELETED\" INTEGER," + // 6: isDeleted
                 "\"CREATED\" TEXT NOT NULL ," + // 7: created
-                "\"CONTACT_ID\" INTEGER," + // 8: contactId
+                "\"CONTACT_ID\" INTEGER NOT NULL ," + // 8: contactId
                 "\"DEVICE_ID\" INTEGER);"); // 9: deviceId
         // Add Indexes
         db.execSQL("CREATE INDEX " + constraint + "IDX_contact_number_sensor__id ON contact_number_sensor" +
                 " (\"_id\");");
+        db.execSQL("CREATE INDEX " + constraint + "IDX_contact_number_sensor_NUMBER_ID ON contact_number_sensor" +
+                " (\"NUMBER_ID\");");
         db.execSQL("CREATE INDEX " + constraint + "IDX_contact_number_sensor_CONTACT_ID ON contact_number_sensor" +
                 " (\"CONTACT_ID\");");
         db.execSQL("CREATE INDEX " + constraint + "IDX_contact_number_sensor_DEVICE_ID ON contact_number_sensor" +
@@ -91,11 +93,7 @@ public class DbContactNumberSensorDao extends AbstractDao<DbContactNumberSensor,
         if (id != null) {
             stmt.bindLong(1, id);
         }
- 
-        Long numberId = entity.getNumberId();
-        if (numberId != null) {
-            stmt.bindLong(2, numberId);
-        }
+        stmt.bindLong(2, entity.getNumberId());
  
         String type = entity.getType();
         if (type != null) {
@@ -122,11 +120,7 @@ public class DbContactNumberSensorDao extends AbstractDao<DbContactNumberSensor,
             stmt.bindLong(7, isDeleted ? 1L: 0L);
         }
         stmt.bindString(8, entity.getCreated());
- 
-        Long contactId = entity.getContactId();
-        if (contactId != null) {
-            stmt.bindLong(9, contactId);
-        }
+        stmt.bindLong(9, entity.getContactId());
  
         Long deviceId = entity.getDeviceId();
         if (deviceId != null) {
@@ -151,14 +145,14 @@ public class DbContactNumberSensorDao extends AbstractDao<DbContactNumberSensor,
     public DbContactNumberSensor readEntity(Cursor cursor, int offset) {
         DbContactNumberSensor entity = new DbContactNumberSensor( //
             cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0), // id
-            cursor.isNull(offset + 1) ? null : cursor.getLong(offset + 1), // numberId
+            cursor.getLong(offset + 1), // numberId
             cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // type
             cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // number
             cursor.isNull(offset + 4) ? null : cursor.getShort(offset + 4) != 0, // isNew
             cursor.isNull(offset + 5) ? null : cursor.getShort(offset + 5) != 0, // isUpdated
             cursor.isNull(offset + 6) ? null : cursor.getShort(offset + 6) != 0, // isDeleted
             cursor.getString(offset + 7), // created
-            cursor.isNull(offset + 8) ? null : cursor.getLong(offset + 8), // contactId
+            cursor.getLong(offset + 8), // contactId
             cursor.isNull(offset + 9) ? null : cursor.getLong(offset + 9) // deviceId
         );
         return entity;
@@ -168,14 +162,14 @@ public class DbContactNumberSensorDao extends AbstractDao<DbContactNumberSensor,
     @Override
     public void readEntity(Cursor cursor, DbContactNumberSensor entity, int offset) {
         entity.setId(cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0));
-        entity.setNumberId(cursor.isNull(offset + 1) ? null : cursor.getLong(offset + 1));
+        entity.setNumberId(cursor.getLong(offset + 1));
         entity.setType(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
         entity.setNumber(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
         entity.setIsNew(cursor.isNull(offset + 4) ? null : cursor.getShort(offset + 4) != 0);
         entity.setIsUpdated(cursor.isNull(offset + 5) ? null : cursor.getShort(offset + 5) != 0);
         entity.setIsDeleted(cursor.isNull(offset + 6) ? null : cursor.getShort(offset + 6) != 0);
         entity.setCreated(cursor.getString(offset + 7));
-        entity.setContactId(cursor.isNull(offset + 8) ? null : cursor.getLong(offset + 8));
+        entity.setContactId(cursor.getLong(offset + 8));
         entity.setDeviceId(cursor.isNull(offset + 9) ? null : cursor.getLong(offset + 9));
      }
     
@@ -203,7 +197,7 @@ public class DbContactNumberSensorDao extends AbstractDao<DbContactNumberSensor,
     }
     
     /** Internal query to resolve the "dbContactNumberSensorList" to-many relationship of DbContactSensor. */
-    public List<DbContactNumberSensor> _queryDbContactSensor_DbContactNumberSensorList(Long contactId) {
+    public List<DbContactNumberSensor> _queryDbContactSensor_DbContactNumberSensorList(long contactId) {
         synchronized (this) {
             if (dbContactSensor_DbContactNumberSensorListQuery == null) {
                 QueryBuilder<DbContactNumberSensor> queryBuilder = queryBuilder();
@@ -240,7 +234,9 @@ public class DbContactNumberSensorDao extends AbstractDao<DbContactNumberSensor,
         int offset = getAllColumns().length;
 
         DbContactSensor dbContactSensor = loadCurrentOther(daoSession.getDbContactSensorDao(), cursor, offset);
-        entity.setDbContactSensor(dbContactSensor);
+         if(dbContactSensor != null) {
+            entity.setDbContactSensor(dbContactSensor);
+        }
         offset += daoSession.getDbContactSensorDao().getAllColumns().length;
 
         DbDevice dbDevice = loadCurrentOther(daoSession.getDbDeviceDao(), cursor, offset);

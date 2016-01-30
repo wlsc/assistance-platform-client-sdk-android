@@ -2,6 +2,7 @@ package de.tudarmstadt.informatik.tk.assistance.sdk.sensing.impl.contentobserver
 
 import android.Manifest;
 import android.content.ContentProviderClient;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
@@ -18,6 +19,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.util.LongSparseArray;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -98,14 +100,21 @@ public class ContactsSensor extends AbstractContentObserverSensor {
 
         //Cursor cursor = context.getContentResolver().query(URI_RAW_CONTACTS, null, "deleted=?", new String[] { "0" }, null);
 
-        ContentProviderClient contentClient = null, namesContentClient = null;
+        ContentProviderClient contentClient = null,
+                namesContentClient = null,
+                numbersContentClient = null,
+                emailsContentClient = null;
         Cursor cursor = null;
         Cursor nameCur = null;
 
         try {
 
-            contentClient = context.getContentResolver().acquireContentProviderClient(URI_CONTACTS);
-            namesContentClient = context.getContentResolver().acquireContentProviderClient(URI_DATA);
+            ContentResolver contentResolver = context.getContentResolver();
+
+            contentClient = contentResolver.acquireContentProviderClient(URI_CONTACTS);
+            namesContentClient = contentResolver.acquireContentProviderClient(URI_DATA);
+            numbersContentClient = contentResolver.acquireContentProviderClient(URI_PHONE);
+            emailsContentClient = contentResolver.acquireContentProviderClient(URI_EMAIL);
 
             if (contentClient == null) {
                 Log.d(TAG, "contentClient is NULL");
@@ -120,6 +129,9 @@ public class ContactsSensor extends AbstractContentObserverSensor {
                 return;
             }
 
+            final ContentProviderClient finalNumbersContentClient = numbersContentClient;
+            final ContentProviderClient finalEmailsContentClient = emailsContentClient;
+
             String created = DateUtils.dateToISO8601String(new Date(), Locale.getDefault());
             LongSparseArray<DbContactSensor> allExistingContacts = getAllExistingContacts();
 
@@ -127,7 +139,8 @@ public class ContactsSensor extends AbstractContentObserverSensor {
 
             while (cursor.moveToNext() && isRunning()) {
 
-                String strContactId = getStringByColumnName(cursor, BaseColumns._ID);
+                long contactId = getLongByColumnName(cursor, BaseColumns._ID);
+                String strContactId = String.valueOf(contactId);
 
                 Log.d(TAG, "sync Contact Id: " + strContactId);
 
@@ -163,15 +176,15 @@ public class ContactsSensor extends AbstractContentObserverSensor {
                 // Fill database object
                 DbContactSensor sensorContact = new DbContactSensor();
 
-                sensorContact.setContactId(Long.valueOf(strContactId));
-                sensorContact.setGlobalContactId(Long.valueOf(strContactId));
+                sensorContact.setContactId(contactId);
+                sensorContact.setGlobalContactId(contactId);
                 sensorContact.setDisplayName(getStringByColumnName(cursor, Data.DISPLAY_NAME_PRIMARY));
                 sensorContact.setGivenName(strGivenName);
                 sensorContact.setFamilyName(strFamilyName);
                 sensorContact.setStarred(getIntByColumnName(cursor, Data.STARRED));
                 sensorContact.setLastTimeContacted(getIntByColumnName(cursor, Data.LAST_TIME_CONTACTED));
                 sensorContact.setTimesContacted(getIntByColumnName(cursor, Data.TIMES_CONTACTED));
-                sensorContact.setNote(getNote(strContactId));
+                sensorContact.setNote(getNote(strContactId, namesContentClient));
                 sensorContact.setIsNew(Boolean.TRUE);
                 sensorContact.setIsDeleted(Boolean.FALSE);
                 sensorContact.setIsUpdated(Boolean.TRUE);
@@ -181,10 +194,6 @@ public class ContactsSensor extends AbstractContentObserverSensor {
                 if (checkForContactChange(allExistingContacts, sensorContact)) {
                     entriesToInsert.add(sensorContact);
                 }
-
-                // get extra data
-                new Handler(Looper.getMainLooper()).post(() -> syncNumbers(sensorContact));
-                new Handler(Looper.getMainLooper()).post(() -> syncMails(sensorContact));
             }
 
             // insert sensor data in Tx
@@ -193,7 +202,32 @@ public class ContactsSensor extends AbstractContentObserverSensor {
                 Log.d(TAG, "Inserting entries...");
                 daoProvider.getContactSensorDao().insert(entriesToInsert);
                 Log.d(TAG, "Finished");
+
+                List<DbContactNumberSensor> numberEntriesToInsert = new ArrayList<>();
+                List<DbContactEmailSensor> emailEntriesToInsert = new ArrayList<>();
+
+                // get them again with IDs
+                entriesToInsert.clear();
+                entriesToInsert = daoProvider.getContactSensorDao().getAll(deviceId);
+
+                for (DbContactSensor sensorContact : entriesToInsert) {
+
+                    // get extra data
+                    numberEntriesToInsert.addAll(getNumbers(sensorContact, finalNumbersContentClient));
+                    emailEntriesToInsert.addAll(getMails(sensorContact, finalEmailsContentClient));
+                }
+
+                Log.d(TAG, "Contact number: Inserting entries");
+                daoProvider.getContactNumberSensorDao().insert(numberEntriesToInsert);
+                Log.d(TAG, "Finished");
+
+                Log.d(TAG, "Contact email: Inserting entries");
+                daoProvider.getContactEmailSensorDao().insert(emailEntriesToInsert);
+                Log.d(TAG, "Finished");
             }
+
+            List<DbContactNumberSensor> numberEntriesToInsert = new ArrayList<>();
+            List<DbContactEmailSensor> emailEntriesToInsert = new ArrayList<>();
 
             // this deletes implicitly all numbers and mails which have no contact anymore
             for (int i = 0, size = allExistingContacts.size(); i < size; i++) {
@@ -204,9 +238,17 @@ public class ContactsSensor extends AbstractContentObserverSensor {
 
                 DbContactSensor contact = allExistingContacts.valueAt(i);
 
-                new Handler(Looper.getMainLooper()).post(() -> syncNumbers(contact));
-                new Handler(Looper.getMainLooper()).post(() -> syncMails(contact));
+                numberEntriesToInsert.addAll(getNumbers(contact, finalNumbersContentClient));
+                emailEntriesToInsert.addAll(getMails(contact, finalEmailsContentClient));
             }
+
+            Log.d(TAG, "Contact number: Inserting entries");
+            daoProvider.getContactNumberSensorDao().insert(numberEntriesToInsert);
+            Log.d(TAG, "Finished");
+
+            Log.d(TAG, "Contact email: Inserting entries");
+            daoProvider.getContactEmailSensorDao().insert(emailEntriesToInsert);
+            Log.d(TAG, "Finished");
 
             // remaining contacts are deleted
             deleteRemainingEntries(allExistingContacts, true);
@@ -216,7 +258,7 @@ public class ContactsSensor extends AbstractContentObserverSensor {
         } catch (NumberFormatException e) {
             Log.d(TAG, "Number format exception", e);
         } catch (Exception e) {
-            Log.e(TAG, "Some error:", e);
+            Log.e(TAG, "Some error in syncData", e);
         } finally {
 
             if (cursor != null) {
@@ -233,6 +275,14 @@ public class ContactsSensor extends AbstractContentObserverSensor {
 
             if (namesContentClient != null) {
                 namesContentClient.release();
+            }
+
+            if (numbersContentClient != null) {
+                numbersContentClient.release();
+            }
+
+            if (emailsContentClient != null) {
+                emailsContentClient.release();
             }
         }
     }
@@ -330,7 +380,13 @@ public class ContactsSensor extends AbstractContentObserverSensor {
         return bSomethingDeleted;
     }
 
-    private void syncMails(DbContactSensor sensorContact) {
+    private List<DbContactEmailSensor> getMails(DbContactSensor sensorContact,
+                                                ContentProviderClient finalEmailsContentClient) {
+
+        if (finalEmailsContentClient == null) {
+            Log.d(TAG, "finalEmailsContentClient is NULL");
+            return Collections.emptyList();
+        }
 
         long deviceId = PreferenceProvider.getInstance(context).getCurrentDeviceId();
         long longContactId = sensorContact.getContactId();
@@ -341,34 +397,33 @@ public class ContactsSensor extends AbstractContentObserverSensor {
                 ContactsContract.CommonDataKinds.Email.TYPE
         };
 
-        Cursor emails = null;
+        Cursor emailsCursor = null;
 
         try {
 
-            emails = context
-                    .getContentResolver()
+            emailsCursor = finalEmailsContentClient
                     .query(URI_EMAIL,
                             columns,
                             ContactsContract.CommonDataKinds.Email.CONTACT_ID + " = " + longContactId,
                             null,
                             null);
 
-            if (emails == null) {
-                return;
+            if (emailsCursor == null) {
+                return Collections.emptyList();
             }
 
             String created = DateUtils.dateToISO8601String(new Date(), Locale.getDefault());
 
             List<DbContactEmailSensor> entriesToInsert = new ArrayList<>();
 
-            while (emails.moveToNext()) {
+            while (emailsCursor.moveToNext()) {
 
                 DbContactEmailSensor sensorContactMail = new DbContactEmailSensor();
 
-                sensorContactMail.setMailId(getLongByColumnName(emails, BaseColumns._ID));
+                sensorContactMail.setMailId(getLongByColumnName(emailsCursor, Email._ID));
                 sensorContactMail.setContactId(sensorContact.getId());
-                sensorContactMail.setAddress(getStringByColumnName(emails, Email.ADDRESS));
-                sensorContactMail.setType(getStringByColumnName(emails, Email.TYPE));
+                sensorContactMail.setAddress(getStringByColumnName(emailsCursor, Email.ADDRESS));
+                sensorContactMail.setType(getStringByColumnName(emailsCursor, Email.TYPE));
                 sensorContactMail.setIsNew(Boolean.TRUE);
                 sensorContactMail.setIsDeleted(Boolean.FALSE);
                 sensorContactMail.setIsUpdated(Boolean.TRUE);
@@ -376,23 +431,24 @@ public class ContactsSensor extends AbstractContentObserverSensor {
                 sensorContactMail.setDeviceId(deviceId);
 
                 if (checkForContactMailChange(mapExistingMails, sensorContactMail)) {
-
                     entriesToInsert.add(sensorContactMail);
                 }
             }
 
-            Log.d(TAG, "Contact email: Insert entry");
-            daoProvider.getContactEmailSensorDao().insert(entriesToInsert);
-            Log.d(TAG, "Finished");
+            // remaining mails are deleted
+            deleteRemainingEmailEntries(mapExistingMails, false);
 
+            return entriesToInsert;
+
+        } catch (Exception e) {
+            Log.e(TAG, "Some error in getMails");
         } finally {
-            if (emails != null) {
-                emails.close();
+            if (emailsCursor != null) {
+                emailsCursor.close();
             }
         }
 
-        // remaining mails are deleted
-        deleteRemainingEmailEntries(mapExistingMails, false);
+        return Collections.emptyList();
     }
 
     private boolean checkForContactMailChange(
@@ -434,7 +490,13 @@ public class ContactsSensor extends AbstractContentObserverSensor {
                 checkForDifference(existingMail.getType(), newMail.getType());
     }
 
-    private void syncNumbers(DbContactSensor sensorContact) {
+    private List<DbContactNumberSensor> getNumbers(DbContactSensor sensorContact,
+                                                   ContentProviderClient finalPhoneNumbersContentClient) {
+
+        if (finalPhoneNumbersContentClient == null) {
+            Log.d(TAG, "NumbersContentClient is NULL");
+            return Collections.emptyList();
+        }
 
         long deviceId = PreferenceProvider.getInstance(context).getCurrentDeviceId();
         long longContactId = sensorContact.getGlobalContactId();
@@ -444,8 +506,7 @@ public class ContactsSensor extends AbstractContentObserverSensor {
 
         try {
 
-            curPhones = context
-                    .getContentResolver()
+            curPhones = finalPhoneNumbersContentClient
                     .query(URI_PHONE,
                             null,
                             Phone.CONTACT_ID + " = " + longContactId,
@@ -453,7 +514,7 @@ public class ContactsSensor extends AbstractContentObserverSensor {
                             null);
 
             if (curPhones == null) {
-                return;
+                return Collections.emptyList();
             }
 
             String created = DateUtils.dateToISO8601String(new Date(), Locale.getDefault());
@@ -475,25 +536,24 @@ public class ContactsSensor extends AbstractContentObserverSensor {
                 sensorContactNumber.setDeviceId(deviceId);
 
                 if (checkForContactNumberChange(mapExistingNumbers, sensorContactNumber)) {
-
                     entriesToInsert.add(sensorContactNumber);
                 }
             }
 
-            Log.d(TAG, "Contact number: Insert entry");
-            daoProvider.getContactNumberSensorDao().insert(entriesToInsert);
-            Log.d(TAG, "Finished");
+            // remaining numbers are deleted
+            deleteRemainingNumberEntries(mapExistingNumbers, false);
+
+            return entriesToInsert;
 
         } catch (Exception e) {
-            Log.e(TAG, "Some error:", e);
+            Log.e(TAG, "Some error in getNumbers", e);
         } finally {
             if (curPhones != null) {
                 curPhones.close();
             }
         }
 
-        // remaining numbers are deleted
-        deleteRemainingNumberEntries(mapExistingNumbers, false);
+        return Collections.emptyList();
     }
 
     private boolean checkForContactNumberChange(
@@ -635,7 +695,7 @@ public class ContactsSensor extends AbstractContentObserverSensor {
         return map;
     }
 
-    private String getNote(String contactId) {
+    private String getNote(String contactId, ContentProviderClient namesContentClient) {
 
         if (context == null) {
             return null;
@@ -650,8 +710,7 @@ public class ContactsSensor extends AbstractContentObserverSensor {
 
         try {
 
-            contacts = context
-                    .getContentResolver()
+            contacts = namesContentClient
                     .query(URI_DATA, columns, where, whereParameters, null);
 
             if (contacts != null) {
@@ -660,6 +719,8 @@ public class ContactsSensor extends AbstractContentObserverSensor {
                 }
             }
 
+        } catch (Exception e) {
+            Log.d(TAG, "Some error in getNote");
         } finally {
             if (contacts != null) {
                 contacts.close();

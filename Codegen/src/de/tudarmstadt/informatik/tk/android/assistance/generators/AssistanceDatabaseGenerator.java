@@ -562,7 +562,7 @@ public class AssistanceDatabaseGenerator {
     contactNumbersEvent.setTableName("contact_number_sensor");
     contactNumbersEvent.addIdProperty().autoincrement().index();
     contactNumbersEvent.implementsInterface(Config.ASSISTANCE_PACKAGE_UPDATABLE_SENSOR);
-    contactNumbersEvent.addLongProperty("numberId");
+    contactNumbersEvent.addLongProperty("numberId").index().notNull().unique();
     contactNumbersEvent.addStringProperty("type");
     contactNumbersEvent.addStringProperty("number");
     contactNumbersEvent.addBooleanProperty("isNew");
@@ -571,7 +571,7 @@ public class AssistanceDatabaseGenerator {
     contactNumbersEvent.addStringProperty("created").notNull();
 
     Property contactNumberfkContactEvent =
-        contactNumbersEvent.addLongProperty("contactId").index().getProperty();
+        contactNumbersEvent.addLongProperty("contactId").index().notNull().getProperty();
     contactNumbersEvent.addToOne(contactEvent, contactNumberfkContactEvent);
     contactEvent.addToMany(contactNumbersEvent, contactNumberfkContactEvent);
     Property contactNumbersfkDeviceEvent = contactNumbersEvent.addLongProperty("deviceId").index().getProperty();
@@ -591,10 +591,10 @@ public class AssistanceDatabaseGenerator {
     contactMailEvent.addStringProperty("created").notNull();
 
     contactNumberfkContactEvent =
-        contactMailEvent.addLongProperty("contactId").index().getProperty();
+        contactMailEvent.addLongProperty("contactId").index().notNull().getProperty();
     contactMailEvent.addToOne(contactEvent, contactNumberfkContactEvent);
     contactEvent.addToMany(contactMailEvent, contactNumberfkContactEvent);
-    Property contactMailfkDeviceEvent = contactMailEvent.addLongProperty("deviceId").index().getProperty();
+    Property contactMailfkDeviceEvent = contactMailEvent.addLongProperty("deviceId").index().notNull().getProperty();
     contactMailEvent.addToOne(device, contactMailfkDeviceEvent);
     
     // ----- Power State Sensor -----
