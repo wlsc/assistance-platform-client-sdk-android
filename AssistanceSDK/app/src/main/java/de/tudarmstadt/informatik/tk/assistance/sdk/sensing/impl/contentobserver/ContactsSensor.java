@@ -1,6 +1,7 @@
 package de.tudarmstadt.informatik.tk.assistance.sdk.sensing.impl.contentobserver;
 
 import android.Manifest;
+import android.content.ContentProviderClient;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
@@ -97,15 +98,25 @@ public class ContactsSensor extends AbstractContentObserverSensor {
 
         //Cursor cursor = context.getContentResolver().query(URI_RAW_CONTACTS, null, "deleted=?", new String[] { "0" }, null);
 
+        ContentProviderClient contentClient = null, namesContentClient = null;
         Cursor cursor = null;
         Cursor nameCur = null;
 
         try {
 
-            cursor = context.getContentResolver()
+            contentClient = context.getContentResolver().acquireContentProviderClient(URI_CONTACTS);
+            namesContentClient = context.getContentResolver().acquireContentProviderClient(URI_DATA);
+
+            if (contentClient == null) {
+                Log.d(TAG, "contentClient is NULL");
+                return;
+            }
+
+            cursor = contentClient
                     .query(URI_CONTACTS, null, Data.IN_VISIBLE_GROUP + " = 1", null, null);
 
             if (cursor == null) {
+                Log.d(TAG, "cursor is NULL");
                 return;
             }
 
@@ -131,19 +142,21 @@ public class ContactsSensor extends AbstractContentObserverSensor {
                         ContactsContract.CommonDataKinds.StructuredName.CONTENT_ITEM_TYPE,
                         strContactId};
 
+                if (namesContentClient != null) {
 
-                nameCur = context.getContentResolver().query(URI_DATA, projectionNameParams, whereName, whereNameParams, null);
+                    nameCur = namesContentClient.query(URI_DATA, projectionNameParams, whereName, whereNameParams, null);
 
-                if (nameCur != null) {
+                    if (nameCur != null) {
 
-                    if (nameCur.moveToFirst()) {
+                        if (nameCur.moveToFirst()) {
 
-                        strGivenName = getStringByColumnName(
-                                nameCur,
-                                ContactsContract.CommonDataKinds.StructuredName.GIVEN_NAME);
-                        strFamilyName = getStringByColumnName(
-                                nameCur,
-                                ContactsContract.CommonDataKinds.StructuredName.FAMILY_NAME);
+                            strGivenName = getStringByColumnName(
+                                    nameCur,
+                                    ContactsContract.CommonDataKinds.StructuredName.GIVEN_NAME);
+                            strFamilyName = getStringByColumnName(
+                                    nameCur,
+                                    ContactsContract.CommonDataKinds.StructuredName.FAMILY_NAME);
+                        }
                     }
                 }
 
@@ -212,6 +225,14 @@ public class ContactsSensor extends AbstractContentObserverSensor {
 
             if (nameCur != null) {
                 nameCur.close();
+            }
+
+            if (contentClient != null) {
+                contentClient.release();
+            }
+
+            if (namesContentClient != null) {
+                namesContentClient.release();
             }
         }
     }
