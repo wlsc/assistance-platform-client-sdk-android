@@ -15,10 +15,8 @@ import android.support.v4.util.LongSparseArray;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbCalendarReminderSensor;
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbCalendarSensor;
@@ -224,7 +222,7 @@ public class CalendarSensor extends AbstractContentObserverSensor {
         long eventId = event.getEventId();
         boolean hasAlarm = event.getHasAlarm();
 
-        Map<Long, DbCalendarReminderSensor> mapExistingReminders = getExistingReminders(eventId);
+        LongSparseArray<DbCalendarReminderSensor> mapExistingReminders = getExistingReminders(eventId);
 
         if (hasAlarm) {
             // optional selection
@@ -318,7 +316,7 @@ public class CalendarSensor extends AbstractContentObserverSensor {
         return false;
     }
 
-    private boolean checkForReminderChange(Map<Long, DbCalendarReminderSensor> map, DbCalendarReminderSensor newItem) {
+    private boolean checkForReminderChange(LongSparseArray<DbCalendarReminderSensor> map, DbCalendarReminderSensor newItem) {
 
         if (newItem == null) {
             throw new IllegalArgumentException();
@@ -330,7 +328,8 @@ public class CalendarSensor extends AbstractContentObserverSensor {
             return false;
         }
 
-        DbCalendarReminderSensor existingItem = map.remove(eventId);
+        DbCalendarReminderSensor existingItem = map.get(eventId);
+        map.delete(eventId);
 
         if (existingItem == null) {
 
@@ -361,7 +360,7 @@ public class CalendarSensor extends AbstractContentObserverSensor {
      * @param eventId
      * @return
      */
-    private Map<Long, DbCalendarReminderSensor> getExistingReminders(long eventId) {
+    private LongSparseArray<DbCalendarReminderSensor> getExistingReminders(long eventId) {
 
         long deviceId = PreferenceProvider.getInstance(context).getCurrentDeviceId();
 
@@ -369,7 +368,7 @@ public class CalendarSensor extends AbstractContentObserverSensor {
                 .getCalendarReminderSensorDao()
                 .getAllByEventId(eventId, deviceId);
 
-        Map<Long, DbCalendarReminderSensor> map = new HashMap<>();
+        LongSparseArray<DbCalendarReminderSensor> map = new LongSparseArray<>();
 
         for (DbCalendarReminderSensor reminder : list) {
             map.put(reminder.getReminderId(), reminder);
