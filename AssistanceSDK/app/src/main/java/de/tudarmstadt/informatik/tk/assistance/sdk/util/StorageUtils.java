@@ -1,6 +1,8 @@
 package de.tudarmstadt.informatik.tk.assistance.sdk.util;
 
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Environment;
 
 import java.io.File;
@@ -195,7 +197,17 @@ public class StorageUtils {
         // check if it exists
         if (oldDb.exists()) {
 
-            FileUtils.copyFile(new FileInputStream(oldDb), new FileOutputStream(newDb));
+            FileInputStream fromFile = new FileInputStream(oldDb);
+            FileOutputStream toFile = new FileOutputStream(newDb);
+
+            FileUtils.copyFile(fromFile, toFile);
+
+            Intent intent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+            intent.setData(Uri.fromFile(newDb));
+            context.sendBroadcast(intent);
+
+            fromFile.close();
+            toFile.close();
 
             return true;
         }
