@@ -32,9 +32,8 @@ public class BatteryWatcherDatabaseGenerator {
     measurements.setTableName("measurement");
     measurements.addIdProperty().autoincrement().index();
     measurements.addIntProperty("voltage");
-    measurements.addIntProperty("cpu");
-    measurements.addIntProperty("memory");
-    measurements.addStringProperty("created").notNull();
+    measurements.addIntProperty("current");
+    measurements.addLongProperty("timestampt").notNull();
     
     // **************************
     // **** GENERATE DAOs ****
