@@ -33,7 +33,7 @@ public class BatteryWatcherDatabaseGenerator {
     measurements.addIdProperty().autoincrement().index();
     measurements.addIntProperty("voltage");
     measurements.addIntProperty("current");
-    measurements.addLongProperty("timestampt").notNull();
+    measurements.addLongProperty("timestamp").notNull();
     
     // **************************
     // **** GENERATE DAOs ****
