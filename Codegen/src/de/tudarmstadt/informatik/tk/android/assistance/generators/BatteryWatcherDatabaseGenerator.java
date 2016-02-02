@@ -31,8 +31,9 @@ public class BatteryWatcherDatabaseGenerator {
     Entity measurements = schema.addEntity("Measurement");
     measurements.setTableName("measurement");
     measurements.addIdProperty().autoincrement().index();
-    measurements.addIntProperty("voltage");
-    measurements.addIntProperty("current");
+    measurements.addFloatProperty("voltage");
+    measurements.addFloatProperty("current");
+    measurements.addFloatProperty("power");
     measurements.addLongProperty("timestamp").notNull();
     
     // **************************
