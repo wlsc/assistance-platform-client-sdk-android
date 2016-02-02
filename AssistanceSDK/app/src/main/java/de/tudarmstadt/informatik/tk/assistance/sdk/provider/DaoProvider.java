@@ -12,8 +12,6 @@ import de.tudarmstadt.informatik.tk.assistance.sdk.provider.dao.device.DeviceDao
 import de.tudarmstadt.informatik.tk.assistance.sdk.provider.dao.device.DeviceDaoImpl;
 import de.tudarmstadt.informatik.tk.assistance.sdk.provider.dao.logs.upload.sensor.SensorUploadLogsDao;
 import de.tudarmstadt.informatik.tk.assistance.sdk.provider.dao.logs.upload.sensor.SensorUploadLogsDaoImpl;
-import de.tudarmstadt.informatik.tk.assistance.sdk.provider.dao.module.ModuleAllowedCapsDao;
-import de.tudarmstadt.informatik.tk.assistance.sdk.provider.dao.module.ModuleAllowedCapsDaoImpl;
 import de.tudarmstadt.informatik.tk.assistance.sdk.provider.dao.module.ModuleCapabilityDao;
 import de.tudarmstadt.informatik.tk.assistance.sdk.provider.dao.module.ModuleCapabilityDaoImpl;
 import de.tudarmstadt.informatik.tk.assistance.sdk.provider.dao.module.ModuleDao;
@@ -159,15 +157,6 @@ public class DaoProvider {
      */
     public ModuleCapabilityDao getModuleCapabilityDao() {
         return ModuleCapabilityDaoImpl.getInstance(mDaoSession);
-    }
-
-    /**
-     * ModuleAllowedCapsDao
-     *
-     * @return
-     */
-    public ModuleAllowedCapsDao getModuleAllowedCapsDao() {
-        return ModuleAllowedCapsDaoImpl.getInstance(mDaoSession);
     }
 
     /**

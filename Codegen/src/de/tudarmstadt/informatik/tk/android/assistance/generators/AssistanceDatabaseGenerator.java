@@ -119,19 +119,7 @@ public class AssistanceDatabaseGenerator {
     moduleCapability.addToOne(module, moduleCapabilityFKModuleProperty);
     module.addToMany(moduleCapability, moduleCapabilityFKModuleProperty);
     
-    // ----- Module types permission scheme -----
-    Entity moduleTypesPerm = schema.addEntity("DbModuleAllowedCapabilities");
-    moduleTypesPerm.setTableName("module_allowed_capabilities");
-    moduleTypesPerm.addIdProperty().autoincrement().index();
-    moduleTypesPerm.addStringProperty("type").notNull().index();
-    moduleTypesPerm.addBooleanProperty("isAllowed").notNull().index();
-    moduleTypesPerm.addStringProperty("created").notNull();
-
-    Property moduleTypesPermFKUserProperty =
-        moduleTypesPerm.addLongProperty("userId").index().getProperty();
-    moduleTypesPerm.addToOne(user, moduleTypesPermFKUserProperty);
-    user.addToMany(moduleTypesPerm, moduleTypesPermFKUserProperty);
-
+    
     // ----- Assistance News scheme -----
     Entity assistanceNews = schema.addEntity("DbNews");
     assistanceNews.setTableName("news");
