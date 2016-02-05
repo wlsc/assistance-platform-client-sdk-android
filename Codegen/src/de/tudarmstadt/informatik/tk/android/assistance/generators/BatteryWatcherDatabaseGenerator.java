@@ -34,6 +34,9 @@ public class BatteryWatcherDatabaseGenerator {
     measurements.addFloatProperty("voltage");
     measurements.addFloatProperty("current");
     measurements.addFloatProperty("power");
+    measurements.addLongProperty("availableMemory");
+    measurements.addLongProperty("totalMemory");
+    measurements.addFloatProperty("cpuLoad");
     measurements.addLongProperty("timestamp").notNull();
     
     // **************************
