@@ -34,7 +34,7 @@
   <string name="sensor_uni_tucan">TUCaN</string>
   <string name="sensor_social_facebook">Facebook</string>
   <string name="service_running_notification_title">Assistance-Service läuft!</string>
-  <string name="service_running_notification_text">Sammeln von Daten...</string>
+  <string name="service_running_notification_text">Sammeln von Daten…</string>
   <string name="finish">Fertig</string>
   <string name="general">Allgemeine</string>
   <string name="login">Anmeldung</string>

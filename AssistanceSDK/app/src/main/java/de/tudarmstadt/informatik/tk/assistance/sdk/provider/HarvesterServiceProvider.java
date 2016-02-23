@@ -49,7 +49,7 @@ public class HarvesterServiceProvider implements ServiceConnection {
         mServiceConnection = this;
         serviceIntent = new Intent(mContext, HarvesterService.class);
 
-        if (!isServiceBound()) {
+        if (!isServiceBound) {
             bindService();
         }
 
@@ -126,7 +126,7 @@ public class HarvesterServiceProvider implements ServiceConnection {
 
         sendMessageToService(HarvesterService.MSG_CMD_STOP_SERVICE);
 
-        if (isServiceBound()) {
+        if (isServiceBound) {
             unbindService();
         }
 
@@ -206,7 +206,7 @@ public class HarvesterServiceProvider implements ServiceConnection {
      */
     public void sendMessageToService(int command) {
 
-        if (isServiceBound()) {
+        if (isServiceBound) {
             if (mMessengerOutgoing != null) {
 
                 try {
@@ -232,7 +232,7 @@ public class HarvesterServiceProvider implements ServiceConnection {
      */
     private void bindService() {
 
-        if (!isServiceBound()) {
+        if (!isServiceBound) {
 
             try {
 
@@ -257,7 +257,7 @@ public class HarvesterServiceProvider implements ServiceConnection {
      */
     public void unbindService() {
 
-        if (isServiceBound()) {
+        if (isServiceBound) {
 
             sendMessageToService(HarvesterService.MSG_CMD_UNREGISTER_CLIENT);
 
