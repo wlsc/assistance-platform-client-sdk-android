@@ -379,25 +379,24 @@ public class LocationSensor extends
                 } else {
                     Log.d(TAG, "Api client is not connected");
                 }
+            }
+
+            if (isGoodLocation) {
+
+                latitude = location.getLatitude();
+                longitude = location.getLongitude();
+                accuracyHorizontal = (double) location.getAccuracy();
+                accuracyVertical = (double) location.getAccuracy();
+                speed = location.getSpeed();
+                altitude = location.getAltitude();
+
+                // saving them to SharedPreferences to further fast access
+                preferenceProvider.setLastLatitude(latitude);
+                preferenceProvider.setLastLongitude(longitude);
+
+                dumpData();
             } else {
-
-                if (isGoodLocation) {
-
-                    latitude = location.getLatitude();
-                    longitude = location.getLongitude();
-                    accuracyHorizontal = (double) location.getAccuracy();
-                    accuracyVertical = (double) location.getAccuracy();
-                    speed = location.getSpeed();
-                    altitude = location.getAltitude();
-
-                    // saving them to SharedPreferences to further fast access
-                    preferenceProvider.setLastLatitude(latitude);
-                    preferenceProvider.setLastLongitude(longitude);
-
-                    dumpData();
-                } else {
-                    Log.d(TAG, "Location accuracy (" + location.getAccuracy() + ") is unacceptable!");
-                }
+                Log.d(TAG, "Location accuracy (" + location.getAccuracy() + ") is unacceptable!");
             }
 
         } else {
