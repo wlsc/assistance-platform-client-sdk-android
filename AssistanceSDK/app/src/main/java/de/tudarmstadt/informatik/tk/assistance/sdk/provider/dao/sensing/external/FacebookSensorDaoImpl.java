@@ -1,4 +1,4 @@
-package de.tudarmstadt.informatik.tk.assistance.sdk.provider.dao.sensing.social;
+package de.tudarmstadt.informatik.tk.assistance.sdk.provider.dao.sensing.external;
 
 import android.support.annotation.Nullable;
 
@@ -12,7 +12,7 @@ import de.tudarmstadt.informatik.tk.assistance.sdk.db.DaoSession;
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbFacebookSensor;
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbFacebookSensorDao;
 import de.tudarmstadt.informatik.tk.assistance.sdk.model.api.SensorDto;
-import de.tudarmstadt.informatik.tk.assistance.sdk.model.api.sensing.sensor.social.FacebookSensorDto;
+import de.tudarmstadt.informatik.tk.assistance.sdk.model.api.sensing.sensor.external.FacebookSensorDto;
 
 /**
  * @author Wladimir Schmidt (wlsc.dev@gmail.com)

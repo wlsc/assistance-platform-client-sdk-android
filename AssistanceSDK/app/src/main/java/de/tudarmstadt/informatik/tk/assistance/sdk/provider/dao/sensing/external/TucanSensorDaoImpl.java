@@ -1,4 +1,4 @@
-package de.tudarmstadt.informatik.tk.assistance.sdk.provider.dao.sensing.social;
+package de.tudarmstadt.informatik.tk.assistance.sdk.provider.dao.sensing.external;
 
 import android.support.annotation.Nullable;
 
@@ -6,7 +6,7 @@ import de.tudarmstadt.informatik.tk.assistance.sdk.db.DaoSession;
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbTucanSensor;
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbTucanSensorDao;
 import de.tudarmstadt.informatik.tk.assistance.sdk.model.api.SensorDto;
-import de.tudarmstadt.informatik.tk.assistance.sdk.model.api.sensing.sensor.uni.TucanSensorDto;
+import de.tudarmstadt.informatik.tk.assistance.sdk.model.api.sensing.sensor.external.TucanSensorDto;
 
 /**
  * @author Wladimir Schmidt (wlsc.dev@gmail.com)

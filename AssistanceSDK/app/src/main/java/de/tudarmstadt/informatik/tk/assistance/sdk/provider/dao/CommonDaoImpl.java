@@ -24,7 +24,7 @@ public abstract class CommonDaoImpl<T> implements CommonDao<T> {
             this.dao = dao;
         }
 
-        // general ID property of an SQLite table
+        // external ID property of an SQLite table
         this.idProperty = new Property(0, Long.class, "id", true, "_id");
     }
 

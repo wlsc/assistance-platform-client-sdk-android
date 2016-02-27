@@ -1,4 +1,4 @@
-package de.tudarmstadt.informatik.tk.assistance.sdk.model.api.social;
+package de.tudarmstadt.informatik.tk.assistance.sdk.model.api.oauth;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;

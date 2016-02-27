@@ -1,4 +1,4 @@
-package de.tudarmstadt.informatik.tk.assistance.sdk.model.api.sensing.sensor.uni;
+package de.tudarmstadt.informatik.tk.assistance.sdk.model.api.sensing.sensor.external;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;

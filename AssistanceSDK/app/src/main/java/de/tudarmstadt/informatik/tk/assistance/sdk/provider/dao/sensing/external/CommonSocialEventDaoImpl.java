@@ -1,4 +1,4 @@
-package de.tudarmstadt.informatik.tk.assistance.sdk.provider.dao.sensing.social;
+package de.tudarmstadt.informatik.tk.assistance.sdk.provider.dao.sensing.external;
 
 import de.greenrobot.dao.AbstractDao;
 import de.tudarmstadt.informatik.tk.assistance.sdk.provider.dao.sensing.CommonEventDaoImpl;

@@ -1,4 +1,4 @@
-package de.tudarmstadt.informatik.tk.assistance.sdk.sensing.impl.general;
+package de.tudarmstadt.informatik.tk.assistance.sdk.sensing.impl.external;
 
 import android.content.Context;
 

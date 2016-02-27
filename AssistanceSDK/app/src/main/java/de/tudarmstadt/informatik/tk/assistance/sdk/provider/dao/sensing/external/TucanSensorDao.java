@@ -1,7 +1,6 @@
-package de.tudarmstadt.informatik.tk.assistance.sdk.provider.dao.sensing.social;
+package de.tudarmstadt.informatik.tk.assistance.sdk.provider.dao.sensing.external;
 
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbTucanSensor;
-import de.tudarmstadt.informatik.tk.assistance.sdk.provider.dao.sensing.CommonEventDao;
 
 /**
  * @author Wladimir Schmidt (wlsc.dev@gmail.com)
