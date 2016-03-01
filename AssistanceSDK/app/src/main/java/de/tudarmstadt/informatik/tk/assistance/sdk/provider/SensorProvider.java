@@ -59,10 +59,10 @@ import de.tudarmstadt.informatik.tk.assistance.sdk.provider.dao.sensing.external
 import de.tudarmstadt.informatik.tk.assistance.sdk.provider.dao.sensing.external.TucanSensorDao;
 import de.tudarmstadt.informatik.tk.assistance.sdk.sensing.ISensor;
 import de.tudarmstadt.informatik.tk.assistance.sdk.sensing.SensorUploadHolder;
-import de.tudarmstadt.informatik.tk.assistance.sdk.sensing.impl.contentobserver.BrowserHistorySensor;
 import de.tudarmstadt.informatik.tk.assistance.sdk.sensing.impl.contentobserver.CalendarSensor;
 import de.tudarmstadt.informatik.tk.assistance.sdk.sensing.impl.contentobserver.CallLogSensor;
 import de.tudarmstadt.informatik.tk.assistance.sdk.sensing.impl.contentobserver.ContactsSensor;
+import de.tudarmstadt.informatik.tk.assistance.sdk.sensing.impl.contentobserver.incomplete.BrowserHistorySensor;
 import de.tudarmstadt.informatik.tk.assistance.sdk.sensing.impl.external.FacebookSensor;
 import de.tudarmstadt.informatik.tk.assistance.sdk.sensing.impl.external.TucanSensor;
 import de.tudarmstadt.informatik.tk.assistance.sdk.sensing.impl.periodic.BackgroundTrafficSensor;

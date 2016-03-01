@@ -1,4 +1,4 @@
-package de.tudarmstadt.informatik.tk.assistance.sdk.sensing.impl.contentobserver;
+package de.tudarmstadt.informatik.tk.assistance.sdk.sensing.impl.contentobserver.incomplete;
 
 import android.content.Context;
 import android.net.Uri;
