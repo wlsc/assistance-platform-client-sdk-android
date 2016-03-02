@@ -33,7 +33,7 @@ android {
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
-    compile files('libs/AssistanceClientFeedbackTransferFormat-1.0.5.jar')
+    compile files('libs/AssistanceClientFeedbackTransferFormat-1.0.6.jar')
     compile project(':LiveSDK')
     // Facebook SDK
     compile 'com.facebook.android:facebook-android-sdk:4.10.0'

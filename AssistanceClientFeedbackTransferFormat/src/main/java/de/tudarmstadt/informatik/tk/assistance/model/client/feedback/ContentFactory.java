@@ -117,6 +117,35 @@ public class ContentFactory {
     return text;
   }
 
+  public static ContentDto createImage(String source) {
+    return createImage(source, null, null);
+  }
+
+  public static ContentDto createImage(String source, String target) {
+    return createImage(source, target, null);
+  }
+
+  public static ContentDto createImage(String source, String target, Integer priority) {
+
+    if (source == null || source.isEmpty()) {
+      return null;
+    }
+
+    ImageDto image = new ImageDto();
+
+    image.setSource(source);
+
+    if (target != null && !target.isEmpty()) {
+      image.setTarget(target);
+    }
+
+    if (priority != null) {
+      image.setPriority(priority);
+    }
+
+    return image;
+  }
+
   public static GroupDto getGroup(ContentDto contentDto) {
 
     if (contentDto == null) {
