@@ -403,22 +403,7 @@ public class LocationSensor extends
 
             Log.d(TAG, "NETWORK is active");
 
-            if (isGoodLocation) {
-
-                latitude = location.getLatitude();
-                longitude = location.getLongitude();
-                accuracyHorizontal = (double) location.getAccuracy();
-                accuracyVertical = (double) location.getAccuracy();
-                speed = location.getSpeed();
-                altitude = location.getAltitude();
-
-                // saving them to SharedPreferences to further fast access
-                preferenceProvider.setLastLatitude(latitude);
-                preferenceProvider.setLastLongitude(longitude);
-
-                dumpData();
-
-            } else {
+            if (!isGoodLocation) {
 
                 Log.d(TAG, "Location accuracy (" + location.getAccuracy() + ") is unacceptable!");
 
@@ -445,6 +430,20 @@ public class LocationSensor extends
                     Log.d(TAG, "You have WIFI connection. GPS won't start!");
                 }
             }
+
+            // saving data
+            latitude = location.getLatitude();
+            longitude = location.getLongitude();
+            accuracyHorizontal = (double) location.getAccuracy();
+            accuracyVertical = (double) location.getAccuracy();
+            speed = location.getSpeed();
+            altitude = location.getAltitude();
+
+            // saving them to SharedPreferences to further fast access
+            preferenceProvider.setLastLatitude(latitude);
+            preferenceProvider.setLastLongitude(longitude);
+
+            dumpData();
         }
     }
 
