@@ -6,8 +6,8 @@ import android.content.Context;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
-import android.os.Handler;
-import android.os.Looper;
+import android.os.AsyncTask;
+import android.provider.CalendarContract;
 import android.provider.CalendarContract.Events;
 import android.provider.CalendarContract.Reminders;
 import android.support.v4.app.ActivityCompat;
@@ -22,6 +22,8 @@ import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbCalendarReminderSensor;
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbCalendarSensor;
 import de.tudarmstadt.informatik.tk.assistance.sdk.model.api.sensing.SensorApiType;
 import de.tudarmstadt.informatik.tk.assistance.sdk.provider.PreferenceProvider;
+import de.tudarmstadt.informatik.tk.assistance.sdk.provider.dao.sensing.calendar.CalendarReminderSensorDao;
+import de.tudarmstadt.informatik.tk.assistance.sdk.provider.dao.sensing.calendar.CalendarSensorDao;
 import de.tudarmstadt.informatik.tk.assistance.sdk.sensing.impl.AbstractContentObserverSensor;
 import de.tudarmstadt.informatik.tk.assistance.sdk.util.DateUtils;
 import de.tudarmstadt.informatik.tk.assistance.sdk.util.logger.Log;
@@ -40,7 +42,12 @@ public class CalendarSensor extends AbstractContentObserverSensor {
     private static final Uri URI_CALENDAR = android.provider.CalendarContract.Events.CONTENT_URI;
     private static final Uri URI_REMINDER = android.provider.CalendarContract.Reminders.CONTENT_URI;
 
-    private Handler syncingTask;
+    private final CalendarReminderSensorDao calendarReminderSensorDao;
+    private final CalendarSensorDao calendarSensorDao;
+
+    private AsyncTask<Void, Void, Void> asyncTask;
+
+    private ContentResolver contentResolver;
 
     private static final String[] PROJECTION_EVENTS =
             {
@@ -74,8 +81,12 @@ public class CalendarSensor extends AbstractContentObserverSensor {
                     Reminders.METHOD,
                     Reminders.MINUTES};
 
+    private String reminderSelection;
+
     private CalendarSensor(Context context) {
         super(context);
+        calendarReminderSensorDao = daoProvider.getCalendarReminderSensorDao();
+        calendarSensorDao = daoProvider.getCalendarSensorDao();
     }
 
     /**
@@ -105,11 +116,11 @@ public class CalendarSensor extends AbstractContentObserverSensor {
 
     protected void syncData() {
 
-        Log.d(TAG, "Syncing data...");
-
-        if (context == null) {
+        if (context == null || !isRunning()) {
             return;
         }
+
+        Log.d(TAG, "Syncing data...");
 
         if (ActivityCompat.checkSelfPermission(
                 context,
@@ -121,28 +132,31 @@ public class CalendarSensor extends AbstractContentObserverSensor {
             return;
         }
 
-        // Submit the query
-        ContentResolver cr = context.getContentResolver();
-        Cursor cur = cr.query(URI_CALENDAR, PROJECTION_EVENTS, "deleted=?", new String[]{"0"}, null);
+        contentResolver = context.getContentResolver();
 
-        if (cur == null) {
+        // for reminders
+        reminderSelection = Reminders.EVENT_ID + " = ?";
+
+        // Submit the query
+        Cursor cur = contentResolver.query(URI_CALENDAR, PROJECTION_EVENTS, "deleted=?", new String[]{"0"}, null);
+
+        if (cur == null || cur.getCount() <= 0) {
             return;
         }
 
         LongSparseArray<DbCalendarSensor> allExistingEvents = new LongSparseArray<>();
 
+        long deviceId = PreferenceProvider.getInstance(context).getCurrentDeviceId();
+        List<DbCalendarSensor> events = calendarSensorDao.getAll(deviceId);
+
+        for (DbCalendarSensor event : events) {
+            allExistingEvents.put(event.getEventId(), event);
+        }
+
+        List<DbCalendarSensor> entriesToInsert = new ArrayList<>(cur.getCount());
+        String created = DateUtils.dateToISO8601String(new Date(), Locale.getDefault());
+
         try {
-
-            long deviceId = PreferenceProvider.getInstance(context).getCurrentDeviceId();
-
-            List<DbCalendarSensor> events = daoProvider.getCalendarSensorDao().getAll(deviceId);
-
-            for (DbCalendarSensor event : events) {
-                allExistingEvents.put(event.getEventId(), event);
-            }
-
-            List<DbCalendarSensor> entriesToInsert = new ArrayList<>();
-            String created = DateUtils.dateToISO8601String(new Date(), Locale.getDefault());
 
             // Iterate over event
             while (cur.moveToNext() && isRunning()) {
@@ -182,14 +196,21 @@ public class CalendarSensor extends AbstractContentObserverSensor {
                     entriesToInsert.add(event);
                 }
 
-                new Handler(Looper.getMainLooper()).post(() -> {
-                    syncReminders(event);
-                });
+                new AsyncTask<Void, Void, Void>() {
+
+                    @Override
+                    protected Void doInBackground(Void... params) {
+
+                        syncReminders(event);
+                        return null;
+                    }
+
+                }.execute();
             }
 
             if (!entriesToInsert.isEmpty()) {
                 Log.d(TAG, "Insert entries");
-                daoProvider.getCalendarSensorDao().insert(entriesToInsert);
+                calendarSensorDao.insert(entriesToInsert);
                 Log.d(TAG, "Finished");
             }
 
@@ -204,9 +225,16 @@ public class CalendarSensor extends AbstractContentObserverSensor {
 
                 DbCalendarSensor existingEvent = allExistingEvents.valueAt(i);
 
-                new Handler(Looper.getMainLooper()).post(() -> {
-                    syncReminders(existingEvent);
-                });
+                new AsyncTask<Void, Void, Void>() {
+
+                    @Override
+                    protected Void doInBackground(Void... params) {
+
+                        syncReminders(existingEvent);
+                        return null;
+                    }
+
+                }.execute();
             }
 
         } catch (Exception e) {
@@ -219,18 +247,19 @@ public class CalendarSensor extends AbstractContentObserverSensor {
 
     protected void syncReminders(DbCalendarSensor event) {
 
-        long eventId = event.getEventId();
+        if (event == null) {
+            return;
+        }
+
         boolean hasAlarm = event.getHasAlarm();
 
-        LongSparseArray<DbCalendarReminderSensor> mapExistingReminders = getExistingReminders(eventId);
-
         if (hasAlarm) {
-            // optional selection
-            final String selection = Reminders.EVENT_ID + " = ?";
-            String[] selectionArgs = new String[]{String.valueOf(eventId)};
 
-            // Submit the query
-            ContentResolver cr = context.getContentResolver();
+            long eventId = event.getEventId();
+            LongSparseArray<DbCalendarReminderSensor> mapExistingReminders = getExistingReminders(eventId);
+
+            // optional reminderSelection
+            String[] selectionArgs = new String[]{String.valueOf(eventId)};
 
             Cursor cur = null;
 
@@ -238,13 +267,13 @@ public class CalendarSensor extends AbstractContentObserverSensor {
 
                 long deviceId = PreferenceProvider.getInstance(context).getCurrentDeviceId();
 
-                cur = cr.query(URI_REMINDER, PROJECTION_REMINDERS, selection, selectionArgs, null);
+                cur = contentResolver.query(URI_REMINDER, PROJECTION_REMINDERS, reminderSelection, selectionArgs, null);
 
-                if (cur == null) {
+                if (cur == null || cur.getCount() <= 0) {
                     return;
                 }
 
-                List<DbCalendarReminderSensor> entriesToInsert = new ArrayList<>();
+                List<DbCalendarReminderSensor> entriesToInsert = new ArrayList<>(cur.getCount());
                 String created = DateUtils.dateToISO8601String(new Date(), Locale.getDefault());
 
                 // Iterate over event
@@ -268,9 +297,7 @@ public class CalendarSensor extends AbstractContentObserverSensor {
                 }
 
                 if (!entriesToInsert.isEmpty()) {
-                    Log.d(TAG, "Calendar reminder: Insert entries");
-                    daoProvider.getCalendarReminderSensorDao().insert(entriesToInsert);
-                    Log.d(TAG, "Finished");
+                    calendarReminderSensorDao.insert(entriesToInsert);
                 }
 
             } finally {
@@ -368,7 +395,7 @@ public class CalendarSensor extends AbstractContentObserverSensor {
                 .getCalendarReminderSensorDao()
                 .getAllByEventId(eventId, deviceId);
 
-        LongSparseArray<DbCalendarReminderSensor> map = new LongSparseArray<>();
+        LongSparseArray<DbCalendarReminderSensor> map = new LongSparseArray<>(list.size());
 
         for (DbCalendarReminderSensor reminder : list) {
             map.put(reminder.getReminderId(), reminder);
@@ -438,14 +465,19 @@ public class CalendarSensor extends AbstractContentObserverSensor {
     @Override
     public void startSensor() {
 
-        syncingTask = new Handler(Looper.getMainLooper());
+        asyncTask = new AsyncTask<Void, Void, Void>() {
 
-        syncingTask.post(() -> {
+            @Override
+            protected Void doInBackground(Void... params) {
 
-            syncData();
-            context.getContentResolver().registerContentObserver(URI_CALENDAR, true, mObserver);
-            context.getContentResolver().registerContentObserver(URI_REMINDER, true, mObserver);
-        });
+                syncData();
+                context.getContentResolver().registerContentObserver(URI_CALENDAR, true, mObserver);
+                context.getContentResolver().registerContentObserver(URI_REMINDER, true, mObserver);
+
+                return null;
+            }
+
+        }.execute();
 
         setRunning(true);
     }
@@ -453,7 +485,12 @@ public class CalendarSensor extends AbstractContentObserverSensor {
     @Override
     public void stopSensor() {
 
-        syncingTask = null;
+        if (asyncTask != null && !asyncTask.isCancelled()) {
+            asyncTask.cancel(true);
+        }
+
+        asyncTask = null;
+
         setRunning(false);
     }
 

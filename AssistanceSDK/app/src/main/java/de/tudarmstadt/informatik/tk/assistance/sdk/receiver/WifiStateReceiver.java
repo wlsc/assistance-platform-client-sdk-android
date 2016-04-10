@@ -3,8 +3,7 @@ package de.tudarmstadt.informatik.tk.assistance.sdk.receiver;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Handler;
-import android.os.Looper;
+import android.os.AsyncTask;
 
 import com.google.android.gms.gcm.GcmNetworkManager;
 import com.google.android.gms.gcm.OneoffTask;
@@ -58,13 +57,18 @@ public class WifiStateReceiver extends BroadcastReceiver {
                     return;
                 }
 
-                Handler handler = new Handler(Looper.getMainLooper());
+                new AsyncTask<Void, Void, Void>() {
 
-                handler.post(() -> {
+                    @Override
+                    protected Void doInBackground(Void... params) {
 
-                    Log.d(TAG, "Starting background uploader task...");
-                    uploadAllEvents(context.getApplicationContext());
-                });
+                        Log.d(TAG, "Starting background uploader task...");
+                        uploadAllEvents(context.getApplicationContext());
+
+                        return null;
+                    }
+
+                }.execute();
 
                 /**
                  * Send all sensor upload logs

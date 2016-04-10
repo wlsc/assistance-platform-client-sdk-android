@@ -29,7 +29,7 @@ public abstract class AbstractContentObserverSensor extends AbstractSensor {
         public void run() {
             Log.d(TAG, "Syncing now...");
 
-            mDaoSession.runInTx(() -> syncData());
+            mDaoSession.runInTx(AbstractContentObserverSensor.this::syncData);
 
             mTimer = null;
         }

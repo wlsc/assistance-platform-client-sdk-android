@@ -6,8 +6,7 @@ import android.content.Context;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
-import android.os.Handler;
-import android.os.Looper;
+import android.os.AsyncTask;
 import android.provider.CallLog;
 import android.support.v4.app.ActivityCompat;
 
@@ -36,9 +35,9 @@ public class CallLogSensor extends AbstractContentObserverSensor {
 
     protected static final Uri URI_CALL_LOG = android.provider.CallLog.Calls.CONTENT_URI;
 
-    private Handler syncingTask;
+    private List<DbCallLogSensor> events;
 
-    private List<DbCallLogSensor> events = new ArrayList<>();
+    private AsyncTask<Void, Void, Void> asyncTask;
 
     private CallLogSensor(Context context) {
         super(context);
@@ -87,13 +86,18 @@ public class CallLogSensor extends AbstractContentObserverSensor {
     @Override
     public void startSensor() {
 
-        syncingTask = new Handler(Looper.getMainLooper());
+        asyncTask = new AsyncTask<Void, Void, Void>() {
 
-        syncingTask.post(() -> {
+            @Override
+            protected Void doInBackground(Void... params) {
 
-            syncData();
-            context.getContentResolver().registerContentObserver(URI_CALL_LOG, true, mObserver);
-        });
+                syncData();
+                context.getContentResolver().registerContentObserver(URI_CALL_LOG, true, mObserver);
+
+                return null;
+            }
+
+        }.execute();
 
         setRunning(true);
     }
@@ -101,14 +105,19 @@ public class CallLogSensor extends AbstractContentObserverSensor {
     @Override
     public void stopSensor() {
 
-        syncingTask = null;
+        if (asyncTask != null && !asyncTask.isCancelled()) {
+            asyncTask.cancel(true);
+        }
+
+        asyncTask = null;
+
         setRunning(false);
     }
 
     @Override
     protected void syncData() {
 
-        if (context == null) {
+        if (context == null || !isRunning()) {
             return;
         }
 
@@ -133,39 +142,41 @@ public class CallLogSensor extends AbstractContentObserverSensor {
         long deviceId = PreferenceProvider.getInstance(context).getCurrentDeviceId();
 
         ContentResolver cr = context.getContentResolver();
-        Cursor cur = null;
+        Cursor cursor = null;
 
         try {
 
-            cur = cr.query(android.provider.CallLog.Calls.CONTENT_URI,
+            cursor = cr.query(android.provider.CallLog.Calls.CONTENT_URI,
                     null,
                     CallLog.Calls._ID + ">?",
                     new String[]{String.valueOf(longLastKnownCallLogId)},
                     null);
 
-            if (cur == null || cur.getCount() == 0) {
+            if (cursor == null || cursor.getCount() <= 0) {
                 return;
             }
 
             // clear previous events
-            events.clear();
+            events = new ArrayList<>(cursor.getCount());
+
+            String created = DateUtils.dateToISO8601String(new Date(), Locale.getDefault());
 
             // Iterate over event
-            while (cur.moveToNext() && isRunning()) {
+            while (cursor.moveToNext() && isRunning()) {
 
                 DbCallLogSensor callLogEvent = new DbCallLogSensor();
 
-                callLogEvent.setCallId(getLongByColumnName(cur, CallLog.Calls._ID));
-                callLogEvent.setType(getIntByColumnName(cur, CallLog.Calls.TYPE));
-                callLogEvent.setNumber(getStringByColumnName(cur, CallLog.Calls.NUMBER));
-                callLogEvent.setName(getStringByColumnName(cur, CallLog.Calls.CACHED_NAME));
-                callLogEvent.setDate(getLongByColumnName(cur, CallLog.Calls.DATE));
-                callLogEvent.setDuration(getLongByColumnName(cur, CallLog.Calls.DURATION));
+                callLogEvent.setCallId(getLongByColumnName(cursor, CallLog.Calls._ID));
+                callLogEvent.setType(getIntByColumnName(cursor, CallLog.Calls.TYPE));
+                callLogEvent.setNumber(getStringByColumnName(cursor, CallLog.Calls.NUMBER));
+                callLogEvent.setName(getStringByColumnName(cursor, CallLog.Calls.CACHED_NAME));
+                callLogEvent.setDate(getLongByColumnName(cursor, CallLog.Calls.DATE));
+                callLogEvent.setDuration(getLongByColumnName(cursor, CallLog.Calls.DURATION));
                 callLogEvent.setIsNew(Boolean.TRUE);
                 callLogEvent.setIsDeleted(Boolean.FALSE);
                 callLogEvent.setIsUpdated(Boolean.TRUE);
                 callLogEvent.setDeviceId(deviceId);
-                callLogEvent.setCreated(DateUtils.dateToISO8601String(new Date(), Locale.getDefault()));
+                callLogEvent.setCreated(created);
 
                 events.add(callLogEvent);
             }
@@ -173,8 +184,8 @@ public class CallLogSensor extends AbstractContentObserverSensor {
             dumpData();
 
         } finally {
-            if (cur != null) {
-                cur.close();
+            if (cursor != null) {
+                cursor.close();
             }
         }
     }
