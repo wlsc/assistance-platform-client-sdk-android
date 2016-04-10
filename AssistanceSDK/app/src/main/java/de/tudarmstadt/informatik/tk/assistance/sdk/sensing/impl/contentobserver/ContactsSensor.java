@@ -24,7 +24,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
 
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbContactEmailSensor;
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbContactNumberSensor;
@@ -148,7 +147,7 @@ public class ContactsSensor extends AbstractContentObserverSensor {
 
             List<DbContactSensor> entriesToInsert = new ArrayList<>(contactsCursor.getCount());
 
-            long timeStart = System.nanoTime();
+//            long timeStart = System.nanoTime();
 
             while (contactsCursor.moveToNext() && isRunning()) {
 
@@ -200,8 +199,8 @@ public class ContactsSensor extends AbstractContentObserverSensor {
                 }
             }
 
-            long timeStop = System.nanoTime();
-            Log.d(TAG, "Execution time: " + TimeUnit.MILLISECONDS.convert(timeStop - timeStart, TimeUnit.NANOSECONDS));
+//            long timeStop = System.nanoTime();
+//            Log.d(TAG, "Execution time: " + TimeUnit.MILLISECONDS.convert(timeStop - timeStart, TimeUnit.NANOSECONDS));
 
             ContactNumberSensorDao contactNumberSensorDao = daoProvider.getContactNumberSensorDao();
             ContactEmailSensorDao contactEmailSensorDao = daoProvider.getContactEmailSensorDao();
