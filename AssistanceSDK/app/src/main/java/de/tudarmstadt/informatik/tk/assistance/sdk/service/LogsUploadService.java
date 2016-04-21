@@ -83,7 +83,7 @@ public class LogsUploadService extends GcmTaskService {
             return;
         }
 
-        List<SensorUploadLogsRequestDto.Data> allLogs = new ArrayList<>();
+        List<SensorUploadLogsRequestDto.Data> allLogs = new ArrayList<>(sensorUploadLogs.size());
 
         for (LogsSensorUpload entry : sensorUploadLogs) {
 

@@ -28,13 +28,14 @@ public abstract class CommonEventDaoImpl<T> extends
     @Override
     public List<SensorDto> convertObjects(List<T> sensors) {
 
-        List<SensorDto> result = new ArrayList<>();
+        if (sensors == null || sensors.isEmpty()) {
+            return Collections.emptyList();
+        }
 
-        if (sensors != null && !sensors.isEmpty()) {
+        List<SensorDto> result = new ArrayList<>(sensors.size());
 
-            for (T sensor : sensors) {
-                result.add(convertObject(sensor));
-            }
+        for (T sensor : sensors) {
+            result.add(convertObject(sensor));
         }
 
         return result;

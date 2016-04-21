@@ -368,7 +368,11 @@ public class SensorProvider {
      */
     private List<ISensor> mapModuleCapabilitiesToSensors(List<DbModuleCapability> moduleCapabilities) {
 
-        List<ISensor> result = new ArrayList<>();
+        if (moduleCapabilities == null || moduleCapabilities.isEmpty()) {
+            return Collections.emptyList();
+        }
+
+        List<ISensor> result = new ArrayList<>(moduleCapabilities.size());
 
         for (DbModuleCapability capability : moduleCapabilities) {
             result.add(getSensorByDtoType(capability.getType()));
@@ -1464,7 +1468,7 @@ public class SensorProvider {
 
                         // EMAILS
                         List<DbContactEmailSensor> eventEmails = contactEmailDao
-                                .getAll(Long.valueOf(contactSensorDto.getGlobalContactId()), deviceId);
+                                .getAll(contactSensorDto.getGlobalContactId(), deviceId);
 
                         if (eventEmails == null || eventEmails.isEmpty()) {
                             continue;
@@ -1479,7 +1483,7 @@ public class SensorProvider {
 
                         // NUMBERS
                         List<DbContactNumberSensor> eventNumbers = contactNumberSensorDao
-                                .getAll(Long.valueOf(contactSensorDto.getGlobalContactId()), deviceId);
+                                .getAll(contactSensorDto.getGlobalContactId(), deviceId);
 
                         if (eventNumbers == null || eventNumbers.isEmpty()) {
                             continue;
