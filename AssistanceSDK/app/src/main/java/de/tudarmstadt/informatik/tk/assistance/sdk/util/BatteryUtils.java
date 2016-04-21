@@ -82,8 +82,7 @@ public class BatteryUtils {
         boolean isPlugged = false;
 
         isPlugged = plugged == BatteryManager.BATTERY_PLUGGED_AC ||
-                plugged == BatteryManager.BATTERY_PLUGGED_USB ||
-                plugged == BatteryManager.BATTERY_PLUGGED_WIRELESS;
+                plugged == BatteryManager.BATTERY_PLUGGED_USB;
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
             isPlugged = isPlugged || (plugged == BatteryManager.BATTERY_PLUGGED_WIRELESS);
