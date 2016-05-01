@@ -36,7 +36,7 @@ dependencies {
     compile files('libs/AssistanceClientFeedbackTransferFormat-1.0.6.jar')
     compile project(':LiveSDK')
     // Facebook SDK
-    compile 'com.facebook.android:facebook-android-sdk:4.10.0'
+    compile 'com.facebook.android:facebook-android-sdk:4.11.0'
     // twitter library
 //    compile 'org.twitter4j:twitter4j-core:4.0.4'
     // support library
@@ -58,7 +58,7 @@ dependencies {
     compile 'com.google.guava:guava:19.0'
     // reactive
     compile 'io.reactivex:rxandroid:1.1.0'
-    compile 'io.reactivex:rxjava:1.1.1'
+    compile 'io.reactivex:rxjava:1.1.3'
     // runtime permissions wrapper
     compile 'com.github.kayvannj:PermissionUtils:1.0.2@aar'
 }
