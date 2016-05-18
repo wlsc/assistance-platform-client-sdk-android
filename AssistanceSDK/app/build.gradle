@@ -40,12 +40,12 @@ dependencies {
     // twitter library
 //    compile 'org.twitter4j:twitter4j-core:4.0.4'
     // support library
-    compile 'com.android.support:appcompat-v7:23.3.0'
+    compile 'com.android.support:appcompat-v7:23.4.0'
     // google play library
-    compile 'com.google.android.gms:play-services-base:8.4.0'
-    compile 'com.google.android.gms:play-services-gcm:8.4.0'
-    compile 'com.google.android.gms:play-services-location:8.4.0'
-    compile 'com.google.android.gms:play-services-analytics:8.4.0'
+    compile 'com.google.android.gms:play-services-base:9.0.0'
+    compile 'com.google.android.gms:play-services-gcm:9.0.0'
+    compile 'com.google.android.gms:play-services-location:9.0.0'
+    compile 'com.google.android.gms:play-services-analytics:9.0.0'
     // a type-safe HTTP client
     compile 'com.squareup.retrofit:retrofit:1.9.0'
     // efficient HTTP client
