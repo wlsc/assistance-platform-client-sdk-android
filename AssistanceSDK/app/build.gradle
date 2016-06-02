@@ -36,16 +36,16 @@ dependencies {
     compile files('libs/AssistanceClientFeedbackTransferFormat-1.0.6.jar')
     compile project(':LiveSDK')
     // Facebook SDK
-    compile 'com.facebook.android:facebook-android-sdk:4.11.0'
+    compile 'com.facebook.android:facebook-android-sdk:4.12.1'
     // twitter library
 //    compile 'org.twitter4j:twitter4j-core:4.0.4'
     // support library
     compile 'com.android.support:appcompat-v7:23.4.0'
     // google play library
-    compile 'com.google.android.gms:play-services-base:9.0.0'
-    compile 'com.google.android.gms:play-services-gcm:9.0.0'
-    compile 'com.google.android.gms:play-services-location:9.0.0'
-    compile 'com.google.android.gms:play-services-analytics:9.0.0'
+    compile 'com.google.android.gms:play-services-base:9.0.1'
+    compile 'com.google.android.gms:play-services-gcm:9.0.1'
+    compile 'com.google.android.gms:play-services-location:9.0.1'
+    compile 'com.google.android.gms:play-services-analytics:9.0.1'
     // a type-safe HTTP client
     compile 'com.squareup.retrofit:retrofit:1.9.0'
     // efficient HTTP client
