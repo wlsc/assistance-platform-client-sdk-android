@@ -270,7 +270,13 @@ public class SensorApiType {
             return -1;
         }
 
-        return SensorApiType.apiNameToDtoTypeMap.get(apiName).intValue();
+        Integer type = SensorApiType.apiNameToDtoTypeMap.get(apiName);
+
+        if (type == null) {
+            return -1;
+        }
+
+        return type.intValue();
     }
 
     /**
@@ -300,7 +306,7 @@ public class SensorApiType {
             }
         }
     }
-    
+
     public static List<String> getAllPossibleModuleTypes() {
         return allPossibleTypes;
     }
