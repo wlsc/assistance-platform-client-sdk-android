@@ -114,7 +114,7 @@ public class BackgroundTrafficSensor extends AbstractPeriodicSensor {
         PreferenceProvider preferenceProvider = PreferenceProvider.getInstance(context);
         String created = DateUtils.dateToISO8601String(new Date(), Locale.getDefault());
 
-        List<DbNetworkTrafficSensor> insertList = new ArrayList<>();
+        List<DbNetworkTrafficSensor> insertList = new ArrayList<>(packages.size());
 
         for (ApplicationInfo packageInfo : packages) {
 
