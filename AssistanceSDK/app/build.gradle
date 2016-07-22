@@ -2,12 +2,12 @@ apply plugin: 'com.android.library'
 apply plugin: 'me.tatarka.retrolambda'
 
 android {
-    compileSdkVersion 23
-    buildToolsVersion "23.0.3"
+    compileSdkVersion 24
+    buildToolsVersion "24.0.1"
 
     defaultConfig {
         minSdkVersion 16
-        targetSdkVersion 23
+        targetSdkVersion 24
     }
     buildTypes {
         release {
@@ -35,7 +35,7 @@ dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     compile files('libs/AssistanceClientFeedbackTransferFormat-1.0.6.jar')
     // Facebook SDK
-    compile 'com.facebook.android:facebook-android-sdk:4.12.1'
+    compile 'com.facebook.android:facebook-android-sdk:4.14.0'
     // Microsoft OneDrive SDK
     compile ('com.onedrive.sdk:onedrive-sdk-android:1.2+') {
         transitive = false
@@ -46,12 +46,12 @@ dependencies {
     // twitter library
 //    compile 'org.twitter4j:twitter4j-core:4.0.4'
     // support library
-    compile 'com.android.support:appcompat-v7:23.4.0'
+    compile 'com.android.support:appcompat-v7:24.1.1'
     // google play library
-    compile 'com.google.android.gms:play-services-base:9.0.2'
-    compile 'com.google.android.gms:play-services-gcm:9.0.2'
-    compile 'com.google.android.gms:play-services-location:9.0.2'
-    compile 'com.google.android.gms:play-services-analytics:9.0.2'
+    compile 'com.google.android.gms:play-services-base:9.2.1'
+    compile 'com.google.android.gms:play-services-gcm:9.2.1'
+    compile 'com.google.android.gms:play-services-location:9.2.1'
+    compile 'com.google.android.gms:play-services-analytics:9.2.1'
     // a type-safe HTTP client
     compile 'com.squareup.retrofit:retrofit:1.9.0'
     // efficient HTTP client
@@ -63,8 +63,8 @@ dependencies {
     // google's guava
     compile 'com.google.guava:guava:19.0'
     // reactive
-    compile 'io.reactivex:rxandroid:1.2.0'
-    compile 'io.reactivex:rxjava:1.1.5'
+    compile 'io.reactivex:rxandroid:1.2.1'
+    compile 'io.reactivex:rxjava:1.1.7'
     // runtime permissions wrapper
     compile 'com.github.kayvannj:PermissionUtils:1.0.2@aar'
 }
