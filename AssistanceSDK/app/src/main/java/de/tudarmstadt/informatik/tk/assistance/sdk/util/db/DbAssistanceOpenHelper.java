@@ -3,6 +3,8 @@ package de.tudarmstadt.informatik.tk.assistance.sdk.util.db;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 
+import org.greenrobot.greendao.database.Database;
+
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DaoMaster;
 import de.tudarmstadt.informatik.tk.assistance.sdk.util.logger.Log;
 
@@ -19,14 +21,14 @@ public class DbAssistanceOpenHelper extends DaoMaster.OpenHelper {
     }
 
     @Override
-    public void onCreate(SQLiteDatabase db) {
+    public void onCreate(Database db) {
         super.onCreate(db);
 
         DaoMaster.createAllTables(db, true);
     }
 
     @Override
-    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+    public void onUpgrade(Database db, int oldVersion, int newVersion) {
 
         Log.d(TAG, "onUpgrade from version " + oldVersion + " to" + newVersion);
 

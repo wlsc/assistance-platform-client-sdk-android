@@ -5,8 +5,8 @@ import android.support.annotation.Nullable;
 import java.util.Collections;
 import java.util.List;
 
-import de.greenrobot.dao.AbstractDao;
-import de.greenrobot.dao.Property;
+import org.greenrobot.greendao.AbstractDao;
+import org.greenrobot.greendao.Property;
 
 /**
  * @author Wladimir Schmidt (wlsc.dev@gmail.com)

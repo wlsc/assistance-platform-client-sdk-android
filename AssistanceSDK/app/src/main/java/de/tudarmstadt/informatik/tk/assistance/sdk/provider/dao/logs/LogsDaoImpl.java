@@ -1,6 +1,6 @@
 package de.tudarmstadt.informatik.tk.assistance.sdk.provider.dao.logs;
 
-import de.greenrobot.dao.AbstractDao;
+import org.greenrobot.greendao.AbstractDao;
 import de.tudarmstadt.informatik.tk.assistance.sdk.provider.dao.CommonDaoImpl;
 
 /**

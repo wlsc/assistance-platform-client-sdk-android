@@ -2,9 +2,10 @@
 package de.tudarmstadt.informatik.tk.assistance.sdk.provider;
 
 import android.content.Context;
-import android.database.sqlite.SQLiteDatabase;
 
-import de.greenrobot.dao.identityscope.IdentityScopeType;
+import org.greenrobot.greendao.database.Database;
+import org.greenrobot.greendao.identityscope.IdentityScopeType;
+
 import de.tudarmstadt.informatik.tk.assistance.sdk.Config;
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DaoMaster;
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DaoSession;
@@ -90,7 +91,7 @@ public class DaoProvider {
 
     private static DaoProvider INSTANCE;
 
-    private SQLiteDatabase mDb;
+    private Database mDb;
     private DaoMaster mDaoMaster;
     private DaoSession mDaoSession;
 
@@ -102,7 +103,7 @@ public class DaoProvider {
     private DaoProvider(Context context) {
 
         DbAssistanceOpenHelper helper = new DbAssistanceOpenHelper(context, Config.DATABASE_NAME, null);
-        mDb = helper.getWritableDatabase();
+        mDb = helper.getWritableDb();
 
         mDaoMaster = new DaoMaster(mDb);
         mDaoSession = mDaoMaster.newSession(IdentityScopeType.None);
@@ -453,7 +454,7 @@ public class DaoProvider {
         return mDaoSession;
     }
 
-    public SQLiteDatabase getDatabase() {
+    public Database getDatabase() {
         return mDb;
     }
 }

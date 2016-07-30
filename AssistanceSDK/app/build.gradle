@@ -27,13 +27,12 @@ android {
         targetCompatibility JavaVersion.VERSION_1_8
     }
     sourceSets {
-        main.java.srcDirs += 'src/main/src-gen'
+        main.java.srcDirs += 'src-gen/main/java'
     }
 }
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
-    compile files('libs/AssistanceClientFeedbackTransferFormat-1.0.6.jar')
     // Facebook SDK
     compile 'com.facebook.android:facebook-android-sdk:4.14.0'
     // Microsoft OneDrive SDK
@@ -57,7 +56,7 @@ dependencies {
     // efficient HTTP client
     compile 'com.squareup.okhttp:okhttp:2.7.5'
     // database ORM
-    compile 'de.greenrobot:greendao:2.1.0'
+    compile 'org.greenrobot:greendao:3.0.1'
     // event bus system
     compile 'de.greenrobot:eventbus:2.4.1'
     // google's guava

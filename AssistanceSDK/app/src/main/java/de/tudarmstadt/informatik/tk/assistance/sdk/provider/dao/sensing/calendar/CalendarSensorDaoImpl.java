@@ -5,7 +5,7 @@ import android.support.annotation.Nullable;
 import java.util.Collections;
 import java.util.List;
 
-import de.greenrobot.dao.Property;
+import org.greenrobot.greendao.Property;
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DaoSession;
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbCalendarSensor;
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbCalendarSensorDao;
