@@ -34,8 +34,8 @@ public class AccelerometerSensor extends
 
     private static AccelerometerSensor INSTANCE;
 
-    private SensorManager mSensorManager;
-    private Sensor mSensor;
+    private final SensorManager mSensorManager;
+    private final Sensor mSensor;
 
     private long startTimestamp;
     private float sumAccelerationX;

@@ -1,16 +1,19 @@
 package de.tudarmstadt.informatik.tk.assistance.sdk.sensing.impl.periodic.incomplete;
 
+import android.Manifest;
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.content.Context;
+import android.content.pm.PackageManager;
+import android.support.v4.app.ActivityCompat;
 
 import java.util.Date;
 import java.util.Locale;
 
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbAccountReaderSensor;
 import de.tudarmstadt.informatik.tk.assistance.sdk.model.api.sensing.SensorApiType;
-import de.tudarmstadt.informatik.tk.assistance.sdk.sensing.impl.AbstractPeriodicSensor;
 import de.tudarmstadt.informatik.tk.assistance.sdk.sensing.ISensor;
+import de.tudarmstadt.informatik.tk.assistance.sdk.sensing.impl.AbstractPeriodicSensor;
 import de.tudarmstadt.informatik.tk.assistance.sdk.util.DateUtils;
 import de.tudarmstadt.informatik.tk.assistance.sdk.util.logger.Log;
 
@@ -24,6 +27,7 @@ public class AccountsReaderSensor extends AbstractPeriodicSensor implements ISen
     private static final String TAG = AccountsReaderSensor.class.getSimpleName();
 
     public static final int INTERVAL_IN_SEC = 3600;
+    public static final char SEMICOLON = ';';
 
     private AccountManager mAccountManager;
 
@@ -77,6 +81,11 @@ public class AccountsReaderSensor extends AbstractPeriodicSensor implements ISen
             return;
         }
 
+        if (ActivityCompat.checkSelfPermission(context,
+                Manifest.permission.GET_ACCOUNTS) != PackageManager.PERMISSION_GRANTED) {
+            return;
+        }
+
         Account[] accounts = mAccountManager.getAccounts();
 
         if (accounts == null) {
@@ -107,7 +116,7 @@ public class AccountsReaderSensor extends AbstractPeriodicSensor implements ISen
             int accountsLengthMinusOne = accountsLength - 1;
 
             for (int i = 0; i < accountsLengthMinusOne; i++) {
-                sb.append(accounts[i].type).append(';');
+                sb.append(accounts[i].type).append(SEMICOLON);
             }
 
             sb.append(accounts[accountsLengthMinusOne]);
