@@ -35,7 +35,7 @@ android {
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     // Facebook SDK
-    compile 'com.facebook.android:facebook-android-sdk:4.14.0'
+    compile 'com.facebook.android:facebook-android-sdk:4.14.1'
     // Microsoft OneDrive SDK
     compile ('com.onedrive.sdk:onedrive-sdk-android:1.2+') {
         transitive = false
@@ -64,7 +64,7 @@ dependencies {
     compile 'com.google.guava:guava:19.0'
     // reactive
     compile 'io.reactivex:rxandroid:1.2.1'
-    compile 'io.reactivex:rxjava:1.1.8'
+    compile 'io.reactivex:rxjava:1.1.9'
     // runtime permissions wrapper
     compile 'com.github.kayvannj:PermissionUtils:1.0.2@aar'
 }
