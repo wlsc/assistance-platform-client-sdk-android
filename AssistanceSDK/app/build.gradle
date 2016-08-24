@@ -3,7 +3,7 @@ apply plugin: 'me.tatarka.retrolambda'
 
 android {
     compileSdkVersion 24
-    buildToolsVersion "24.0.1"
+    buildToolsVersion "24.0.2"
 
     defaultConfig {
         minSdkVersion 16
@@ -35,7 +35,7 @@ android {
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     // Facebook SDK
-    compile 'com.facebook.android:facebook-android-sdk:4.14.1'
+    compile 'com.facebook.android:facebook-android-sdk:4.15.0'
     // Microsoft OneDrive SDK
     compile ('com.onedrive.sdk:onedrive-sdk-android:1.2+') {
         transitive = false
