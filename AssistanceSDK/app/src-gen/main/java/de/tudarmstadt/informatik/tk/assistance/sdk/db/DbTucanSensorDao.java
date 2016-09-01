@@ -23,7 +23,7 @@ public class DbTucanSensorDao extends AbstractDao<DbTucanSensor, Long> {
     /**
      * Properties of entity DbTucanSensor.<br/>
      * Can be used for QueryBuilder and for referencing column names.
-    */
+     */
     public static class Properties {
         public final static Property Id = new Property(0, Long.class, "id", true, "_id");
         public final static Property Username = new Property(1, String.class, "username", false, "USERNAME");
@@ -31,7 +31,7 @@ public class DbTucanSensorDao extends AbstractDao<DbTucanSensor, Long> {
         public final static Property WasChanged = new Property(3, boolean.class, "wasChanged", false, "WAS_CHANGED");
         public final static Property Created = new Property(4, String.class, "created", false, "CREATED");
         public final static Property UserId = new Property(5, Long.class, "userId", false, "USER_ID");
-    };
+    }
 
     private DaoSession daoSession;
 
@@ -153,6 +153,11 @@ public class DbTucanSensorDao extends AbstractDao<DbTucanSensor, Long> {
         } else {
             return null;
         }
+    }
+
+    @Override
+    public boolean hasKey(DbTucanSensor entity) {
+        return entity.getId() != null;
     }
 
     @Override

@@ -23,7 +23,7 @@ public class DbNetworkTrafficSensorDao extends AbstractDao<DbNetworkTrafficSenso
     /**
      * Properties of entity DbNetworkTrafficSensor.<br/>
      * Can be used for QueryBuilder and for referencing column names.
-    */
+     */
     public static class Properties {
         public final static Property Id = new Property(0, Long.class, "id", true, "_id");
         public final static Property AppName = new Property(1, String.class, "appName", false, "APP_NAME");
@@ -34,7 +34,7 @@ public class DbNetworkTrafficSensorDao extends AbstractDao<DbNetworkTrafficSenso
         public final static Property Latitude = new Property(6, Double.class, "latitude", false, "LATITUDE");
         public final static Property Created = new Property(7, String.class, "created", false, "CREATED");
         public final static Property DeviceId = new Property(8, Long.class, "deviceId", false, "DEVICE_ID");
-    };
+    }
 
     private DaoSession daoSession;
 
@@ -219,6 +219,11 @@ public class DbNetworkTrafficSensorDao extends AbstractDao<DbNetworkTrafficSenso
         } else {
             return null;
         }
+    }
+
+    @Override
+    public boolean hasKey(DbNetworkTrafficSensor entity) {
+        return entity.getId() != null;
     }
 
     @Override

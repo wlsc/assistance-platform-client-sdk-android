@@ -23,7 +23,7 @@ public class DbMobileConnectionSensorDao extends AbstractDao<DbMobileConnectionS
     /**
      * Properties of entity DbMobileConnectionSensor.<br/>
      * Can be used for QueryBuilder and for referencing column names.
-    */
+     */
     public static class Properties {
         public final static Property Id = new Property(0, Long.class, "id", true, "_id");
         public final static Property CarrierName = new Property(1, String.class, "carrierName", false, "CARRIER_NAME");
@@ -32,7 +32,7 @@ public class DbMobileConnectionSensorDao extends AbstractDao<DbMobileConnectionS
         public final static Property Created = new Property(4, String.class, "created", false, "CREATED");
         public final static Property VoipAvailable = new Property(5, Boolean.class, "voipAvailable", false, "VOIP_AVAILABLE");
         public final static Property DeviceId = new Property(6, Long.class, "deviceId", false, "DEVICE_ID");
-    };
+    }
 
     private DaoSession daoSession;
 
@@ -191,6 +191,11 @@ public class DbMobileConnectionSensorDao extends AbstractDao<DbMobileConnectionS
         } else {
             return null;
         }
+    }
+
+    @Override
+    public boolean hasKey(DbMobileConnectionSensor entity) {
+        return entity.getId() != null;
     }
 
     @Override

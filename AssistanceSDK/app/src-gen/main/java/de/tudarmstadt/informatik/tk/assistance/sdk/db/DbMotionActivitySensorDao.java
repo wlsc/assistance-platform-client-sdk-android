@@ -23,7 +23,7 @@ public class DbMotionActivitySensorDao extends AbstractDao<DbMotionActivitySenso
     /**
      * Properties of entity DbMotionActivitySensor.<br/>
      * Can be used for QueryBuilder and for referencing column names.
-    */
+     */
     public static class Properties {
         public final static Property Id = new Property(0, Long.class, "id", true, "_id");
         public final static Property Walking = new Property(1, Integer.class, "walking", false, "WALKING");
@@ -36,7 +36,7 @@ public class DbMotionActivitySensorDao extends AbstractDao<DbMotionActivitySenso
         public final static Property OnFoot = new Property(8, Integer.class, "onFoot", false, "ON_FOOT");
         public final static Property Tilting = new Property(9, Integer.class, "tilting", false, "TILTING");
         public final static Property DeviceId = new Property(10, Long.class, "deviceId", false, "DEVICE_ID");
-    };
+    }
 
     private DaoSession daoSession;
 
@@ -247,6 +247,11 @@ public class DbMotionActivitySensorDao extends AbstractDao<DbMotionActivitySenso
         } else {
             return null;
         }
+    }
+
+    @Override
+    public boolean hasKey(DbMotionActivitySensor entity) {
+        return entity.getId() != null;
     }
 
     @Override

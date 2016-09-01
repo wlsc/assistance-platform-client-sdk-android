@@ -25,7 +25,7 @@ public class DbModuleDao extends AbstractDao<DbModule, Long> {
     /**
      * Properties of entity DbModule.<br/>
      * Can be used for QueryBuilder and for referencing column names.
-    */
+     */
     public static class Properties {
         public final static Property Id = new Property(0, Long.class, "id", true, "_id");
         public final static Property PackageName = new Property(1, String.class, "packageName", false, "PACKAGE_NAME");
@@ -38,7 +38,7 @@ public class DbModuleDao extends AbstractDao<DbModule, Long> {
         public final static Property Active = new Property(8, boolean.class, "active", false, "ACTIVE");
         public final static Property Created = new Property(9, String.class, "created", false, "CREATED");
         public final static Property UserId = new Property(10, Long.class, "userId", false, "USER_ID");
-    };
+    }
 
     private DaoSession daoSession;
 
@@ -236,6 +236,11 @@ public class DbModuleDao extends AbstractDao<DbModule, Long> {
         } else {
             return null;
         }
+    }
+
+    @Override
+    public boolean hasKey(DbModule entity) {
+        return entity.getId() != null;
     }
 
     @Override

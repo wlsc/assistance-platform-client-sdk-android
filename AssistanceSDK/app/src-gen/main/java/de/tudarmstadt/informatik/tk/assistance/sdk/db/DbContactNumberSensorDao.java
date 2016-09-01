@@ -25,7 +25,7 @@ public class DbContactNumberSensorDao extends AbstractDao<DbContactNumberSensor,
     /**
      * Properties of entity DbContactNumberSensor.<br/>
      * Can be used for QueryBuilder and for referencing column names.
-    */
+     */
     public static class Properties {
         public final static Property Id = new Property(0, Long.class, "id", true, "_id");
         public final static Property NumberId = new Property(1, long.class, "numberId", false, "NUMBER_ID");
@@ -37,7 +37,7 @@ public class DbContactNumberSensorDao extends AbstractDao<DbContactNumberSensor,
         public final static Property Created = new Property(7, String.class, "created", false, "CREATED");
         public final static Property ContactId = new Property(8, long.class, "contactId", false, "CONTACT_ID");
         public final static Property DeviceId = new Property(9, Long.class, "deviceId", false, "DEVICE_ID");
-    };
+    }
 
     private DaoSession daoSession;
 
@@ -222,6 +222,11 @@ public class DbContactNumberSensorDao extends AbstractDao<DbContactNumberSensor,
         } else {
             return null;
         }
+    }
+
+    @Override
+    public boolean hasKey(DbContactNumberSensor entity) {
+        return entity.getId() != null;
     }
 
     @Override

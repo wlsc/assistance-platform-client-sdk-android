@@ -20,7 +20,7 @@ public class DbUserDao extends AbstractDao<DbUser, Long> {
     /**
      * Properties of entity DbUser.<br/>
      * Can be used for QueryBuilder and for referencing column names.
-    */
+     */
     public static class Properties {
         public final static Property Id = new Property(0, Long.class, "id", true, "_id");
         public final static Property Token = new Property(1, String.class, "token", false, "TOKEN");
@@ -32,7 +32,7 @@ public class DbUserDao extends AbstractDao<DbUser, Long> {
         public final static Property JoinedSince = new Property(7, String.class, "joinedSince", false, "JOINED_SINCE");
         public final static Property Uuid = new Property(8, String.class, "uuid", false, "UUID");
         public final static Property Created = new Property(9, String.class, "created", false, "CREATED");
-    };
+    }
 
     private DaoSession daoSession;
 
@@ -216,6 +216,11 @@ public class DbUserDao extends AbstractDao<DbUser, Long> {
         } else {
             return null;
         }
+    }
+
+    @Override
+    public boolean hasKey(DbUser entity) {
+        return entity.getId() != null;
     }
 
     @Override

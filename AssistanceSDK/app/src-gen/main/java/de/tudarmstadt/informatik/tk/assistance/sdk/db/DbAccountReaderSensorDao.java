@@ -23,13 +23,13 @@ public class DbAccountReaderSensorDao extends AbstractDao<DbAccountReaderSensor,
     /**
      * Properties of entity DbAccountReaderSensor.<br/>
      * Can be used for QueryBuilder and for referencing column names.
-    */
+     */
     public static class Properties {
         public final static Property Id = new Property(0, Long.class, "id", true, "_id");
         public final static Property Types = new Property(1, String.class, "types", false, "TYPES");
         public final static Property Created = new Property(2, String.class, "created", false, "CREATED");
         public final static Property DeviceId = new Property(3, Long.class, "deviceId", false, "DEVICE_ID");
-    };
+    }
 
     private DaoSession daoSession;
 
@@ -149,6 +149,11 @@ public class DbAccountReaderSensorDao extends AbstractDao<DbAccountReaderSensor,
         } else {
             return null;
         }
+    }
+
+    @Override
+    public boolean hasKey(DbAccountReaderSensor entity) {
+        return entity.getId() != null;
     }
 
     @Override

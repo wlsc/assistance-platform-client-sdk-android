@@ -23,7 +23,7 @@ public class DbCalendarSensorDao extends AbstractDao<DbCalendarSensor, Long> {
     /**
      * Properties of entity DbCalendarSensor.<br/>
      * Can be used for QueryBuilder and for referencing column names.
-    */
+     */
     public static class Properties {
         public final static Property Id = new Property(0, Long.class, "id", true, "_id");
         public final static Property EventId = new Property(1, Long.class, "eventId", false, "EVENT_ID");
@@ -53,7 +53,7 @@ public class DbCalendarSensorDao extends AbstractDao<DbCalendarSensor, Long> {
         public final static Property IsDeleted = new Property(25, Boolean.class, "isDeleted", false, "IS_DELETED");
         public final static Property Created = new Property(26, String.class, "created", false, "CREATED");
         public final static Property DeviceId = new Property(27, Long.class, "deviceId", false, "DEVICE_ID");
-    };
+    }
 
     private DaoSession daoSession;
 
@@ -485,6 +485,11 @@ public class DbCalendarSensorDao extends AbstractDao<DbCalendarSensor, Long> {
         } else {
             return null;
         }
+    }
+
+    @Override
+    public boolean hasKey(DbCalendarSensor entity) {
+        return entity.getId() != null;
     }
 
     @Override

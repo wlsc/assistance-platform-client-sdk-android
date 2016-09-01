@@ -23,7 +23,7 @@
 		<dependency>
 		    <groupId>org.greenrobot</groupId>
 		    <artifactId>greendao-generator</artifactId>
-		    <version>3.0.0</version>
+		    <version>3.1.0</version>
 		</dependency>
 		<dependency>
 			<groupId>org.freemarker</groupId>

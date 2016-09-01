@@ -23,7 +23,7 @@ public class DbPowerStateSensorDao extends AbstractDao<DbPowerStateSensor, Long>
     /**
      * Properties of entity DbPowerStateSensor.<br/>
      * Can be used for QueryBuilder and for referencing column names.
-    */
+     */
     public static class Properties {
         public final static Property Id = new Property(0, Long.class, "id", true, "_id");
         public final static Property IsCharging = new Property(1, Boolean.class, "isCharging", false, "IS_CHARGING");
@@ -33,7 +33,7 @@ public class DbPowerStateSensorDao extends AbstractDao<DbPowerStateSensor, Long>
         public final static Property ChargingMode = new Property(5, Integer.class, "chargingMode", false, "CHARGING_MODE");
         public final static Property PowerSaveMode = new Property(6, Boolean.class, "powerSaveMode", false, "POWER_SAVE_MODE");
         public final static Property DeviceId = new Property(7, Long.class, "deviceId", false, "DEVICE_ID");
-    };
+    }
 
     private DaoSession daoSession;
 
@@ -205,6 +205,11 @@ public class DbPowerStateSensorDao extends AbstractDao<DbPowerStateSensor, Long>
         } else {
             return null;
         }
+    }
+
+    @Override
+    public boolean hasKey(DbPowerStateSensor entity) {
+        return entity.getId() != null;
     }
 
     @Override

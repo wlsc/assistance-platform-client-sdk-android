@@ -23,7 +23,7 @@ public class LogsSensorUploadDao extends AbstractDao<LogsSensorUpload, Long> {
     /**
      * Properties of entity LogsSensorUpload.<br/>
      * Can be used for QueryBuilder and for referencing column names.
-    */
+     */
     public static class Properties {
         public final static Property Id = new Property(0, Long.class, "id", true, "_id");
         public final static Property StartTime = new Property(1, Long.class, "startTime", false, "START_TIME");
@@ -33,7 +33,7 @@ public class LogsSensorUploadDao extends AbstractDao<LogsSensorUpload, Long> {
         public final static Property EventsNumber = new Property(5, Integer.class, "eventsNumber", false, "EVENTS_NUMBER");
         public final static Property BodySize = new Property(6, Long.class, "bodySize", false, "BODY_SIZE");
         public final static Property UserId = new Property(7, Long.class, "userId", false, "USER_ID");
-    };
+    }
 
     private DaoSession daoSession;
 
@@ -213,6 +213,11 @@ public class LogsSensorUploadDao extends AbstractDao<LogsSensorUpload, Long> {
         } else {
             return null;
         }
+    }
+
+    @Override
+    public boolean hasKey(LogsSensorUpload entity) {
+        return entity.getId() != null;
     }
 
     @Override

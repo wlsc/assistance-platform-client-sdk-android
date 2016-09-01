@@ -23,13 +23,13 @@ public class DbPowerLevelSensorDao extends AbstractDao<DbPowerLevelSensor, Long>
     /**
      * Properties of entity DbPowerLevelSensor.<br/>
      * Can be used for QueryBuilder and for referencing column names.
-    */
+     */
     public static class Properties {
         public final static Property Id = new Property(0, Long.class, "id", true, "_id");
         public final static Property Percent = new Property(1, Float.class, "percent", false, "PERCENT");
         public final static Property Created = new Property(2, String.class, "created", false, "CREATED");
         public final static Property DeviceId = new Property(3, Long.class, "deviceId", false, "DEVICE_ID");
-    };
+    }
 
     private DaoSession daoSession;
 
@@ -149,6 +149,11 @@ public class DbPowerLevelSensorDao extends AbstractDao<DbPowerLevelSensor, Long>
         } else {
             return null;
         }
+    }
+
+    @Override
+    public boolean hasKey(DbPowerLevelSensor entity) {
+        return entity.getId() != null;
     }
 
     @Override

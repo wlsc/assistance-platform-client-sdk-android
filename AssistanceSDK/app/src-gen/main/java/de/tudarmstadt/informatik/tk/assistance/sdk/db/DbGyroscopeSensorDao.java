@@ -23,7 +23,7 @@ public class DbGyroscopeSensorDao extends AbstractDao<DbGyroscopeSensor, Long> {
     /**
      * Properties of entity DbGyroscopeSensor.<br/>
      * Can be used for QueryBuilder and for referencing column names.
-    */
+     */
     public static class Properties {
         public final static Property Id = new Property(0, Long.class, "id", true, "_id");
         public final static Property X = new Property(1, Double.class, "x", false, "X");
@@ -38,7 +38,7 @@ public class DbGyroscopeSensorDao extends AbstractDao<DbGyroscopeSensor, Long> {
         public final static Property YUncalibratedEstimatedDrift = new Property(10, Float.class, "yUncalibratedEstimatedDrift", false, "Y_UNCALIBRATED_ESTIMATED_DRIFT");
         public final static Property ZUncalibratedEstimatedDrift = new Property(11, Float.class, "zUncalibratedEstimatedDrift", false, "Z_UNCALIBRATED_ESTIMATED_DRIFT");
         public final static Property DeviceId = new Property(12, Long.class, "deviceId", false, "DEVICE_ID");
-    };
+    }
 
     private DaoSession daoSession;
 
@@ -275,6 +275,11 @@ public class DbGyroscopeSensorDao extends AbstractDao<DbGyroscopeSensor, Long> {
         } else {
             return null;
         }
+    }
+
+    @Override
+    public boolean hasKey(DbGyroscopeSensor entity) {
+        return entity.getId() != null;
     }
 
     @Override

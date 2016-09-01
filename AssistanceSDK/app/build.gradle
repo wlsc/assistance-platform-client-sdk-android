@@ -57,7 +57,7 @@ dependencies {
     // efficient HTTP client
     compile 'com.squareup.okhttp:okhttp:2.7.5'
     // database ORM
-    compile 'org.greenrobot:greendao:3.0.1'
+    compile 'org.greenrobot:greendao:3.1.1'
     // event bus system
     compile 'de.greenrobot:eventbus:2.4.1'
     // google's guava

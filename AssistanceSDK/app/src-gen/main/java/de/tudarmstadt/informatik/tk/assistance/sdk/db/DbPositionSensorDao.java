@@ -23,7 +23,7 @@ public class DbPositionSensorDao extends AbstractDao<DbPositionSensor, Long> {
     /**
      * Properties of entity DbPositionSensor.<br/>
      * Can be used for QueryBuilder and for referencing column names.
-    */
+     */
     public static class Properties {
         public final static Property Id = new Property(0, Long.class, "id", true, "_id");
         public final static Property Latitude = new Property(1, Double.class, "latitude", false, "LATITUDE");
@@ -36,7 +36,7 @@ public class DbPositionSensorDao extends AbstractDao<DbPositionSensor, Long> {
         public final static Property Course = new Property(8, Integer.class, "course", false, "COURSE");
         public final static Property Floor = new Property(9, Integer.class, "floor", false, "FLOOR");
         public final static Property DeviceId = new Property(10, Long.class, "deviceId", false, "DEVICE_ID");
-    };
+    }
 
     private DaoSession daoSession;
 
@@ -247,6 +247,11 @@ public class DbPositionSensorDao extends AbstractDao<DbPositionSensor, Long> {
         } else {
             return null;
         }
+    }
+
+    @Override
+    public boolean hasKey(DbPositionSensor entity) {
+        return entity.getId() != null;
     }
 
     @Override

@@ -344,41 +344,41 @@ public class DaoSession extends AbstractDaoSession {
     }
     
     public void clear() {
-        dbUserDaoConfig.getIdentityScope().clear();
-        dbUserSocialProfileDaoConfig.getIdentityScope().clear();
-        dbDeviceDaoConfig.getIdentityScope().clear();
-        dbModuleDaoConfig.getIdentityScope().clear();
-        dbModuleCapabilityDaoConfig.getIdentityScope().clear();
-        dbNewsDaoConfig.getIdentityScope().clear();
-        logsSensorUploadDaoConfig.getIdentityScope().clear();
-        dbPositionSensorDaoConfig.getIdentityScope().clear();
-        dbGyroscopeSensorDaoConfig.getIdentityScope().clear();
-        dbAccelerometerSensorDaoConfig.getIdentityScope().clear();
-        dbMagneticFieldSensorDaoConfig.getIdentityScope().clear();
-        dbMotionActivitySensorDaoConfig.getIdentityScope().clear();
-        dbConnectionSensorDaoConfig.getIdentityScope().clear();
-        dbWifiConnectionSensorDaoConfig.getIdentityScope().clear();
-        dbMobileConnectionSensorDaoConfig.getIdentityScope().clear();
-        dbLoudnessSensorDaoConfig.getIdentityScope().clear();
-        dbForegroundSensorDaoConfig.getIdentityScope().clear();
-        dbLightSensorDaoConfig.getIdentityScope().clear();
-        dbRingtoneSensorDaoConfig.getIdentityScope().clear();
-        dbRunningProcessesSensorDaoConfig.getIdentityScope().clear();
-        dbRunningServicesSensorDaoConfig.getIdentityScope().clear();
-        dbRunningTasksSensorDaoConfig.getIdentityScope().clear();
-        dbAccountReaderSensorDaoConfig.getIdentityScope().clear();
-        dbNetworkTrafficSensorDaoConfig.getIdentityScope().clear();
-        dbBrowserHistorySensorDaoConfig.getIdentityScope().clear();
-        dbCallLogSensorDaoConfig.getIdentityScope().clear();
-        dbCalendarSensorDaoConfig.getIdentityScope().clear();
-        dbCalendarReminderSensorDaoConfig.getIdentityScope().clear();
-        dbContactSensorDaoConfig.getIdentityScope().clear();
-        dbContactNumberSensorDaoConfig.getIdentityScope().clear();
-        dbContactEmailSensorDaoConfig.getIdentityScope().clear();
-        dbPowerStateSensorDaoConfig.getIdentityScope().clear();
-        dbPowerLevelSensorDaoConfig.getIdentityScope().clear();
-        dbTucanSensorDaoConfig.getIdentityScope().clear();
-        dbFacebookSensorDaoConfig.getIdentityScope().clear();
+        dbUserDaoConfig.clearIdentityScope();
+        dbUserSocialProfileDaoConfig.clearIdentityScope();
+        dbDeviceDaoConfig.clearIdentityScope();
+        dbModuleDaoConfig.clearIdentityScope();
+        dbModuleCapabilityDaoConfig.clearIdentityScope();
+        dbNewsDaoConfig.clearIdentityScope();
+        logsSensorUploadDaoConfig.clearIdentityScope();
+        dbPositionSensorDaoConfig.clearIdentityScope();
+        dbGyroscopeSensorDaoConfig.clearIdentityScope();
+        dbAccelerometerSensorDaoConfig.clearIdentityScope();
+        dbMagneticFieldSensorDaoConfig.clearIdentityScope();
+        dbMotionActivitySensorDaoConfig.clearIdentityScope();
+        dbConnectionSensorDaoConfig.clearIdentityScope();
+        dbWifiConnectionSensorDaoConfig.clearIdentityScope();
+        dbMobileConnectionSensorDaoConfig.clearIdentityScope();
+        dbLoudnessSensorDaoConfig.clearIdentityScope();
+        dbForegroundSensorDaoConfig.clearIdentityScope();
+        dbLightSensorDaoConfig.clearIdentityScope();
+        dbRingtoneSensorDaoConfig.clearIdentityScope();
+        dbRunningProcessesSensorDaoConfig.clearIdentityScope();
+        dbRunningServicesSensorDaoConfig.clearIdentityScope();
+        dbRunningTasksSensorDaoConfig.clearIdentityScope();
+        dbAccountReaderSensorDaoConfig.clearIdentityScope();
+        dbNetworkTrafficSensorDaoConfig.clearIdentityScope();
+        dbBrowserHistorySensorDaoConfig.clearIdentityScope();
+        dbCallLogSensorDaoConfig.clearIdentityScope();
+        dbCalendarSensorDaoConfig.clearIdentityScope();
+        dbCalendarReminderSensorDaoConfig.clearIdentityScope();
+        dbContactSensorDaoConfig.clearIdentityScope();
+        dbContactNumberSensorDaoConfig.clearIdentityScope();
+        dbContactEmailSensorDaoConfig.clearIdentityScope();
+        dbPowerStateSensorDaoConfig.clearIdentityScope();
+        dbPowerLevelSensorDaoConfig.clearIdentityScope();
+        dbTucanSensorDaoConfig.clearIdentityScope();
+        dbFacebookSensorDaoConfig.clearIdentityScope();
     }
 
     public DbUserDao getDbUserDao() {

@@ -23,7 +23,7 @@ public class DbWifiConnectionSensorDao extends AbstractDao<DbWifiConnectionSenso
     /**
      * Properties of entity DbWifiConnectionSensor.<br/>
      * Can be used for QueryBuilder and for referencing column names.
-    */
+     */
     public static class Properties {
         public final static Property Id = new Property(0, Long.class, "id", true, "_id");
         public final static Property Ssid = new Property(1, String.class, "ssid", false, "SSID");
@@ -35,7 +35,7 @@ public class DbWifiConnectionSensorDao extends AbstractDao<DbWifiConnectionSenso
         public final static Property SignalStrength = new Property(7, Integer.class, "signalStrength", false, "SIGNAL_STRENGTH");
         public final static Property NetworkId = new Property(8, Integer.class, "networkId", false, "NETWORK_ID");
         public final static Property DeviceId = new Property(9, Long.class, "deviceId", false, "DEVICE_ID");
-    };
+    }
 
     private DaoSession daoSession;
 
@@ -233,6 +233,11 @@ public class DbWifiConnectionSensorDao extends AbstractDao<DbWifiConnectionSenso
         } else {
             return null;
         }
+    }
+
+    @Override
+    public boolean hasKey(DbWifiConnectionSensor entity) {
+        return entity.getId() != null;
     }
 
     @Override

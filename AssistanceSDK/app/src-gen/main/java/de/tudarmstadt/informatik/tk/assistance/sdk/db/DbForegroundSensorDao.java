@@ -23,7 +23,7 @@ public class DbForegroundSensorDao extends AbstractDao<DbForegroundSensor, Long>
     /**
      * Properties of entity DbForegroundSensor.<br/>
      * Can be used for QueryBuilder and for referencing column names.
-    */
+     */
     public static class Properties {
         public final static Property Id = new Property(0, Long.class, "id", true, "_id");
         public final static Property PackageName = new Property(1, String.class, "packageName", false, "PACKAGE_NAME");
@@ -36,7 +36,7 @@ public class DbForegroundSensorDao extends AbstractDao<DbForegroundSensor, Long>
         public final static Property Keystrokes = new Property(8, Integer.class, "keystrokes", false, "KEYSTROKES");
         public final static Property Created = new Property(9, String.class, "created", false, "CREATED");
         public final static Property DeviceId = new Property(10, Long.class, "deviceId", false, "DEVICE_ID");
-    };
+    }
 
     private DaoSession daoSession;
 
@@ -247,6 +247,11 @@ public class DbForegroundSensorDao extends AbstractDao<DbForegroundSensor, Long>
         } else {
             return null;
         }
+    }
+
+    @Override
+    public boolean hasKey(DbForegroundSensor entity) {
+        return entity.getId() != null;
     }
 
     @Override

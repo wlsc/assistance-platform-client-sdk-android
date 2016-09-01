@@ -23,14 +23,14 @@ public class DbRunningServicesSensorDao extends AbstractDao<DbRunningServicesSen
     /**
      * Properties of entity DbRunningServicesSensor.<br/>
      * Can be used for QueryBuilder and for referencing column names.
-    */
+     */
     public static class Properties {
         public final static Property Id = new Property(0, Long.class, "id", true, "_id");
         public final static Property PackageName = new Property(1, String.class, "packageName", false, "PACKAGE_NAME");
         public final static Property ClassName = new Property(2, String.class, "className", false, "CLASS_NAME");
         public final static Property Created = new Property(3, String.class, "created", false, "CREATED");
         public final static Property DeviceId = new Property(4, Long.class, "deviceId", false, "DEVICE_ID");
-    };
+    }
 
     private DaoSession daoSession;
 
@@ -163,6 +163,11 @@ public class DbRunningServicesSensorDao extends AbstractDao<DbRunningServicesSen
         } else {
             return null;
         }
+    }
+
+    @Override
+    public boolean hasKey(DbRunningServicesSensor entity) {
+        return entity.getId() != null;
     }
 
     @Override

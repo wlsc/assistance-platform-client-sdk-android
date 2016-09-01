@@ -25,7 +25,7 @@ public class DbModuleCapabilityDao extends AbstractDao<DbModuleCapability, Long>
     /**
      * Properties of entity DbModuleCapability.<br/>
      * Can be used for QueryBuilder and for referencing column names.
-    */
+     */
     public static class Properties {
         public final static Property Id = new Property(0, Long.class, "id", true, "_id");
         public final static Property Type = new Property(1, String.class, "type", false, "TYPE");
@@ -37,7 +37,7 @@ public class DbModuleCapabilityDao extends AbstractDao<DbModuleCapability, Long>
         public final static Property Active = new Property(7, boolean.class, "active", false, "ACTIVE");
         public final static Property Created = new Property(8, String.class, "created", false, "CREATED");
         public final static Property ModuleId = new Property(9, Long.class, "moduleId", false, "MODULE_ID");
-    };
+    }
 
     private DaoSession daoSession;
 
@@ -216,6 +216,11 @@ public class DbModuleCapabilityDao extends AbstractDao<DbModuleCapability, Long>
         } else {
             return null;
         }
+    }
+
+    @Override
+    public boolean hasKey(DbModuleCapability entity) {
+        return entity.getId() != null;
     }
 
     @Override

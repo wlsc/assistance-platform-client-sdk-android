@@ -23,14 +23,14 @@ public class DbRunningTasksSensorDao extends AbstractDao<DbRunningTasksSensor, L
     /**
      * Properties of entity DbRunningTasksSensor.<br/>
      * Can be used for QueryBuilder and for referencing column names.
-    */
+     */
     public static class Properties {
         public final static Property Id = new Property(0, Long.class, "id", true, "_id");
         public final static Property Name = new Property(1, String.class, "name", false, "NAME");
         public final static Property StackPosition = new Property(2, Integer.class, "stackPosition", false, "STACK_POSITION");
         public final static Property Created = new Property(3, String.class, "created", false, "CREATED");
         public final static Property DeviceId = new Property(4, Long.class, "deviceId", false, "DEVICE_ID");
-    };
+    }
 
     private DaoSession daoSession;
 
@@ -163,6 +163,11 @@ public class DbRunningTasksSensorDao extends AbstractDao<DbRunningTasksSensor, L
         } else {
             return null;
         }
+    }
+
+    @Override
+    public boolean hasKey(DbRunningTasksSensor entity) {
+        return entity.getId() != null;
     }
 
     @Override

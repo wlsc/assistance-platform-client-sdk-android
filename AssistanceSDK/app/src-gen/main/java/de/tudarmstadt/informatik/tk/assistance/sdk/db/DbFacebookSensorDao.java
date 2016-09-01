@@ -23,7 +23,7 @@ public class DbFacebookSensorDao extends AbstractDao<DbFacebookSensor, Long> {
     /**
      * Properties of entity DbFacebookSensor.<br/>
      * Can be used for QueryBuilder and for referencing column names.
-    */
+     */
     public static class Properties {
         public final static Property Id = new Property(0, Long.class, "id", true, "_id");
         public final static Property OauthToken = new Property(1, String.class, "oauthToken", false, "OAUTH_TOKEN");
@@ -32,7 +32,7 @@ public class DbFacebookSensorDao extends AbstractDao<DbFacebookSensor, Long> {
         public final static Property WasChanged = new Property(4, boolean.class, "wasChanged", false, "WAS_CHANGED");
         public final static Property Created = new Property(5, String.class, "created", false, "CREATED");
         public final static Property UserId = new Property(6, Long.class, "userId", false, "USER_ID");
-    };
+    }
 
     private DaoSession daoSession;
 
@@ -183,6 +183,11 @@ public class DbFacebookSensorDao extends AbstractDao<DbFacebookSensor, Long> {
         } else {
             return null;
         }
+    }
+
+    @Override
+    public boolean hasKey(DbFacebookSensor entity) {
+        return entity.getId() != null;
     }
 
     @Override

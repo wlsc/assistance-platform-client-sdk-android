@@ -25,7 +25,7 @@ public class DbUserSocialProfileDao extends AbstractDao<DbUserSocialProfile, Lon
     /**
      * Properties of entity DbUserSocialProfile.<br/>
      * Can be used for QueryBuilder and for referencing column names.
-    */
+     */
     public static class Properties {
         public final static Property Id = new Property(0, Long.class, "id", true, "_id");
         public final static Property Name = new Property(1, String.class, "name", false, "NAME");
@@ -35,7 +35,7 @@ public class DbUserSocialProfileDao extends AbstractDao<DbUserSocialProfile, Lon
         public final static Property Updated = new Property(5, String.class, "updated", false, "UPDATED");
         public final static Property Created = new Property(6, String.class, "created", false, "CREATED");
         public final static Property UserId = new Property(7, Long.class, "userId", false, "USER_ID");
-    };
+    }
 
     private DaoSession daoSession;
 
@@ -208,6 +208,11 @@ public class DbUserSocialProfileDao extends AbstractDao<DbUserSocialProfile, Lon
         } else {
             return null;
         }
+    }
+
+    @Override
+    public boolean hasKey(DbUserSocialProfile entity) {
+        return entity.getId() != null;
     }
 
     @Override

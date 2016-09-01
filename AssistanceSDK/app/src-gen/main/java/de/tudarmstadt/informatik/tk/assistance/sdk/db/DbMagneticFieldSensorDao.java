@@ -23,7 +23,7 @@ public class DbMagneticFieldSensorDao extends AbstractDao<DbMagneticFieldSensor,
     /**
      * Properties of entity DbMagneticFieldSensor.<br/>
      * Can be used for QueryBuilder and for referencing column names.
-    */
+     */
     public static class Properties {
         public final static Property Id = new Property(0, Long.class, "id", true, "_id");
         public final static Property X = new Property(1, Double.class, "x", false, "X");
@@ -38,7 +38,7 @@ public class DbMagneticFieldSensorDao extends AbstractDao<DbMagneticFieldSensor,
         public final static Property YUncalibratedEstimatedIronBias = new Property(10, Float.class, "yUncalibratedEstimatedIronBias", false, "Y_UNCALIBRATED_ESTIMATED_IRON_BIAS");
         public final static Property ZUncalibratedEstimatedIronBias = new Property(11, Float.class, "zUncalibratedEstimatedIronBias", false, "Z_UNCALIBRATED_ESTIMATED_IRON_BIAS");
         public final static Property DeviceId = new Property(12, Long.class, "deviceId", false, "DEVICE_ID");
-    };
+    }
 
     private DaoSession daoSession;
 
@@ -275,6 +275,11 @@ public class DbMagneticFieldSensorDao extends AbstractDao<DbMagneticFieldSensor,
         } else {
             return null;
         }
+    }
+
+    @Override
+    public boolean hasKey(DbMagneticFieldSensor entity) {
+        return entity.getId() != null;
     }
 
     @Override

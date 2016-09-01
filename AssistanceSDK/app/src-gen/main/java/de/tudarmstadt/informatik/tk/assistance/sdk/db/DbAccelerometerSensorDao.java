@@ -23,7 +23,7 @@ public class DbAccelerometerSensorDao extends AbstractDao<DbAccelerometerSensor,
     /**
      * Properties of entity DbAccelerometerSensor.<br/>
      * Can be used for QueryBuilder and for referencing column names.
-    */
+     */
     public static class Properties {
         public final static Property Id = new Property(0, Long.class, "id", true, "_id");
         public final static Property X = new Property(1, Double.class, "x", false, "X");
@@ -32,7 +32,7 @@ public class DbAccelerometerSensorDao extends AbstractDao<DbAccelerometerSensor,
         public final static Property Created = new Property(4, String.class, "created", false, "CREATED");
         public final static Property Accuracy = new Property(5, Integer.class, "accuracy", false, "ACCURACY");
         public final static Property DeviceId = new Property(6, Long.class, "deviceId", false, "DEVICE_ID");
-    };
+    }
 
     private DaoSession daoSession;
 
@@ -191,6 +191,11 @@ public class DbAccelerometerSensorDao extends AbstractDao<DbAccelerometerSensor,
         } else {
             return null;
         }
+    }
+
+    @Override
+    public boolean hasKey(DbAccelerometerSensor entity) {
+        return entity.getId() != null;
     }
 
     @Override
