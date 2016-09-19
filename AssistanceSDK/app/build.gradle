@@ -64,7 +64,7 @@ dependencies {
     compile 'com.google.guava:guava:19.0'
     // reactive
     compile 'io.reactivex:rxandroid:1.2.1'
-    compile 'io.reactivex:rxjava:1.1.10'
+    compile 'io.reactivex:rxjava:1.2.0'
     // runtime permissions wrapper
     compile 'com.github.kayvannj:PermissionUtils:1.0.2@aar'
 }
