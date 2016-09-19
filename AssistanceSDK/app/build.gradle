@@ -37,7 +37,7 @@ dependencies {
     // Facebook SDK
     compile 'com.facebook.android:facebook-android-sdk:4.15.0'
     // Microsoft OneDrive SDK
-    compile ('com.onedrive.sdk:onedrive-sdk-android:1.2+') {
+    compile('com.onedrive.sdk:onedrive-sdk-android:1.2+') {
         transitive = false
     }
     // OneDrive auth types
@@ -46,7 +46,7 @@ dependencies {
     // twitter library
 //    compile 'org.twitter4j:twitter4j-core:4.0.4'
     // support library
-    compile 'com.android.support:appcompat-v7:24.2.0'
+//    compile 'com.android.support:appcompat-v7:24.2.1'
     // google play library
     compile 'com.google.android.gms:play-services-base:9.0.2'
     compile 'com.google.android.gms:play-services-gcm:9.0.2'

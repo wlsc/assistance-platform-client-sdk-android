@@ -1,14 +1,10 @@
 package de.tudarmstadt.informatik.tk.assistance.sdk.service;
 
-import android.app.NotificationManager;
-import android.content.Context;
 import android.os.Bundle;
-import android.support.v7.app.NotificationCompat;
 
 import com.google.android.gms.gcm.GcmListenerService;
 
 import de.tudarmstadt.informatik.tk.assistance.sdk.Config;
-import de.tudarmstadt.informatik.tk.assistance.sdk.R;
 import de.tudarmstadt.informatik.tk.assistance.sdk.util.logger.Log;
 
 /**
@@ -57,17 +53,17 @@ public class AssistanceGcmListenerService extends GcmListenerService {
 
 //        Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
 
-        NotificationCompat.Builder notificationBuilder = (NotificationCompat.Builder) new NotificationCompat.Builder(this)
-                .setSmallIcon(R.drawable.ic_assistance_service)
-                .setContentTitle("GCM Action Message")
-                .setContentText(message)
-                .setAutoCancel(true);
+//        NotificationCompat.Builder notificationBuilder = (NotificationCompat.Builder) new NotificationCompat.Builder(this)
+//                .setSmallIcon(R.drawable.ic_assistance_service)
+//                .setContentTitle("GCM Action Message")
+//                .setContentText(message)
+//                .setAutoCancel(true);
 //                .setSound(defaultSoundUri)
 //                .setContentIntent(pendingIntent);
 
-        NotificationManager notificationManager =
-                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+//        NotificationManager notificationManager =
+//                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
-        notificationManager.notify(0 /* ID of notification */, notificationBuilder.build());
+//        notificationManager.notify(0 /* ID of notification */, notificationBuilder.build());
     }
 }
