@@ -17,7 +17,7 @@ import de.tudarmstadt.informatik.tk.assistance.sdk.model.api.sensing.SensorApiTy
  * @author Wladimir Schmidt (wlsc.dev@gmail.com)
  * @date 02.10.2015
  */
-public class PermissionUtils {
+public final class PermissionUtils {
 
     private static final String TAG = PermissionUtils.class.getSimpleName();
 

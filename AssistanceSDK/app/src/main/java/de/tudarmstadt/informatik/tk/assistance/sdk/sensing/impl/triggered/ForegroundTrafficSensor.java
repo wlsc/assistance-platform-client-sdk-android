@@ -36,7 +36,7 @@ import de.tudarmstadt.informatik.tk.assistance.sdk.util.logger.Log;
  * @edited by Wladimir Schmidt (wlsc.dev@gmail.com)
  * @date 27.10.2015
  */
-public class ForegroundTrafficSensor extends AbstractTriggeredSensor {
+public final class ForegroundTrafficSensor extends AbstractTriggeredSensor {
 
     private static final String TAG = ForegroundTrafficSensor.class.getSimpleName();
 

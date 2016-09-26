@@ -10,7 +10,7 @@ import de.tudarmstadt.informatik.tk.assistance.sdk.model.api.sensing.sensor.Magn
  * @author Wladimir Schmidt (wlsc.dev@gmail.com)
  * @date 30.10.2015
  */
-public class MagneticFieldSensorDaoImpl extends
+public final class MagneticFieldSensorDaoImpl extends
         CommonEventDaoImpl<DbMagneticFieldSensor> implements
         MagneticFieldSensorDao {
 

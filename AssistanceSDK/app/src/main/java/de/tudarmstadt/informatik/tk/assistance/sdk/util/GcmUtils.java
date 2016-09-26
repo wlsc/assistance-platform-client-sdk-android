@@ -16,7 +16,7 @@ import de.tudarmstadt.informatik.tk.assistance.sdk.util.logger.Log;
  * @author Wladimir Schmidt (wlsc.dev@gmail.com)
  * @date 30.09.2015
  */
-public class GcmUtils {
+public final class GcmUtils {
 
     private static final String TAG = GcmUtils.class.getSimpleName();
 

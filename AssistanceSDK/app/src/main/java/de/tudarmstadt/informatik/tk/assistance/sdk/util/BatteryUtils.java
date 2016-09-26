@@ -11,7 +11,7 @@ import android.os.PowerManager;
  * @author Wladimir Schmidt (wlsc.dev@gmail.com)
  * @date 31.10.2015
  */
-public class BatteryUtils {
+public final class BatteryUtils {
 
     private BatteryUtils() {
     }

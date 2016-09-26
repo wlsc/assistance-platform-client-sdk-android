@@ -10,7 +10,7 @@ import de.tudarmstadt.informatik.tk.assistance.sdk.sensing.impl.DummySensor;
  * @author Wladimir Schmidt (wlsc.dev@gmail.com)
  * @date 30.12.2015
  */
-public class TucanSensor extends DummySensor {
+public final class TucanSensor extends DummySensor {
 
     private static final String TAG = TucanSensor.class.getSimpleName();
 

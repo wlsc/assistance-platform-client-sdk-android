@@ -11,7 +11,7 @@ import de.tudarmstadt.informatik.tk.assistance.sdk.model.api.sensing.sensor.Ring
  * @author Wladimir Schmidt (wlsc.dev@gmail.com)
  * @date 24.11.2015
  */
-public class RingtoneSensorDaoImpl extends
+public final class RingtoneSensorDaoImpl extends
         CommonEventDaoImpl<DbRingtoneSensor> implements
         RingtoneSensorDao {
 

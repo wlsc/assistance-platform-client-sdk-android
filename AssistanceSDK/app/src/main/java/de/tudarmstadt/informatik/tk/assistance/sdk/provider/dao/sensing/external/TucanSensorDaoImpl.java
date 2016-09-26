@@ -12,7 +12,7 @@ import de.tudarmstadt.informatik.tk.assistance.sdk.model.api.sensing.sensor.exte
  * @author Wladimir Schmidt (wlsc.dev@gmail.com)
  * @date 17.01.2016
  */
-public class TucanSensorDaoImpl extends
+public final class TucanSensorDaoImpl extends
         CommonSocialEventDaoImpl<DbTucanSensor> implements
         TucanSensorDao {
 

@@ -18,7 +18,7 @@ import de.tudarmstadt.informatik.tk.assistance.sdk.Config;
  * @author Wladimir Schmidt (wlsc.dev@gmail.com)
  * @date 01.09.2015
  */
-public class StorageUtils {
+public final class StorageUtils {
 
     private StorageUtils() {
     }

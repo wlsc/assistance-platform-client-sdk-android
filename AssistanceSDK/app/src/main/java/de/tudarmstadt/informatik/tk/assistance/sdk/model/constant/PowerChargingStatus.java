@@ -4,7 +4,7 @@ package de.tudarmstadt.informatik.tk.assistance.sdk.model.constant;
  * @author Wladimir Schmidt (wlsc.dev@gmail.com)
  * @date 10.11.2015
  */
-public class PowerChargingStatus {
+public final class PowerChargingStatus {
 
     public static final int NONE = 0;
 

@@ -12,7 +12,7 @@ import de.tudarmstadt.informatik.tk.assistance.sdk.provider.dao.CommonDaoImpl;
  * @author Wladimir Schmidt (wlsc.dev@gmail.com)
  * @date 30.10.2015
  */
-public class ModuleCapabilityDaoImpl extends
+public final class ModuleCapabilityDaoImpl extends
         CommonDaoImpl<DbModuleCapability> implements
         ModuleCapabilityDao {
 

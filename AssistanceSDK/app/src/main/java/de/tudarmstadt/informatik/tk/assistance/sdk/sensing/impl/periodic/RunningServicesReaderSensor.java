@@ -23,7 +23,7 @@ import de.tudarmstadt.informatik.tk.assistance.sdk.util.logger.Log;
  * @edited by Wladimir Schmidt (wlsc.dev@gmail.com)
  * @date 06.12.2015
  */
-public class RunningServicesReaderSensor extends AbstractPeriodicSensor {
+public final class RunningServicesReaderSensor extends AbstractPeriodicSensor {
 
     private static final String TAG = RunningServicesReaderSensor.class.getSimpleName();
 

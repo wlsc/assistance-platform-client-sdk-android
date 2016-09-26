@@ -11,7 +11,7 @@ import de.tudarmstadt.informatik.tk.assistance.sdk.model.api.sensing.sensor.Brow
  * @author Wladimir Schmidt (wlsc.dev@gmail.com)
  * @date 24.11.2015
  */
-public class BrowserHistorySensorDaoImpl extends
+public final class BrowserHistorySensorDaoImpl extends
         CommonEventDaoImpl<DbBrowserHistorySensor> implements
         BrowserHistorySensorDao {
 

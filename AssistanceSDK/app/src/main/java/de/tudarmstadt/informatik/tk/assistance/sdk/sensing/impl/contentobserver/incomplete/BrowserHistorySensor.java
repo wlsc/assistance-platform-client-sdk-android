@@ -13,7 +13,7 @@ import de.tudarmstadt.informatik.tk.assistance.sdk.util.logger.Log;
 /**
  * @author Karsten Planz
  */
-public class BrowserHistorySensor extends AbstractContentObserverSensor {
+public final class BrowserHistorySensor extends AbstractContentObserverSensor {
 
     private static final String TAG = BrowserHistorySensor.class.getSimpleName();
 

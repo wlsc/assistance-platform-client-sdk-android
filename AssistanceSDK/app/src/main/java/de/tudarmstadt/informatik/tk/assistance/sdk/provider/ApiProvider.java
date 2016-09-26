@@ -13,7 +13,7 @@ import de.tudarmstadt.informatik.tk.assistance.sdk.provider.api.UserApiProvider;
  * @author Wladimir Schmidt (wlsc.dev@gmail.com)
  * @date 08.01.2016
  */
-public class ApiProvider {
+public final class ApiProvider {
 
     private static final String TAG = ApiProvider.class.getSimpleName();
 

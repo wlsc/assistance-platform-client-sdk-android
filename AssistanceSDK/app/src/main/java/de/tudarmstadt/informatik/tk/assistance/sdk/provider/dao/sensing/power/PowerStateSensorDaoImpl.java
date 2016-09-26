@@ -11,7 +11,7 @@ import de.tudarmstadt.informatik.tk.assistance.sdk.provider.dao.sensing.CommonEv
  * @author Wladimir Schmidt (wlsc.dev@gmail.com)
  * @date 31.10.2015
  */
-public class PowerStateSensorDaoImpl extends
+public final class PowerStateSensorDaoImpl extends
         CommonEventDaoImpl<DbPowerStateSensor> implements
         PowerStateSensorDao {
 

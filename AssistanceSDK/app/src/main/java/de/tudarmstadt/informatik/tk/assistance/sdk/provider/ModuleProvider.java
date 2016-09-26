@@ -23,7 +23,7 @@ import de.tudarmstadt.informatik.tk.assistance.sdk.util.logger.Log;
  * @author Wladimir Schmidt (wlsc.dev@gmail.com)
  * @date 26.12.2015
  */
-public class ModuleProvider {
+public final class ModuleProvider {
 
     private static final String TAG = ModuleProvider.class.getSimpleName();
 

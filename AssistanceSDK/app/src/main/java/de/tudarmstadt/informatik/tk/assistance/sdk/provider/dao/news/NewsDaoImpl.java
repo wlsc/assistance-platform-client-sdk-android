@@ -21,7 +21,7 @@ import de.tudarmstadt.informatik.tk.assistance.sdk.util.logger.Log;
  * @author Wladimir Schmidt (wlsc.dev@gmail.com)
  * @date 30.10.2015
  */
-public class NewsDaoImpl extends
+public final class NewsDaoImpl extends
         CommonDaoImpl<DbNews> implements
         NewsDao {
 

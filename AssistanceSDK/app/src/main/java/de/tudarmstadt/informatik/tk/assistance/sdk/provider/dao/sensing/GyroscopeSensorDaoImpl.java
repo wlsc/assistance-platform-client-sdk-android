@@ -10,7 +10,7 @@ import de.tudarmstadt.informatik.tk.assistance.sdk.model.api.sensing.sensor.Gyro
  * @author Wladimir Schmidt (wlsc.dev@gmail.com)
  * @date 30.10.2015
  */
-public class GyroscopeSensorDaoImpl extends
+public final class GyroscopeSensorDaoImpl extends
         CommonEventDaoImpl<DbGyroscopeSensor> implements
         GyroscopeSensorDao {
 

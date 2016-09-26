@@ -21,7 +21,7 @@ import de.tudarmstadt.informatik.tk.assistance.sdk.util.logger.Log;
  * @edited by Wladimir Schmidt (wlsc.dev@gmail.com)
  * @date 24.11.2015
  */
-public class RunningProcessesReaderSensor extends AbstractPeriodicSensor {
+public final class RunningProcessesReaderSensor extends AbstractPeriodicSensor {
 
     private static final String TAG = RunningProcessesReaderSensor.class.getSimpleName();
 

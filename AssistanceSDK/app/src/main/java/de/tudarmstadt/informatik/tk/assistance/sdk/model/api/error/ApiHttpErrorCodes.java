@@ -6,7 +6,7 @@ package de.tudarmstadt.informatik.tk.assistance.sdk.model.api.error;
  *
  * Created by Wladimir Schmidt on 28.06.2015.
  */
-public class ApiHttpErrorCodes {
+public final class ApiHttpErrorCodes {
 
     public static final int LOGIN_NO_VALID = 2;
 

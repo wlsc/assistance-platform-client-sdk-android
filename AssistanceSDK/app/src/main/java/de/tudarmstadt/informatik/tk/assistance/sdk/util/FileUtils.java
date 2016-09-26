@@ -17,7 +17,7 @@ import java.io.UnsupportedEncodingException;
 import java.nio.channels.FileChannel;
 
 
-public class FileUtils {
+public final class FileUtils {
 
     private FileUtils() {
     }

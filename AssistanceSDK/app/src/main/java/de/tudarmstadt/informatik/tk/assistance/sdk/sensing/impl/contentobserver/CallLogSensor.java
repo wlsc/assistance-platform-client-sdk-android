@@ -27,7 +27,7 @@ import de.tudarmstadt.informatik.tk.assistance.sdk.util.logger.Log;
  * @edited by Wladimir Schmidt (wlsc.dev@gmail.com)
  * @date 27.10.2015
  */
-public class CallLogSensor extends AbstractContentObserverSensor {
+public final class CallLogSensor extends AbstractContentObserverSensor {
 
     private static final String TAG = CallLogSensor.class.getSimpleName();
 

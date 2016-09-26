@@ -10,7 +10,7 @@ import de.tudarmstadt.informatik.tk.assistance.sdk.model.api.sensing.sensor.Acce
  * @author Wladimir Schmidt (wlsc.dev@gmail.com)
  * @date 30.10.2015
  */
-public class AccelerometerSensorDaoImpl extends
+public final class AccelerometerSensorDaoImpl extends
         CommonEventDaoImpl<DbAccelerometerSensor> implements
         AccelerometerSensorDao {
 

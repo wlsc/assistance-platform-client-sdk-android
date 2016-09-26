@@ -17,7 +17,7 @@ import rx.schedulers.Schedulers;
  * @author Wladimir Schmidt (wlsc.dev@gmail.com)
  * @date 19.01.2016
  */
-public class UserApiProvider {
+public final class UserApiProvider {
 
     private static final String TAG = UserApiProvider.class.getSimpleName();
 

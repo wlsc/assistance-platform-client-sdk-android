@@ -17,7 +17,7 @@ import de.tudarmstadt.informatik.tk.assistance.sdk.util.DateUtils;
  * @author Wladimir Schmidt (wlsc.dev@gmail.com)
  * @date 30.10.2015
  */
-public class CalendarSensorDaoImpl extends
+public final class CalendarSensorDaoImpl extends
         CommonEventDaoImpl<DbCalendarSensor> implements
         CalendarSensorDao {
 

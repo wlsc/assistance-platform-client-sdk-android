@@ -22,7 +22,7 @@ import rx.schedulers.Schedulers;
  * @author Wladimir Schmidt (wlsc.dev@gmail.com)
  * @date 02.01.2016
  */
-public class ModuleApiProvider {
+public final class ModuleApiProvider {
 
     private static final String TAG = ModuleApiProvider.class.getSimpleName();
 

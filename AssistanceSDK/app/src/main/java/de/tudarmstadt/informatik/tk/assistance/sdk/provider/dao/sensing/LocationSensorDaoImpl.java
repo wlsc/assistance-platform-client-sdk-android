@@ -10,7 +10,7 @@ import de.tudarmstadt.informatik.tk.assistance.sdk.model.api.sensing.sensor.Loca
  * @author Wladimir Schmidt (wlsc.dev@gmail.com)
  * @date 30.10.2015
  */
-public class LocationSensorDaoImpl extends
+public final class LocationSensorDaoImpl extends
         CommonEventDaoImpl<DbPositionSensor> implements
         LocationSensorDao {
 

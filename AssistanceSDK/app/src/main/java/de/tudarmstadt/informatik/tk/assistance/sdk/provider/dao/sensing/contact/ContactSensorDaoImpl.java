@@ -22,7 +22,7 @@ import de.tudarmstadt.informatik.tk.assistance.sdk.provider.dao.sensing.CommonEv
  * @author Wladimir Schmidt (wlsc.dev@gmail.com)
  * @date 24.11.2015
  */
-public class ContactSensorDaoImpl extends
+public final class ContactSensorDaoImpl extends
         CommonEventDaoImpl<DbContactSensor> implements
         ContactSensorDao {
 

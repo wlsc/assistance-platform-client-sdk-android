@@ -16,7 +16,7 @@ import de.tudarmstadt.informatik.tk.assistance.sdk.provider.dao.sensing.CommonEv
  * @author Wladimir Schmidt (wlsc.dev@gmail.com)
  * @date 30.10.2015
  */
-public class CalendarReminderSensorDaoImpl extends
+public final class CalendarReminderSensorDaoImpl extends
         CommonEventDaoImpl<DbCalendarReminderSensor> implements
         CalendarReminderSensorDao {
 

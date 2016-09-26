@@ -29,7 +29,7 @@ import de.tudarmstadt.informatik.tk.assistance.sdk.util.logger.Log;
  * @edited by Wladimir Schmidt (wlsc.dev@gmail.com)
  * @date 26.10.2015
  */
-public class ConnectionSensor extends AbstractTriggeredSensor {
+public final class ConnectionSensor extends AbstractTriggeredSensor {
 
     private static final String TAG = ConnectionReceiver.class.getSimpleName();
 

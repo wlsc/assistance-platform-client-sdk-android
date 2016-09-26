@@ -9,7 +9,7 @@ import android.webkit.URLUtil;
  * @author Wladimir Schmidt (wlsc.dev@gmail.com)
  * @date 20.01.2016
  */
-public class UrlUtils {
+public final class UrlUtils {
 
     private UrlUtils() {
     }

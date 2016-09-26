@@ -4,7 +4,7 @@ package de.tudarmstadt.informatik.tk.assistance.sdk.util;
  * @author Wladimir Schmidt (wlsc.dev@gmail.com)
  * @date 26.11.2015
  */
-public class StringUtils {
+public final class StringUtils {
 
     private StringUtils() {
     }

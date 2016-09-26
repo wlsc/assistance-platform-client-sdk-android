@@ -21,7 +21,7 @@ import retrofit.converter.GsonConverter;
  * @author Wladimir Schmidt (wlsc.dev@gmail.com)
  * @date 27.06.2015
  */
-public class ApiGenerator {
+public final class ApiGenerator {
 
     public static final long CACHE_SIZE = 1024l * 1024l * 10l;
 

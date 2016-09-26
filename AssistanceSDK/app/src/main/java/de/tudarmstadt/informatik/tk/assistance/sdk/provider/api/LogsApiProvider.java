@@ -11,7 +11,7 @@ import rx.Observable;
  * @author Wladimir Schmidt (wlsc.dev@gmail.com)
  * @date 23.01.2016
  */
-public class LogsApiProvider {
+public final class LogsApiProvider {
 
     private static final String TAG = LoginApiProvider.class.getSimpleName();
 

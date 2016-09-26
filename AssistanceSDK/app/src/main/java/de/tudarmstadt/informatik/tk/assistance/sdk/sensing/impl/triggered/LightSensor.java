@@ -22,7 +22,7 @@ import de.tudarmstadt.informatik.tk.assistance.sdk.util.logger.Log;
  * @edited by Wladimir Schmidt (wlsc.dev@gmail.com)
  * @date 26.10.2015
  */
-public class LightSensor
+public final class LightSensor
         extends AbstractTriggeredSensor
         implements SensorEventListener {
 

@@ -14,7 +14,7 @@ import rx.schedulers.Schedulers;
  * @author Wladimir Schmidt (wlsc.dev@gmail.com)
  * @date 18.01.2016
  */
-public class SensorUploadApiProvider {
+public final class SensorUploadApiProvider {
 
     private static final String TAG = SensorUploadApiProvider.class.getSimpleName();
 

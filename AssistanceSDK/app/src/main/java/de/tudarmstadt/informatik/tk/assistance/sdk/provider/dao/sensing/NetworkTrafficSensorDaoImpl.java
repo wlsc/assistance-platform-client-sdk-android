@@ -15,7 +15,7 @@ import de.tudarmstadt.informatik.tk.assistance.sdk.model.api.sensing.sensor.Netw
  * @author Wladimir Schmidt (wlsc.dev@gmail.com)
  * @date 30.10.2015
  */
-public class NetworkTrafficSensorDaoImpl extends
+public final class NetworkTrafficSensorDaoImpl extends
         CommonEventDaoImpl<DbNetworkTrafficSensor> implements
         NetworkTrafficSensorDao {
 

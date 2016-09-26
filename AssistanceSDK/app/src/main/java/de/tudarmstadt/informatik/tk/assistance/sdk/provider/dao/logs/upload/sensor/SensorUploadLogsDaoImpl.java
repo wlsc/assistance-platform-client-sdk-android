@@ -8,7 +8,7 @@ import de.tudarmstadt.informatik.tk.assistance.sdk.provider.dao.logs.upload.Uplo
  * @author Wladimir Schmidt (wlsc.dev@gmail.com)
  * @date 23.01.2016
  */
-public class SensorUploadLogsDaoImpl extends
+public final class SensorUploadLogsDaoImpl extends
         UploadLogsDaoImpl<LogsSensorUpload> implements
         SensorUploadLogsDao {
 

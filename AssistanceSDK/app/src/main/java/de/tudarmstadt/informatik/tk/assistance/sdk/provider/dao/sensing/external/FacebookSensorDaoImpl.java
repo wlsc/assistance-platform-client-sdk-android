@@ -18,7 +18,7 @@ import de.tudarmstadt.informatik.tk.assistance.sdk.model.api.sensing.sensor.exte
  * @author Wladimir Schmidt (wlsc.dev@gmail.com)
  * @date 17.01.2016
  */
-public class FacebookSensorDaoImpl extends
+public final class FacebookSensorDaoImpl extends
         CommonSocialEventDaoImpl<DbFacebookSensor> implements
         FacebookSensorDao {
 

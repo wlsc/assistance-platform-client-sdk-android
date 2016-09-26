@@ -15,7 +15,7 @@ import org.json.JSONObject;
  * @author Wladimir Schmidt (wlsc.dev@gmail.com)
  * @date 17.12.2015
  */
-public class JsonUtils {
+public final class JsonUtils {
 
     private static JsonUtils INSTANCE;
 

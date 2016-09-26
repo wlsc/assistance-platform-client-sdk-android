@@ -10,7 +10,7 @@ import de.tudarmstadt.informatik.tk.assistance.sdk.model.api.sensing.sensor.Moti
  * @author Wladimir Schmidt (wlsc.dev@gmail.com)
  * @date 30.10.2015
  */
-public class MotionActivitySensorDaoImpl extends
+public final class MotionActivitySensorDaoImpl extends
         CommonEventDaoImpl<DbMotionActivitySensor> implements
         MotionActivitySensorDao {
 

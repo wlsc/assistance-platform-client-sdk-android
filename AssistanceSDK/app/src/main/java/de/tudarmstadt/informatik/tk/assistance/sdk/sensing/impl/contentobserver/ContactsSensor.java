@@ -42,7 +42,7 @@ import de.tudarmstadt.informatik.tk.assistance.sdk.util.logger.Log;
  * @edited by Wladimir Schmidt (wlsc.dev@gmail.com)
  * @date 24.11.2015
  */
-public class ContactsSensor extends AbstractContentObserverSensor {
+public final class ContactsSensor extends AbstractContentObserverSensor {
 
     private static final String TAG = ContactsSensor.class.getSimpleName();
 

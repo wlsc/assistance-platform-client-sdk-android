@@ -11,7 +11,7 @@ import de.tudarmstadt.informatik.tk.assistance.sdk.model.api.sensing.sensor.Acco
  * @author Wladimir Schmidt (wlsc.dev@gmail.com)
  * @date 24.11.2015
  */
-public class AccountReaderSensorDaoImpl extends
+public final class AccountReaderSensorDaoImpl extends
         CommonEventDaoImpl<DbAccountReaderSensor> implements
         AccountReaderSensorDao {
 

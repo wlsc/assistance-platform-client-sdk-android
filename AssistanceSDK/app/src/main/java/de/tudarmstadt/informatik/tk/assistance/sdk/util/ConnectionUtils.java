@@ -11,7 +11,7 @@ import android.telephony.TelephonyManager;
  * @author Wladimir Schmidt (wlsc.dev@gmail.com)
  * @date 31.10.2015
  */
-public class ConnectionUtils {
+public final class ConnectionUtils {
 
     private ConnectionUtils() {
     }

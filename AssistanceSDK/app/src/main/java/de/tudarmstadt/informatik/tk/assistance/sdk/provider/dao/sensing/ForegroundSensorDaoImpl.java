@@ -11,7 +11,7 @@ import de.tudarmstadt.informatik.tk.assistance.sdk.model.api.sensing.sensor.Fore
  * @author Wladimir Schmidt (wlsc.dev@gmail.com)
  * @date 30.10.2015
  */
-public class ForegroundSensorDaoImpl extends
+public final class ForegroundSensorDaoImpl extends
         CommonEventDaoImpl<DbForegroundSensor> implements
         ForegroundSensorDao {
 

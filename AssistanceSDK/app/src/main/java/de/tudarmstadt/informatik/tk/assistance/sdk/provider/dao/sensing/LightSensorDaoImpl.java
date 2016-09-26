@@ -10,7 +10,7 @@ import de.tudarmstadt.informatik.tk.assistance.sdk.model.api.sensing.sensor.Ligh
  * @author Wladimir Schmidt (wlsc.dev@gmail.com)
  * @date 30.10.2015
  */
-public class LightSensorDaoImpl extends
+public final class LightSensorDaoImpl extends
         CommonEventDaoImpl<DbLightSensor> implements
         LightSensorDao {
 

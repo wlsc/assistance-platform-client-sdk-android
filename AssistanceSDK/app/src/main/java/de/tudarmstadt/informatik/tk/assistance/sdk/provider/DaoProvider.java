@@ -85,7 +85,7 @@ import de.tudarmstadt.informatik.tk.assistance.sdk.util.db.DbAssistanceOpenHelpe
  * @author Wladimir Schmidt (wlsc.dev@gmail.com)
  * @date 08.10.2015
  */
-public class DaoProvider {
+public final class DaoProvider {
 
     private static final String TAG = DaoProvider.class.getSimpleName();
 

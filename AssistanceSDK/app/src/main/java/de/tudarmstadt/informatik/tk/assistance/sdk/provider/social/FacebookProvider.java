@@ -13,7 +13,7 @@ import de.tudarmstadt.informatik.tk.assistance.sdk.util.logger.Log;
  * @author Wladimir Schmidt (wlsc.dev@gmail.com)
  * @date 31.12.2015
  */
-public class FacebookProvider {
+public final class FacebookProvider {
 
     private static final String TAG = FacebookProvider.class.getSimpleName();
 

@@ -11,7 +11,7 @@ import de.tudarmstadt.informatik.tk.assistance.sdk.provider.dao.sensing.CommonEv
  * @author Wladimir Schmidt (wlsc.dev@gmail.com)
  * @date 30.10.2015
  */
-public class MobileConnectionSensorDaoImpl extends
+public final class MobileConnectionSensorDaoImpl extends
         CommonEventDaoImpl<DbMobileConnectionSensor> implements
         MobileConnectionSensorDao {
 

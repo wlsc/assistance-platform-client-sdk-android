@@ -12,7 +12,7 @@ import de.tudarmstadt.informatik.tk.assistance.sdk.util.logger.Log;
  * @author Wladimir Schmidt (wlsc.dev@gmail.com)
  * @date 30.10.2015
  */
-public class DeviceDaoImpl extends
+public final class DeviceDaoImpl extends
         CommonDaoImpl<DbDevice> implements
         DeviceDao {
 

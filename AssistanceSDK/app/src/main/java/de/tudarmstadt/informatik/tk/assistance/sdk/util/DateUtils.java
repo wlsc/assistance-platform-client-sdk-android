@@ -13,7 +13,7 @@ import java.util.TimeZone;
  * @author Karsten Planz
  * @edited on 30.08.2015 by  Wladimir Schmidt (wlsc.dev@gmail.com)
  */
-public class DateUtils {
+public final class DateUtils {
 
     /**
      * http://www.w3.org/TR/NOTE-datetime

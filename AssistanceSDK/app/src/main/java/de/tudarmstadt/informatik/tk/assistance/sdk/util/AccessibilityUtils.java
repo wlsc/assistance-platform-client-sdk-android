@@ -16,7 +16,7 @@ import de.tudarmstadt.informatik.tk.assistance.sdk.util.logger.Log;
  *
  * @author Karsten Planz
  */
-public class AccessibilityUtils {
+public final class AccessibilityUtils {
 
     private static final String TAG = AccessibilityUtils.class.getSimpleName();
 

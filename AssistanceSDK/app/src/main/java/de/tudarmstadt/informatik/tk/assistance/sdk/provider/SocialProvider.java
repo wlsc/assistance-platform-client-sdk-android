@@ -8,7 +8,7 @@ import de.tudarmstadt.informatik.tk.assistance.sdk.provider.social.FacebookProvi
  * @author Wladimir Schmidt (wlsc.dev@gmail.com)
  * @date 31.12.2015
  */
-public class SocialProvider {
+public final class SocialProvider {
 
     private static final String TAG = SocialProvider.class.getSimpleName();
 

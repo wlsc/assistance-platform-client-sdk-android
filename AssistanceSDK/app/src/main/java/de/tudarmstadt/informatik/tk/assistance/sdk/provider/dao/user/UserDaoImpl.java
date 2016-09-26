@@ -11,7 +11,7 @@ import de.tudarmstadt.informatik.tk.assistance.sdk.provider.dao.CommonDaoImpl;
  * @author Wladimir Schmidt (wlsc.dev@gmail.com)
  * @date 29.10.2015
  */
-public class UserDaoImpl extends
+public final class UserDaoImpl extends
         CommonDaoImpl<DbUser> implements
         UserDao {
 

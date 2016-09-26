@@ -17,7 +17,7 @@ import de.tudarmstadt.informatik.tk.assistance.sdk.util.logger.Log;
  * @author Wladimir Schmidt (wlsc.dev@gmail.com)
  * @date 08.12.2015
  */
-public class PowerLevelSensor extends AbstractPeriodicSensor {
+public final class PowerLevelSensor extends AbstractPeriodicSensor {
 
     private static final String TAG = PowerLevelSensor.class.getSimpleName();
 

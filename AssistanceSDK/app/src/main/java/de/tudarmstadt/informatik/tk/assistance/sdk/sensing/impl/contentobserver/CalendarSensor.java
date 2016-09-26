@@ -33,7 +33,7 @@ import de.tudarmstadt.informatik.tk.assistance.sdk.util.logger.Log;
  * @edited by Wladimir Schmidt (wlsc.dev@gmail.com)
  * @date 28.10.2015
  */
-public class CalendarSensor extends AbstractContentObserverSensor {
+public final class CalendarSensor extends AbstractContentObserverSensor {
 
     private static final String TAG = CalendarSensor.class.getSimpleName();
 

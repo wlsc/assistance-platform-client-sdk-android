@@ -16,7 +16,7 @@ import java.util.Map;
 /**
  * @author Karsten Planz
  */
-public class ImageUtils {
+public final class ImageUtils {
 
     private ImageUtils() {
     }

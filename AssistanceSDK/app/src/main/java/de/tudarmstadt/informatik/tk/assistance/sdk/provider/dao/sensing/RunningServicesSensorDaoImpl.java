@@ -11,7 +11,7 @@ import de.tudarmstadt.informatik.tk.assistance.sdk.model.api.sensing.sensor.Runn
  * @author Wladimir Schmidt (wlsc.dev@gmail.com)
  * @date 24.11.2015
  */
-public class RunningServicesSensorDaoImpl extends
+public final class RunningServicesSensorDaoImpl extends
         CommonEventDaoImpl<DbRunningServicesSensor> implements
         RunningServicesSensorDao {
 

@@ -15,7 +15,7 @@ import de.tudarmstadt.informatik.tk.assistance.sdk.model.api.sensing.sensor.Call
  * @author Wladimir Schmidt (wlsc.dev@gmail.com)
  * @date 30.10.2015
  */
-public class CallLogSensorDaoImpl extends
+public final class CallLogSensorDaoImpl extends
         CommonEventDaoImpl<DbCallLogSensor> implements
         CallLogSensorDao {
 

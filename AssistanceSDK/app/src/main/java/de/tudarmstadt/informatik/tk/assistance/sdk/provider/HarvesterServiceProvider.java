@@ -22,7 +22,7 @@ import de.tudarmstadt.informatik.tk.assistance.sdk.util.logger.Log;
  * @author Wladimir Schmidt (wlsc.dev@gmail.com)
  * @date 28.06.2015
  */
-public class HarvesterServiceProvider implements ServiceConnection {
+public final class HarvesterServiceProvider implements ServiceConnection {
 
     private static final String TAG = HarvesterServiceProvider.class.getSimpleName();
 

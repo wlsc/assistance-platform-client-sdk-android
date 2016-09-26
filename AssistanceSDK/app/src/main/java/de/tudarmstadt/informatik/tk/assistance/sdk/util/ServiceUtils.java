@@ -19,7 +19,7 @@ import de.tudarmstadt.informatik.tk.assistance.sdk.util.logger.Log;
  * @author Wladimir Schmidt (wlsc.dev@gmail.com)
  * @date 17.12.2015
  */
-public class ServiceUtils {
+public final class ServiceUtils {
 
     private static final String TAG = ServiceUtils.class.getSimpleName();
 

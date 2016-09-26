@@ -16,7 +16,7 @@ import de.tudarmstadt.informatik.tk.assistance.sdk.R;
  * @author Wladimir Schmidt (wlsc.dev@gmail.com)
  * @date 30.08.2015
  */
-public class SensorApiType {
+public final class SensorApiType {
 
     // holder of API type string to DTO type mappings
     private static final Map<String, Integer> apiNameToDtoTypeMap = new HashMap<>();

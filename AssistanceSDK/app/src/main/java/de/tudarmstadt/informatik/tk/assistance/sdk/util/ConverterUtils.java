@@ -22,7 +22,7 @@ import de.tudarmstadt.informatik.tk.assistance.sdk.model.api.module.ModuleRespon
  * @author Wladimir Schmidt (wlsc.dev@gmail.com)
  * @date 08.09.2015
  */
-public class ConverterUtils {
+public final class ConverterUtils {
 
     private final static Gson gson = new Gson();
 

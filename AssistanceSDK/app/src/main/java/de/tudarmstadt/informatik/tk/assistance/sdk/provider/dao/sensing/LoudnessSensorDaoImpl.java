@@ -11,7 +11,7 @@ import de.tudarmstadt.informatik.tk.assistance.sdk.model.api.sensing.sensor.Loud
  * @author Wladimir Schmidt (wlsc.dev@gmail.com)
  * @date 24.11.2015
  */
-public class LoudnessSensorDaoImpl extends
+public final class LoudnessSensorDaoImpl extends
         CommonEventDaoImpl<DbLoudnessSensor> implements
         LoudnessSensorDao {
 

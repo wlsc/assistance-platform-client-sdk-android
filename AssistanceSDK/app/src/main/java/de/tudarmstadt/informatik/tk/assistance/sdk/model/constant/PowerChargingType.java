@@ -4,7 +4,7 @@ package de.tudarmstadt.informatik.tk.assistance.sdk.model.constant;
  * @author Wladimir Schmidt (wlsc.dev@gmail.com)
  * @date 31.10.2015
  */
-public class PowerChargingType {
+public final class PowerChargingType {
 
     public static final int AC_ADAPTER = 0;
 

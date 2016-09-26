@@ -21,7 +21,7 @@ import de.tudarmstadt.informatik.tk.assistance.sdk.util.logger.Log;
  * @author Wladimir Schmidt (wlsc.dev@gmail.com)
  * @date 27.10.2015
  */
-public class MagneticFieldSensor extends AbstractTriggeredSensor implements SensorEventListener {
+public final class MagneticFieldSensor extends AbstractTriggeredSensor implements SensorEventListener {
 
     private static final String TAG = MagneticFieldSensor.class.getSimpleName();
 

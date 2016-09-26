@@ -13,7 +13,7 @@ import java.util.UUID;
  * @author Wladimir Schmidt (wlsc.dev@gmail.com)
  * @date 17.10.2015
  */
-public class AppUtils {
+public final class AppUtils {
 
     private AppUtils() {
     }
