@@ -25,17 +25,17 @@ public class DbPositionSensorDao extends AbstractDao<DbPositionSensor, Long> {
      * Can be used for QueryBuilder and for referencing column names.
      */
     public static class Properties {
-        public static final Property Id = new Property(0, Long.class, "id", true, "_id");
-        public static final Property Latitude = new Property(1, Double.class, "latitude", false, "LATITUDE");
-        public static final Property Longitude = new Property(2, Double.class, "longitude", false, "LONGITUDE");
-        public static final Property AccuracyHorizontal = new Property(3, Double.class, "accuracyHorizontal", false, "ACCURACY_HORIZONTAL");
-        public static final Property Speed = new Property(4, Float.class, "speed", false, "SPEED");
-        public static final Property Created = new Property(5, String.class, "created", false, "CREATED");
-        public static final Property Altitude = new Property(6, Double.class, "altitude", false, "ALTITUDE");
-        public static final Property AccuracyVertical = new Property(7, Double.class, "accuracyVertical", false, "ACCURACY_VERTICAL");
-        public static final Property Course = new Property(8, Integer.class, "course", false, "COURSE");
-        public static final Property Floor = new Property(9, Integer.class, "floor", false, "FLOOR");
-        public static final Property DeviceId = new Property(10, Long.class, "deviceId", false, "DEVICE_ID");
+        public final static Property Id = new Property(0, Long.class, "id", true, "_id");
+        public final static Property Latitude = new Property(1, Double.class, "latitude", false, "LATITUDE");
+        public final static Property Longitude = new Property(2, Double.class, "longitude", false, "LONGITUDE");
+        public final static Property AccuracyHorizontal = new Property(3, Double.class, "accuracyHorizontal", false, "ACCURACY_HORIZONTAL");
+        public final static Property Speed = new Property(4, Float.class, "speed", false, "SPEED");
+        public final static Property Created = new Property(5, String.class, "created", false, "CREATED");
+        public final static Property Altitude = new Property(6, Double.class, "altitude", false, "ALTITUDE");
+        public final static Property AccuracyVertical = new Property(7, Double.class, "accuracyVertical", false, "ACCURACY_VERTICAL");
+        public final static Property Course = new Property(8, Integer.class, "course", false, "COURSE");
+        public final static Property Floor = new Property(9, Integer.class, "floor", false, "FLOOR");
+        public final static Property DeviceId = new Property(10, Long.class, "deviceId", false, "DEVICE_ID");
     }
 
     private DaoSession daoSession;
@@ -296,15 +296,14 @@ public class DbPositionSensorDao extends AbstractDao<DbPositionSensor, Long> {
         SqlUtils.appendColumnsEqValue(builder, "T", getPkColumns());
         String sql = builder.toString();
         
-        String[] keyArray = { key.toString() };
+        String[] keyArray = new String[] { key.toString() };
         Cursor cursor = db.rawQuery(sql, keyArray);
         
         try {
             boolean available = cursor.moveToFirst();
             if (!available) {
                 return null;
-            }
-            if (!cursor.isLast()) {
+            } else if (!cursor.isLast()) {
                 throw new IllegalStateException("Expected unique result, but count was " + cursor.getCount());
             }
             return loadCurrentDeep(cursor, true);
@@ -316,7 +315,7 @@ public class DbPositionSensorDao extends AbstractDao<DbPositionSensor, Long> {
     /** Reads all available rows from the given cursor and returns a list of new ImageTO objects. */
     public List<DbPositionSensor> loadAllDeepFromCursor(Cursor cursor) {
         int count = cursor.getCount();
-        List<DbPositionSensor> list = new ArrayList<>(count);
+        List<DbPositionSensor> list = new ArrayList<DbPositionSensor>(count);
         
         if (cursor.moveToFirst()) {
             if (identityScope != null) {

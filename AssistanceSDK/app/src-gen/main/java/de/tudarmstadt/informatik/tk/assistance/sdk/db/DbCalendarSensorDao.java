@@ -25,34 +25,34 @@ public class DbCalendarSensorDao extends AbstractDao<DbCalendarSensor, Long> {
      * Can be used for QueryBuilder and for referencing column names.
      */
     public static class Properties {
-        public static final Property Id = new Property(0, Long.class, "id", true, "_id");
-        public static final Property EventId = new Property(1, Long.class, "eventId", false, "EVENT_ID");
-        public static final Property CalendarId = new Property(2, Long.class, "calendarId", false, "CALENDAR_ID");
-        public static final Property AllDay = new Property(3, Boolean.class, "allDay", false, "ALL_DAY");
-        public static final Property Availability = new Property(4, Integer.class, "availability", false, "AVAILABILITY");
-        public static final Property Description = new Property(5, String.class, "description", false, "DESCRIPTION");
-        public static final Property TimestampStart = new Property(6, Long.class, "timestampStart", false, "TIMESTAMP_START");
-        public static final Property TimestampEnd = new Property(7, Long.class, "timestampEnd", false, "TIMESTAMP_END");
-        public static final Property Duration = new Property(8, String.class, "duration", false, "DURATION");
-        public static final Property Location = new Property(9, String.class, "location", false, "LOCATION");
-        public static final Property TimezoneStart = new Property(10, String.class, "timezoneStart", false, "TIMEZONE_START");
-        public static final Property TimezoneEnd = new Property(11, String.class, "timezoneEnd", false, "TIMEZONE_END");
-        public static final Property RecurrenceExceptionDate = new Property(12, String.class, "recurrenceExceptionDate", false, "RECURRENCE_EXCEPTION_DATE");
-        public static final Property RecurrenceExceptionRule = new Property(13, String.class, "recurrenceExceptionRule", false, "RECURRENCE_EXCEPTION_RULE");
-        public static final Property HasAlarm = new Property(14, Boolean.class, "hasAlarm", false, "HAS_ALARM");
-        public static final Property LastDate = new Property(15, Long.class, "lastDate", false, "LAST_DATE");
-        public static final Property OriginalAllDay = new Property(16, Boolean.class, "originalAllDay", false, "ORIGINAL_ALL_DAY");
-        public static final Property OriginalId = new Property(17, String.class, "originalId", false, "ORIGINAL_ID");
-        public static final Property OriginalInstanceTime = new Property(18, Long.class, "originalInstanceTime", false, "ORIGINAL_INSTANCE_TIME");
-        public static final Property RecurrenceDate = new Property(19, String.class, "recurrenceDate", false, "RECURRENCE_DATE");
-        public static final Property RecurrenceRule = new Property(20, String.class, "recurrenceRule", false, "RECURRENCE_RULE");
-        public static final Property Status = new Property(21, Integer.class, "status", false, "STATUS");
-        public static final Property Title = new Property(22, String.class, "title", false, "TITLE");
-        public static final Property IsNew = new Property(23, Boolean.class, "isNew", false, "IS_NEW");
-        public static final Property IsUpdated = new Property(24, Boolean.class, "isUpdated", false, "IS_UPDATED");
-        public static final Property IsDeleted = new Property(25, Boolean.class, "isDeleted", false, "IS_DELETED");
-        public static final Property Created = new Property(26, String.class, "created", false, "CREATED");
-        public static final Property DeviceId = new Property(27, Long.class, "deviceId", false, "DEVICE_ID");
+        public final static Property Id = new Property(0, Long.class, "id", true, "_id");
+        public final static Property EventId = new Property(1, Long.class, "eventId", false, "EVENT_ID");
+        public final static Property CalendarId = new Property(2, Long.class, "calendarId", false, "CALENDAR_ID");
+        public final static Property AllDay = new Property(3, Boolean.class, "allDay", false, "ALL_DAY");
+        public final static Property Availability = new Property(4, Integer.class, "availability", false, "AVAILABILITY");
+        public final static Property Description = new Property(5, String.class, "description", false, "DESCRIPTION");
+        public final static Property TimestampStart = new Property(6, Long.class, "timestampStart", false, "TIMESTAMP_START");
+        public final static Property TimestampEnd = new Property(7, Long.class, "timestampEnd", false, "TIMESTAMP_END");
+        public final static Property Duration = new Property(8, String.class, "duration", false, "DURATION");
+        public final static Property Location = new Property(9, String.class, "location", false, "LOCATION");
+        public final static Property TimezoneStart = new Property(10, String.class, "timezoneStart", false, "TIMEZONE_START");
+        public final static Property TimezoneEnd = new Property(11, String.class, "timezoneEnd", false, "TIMEZONE_END");
+        public final static Property RecurrenceExceptionDate = new Property(12, String.class, "recurrenceExceptionDate", false, "RECURRENCE_EXCEPTION_DATE");
+        public final static Property RecurrenceExceptionRule = new Property(13, String.class, "recurrenceExceptionRule", false, "RECURRENCE_EXCEPTION_RULE");
+        public final static Property HasAlarm = new Property(14, Boolean.class, "hasAlarm", false, "HAS_ALARM");
+        public final static Property LastDate = new Property(15, Long.class, "lastDate", false, "LAST_DATE");
+        public final static Property OriginalAllDay = new Property(16, Boolean.class, "originalAllDay", false, "ORIGINAL_ALL_DAY");
+        public final static Property OriginalId = new Property(17, String.class, "originalId", false, "ORIGINAL_ID");
+        public final static Property OriginalInstanceTime = new Property(18, Long.class, "originalInstanceTime", false, "ORIGINAL_INSTANCE_TIME");
+        public final static Property RecurrenceDate = new Property(19, String.class, "recurrenceDate", false, "RECURRENCE_DATE");
+        public final static Property RecurrenceRule = new Property(20, String.class, "recurrenceRule", false, "RECURRENCE_RULE");
+        public final static Property Status = new Property(21, Integer.class, "status", false, "STATUS");
+        public final static Property Title = new Property(22, String.class, "title", false, "TITLE");
+        public final static Property IsNew = new Property(23, Boolean.class, "isNew", false, "IS_NEW");
+        public final static Property IsUpdated = new Property(24, Boolean.class, "isUpdated", false, "IS_UPDATED");
+        public final static Property IsDeleted = new Property(25, Boolean.class, "isDeleted", false, "IS_DELETED");
+        public final static Property Created = new Property(26, String.class, "created", false, "CREATED");
+        public final static Property DeviceId = new Property(27, Long.class, "deviceId", false, "DEVICE_ID");
     }
 
     private DaoSession daoSession;
@@ -534,15 +534,14 @@ public class DbCalendarSensorDao extends AbstractDao<DbCalendarSensor, Long> {
         SqlUtils.appendColumnsEqValue(builder, "T", getPkColumns());
         String sql = builder.toString();
         
-        String[] keyArray = { key.toString() };
+        String[] keyArray = new String[] { key.toString() };
         Cursor cursor = db.rawQuery(sql, keyArray);
         
         try {
             boolean available = cursor.moveToFirst();
             if (!available) {
                 return null;
-            }
-            if (!cursor.isLast()) {
+            } else if (!cursor.isLast()) {
                 throw new IllegalStateException("Expected unique result, but count was " + cursor.getCount());
             }
             return loadCurrentDeep(cursor, true);
@@ -554,7 +553,7 @@ public class DbCalendarSensorDao extends AbstractDao<DbCalendarSensor, Long> {
     /** Reads all available rows from the given cursor and returns a list of new ImageTO objects. */
     public List<DbCalendarSensor> loadAllDeepFromCursor(Cursor cursor) {
         int count = cursor.getCount();
-        List<DbCalendarSensor> list = new ArrayList<>(count);
+        List<DbCalendarSensor> list = new ArrayList<DbCalendarSensor>(count);
         
         if (cursor.moveToFirst()) {
             if (identityScope != null) {

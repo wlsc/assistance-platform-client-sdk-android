@@ -25,19 +25,19 @@ public class DbGyroscopeSensorDao extends AbstractDao<DbGyroscopeSensor, Long> {
      * Can be used for QueryBuilder and for referencing column names.
      */
     public static class Properties {
-        public static final Property Id = new Property(0, Long.class, "id", true, "_id");
-        public static final Property X = new Property(1, Double.class, "x", false, "X");
-        public static final Property Y = new Property(2, Double.class, "y", false, "Y");
-        public static final Property Z = new Property(3, Double.class, "z", false, "Z");
-        public static final Property Created = new Property(4, String.class, "created", false, "CREATED");
-        public static final Property Accuracy = new Property(5, Integer.class, "accuracy", false, "ACCURACY");
-        public static final Property XUncalibratedNoDrift = new Property(6, Float.class, "xUncalibratedNoDrift", false, "X_UNCALIBRATED_NO_DRIFT");
-        public static final Property YUncalibratedNoDrift = new Property(7, Float.class, "yUncalibratedNoDrift", false, "Y_UNCALIBRATED_NO_DRIFT");
-        public static final Property ZUncalibratedNoDrift = new Property(8, Float.class, "zUncalibratedNoDrift", false, "Z_UNCALIBRATED_NO_DRIFT");
-        public static final Property XUncalibratedEstimatedDrift = new Property(9, Float.class, "xUncalibratedEstimatedDrift", false, "X_UNCALIBRATED_ESTIMATED_DRIFT");
-        public static final Property YUncalibratedEstimatedDrift = new Property(10, Float.class, "yUncalibratedEstimatedDrift", false, "Y_UNCALIBRATED_ESTIMATED_DRIFT");
-        public static final Property ZUncalibratedEstimatedDrift = new Property(11, Float.class, "zUncalibratedEstimatedDrift", false, "Z_UNCALIBRATED_ESTIMATED_DRIFT");
-        public static final Property DeviceId = new Property(12, Long.class, "deviceId", false, "DEVICE_ID");
+        public final static Property Id = new Property(0, Long.class, "id", true, "_id");
+        public final static Property X = new Property(1, Double.class, "x", false, "X");
+        public final static Property Y = new Property(2, Double.class, "y", false, "Y");
+        public final static Property Z = new Property(3, Double.class, "z", false, "Z");
+        public final static Property Created = new Property(4, String.class, "created", false, "CREATED");
+        public final static Property Accuracy = new Property(5, Integer.class, "accuracy", false, "ACCURACY");
+        public final static Property XUncalibratedNoDrift = new Property(6, Float.class, "xUncalibratedNoDrift", false, "X_UNCALIBRATED_NO_DRIFT");
+        public final static Property YUncalibratedNoDrift = new Property(7, Float.class, "yUncalibratedNoDrift", false, "Y_UNCALIBRATED_NO_DRIFT");
+        public final static Property ZUncalibratedNoDrift = new Property(8, Float.class, "zUncalibratedNoDrift", false, "Z_UNCALIBRATED_NO_DRIFT");
+        public final static Property XUncalibratedEstimatedDrift = new Property(9, Float.class, "xUncalibratedEstimatedDrift", false, "X_UNCALIBRATED_ESTIMATED_DRIFT");
+        public final static Property YUncalibratedEstimatedDrift = new Property(10, Float.class, "yUncalibratedEstimatedDrift", false, "Y_UNCALIBRATED_ESTIMATED_DRIFT");
+        public final static Property ZUncalibratedEstimatedDrift = new Property(11, Float.class, "zUncalibratedEstimatedDrift", false, "Z_UNCALIBRATED_ESTIMATED_DRIFT");
+        public final static Property DeviceId = new Property(12, Long.class, "deviceId", false, "DEVICE_ID");
     }
 
     private DaoSession daoSession;
@@ -324,15 +324,14 @@ public class DbGyroscopeSensorDao extends AbstractDao<DbGyroscopeSensor, Long> {
         SqlUtils.appendColumnsEqValue(builder, "T", getPkColumns());
         String sql = builder.toString();
         
-        String[] keyArray = { key.toString() };
+        String[] keyArray = new String[] { key.toString() };
         Cursor cursor = db.rawQuery(sql, keyArray);
         
         try {
             boolean available = cursor.moveToFirst();
             if (!available) {
                 return null;
-            }
-            if (!cursor.isLast()) {
+            } else if (!cursor.isLast()) {
                 throw new IllegalStateException("Expected unique result, but count was " + cursor.getCount());
             }
             return loadCurrentDeep(cursor, true);
@@ -344,7 +343,7 @@ public class DbGyroscopeSensorDao extends AbstractDao<DbGyroscopeSensor, Long> {
     /** Reads all available rows from the given cursor and returns a list of new ImageTO objects. */
     public List<DbGyroscopeSensor> loadAllDeepFromCursor(Cursor cursor) {
         int count = cursor.getCount();
-        List<DbGyroscopeSensor> list = new ArrayList<>(count);
+        List<DbGyroscopeSensor> list = new ArrayList<DbGyroscopeSensor>(count);
         
         if (cursor.moveToFirst()) {
             if (identityScope != null) {

@@ -25,11 +25,11 @@ public class DbRunningServicesSensorDao extends AbstractDao<DbRunningServicesSen
      * Can be used for QueryBuilder and for referencing column names.
      */
     public static class Properties {
-        public static final Property Id = new Property(0, Long.class, "id", true, "_id");
-        public static final Property PackageName = new Property(1, String.class, "packageName", false, "PACKAGE_NAME");
-        public static final Property ClassName = new Property(2, String.class, "className", false, "CLASS_NAME");
-        public static final Property Created = new Property(3, String.class, "created", false, "CREATED");
-        public static final Property DeviceId = new Property(4, Long.class, "deviceId", false, "DEVICE_ID");
+        public final static Property Id = new Property(0, Long.class, "id", true, "_id");
+        public final static Property PackageName = new Property(1, String.class, "packageName", false, "PACKAGE_NAME");
+        public final static Property ClassName = new Property(2, String.class, "className", false, "CLASS_NAME");
+        public final static Property Created = new Property(3, String.class, "created", false, "CREATED");
+        public final static Property DeviceId = new Property(4, Long.class, "deviceId", false, "DEVICE_ID");
     }
 
     private DaoSession daoSession;
@@ -212,15 +212,14 @@ public class DbRunningServicesSensorDao extends AbstractDao<DbRunningServicesSen
         SqlUtils.appendColumnsEqValue(builder, "T", getPkColumns());
         String sql = builder.toString();
         
-        String[] keyArray = { key.toString() };
+        String[] keyArray = new String[] { key.toString() };
         Cursor cursor = db.rawQuery(sql, keyArray);
         
         try {
             boolean available = cursor.moveToFirst();
             if (!available) {
                 return null;
-            }
-            if (!cursor.isLast()) {
+            } else if (!cursor.isLast()) {
                 throw new IllegalStateException("Expected unique result, but count was " + cursor.getCount());
             }
             return loadCurrentDeep(cursor, true);
@@ -232,7 +231,7 @@ public class DbRunningServicesSensorDao extends AbstractDao<DbRunningServicesSen
     /** Reads all available rows from the given cursor and returns a list of new ImageTO objects. */
     public List<DbRunningServicesSensor> loadAllDeepFromCursor(Cursor cursor) {
         int count = cursor.getCount();
-        List<DbRunningServicesSensor> list = new ArrayList<>(count);
+        List<DbRunningServicesSensor> list = new ArrayList<DbRunningServicesSensor>(count);
         
         if (cursor.moveToFirst()) {
             if (identityScope != null) {

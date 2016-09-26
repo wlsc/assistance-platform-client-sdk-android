@@ -25,14 +25,14 @@ public class LogsSensorUploadDao extends AbstractDao<LogsSensorUpload, Long> {
      * Can be used for QueryBuilder and for referencing column names.
      */
     public static class Properties {
-        public static final Property Id = new Property(0, Long.class, "id", true, "_id");
-        public static final Property StartTime = new Property(1, Long.class, "startTime", false, "START_TIME");
-        public static final Property ProcessingTime = new Property(2, Long.class, "processingTime", false, "PROCESSING_TIME");
-        public static final Property ResponseTime = new Property(3, Long.class, "responseTime", false, "RESPONSE_TIME");
-        public static final Property NetworkType = new Property(4, String.class, "networkType", false, "NETWORK_TYPE");
-        public static final Property EventsNumber = new Property(5, Integer.class, "eventsNumber", false, "EVENTS_NUMBER");
-        public static final Property BodySize = new Property(6, Long.class, "bodySize", false, "BODY_SIZE");
-        public static final Property UserId = new Property(7, Long.class, "userId", false, "USER_ID");
+        public final static Property Id = new Property(0, Long.class, "id", true, "_id");
+        public final static Property StartTime = new Property(1, Long.class, "startTime", false, "START_TIME");
+        public final static Property ProcessingTime = new Property(2, Long.class, "processingTime", false, "PROCESSING_TIME");
+        public final static Property ResponseTime = new Property(3, Long.class, "responseTime", false, "RESPONSE_TIME");
+        public final static Property NetworkType = new Property(4, String.class, "networkType", false, "NETWORK_TYPE");
+        public final static Property EventsNumber = new Property(5, Integer.class, "eventsNumber", false, "EVENTS_NUMBER");
+        public final static Property BodySize = new Property(6, Long.class, "bodySize", false, "BODY_SIZE");
+        public final static Property UserId = new Property(7, Long.class, "userId", false, "USER_ID");
     }
 
     private DaoSession daoSession;
@@ -262,15 +262,14 @@ public class LogsSensorUploadDao extends AbstractDao<LogsSensorUpload, Long> {
         SqlUtils.appendColumnsEqValue(builder, "T", getPkColumns());
         String sql = builder.toString();
         
-        String[] keyArray = { key.toString() };
+        String[] keyArray = new String[] { key.toString() };
         Cursor cursor = db.rawQuery(sql, keyArray);
         
         try {
             boolean available = cursor.moveToFirst();
             if (!available) {
                 return null;
-            }
-            if (!cursor.isLast()) {
+            } else if (!cursor.isLast()) {
                 throw new IllegalStateException("Expected unique result, but count was " + cursor.getCount());
             }
             return loadCurrentDeep(cursor, true);
@@ -282,7 +281,7 @@ public class LogsSensorUploadDao extends AbstractDao<LogsSensorUpload, Long> {
     /** Reads all available rows from the given cursor and returns a list of new ImageTO objects. */
     public List<LogsSensorUpload> loadAllDeepFromCursor(Cursor cursor) {
         int count = cursor.getCount();
-        List<LogsSensorUpload> list = new ArrayList<>(count);
+        List<LogsSensorUpload> list = new ArrayList<LogsSensorUpload>(count);
         
         if (cursor.moveToFirst()) {
             if (identityScope != null) {

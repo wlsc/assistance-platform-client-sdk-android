@@ -25,13 +25,13 @@ public class DbMobileConnectionSensorDao extends AbstractDao<DbMobileConnectionS
      * Can be used for QueryBuilder and for referencing column names.
      */
     public static class Properties {
-        public static final Property Id = new Property(0, Long.class, "id", true, "_id");
-        public static final Property CarrierName = new Property(1, String.class, "carrierName", false, "CARRIER_NAME");
-        public static final Property MobileCountryCode = new Property(2, String.class, "mobileCountryCode", false, "MOBILE_COUNTRY_CODE");
-        public static final Property MobileNetworkCode = new Property(3, String.class, "mobileNetworkCode", false, "MOBILE_NETWORK_CODE");
-        public static final Property Created = new Property(4, String.class, "created", false, "CREATED");
-        public static final Property VoipAvailable = new Property(5, Boolean.class, "voipAvailable", false, "VOIP_AVAILABLE");
-        public static final Property DeviceId = new Property(6, Long.class, "deviceId", false, "DEVICE_ID");
+        public final static Property Id = new Property(0, Long.class, "id", true, "_id");
+        public final static Property CarrierName = new Property(1, String.class, "carrierName", false, "CARRIER_NAME");
+        public final static Property MobileCountryCode = new Property(2, String.class, "mobileCountryCode", false, "MOBILE_COUNTRY_CODE");
+        public final static Property MobileNetworkCode = new Property(3, String.class, "mobileNetworkCode", false, "MOBILE_NETWORK_CODE");
+        public final static Property Created = new Property(4, String.class, "created", false, "CREATED");
+        public final static Property VoipAvailable = new Property(5, Boolean.class, "voipAvailable", false, "VOIP_AVAILABLE");
+        public final static Property DeviceId = new Property(6, Long.class, "deviceId", false, "DEVICE_ID");
     }
 
     private DaoSession daoSession;
@@ -240,15 +240,14 @@ public class DbMobileConnectionSensorDao extends AbstractDao<DbMobileConnectionS
         SqlUtils.appendColumnsEqValue(builder, "T", getPkColumns());
         String sql = builder.toString();
         
-        String[] keyArray = { key.toString() };
+        String[] keyArray = new String[] { key.toString() };
         Cursor cursor = db.rawQuery(sql, keyArray);
         
         try {
             boolean available = cursor.moveToFirst();
             if (!available) {
                 return null;
-            }
-            if (!cursor.isLast()) {
+            } else if (!cursor.isLast()) {
                 throw new IllegalStateException("Expected unique result, but count was " + cursor.getCount());
             }
             return loadCurrentDeep(cursor, true);
@@ -260,7 +259,7 @@ public class DbMobileConnectionSensorDao extends AbstractDao<DbMobileConnectionS
     /** Reads all available rows from the given cursor and returns a list of new ImageTO objects. */
     public List<DbMobileConnectionSensor> loadAllDeepFromCursor(Cursor cursor) {
         int count = cursor.getCount();
-        List<DbMobileConnectionSensor> list = new ArrayList<>(count);
+        List<DbMobileConnectionSensor> list = new ArrayList<DbMobileConnectionSensor>(count);
         
         if (cursor.moveToFirst()) {
             if (identityScope != null) {

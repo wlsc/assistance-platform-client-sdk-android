@@ -25,14 +25,14 @@ public class DbPowerStateSensorDao extends AbstractDao<DbPowerStateSensor, Long>
      * Can be used for QueryBuilder and for referencing column names.
      */
     public static class Properties {
-        public static final Property Id = new Property(0, Long.class, "id", true, "_id");
-        public static final Property IsCharging = new Property(1, Boolean.class, "isCharging", false, "IS_CHARGING");
-        public static final Property Percent = new Property(2, Float.class, "percent", false, "PERCENT");
-        public static final Property Created = new Property(3, String.class, "created", false, "CREATED");
-        public static final Property ChargingState = new Property(4, Integer.class, "chargingState", false, "CHARGING_STATE");
-        public static final Property ChargingMode = new Property(5, Integer.class, "chargingMode", false, "CHARGING_MODE");
-        public static final Property PowerSaveMode = new Property(6, Boolean.class, "powerSaveMode", false, "POWER_SAVE_MODE");
-        public static final Property DeviceId = new Property(7, Long.class, "deviceId", false, "DEVICE_ID");
+        public final static Property Id = new Property(0, Long.class, "id", true, "_id");
+        public final static Property IsCharging = new Property(1, Boolean.class, "isCharging", false, "IS_CHARGING");
+        public final static Property Percent = new Property(2, Float.class, "percent", false, "PERCENT");
+        public final static Property Created = new Property(3, String.class, "created", false, "CREATED");
+        public final static Property ChargingState = new Property(4, Integer.class, "chargingState", false, "CHARGING_STATE");
+        public final static Property ChargingMode = new Property(5, Integer.class, "chargingMode", false, "CHARGING_MODE");
+        public final static Property PowerSaveMode = new Property(6, Boolean.class, "powerSaveMode", false, "POWER_SAVE_MODE");
+        public final static Property DeviceId = new Property(7, Long.class, "deviceId", false, "DEVICE_ID");
     }
 
     private DaoSession daoSession;
@@ -254,15 +254,14 @@ public class DbPowerStateSensorDao extends AbstractDao<DbPowerStateSensor, Long>
         SqlUtils.appendColumnsEqValue(builder, "T", getPkColumns());
         String sql = builder.toString();
         
-        String[] keyArray = { key.toString() };
+        String[] keyArray = new String[] { key.toString() };
         Cursor cursor = db.rawQuery(sql, keyArray);
         
         try {
             boolean available = cursor.moveToFirst();
             if (!available) {
                 return null;
-            }
-            if (!cursor.isLast()) {
+            } else if (!cursor.isLast()) {
                 throw new IllegalStateException("Expected unique result, but count was " + cursor.getCount());
             }
             return loadCurrentDeep(cursor, true);
@@ -274,7 +273,7 @@ public class DbPowerStateSensorDao extends AbstractDao<DbPowerStateSensor, Long>
     /** Reads all available rows from the given cursor and returns a list of new ImageTO objects. */
     public List<DbPowerStateSensor> loadAllDeepFromCursor(Cursor cursor) {
         int count = cursor.getCount();
-        List<DbPowerStateSensor> list = new ArrayList<>(count);
+        List<DbPowerStateSensor> list = new ArrayList<DbPowerStateSensor>(count);
         
         if (cursor.moveToFirst()) {
             if (identityScope != null) {

@@ -25,16 +25,16 @@ public class DbCalendarReminderSensorDao extends AbstractDao<DbCalendarReminderS
      * Can be used for QueryBuilder and for referencing column names.
      */
     public static class Properties {
-        public static final Property Id = new Property(0, Long.class, "id", true, "_id");
-        public static final Property ReminderId = new Property(1, long.class, "reminderId", false, "REMINDER_ID");
-        public static final Property EventId = new Property(2, Long.class, "eventId", false, "EVENT_ID");
-        public static final Property Method = new Property(3, Integer.class, "method", false, "METHOD");
-        public static final Property Minutes = new Property(4, Integer.class, "minutes", false, "MINUTES");
-        public static final Property IsNew = new Property(5, Boolean.class, "isNew", false, "IS_NEW");
-        public static final Property IsUpdated = new Property(6, Boolean.class, "isUpdated", false, "IS_UPDATED");
-        public static final Property IsDeleted = new Property(7, Boolean.class, "isDeleted", false, "IS_DELETED");
-        public static final Property Created = new Property(8, String.class, "created", false, "CREATED");
-        public static final Property DeviceId = new Property(9, Long.class, "deviceId", false, "DEVICE_ID");
+        public final static Property Id = new Property(0, Long.class, "id", true, "_id");
+        public final static Property ReminderId = new Property(1, long.class, "reminderId", false, "REMINDER_ID");
+        public final static Property EventId = new Property(2, Long.class, "eventId", false, "EVENT_ID");
+        public final static Property Method = new Property(3, Integer.class, "method", false, "METHOD");
+        public final static Property Minutes = new Property(4, Integer.class, "minutes", false, "MINUTES");
+        public final static Property IsNew = new Property(5, Boolean.class, "isNew", false, "IS_NEW");
+        public final static Property IsUpdated = new Property(6, Boolean.class, "isUpdated", false, "IS_UPDATED");
+        public final static Property IsDeleted = new Property(7, Boolean.class, "isDeleted", false, "IS_DELETED");
+        public final static Property Created = new Property(8, String.class, "created", false, "CREATED");
+        public final static Property DeviceId = new Property(9, Long.class, "deviceId", false, "DEVICE_ID");
     }
 
     private DaoSession daoSession;
@@ -274,15 +274,14 @@ public class DbCalendarReminderSensorDao extends AbstractDao<DbCalendarReminderS
         SqlUtils.appendColumnsEqValue(builder, "T", getPkColumns());
         String sql = builder.toString();
         
-        String[] keyArray = { key.toString() };
+        String[] keyArray = new String[] { key.toString() };
         Cursor cursor = db.rawQuery(sql, keyArray);
         
         try {
             boolean available = cursor.moveToFirst();
             if (!available) {
                 return null;
-            }
-            if (!cursor.isLast()) {
+            } else if (!cursor.isLast()) {
                 throw new IllegalStateException("Expected unique result, but count was " + cursor.getCount());
             }
             return loadCurrentDeep(cursor, true);
@@ -294,7 +293,7 @@ public class DbCalendarReminderSensorDao extends AbstractDao<DbCalendarReminderS
     /** Reads all available rows from the given cursor and returns a list of new ImageTO objects. */
     public List<DbCalendarReminderSensor> loadAllDeepFromCursor(Cursor cursor) {
         int count = cursor.getCount();
-        List<DbCalendarReminderSensor> list = new ArrayList<>(count);
+        List<DbCalendarReminderSensor> list = new ArrayList<DbCalendarReminderSensor>(count);
         
         if (cursor.moveToFirst()) {
             if (identityScope != null) {

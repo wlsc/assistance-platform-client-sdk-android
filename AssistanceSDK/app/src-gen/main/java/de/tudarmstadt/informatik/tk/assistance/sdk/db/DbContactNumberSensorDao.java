@@ -27,16 +27,16 @@ public class DbContactNumberSensorDao extends AbstractDao<DbContactNumberSensor,
      * Can be used for QueryBuilder and for referencing column names.
      */
     public static class Properties {
-        public static final Property Id = new Property(0, Long.class, "id", true, "_id");
-        public static final Property NumberId = new Property(1, long.class, "numberId", false, "NUMBER_ID");
-        public static final Property Type = new Property(2, String.class, "type", false, "TYPE");
-        public static final Property Number = new Property(3, String.class, "number", false, "NUMBER");
-        public static final Property IsNew = new Property(4, Boolean.class, "isNew", false, "IS_NEW");
-        public static final Property IsUpdated = new Property(5, Boolean.class, "isUpdated", false, "IS_UPDATED");
-        public static final Property IsDeleted = new Property(6, Boolean.class, "isDeleted", false, "IS_DELETED");
-        public static final Property Created = new Property(7, String.class, "created", false, "CREATED");
-        public static final Property ContactId = new Property(8, long.class, "contactId", false, "CONTACT_ID");
-        public static final Property DeviceId = new Property(9, Long.class, "deviceId", false, "DEVICE_ID");
+        public final static Property Id = new Property(0, Long.class, "id", true, "_id");
+        public final static Property NumberId = new Property(1, long.class, "numberId", false, "NUMBER_ID");
+        public final static Property Type = new Property(2, String.class, "type", false, "TYPE");
+        public final static Property Number = new Property(3, String.class, "number", false, "NUMBER");
+        public final static Property IsNew = new Property(4, Boolean.class, "isNew", false, "IS_NEW");
+        public final static Property IsUpdated = new Property(5, Boolean.class, "isUpdated", false, "IS_UPDATED");
+        public final static Property IsDeleted = new Property(6, Boolean.class, "isDeleted", false, "IS_DELETED");
+        public final static Property Created = new Property(7, String.class, "created", false, "CREATED");
+        public final static Property ContactId = new Property(8, long.class, "contactId", false, "CONTACT_ID");
+        public final static Property DeviceId = new Property(9, Long.class, "deviceId", false, "DEVICE_ID");
     }
 
     private DaoSession daoSession;
@@ -294,15 +294,14 @@ public class DbContactNumberSensorDao extends AbstractDao<DbContactNumberSensor,
         SqlUtils.appendColumnsEqValue(builder, "T", getPkColumns());
         String sql = builder.toString();
         
-        String[] keyArray = { key.toString() };
+        String[] keyArray = new String[] { key.toString() };
         Cursor cursor = db.rawQuery(sql, keyArray);
         
         try {
             boolean available = cursor.moveToFirst();
             if (!available) {
                 return null;
-            }
-            if (!cursor.isLast()) {
+            } else if (!cursor.isLast()) {
                 throw new IllegalStateException("Expected unique result, but count was " + cursor.getCount());
             }
             return loadCurrentDeep(cursor, true);
@@ -314,7 +313,7 @@ public class DbContactNumberSensorDao extends AbstractDao<DbContactNumberSensor,
     /** Reads all available rows from the given cursor and returns a list of new ImageTO objects. */
     public List<DbContactNumberSensor> loadAllDeepFromCursor(Cursor cursor) {
         int count = cursor.getCount();
-        List<DbContactNumberSensor> list = new ArrayList<>(count);
+        List<DbContactNumberSensor> list = new ArrayList<DbContactNumberSensor>(count);
         
         if (cursor.moveToFirst()) {
             if (identityScope != null) {

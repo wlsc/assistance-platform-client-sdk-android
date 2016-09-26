@@ -38,7 +38,7 @@ public class AssistanceDatabaseGenerator {
 
     // ----- User scheme -----
     Entity user = schema.addEntity("DbUser");
-    user.setTableName("user");
+    user.setDbName("user");
     user.addIdProperty().autoincrement().index();
     user.addStringProperty("token").notNull().index();
     user.addStringProperty("firstname");
@@ -52,7 +52,7 @@ public class AssistanceDatabaseGenerator {
 
     // ----- Social user profile scheme -----
     Entity socialProfile = schema.addEntity("DbUserSocialProfile");
-    socialProfile.setTableName("user_social_profile");
+    socialProfile.setDbName("user_social_profile");
     socialProfile.addIdProperty().autoincrement().index();
     socialProfile.addStringProperty("name");
     socialProfile.addStringProperty("firstname");
@@ -68,7 +68,7 @@ public class AssistanceDatabaseGenerator {
 
     // ----- Device scheme -----
     Entity device = schema.addEntity("DbDevice");
-    device.setTableName("device");
+    device.setDbName("device");
     device.addIdProperty().autoincrement().index();
     device.addStringProperty("deviceIdentifier");
     device.addStringProperty("os");
@@ -86,7 +86,7 @@ public class AssistanceDatabaseGenerator {
 
     // ----- Module installation scheme -----
     Entity module = schema.addEntity("DbModule");
-    module.setTableName("module");
+    module.setDbName("module");
     module.addIdProperty().autoincrement().index();
     module.addStringProperty("packageName").notNull().unique();
     module.addStringProperty("title");
@@ -104,7 +104,7 @@ public class AssistanceDatabaseGenerator {
 
     // ----- Module capability scheme -----
     Entity moduleCapability = schema.addEntity("DbModuleCapability");
-    moduleCapability.setTableName("module_capability");
+    moduleCapability.setDbName("module_capability");
     moduleCapability.addIdProperty().autoincrement().index();
     moduleCapability.addStringProperty("type").notNull().index();
     moduleCapability.addDoubleProperty("collectionInterval");
@@ -123,7 +123,7 @@ public class AssistanceDatabaseGenerator {
 
     // ----- Assistance News scheme -----
     Entity assistanceNews = schema.addEntity("DbNews");
-    assistanceNews.setTableName("news");
+    assistanceNews.setDbName("news");
     assistanceNews.addIdProperty().autoincrement().index();
     assistanceNews.addStringProperty("content");
     assistanceNews.addStringProperty("created").notNull();
@@ -142,7 +142,7 @@ public class AssistanceDatabaseGenerator {
 
     // ----- Logs: Sensor Upload -----
     Entity logsSensorUpload = schema.addEntity("LogsSensorUpload");
-    logsSensorUpload.setTableName("logs_sensor_upload");
+    logsSensorUpload.setDbName("logs_sensor_upload");
     logsSensorUpload.addIdProperty().autoincrement().index();
     logsSensorUpload.addLongProperty("startTime");
     logsSensorUpload.addLongProperty("processingTime");
@@ -162,7 +162,7 @@ public class AssistanceDatabaseGenerator {
     // ----- GPS Position -----
     // REQUIRED
     Entity positionSensor = schema.addEntity("DbPositionSensor");
-    positionSensor.setTableName("position_sensor");
+    positionSensor.setDbName("position_sensor");
     positionSensor.addIdProperty().autoincrement().index();
     positionSensor.implementsInterface(Config.ASSISTANCE_PACKAGE_SENSOR);
     positionSensor.addDoubleProperty("latitude");
@@ -183,7 +183,7 @@ public class AssistanceDatabaseGenerator {
     // ----- Gyroscope -----
     // REQUIRED
     Entity gyroscopeSensor = schema.addEntity("DbGyroscopeSensor");
-    gyroscopeSensor.setTableName("gyroscope_sensor");
+    gyroscopeSensor.setDbName("gyroscope_sensor");
     gyroscopeSensor.addIdProperty().autoincrement().index();
     gyroscopeSensor.implementsInterface(Config.ASSISTANCE_PACKAGE_SENSOR);
     gyroscopeSensor.addDoubleProperty("x");
@@ -206,7 +206,7 @@ public class AssistanceDatabaseGenerator {
     // ----- Accelerometer -----
     // REQUIRED
     Entity accelerometerSensor = schema.addEntity("DbAccelerometerSensor");
-    accelerometerSensor.setTableName("accelerometer_sensor");
+    accelerometerSensor.setDbName("accelerometer_sensor");
     accelerometerSensor.addIdProperty().autoincrement().index();
     accelerometerSensor.implementsInterface(Config.ASSISTANCE_PACKAGE_SENSOR);
     accelerometerSensor.addDoubleProperty("x");
@@ -223,7 +223,7 @@ public class AssistanceDatabaseGenerator {
     // ----- Magnetic Field -----
     // REQUIRED
     Entity magneticFieldSensor = schema.addEntity("DbMagneticFieldSensor");
-    magneticFieldSensor.setTableName("magnetic_field_sensor");
+    magneticFieldSensor.setDbName("magnetic_field_sensor");
     magneticFieldSensor.addIdProperty().autoincrement().index();
     magneticFieldSensor.implementsInterface(Config.ASSISTANCE_PACKAGE_SENSOR);
     magneticFieldSensor.addDoubleProperty("x");
@@ -247,7 +247,7 @@ public class AssistanceDatabaseGenerator {
     // ----- Motion Activity -----
     // REQUIRED
     Entity motionActivityEvent = schema.addEntity("DbMotionActivitySensor");
-    motionActivityEvent.setTableName("motion_activity_sensor");
+    motionActivityEvent.setDbName("motion_activity_sensor");
     motionActivityEvent.addIdProperty().autoincrement().index();
     motionActivityEvent.implementsInterface(Config.ASSISTANCE_PACKAGE_SENSOR);
     motionActivityEvent.addIntProperty("walking");
@@ -268,7 +268,7 @@ public class AssistanceDatabaseGenerator {
     // ----- Connection -----
     // REQUIRED
     Entity connectionEvent = schema.addEntity("DbConnectionSensor");
-    connectionEvent.setTableName("connection_sensor");
+    connectionEvent.setDbName("connection_sensor");
     connectionEvent.addIdProperty().autoincrement().index();
     connectionEvent.implementsInterface(Config.ASSISTANCE_PACKAGE_SENSOR);
     connectionEvent.addBooleanProperty("isWifi");
@@ -284,7 +284,7 @@ public class AssistanceDatabaseGenerator {
     // ----- WIFI Connection -----
     // REQUIRED
     Entity wifiConnectionEvent = schema.addEntity("DbWifiConnectionSensor");
-    wifiConnectionEvent.setTableName("wifi_connection_sensor");
+    wifiConnectionEvent.setDbName("wifi_connection_sensor");
     wifiConnectionEvent.addIdProperty().autoincrement().index();
     wifiConnectionEvent.implementsInterface(Config.ASSISTANCE_PACKAGE_SENSOR);
     wifiConnectionEvent.addStringProperty("ssid");
@@ -304,7 +304,7 @@ public class AssistanceDatabaseGenerator {
     // ----- Mobile Connection -----
     // REQUIRED
     Entity mobileConnectionEvent = schema.addEntity("DbMobileConnectionSensor");
-    mobileConnectionEvent.setTableName("mobile_connection_sensor");
+    mobileConnectionEvent.setDbName("mobile_connection_sensor");
     mobileConnectionEvent.addIdProperty().autoincrement().index();
     mobileConnectionEvent.implementsInterface(Config.ASSISTANCE_PACKAGE_SENSOR);
     mobileConnectionEvent.addStringProperty("carrierName");
@@ -321,7 +321,7 @@ public class AssistanceDatabaseGenerator {
     // ----- Loudness -----
     // REQUIRED
     Entity loudnessEvent = schema.addEntity("DbLoudnessSensor");
-    loudnessEvent.setTableName("loudness_sensor");
+    loudnessEvent.setDbName("loudness_sensor");
     loudnessEvent.addIdProperty().autoincrement().index();
     loudnessEvent.implementsInterface(Config.ASSISTANCE_PACKAGE_SENSOR);
     loudnessEvent.addFloatProperty("loudness").notNull();
@@ -343,7 +343,7 @@ public class AssistanceDatabaseGenerator {
 
     // ----- Foreground Sensor -----
     Entity foregroundEvent = schema.addEntity("DbForegroundSensor");
-    foregroundEvent.setTableName("foreground_sensor");
+    foregroundEvent.setDbName("foreground_sensor");
     foregroundEvent.addIdProperty().autoincrement().index();
     foregroundEvent.implementsInterface(Config.ASSISTANCE_PACKAGE_SENSOR);
     foregroundEvent.addStringProperty("packageName");
@@ -362,7 +362,7 @@ public class AssistanceDatabaseGenerator {
 
     // ----- Light Sensor -----
     Entity lightSensor = schema.addEntity("DbLightSensor");
-    lightSensor.setTableName("light_sensor");
+    lightSensor.setDbName("light_sensor");
     lightSensor.addIdProperty().autoincrement().index();
     lightSensor.implementsInterface(Config.ASSISTANCE_PACKAGE_SENSOR);
     lightSensor.addIntProperty("accuracy");
@@ -374,7 +374,7 @@ public class AssistanceDatabaseGenerator {
 
     // ----- Ringtone Sensor -----
     Entity ringtoneEvent = schema.addEntity("DbRingtoneSensor");
-    ringtoneEvent.setTableName("ringtone_sensor");
+    ringtoneEvent.setDbName("ringtone_sensor");
     ringtoneEvent.addIdProperty().autoincrement().index();
     ringtoneEvent.implementsInterface(Config.ASSISTANCE_PACKAGE_SENSOR);
     ringtoneEvent.addIntProperty("mode");
@@ -386,7 +386,7 @@ public class AssistanceDatabaseGenerator {
 
     // ----- Running Processes Sensor -----
     Entity runningProcessesEvent = schema.addEntity("DbRunningProcessesSensor");
-    runningProcessesEvent.setTableName("running_processes_sensor");
+    runningProcessesEvent.setDbName("running_processes_sensor");
     runningProcessesEvent.addIdProperty().autoincrement().index();
     runningProcessesEvent.implementsInterface(Config.ASSISTANCE_PACKAGE_SENSOR);
     runningProcessesEvent.addStringProperty("name");
@@ -398,7 +398,7 @@ public class AssistanceDatabaseGenerator {
 
     // ----- Running Services Sensor -----
     Entity runningServicesEvent = schema.addEntity("DbRunningServicesSensor");
-    runningServicesEvent.setTableName("running_services_sensor");
+    runningServicesEvent.setDbName("running_services_sensor");
     runningServicesEvent.addIdProperty().autoincrement().index();
     runningServicesEvent.implementsInterface(Config.ASSISTANCE_PACKAGE_SENSOR);
     runningServicesEvent.addStringProperty("packageName");
@@ -411,7 +411,7 @@ public class AssistanceDatabaseGenerator {
 
     // ----- Running Tasks Sensor -----
     Entity runningTasksEvent = schema.addEntity("DbRunningTasksSensor");
-    runningTasksEvent.setTableName("running_tasks_sensor");
+    runningTasksEvent.setDbName("running_tasks_sensor");
     runningTasksEvent.addIdProperty().autoincrement().index();
     runningTasksEvent.implementsInterface(Config.ASSISTANCE_PACKAGE_SENSOR);
     runningTasksEvent.addStringProperty("name");
@@ -424,7 +424,7 @@ public class AssistanceDatabaseGenerator {
 
     // ----- Account Reader Sensor -----
     Entity accountReaderEvent = schema.addEntity("DbAccountReaderSensor");
-    accountReaderEvent.setTableName("account_reader_sensor");
+    accountReaderEvent.setDbName("account_reader_sensor");
     accountReaderEvent.addIdProperty().autoincrement().index();
     accountReaderEvent.implementsInterface(Config.ASSISTANCE_PACKAGE_SENSOR);
     accountReaderEvent.addStringProperty("types");
@@ -436,7 +436,7 @@ public class AssistanceDatabaseGenerator {
 
     // ----- Network Traffic Sensor -----
     Entity networkTrafficEvent = schema.addEntity("DbNetworkTrafficSensor");
-    networkTrafficEvent.setTableName("network_traffic_sensor");
+    networkTrafficEvent.setDbName("network_traffic_sensor");
     networkTrafficEvent.addIdProperty().autoincrement().index();
     networkTrafficEvent.implementsInterface(Config.ASSISTANCE_PACKAGE_SENSOR);
     networkTrafficEvent.addStringProperty("appName");
@@ -453,7 +453,7 @@ public class AssistanceDatabaseGenerator {
 
     // ----- Browser History Sensor -----
     Entity browserHistoryEvent = schema.addEntity("DbBrowserHistorySensor");
-    browserHistoryEvent.setTableName("browser_history_sensor");
+    browserHistoryEvent.setDbName("browser_history_sensor");
     browserHistoryEvent.addIdProperty().autoincrement().index();
     browserHistoryEvent.implementsInterface(Config.ASSISTANCE_PACKAGE_UPDATABLE_SENSOR);
     browserHistoryEvent.addStringProperty("url");
@@ -472,7 +472,7 @@ public class AssistanceDatabaseGenerator {
 
     // ----- Call Log Sensor -----
     Entity callLogEvent = schema.addEntity("DbCallLogSensor");
-    callLogEvent.setTableName("call_log_sensor");
+    callLogEvent.setDbName("call_log_sensor");
     callLogEvent.addIdProperty().autoincrement().index();
     callLogEvent.implementsInterface(Config.ASSISTANCE_PACKAGE_UPDATABLE_SENSOR);
     callLogEvent.addLongProperty("callId");
@@ -491,7 +491,7 @@ public class AssistanceDatabaseGenerator {
 
     // ----- Calendar Sensor -----
     Entity calendarEvent = schema.addEntity("DbCalendarSensor");
-    calendarEvent.setTableName("calendar_sensor");
+    calendarEvent.setDbName("calendar_sensor");
     calendarEvent.addIdProperty().autoincrement().index();
     calendarEvent.implementsInterface(Config.ASSISTANCE_PACKAGE_UPDATABLE_SENSOR);
     calendarEvent.addLongProperty("eventId");
@@ -527,7 +527,7 @@ public class AssistanceDatabaseGenerator {
 
     // ----- Calendar Reminder Sensor -----
     Entity calendarReminderEvent = schema.addEntity("DbCalendarReminderSensor");
-    calendarReminderEvent.setTableName("calendar_reminder_sensor");
+    calendarReminderEvent.setDbName("calendar_reminder_sensor");
     calendarReminderEvent.addIdProperty().autoincrement().index();
     calendarReminderEvent.implementsInterface(Config.ASSISTANCE_PACKAGE_UPDATABLE_SENSOR);
     calendarReminderEvent.addLongProperty("reminderId").notNull().unique();
@@ -545,7 +545,7 @@ public class AssistanceDatabaseGenerator {
 
     // ----- Contact Sensor -----
     Entity contactEvent = schema.addEntity("DbContactSensor");
-    contactEvent.setTableName("contact_sensor");
+    contactEvent.setDbName("contact_sensor");
     contactEvent.addIdProperty().autoincrement().index();
     contactEvent.implementsInterface(Config.ASSISTANCE_PACKAGE_UPDATABLE_SENSOR);
     contactEvent.addLongProperty("contactId");
@@ -567,7 +567,7 @@ public class AssistanceDatabaseGenerator {
 
     // ----- Contact Numbers Sensor -----
     Entity contactNumbersEvent = schema.addEntity("DbContactNumberSensor");
-    contactNumbersEvent.setTableName("contact_number_sensor");
+    contactNumbersEvent.setDbName("contact_number_sensor");
     contactNumbersEvent.addIdProperty().autoincrement().index();
     contactNumbersEvent.implementsInterface(Config.ASSISTANCE_PACKAGE_UPDATABLE_SENSOR);
     contactNumbersEvent.addLongProperty("numberId").notNull().unique();
@@ -588,7 +588,7 @@ public class AssistanceDatabaseGenerator {
 
     // ----- Contact Mail Addresses Sensor -----
     Entity contactMailEvent = schema.addEntity("DbContactEmailSensor");
-    contactMailEvent.setTableName("contact_email_sensor");
+    contactMailEvent.setDbName("contact_email_sensor");
     contactMailEvent.addIdProperty().autoincrement().index();
     contactMailEvent.implementsInterface(Config.ASSISTANCE_PACKAGE_UPDATABLE_SENSOR);
     contactMailEvent.addLongProperty("mailId");
@@ -610,7 +610,7 @@ public class AssistanceDatabaseGenerator {
     // ----- Power State Sensor -----
     // REQUIRED
     Entity powerStatusEvent = schema.addEntity("DbPowerStateSensor");
-    powerStatusEvent.setTableName("power_state_sensor");
+    powerStatusEvent.setDbName("power_state_sensor");
     powerStatusEvent.addIdProperty().autoincrement().index();
     powerStatusEvent.implementsInterface(Config.ASSISTANCE_PACKAGE_SENSOR);
     powerStatusEvent.addBooleanProperty("isCharging");
@@ -628,7 +628,7 @@ public class AssistanceDatabaseGenerator {
     // ----- Power Level Sensor -----
     // REQUIRED
     Entity powerLevelEvent = schema.addEntity("DbPowerLevelSensor");
-    powerLevelEvent.setTableName("power_level_sensor");
+    powerLevelEvent.setDbName("power_level_sensor");
     powerLevelEvent.addIdProperty().autoincrement().index();
     powerLevelEvent.implementsInterface(Config.ASSISTANCE_PACKAGE_SENSOR);
     powerLevelEvent.addFloatProperty("percent");
@@ -645,7 +645,7 @@ public class AssistanceDatabaseGenerator {
     // ----- TUCaN Sensor -----
     // REQUIRED
     Entity tucanEvent = schema.addEntity("DbTucanSensor");
-    tucanEvent.setTableName("tucan_sensor");
+    tucanEvent.setDbName("tucan_sensor");
     tucanEvent.addIdProperty().autoincrement().index();
     tucanEvent.implementsInterface(Config.ASSISTANCE_PACKAGE_SENSOR);
     tucanEvent.addStringProperty("username").notNull();
@@ -659,7 +659,7 @@ public class AssistanceDatabaseGenerator {
     // ----- Facebook Sensor -----
     // REQUIRED
     Entity facebookEvent = schema.addEntity("DbFacebookSensor");
-    facebookEvent.setTableName("facebook_sensor");
+    facebookEvent.setDbName("facebook_sensor");
     facebookEvent.addIdProperty().autoincrement().index();
     facebookEvent.implementsInterface(Config.ASSISTANCE_PACKAGE_SENSOR);
     facebookEvent.addStringProperty("oauthToken");

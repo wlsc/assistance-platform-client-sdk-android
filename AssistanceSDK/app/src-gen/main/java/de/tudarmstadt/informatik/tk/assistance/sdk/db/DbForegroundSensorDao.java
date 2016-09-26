@@ -25,17 +25,17 @@ public class DbForegroundSensorDao extends AbstractDao<DbForegroundSensor, Long>
      * Can be used for QueryBuilder and for referencing column names.
      */
     public static class Properties {
-        public static final Property Id = new Property(0, Long.class, "id", true, "_id");
-        public static final Property PackageName = new Property(1, String.class, "packageName", false, "PACKAGE_NAME");
-        public static final Property AppName = new Property(2, String.class, "appName", false, "APP_NAME");
-        public static final Property ClassName = new Property(3, String.class, "className", false, "CLASS_NAME");
-        public static final Property ActivityLabel = new Property(4, String.class, "activityLabel", false, "ACTIVITY_LABEL");
-        public static final Property Color = new Property(5, String.class, "color", false, "COLOR");
-        public static final Property Url = new Property(6, String.class, "url", false, "URL");
-        public static final Property EventType = new Property(7, Integer.class, "eventType", false, "EVENT_TYPE");
-        public static final Property Keystrokes = new Property(8, Integer.class, "keystrokes", false, "KEYSTROKES");
-        public static final Property Created = new Property(9, String.class, "created", false, "CREATED");
-        public static final Property DeviceId = new Property(10, Long.class, "deviceId", false, "DEVICE_ID");
+        public final static Property Id = new Property(0, Long.class, "id", true, "_id");
+        public final static Property PackageName = new Property(1, String.class, "packageName", false, "PACKAGE_NAME");
+        public final static Property AppName = new Property(2, String.class, "appName", false, "APP_NAME");
+        public final static Property ClassName = new Property(3, String.class, "className", false, "CLASS_NAME");
+        public final static Property ActivityLabel = new Property(4, String.class, "activityLabel", false, "ACTIVITY_LABEL");
+        public final static Property Color = new Property(5, String.class, "color", false, "COLOR");
+        public final static Property Url = new Property(6, String.class, "url", false, "URL");
+        public final static Property EventType = new Property(7, Integer.class, "eventType", false, "EVENT_TYPE");
+        public final static Property Keystrokes = new Property(8, Integer.class, "keystrokes", false, "KEYSTROKES");
+        public final static Property Created = new Property(9, String.class, "created", false, "CREATED");
+        public final static Property DeviceId = new Property(10, Long.class, "deviceId", false, "DEVICE_ID");
     }
 
     private DaoSession daoSession;
@@ -296,15 +296,14 @@ public class DbForegroundSensorDao extends AbstractDao<DbForegroundSensor, Long>
         SqlUtils.appendColumnsEqValue(builder, "T", getPkColumns());
         String sql = builder.toString();
         
-        String[] keyArray = { key.toString() };
+        String[] keyArray = new String[] { key.toString() };
         Cursor cursor = db.rawQuery(sql, keyArray);
         
         try {
             boolean available = cursor.moveToFirst();
             if (!available) {
                 return null;
-            }
-            if (!cursor.isLast()) {
+            } else if (!cursor.isLast()) {
                 throw new IllegalStateException("Expected unique result, but count was " + cursor.getCount());
             }
             return loadCurrentDeep(cursor, true);
@@ -316,7 +315,7 @@ public class DbForegroundSensorDao extends AbstractDao<DbForegroundSensor, Long>
     /** Reads all available rows from the given cursor and returns a list of new ImageTO objects. */
     public List<DbForegroundSensor> loadAllDeepFromCursor(Cursor cursor) {
         int count = cursor.getCount();
-        List<DbForegroundSensor> list = new ArrayList<>(count);
+        List<DbForegroundSensor> list = new ArrayList<DbForegroundSensor>(count);
         
         if (cursor.moveToFirst()) {
             if (identityScope != null) {

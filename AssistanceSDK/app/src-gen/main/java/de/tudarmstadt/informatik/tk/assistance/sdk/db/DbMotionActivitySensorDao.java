@@ -25,17 +25,17 @@ public class DbMotionActivitySensorDao extends AbstractDao<DbMotionActivitySenso
      * Can be used for QueryBuilder and for referencing column names.
      */
     public static class Properties {
-        public static final Property Id = new Property(0, Long.class, "id", true, "_id");
-        public static final Property Walking = new Property(1, Integer.class, "walking", false, "WALKING");
-        public static final Property Running = new Property(2, Integer.class, "running", false, "RUNNING");
-        public static final Property Cycling = new Property(3, Integer.class, "cycling", false, "CYCLING");
-        public static final Property Driving = new Property(4, Integer.class, "driving", false, "DRIVING");
-        public static final Property Stationary = new Property(5, Integer.class, "stationary", false, "STATIONARY");
-        public static final Property Unknown = new Property(6, Integer.class, "unknown", false, "UNKNOWN");
-        public static final Property Created = new Property(7, String.class, "created", false, "CREATED");
-        public static final Property OnFoot = new Property(8, Integer.class, "onFoot", false, "ON_FOOT");
-        public static final Property Tilting = new Property(9, Integer.class, "tilting", false, "TILTING");
-        public static final Property DeviceId = new Property(10, Long.class, "deviceId", false, "DEVICE_ID");
+        public final static Property Id = new Property(0, Long.class, "id", true, "_id");
+        public final static Property Walking = new Property(1, Integer.class, "walking", false, "WALKING");
+        public final static Property Running = new Property(2, Integer.class, "running", false, "RUNNING");
+        public final static Property Cycling = new Property(3, Integer.class, "cycling", false, "CYCLING");
+        public final static Property Driving = new Property(4, Integer.class, "driving", false, "DRIVING");
+        public final static Property Stationary = new Property(5, Integer.class, "stationary", false, "STATIONARY");
+        public final static Property Unknown = new Property(6, Integer.class, "unknown", false, "UNKNOWN");
+        public final static Property Created = new Property(7, String.class, "created", false, "CREATED");
+        public final static Property OnFoot = new Property(8, Integer.class, "onFoot", false, "ON_FOOT");
+        public final static Property Tilting = new Property(9, Integer.class, "tilting", false, "TILTING");
+        public final static Property DeviceId = new Property(10, Long.class, "deviceId", false, "DEVICE_ID");
     }
 
     private DaoSession daoSession;
@@ -296,15 +296,14 @@ public class DbMotionActivitySensorDao extends AbstractDao<DbMotionActivitySenso
         SqlUtils.appendColumnsEqValue(builder, "T", getPkColumns());
         String sql = builder.toString();
         
-        String[] keyArray = { key.toString() };
+        String[] keyArray = new String[] { key.toString() };
         Cursor cursor = db.rawQuery(sql, keyArray);
         
         try {
             boolean available = cursor.moveToFirst();
             if (!available) {
                 return null;
-            }
-            if (!cursor.isLast()) {
+            } else if (!cursor.isLast()) {
                 throw new IllegalStateException("Expected unique result, but count was " + cursor.getCount());
             }
             return loadCurrentDeep(cursor, true);
@@ -316,7 +315,7 @@ public class DbMotionActivitySensorDao extends AbstractDao<DbMotionActivitySenso
     /** Reads all available rows from the given cursor and returns a list of new ImageTO objects. */
     public List<DbMotionActivitySensor> loadAllDeepFromCursor(Cursor cursor) {
         int count = cursor.getCount();
-        List<DbMotionActivitySensor> list = new ArrayList<>(count);
+        List<DbMotionActivitySensor> list = new ArrayList<DbMotionActivitySensor>(count);
         
         if (cursor.moveToFirst()) {
             if (identityScope != null) {

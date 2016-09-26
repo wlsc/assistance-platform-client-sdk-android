@@ -25,19 +25,19 @@ public class DbMagneticFieldSensorDao extends AbstractDao<DbMagneticFieldSensor,
      * Can be used for QueryBuilder and for referencing column names.
      */
     public static class Properties {
-        public static final Property Id = new Property(0, Long.class, "id", true, "_id");
-        public static final Property X = new Property(1, Double.class, "x", false, "X");
-        public static final Property Y = new Property(2, Double.class, "y", false, "Y");
-        public static final Property Z = new Property(3, Double.class, "z", false, "Z");
-        public static final Property Created = new Property(4, String.class, "created", false, "CREATED");
-        public static final Property Accuracy = new Property(5, Integer.class, "accuracy", false, "ACCURACY");
-        public static final Property XUncalibratedNoHardIron = new Property(6, Float.class, "xUncalibratedNoHardIron", false, "X_UNCALIBRATED_NO_HARD_IRON");
-        public static final Property YUncalibratedNoHardIron = new Property(7, Float.class, "yUncalibratedNoHardIron", false, "Y_UNCALIBRATED_NO_HARD_IRON");
-        public static final Property ZUncalibratedNoHardIron = new Property(8, Float.class, "zUncalibratedNoHardIron", false, "Z_UNCALIBRATED_NO_HARD_IRON");
-        public static final Property XUncalibratedEstimatedIronBias = new Property(9, Float.class, "xUncalibratedEstimatedIronBias", false, "X_UNCALIBRATED_ESTIMATED_IRON_BIAS");
-        public static final Property YUncalibratedEstimatedIronBias = new Property(10, Float.class, "yUncalibratedEstimatedIronBias", false, "Y_UNCALIBRATED_ESTIMATED_IRON_BIAS");
-        public static final Property ZUncalibratedEstimatedIronBias = new Property(11, Float.class, "zUncalibratedEstimatedIronBias", false, "Z_UNCALIBRATED_ESTIMATED_IRON_BIAS");
-        public static final Property DeviceId = new Property(12, Long.class, "deviceId", false, "DEVICE_ID");
+        public final static Property Id = new Property(0, Long.class, "id", true, "_id");
+        public final static Property X = new Property(1, Double.class, "x", false, "X");
+        public final static Property Y = new Property(2, Double.class, "y", false, "Y");
+        public final static Property Z = new Property(3, Double.class, "z", false, "Z");
+        public final static Property Created = new Property(4, String.class, "created", false, "CREATED");
+        public final static Property Accuracy = new Property(5, Integer.class, "accuracy", false, "ACCURACY");
+        public final static Property XUncalibratedNoHardIron = new Property(6, Float.class, "xUncalibratedNoHardIron", false, "X_UNCALIBRATED_NO_HARD_IRON");
+        public final static Property YUncalibratedNoHardIron = new Property(7, Float.class, "yUncalibratedNoHardIron", false, "Y_UNCALIBRATED_NO_HARD_IRON");
+        public final static Property ZUncalibratedNoHardIron = new Property(8, Float.class, "zUncalibratedNoHardIron", false, "Z_UNCALIBRATED_NO_HARD_IRON");
+        public final static Property XUncalibratedEstimatedIronBias = new Property(9, Float.class, "xUncalibratedEstimatedIronBias", false, "X_UNCALIBRATED_ESTIMATED_IRON_BIAS");
+        public final static Property YUncalibratedEstimatedIronBias = new Property(10, Float.class, "yUncalibratedEstimatedIronBias", false, "Y_UNCALIBRATED_ESTIMATED_IRON_BIAS");
+        public final static Property ZUncalibratedEstimatedIronBias = new Property(11, Float.class, "zUncalibratedEstimatedIronBias", false, "Z_UNCALIBRATED_ESTIMATED_IRON_BIAS");
+        public final static Property DeviceId = new Property(12, Long.class, "deviceId", false, "DEVICE_ID");
     }
 
     private DaoSession daoSession;
@@ -324,15 +324,14 @@ public class DbMagneticFieldSensorDao extends AbstractDao<DbMagneticFieldSensor,
         SqlUtils.appendColumnsEqValue(builder, "T", getPkColumns());
         String sql = builder.toString();
         
-        String[] keyArray = { key.toString() };
+        String[] keyArray = new String[] { key.toString() };
         Cursor cursor = db.rawQuery(sql, keyArray);
         
         try {
             boolean available = cursor.moveToFirst();
             if (!available) {
                 return null;
-            }
-            if (!cursor.isLast()) {
+            } else if (!cursor.isLast()) {
                 throw new IllegalStateException("Expected unique result, but count was " + cursor.getCount());
             }
             return loadCurrentDeep(cursor, true);
@@ -344,7 +343,7 @@ public class DbMagneticFieldSensorDao extends AbstractDao<DbMagneticFieldSensor,
     /** Reads all available rows from the given cursor and returns a list of new ImageTO objects. */
     public List<DbMagneticFieldSensor> loadAllDeepFromCursor(Cursor cursor) {
         int count = cursor.getCount();
-        List<DbMagneticFieldSensor> list = new ArrayList<>(count);
+        List<DbMagneticFieldSensor> list = new ArrayList<DbMagneticFieldSensor>(count);
         
         if (cursor.moveToFirst()) {
             if (identityScope != null) {

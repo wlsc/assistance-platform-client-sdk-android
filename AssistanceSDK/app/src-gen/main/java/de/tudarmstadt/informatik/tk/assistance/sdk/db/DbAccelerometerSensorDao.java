@@ -25,13 +25,13 @@ public class DbAccelerometerSensorDao extends AbstractDao<DbAccelerometerSensor,
      * Can be used for QueryBuilder and for referencing column names.
      */
     public static class Properties {
-        public static final Property Id = new Property(0, Long.class, "id", true, "_id");
-        public static final Property X = new Property(1, Double.class, "x", false, "X");
-        public static final Property Y = new Property(2, Double.class, "y", false, "Y");
-        public static final Property Z = new Property(3, Double.class, "z", false, "Z");
-        public static final Property Created = new Property(4, String.class, "created", false, "CREATED");
-        public static final Property Accuracy = new Property(5, Integer.class, "accuracy", false, "ACCURACY");
-        public static final Property DeviceId = new Property(6, Long.class, "deviceId", false, "DEVICE_ID");
+        public final static Property Id = new Property(0, Long.class, "id", true, "_id");
+        public final static Property X = new Property(1, Double.class, "x", false, "X");
+        public final static Property Y = new Property(2, Double.class, "y", false, "Y");
+        public final static Property Z = new Property(3, Double.class, "z", false, "Z");
+        public final static Property Created = new Property(4, String.class, "created", false, "CREATED");
+        public final static Property Accuracy = new Property(5, Integer.class, "accuracy", false, "ACCURACY");
+        public final static Property DeviceId = new Property(6, Long.class, "deviceId", false, "DEVICE_ID");
     }
 
     private DaoSession daoSession;
@@ -240,15 +240,14 @@ public class DbAccelerometerSensorDao extends AbstractDao<DbAccelerometerSensor,
         SqlUtils.appendColumnsEqValue(builder, "T", getPkColumns());
         String sql = builder.toString();
         
-        String[] keyArray = { key.toString() };
+        String[] keyArray = new String[] { key.toString() };
         Cursor cursor = db.rawQuery(sql, keyArray);
         
         try {
             boolean available = cursor.moveToFirst();
             if (!available) {
                 return null;
-            }
-            if (!cursor.isLast()) {
+            } else if (!cursor.isLast()) {
                 throw new IllegalStateException("Expected unique result, but count was " + cursor.getCount());
             }
             return loadCurrentDeep(cursor, true);
@@ -260,7 +259,7 @@ public class DbAccelerometerSensorDao extends AbstractDao<DbAccelerometerSensor,
     /** Reads all available rows from the given cursor and returns a list of new ImageTO objects. */
     public List<DbAccelerometerSensor> loadAllDeepFromCursor(Cursor cursor) {
         int count = cursor.getCount();
-        List<DbAccelerometerSensor> list = new ArrayList<>(count);
+        List<DbAccelerometerSensor> list = new ArrayList<DbAccelerometerSensor>(count);
         
         if (cursor.moveToFirst()) {
             if (identityScope != null) {
