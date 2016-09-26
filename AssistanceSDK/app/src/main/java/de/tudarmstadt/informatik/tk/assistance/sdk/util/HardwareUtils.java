@@ -2,7 +2,8 @@ package de.tudarmstadt.informatik.tk.assistance.sdk.util;
 
 import android.content.Context;
 import android.os.Build;
-import android.provider.Settings;
+import android.os.Build.VERSION;
+import android.provider.Settings.Secure;
 
 /**
  * @author Wladimir Schmidt (wlsc.dev@gmail.com)
@@ -16,7 +17,7 @@ public class HardwareUtils {
      * @return
      */
     public static String getAndroidVersion() {
-        return Build.VERSION.RELEASE;
+        return VERSION.RELEASE;
     }
 
     /**
@@ -44,7 +45,7 @@ public class HardwareUtils {
      * @return
      */
     public static String getAndroidId(Context context) {
-        return Settings.Secure.getString(context.getContentResolver(), Settings.Secure.ANDROID_ID);
+        return Secure.getString(context.getContentResolver(), Secure.ANDROID_ID);
     }
 
 }

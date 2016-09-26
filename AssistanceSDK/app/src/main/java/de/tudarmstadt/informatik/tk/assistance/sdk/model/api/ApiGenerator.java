@@ -11,6 +11,8 @@ import de.tudarmstadt.informatik.tk.assistance.sdk.model.httpclient.UntrustedOkH
 import de.tudarmstadt.informatik.tk.assistance.sdk.provider.PreferenceProvider;
 import de.tudarmstadt.informatik.tk.assistance.sdk.util.AppUtils;
 import retrofit.RestAdapter;
+import retrofit.RestAdapter.Builder;
+import retrofit.RestAdapter.LogLevel;
 import retrofit.android.AndroidLog;
 import retrofit.client.OkClient;
 import retrofit.converter.GsonConverter;
@@ -60,11 +62,11 @@ public final class ApiGenerator {
         // magic check for debug ON/OFF
         boolean isDebuggable = AppUtils.isDebug(context);
 
-        RestAdapter.LogLevel httpLogLevel = RestAdapter.LogLevel.NONE;
+        LogLevel httpLogLevel = LogLevel.NONE;
         // setting to output information for http client
         // in debug mode
         if (isDebuggable) {
-            httpLogLevel = RestAdapter.LogLevel.FULL;
+            httpLogLevel = LogLevel.FULL;
         }
 
         AndroidLog logger = new AndroidLog(Config.HTTP_LOGGER_NAME);
@@ -108,10 +110,10 @@ public final class ApiGenerator {
      * @param httpClient
      * @return
      */
-    private RestAdapter getRestAdapter(GsonConverter jsonConverter, RestAdapter.LogLevel httpLogLevel, AndroidLog logger, String endpointUrl, OkClient httpClient) {
+    private RestAdapter getRestAdapter(GsonConverter jsonConverter, LogLevel httpLogLevel, AndroidLog logger, String endpointUrl, OkClient httpClient) {
 
         if (restAdapter == null) {
-            restAdapter = new RestAdapter.Builder()
+            restAdapter = new Builder()
 //                .setErrorHandler(new AssistanceErrorHandler())
                     .setLogLevel(httpLogLevel) // enabling log traces
                     .setLog(logger)

@@ -10,7 +10,7 @@ import java.util.Set;
 
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DaoSession;
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbFacebookSensor;
-import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbFacebookSensorDao;
+import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbFacebookSensorDao.Properties;
 import de.tudarmstadt.informatik.tk.assistance.sdk.model.api.SensorDto;
 import de.tudarmstadt.informatik.tk.assistance.sdk.model.api.sensing.sensor.external.FacebookSensorDto;
 
@@ -74,7 +74,7 @@ public final class FacebookSensorDaoImpl extends
 
         return dao
                 .queryBuilder()
-                .where(DbFacebookSensorDao.Properties.UserId.eq(userId))
+                .where(Properties.UserId.eq(userId))
                 .limit(1)
                 .build()
                 .unique();
@@ -90,8 +90,8 @@ public final class FacebookSensorDaoImpl extends
 
         return dao
                 .queryBuilder()
-                .where(DbFacebookSensorDao.Properties.UserId.eq(userId))
-                .where(DbFacebookSensorDao.Properties.WasChanged.eq(Boolean.TRUE))
+                .where(Properties.UserId.eq(userId))
+                .where(Properties.WasChanged.eq(Boolean.TRUE))
                 .limit(1)
                 .build()
                 .unique();

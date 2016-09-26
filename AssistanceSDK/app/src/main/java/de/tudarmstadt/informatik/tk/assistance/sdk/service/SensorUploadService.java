@@ -6,10 +6,12 @@ import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.telephony.TelephonyManager;
+import android.util.SparseArray;
 
 import com.google.android.gms.gcm.GcmNetworkManager;
 import com.google.android.gms.gcm.GcmTaskService;
 import com.google.android.gms.gcm.OneoffTask;
+import com.google.android.gms.gcm.OneoffTask.Builder;
 import com.google.android.gms.gcm.Task;
 import com.google.android.gms.gcm.TaskParams;
 import com.google.common.collect.Lists;
@@ -27,7 +29,6 @@ import de.tudarmstadt.informatik.tk.assistance.sdk.model.api.login.LoginResponse
 import de.tudarmstadt.informatik.tk.assistance.sdk.model.api.login.UserDeviceDto;
 import de.tudarmstadt.informatik.tk.assistance.sdk.model.api.sensing.SensorUploadRequestDto;
 import de.tudarmstadt.informatik.tk.assistance.sdk.model.api.sensing.SensorUploadResponseDto;
-import de.tudarmstadt.informatik.tk.assistance.sdk.sensing.SensorUploadHolder;
 import de.tudarmstadt.informatik.tk.assistance.sdk.provider.ApiProvider;
 import de.tudarmstadt.informatik.tk.assistance.sdk.provider.DaoProvider;
 import de.tudarmstadt.informatik.tk.assistance.sdk.provider.PreferenceProvider;
@@ -35,6 +36,7 @@ import de.tudarmstadt.informatik.tk.assistance.sdk.provider.SensorProvider;
 import de.tudarmstadt.informatik.tk.assistance.sdk.provider.api.LoginApiProvider;
 import de.tudarmstadt.informatik.tk.assistance.sdk.provider.api.SensorUploadApiProvider;
 import de.tudarmstadt.informatik.tk.assistance.sdk.provider.dao.logs.upload.sensor.SensorUploadLogsDao;
+import de.tudarmstadt.informatik.tk.assistance.sdk.sensing.SensorUploadHolder;
 import de.tudarmstadt.informatik.tk.assistance.sdk.util.ConnectionUtils;
 import de.tudarmstadt.informatik.tk.assistance.sdk.util.GcmUtils;
 import de.tudarmstadt.informatik.tk.assistance.sdk.util.HardwareUtils;
@@ -242,9 +244,10 @@ public class SensorUploadService extends GcmTaskService {
         sensorData = sensorProvider.getEntriesForUpload(amountOfData);
 
         final List<SensorDto> eventsAsList = new ArrayList<>();
+        final SparseArray<List<? extends SensorDto>> requestEvents = sensorData.getRequestEvents();
 
-        for (int i = 0, eventsSize = sensorData.getRequestEvents().size(); i < eventsSize; i++) {
-            eventsAsList.addAll(sensorData.getRequestEvents().valueAt(i));
+        for (int i = 0, eventsSize = requestEvents.size(); i < eventsSize; i++) {
+            eventsAsList.addAll(requestEvents.valueAt(i));
         }
 
         Log.d(TAG, "There are " + eventsAsList.size() + " events to upload");
@@ -283,7 +286,7 @@ public class SensorUploadService extends GcmTaskService {
             return;
         }
 
-        if (eventUploadRequest.getDataEvents().size() == 0) {
+        if (eventUploadRequest.getDataEvents().isEmpty()) {
             Log.d(TAG, "No new data found");
             return;
         }
@@ -635,7 +638,7 @@ public class SensorUploadService extends GcmTaskService {
         Bundle bundle = new Bundle();
         bundle.putInt(UPLOAD_ALL_FLAG_NAME, UPLOAD_ALL_FLAG_VALUE);
 
-        OneoffTask oneTimeTask = new OneoffTask.Builder()
+        OneoffTask oneTimeTask = new Builder()
                 .setService(SensorUploadService.class)
                 .setExecutionWindow(startSecs, endSecs)
                 .setTag(tag)

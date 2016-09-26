@@ -2,7 +2,8 @@ package de.tudarmstadt.informatik.tk.assistance.sdk.model.api.sensing;
 
 import android.content.res.Resources;
 import android.hardware.Sensor;
-import android.os.Build;
+import android.os.Build.VERSION;
+import android.os.Build.VERSION_CODES;
 import android.util.SparseIntArray;
 
 import java.util.ArrayList;
@@ -10,7 +11,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import de.tudarmstadt.informatik.tk.assistance.sdk.R;
+import de.tudarmstadt.informatik.tk.assistance.sdk.R.string;
 
 /**
  * @author Wladimir Schmidt (wlsc.dev@gmail.com)
@@ -117,13 +118,13 @@ public final class SensorApiType {
         androidSensorToDtoTypeMap.put(Sensor.TYPE_ACCELEROMETER, ACCELEROMETER);
         androidSensorToDtoTypeMap.put(Sensor.TYPE_GYROSCOPE, GYROSCOPE);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
+        if (VERSION.SDK_INT >= VERSION_CODES.JELLY_BEAN_MR2) {
             androidSensorToDtoTypeMap.put(Sensor.TYPE_GYROSCOPE_UNCALIBRATED, GYROSCOPE);
         }
 
         androidSensorToDtoTypeMap.put(Sensor.TYPE_MAGNETIC_FIELD, MAGNETIC_FIELD);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
+        if (VERSION.SDK_INT >= VERSION_CODES.JELLY_BEAN_MR2) {
             androidSensorToDtoTypeMap.put(Sensor.TYPE_MAGNETIC_FIELD_UNCALIBRATED, MAGNETIC_FIELD);
         }
 
@@ -136,57 +137,57 @@ public final class SensorApiType {
     public static String getName(int type, Resources res) {
         switch (type) {
             case LOCATION:
-                return res.getString(R.string.sensor_location);
+                return res.getString(string.sensor_location);
             case GYROSCOPE:
-                return res.getString(R.string.sensor_gyroscope);
+                return res.getString(string.sensor_gyroscope);
             case ACCELEROMETER:
-                return res.getString(R.string.sensor_accelerometer);
+                return res.getString(string.sensor_accelerometer);
             case MAGNETIC_FIELD:
-                return res.getString(R.string.sensor_magnetic_field);
+                return res.getString(string.sensor_magnetic_field);
             case MOTION_ACTIVITY:
-                return res.getString(R.string.sensor_motion_activity);
+                return res.getString(string.sensor_motion_activity);
             case CONNECTION:
-                return res.getString(R.string.sensor_connection);
+                return res.getString(string.sensor_connection);
             case WIFI_CONNECTION:
-                return res.getString(R.string.sensor_wifi_connection);
+                return res.getString(string.sensor_wifi_connection);
             case MOBILE_DATA_CONNECTION:
-                return res.getString(R.string.sensor_mobile_connection);
+                return res.getString(string.sensor_mobile_connection);
             case LOUDNESS:
-                return res.getString(R.string.sensor_loudness);
+                return res.getString(string.sensor_loudness);
             case FOREGROUND:
-                return res.getString(R.string.sensor_foreground);
+                return res.getString(string.sensor_foreground);
             case LIGHT:
-                return res.getString(R.string.sensor_light);
+                return res.getString(string.sensor_light);
             case RINGTONE:
-                return res.getString(R.string.sensor_ringtone);
+                return res.getString(string.sensor_ringtone);
             case POWER_STATE:
-                return res.getString(R.string.sensor_power_state);
+                return res.getString(string.sensor_power_state);
             case POWER_LEVEL:
-                return res.getString(R.string.sensor_power_level);
+                return res.getString(string.sensor_power_level);
             case CALENDAR:
-                return res.getString(R.string.sensor_calendar);
+                return res.getString(string.sensor_calendar);
             case CALL_LOG:
-                return res.getString(R.string.sensor_calllog);
+                return res.getString(string.sensor_calllog);
             case FOREGROUND_TRAFFIC:
-                return res.getString(R.string.sensor_network_traffic);
+                return res.getString(string.sensor_network_traffic);
             case BACKGROUND_TRAFFIC:
-                return res.getString(R.string.sensor_background_traffic);
+                return res.getString(string.sensor_background_traffic);
             case CONTACT:
-                return res.getString(R.string.sensor_contacts);
+                return res.getString(string.sensor_contacts);
             case BROWSER_HISTORY:
-                return res.getString(R.string.sensor_browser_history);
+                return res.getString(string.sensor_browser_history);
             case RUNNING_SERVICES:
-                return res.getString(R.string.sensor_running_services);
+                return res.getString(string.sensor_running_services);
             case ACCOUNT_READER:
-                return res.getString(R.string.sensor_account_reader);
+                return res.getString(string.sensor_account_reader);
             case RUNNING_TASKS:
-                return res.getString(R.string.sensor_running_tasks);
+                return res.getString(string.sensor_running_tasks);
             case RUNNING_PROCESSES:
-                return res.getString(R.string.sensor_running_processes);
+                return res.getString(string.sensor_running_processes);
             case UNI_TUCAN:
-                return res.getString(R.string.sensor_uni_tucan);
+                return res.getString(string.sensor_uni_tucan);
             case SOCIAL_FACEBOOK:
-                return res.getString(R.string.sensor_social_facebook);
+                return res.getString(string.sensor_social_facebook);
             default:
                 return "";
         }
@@ -270,7 +271,7 @@ public final class SensorApiType {
             return -1;
         }
 
-        Integer type = SensorApiType.apiNameToDtoTypeMap.get(apiName);
+        Integer type = apiNameToDtoTypeMap.get(apiName);
 
         if (type == null) {
             return -1;

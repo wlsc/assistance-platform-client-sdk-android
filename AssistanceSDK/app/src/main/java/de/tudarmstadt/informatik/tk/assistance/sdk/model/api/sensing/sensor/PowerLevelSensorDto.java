@@ -46,6 +46,7 @@ public class PowerLevelSensorDto implements SensorDto {
         this.percent = percent;
     }
 
+    @Override
     public String getCreated() {
         return this.created;
     }

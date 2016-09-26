@@ -83,6 +83,7 @@ public class AccelerometerSensorDto implements SensorDto {
     /**
      * Not-null value.
      */
+    @Override
     public String getCreated() {
         return created;
     }

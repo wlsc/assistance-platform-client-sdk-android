@@ -25,10 +25,10 @@ public class DbLoudnessSensorDao extends AbstractDao<DbLoudnessSensor, Long> {
      * Can be used for QueryBuilder and for referencing column names.
      */
     public static class Properties {
-        public final static Property Id = new Property(0, Long.class, "id", true, "_id");
-        public final static Property Loudness = new Property(1, float.class, "loudness", false, "LOUDNESS");
-        public final static Property Created = new Property(2, String.class, "created", false, "CREATED");
-        public final static Property DeviceId = new Property(3, Long.class, "deviceId", false, "DEVICE_ID");
+        public static final Property Id = new Property(0, Long.class, "id", true, "_id");
+        public static final Property Loudness = new Property(1, float.class, "loudness", false, "LOUDNESS");
+        public static final Property Created = new Property(2, String.class, "created", false, "CREATED");
+        public static final Property DeviceId = new Property(3, Long.class, "deviceId", false, "DEVICE_ID");
     }
 
     private DaoSession daoSession;
@@ -190,14 +190,15 @@ public class DbLoudnessSensorDao extends AbstractDao<DbLoudnessSensor, Long> {
         SqlUtils.appendColumnsEqValue(builder, "T", getPkColumns());
         String sql = builder.toString();
         
-        String[] keyArray = new String[] { key.toString() };
+        String[] keyArray = { key.toString() };
         Cursor cursor = db.rawQuery(sql, keyArray);
         
         try {
             boolean available = cursor.moveToFirst();
             if (!available) {
                 return null;
-            } else if (!cursor.isLast()) {
+            }
+            if (!cursor.isLast()) {
                 throw new IllegalStateException("Expected unique result, but count was " + cursor.getCount());
             }
             return loadCurrentDeep(cursor, true);
@@ -209,7 +210,7 @@ public class DbLoudnessSensorDao extends AbstractDao<DbLoudnessSensor, Long> {
     /** Reads all available rows from the given cursor and returns a list of new ImageTO objects. */
     public List<DbLoudnessSensor> loadAllDeepFromCursor(Cursor cursor) {
         int count = cursor.getCount();
-        List<DbLoudnessSensor> list = new ArrayList<DbLoudnessSensor>(count);
+        List<DbLoudnessSensor> list = new ArrayList<>(count);
         
         if (cursor.moveToFirst()) {
             if (identityScope != null) {

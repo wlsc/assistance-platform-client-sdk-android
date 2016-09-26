@@ -4,9 +4,9 @@ import android.support.annotation.Nullable;
 
 import java.util.List;
 
+import de.tudarmstadt.informatik.tk.assistance.model.client.feedback.content.ClientFeedbackDto;
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbNews;
 import de.tudarmstadt.informatik.tk.assistance.sdk.provider.dao.CommonDao;
-import de.tudarmstadt.informatik.tk.assistance.model.client.feedback.content.ClientFeedbackDto;
 
 /**
  * @author Wladimir Schmidt (wlsc.dev@gmail.com)

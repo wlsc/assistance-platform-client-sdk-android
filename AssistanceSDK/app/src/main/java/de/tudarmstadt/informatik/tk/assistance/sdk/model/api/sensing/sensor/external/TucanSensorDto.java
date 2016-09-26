@@ -3,8 +3,8 @@ package de.tudarmstadt.informatik.tk.assistance.sdk.model.api.sensing.sensor.ext
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-import de.tudarmstadt.informatik.tk.assistance.sdk.model.api.sensing.SensorApiType;
 import de.tudarmstadt.informatik.tk.assistance.sdk.model.api.SensorDto;
+import de.tudarmstadt.informatik.tk.assistance.sdk.model.api.sensing.SensorApiType;
 
 /**
  * @author Wladimir Schmidt (wlsc.dev@gmail.com)

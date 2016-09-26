@@ -167,6 +167,7 @@ public class GyroscopeSensorDto implements SensorDto {
         this.accuracy = accuracy;
     }
 
+    @Override
     public String getCreated() {
         return created;
     }

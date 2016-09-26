@@ -84,6 +84,7 @@ public class MobileConnectionSensorDto implements SensorDto {
     /**
      * Not-null value.
      */
+    @Override
     public String getCreated() {
         return created;
     }

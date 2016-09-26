@@ -2,13 +2,14 @@ package de.tudarmstadt.informatik.tk.assistance.sdk.provider.dao.sensing;
 
 import android.support.annotation.Nullable;
 
+import org.greenrobot.greendao.Property;
+
 import java.util.Collections;
 import java.util.List;
 
-import org.greenrobot.greendao.Property;
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DaoSession;
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbCallLogSensor;
-import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbCallLogSensorDao;
+import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbCallLogSensorDao.Properties;
 import de.tudarmstadt.informatik.tk.assistance.sdk.model.api.sensing.sensor.CallLogSensorDto;
 
 /**
@@ -70,7 +71,7 @@ public final class CallLogSensorDaoImpl extends
     public DbCallLogSensor getLastCallLogEvent() {
         return dao
                 .queryBuilder()
-                .orderDesc(DbCallLogSensorDao.Properties.Id)
+                .orderDesc(Properties.Id)
                 .limit(1)
                 .build()
                 .unique();
@@ -87,7 +88,7 @@ public final class CallLogSensorDaoImpl extends
             if (property.name.equals(DEVICE_ID_FIELD_NAME)) {
                 return dao
                         .queryBuilder()
-                        .where(DbCallLogSensorDao.Properties.IsUpdated.eq(Boolean.TRUE))
+                        .where(Properties.IsUpdated.eq(Boolean.TRUE))
                         .where(property.eq(deviceId))
                         .build()
                         .list();

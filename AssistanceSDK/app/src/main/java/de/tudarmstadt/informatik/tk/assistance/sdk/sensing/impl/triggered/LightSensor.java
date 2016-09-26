@@ -11,9 +11,9 @@ import java.util.Locale;
 
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbLightSensor;
 import de.tudarmstadt.informatik.tk.assistance.sdk.model.api.sensing.SensorApiType;
-import de.tudarmstadt.informatik.tk.assistance.sdk.sensing.impl.AbstractTriggeredSensor;
 import de.tudarmstadt.informatik.tk.assistance.sdk.provider.DaoProvider;
 import de.tudarmstadt.informatik.tk.assistance.sdk.provider.PreferenceProvider;
+import de.tudarmstadt.informatik.tk.assistance.sdk.sensing.impl.AbstractTriggeredSensor;
 import de.tudarmstadt.informatik.tk.assistance.sdk.util.DateUtils;
 import de.tudarmstadt.informatik.tk.assistance.sdk.util.logger.Log;
 
@@ -201,14 +201,13 @@ public final class LightSensor
             numValues = 1;
 
             return true;
-        } else {
-            if (event.timestamp < (startTimestamp + UPDATE_INTERVAL_IN_SEC * 1_000_000_000l)) {
+        }
+        if (event.timestamp < (startTimestamp + UPDATE_INTERVAL_IN_SEC * 1_000_000_000l)) {
 
-                mLastValue += Math.abs(event.values[0]);
-                numValues++;
+            mLastValue += Math.abs(event.values[0]);
+            numValues++;
 
-                return true;
-            }
+            return true;
         }
 
         return false;

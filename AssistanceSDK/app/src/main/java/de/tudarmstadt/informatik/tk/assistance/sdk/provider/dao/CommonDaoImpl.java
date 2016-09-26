@@ -2,11 +2,11 @@ package de.tudarmstadt.informatik.tk.assistance.sdk.provider.dao;
 
 import android.support.annotation.Nullable;
 
-import java.util.Collections;
-import java.util.List;
-
 import org.greenrobot.greendao.AbstractDao;
 import org.greenrobot.greendao.Property;
+
+import java.util.Collections;
+import java.util.List;
 
 /**
  * @author Wladimir Schmidt (wlsc.dev@gmail.com)

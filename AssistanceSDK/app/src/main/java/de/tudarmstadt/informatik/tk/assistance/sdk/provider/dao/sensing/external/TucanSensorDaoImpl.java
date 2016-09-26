@@ -4,7 +4,7 @@ import android.support.annotation.Nullable;
 
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DaoSession;
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbTucanSensor;
-import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbTucanSensorDao;
+import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbTucanSensorDao.Properties;
 import de.tudarmstadt.informatik.tk.assistance.sdk.model.api.SensorDto;
 import de.tudarmstadt.informatik.tk.assistance.sdk.model.api.sensing.sensor.external.TucanSensorDto;
 
@@ -59,7 +59,7 @@ public final class TucanSensorDaoImpl extends
 
         return dao
                 .queryBuilder()
-                .where(DbTucanSensorDao.Properties.UserId.eq(userId))
+                .where(Properties.UserId.eq(userId))
                 .limit(1)
                 .build()
                 .unique();
@@ -75,8 +75,8 @@ public final class TucanSensorDaoImpl extends
 
         return dao
                 .queryBuilder()
-                .where(DbTucanSensorDao.Properties.UserId.eq(userId))
-                .where(DbTucanSensorDao.Properties.WasChanged.eq(Boolean.TRUE))
+                .where(Properties.UserId.eq(userId))
+                .where(Properties.WasChanged.eq(Boolean.TRUE))
                 .limit(1)
                 .build()
                 .unique();

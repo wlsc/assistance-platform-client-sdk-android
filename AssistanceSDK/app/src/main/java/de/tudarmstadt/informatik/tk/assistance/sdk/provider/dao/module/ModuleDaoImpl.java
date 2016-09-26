@@ -7,7 +7,7 @@ import java.util.List;
 
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DaoSession;
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbModule;
-import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbModuleDao;
+import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbModuleDao.Properties;
 import de.tudarmstadt.informatik.tk.assistance.sdk.provider.dao.CommonDaoImpl;
 
 /**
@@ -52,8 +52,8 @@ public final class ModuleDaoImpl extends
 
         return dao
                 .queryBuilder()
-                .where(DbModuleDao.Properties.PackageName.eq(modulePackageName))
-                .where(DbModuleDao.Properties.UserId.eq(userId))
+                .where(Properties.PackageName.eq(modulePackageName))
+                .where(Properties.UserId.eq(userId))
                 .limit(1)
                 .build()
                 .unique();
@@ -69,7 +69,7 @@ public final class ModuleDaoImpl extends
 
         return dao
                 .queryBuilder()
-                .where(DbModuleDao.Properties.PackageName.eq(modulePackageName))
+                .where(Properties.PackageName.eq(modulePackageName))
                 .limit(1)
                 .build()
                 .unique();
@@ -84,7 +84,7 @@ public final class ModuleDaoImpl extends
 
         return dao
                 .queryBuilder()
-                .where(DbModuleDao.Properties.UserId.eq(userId))
+                .where(Properties.UserId.eq(userId))
                 .build()
                 .list();
     }
@@ -98,8 +98,8 @@ public final class ModuleDaoImpl extends
 
         return dao
                 .queryBuilder()
-                .where(DbModuleDao.Properties.UserId.eq(userId))
-                .where(DbModuleDao.Properties.Active.eq(Boolean.TRUE))
+                .where(Properties.UserId.eq(userId))
+                .where(Properties.Active.eq(Boolean.TRUE))
                 .build()
                 .list();
     }

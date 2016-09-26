@@ -4,7 +4,7 @@ import android.support.annotation.Nullable;
 
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DaoSession;
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbDevice;
-import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbDeviceDao;
+import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbDeviceDao.Properties;
 import de.tudarmstadt.informatik.tk.assistance.sdk.provider.dao.CommonDaoImpl;
 import de.tudarmstadt.informatik.tk.assistance.sdk.util.logger.Log;
 
@@ -49,7 +49,7 @@ public final class DeviceDaoImpl extends
 
         return dao
                 .queryBuilder()
-                .where(DbDeviceDao.Properties.Id.eq(deviceId))
+                .where(Properties.Id.eq(deviceId))
                 .limit(1)
                 .build()
                 .unique();
@@ -72,8 +72,8 @@ public final class DeviceDaoImpl extends
 
         DbDevice device = dao
                 .queryBuilder()
-                .where(DbDeviceDao.Properties.UserId.eq(userId))
-                .where(DbDeviceDao.Properties.ServerDeviceId.eq(serverDeviceId))
+                .where(Properties.UserId.eq(userId))
+                .where(Properties.ServerDeviceId.eq(serverDeviceId))
                 .build()
                 .unique();
 

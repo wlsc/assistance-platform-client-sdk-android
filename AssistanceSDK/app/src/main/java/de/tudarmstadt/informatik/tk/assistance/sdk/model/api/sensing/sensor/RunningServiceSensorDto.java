@@ -57,6 +57,7 @@ public class RunningServiceSensorDto implements SensorDto {
         this.className = className;
     }
 
+    @Override
     public String getCreated() {
         return this.created;
     }

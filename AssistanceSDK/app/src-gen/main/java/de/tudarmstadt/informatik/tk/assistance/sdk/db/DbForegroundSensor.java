@@ -74,10 +74,12 @@ public class DbForegroundSensor implements de.tudarmstadt.informatik.tk.assistan
         myDao = daoSession != null ? daoSession.getDbForegroundSensorDao() : null;
     }
 
+    @Override
     public Long getId() {
         return id;
     }
 
+    @Override
     public void setId(Long id) {
         this.id = id;
     }
@@ -146,12 +148,14 @@ public class DbForegroundSensor implements de.tudarmstadt.informatik.tk.assistan
         this.keystrokes = keystrokes;
     }
 
+    @Override
     @NotNull
     public String getCreated() {
         return created;
     }
 
     /** Not-null value; ensure this value is available before it is saved to the database. */
+    @Override
     public void setCreated(@NotNull String created) {
         this.created = created;
     }

@@ -46,6 +46,7 @@ public class AccountReaderSensorDto implements SensorDto {
         this.types = types;
     }
 
+    @Override
     public String getCreated() {
         return created;
     }

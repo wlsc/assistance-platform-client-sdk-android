@@ -22,16 +22,16 @@ public class DbUserDao extends AbstractDao<DbUser, Long> {
      * Can be used for QueryBuilder and for referencing column names.
      */
     public static class Properties {
-        public final static Property Id = new Property(0, Long.class, "id", true, "_id");
-        public final static Property Token = new Property(1, String.class, "token", false, "TOKEN");
-        public final static Property Firstname = new Property(2, String.class, "firstname", false, "FIRSTNAME");
-        public final static Property Lastname = new Property(3, String.class, "lastname", false, "LASTNAME");
-        public final static Property PrimaryEmail = new Property(4, String.class, "primaryEmail", false, "PRIMARY_EMAIL");
-        public final static Property UserpicFilename = new Property(5, String.class, "userpicFilename", false, "USERPIC_FILENAME");
-        public final static Property LastLogin = new Property(6, String.class, "lastLogin", false, "LAST_LOGIN");
-        public final static Property JoinedSince = new Property(7, String.class, "joinedSince", false, "JOINED_SINCE");
-        public final static Property Uuid = new Property(8, String.class, "uuid", false, "UUID");
-        public final static Property Created = new Property(9, String.class, "created", false, "CREATED");
+        public static final Property Id = new Property(0, Long.class, "id", true, "_id");
+        public static final Property Token = new Property(1, String.class, "token", false, "TOKEN");
+        public static final Property Firstname = new Property(2, String.class, "firstname", false, "FIRSTNAME");
+        public static final Property Lastname = new Property(3, String.class, "lastname", false, "LASTNAME");
+        public static final Property PrimaryEmail = new Property(4, String.class, "primaryEmail", false, "PRIMARY_EMAIL");
+        public static final Property UserpicFilename = new Property(5, String.class, "userpicFilename", false, "USERPIC_FILENAME");
+        public static final Property LastLogin = new Property(6, String.class, "lastLogin", false, "LAST_LOGIN");
+        public static final Property JoinedSince = new Property(7, String.class, "joinedSince", false, "JOINED_SINCE");
+        public static final Property Uuid = new Property(8, String.class, "uuid", false, "UUID");
+        public static final Property Created = new Property(9, String.class, "created", false, "CREATED");
     }
 
     private DaoSession daoSession;

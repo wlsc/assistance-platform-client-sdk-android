@@ -98,7 +98,7 @@ public final class ModuleProvider {
             return;
         }
 
-        Set<Integer> dtoTypes = new HashSet<>();
+        final Set<Integer> dtoTypes = new HashSet<>(capabilities.size());
 
         for (DbModuleCapability capability : capabilities) {
 

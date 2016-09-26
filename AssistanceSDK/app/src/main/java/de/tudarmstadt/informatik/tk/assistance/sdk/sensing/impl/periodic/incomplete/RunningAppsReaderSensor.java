@@ -10,10 +10,9 @@ import java.util.List;
 
 import de.tudarmstadt.informatik.tk.assistance.sdk.model.api.sensing.SensorApiType;
 import de.tudarmstadt.informatik.tk.assistance.sdk.sensing.impl.AbstractPeriodicSensor;
-import de.tudarmstadt.informatik.tk.assistance.sdk.sensing.ISensor;
 
 
-public class RunningAppsReaderSensor extends AbstractPeriodicSensor implements ISensor {
+public class RunningAppsReaderSensor extends AbstractPeriodicSensor {
 
     private static final int MAXIMUM_SERVICES = 20;
     private ActivityManager m_activityManager;
@@ -60,7 +59,7 @@ public class RunningAppsReaderSensor extends AbstractPeriodicSensor implements I
         // strAccountTypes[i] = accounts[i].type;
         // }
 
-        if (liServices.size() > 0) {
+        if (!liServices.isEmpty()) {
             // TODO: implement logic
             StringBuilder sb = new StringBuilder();
             // for (int i = 0; i < liProcesses.size() - 1; i++)

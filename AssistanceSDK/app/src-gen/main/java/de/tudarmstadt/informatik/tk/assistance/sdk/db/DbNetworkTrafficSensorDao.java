@@ -25,15 +25,15 @@ public class DbNetworkTrafficSensorDao extends AbstractDao<DbNetworkTrafficSenso
      * Can be used for QueryBuilder and for referencing column names.
      */
     public static class Properties {
-        public final static Property Id = new Property(0, Long.class, "id", true, "_id");
-        public final static Property AppName = new Property(1, String.class, "appName", false, "APP_NAME");
-        public final static Property RxBytes = new Property(2, Long.class, "rxBytes", false, "RX_BYTES");
-        public final static Property TxBytes = new Property(3, Long.class, "txBytes", false, "TX_BYTES");
-        public final static Property Background = new Property(4, Boolean.class, "background", false, "BACKGROUND");
-        public final static Property Longitude = new Property(5, Double.class, "longitude", false, "LONGITUDE");
-        public final static Property Latitude = new Property(6, Double.class, "latitude", false, "LATITUDE");
-        public final static Property Created = new Property(7, String.class, "created", false, "CREATED");
-        public final static Property DeviceId = new Property(8, Long.class, "deviceId", false, "DEVICE_ID");
+        public static final Property Id = new Property(0, Long.class, "id", true, "_id");
+        public static final Property AppName = new Property(1, String.class, "appName", false, "APP_NAME");
+        public static final Property RxBytes = new Property(2, Long.class, "rxBytes", false, "RX_BYTES");
+        public static final Property TxBytes = new Property(3, Long.class, "txBytes", false, "TX_BYTES");
+        public static final Property Background = new Property(4, Boolean.class, "background", false, "BACKGROUND");
+        public static final Property Longitude = new Property(5, Double.class, "longitude", false, "LONGITUDE");
+        public static final Property Latitude = new Property(6, Double.class, "latitude", false, "LATITUDE");
+        public static final Property Created = new Property(7, String.class, "created", false, "CREATED");
+        public static final Property DeviceId = new Property(8, Long.class, "deviceId", false, "DEVICE_ID");
     }
 
     private DaoSession daoSession;
@@ -268,14 +268,15 @@ public class DbNetworkTrafficSensorDao extends AbstractDao<DbNetworkTrafficSenso
         SqlUtils.appendColumnsEqValue(builder, "T", getPkColumns());
         String sql = builder.toString();
         
-        String[] keyArray = new String[] { key.toString() };
+        String[] keyArray = { key.toString() };
         Cursor cursor = db.rawQuery(sql, keyArray);
         
         try {
             boolean available = cursor.moveToFirst();
             if (!available) {
                 return null;
-            } else if (!cursor.isLast()) {
+            }
+            if (!cursor.isLast()) {
                 throw new IllegalStateException("Expected unique result, but count was " + cursor.getCount());
             }
             return loadCurrentDeep(cursor, true);
@@ -287,7 +288,7 @@ public class DbNetworkTrafficSensorDao extends AbstractDao<DbNetworkTrafficSenso
     /** Reads all available rows from the given cursor and returns a list of new ImageTO objects. */
     public List<DbNetworkTrafficSensor> loadAllDeepFromCursor(Cursor cursor) {
         int count = cursor.getCount();
-        List<DbNetworkTrafficSensor> list = new ArrayList<DbNetworkTrafficSensor>(count);
+        List<DbNetworkTrafficSensor> list = new ArrayList<>(count);
         
         if (cursor.moveToFirst()) {
             if (identityScope != null) {

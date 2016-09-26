@@ -1,22 +1,23 @@
 package de.tudarmstadt.informatik.tk.assistance.sdk.util.db;
 
 import android.content.Context;
-import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteDatabase.CursorFactory;
 
 import org.greenrobot.greendao.database.Database;
 
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DaoMaster;
+import de.tudarmstadt.informatik.tk.assistance.sdk.db.DaoMaster.OpenHelper;
 import de.tudarmstadt.informatik.tk.assistance.sdk.util.logger.Log;
 
 /**
  * @author Karsten Planz
  * @edited on 07.09.2015 by Wladimir Schmidt (wlsc.dev@gmail.com)
  */
-public class DbAssistanceOpenHelper extends DaoMaster.OpenHelper {
+public class DbAssistanceOpenHelper extends OpenHelper {
 
     private static final String TAG = DbAssistanceOpenHelper.class.getSimpleName();
 
-    public DbAssistanceOpenHelper(Context context, String name, SQLiteDatabase.CursorFactory factory) {
+    public DbAssistanceOpenHelper(Context context, String name, CursorFactory factory) {
         super(context, name, factory);
     }
 

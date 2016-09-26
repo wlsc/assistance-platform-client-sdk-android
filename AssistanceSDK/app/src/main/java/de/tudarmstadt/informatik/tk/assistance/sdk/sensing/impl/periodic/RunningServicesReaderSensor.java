@@ -1,6 +1,5 @@
 package de.tudarmstadt.informatik.tk.assistance.sdk.sensing.impl.periodic;
 
-import android.app.ActivityManager;
 import android.app.ActivityManager.RunningServiceInfo;
 import android.content.Context;
 
@@ -11,9 +10,9 @@ import java.util.Locale;
 
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbRunningServicesSensor;
 import de.tudarmstadt.informatik.tk.assistance.sdk.model.api.sensing.SensorApiType;
-import de.tudarmstadt.informatik.tk.assistance.sdk.sensing.impl.AbstractPeriodicSensor;
 import de.tudarmstadt.informatik.tk.assistance.sdk.provider.PreferenceProvider;
 import de.tudarmstadt.informatik.tk.assistance.sdk.provider.dao.sensing.RunningServicesSensorDao;
+import de.tudarmstadt.informatik.tk.assistance.sdk.sensing.impl.AbstractPeriodicSensor;
 import de.tudarmstadt.informatik.tk.assistance.sdk.util.DateUtils;
 import de.tudarmstadt.informatik.tk.assistance.sdk.util.ServiceUtils;
 import de.tudarmstadt.informatik.tk.assistance.sdk.util.logger.Log;
@@ -105,7 +104,7 @@ public final class RunningServicesReaderSensor extends AbstractPeriodicSensor {
 
         boolean processesChanged = services.size() != lastServicePackageNames.size();
 
-        for (ActivityManager.RunningServiceInfo service : services) {
+        for (RunningServiceInfo service : services) {
 
             servicesPackageNames.add(service.process);
             servicesClassNames.add(service.service.getClassName());

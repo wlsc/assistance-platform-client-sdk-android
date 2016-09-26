@@ -110,6 +110,7 @@ public class MagneticFieldSensorDto implements SensorDto {
         this.z = z;
     }
 
+    @Override
     public String getCreated() {
         return this.created;
     }

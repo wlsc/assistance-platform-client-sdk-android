@@ -29,17 +29,17 @@ public class DbDeviceDao extends AbstractDao<DbDevice, Long> {
      * Can be used for QueryBuilder and for referencing column names.
      */
     public static class Properties {
-        public final static Property Id = new Property(0, Long.class, "id", true, "_id");
-        public final static Property DeviceIdentifier = new Property(1, String.class, "deviceIdentifier", false, "DEVICE_IDENTIFIER");
-        public final static Property Os = new Property(2, String.class, "os", false, "OS");
-        public final static Property OsVersion = new Property(3, String.class, "osVersion", false, "OS_VERSION");
-        public final static Property Brand = new Property(4, String.class, "brand", false, "BRAND");
-        public final static Property Model = new Property(5, String.class, "model", false, "MODEL");
-        public final static Property ServerDeviceId = new Property(6, Long.class, "serverDeviceId", false, "SERVER_DEVICE_ID");
-        public final static Property GcmRegistrationToken = new Property(7, String.class, "gcmRegistrationToken", false, "GCM_REGISTRATION_TOKEN");
-        public final static Property UserDefinedName = new Property(8, String.class, "userDefinedName", false, "USER_DEFINED_NAME");
-        public final static Property Created = new Property(9, String.class, "created", false, "CREATED");
-        public final static Property UserId = new Property(10, Long.class, "userId", false, "USER_ID");
+        public static final Property Id = new Property(0, Long.class, "id", true, "_id");
+        public static final Property DeviceIdentifier = new Property(1, String.class, "deviceIdentifier", false, "DEVICE_IDENTIFIER");
+        public static final Property Os = new Property(2, String.class, "os", false, "OS");
+        public static final Property OsVersion = new Property(3, String.class, "osVersion", false, "OS_VERSION");
+        public static final Property Brand = new Property(4, String.class, "brand", false, "BRAND");
+        public static final Property Model = new Property(5, String.class, "model", false, "MODEL");
+        public static final Property ServerDeviceId = new Property(6, Long.class, "serverDeviceId", false, "SERVER_DEVICE_ID");
+        public static final Property GcmRegistrationToken = new Property(7, String.class, "gcmRegistrationToken", false, "GCM_REGISTRATION_TOKEN");
+        public static final Property UserDefinedName = new Property(8, String.class, "userDefinedName", false, "USER_DEFINED_NAME");
+        public static final Property Created = new Property(9, String.class, "created", false, "CREATED");
+        public static final Property UserId = new Property(10, Long.class, "userId", false, "USER_ID");
     }
 
     private DaoSession daoSession;
@@ -321,14 +321,15 @@ public class DbDeviceDao extends AbstractDao<DbDevice, Long> {
         SqlUtils.appendColumnsEqValue(builder, "T", getPkColumns());
         String sql = builder.toString();
 
-        String[] keyArray = new String[]{key.toString()};
+        String[] keyArray = {key.toString()};
         Cursor cursor = db.rawQuery(sql, keyArray);
 
         try {
             boolean available = cursor.moveToFirst();
             if (!available) {
                 return null;
-            } else if (!cursor.isLast()) {
+            }
+            if (!cursor.isLast()) {
                 throw new IllegalStateException("Expected unique result, but count was " + cursor.getCount());
             }
             return loadCurrentDeep(cursor, true);
@@ -342,7 +343,7 @@ public class DbDeviceDao extends AbstractDao<DbDevice, Long> {
      */
     public List<DbDevice> loadAllDeepFromCursor(Cursor cursor) {
         int count = cursor.getCount();
-        List<DbDevice> list = new ArrayList<DbDevice>(count);
+        List<DbDevice> list = new ArrayList<>(count);
 
         if (cursor.moveToFirst()) {
             if (identityScope != null) {

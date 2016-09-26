@@ -27,7 +27,7 @@ public class AccessibilityEventFilterUtils {
 
     private static final long MIN_DURATION_APP_CHANGE = 5 * ONE_SECOND;
 
-    private static final String[] BROWSER_PACKAGES = new String[]{
+    private static final String[] BROWSER_PACKAGES = {
             "com.android.chrome"
     };
 

@@ -46,6 +46,7 @@ public class RunningProcessSensorDto implements SensorDto {
         this.name = name;
     }
 
+    @Override
     public String getCreated() {
         return created;
     }

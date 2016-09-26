@@ -4,7 +4,7 @@ import android.support.annotation.Nullable;
 
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DaoSession;
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbUser;
-import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbUserDao;
+import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbUserDao.Properties;
 import de.tudarmstadt.informatik.tk.assistance.sdk.provider.dao.CommonDaoImpl;
 
 /**
@@ -48,7 +48,7 @@ public final class UserDaoImpl extends
 
         return dao
                 .queryBuilder()
-                .where(DbUserDao.Properties.PrimaryEmail.eq(email))
+                .where(Properties.PrimaryEmail.eq(email))
                 .limit(1)
                 .build()
                 .unique();
@@ -70,7 +70,7 @@ public final class UserDaoImpl extends
 
         return dao
                 .queryBuilder()
-                .where(DbUserDao.Properties.Token.eq(token))
+                .where(Properties.Token.eq(token))
                 .limit(1)
                 .build()
                 .unique();

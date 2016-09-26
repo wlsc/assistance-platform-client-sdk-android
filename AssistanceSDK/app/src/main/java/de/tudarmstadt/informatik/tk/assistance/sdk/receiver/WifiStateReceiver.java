@@ -7,6 +7,7 @@ import android.os.AsyncTask;
 
 import com.google.android.gms.gcm.GcmNetworkManager;
 import com.google.android.gms.gcm.OneoffTask;
+import com.google.android.gms.gcm.OneoffTask.Builder;
 import com.google.android.gms.gcm.Task;
 
 import de.tudarmstadt.informatik.tk.assistance.sdk.provider.PreferenceProvider;
@@ -114,8 +115,8 @@ public class WifiStateReceiver extends BroadcastReceiver {
     private void scheduleSensorDataUploadTask(Context context) {
 
         SensorUploadService.scheduleOneTimeTask(context,
-                WifiStateReceiver.UPLOAD_ALL_TASKS_START_SECS,
-                WifiStateReceiver.UPLOAD_ALL_TASKS_END_SECS,
+                UPLOAD_ALL_TASKS_START_SECS,
+                UPLOAD_ALL_TASKS_END_SECS,
                 "onetimetag | 1");
     }
 
@@ -128,10 +129,10 @@ public class WifiStateReceiver extends BroadcastReceiver {
 
         Log.d(TAG, "Scheduling logs upload one time task...");
 
-        OneoffTask oneTimeTask = new OneoffTask.Builder()
+        OneoffTask oneTimeTask = new Builder()
                 .setService(LogsUploadService.class)
-                .setExecutionWindow(WifiStateReceiver.UPLOAD_ALL_TASKS_START_SECS,
-                        WifiStateReceiver.UPLOAD_ALL_TASKS_END_SECS)
+                .setExecutionWindow(UPLOAD_ALL_TASKS_START_SECS,
+                        UPLOAD_ALL_TASKS_END_SECS)
                 .setTag("onetimetag | 2")
                 .setPersisted(true)
                 .setUpdateCurrent(true)

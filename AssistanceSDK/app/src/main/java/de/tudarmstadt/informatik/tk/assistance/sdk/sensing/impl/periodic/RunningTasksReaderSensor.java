@@ -11,8 +11,8 @@ import java.util.Locale;
 
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbRunningTasksSensor;
 import de.tudarmstadt.informatik.tk.assistance.sdk.model.api.sensing.SensorApiType;
-import de.tudarmstadt.informatik.tk.assistance.sdk.sensing.impl.AbstractPeriodicSensor;
 import de.tudarmstadt.informatik.tk.assistance.sdk.provider.PreferenceProvider;
+import de.tudarmstadt.informatik.tk.assistance.sdk.sensing.impl.AbstractPeriodicSensor;
 import de.tudarmstadt.informatik.tk.assistance.sdk.util.DateUtils;
 import de.tudarmstadt.informatik.tk.assistance.sdk.util.logger.Log;
 
@@ -114,8 +114,9 @@ public final class RunningTasksReaderSensor extends AbstractPeriodicSensor {
                 if (!isTasksChanged) {
 
                     String strLastTask = mLastTasks.get(i);
-                    if (strLastTask == null || !strCurrentClassName.equals(strLastTask))
+                    if (strLastTask == null || !strCurrentClassName.equals(strLastTask)) {
                         isTasksChanged = true;
+                    }
                 }
 
                 i++;

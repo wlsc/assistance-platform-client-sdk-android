@@ -1,11 +1,12 @@
 package de.tudarmstadt.informatik.tk.assistance.sdk.provider.dao.sensing;
 
+import org.greenrobot.greendao.AbstractDao;
+import org.greenrobot.greendao.Property;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import org.greenrobot.greendao.AbstractDao;
-import org.greenrobot.greendao.Property;
 import de.tudarmstadt.informatik.tk.assistance.sdk.model.api.SensorDto;
 import de.tudarmstadt.informatik.tk.assistance.sdk.provider.dao.CommonDaoImpl;
 

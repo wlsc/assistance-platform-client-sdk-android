@@ -54,6 +54,7 @@ public class RingtoneSensorDto implements SensorDto {
         this.mode = mode;
     }
 
+    @Override
     public String getCreated() {
         return created;
     }

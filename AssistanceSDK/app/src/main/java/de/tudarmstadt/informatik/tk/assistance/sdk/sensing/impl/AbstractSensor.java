@@ -5,8 +5,8 @@ import android.content.Context;
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DaoSession;
 import de.tudarmstadt.informatik.tk.assistance.sdk.event.UpdateSensorIntervalEvent;
 import de.tudarmstadt.informatik.tk.assistance.sdk.model.enums.EPushType;
-import de.tudarmstadt.informatik.tk.assistance.sdk.sensing.ISensor;
 import de.tudarmstadt.informatik.tk.assistance.sdk.provider.DaoProvider;
+import de.tudarmstadt.informatik.tk.assistance.sdk.sensing.ISensor;
 import de.tudarmstadt.informatik.tk.assistance.sdk.service.HarvesterService;
 
 /**

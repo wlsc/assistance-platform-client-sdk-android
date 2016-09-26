@@ -7,7 +7,8 @@ import android.content.IntentFilter;
 import android.net.ConnectivityManager;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
-import android.os.Build;
+import android.os.Build.VERSION;
+import android.os.Build.VERSION_CODES;
 import android.telephony.TelephonyManager;
 
 import java.util.Date;
@@ -17,8 +18,8 @@ import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbConnectionSensor;
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbMobileConnectionSensor;
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbWifiConnectionSensor;
 import de.tudarmstadt.informatik.tk.assistance.sdk.model.api.sensing.SensorApiType;
-import de.tudarmstadt.informatik.tk.assistance.sdk.sensing.impl.AbstractTriggeredSensor;
 import de.tudarmstadt.informatik.tk.assistance.sdk.provider.PreferenceProvider;
+import de.tudarmstadt.informatik.tk.assistance.sdk.sensing.impl.AbstractTriggeredSensor;
 import de.tudarmstadt.informatik.tk.assistance.sdk.util.ConnectionUtils;
 import de.tudarmstadt.informatik.tk.assistance.sdk.util.DateUtils;
 import de.tudarmstadt.informatik.tk.assistance.sdk.util.StringUtils;
@@ -289,7 +290,7 @@ public final class ConnectionSensor extends AbstractTriggeredSensor {
                 // TODO: find a way to get a channel
                 channel = -1;
 
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                if (VERSION.SDK_INT >= VERSION_CODES.LOLLIPOP) {
                     frequency = info.getFrequency();
                 }
 

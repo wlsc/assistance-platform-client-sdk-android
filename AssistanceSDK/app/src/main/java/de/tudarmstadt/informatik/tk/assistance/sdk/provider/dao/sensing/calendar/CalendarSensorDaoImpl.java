@@ -2,13 +2,14 @@ package de.tudarmstadt.informatik.tk.assistance.sdk.provider.dao.sensing.calenda
 
 import android.support.annotation.Nullable;
 
+import org.greenrobot.greendao.Property;
+
 import java.util.Collections;
 import java.util.List;
 
-import org.greenrobot.greendao.Property;
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DaoSession;
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbCalendarSensor;
-import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbCalendarSensorDao;
+import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbCalendarSensorDao.Properties;
 import de.tudarmstadt.informatik.tk.assistance.sdk.model.api.sensing.sensor.calendar.CalendarSensorDto;
 import de.tudarmstadt.informatik.tk.assistance.sdk.provider.dao.sensing.CommonEventDaoImpl;
 import de.tudarmstadt.informatik.tk.assistance.sdk.util.DateUtils;
@@ -84,7 +85,7 @@ public final class CalendarSensorDaoImpl extends
             if (property.name.equals(DEVICE_ID_FIELD_NAME)) {
                 return dao
                         .queryBuilder()
-                        .where(DbCalendarSensorDao.Properties.IsUpdated.eq(Boolean.TRUE))
+                        .where(Properties.IsUpdated.eq(Boolean.TRUE))
                         .where(property.eq(deviceId))
                         .build()
                         .list();

@@ -3,8 +3,10 @@ package de.tudarmstadt.informatik.tk.assistance.sdk.util;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.os.Build;
+import android.os.Build.VERSION;
+import android.os.Build.VERSION_CODES;
 import android.provider.Settings;
+import android.provider.Settings.Global;
 import android.telephony.TelephonyManager;
 
 /**
@@ -99,10 +101,10 @@ public final class ConnectionUtils {
      */
     public static boolean isAirplaneModeEnabled(Context context) {
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+        if (VERSION.SDK_INT >= VERSION_CODES.JELLY_BEAN_MR1) {
 
             return Settings.System.getInt(context.getContentResolver(),
-                    Settings.Global.AIRPLANE_MODE_ON,
+                    Global.AIRPLANE_MODE_ON,
                     0) == 1;
         } else {
             return Settings.System.getInt(context.getContentResolver(),

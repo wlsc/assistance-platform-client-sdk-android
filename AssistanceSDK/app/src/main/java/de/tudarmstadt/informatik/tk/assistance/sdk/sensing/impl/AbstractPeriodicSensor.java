@@ -63,7 +63,7 @@ public abstract class AbstractPeriodicSensor extends AbstractSensor {
         }
     }
 
-    abstract protected void getData();
+    protected abstract void getData();
 
     protected int getDataIntervalInSec() {
         return UPDATE_INTERVAL_IN_SEC;

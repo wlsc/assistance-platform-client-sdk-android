@@ -27,17 +27,17 @@ public class DbModuleDao extends AbstractDao<DbModule, Long> {
      * Can be used for QueryBuilder and for referencing column names.
      */
     public static class Properties {
-        public final static Property Id = new Property(0, Long.class, "id", true, "_id");
-        public final static Property PackageName = new Property(1, String.class, "packageName", false, "PACKAGE_NAME");
-        public final static Property Title = new Property(2, String.class, "title", false, "TITLE");
-        public final static Property LogoUrl = new Property(3, String.class, "logoUrl", false, "LOGO_URL");
-        public final static Property DescriptionShort = new Property(4, String.class, "descriptionShort", false, "DESCRIPTION_SHORT");
-        public final static Property DescriptionFull = new Property(5, String.class, "descriptionFull", false, "DESCRIPTION_FULL");
-        public final static Property Copyright = new Property(6, String.class, "copyright", false, "COPYRIGHT");
-        public final static Property SupportEmail = new Property(7, String.class, "supportEmail", false, "SUPPORT_EMAIL");
-        public final static Property Active = new Property(8, boolean.class, "active", false, "ACTIVE");
-        public final static Property Created = new Property(9, String.class, "created", false, "CREATED");
-        public final static Property UserId = new Property(10, Long.class, "userId", false, "USER_ID");
+        public static final Property Id = new Property(0, Long.class, "id", true, "_id");
+        public static final Property PackageName = new Property(1, String.class, "packageName", false, "PACKAGE_NAME");
+        public static final Property Title = new Property(2, String.class, "title", false, "TITLE");
+        public static final Property LogoUrl = new Property(3, String.class, "logoUrl", false, "LOGO_URL");
+        public static final Property DescriptionShort = new Property(4, String.class, "descriptionShort", false, "DESCRIPTION_SHORT");
+        public static final Property DescriptionFull = new Property(5, String.class, "descriptionFull", false, "DESCRIPTION_FULL");
+        public static final Property Copyright = new Property(6, String.class, "copyright", false, "COPYRIGHT");
+        public static final Property SupportEmail = new Property(7, String.class, "supportEmail", false, "SUPPORT_EMAIL");
+        public static final Property Active = new Property(8, boolean.class, "active", false, "ACTIVE");
+        public static final Property Created = new Property(9, String.class, "created", false, "CREATED");
+        public static final Property UserId = new Property(10, Long.class, "userId", false, "USER_ID");
     }
 
     private DaoSession daoSession;
@@ -299,14 +299,15 @@ public class DbModuleDao extends AbstractDao<DbModule, Long> {
         SqlUtils.appendColumnsEqValue(builder, "T", getPkColumns());
         String sql = builder.toString();
         
-        String[] keyArray = new String[] { key.toString() };
+        String[] keyArray = { key.toString() };
         Cursor cursor = db.rawQuery(sql, keyArray);
         
         try {
             boolean available = cursor.moveToFirst();
             if (!available) {
                 return null;
-            } else if (!cursor.isLast()) {
+            }
+            if (!cursor.isLast()) {
                 throw new IllegalStateException("Expected unique result, but count was " + cursor.getCount());
             }
             return loadCurrentDeep(cursor, true);
@@ -318,7 +319,7 @@ public class DbModuleDao extends AbstractDao<DbModule, Long> {
     /** Reads all available rows from the given cursor and returns a list of new ImageTO objects. */
     public List<DbModule> loadAllDeepFromCursor(Cursor cursor) {
         int count = cursor.getCount();
-        List<DbModule> list = new ArrayList<DbModule>(count);
+        List<DbModule> list = new ArrayList<>(count);
         
         if (cursor.moveToFirst()) {
             if (identityScope != null) {

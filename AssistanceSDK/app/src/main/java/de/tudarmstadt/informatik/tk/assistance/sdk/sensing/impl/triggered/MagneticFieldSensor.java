@@ -5,15 +5,16 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
-import android.os.Build;
+import android.os.Build.VERSION;
+import android.os.Build.VERSION_CODES;
 
 import java.util.Date;
 import java.util.Locale;
 
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbMagneticFieldSensor;
 import de.tudarmstadt.informatik.tk.assistance.sdk.model.api.sensing.SensorApiType;
-import de.tudarmstadt.informatik.tk.assistance.sdk.sensing.impl.AbstractTriggeredSensor;
 import de.tudarmstadt.informatik.tk.assistance.sdk.provider.PreferenceProvider;
+import de.tudarmstadt.informatik.tk.assistance.sdk.sensing.impl.AbstractTriggeredSensor;
 import de.tudarmstadt.informatik.tk.assistance.sdk.util.DateUtils;
 import de.tudarmstadt.informatik.tk.assistance.sdk.util.logger.Log;
 
@@ -59,7 +60,7 @@ public final class MagneticFieldSensor extends AbstractTriggeredSensor implement
         mMagneticFieldSensor = mSensorManager
                 .getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
+        if (VERSION.SDK_INT >= VERSION_CODES.JELLY_BEAN_MR2) {
             mMagneticFieldUncalibratedSensor = mSensorManager
                     .getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD_UNCALIBRATED);
         }
@@ -316,12 +317,11 @@ public final class MagneticFieldSensor extends AbstractTriggeredSensor implement
         // save the first sensor data
         if (mLastEventDumpingTimestamp == 0) {
             return true;
-        } else {
+        }
 
-            // the time has come -> save data into db
-            if ((timestamp - mLastEventDumpingTimestamp) / 1_000_000_000 > UPDATE_INTERVAL_IN_SEC) {
-                return true;
-            }
+        // the time has come -> save data into db
+        if ((timestamp - mLastEventDumpingTimestamp) / 1_000_000_000 > UPDATE_INTERVAL_IN_SEC) {
+            return true;
         }
 
         return false;

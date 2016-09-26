@@ -25,13 +25,13 @@ public class DbFacebookSensorDao extends AbstractDao<DbFacebookSensor, Long> {
      * Can be used for QueryBuilder and for referencing column names.
      */
     public static class Properties {
-        public final static Property Id = new Property(0, Long.class, "id", true, "_id");
-        public final static Property OauthToken = new Property(1, String.class, "oauthToken", false, "OAUTH_TOKEN");
-        public final static Property PermissionsDeclined = new Property(2, String.class, "permissionsDeclined", false, "PERMISSIONS_DECLINED");
-        public final static Property Permissions = new Property(3, String.class, "permissions", false, "PERMISSIONS");
-        public final static Property WasChanged = new Property(4, boolean.class, "wasChanged", false, "WAS_CHANGED");
-        public final static Property Created = new Property(5, String.class, "created", false, "CREATED");
-        public final static Property UserId = new Property(6, Long.class, "userId", false, "USER_ID");
+        public static final Property Id = new Property(0, Long.class, "id", true, "_id");
+        public static final Property OauthToken = new Property(1, String.class, "oauthToken", false, "OAUTH_TOKEN");
+        public static final Property PermissionsDeclined = new Property(2, String.class, "permissionsDeclined", false, "PERMISSIONS_DECLINED");
+        public static final Property Permissions = new Property(3, String.class, "permissions", false, "PERMISSIONS");
+        public static final Property WasChanged = new Property(4, boolean.class, "wasChanged", false, "WAS_CHANGED");
+        public static final Property Created = new Property(5, String.class, "created", false, "CREATED");
+        public static final Property UserId = new Property(6, Long.class, "userId", false, "USER_ID");
     }
 
     private DaoSession daoSession;
@@ -232,14 +232,15 @@ public class DbFacebookSensorDao extends AbstractDao<DbFacebookSensor, Long> {
         SqlUtils.appendColumnsEqValue(builder, "T", getPkColumns());
         String sql = builder.toString();
         
-        String[] keyArray = new String[] { key.toString() };
+        String[] keyArray = { key.toString() };
         Cursor cursor = db.rawQuery(sql, keyArray);
         
         try {
             boolean available = cursor.moveToFirst();
             if (!available) {
                 return null;
-            } else if (!cursor.isLast()) {
+            }
+            if (!cursor.isLast()) {
                 throw new IllegalStateException("Expected unique result, but count was " + cursor.getCount());
             }
             return loadCurrentDeep(cursor, true);
@@ -251,7 +252,7 @@ public class DbFacebookSensorDao extends AbstractDao<DbFacebookSensor, Long> {
     /** Reads all available rows from the given cursor and returns a list of new ImageTO objects. */
     public List<DbFacebookSensor> loadAllDeepFromCursor(Cursor cursor) {
         int count = cursor.getCount();
-        List<DbFacebookSensor> list = new ArrayList<DbFacebookSensor>(count);
+        List<DbFacebookSensor> list = new ArrayList<>(count);
         
         if (cursor.moveToFirst()) {
             if (identityScope != null) {

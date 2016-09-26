@@ -2,13 +2,14 @@ package de.tudarmstadt.informatik.tk.assistance.sdk.provider.dao.sensing;
 
 import android.support.annotation.Nullable;
 
+import org.greenrobot.greendao.Property;
+
 import java.util.Collections;
 import java.util.List;
 
-import org.greenrobot.greendao.Property;
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DaoSession;
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbNetworkTrafficSensor;
-import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbNetworkTrafficSensorDao;
+import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbNetworkTrafficSensorDao.Properties;
 import de.tudarmstadt.informatik.tk.assistance.sdk.model.api.sensing.sensor.NetworkTrafficSensorDto;
 
 /**
@@ -68,7 +69,7 @@ public final class NetworkTrafficSensorDaoImpl extends
             if (property.name.equals(DEVICE_ID_FIELD_NAME)) {
                 return dao
                         .queryBuilder()
-                        .where(DbNetworkTrafficSensorDao.Properties.Background.eq(Boolean.TRUE))
+                        .where(Properties.Background.eq(Boolean.TRUE))
                         .where(property.eq(deviceId))
                         .build()
                         .list();
@@ -89,7 +90,7 @@ public final class NetworkTrafficSensorDaoImpl extends
             if (property.name.equals(DEVICE_ID_FIELD_NAME)) {
                 return dao
                         .queryBuilder()
-                        .where(DbNetworkTrafficSensorDao.Properties.Background.eq(Boolean.FALSE))
+                        .where(Properties.Background.eq(Boolean.FALSE))
                         .where(property.eq(deviceId))
                         .build()
                         .list();
@@ -110,7 +111,7 @@ public final class NetworkTrafficSensorDaoImpl extends
             if (property.name.equals(DEVICE_ID_FIELD_NAME)) {
                 return dao
                         .queryBuilder()
-                        .where(DbNetworkTrafficSensorDao.Properties.Background.eq(Boolean.TRUE))
+                        .where(Properties.Background.eq(Boolean.TRUE))
                         .where(property.eq(deviceId))
                         .limit(amount)
                         .build()
@@ -132,7 +133,7 @@ public final class NetworkTrafficSensorDaoImpl extends
             if (property.name.equals(DEVICE_ID_FIELD_NAME)) {
                 return dao
                         .queryBuilder()
-                        .where(DbNetworkTrafficSensorDao.Properties.Background.eq(Boolean.FALSE))
+                        .where(Properties.Background.eq(Boolean.FALSE))
                         .where(property.eq(deviceId))
                         .limit(amount)
                         .build()

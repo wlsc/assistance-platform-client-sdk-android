@@ -12,6 +12,7 @@ import java.util.List;
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbUser;
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.LogsSensorUpload;
 import de.tudarmstadt.informatik.tk.assistance.sdk.model.api.logs.SensorUploadLogsRequestDto;
+import de.tudarmstadt.informatik.tk.assistance.sdk.model.api.logs.SensorUploadLogsRequestDto.Data;
 import de.tudarmstadt.informatik.tk.assistance.sdk.provider.ApiProvider;
 import de.tudarmstadt.informatik.tk.assistance.sdk.provider.DaoProvider;
 import de.tudarmstadt.informatik.tk.assistance.sdk.provider.PreferenceProvider;
@@ -57,7 +58,7 @@ public class LogsUploadService extends GcmTaskService {
         }
 
         Handler handler = new Handler(getMainLooper());
-        handler.post(() -> prepareData());
+        handler.post(this::prepareData);
 
         return GcmNetworkManager.RESULT_SUCCESS;
     }
@@ -83,11 +84,11 @@ public class LogsUploadService extends GcmTaskService {
             return;
         }
 
-        List<SensorUploadLogsRequestDto.Data> allLogs = new ArrayList<>(sensorUploadLogs.size());
+        List<Data> allLogs = new ArrayList<>(sensorUploadLogs.size());
 
         for (LogsSensorUpload entry : sensorUploadLogs) {
 
-            SensorUploadLogsRequestDto.Data log = new SensorUploadLogsRequestDto.Data(
+            Data log = new Data(
                     entry.getStartTime(),
                     entry.getResponseTime(),
                     entry.getProcessingTime(),

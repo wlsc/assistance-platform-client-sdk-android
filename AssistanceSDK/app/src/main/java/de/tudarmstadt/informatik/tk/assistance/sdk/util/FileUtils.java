@@ -1,7 +1,8 @@
 package de.tudarmstadt.informatik.tk.assistance.sdk.util;
 
 import android.content.Context;
-import android.os.Build;
+import android.os.Build.VERSION;
+import android.os.Build.VERSION_CODES;
 import android.os.Environment;
 
 import java.io.BufferedReader;
@@ -31,7 +32,7 @@ public final class FileUtils {
     }
 
     public static File getPrivateFilesDir(Context context) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.FROYO) {
+        if (VERSION.SDK_INT >= VERSION_CODES.FROYO) {
             return context.getExternalFilesDir(null);
         } else {
             String packageName = context.getPackageName();

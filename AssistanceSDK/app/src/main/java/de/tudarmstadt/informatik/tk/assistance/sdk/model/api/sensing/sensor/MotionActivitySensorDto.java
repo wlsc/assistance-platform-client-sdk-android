@@ -126,6 +126,7 @@ public class MotionActivitySensorDto implements SensorDto {
     /**
      * Not-null value.
      */
+    @Override
     public String getCreated() {
         return created;
     }

@@ -7,6 +7,7 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.gcm.GcmNetworkManager;
 import com.google.android.gms.gcm.PeriodicTask;
+import com.google.android.gms.gcm.PeriodicTask.Builder;
 import com.google.android.gms.gcm.Task;
 
 import de.tudarmstadt.informatik.tk.assistance.sdk.Config;
@@ -68,7 +69,7 @@ public final class GcmUtils {
                 periodSecs + "s, f:" +
                 flexSecs;
 
-        PeriodicTask task = new PeriodicTask.Builder()
+        PeriodicTask task = new Builder()
                 .setService(clazz)
                 .setPeriod(periodSecs)
                 .setFlex(flexSecs)

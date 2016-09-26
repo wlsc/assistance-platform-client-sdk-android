@@ -3,7 +3,7 @@ package de.tudarmstadt.informatik.tk.assistance.sdk.sensing.impl.periodic;
 import android.content.Context;
 import android.media.AudioFormat;
 import android.media.AudioRecord;
-import android.media.MediaRecorder;
+import android.media.MediaRecorder.AudioSource;
 import android.os.Bundle;
 import android.os.Handler.Callback;
 import android.os.Message;
@@ -18,8 +18,8 @@ import java.util.Locale;
 
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbLoudnessSensor;
 import de.tudarmstadt.informatik.tk.assistance.sdk.model.api.sensing.SensorApiType;
-import de.tudarmstadt.informatik.tk.assistance.sdk.sensing.impl.AbstractPeriodicSensor;
 import de.tudarmstadt.informatik.tk.assistance.sdk.provider.PreferenceProvider;
+import de.tudarmstadt.informatik.tk.assistance.sdk.sensing.impl.AbstractPeriodicSensor;
 import de.tudarmstadt.informatik.tk.assistance.sdk.util.DateUtils;
 import de.tudarmstadt.informatik.tk.assistance.sdk.util.logger.Log;
 
@@ -93,7 +93,7 @@ public final class LoudnessSensor extends AbstractPeriodicSensor implements Call
 
             synchronized (sampleValues) {
 
-                if (sampleValues.size() > 0) {
+                if (!sampleValues.isEmpty()) {
 
                     for (RMSValue value : sampleValues) {
 
@@ -261,7 +261,7 @@ public final class LoudnessSensor extends AbstractPeriodicSensor implements Call
     }
 
     @Nullable
-    public RMSValue calcRMS(short[] data) {
+    public RMSValue calcRMS(short... data) {
 
         if (data == null) {
             return null;
@@ -293,7 +293,7 @@ public final class LoudnessSensor extends AbstractPeriodicSensor implements Call
             this.mSensor = sensor;
 
             int channel = AudioFormat.CHANNEL_IN_MONO;
-            int mic = MediaRecorder.AudioSource.MIC;
+            int mic = AudioSource.MIC;
 
             // Berechne den Puffer
             int minAudioBuffer = AudioRecord.getMinBufferSize(
@@ -355,15 +355,14 @@ public final class LoudnessSensor extends AbstractPeriodicSensor implements Call
                         return;
 
                         // Buffer wurde ein Stück weiter vollgeschrieben
-                    } else {
-                        if (read + offset < bufferSize) {
-                            offset += read;
+                    }
+                    if (read + offset < bufferSize) {
+                        offset += read;
 
-                            // Buffer ist voll!
-                        } else {
-                            offset = 0;
-                            flushBuffer = true;
-                        }
+                        // Buffer ist voll!
+                    } else {
+                        offset = 0;
+                        flushBuffer = true;
                     }
 
                     // Notify Listener!
@@ -371,7 +370,7 @@ public final class LoudnessSensor extends AbstractPeriodicSensor implements Call
                         flushBuffer = false;
                         Bundle bundle = new Bundle(2);
                         synchronized (audioData) {
-                            bundle.putInt("type", LoudnessSensor.AUDIO_BLOCK);
+                            bundle.putInt("type", AUDIO_BLOCK);
                             bundle.putShortArray("audioBlock", audioData.clone());
                         }
 
@@ -434,7 +433,7 @@ public final class LoudnessSensor extends AbstractPeriodicSensor implements Call
             }
 
             Bundle bundle = new Bundle(2);
-            bundle.putInt("type", LoudnessSensor.PHONE_STATUS);
+            bundle.putInt("type", PHONE_STATUS);
             bundle.putInt("status", state);
 
             sensor.handleData(bundle);

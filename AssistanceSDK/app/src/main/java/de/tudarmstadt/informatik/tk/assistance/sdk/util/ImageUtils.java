@@ -1,6 +1,7 @@
 package de.tudarmstadt.informatik.tk.assistance.sdk.util;
 
 import android.graphics.Bitmap;
+import android.graphics.Bitmap.Config;
 import android.graphics.Canvas;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
@@ -8,10 +9,10 @@ import android.support.annotation.Nullable;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 /**
  * @author Karsten Planz
@@ -26,7 +27,7 @@ public final class ImageUtils {
             return ((BitmapDrawable) drawable).getBitmap();
         }
 
-        Bitmap bitmap = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
+        Bitmap bitmap = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), Config.ARGB_8888);
         Canvas canvas = new Canvas(bitmap);
         drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
         drawable.draw(canvas);
@@ -51,23 +52,24 @@ public final class ImageUtils {
                 int[] rgbArr = getRGBArr(rgb);
                 if (!isGray(rgbArr)) {
                     Integer counter = m.get(rgb);
-                    if (counter == null)
+                    if (counter == null) {
                         counter = 0;
+                    }
                     counter++;
                     m.put(rgb, counter);
                 }
             }
         }
-        if (m.size() == 0) {
+        if (m.isEmpty()) {
             return null;
         }
         return getMostCommonColour(m);
     }
 
     public static String getMostCommonColour(Map<Integer, Integer> map) {
-        List<Map.Entry<Integer, Integer>> list = new ArrayList<>(map.entrySet());
+        List<Entry<Integer, Integer>> list = new ArrayList<>(map.entrySet());
         Collections.sort(list, (lhs, rhs) -> lhs.getValue().compareTo(rhs.getValue()));
-        Map.Entry me = (Map.Entry) list.get(list.size() - 1);
+        Entry me = (Entry) list.get(list.size() - 1);
         int[] rgb = getRGBArr((Integer) me.getKey());
 
         return String.format("#%02x%02x%02x", rgb[0], rgb[1], rgb[2]);
@@ -82,15 +84,16 @@ public final class ImageUtils {
 
     }
 
-    public static boolean isGray(int[] rgbArr) {
+    public static boolean isGray(int... rgbArr) {
         int rgDiff = rgbArr[0] - rgbArr[1];
         int rbDiff = rgbArr[0] - rgbArr[2];
         // Filter out black, white and grays...... (tolerance within 10 pixels)
         int tolerance = 10;
-        if (rgDiff > tolerance || rgDiff < -tolerance)
+        if (rgDiff > tolerance || rgDiff < -tolerance) {
             if (rbDiff > tolerance || rbDiff < -tolerance) {
                 return false;
             }
+        }
         return true;
     }
 }

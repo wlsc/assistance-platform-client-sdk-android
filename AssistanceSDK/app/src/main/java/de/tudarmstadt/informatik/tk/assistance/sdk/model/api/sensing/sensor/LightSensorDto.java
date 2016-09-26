@@ -63,6 +63,7 @@ public class LightSensorDto implements SensorDto {
         this.accuracy = accuracy;
     }
 
+    @Override
     public String getCreated() {
         return this.created;
     }

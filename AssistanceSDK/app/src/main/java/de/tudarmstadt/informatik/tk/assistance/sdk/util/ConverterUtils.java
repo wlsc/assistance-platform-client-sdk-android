@@ -24,7 +24,7 @@ import de.tudarmstadt.informatik.tk.assistance.sdk.model.api.module.ModuleRespon
  */
 public final class ConverterUtils {
 
-    private final static Gson gson = new Gson();
+    private static final Gson gson = new Gson();
 
     private ConverterUtils() {
     }

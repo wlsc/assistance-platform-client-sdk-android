@@ -144,6 +144,7 @@ public class ForegroundSensorDto implements SensorDto {
         this.keystrokes = keystrokes;
     }
 
+    @Override
     public String getCreated() {
         return created;
     }

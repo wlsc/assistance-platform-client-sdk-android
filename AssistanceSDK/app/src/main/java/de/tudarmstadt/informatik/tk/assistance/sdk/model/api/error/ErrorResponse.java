@@ -33,9 +33,6 @@ public class ErrorResponse {
     @Expose
     private String message;
 
-    public ErrorResponse() {
-    }
-
     public int getStatusCode() {
         return statusCode;
     }

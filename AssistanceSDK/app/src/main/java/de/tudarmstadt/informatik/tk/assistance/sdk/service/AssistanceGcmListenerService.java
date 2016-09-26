@@ -17,9 +17,6 @@ public class AssistanceGcmListenerService extends GcmListenerService {
 
     private static final String TAG = AssistanceGcmListenerService.class.getSimpleName();
 
-    public AssistanceGcmListenerService() {
-    }
-
     @Override
     public void onMessageReceived(String from, Bundle data) {
 

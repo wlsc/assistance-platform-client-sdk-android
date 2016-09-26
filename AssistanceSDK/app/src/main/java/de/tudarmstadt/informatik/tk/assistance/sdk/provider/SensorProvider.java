@@ -76,6 +76,7 @@ import de.tudarmstadt.informatik.tk.assistance.sdk.sensing.impl.triggered.Accele
 import de.tudarmstadt.informatik.tk.assistance.sdk.sensing.impl.triggered.ConnectionSensor;
 import de.tudarmstadt.informatik.tk.assistance.sdk.sensing.impl.triggered.ForegroundSensor;
 import de.tudarmstadt.informatik.tk.assistance.sdk.sensing.impl.triggered.ForegroundTrafficSensor;
+import de.tudarmstadt.informatik.tk.assistance.sdk.sensing.impl.triggered.ForegroundTrafficSensor.Mode;
 import de.tudarmstadt.informatik.tk.assistance.sdk.sensing.impl.triggered.GyroscopeSensor;
 import de.tudarmstadt.informatik.tk.assistance.sdk.sensing.impl.triggered.LightSensor;
 import de.tudarmstadt.informatik.tk.assistance.sdk.sensing.impl.triggered.LocationSensor;
@@ -158,7 +159,7 @@ public final class SensorProvider {
         availableSensors.put(foregroundSensor.getType(), foregroundSensor);
 
         ForegroundTrafficSensor foregroundTrafficSensor = ForegroundTrafficSensor
-                .getInstance(mContext, ForegroundTrafficSensor.Mode.PERIODIC);
+                .getInstance(mContext, Mode.PERIODIC);
         availableSensors.put(foregroundTrafficSensor.getType(), foregroundTrafficSensor);
 
         GyroscopeSensor gyroscopeSensor = GyroscopeSensor.getInstance(mContext);
@@ -399,7 +400,7 @@ public final class SensorProvider {
 
             ISensor sensor = availableSensors.valueAt(i);
 
-            if (sensor.getPushType().equals(pushType)) {
+            if (sensor.getPushType() == pushType) {
                 result.add(sensor);
             }
         }

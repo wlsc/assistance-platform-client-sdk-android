@@ -3,10 +3,11 @@ package de.tudarmstadt.informatik.tk.assistance.sdk.model.notification.impl;
 import android.app.Notification;
 import android.content.Context;
 import android.graphics.BitmapFactory;
-import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.NotificationCompat.Builder;
 
 import de.tudarmstadt.informatik.tk.assistance.sdk.Config;
-import de.tudarmstadt.informatik.tk.assistance.sdk.R;
+import de.tudarmstadt.informatik.tk.assistance.sdk.R.drawable;
+import de.tudarmstadt.informatik.tk.assistance.sdk.R.string;
 
 /**
  * @author Wladimir Schmidt (wlsc.dev@gmail.com)
@@ -43,15 +44,15 @@ public class ServiceNotificationCreator extends AbstractNotificationCreator {
     @Override
     public Notification build() {
 
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(context)
+        Builder builder = new Builder(context)
                 .setOngoing(isOngoing)
-                .setSmallIcon(R.drawable.ic_assistance_service)
-                .setContentTitle(context.getText(R.string.service_running_notification_title))
-                .setContentText(context.getText(R.string.service_running_notification_text))
+                .setSmallIcon(drawable.ic_assistance_service)
+                .setContentTitle(context.getText(string.service_running_notification_title))
+                .setContentText(context.getText(string.service_running_notification_text))
                 .setGroup(Config.DEFAULT_NOTIFICATION_GROUP)
                 .setGroupSummary(isSummaryForGroup);
 
-        builder.setLargeIcon(BitmapFactory.decodeResource(context.getResources(), R.drawable.kraki_big));
+        builder.setLargeIcon(BitmapFactory.decodeResource(context.getResources(), drawable.kraki_big));
 
         return builder.build();
     }

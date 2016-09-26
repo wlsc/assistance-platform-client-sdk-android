@@ -66,10 +66,12 @@ public class DbFacebookSensor implements de.tudarmstadt.informatik.tk.assistance
         myDao = daoSession != null ? daoSession.getDbFacebookSensorDao() : null;
     }
 
+    @Override
     public Long getId() {
         return id;
     }
 
+    @Override
     public void setId(Long id) {
         this.id = id;
     }
@@ -106,12 +108,14 @@ public class DbFacebookSensor implements de.tudarmstadt.informatik.tk.assistance
         this.wasChanged = wasChanged;
     }
 
+    @Override
     @NotNull
     public String getCreated() {
         return created;
     }
 
     /** Not-null value; ensure this value is available before it is saved to the database. */
+    @Override
     public void setCreated(@NotNull String created) {
         this.created = created;
     }

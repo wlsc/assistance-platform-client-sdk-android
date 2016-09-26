@@ -111,6 +111,7 @@ public class NetworkTrafficSensorDto implements SensorDto {
         this.latitude = latitude;
     }
 
+    @Override
     public String getCreated() {
         return created;
     }

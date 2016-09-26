@@ -1,6 +1,6 @@
 package de.tudarmstadt.informatik.tk.assistance.sdk.sensing.impl.contentobserver;
 
-import android.Manifest;
+import android.Manifest.permission;
 import android.content.ContentProviderClient;
 import android.content.ContentResolver;
 import android.content.Context;
@@ -8,12 +8,16 @@ import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build.VERSION;
+import android.os.Build.VERSION_CODES;
 import android.provider.BaseColumns;
-import android.provider.ContactsContract;
 import android.provider.ContactsContract.CommonDataKinds.Email;
 import android.provider.ContactsContract.CommonDataKinds.Note;
 import android.provider.ContactsContract.CommonDataKinds.Phone;
+import android.provider.ContactsContract.CommonDataKinds.StructuredName;
+import android.provider.ContactsContract.Contacts;
 import android.provider.ContactsContract.Data;
+import android.provider.ContactsContract.RawContacts;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.util.LongSparseArray;
 
@@ -24,6 +28,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbContactEmailSensor;
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbContactNumberSensor;
@@ -48,13 +53,13 @@ public final class ContactsSensor extends AbstractContentObserverSensor {
 
     private static ContactsSensor INSTANCE;
 
-    private static final Uri URI_EMAIL = ContactsContract.CommonDataKinds.Email.CONTENT_URI;
+    private static final Uri URI_EMAIL = Email.CONTENT_URI;
     private static final Uri URI_DATA = Data.CONTENT_URI;
     private static final Uri URI_PHONE = Phone.CONTENT_URI;
-    private static final Uri URI_RAW_CONTACTS = ContactsContract.RawContacts.CONTENT_URI;
-    private static final Uri URI_CONTACTS = ContactsContract.Contacts.CONTENT_URI;
+    private static final Uri URI_RAW_CONTACTS = RawContacts.CONTENT_URI;
+    private static final Uri URI_CONTACTS = Contacts.CONTENT_URI;
 
-    private static final String[] columnsNote = new String[]{Note.NOTE};
+    private static final String[] columnsNote = {Note.NOTE};
     private static final String whereNote = Data.RAW_CONTACT_ID + " = ? AND " + Data.MIMETYPE + " = ?";
 
     private AsyncTask<Void, Void, Void> asyncTask;
@@ -92,7 +97,7 @@ public final class ContactsSensor extends AbstractContentObserverSensor {
 
         if (ContextCompat.checkSelfPermission(
                 context,
-                Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED) {
+                permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED) {
 
             Log.d(TAG, "Permission was NOT granted!");
             setRunning(false);
@@ -135,9 +140,9 @@ public final class ContactsSensor extends AbstractContentObserverSensor {
             }
 
             final String[] projectionNameParams = {
-                    ContactsContract.CommonDataKinds.StructuredName.GIVEN_NAME,
-                    ContactsContract.CommonDataKinds.StructuredName.FAMILY_NAME};
-            final String whereName = ContactsContract.Data.MIMETYPE + " = ? AND " + Data.CONTACT_ID + " = ?";
+                    StructuredName.GIVEN_NAME,
+                    StructuredName.FAMILY_NAME};
+            final String whereName = Data.MIMETYPE + " = ? AND " + Data.CONTACT_ID + " = ?";
 
             final ContentProviderClient finalNumbersContentClient = numbersContentClient;
             final ContentProviderClient finalEmailsContentClient = emailsContentClient;
@@ -158,7 +163,7 @@ public final class ContactsSensor extends AbstractContentObserverSensor {
                 String strFamilyName = null;
 
                 String[] whereNameParams = {
-                        ContactsContract.CommonDataKinds.StructuredName.CONTENT_ITEM_TYPE,
+                        StructuredName.CONTENT_ITEM_TYPE,
                         strContactId};
 
                 if (namesContentClient != null) {
@@ -169,10 +174,10 @@ public final class ContactsSensor extends AbstractContentObserverSensor {
 
                         strGivenName = getStringByColumnName(
                                 nameCur,
-                                ContactsContract.CommonDataKinds.StructuredName.GIVEN_NAME);
+                                StructuredName.GIVEN_NAME);
                         strFamilyName = getStringByColumnName(
                                 nameCur,
-                                ContactsContract.CommonDataKinds.StructuredName.FAMILY_NAME);
+                                StructuredName.FAMILY_NAME);
                     }
                 }
 
@@ -279,19 +284,35 @@ public final class ContactsSensor extends AbstractContentObserverSensor {
             }
 
             if (contentClient != null) {
-                contentClient.release();
+                if (VERSION.SDK_INT < VERSION_CODES.N) {
+                    contentClient.release();
+                } else {
+                    contentClient.close();
+                }
             }
 
             if (namesContentClient != null) {
-                namesContentClient.release();
+                if (VERSION.SDK_INT < VERSION_CODES.N) {
+                    namesContentClient.release();
+                } else {
+                    namesContentClient.close();
+                }
             }
 
             if (numbersContentClient != null) {
-                numbersContentClient.release();
+                if (VERSION.SDK_INT < VERSION_CODES.N) {
+                    numbersContentClient.release();
+                } else {
+                    numbersContentClient.close();
+                }
             }
 
             if (emailsContentClient != null) {
-                emailsContentClient.release();
+                if (VERSION.SDK_INT < VERSION_CODES.N) {
+                    emailsContentClient.release();
+                } else {
+                    emailsContentClient.close();
+                }
             }
         }
     }
@@ -333,7 +354,7 @@ public final class ContactsSensor extends AbstractContentObserverSensor {
 
         List<DbContactEmailSensor> entriesToDelete = new ArrayList<>(allExistingContactsEmail.size());
 
-        for (Map.Entry<String, DbContactEmailSensor> entry : allExistingContactsEmail.entrySet()) {
+        for (Entry<String, DbContactEmailSensor> entry : allExistingContactsEmail.entrySet()) {
 
             if (b && !isRunning()) {
                 return bSomethingDeleted;
@@ -364,7 +385,7 @@ public final class ContactsSensor extends AbstractContentObserverSensor {
 
         List<DbContactNumberSensor> entriesToDelete = new ArrayList<>(allExistingContactsNumber.size());
 
-        for (Map.Entry<String, DbContactNumberSensor> entry : allExistingContactsNumber.entrySet()) {
+        for (Entry<String, DbContactNumberSensor> entry : allExistingContactsNumber.entrySet()) {
 
             if (b && !isRunning()) {
                 return bSomethingDeleted;
@@ -402,8 +423,8 @@ public final class ContactsSensor extends AbstractContentObserverSensor {
         Map<String, DbContactEmailSensor> mapExistingMails = getExistingMails(longContactId);
 
         String[] columns = {
-                ContactsContract.CommonDataKinds.Email.ADDRESS,
-                ContactsContract.CommonDataKinds.Email.TYPE
+                Email.ADDRESS,
+                Email.TYPE
         };
 
         Cursor emailsCursor = null;
@@ -413,7 +434,7 @@ public final class ContactsSensor extends AbstractContentObserverSensor {
             emailsCursor = finalEmailsContentClient
                     .query(URI_EMAIL,
                             columns,
-                            ContactsContract.CommonDataKinds.Email.CONTACT_ID + " = " + longContactId,
+                            Email.CONTACT_ID + " = " + longContactId,
                             null,
                             null);
 
@@ -476,16 +497,15 @@ public final class ContactsSensor extends AbstractContentObserverSensor {
 
             return true;
 
-        } else {
-            if (hasContactMailDifference(existingItem, newItem)) {
+        }
+        if (hasContactMailDifference(existingItem, newItem)) {
 
-                newItem.setIsNew(Boolean.FALSE);
-                newItem.setIsUpdated(Boolean.TRUE);
-                newItem.setIsDeleted(Boolean.FALSE);
-                newItem.setId(existingItem.getId());
+            newItem.setIsNew(Boolean.FALSE);
+            newItem.setIsUpdated(Boolean.TRUE);
+            newItem.setIsDeleted(Boolean.FALSE);
+            newItem.setId(existingItem.getId());
 
-                return true;
-            }
+            return true;
         }
 
         return false;
@@ -581,16 +601,15 @@ public final class ContactsSensor extends AbstractContentObserverSensor {
 
             return true;
 
-        } else {
-            if (hasContactNumberDifference(existingItem, newItem)) {
+        }
+        if (hasContactNumberDifference(existingItem, newItem)) {
 
-                newItem.setIsNew(Boolean.FALSE);
-                newItem.setIsUpdated(Boolean.TRUE);
-                newItem.setIsDeleted(Boolean.FALSE);
-                newItem.setId(existingItem.getId());
+            newItem.setIsNew(Boolean.FALSE);
+            newItem.setIsUpdated(Boolean.TRUE);
+            newItem.setIsDeleted(Boolean.FALSE);
+            newItem.setId(existingItem.getId());
 
-                return true;
-            }
+            return true;
         }
 
         return false;
@@ -643,20 +662,27 @@ public final class ContactsSensor extends AbstractContentObserverSensor {
 
     private boolean hasContactDifference(DbContactSensor existingReminder, DbContactSensor newSensorContact) {
 
-        if (checkForDifference(existingReminder.getDisplayName(), newSensorContact.getDisplayName()))
+        if (checkForDifference(existingReminder.getDisplayName(), newSensorContact.getDisplayName())) {
             return true;
-        if (checkForDifference(existingReminder.getGivenName(), newSensorContact.getGivenName()))
+        }
+        if (checkForDifference(existingReminder.getGivenName(), newSensorContact.getGivenName())) {
             return true;
-        if (checkForDifference(existingReminder.getFamilyName(), newSensorContact.getFamilyName()))
+        }
+        if (checkForDifference(existingReminder.getFamilyName(), newSensorContact.getFamilyName())) {
             return true;
-        if (checkForDifference(existingReminder.getStarred(), newSensorContact.getStarred()))
+        }
+        if (checkForDifference(existingReminder.getStarred(), newSensorContact.getStarred())) {
             return true;
-        if (checkForDifference(existingReminder.getLastTimeContacted(), newSensorContact.getLastTimeContacted()))
+        }
+        if (checkForDifference(existingReminder.getLastTimeContacted(), newSensorContact.getLastTimeContacted())) {
             return true;
-        if (checkForDifference(existingReminder.getTimesContacted(), newSensorContact.getTimesContacted()))
+        }
+        if (checkForDifference(existingReminder.getTimesContacted(), newSensorContact.getTimesContacted())) {
             return true;
-        if (checkForDifference(existingReminder.getNote(), newSensorContact.getNote()))
+        }
+        if (checkForDifference(existingReminder.getNote(), newSensorContact.getNote())) {
             return true;
+        }
         return false;
     }
 
@@ -711,7 +737,7 @@ public final class ContactsSensor extends AbstractContentObserverSensor {
         }
 
         String note = "";
-        String[] whereParameters = new String[]{contactId, Note.CONTENT_ITEM_TYPE};
+        String[] whereParameters = {contactId, Note.CONTENT_ITEM_TYPE};
 
         Cursor contacts = null;
 

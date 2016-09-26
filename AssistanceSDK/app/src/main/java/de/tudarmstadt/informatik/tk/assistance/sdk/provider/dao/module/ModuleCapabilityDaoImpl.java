@@ -5,7 +5,7 @@ import java.util.List;
 
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DaoSession;
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbModuleCapability;
-import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbModuleCapabilityDao;
+import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbModuleCapabilityDao.Properties;
 import de.tudarmstadt.informatik.tk.assistance.sdk.provider.dao.CommonDaoImpl;
 
 /**
@@ -42,8 +42,8 @@ public final class ModuleCapabilityDaoImpl extends
 
         return dao
                 .queryBuilder()
-                .where(DbModuleCapabilityDao.Properties.ModuleId.eq(moduleId))
-                .where(DbModuleCapabilityDao.Properties.Active.eq(Boolean.TRUE))
+                .where(Properties.ModuleId.eq(moduleId))
+                .where(Properties.Active.eq(Boolean.TRUE))
                 .build()
                 .list();
     }
@@ -57,9 +57,9 @@ public final class ModuleCapabilityDaoImpl extends
 
         return dao
                 .queryBuilder()
-                .where(DbModuleCapabilityDao.Properties.ModuleId.eq(moduleId))
-                .where(DbModuleCapabilityDao.Properties.Active.eq(Boolean.TRUE))
-                .where(DbModuleCapabilityDao.Properties.Required.eq(Boolean.TRUE))
+                .where(Properties.ModuleId.eq(moduleId))
+                .where(Properties.Active.eq(Boolean.TRUE))
+                .where(Properties.Required.eq(Boolean.TRUE))
                 .build()
                 .list();
     }

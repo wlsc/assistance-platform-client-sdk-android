@@ -19,9 +19,6 @@ public class AssistanceErrorHandler implements ErrorHandler {
 
     private String TAG = AssistanceErrorHandler.class.getSimpleName();
 
-    public AssistanceErrorHandler() {
-    }
-
     /**
      * Return a custom exception to be thrown for a {@link RetrofitError}. It is recommended that you
      * pass the supplied error as the cause to any new exceptions.

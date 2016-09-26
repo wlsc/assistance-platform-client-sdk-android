@@ -1,6 +1,7 @@
 package de.tudarmstadt.informatik.tk.assistance.sdk.util;
 
 import android.app.ActivityManager;
+import android.app.ActivityManager.RunningServiceInfo;
 import android.content.Context;
 import android.util.SparseArray;
 
@@ -100,7 +101,7 @@ public final class ServiceUtils {
                 .getSystemService(Context.ACTIVITY_SERVICE);
 
         // getting all services
-        for (ActivityManager.RunningServiceInfo service : activityManager.getRunningServices(Integer.MAX_VALUE)) {
+        for (RunningServiceInfo service : activityManager.getRunningServices(Integer.MAX_VALUE)) {
             if (clazz.getName().equals(service.service.getClassName())) {
                 return true;
             }
@@ -115,7 +116,7 @@ public final class ServiceUtils {
      * @param context
      * @return
      */
-    public static List<ActivityManager.RunningServiceInfo> getRunningServices(
+    public static List<RunningServiceInfo> getRunningServices(
             final Context context,
             final int maxAmount) {
 

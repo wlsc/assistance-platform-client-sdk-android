@@ -27,16 +27,16 @@ public class DbModuleCapabilityDao extends AbstractDao<DbModuleCapability, Long>
      * Can be used for QueryBuilder and for referencing column names.
      */
     public static class Properties {
-        public final static Property Id = new Property(0, Long.class, "id", true, "_id");
-        public final static Property Type = new Property(1, String.class, "type", false, "TYPE");
-        public final static Property CollectionInterval = new Property(2, Double.class, "collectionInterval", false, "COLLECTION_INTERVAL");
-        public final static Property UpdateInterval = new Property(3, Double.class, "updateInterval", false, "UPDATE_INTERVAL");
-        public final static Property Accuracy = new Property(4, Integer.class, "accuracy", false, "ACCURACY");
-        public final static Property Permissions = new Property(5, String.class, "permissions", false, "PERMISSIONS");
-        public final static Property Required = new Property(6, boolean.class, "required", false, "REQUIRED");
-        public final static Property Active = new Property(7, boolean.class, "active", false, "ACTIVE");
-        public final static Property Created = new Property(8, String.class, "created", false, "CREATED");
-        public final static Property ModuleId = new Property(9, Long.class, "moduleId", false, "MODULE_ID");
+        public static final Property Id = new Property(0, Long.class, "id", true, "_id");
+        public static final Property Type = new Property(1, String.class, "type", false, "TYPE");
+        public static final Property CollectionInterval = new Property(2, Double.class, "collectionInterval", false, "COLLECTION_INTERVAL");
+        public static final Property UpdateInterval = new Property(3, Double.class, "updateInterval", false, "UPDATE_INTERVAL");
+        public static final Property Accuracy = new Property(4, Integer.class, "accuracy", false, "ACCURACY");
+        public static final Property Permissions = new Property(5, String.class, "permissions", false, "PERMISSIONS");
+        public static final Property Required = new Property(6, boolean.class, "required", false, "REQUIRED");
+        public static final Property Active = new Property(7, boolean.class, "active", false, "ACTIVE");
+        public static final Property Created = new Property(8, String.class, "created", false, "CREATED");
+        public static final Property ModuleId = new Property(9, Long.class, "moduleId", false, "MODULE_ID");
     }
 
     private DaoSession daoSession;
@@ -279,14 +279,15 @@ public class DbModuleCapabilityDao extends AbstractDao<DbModuleCapability, Long>
         SqlUtils.appendColumnsEqValue(builder, "T", getPkColumns());
         String sql = builder.toString();
         
-        String[] keyArray = new String[] { key.toString() };
+        String[] keyArray = { key.toString() };
         Cursor cursor = db.rawQuery(sql, keyArray);
         
         try {
             boolean available = cursor.moveToFirst();
             if (!available) {
                 return null;
-            } else if (!cursor.isLast()) {
+            }
+            if (!cursor.isLast()) {
                 throw new IllegalStateException("Expected unique result, but count was " + cursor.getCount());
             }
             return loadCurrentDeep(cursor, true);
@@ -298,7 +299,7 @@ public class DbModuleCapabilityDao extends AbstractDao<DbModuleCapability, Long>
     /** Reads all available rows from the given cursor and returns a list of new ImageTO objects. */
     public List<DbModuleCapability> loadAllDeepFromCursor(Cursor cursor) {
         int count = cursor.getCount();
-        List<DbModuleCapability> list = new ArrayList<DbModuleCapability>(count);
+        List<DbModuleCapability> list = new ArrayList<>(count);
         
         if (cursor.moveToFirst()) {
             if (identityScope != null) {

@@ -3,9 +3,8 @@ package de.tudarmstadt.informatik.tk.assistance.sdk.sensing.impl.periodic.incomp
 import android.content.Context;
 
 import de.tudarmstadt.informatik.tk.assistance.sdk.sensing.impl.AbstractPeriodicSensor;
-import de.tudarmstadt.informatik.tk.assistance.sdk.sensing.ISensor;
 
-public class AlarmClockReaderSensor extends AbstractPeriodicSensor implements ISensor {
+public class AlarmClockReaderSensor extends AbstractPeriodicSensor {
 
     public AlarmClockReaderSensor(Context context) {
         super(context);

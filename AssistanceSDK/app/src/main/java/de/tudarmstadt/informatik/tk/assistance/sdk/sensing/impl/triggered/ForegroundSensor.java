@@ -5,7 +5,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
+import android.content.pm.PackageManager.NameNotFoundException;
 import android.graphics.Bitmap;
+import android.graphics.Bitmap.CompressFormat;
 import android.graphics.drawable.Drawable;
 import android.view.accessibility.AccessibilityEvent;
 
@@ -20,9 +22,9 @@ import java.util.Map;
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbForegroundSensor;
 import de.tudarmstadt.informatik.tk.assistance.sdk.model.api.sensing.SensorApiType;
 import de.tudarmstadt.informatik.tk.assistance.sdk.model.enums.EPushType;
-import de.tudarmstadt.informatik.tk.assistance.sdk.sensing.impl.AbstractTriggeredSensor;
 import de.tudarmstadt.informatik.tk.assistance.sdk.provider.DaoProvider;
 import de.tudarmstadt.informatik.tk.assistance.sdk.provider.PreferenceProvider;
+import de.tudarmstadt.informatik.tk.assistance.sdk.sensing.impl.AbstractTriggeredSensor;
 import de.tudarmstadt.informatik.tk.assistance.sdk.util.AccessibilityEventFilterUtils;
 import de.tudarmstadt.informatik.tk.assistance.sdk.util.DateUtils;
 import de.tudarmstadt.informatik.tk.assistance.sdk.util.ImageUtils;
@@ -47,7 +49,7 @@ public final class ForegroundSensor extends AbstractTriggeredSensor {
     public static final int EVENT_ASSISTANCE_START = 5;
     public static final int EVENT_ASSISTANCE_STOP = 6;
 
-    public final static Integer[] SYSTEM_EVENTS = {
+    public static final Integer[] SYSTEM_EVENTS = {
             EVENT_SCREEN_OFF,
             EVENT_ASSISTANCE_STOP
     };
@@ -239,7 +241,7 @@ public final class ForegroundSensor extends AbstractTriggeredSensor {
         FileOutputStream stream = null;
         try {
             stream = new FileOutputStream(file);
-            icon.compress(Bitmap.CompressFormat.PNG, 100, stream);
+            icon.compress(CompressFormat.PNG, 100, stream);
         } catch (IOException e) {
             Log.e(TAG, "Cannot find file", e);
         } finally {
@@ -259,7 +261,7 @@ public final class ForegroundSensor extends AbstractTriggeredSensor {
         try {
             Drawable icon = pm.getApplicationIcon(packageName);
             return ImageUtils.drawableToBitmap(icon);
-        } catch (PackageManager.NameNotFoundException e) {
+        } catch (NameNotFoundException e) {
             Log.e(TAG, "Cannot get app icon", e);
             return null;
         } catch (Exception e) {

@@ -25,12 +25,12 @@ public class DbTucanSensorDao extends AbstractDao<DbTucanSensor, Long> {
      * Can be used for QueryBuilder and for referencing column names.
      */
     public static class Properties {
-        public final static Property Id = new Property(0, Long.class, "id", true, "_id");
-        public final static Property Username = new Property(1, String.class, "username", false, "USERNAME");
-        public final static Property Password = new Property(2, String.class, "password", false, "PASSWORD");
-        public final static Property WasChanged = new Property(3, boolean.class, "wasChanged", false, "WAS_CHANGED");
-        public final static Property Created = new Property(4, String.class, "created", false, "CREATED");
-        public final static Property UserId = new Property(5, Long.class, "userId", false, "USER_ID");
+        public static final Property Id = new Property(0, Long.class, "id", true, "_id");
+        public static final Property Username = new Property(1, String.class, "username", false, "USERNAME");
+        public static final Property Password = new Property(2, String.class, "password", false, "PASSWORD");
+        public static final Property WasChanged = new Property(3, boolean.class, "wasChanged", false, "WAS_CHANGED");
+        public static final Property Created = new Property(4, String.class, "created", false, "CREATED");
+        public static final Property UserId = new Property(5, Long.class, "userId", false, "USER_ID");
     }
 
     private DaoSession daoSession;
@@ -202,14 +202,15 @@ public class DbTucanSensorDao extends AbstractDao<DbTucanSensor, Long> {
         SqlUtils.appendColumnsEqValue(builder, "T", getPkColumns());
         String sql = builder.toString();
         
-        String[] keyArray = new String[] { key.toString() };
+        String[] keyArray = { key.toString() };
         Cursor cursor = db.rawQuery(sql, keyArray);
         
         try {
             boolean available = cursor.moveToFirst();
             if (!available) {
                 return null;
-            } else if (!cursor.isLast()) {
+            }
+            if (!cursor.isLast()) {
                 throw new IllegalStateException("Expected unique result, but count was " + cursor.getCount());
             }
             return loadCurrentDeep(cursor, true);
@@ -221,7 +222,7 @@ public class DbTucanSensorDao extends AbstractDao<DbTucanSensor, Long> {
     /** Reads all available rows from the given cursor and returns a list of new ImageTO objects. */
     public List<DbTucanSensor> loadAllDeepFromCursor(Cursor cursor) {
         int count = cursor.getCount();
-        List<DbTucanSensor> list = new ArrayList<DbTucanSensor>(count);
+        List<DbTucanSensor> list = new ArrayList<>(count);
         
         if (cursor.moveToFirst()) {
             if (identityScope != null) {

@@ -6,6 +6,4 @@ package de.tudarmstadt.informatik.tk.assistance.sdk.event;
  */
 public class ShowAccessibilityServiceTutorialEvent {
 
-    public ShowAccessibilityServiceTutorialEvent() {
-    }
 }

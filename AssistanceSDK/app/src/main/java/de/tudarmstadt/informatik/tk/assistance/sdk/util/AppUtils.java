@@ -53,7 +53,7 @@ public final class AppUtils {
 
             md.update(someString.getBytes());
 
-            byte bytes[] = md.digest();
+            byte[] bytes = md.digest();
 
             result = convertBytesToString(bytes);
 
@@ -70,7 +70,7 @@ public final class AppUtils {
      * @param bytes
      * @return
      */
-    public static String convertBytesToString(byte[] bytes) {
+    public static String convertBytesToString(byte... bytes) {
 
         StringBuilder sb = new StringBuilder();
 

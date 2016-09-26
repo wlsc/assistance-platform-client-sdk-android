@@ -61,6 +61,7 @@ public class ConnectionSensorDto implements SensorDto {
         this.mobile = isMobile;
     }
 
+    @Override
     public String getCreated() {
         return this.created;
     }

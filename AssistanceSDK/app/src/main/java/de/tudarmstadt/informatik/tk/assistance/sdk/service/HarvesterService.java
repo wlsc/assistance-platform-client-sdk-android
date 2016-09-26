@@ -11,7 +11,7 @@ import android.os.Message;
 import android.os.Messenger;
 import android.os.Parcelable;
 import android.os.RemoteException;
-import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.NotificationCompat.Builder;
 
 import com.google.android.gms.gcm.GcmNetworkManager;
 
@@ -19,7 +19,8 @@ import java.util.HashSet;
 import java.util.Set;
 
 import de.tudarmstadt.informatik.tk.assistance.sdk.Config;
-import de.tudarmstadt.informatik.tk.assistance.sdk.R;
+import de.tudarmstadt.informatik.tk.assistance.sdk.R.drawable;
+import de.tudarmstadt.informatik.tk.assistance.sdk.R.string;
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DaoSession;
 import de.tudarmstadt.informatik.tk.assistance.sdk.provider.DaoProvider;
 import de.tudarmstadt.informatik.tk.assistance.sdk.provider.PreferenceProvider;
@@ -59,9 +60,6 @@ public class HarvesterService extends Service implements Callback {
 
     private boolean mSensorsStarted;
     private SensorProvider sensorProvider;
-
-    public HarvesterService() {
-    }
 
     public static HarvesterService getInstance() {
         return INSTANCE;
@@ -207,11 +205,11 @@ public class HarvesterService extends Service implements Callback {
                 0, notificationIntent,
                 PendingIntent.FLAG_UPDATE_CURRENT);
 
-        NotificationCompat.Builder mBuilder =
-                new NotificationCompat.Builder(this)
-                        .setSmallIcon(R.drawable.ic_assistance_service)
-                        .setContentTitle(getString(R.string.service_running_notification_title))
-                        .setContentText(getString(R.string.service_running_notification_text))
+        Builder mBuilder =
+                new Builder(this)
+                        .setSmallIcon(drawable.ic_assistance_service)
+                        .setContentTitle(getString(string.service_running_notification_title))
+                        .setContentText(getString(string.service_running_notification_text))
                         .setContentIntent(pendingIntent)
 //                        .setPriority(Notification.PRIORITY_MIN)
                         .setOngoing(true);

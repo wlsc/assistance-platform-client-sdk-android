@@ -82,10 +82,12 @@ public class DbContactNumberSensor implements de.tudarmstadt.informatik.tk.assis
         myDao = daoSession != null ? daoSession.getDbContactNumberSensorDao() : null;
     }
 
+    @Override
     public Long getId() {
         return id;
     }
 
+    @Override
     public void setId(Long id) {
         this.id = id;
     }
@@ -114,36 +116,44 @@ public class DbContactNumberSensor implements de.tudarmstadt.informatik.tk.assis
         this.number = number;
     }
 
+    @Override
     public Boolean getIsNew() {
         return isNew;
     }
 
+    @Override
     public void setIsNew(Boolean isNew) {
         this.isNew = isNew;
     }
 
+    @Override
     public Boolean getIsUpdated() {
         return isUpdated;
     }
 
+    @Override
     public void setIsUpdated(Boolean isUpdated) {
         this.isUpdated = isUpdated;
     }
 
+    @Override
     public Boolean getIsDeleted() {
         return isDeleted;
     }
 
+    @Override
     public void setIsDeleted(Boolean isDeleted) {
         this.isDeleted = isDeleted;
     }
 
+    @Override
     @NotNull
     public String getCreated() {
         return created;
     }
 
     /** Not-null value; ensure this value is available before it is saved to the database. */
+    @Override
     public void setCreated(@NotNull String created) {
         this.created = created;
     }

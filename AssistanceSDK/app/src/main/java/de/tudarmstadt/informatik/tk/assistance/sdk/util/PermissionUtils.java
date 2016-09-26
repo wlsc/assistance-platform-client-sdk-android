@@ -1,6 +1,6 @@
 package de.tudarmstadt.informatik.tk.assistance.sdk.util;
 
-import android.Manifest;
+import android.Manifest.permission;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.support.annotation.NonNull;
@@ -60,7 +60,7 @@ public final class PermissionUtils {
         dangerousPermissionsToDtoMapping.put(
                 SensorApiType.getApiName(SensorApiType.CALENDAR),
                 new String[]{
-                        Manifest.permission.READ_CALENDAR//,
+                        permission.READ_CALENDAR//,
 //                        Manifest.permission.WRITE_CALENDAR
                 }
         );
@@ -68,7 +68,7 @@ public final class PermissionUtils {
         dangerousPermissionsToDtoMapping.put(
                 SensorApiType.getApiName(SensorApiType.CALL_LOG),
                 new String[]{
-                        Manifest.permission.READ_CALL_LOG//,
+                        permission.READ_CALL_LOG//,
 //                        Manifest.permission.WRITE_CALL_LOG
                 }
         );
@@ -78,15 +78,15 @@ public final class PermissionUtils {
                 new String[]{
 //                        Manifest.permission.GET_ACCOUNTS,
 //                        Manifest.permission.WRITE_CONTACTS,
-                        Manifest.permission.READ_CONTACTS
+                        permission.READ_CONTACTS
                 }
         );
 
         dangerousPermissionsToDtoMapping.put(
                 SensorApiType.getApiName(SensorApiType.LOCATION),
                 new String[]{
-                        Manifest.permission.ACCESS_COARSE_LOCATION,
-                        Manifest.permission.ACCESS_FINE_LOCATION
+                        permission.ACCESS_COARSE_LOCATION,
+                        permission.ACCESS_FINE_LOCATION
                 }
         );
     }
@@ -112,7 +112,7 @@ public final class PermissionUtils {
      * @param grantResults
      * @return
      */
-    public boolean handlePermissionResult(@NonNull int[] grantResults) {
+    public boolean handlePermissionResult(@NonNull int... grantResults) {
         return !(grantResults == null || grantResults.length <= 0) && grantResults[0] == PackageManager.PERMISSION_GRANTED;
 
     }
@@ -123,7 +123,7 @@ public final class PermissionUtils {
      * @param perms
      * @return
      */
-    public boolean isGranted(String[] perms) {
+    public boolean isGranted(String... perms) {
 
         if (perms == null) {
             return false;

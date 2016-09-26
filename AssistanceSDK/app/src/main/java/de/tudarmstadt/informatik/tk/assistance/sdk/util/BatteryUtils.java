@@ -4,7 +4,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.BatteryManager;
-import android.os.Build;
+import android.os.Build.VERSION;
+import android.os.Build.VERSION_CODES;
 import android.os.PowerManager;
 
 /**
@@ -62,7 +63,7 @@ public final class BatteryUtils {
         Intent intent = getBatteryChangedIntent(context);
         int plugged = intent.getIntExtra(BatteryManager.EXTRA_PLUGGED, -1);
         boolean isPlugged = false;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+        if (VERSION.SDK_INT >= VERSION_CODES.JELLY_BEAN_MR1) {
             isPlugged = plugged == BatteryManager.BATTERY_PLUGGED_WIRELESS;
         }
 
@@ -84,7 +85,7 @@ public final class BatteryUtils {
         isPlugged = plugged == BatteryManager.BATTERY_PLUGGED_AC ||
                 plugged == BatteryManager.BATTERY_PLUGGED_USB;
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+        if (VERSION.SDK_INT >= VERSION_CODES.JELLY_BEAN_MR1) {
             isPlugged = isPlugged || (plugged == BatteryManager.BATTERY_PLUGGED_WIRELESS);
         }
 
@@ -126,7 +127,7 @@ public final class BatteryUtils {
             return false;
         }
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+        if (VERSION.SDK_INT >= VERSION_CODES.LOLLIPOP) {
             return pm.isPowerSaveMode();
         } else {
             return false;

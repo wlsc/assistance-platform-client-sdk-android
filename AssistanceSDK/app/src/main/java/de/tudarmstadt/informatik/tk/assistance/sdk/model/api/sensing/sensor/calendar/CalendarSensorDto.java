@@ -5,8 +5,8 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.Set;
 
-import de.tudarmstadt.informatik.tk.assistance.sdk.model.api.sensing.SensorApiType;
 import de.tudarmstadt.informatik.tk.assistance.sdk.model.api.SensorDto;
+import de.tudarmstadt.informatik.tk.assistance.sdk.model.api.sensing.SensorApiType;
 
 /**
  * @author Wladimir Schmidt (wlsc.dev@gmail.com)
@@ -308,6 +308,7 @@ public class CalendarSensorDto implements SensorDto {
         this.isDeleted = isDeleted;
     }
 
+    @Override
     public String getCreated() {
         return created;
     }

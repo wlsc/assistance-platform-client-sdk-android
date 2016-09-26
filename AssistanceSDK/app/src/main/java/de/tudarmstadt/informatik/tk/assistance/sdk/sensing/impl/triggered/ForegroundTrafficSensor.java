@@ -20,10 +20,10 @@ import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbForegroundSensor;
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbNetworkTrafficSensor;
 import de.tudarmstadt.informatik.tk.assistance.sdk.model.api.sensing.SensorApiType;
 import de.tudarmstadt.informatik.tk.assistance.sdk.model.enums.EPushType;
-import de.tudarmstadt.informatik.tk.assistance.sdk.sensing.impl.AbstractTriggeredSensor;
 import de.tudarmstadt.informatik.tk.assistance.sdk.provider.DaoProvider;
 import de.tudarmstadt.informatik.tk.assistance.sdk.provider.PreferenceProvider;
 import de.tudarmstadt.informatik.tk.assistance.sdk.provider.dao.sensing.NetworkTrafficSensorDao;
+import de.tudarmstadt.informatik.tk.assistance.sdk.sensing.impl.AbstractTriggeredSensor;
 import de.tudarmstadt.informatik.tk.assistance.sdk.util.AccessibilityEventFilterUtils;
 import de.tudarmstadt.informatik.tk.assistance.sdk.util.DateUtils;
 import de.tudarmstadt.informatik.tk.assistance.sdk.util.logger.Log;
@@ -178,7 +178,7 @@ public final class ForegroundTrafficSensor extends AbstractTriggeredSensor {
     @Override
     public void updateSensorInterval(Double collectionInterval) {
 
-        if (operationMode.equals(Mode.PERIODIC)) {
+        if (operationMode == Mode.PERIODIC) {
 
             Log.d(TAG, "onUpdate interval");
             Log.d(TAG, "Old update interval: " + UPDATE_INTERVAL_IN_SEC + " sec");
@@ -237,7 +237,7 @@ public final class ForegroundTrafficSensor extends AbstractTriggeredSensor {
                 /**
                  * Normal mode
                  */
-                if (operationMode.equals(Mode.NORMAL)) {
+                if (operationMode == Mode.NORMAL) {
 
                     //  null at start of sensors
                     if (oldEvent == null) {
@@ -258,7 +258,7 @@ public final class ForegroundTrafficSensor extends AbstractTriggeredSensor {
                 /**
                  * Special periodic mode
                  */
-                if (operationMode.equals(Mode.PERIODIC)) {
+                if (operationMode == Mode.PERIODIC) {
 
                     if (event.getEventType() == AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED) {
 

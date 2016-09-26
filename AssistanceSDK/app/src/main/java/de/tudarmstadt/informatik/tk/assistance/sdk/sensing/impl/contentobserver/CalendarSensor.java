@@ -1,13 +1,12 @@
 package de.tudarmstadt.informatik.tk.assistance.sdk.sensing.impl.contentobserver;
 
-import android.Manifest;
+import android.Manifest.permission;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.provider.CalendarContract;
 import android.provider.CalendarContract.Events;
 import android.provider.CalendarContract.Reminders;
 import android.support.v4.app.ActivityCompat;
@@ -39,8 +38,8 @@ public final class CalendarSensor extends AbstractContentObserverSensor {
 
     private static CalendarSensor INSTANCE;
 
-    private static final Uri URI_CALENDAR = android.provider.CalendarContract.Events.CONTENT_URI;
-    private static final Uri URI_REMINDER = android.provider.CalendarContract.Reminders.CONTENT_URI;
+    private static final Uri URI_CALENDAR = Events.CONTENT_URI;
+    private static final Uri URI_REMINDER = Reminders.CONTENT_URI;
 
     private final CalendarReminderSensorDao calendarReminderSensorDao;
     private final CalendarSensorDao calendarSensorDao;
@@ -114,6 +113,7 @@ public final class CalendarSensor extends AbstractContentObserverSensor {
 
     }
 
+    @Override
     protected void syncData() {
 
         if (context == null || !isRunning()) {
@@ -124,7 +124,7 @@ public final class CalendarSensor extends AbstractContentObserverSensor {
 
         if (ActivityCompat.checkSelfPermission(
                 context,
-                Manifest.permission.READ_CALENDAR) != PackageManager.PERMISSION_GRANTED) {
+                permission.READ_CALENDAR) != PackageManager.PERMISSION_GRANTED) {
 
             Log.d(TAG, "Permission was NOT granted!");
             setRunning(false);
@@ -259,7 +259,7 @@ public final class CalendarSensor extends AbstractContentObserverSensor {
             LongSparseArray<DbCalendarReminderSensor> mapExistingReminders = getExistingReminders(eventId);
 
             // optional reminderSelection
-            String[] selectionArgs = new String[]{String.valueOf(eventId)};
+            String[] selectionArgs = {String.valueOf(eventId)};
 
             Cursor cur = null;
 
@@ -328,16 +328,15 @@ public final class CalendarSensor extends AbstractContentObserverSensor {
 
             return true;
 
-        } else {
-            if (hasEventDifference(existingItem, newItem)) {
+        }
+        if (hasEventDifference(existingItem, newItem)) {
 
-                newItem.setIsNew(Boolean.FALSE);
-                newItem.setIsUpdated(Boolean.TRUE);
-                newItem.setIsDeleted(Boolean.FALSE);
-                newItem.setId(existingItem.getId());
+            newItem.setIsNew(Boolean.FALSE);
+            newItem.setIsUpdated(Boolean.TRUE);
+            newItem.setIsDeleted(Boolean.FALSE);
+            newItem.setId(existingItem.getId());
 
-                return true;
-            }
+            return true;
         }
 
         return false;
@@ -366,16 +365,15 @@ public final class CalendarSensor extends AbstractContentObserverSensor {
 
             return true;
 
-        } else {
-            if (hasReminderDifference(existingItem, newItem)) {
+        }
+        if (hasReminderDifference(existingItem, newItem)) {
 
-                newItem.setIsNew(Boolean.FALSE);
-                newItem.setIsUpdated(Boolean.TRUE);
-                newItem.setIsDeleted(Boolean.FALSE);
-                newItem.setId(existingItem.getId());
+            newItem.setIsNew(Boolean.FALSE);
+            newItem.setIsUpdated(Boolean.TRUE);
+            newItem.setIsDeleted(Boolean.FALSE);
+            newItem.setId(existingItem.getId());
 
-                return true;
-            }
+            return true;
         }
 
         return false;
@@ -406,58 +404,127 @@ public final class CalendarSensor extends AbstractContentObserverSensor {
 
     private boolean hasEventDifference(DbCalendarSensor existingEvent, DbCalendarSensor newEvent) {
 
-        if (checkForDifference(existingEvent.getAllDay(), newEvent.getAllDay()))
-            return true;
-        if (checkForDifference(existingEvent.getHasAlarm(), newEvent.getHasAlarm()))
-            return true;
-        if (checkForDifference(existingEvent.getOriginalAllDay(), newEvent.getOriginalAllDay()))
-            return true;
-        if (checkForDifference(existingEvent.getAvailability(), newEvent.getAvailability()))
-            return true;
-        if (checkForDifference(existingEvent.getCalendarId(), newEvent.getCalendarId()))
-            return true;
-        if (checkForDifference(existingEvent.getDescription(), newEvent.getDescription()))
-            return true;
-        if (checkForDifference(existingEvent.getDuration(), newEvent.getDuration()))
-            return true;
-        if (checkForDifference(existingEvent.getLastDate(), newEvent.getLastDate()))
-            return true;
-        if (checkForDifference(existingEvent.getLocation(), newEvent.getLocation()))
-            return true;
-        if (checkForDifference(existingEvent.getOriginalId(), newEvent.getOriginalId()))
-            return true;
-        if (checkForDifference(existingEvent.getOriginalInstanceTime(), newEvent.getOriginalInstanceTime()))
-            return true;
-        if (checkForDifference(existingEvent.getRecurrenceDate(), newEvent.getRecurrenceDate()))
-            return true;
-        if (checkForDifference(existingEvent.getRecurrenceExceptionDate(), newEvent.getRecurrenceExceptionDate()))
-            return true;
-        if (checkForDifference(existingEvent.getRecurrenceExceptionRule(), newEvent.getRecurrenceExceptionRule()))
-            return true;
-        if (checkForDifference(existingEvent.getRecurrenceRule(), newEvent.getRecurrenceRule()))
-            return true;
-        if (checkForDifference(existingEvent.getStatus(), newEvent.getStatus()))
-            return true;
-        if (checkForDifference(existingEvent.getTimestampStart(), newEvent.getTimestampStart()))
-            return true;
-        if (checkForDifference(existingEvent.getTimestampEnd(), newEvent.getTimestampEnd()))
-            return true;
-        if (checkForDifference(existingEvent.getTimezoneStart(), newEvent.getTimezoneStart()))
-            return true;
-        if (checkForDifference(existingEvent.getTimezoneEnd(), newEvent.getTimezoneEnd()))
-            return true;
-        if (checkForDifference(existingEvent.getTitle(), newEvent.getTitle()))
-            return true;
+        if (checkForDifference(existingEvent.getAllDay(), newEvent.getAllDay())) {
+            {
+                return true;
+            }
+        }
+        if (checkForDifference(existingEvent.getHasAlarm(), newEvent.getHasAlarm())) {
+            {
+                return true;
+            }
+        }
+        if (checkForDifference(existingEvent.getOriginalAllDay(), newEvent.getOriginalAllDay())) {
+            {
+                return true;
+            }
+        }
+        if (checkForDifference(existingEvent.getAvailability(), newEvent.getAvailability())) {
+            {
+                return true;
+            }
+        }
+        if (checkForDifference(existingEvent.getCalendarId(), newEvent.getCalendarId())) {
+            {
+                return true;
+            }
+        }
+        if (checkForDifference(existingEvent.getDescription(), newEvent.getDescription())) {
+            {
+                return true;
+            }
+        }
+        if (checkForDifference(existingEvent.getDuration(), newEvent.getDuration())) {
+            {
+                return true;
+            }
+        }
+        if (checkForDifference(existingEvent.getLastDate(), newEvent.getLastDate())) {
+            {
+                return true;
+            }
+        }
+        if (checkForDifference(existingEvent.getLocation(), newEvent.getLocation())) {
+            {
+                return true;
+            }
+        }
+        if (checkForDifference(existingEvent.getOriginalId(), newEvent.getOriginalId())) {
+            {
+                return true;
+            }
+        }
+        if (checkForDifference(existingEvent.getOriginalInstanceTime(), newEvent.getOriginalInstanceTime())) {
+            {
+                return true;
+            }
+        }
+        if (checkForDifference(existingEvent.getRecurrenceDate(), newEvent.getRecurrenceDate())) {
+            {
+                return true;
+            }
+        }
+        if (checkForDifference(existingEvent.getRecurrenceExceptionDate(), newEvent.getRecurrenceExceptionDate())) {
+            {
+                return true;
+            }
+        }
+        if (checkForDifference(existingEvent.getRecurrenceExceptionRule(), newEvent.getRecurrenceExceptionRule())) {
+            {
+                return true;
+            }
+        }
+        if (checkForDifference(existingEvent.getRecurrenceRule(), newEvent.getRecurrenceRule())) {
+            {
+                return true;
+            }
+        }
+        if (checkForDifference(existingEvent.getStatus(), newEvent.getStatus())) {
+            {
+                return true;
+            }
+        }
+        if (checkForDifference(existingEvent.getTimestampStart(), newEvent.getTimestampStart())) {
+            {
+                return true;
+            }
+        }
+        if (checkForDifference(existingEvent.getTimestampEnd(), newEvent.getTimestampEnd())) {
+            {
+                return true;
+            }
+        }
+        if (checkForDifference(existingEvent.getTimezoneStart(), newEvent.getTimezoneStart())) {
+            {
+                return true;
+            }
+        }
+        if (checkForDifference(existingEvent.getTimezoneEnd(), newEvent.getTimezoneEnd())) {
+            {
+                return true;
+            }
+        }
+        if (checkForDifference(existingEvent.getTitle(), newEvent.getTitle())) {
+            {
+                return true;
+            }
+        }
 
         return false;
     }
 
     private boolean hasReminderDifference(DbCalendarReminderSensor existingReminder, DbCalendarReminderSensor newReminder) {
 
-        if (checkForDifference(existingReminder.getMethod(), newReminder.getMethod()))
-            return true;
-        if (checkForDifference(existingReminder.getMinutes(), newReminder.getMinutes()))
-            return true;
+        if (checkForDifference(existingReminder.getMethod(), newReminder.getMethod())) {
+            {
+                return true;
+            }
+        }
+        if (checkForDifference(existingReminder.getMinutes(), newReminder.getMinutes())) {
+            {
+                return true;
+            }
+        }
 
         return false;
     }

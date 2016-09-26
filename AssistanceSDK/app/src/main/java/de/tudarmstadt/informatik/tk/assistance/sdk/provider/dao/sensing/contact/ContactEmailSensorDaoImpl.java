@@ -2,13 +2,14 @@ package de.tudarmstadt.informatik.tk.assistance.sdk.provider.dao.sensing.contact
 
 import android.support.annotation.Nullable;
 
+import org.greenrobot.greendao.Property;
+
 import java.util.Collections;
 import java.util.List;
 
-import org.greenrobot.greendao.Property;
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DaoSession;
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbContactEmailSensor;
-import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbContactEmailSensorDao;
+import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbContactEmailSensorDao.Properties;
 import de.tudarmstadt.informatik.tk.assistance.sdk.model.api.SensorDto;
 import de.tudarmstadt.informatik.tk.assistance.sdk.provider.dao.sensing.CommonEventDaoImpl;
 
@@ -73,7 +74,7 @@ public final class ContactEmailSensorDaoImpl extends
             if (property.name.equals(DEVICE_ID_FIELD_NAME)) {
                 return dao
                         .queryBuilder()
-                        .where(DbContactEmailSensorDao.Properties.ContactId.eq(contactId))
+                        .where(Properties.ContactId.eq(contactId))
                         .where(property.eq(deviceId))
                         .build()
                         .list();

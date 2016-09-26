@@ -1,13 +1,13 @@
 package de.tudarmstadt.informatik.tk.assistance.sdk.sensing.impl.contentobserver;
 
-import android.Manifest;
+import android.Manifest.permission;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.provider.CallLog;
+import android.provider.CallLog.Calls;
 import android.support.v4.app.ActivityCompat;
 
 import java.util.ArrayList;
@@ -33,7 +33,7 @@ public final class CallLogSensor extends AbstractContentObserverSensor {
 
     private static CallLogSensor INSTANCE;
 
-    protected static final Uri URI_CALL_LOG = android.provider.CallLog.Calls.CONTENT_URI;
+    protected static final Uri URI_CALL_LOG = Calls.CONTENT_URI;
 
     private List<DbCallLogSensor> events;
 
@@ -123,7 +123,7 @@ public final class CallLogSensor extends AbstractContentObserverSensor {
 
         if (ActivityCompat.checkSelfPermission(
                 context,
-                Manifest.permission.READ_CALL_LOG) != PackageManager.PERMISSION_GRANTED) {
+                permission.READ_CALL_LOG) != PackageManager.PERMISSION_GRANTED) {
 
             Log.d(TAG, "Permission was NOT granted!");
             setRunning(false);
@@ -146,9 +146,9 @@ public final class CallLogSensor extends AbstractContentObserverSensor {
 
         try {
 
-            cursor = cr.query(android.provider.CallLog.Calls.CONTENT_URI,
+            cursor = cr.query(Calls.CONTENT_URI,
                     null,
-                    CallLog.Calls._ID + ">?",
+                    Calls._ID + ">?",
                     new String[]{String.valueOf(longLastKnownCallLogId)},
                     null);
 
@@ -166,12 +166,12 @@ public final class CallLogSensor extends AbstractContentObserverSensor {
 
                 DbCallLogSensor callLogEvent = new DbCallLogSensor();
 
-                callLogEvent.setCallId(getLongByColumnName(cursor, CallLog.Calls._ID));
-                callLogEvent.setType(getIntByColumnName(cursor, CallLog.Calls.TYPE));
-                callLogEvent.setNumber(getStringByColumnName(cursor, CallLog.Calls.NUMBER));
-                callLogEvent.setName(getStringByColumnName(cursor, CallLog.Calls.CACHED_NAME));
-                callLogEvent.setDate(getLongByColumnName(cursor, CallLog.Calls.DATE));
-                callLogEvent.setDuration(getLongByColumnName(cursor, CallLog.Calls.DURATION));
+                callLogEvent.setCallId(getLongByColumnName(cursor, Calls._ID));
+                callLogEvent.setType(getIntByColumnName(cursor, Calls.TYPE));
+                callLogEvent.setNumber(getStringByColumnName(cursor, Calls.NUMBER));
+                callLogEvent.setName(getStringByColumnName(cursor, Calls.CACHED_NAME));
+                callLogEvent.setDate(getLongByColumnName(cursor, Calls.DATE));
+                callLogEvent.setDuration(getLongByColumnName(cursor, Calls.DURATION));
                 callLogEvent.setIsNew(Boolean.TRUE);
                 callLogEvent.setIsDeleted(Boolean.FALSE);
                 callLogEvent.setIsUpdated(Boolean.TRUE);

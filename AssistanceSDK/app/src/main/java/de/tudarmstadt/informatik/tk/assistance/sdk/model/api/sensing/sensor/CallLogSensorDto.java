@@ -171,6 +171,7 @@ public class CallLogSensorDto implements SensorDto {
         this.isDeleted = isDeleted;
     }
 
+    @Override
     public String getCreated() {
         return created;
     }

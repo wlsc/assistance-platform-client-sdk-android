@@ -150,10 +150,12 @@ public class DaoMaster extends AbstractDaoMaster {
         registerDaoClass(DbFacebookSensorDao.class);
     }
 
+    @Override
     public DaoSession newSession() {
         return new DaoSession(db, IdentityScopeType.Session, daoConfigMap);
     }
 
+    @Override
     public DaoSession newSession(IdentityScopeType type) {
         return new DaoSession(db, type, daoConfigMap);
     }
@@ -161,7 +163,7 @@ public class DaoMaster extends AbstractDaoMaster {
     /**
      * Calls {@link #createAllTables(Database, boolean)} in {@link #onCreate(Database)} -
      */
-    public static abstract class OpenHelper extends DatabaseOpenHelper {
+    public abstract static class OpenHelper extends DatabaseOpenHelper {
         public OpenHelper(Context context, String name) {
             super(context, name, SCHEMA_VERSION);
         }

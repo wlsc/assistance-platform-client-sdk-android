@@ -89,6 +89,7 @@ public class WifiConnectionSensorDto implements SensorDto {
     /**
      * Not-null value.
      */
+    @Override
     public String getCreated() {
         return created;
     }

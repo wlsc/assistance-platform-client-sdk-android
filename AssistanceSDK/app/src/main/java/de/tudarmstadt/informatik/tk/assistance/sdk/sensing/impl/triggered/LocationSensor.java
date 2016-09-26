@@ -2,13 +2,16 @@ package de.tudarmstadt.informatik.tk.assistance.sdk.sensing.impl.triggered;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.IntentSender;
+import android.content.IntentSender.SendIntentException;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.GoogleApiClient.Builder;
+import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
+import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
@@ -32,8 +35,8 @@ import de.tudarmstadt.informatik.tk.assistance.sdk.util.logger.Log;
  */
 public final class LocationSensor extends
         AbstractTriggeredSensor implements
-        GoogleApiClient.ConnectionCallbacks,
-        GoogleApiClient.OnConnectionFailedListener,
+        ConnectionCallbacks,
+        OnConnectionFailedListener,
         LocationListener {
 
     private static final String TAG = LocationSensor.class.getSimpleName();
@@ -102,7 +105,7 @@ public final class LocationSensor extends
             return mGoogleApiClient;
         }
 
-        return new GoogleApiClient.Builder(context)
+        return new Builder(context)
                 .addApi(LocationServices.API)
                 .addConnectionCallbacks(this)
                 .addOnConnectionFailedListener(this)
@@ -284,7 +287,7 @@ public final class LocationSensor extends
                  * Thrown if Google Play services canceled the original
 				 * PendingIntent
 				 */
-            } catch (IntentSender.SendIntentException e) {
+            } catch (SendIntentException e) {
                 // Log the error
                 Log.e(TAG, "Cannot start resolution for location connection. Error: ", e);
                 mGoogleApiClient.connect();

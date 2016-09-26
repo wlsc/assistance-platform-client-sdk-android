@@ -13,7 +13,7 @@ import de.tudarmstadt.informatik.tk.assistance.model.client.feedback.content.Cli
 import de.tudarmstadt.informatik.tk.assistance.model.client.feedback.content.ContentDto;
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DaoSession;
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbNews;
-import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbNewsDao;
+import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbNewsDao.Properties;
 import de.tudarmstadt.informatik.tk.assistance.sdk.provider.dao.CommonDaoImpl;
 import de.tudarmstadt.informatik.tk.assistance.sdk.util.logger.Log;
 
@@ -57,7 +57,7 @@ public final class NewsDaoImpl extends
 
         return dao
                 .queryBuilder()
-                .where(DbNewsDao.Properties.UserId.eq(userId))
+                .where(Properties.UserId.eq(userId))
                 .build()
                 .list();
     }

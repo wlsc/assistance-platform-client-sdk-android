@@ -1,6 +1,6 @@
 package de.tudarmstadt.informatik.tk.assistance.sdk.sensing.impl.periodic.incomplete;
 
-import android.Manifest;
+import android.Manifest.permission;
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.content.Context;
@@ -12,7 +12,6 @@ import java.util.Locale;
 
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbAccountReaderSensor;
 import de.tudarmstadt.informatik.tk.assistance.sdk.model.api.sensing.SensorApiType;
-import de.tudarmstadt.informatik.tk.assistance.sdk.sensing.ISensor;
 import de.tudarmstadt.informatik.tk.assistance.sdk.sensing.impl.AbstractPeriodicSensor;
 import de.tudarmstadt.informatik.tk.assistance.sdk.util.DateUtils;
 import de.tudarmstadt.informatik.tk.assistance.sdk.util.logger.Log;
@@ -22,7 +21,7 @@ import de.tudarmstadt.informatik.tk.assistance.sdk.util.logger.Log;
  * @edited by Wladimir Schmidt (wlsc.dev@gmail.com)
  * @date 24.11.2015
  */
-public class AccountsReaderSensor extends AbstractPeriodicSensor implements ISensor {
+public class AccountsReaderSensor extends AbstractPeriodicSensor {
 
     private static final String TAG = AccountsReaderSensor.class.getSimpleName();
 
@@ -82,7 +81,7 @@ public class AccountsReaderSensor extends AbstractPeriodicSensor implements ISen
         }
 
         if (ActivityCompat.checkSelfPermission(context,
-                Manifest.permission.GET_ACCOUNTS) != PackageManager.PERMISSION_GRANTED) {
+                permission.GET_ACCOUNTS) != PackageManager.PERMISSION_GRANTED) {
             return;
         }
 
