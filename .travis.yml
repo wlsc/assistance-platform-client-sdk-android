@@ -17,7 +17,7 @@ notifications:
   email: false
 
 before_install:
-    - chmod +x gradlew
+    - chmod +x ./AssistanceSDK/gradlew
 
 script:
     - ./AssistanceSDK/gradlew clean
