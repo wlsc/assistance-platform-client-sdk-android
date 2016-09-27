@@ -1,4 +1,5 @@
 # SDK for Modular Android-based Intelligent Personal Assistant
+[![Build Status](https://travis-ci.org/Telecooperation/assistance-platform-client-sdk-android.svg?branch=master)](https://travis-ci.org/Telecooperation/assistance-platform-client-sdk-android)
 
 The Assistance SDK is a library to track user's behavior and interaction with a device.
 
