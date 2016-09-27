@@ -20,8 +20,8 @@ before_install:
     - chmod +x gradlew
 
 script:
-    - AssistanceSDK/gradlew clean
-    - AssistanceSDK/gradlew build
+    - ./AssistanceSDK/gradlew clean
+    - ./AssistanceSDK/gradlew build
 
 cache:
   directories:
