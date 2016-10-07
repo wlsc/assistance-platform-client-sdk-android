@@ -32,32 +32,32 @@ import de.tudarmstadt.informatik.tk.assistance.sdk.util.logger.Log;
  */
 public final class ConnectionSensor extends AbstractTriggeredSensor {
 
-    private static final String TAG = ConnectionReceiver.class.getSimpleName();
+    static final String TAG = ConnectionReceiver.class.getSimpleName();
 
     private static ConnectionSensor INSTANCE;
 
     private static ConnectionReceiver mReceiver;
 
-    private boolean isMobileDataAvailable;
-    private boolean isWifiDataAvailable;
+    boolean isMobileDataAvailable;
+    boolean isWifiDataAvailable;
 
     /**
      * WIFI information
      */
-    private String ssid;
-    private String bssid;
-    private int channel;
-    private int frequency;
-    private int linkSpeed;
-    private int signalStrength;
-    private int networkId;
+    String ssid;
+    String bssid;
+    int channel;
+    int frequency;
+    int linkSpeed;
+    int signalStrength;
+    int networkId;
 
     /**
      * MOBILE information
      */
-    private String mobileCarrierName;
-    private String mobileCarrierCode;
-    private String mobileNetworkCode;
+    String mobileCarrierName;
+    String mobileCarrierCode;
+    String mobileNetworkCode;
 
     private ConnectionSensor(Context context) {
         super(context);
@@ -233,6 +233,9 @@ public final class ConnectionSensor extends AbstractTriggeredSensor {
      * Connection event receiver
      */
     private class ConnectionReceiver extends BroadcastReceiver {
+
+        ConnectionReceiver() {
+        }
 
         @Override
         public void onReceive(Context context, Intent intent) {

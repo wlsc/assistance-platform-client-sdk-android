@@ -14,17 +14,20 @@ import de.tudarmstadt.informatik.tk.assistance.sdk.util.logger.Log;
 
 public abstract class AbstractContentObserverSensor extends AbstractSensor {
 
-    private static final String TAG = AbstractContentObserverSensor.class.getSimpleName();
+    static final String TAG = AbstractContentObserverSensor.class.getSimpleName();
 
     // ------------------- Configuration -------------------
     private static final int TIME_TO_WAIT_BEFORE_SYNCING_IN_SEC = 120;
     // -----------------------------------------------------
 
-    private SyncTimer mTimerTask;
-    private Timer mTimer = new Timer();
+    SyncTimer mTimerTask;
+    Timer mTimer = new Timer();
     protected Observer mObserver = new Observer();
 
     private class SyncTimer extends TimerTask {
+        SyncTimer() {
+        }
+
         @Override
         public void run() {
             Log.d(TAG, "Syncing now...");

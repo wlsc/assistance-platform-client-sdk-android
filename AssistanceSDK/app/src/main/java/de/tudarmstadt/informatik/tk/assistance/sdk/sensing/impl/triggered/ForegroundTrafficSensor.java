@@ -38,7 +38,7 @@ import de.tudarmstadt.informatik.tk.assistance.sdk.util.logger.Log;
  */
 public final class ForegroundTrafficSensor extends AbstractTriggeredSensor {
 
-    private static final String TAG = ForegroundTrafficSensor.class.getSimpleName();
+    static final String TAG = ForegroundTrafficSensor.class.getSimpleName();
 
     private static ForegroundTrafficSensor INSTANCE;
 
@@ -46,8 +46,8 @@ public final class ForegroundTrafficSensor extends AbstractTriggeredSensor {
 
     private int UPDATE_INTERVAL_IN_SEC = 5;
 
-    private static String EVENT_SCREEN_OFF = "0";
-    private static String EVENT_SCREEN_ON = "1";
+    static String EVENT_SCREEN_OFF = "0";
+    static String EVENT_SCREEN_ON = "1";
     public static String EVENT_START_ASSISTANCE = "2";
 
     private ScreenReceiver mReceiver;
@@ -366,6 +366,9 @@ public final class ForegroundTrafficSensor extends AbstractTriggeredSensor {
      * Receiver of an intent send by sendBroadcast().
      */
     private class ScreenReceiver extends BroadcastReceiver {
+
+        ScreenReceiver() {
+        }
 
         /**
          * do something only if intent action is screen off or on

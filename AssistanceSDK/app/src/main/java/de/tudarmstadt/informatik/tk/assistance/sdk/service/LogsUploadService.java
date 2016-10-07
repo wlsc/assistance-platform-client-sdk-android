@@ -31,10 +31,10 @@ public class LogsUploadService extends GcmTaskService {
 
     private static final String TAG = LogsUploadService.class.getSimpleName();
 
-    private DaoProvider daoProvider;
+    DaoProvider daoProvider;
 
-    private Subscription logsSubscription;
-    private static List<LogsSensorUpload> sensorUploadLogs;
+    Subscription logsSubscription;
+    static List<LogsSensorUpload> sensorUploadLogs;
 
     @Override
     public int onRunTask(TaskParams taskParams) {
@@ -112,6 +112,9 @@ public class LogsUploadService extends GcmTaskService {
     }
 
     private class LogsUploadSubscriber extends Subscriber<Void> {
+
+        LogsUploadSubscriber() {
+        }
 
         @Override
         public void onCompleted() {

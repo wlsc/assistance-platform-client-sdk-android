@@ -57,7 +57,7 @@ public final class ContactsSensor extends AbstractContentObserverSensor {
     private static final Uri URI_DATA = Data.CONTENT_URI;
     private static final Uri URI_PHONE = Phone.CONTENT_URI;
     private static final Uri URI_RAW_CONTACTS = RawContacts.CONTENT_URI;
-    private static final Uri URI_CONTACTS = Contacts.CONTENT_URI;
+    static final Uri URI_CONTACTS = Contacts.CONTENT_URI;
 
     private static final String[] columnsNote = {Note.NOTE};
     private static final String whereNote = Data.RAW_CONTACT_ID + " = ? AND " + Data.MIMETYPE + " = ?";

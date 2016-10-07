@@ -37,7 +37,7 @@ import de.tudarmstadt.informatik.tk.assistance.sdk.util.logger.Log;
  */
 public final class ForegroundSensor extends AbstractTriggeredSensor {
 
-    private static final String TAG = ForegroundSensor.class.getSimpleName();
+    static final String TAG = ForegroundSensor.class.getSimpleName();
 
     private static ForegroundSensor INSTANCE;
 
@@ -289,6 +289,9 @@ public final class ForegroundSensor extends AbstractTriggeredSensor {
      * Screen register
      */
     private class ScreenReceiver extends BroadcastReceiver {
+
+        ScreenReceiver() {
+        }
 
         @Override
         public void onReceive(Context context, Intent intent) {

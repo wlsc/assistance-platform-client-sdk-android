@@ -22,7 +22,7 @@ import de.tudarmstadt.informatik.tk.assistance.sdk.util.logger.Log;
  */
 public class WifiStateReceiver extends BroadcastReceiver {
 
-    private static final String TAG = WifiStateReceiver.class.getSimpleName();
+    static final String TAG = WifiStateReceiver.class.getSimpleName();
 
     // Earliest point in time in the future
     // from which your task might start executing
@@ -87,7 +87,7 @@ public class WifiStateReceiver extends BroadcastReceiver {
     /**
      * Uploads all sensors ans events to server
      */
-    private void uploadAllEvents(Context context) {
+    void uploadAllEvents(Context context) {
 
         Log.d(TAG, "Initializing...");
 

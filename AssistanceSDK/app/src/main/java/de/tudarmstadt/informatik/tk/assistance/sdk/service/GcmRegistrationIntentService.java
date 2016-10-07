@@ -31,13 +31,13 @@ import rx.Subscription;
  */
 public class GcmRegistrationIntentService extends IntentService {
 
-    private static final String TAG = GcmRegistrationIntentService.class.getSimpleName();
+    static final String TAG = GcmRegistrationIntentService.class.getSimpleName();
 
     private static final String TOPICS_SERVICE = "/topics/";
     private static final String[] TOPICS = {"global"};
 
-    private PreferenceProvider preferenceProvider;
-    private DaoProvider daoProvider;
+    PreferenceProvider preferenceProvider;
+    DaoProvider daoProvider;
 
     private Subscription gcmRegistrationSubscriber;
 

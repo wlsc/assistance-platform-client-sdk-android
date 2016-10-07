@@ -30,7 +30,7 @@ import de.tudarmstadt.informatik.tk.assistance.sdk.util.logger.Log;
  */
 public final class LoudnessSensor extends AbstractPeriodicSensor implements Callback {
 
-    private static final String TAG = LoudnessSensor.class.getSimpleName();
+    static final String TAG = LoudnessSensor.class.getSimpleName();
 
     private static LoudnessSensor INSTANCE;
 

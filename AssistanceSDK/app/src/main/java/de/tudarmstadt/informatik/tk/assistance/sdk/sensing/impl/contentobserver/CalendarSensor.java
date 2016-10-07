@@ -38,8 +38,8 @@ public final class CalendarSensor extends AbstractContentObserverSensor {
 
     private static CalendarSensor INSTANCE;
 
-    private static final Uri URI_CALENDAR = Events.CONTENT_URI;
-    private static final Uri URI_REMINDER = Reminders.CONTENT_URI;
+    static final Uri URI_CALENDAR = Events.CONTENT_URI;
+    static final Uri URI_REMINDER = Reminders.CONTENT_URI;
 
     private final CalendarReminderSensorDao calendarReminderSensorDao;
     private final CalendarSensorDao calendarSensorDao;

@@ -54,18 +54,18 @@ import rx.Subscription;
  */
 public class SensorUploadService extends GcmTaskService {
 
-    private static final String TAG = SensorUploadService.class.getSimpleName();
+    static final String TAG = SensorUploadService.class.getSimpleName();
 
     private static final int EVENTS_NUMBER_TO_SPLIT_AFTER_DEFAULT = 500;
     private static final int PUSH_NUMBER_OF_EACH_ELEMENTS_DEFAULT = 80;
-    private static int EVENTS_NUMBER_TO_SPLIT_AFTER = 500;
-    private static int PUSH_NUMBER_OF_EACH_ELEMENTS = 80;
+    static int EVENTS_NUMBER_TO_SPLIT_AFTER = 500;
+    static int PUSH_NUMBER_OF_EACH_ELEMENTS = 80;
 
     // task identifier
     private static final long taskID = 998;
     // the task should be executed every N seconds
     private static final long periodSecsDefault = 30l;
-    private static long periodSecs = 30l;
+    static long periodSecs = 30l;
     // the task can run as early as N seconds from the scheduled time
     private static final long flexSecsDefault = 15l;
     private static long flexSecs = 15l;
@@ -86,19 +86,19 @@ public class SensorUploadService extends GcmTaskService {
     private static final String UPLOAD_ALL_FLAG_NAME = "UPLOAD_ALL";
     private static final int UPLOAD_ALL_FLAG_VALUE = 1;
 
-    private static SensorProvider sensorProvider;
-    private static PreferenceProvider mPreferenceProvider;
+    static SensorProvider sensorProvider;
+    static PreferenceProvider mPreferenceProvider;
 
     private Subscription sensorUploadSubscription;
     private Subscription userLoginSubscription;
 
     @NonNull
-    private SensorUploadHolder sensorData;
+    SensorUploadHolder sensorData;
 
-    private static boolean shouldUseConnectionFallback;
+    static boolean shouldUseConnectionFallback;
 
-    private static long startRequestTime;
-    private static long elapsedRequestTime;
+    static long startRequestTime;
+    static long elapsedRequestTime;
 
     @Override
     public void onCreate() {
@@ -305,7 +305,7 @@ public class SensorUploadService extends GcmTaskService {
     /**
      * Does user token refresh
      */
-    private void relogin() {
+    void relogin() {
 
         String email = mPreferenceProvider.getUserEmail();
         String password = mPreferenceProvider.getUserPassword();
@@ -525,6 +525,9 @@ public class SensorUploadService extends GcmTaskService {
      */
     private class UserLoginSubscriber extends Subscriber<LoginResponseDto> {
 
+        UserLoginSubscriber() {
+        }
+
         @Override
         public void onCompleted() {
             // do nothing
@@ -556,7 +559,7 @@ public class SensorUploadService extends GcmTaskService {
     /**
      * Rescheduling normal periodic task by canceling fallback task
      */
-    private void rescheduleNormalPeriodicTask() {
+    void rescheduleNormalPeriodicTask() {
 
         Log.d(TAG, "Rescheduling normal periodic task...");
 
@@ -577,7 +580,7 @@ public class SensorUploadService extends GcmTaskService {
     /**
      * Rescheduling fallback task by canceling normal task
      */
-    private void rescheduleFallbackPeriodicTask() {
+    void rescheduleFallbackPeriodicTask() {
 
         Log.d(TAG, "Rescheduling fallback periodic task...");
 
