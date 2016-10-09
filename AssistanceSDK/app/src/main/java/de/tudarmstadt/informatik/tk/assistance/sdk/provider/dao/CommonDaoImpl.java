@@ -85,7 +85,7 @@ public abstract class CommonDaoImpl<T> implements CommonDao<T> {
     public long insert(T dbItem) {
 
         if (dbItem == null) {
-            return -1l;
+            return -1L;
         }
 
         return dao.insertOrReplace(dbItem);

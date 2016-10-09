@@ -26,11 +26,11 @@ public class WifiStateReceiver extends BroadcastReceiver {
 
     // Earliest point in time in the future
     // from which your task might start executing
-    private static final long UPLOAD_ALL_TASKS_START_SECS = 0l;
+    private static final long UPLOAD_ALL_TASKS_START_SECS = 0L;
 
     // latest point in time in the future
     // at which your task must have executed
-    private static final long UPLOAD_ALL_TASKS_END_SECS = 3600l;
+    private static final long UPLOAD_ALL_TASKS_END_SECS = 3600L;
 
     @Override
     public void onReceive(final Context context, Intent intent) {

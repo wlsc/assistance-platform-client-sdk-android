@@ -283,7 +283,7 @@ public final class ForegroundTrafficSensor extends AbstractTriggeredSensor {
                                         Log.d(TAG, "Called taskExecutor at " + UPDATE_INTERVAL_IN_SEC);
                                         storeData(oldEvent);
                                     },
-                                    0l,
+                                    0L,
                                     UPDATE_INTERVAL_IN_SEC * 1_000,
                                     TimeUnit.MILLISECONDS
                             );

@@ -171,7 +171,7 @@ public final class AccelerometerSensor extends
 
             return true;
         }
-        if (event.timestamp < (startTimestamp + UPDATE_INTERVAL_IN_SEC * 1_000_000_000l)) {
+        if (event.timestamp < (startTimestamp + UPDATE_INTERVAL_IN_SEC * 1_000_000_000L)) {
 
             sumAccelerationX += Math.abs(event.values[0]);
             sumAccelerationY += Math.abs(event.values[1]);

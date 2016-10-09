@@ -277,7 +277,7 @@ public final class SensorApiType {
             return -1;
         }
 
-        return type.intValue();
+        return type;
     }
 
     /**

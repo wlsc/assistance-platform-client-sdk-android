@@ -64,11 +64,11 @@ public class SensorUploadService extends GcmTaskService {
     // task identifier
     private static final long taskID = 998;
     // the task should be executed every N seconds
-    private static final long periodSecsDefault = 30l;
-    static long periodSecs = 30l;
+    private static final long periodSecsDefault = 30L;
+    static long periodSecs = 30L;
     // the task can run as early as N seconds from the scheduled time
-    private static final long flexSecsDefault = 15l;
-    private static long flexSecs = 15l;
+    private static final long flexSecsDefault = 15L;
+    private static long flexSecs = 15L;
 
     /**
      * In case of errors -> fallback strategy

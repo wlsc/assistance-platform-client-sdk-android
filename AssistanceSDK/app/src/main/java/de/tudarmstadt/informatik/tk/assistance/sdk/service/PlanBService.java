@@ -24,9 +24,9 @@ public class PlanBService extends GcmTaskService {
     // task identifier
     private static final long taskID = 4321;
     // the task should be executed every N seconds
-    private static final long periodSecs = 11700l;
+    private static final long periodSecs = 11700L;
     // the task can run as early as N seconds from the scheduled time
-    private static final long flexSecs = 9900l;
+    private static final long flexSecs = 9900L;
 
     @Override
     public void onCreate() {

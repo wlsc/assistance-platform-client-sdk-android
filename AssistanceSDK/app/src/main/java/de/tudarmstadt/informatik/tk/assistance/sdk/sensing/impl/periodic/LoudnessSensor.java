@@ -285,7 +285,7 @@ public final class LoudnessSensor extends AbstractPeriodicSensor implements Call
 
         private LoudnessSensor mSensor;
         private AudioRecord audioInput = null;
-        private int bufferSize = (int) (COMMON_AUDIO_FREQUENCY * (float) 0.5);
+        private int bufferSize = (int) (COMMON_AUDIO_FREQUENCY * 0.5f);
         private boolean threadKilled = false;
 
         public AudioRecorder(LoudnessSensor sensor) {
@@ -413,7 +413,7 @@ public final class LoudnessSensor extends AbstractPeriodicSensor implements Call
         if (input == 0) {
             return 0;
         } else {
-            return 20 * (float) Math.log10((input / 32767));
+            return 20 * (float) StrictMath.log10((input / 32767));
         }
     }
 
