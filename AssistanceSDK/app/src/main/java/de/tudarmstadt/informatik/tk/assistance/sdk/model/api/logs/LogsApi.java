@@ -1,8 +1,8 @@
 package de.tudarmstadt.informatik.tk.assistance.sdk.model.api.logs;
 
 import de.tudarmstadt.informatik.tk.assistance.sdk.Config;
-import retrofit.http.Body;
-import retrofit.http.POST;
+import retrofit2.http.Body;
+import retrofit2.http.POST;
 import rx.Observable;
 
 /**

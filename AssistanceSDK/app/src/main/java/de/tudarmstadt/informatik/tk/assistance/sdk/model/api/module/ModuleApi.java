@@ -5,11 +5,11 @@ import java.util.Set;
 
 import de.tudarmstadt.informatik.tk.assistance.model.client.feedback.content.ClientFeedbackDto;
 import de.tudarmstadt.informatik.tk.assistance.sdk.Config;
-import retrofit.http.Body;
-import retrofit.http.GET;
-import retrofit.http.Header;
-import retrofit.http.POST;
-import retrofit.http.Path;
+import retrofit2.http.Body;
+import retrofit2.http.GET;
+import retrofit2.http.Header;
+import retrofit2.http.POST;
+import retrofit2.http.Path;
 import rx.Observable;
 
 /**

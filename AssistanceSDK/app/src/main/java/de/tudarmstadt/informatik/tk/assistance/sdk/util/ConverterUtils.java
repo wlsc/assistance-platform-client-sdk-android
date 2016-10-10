@@ -1,10 +1,13 @@
 package de.tudarmstadt.informatik.tk.assistance.sdk.util;
 
+import android.content.Context;
 import android.support.annotation.Nullable;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
+import java.io.IOException;
+import java.lang.annotation.Annotation;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -13,8 +16,13 @@ import java.util.Locale;
 
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbModule;
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbModuleCapability;
+import de.tudarmstadt.informatik.tk.assistance.sdk.model.api.ApiGenerator;
+import de.tudarmstadt.informatik.tk.assistance.sdk.model.api.error.ApiError;
 import de.tudarmstadt.informatik.tk.assistance.sdk.model.api.module.ModuleCapabilityResponseDto;
 import de.tudarmstadt.informatik.tk.assistance.sdk.model.api.module.ModuleResponseDto;
+import okhttp3.ResponseBody;
+import retrofit2.Converter;
+import retrofit2.Response;
 
 /**
  * Converter between various models
@@ -27,6 +35,30 @@ public final class ConverterUtils {
     private static final Gson gson = new Gson();
 
     private ConverterUtils() {
+    }
+
+    /**
+     * Parses API error response
+     *
+     * @param context
+     * @param response
+     * @return
+     */
+    public static ApiError parseError(Context context, Response<?> response) {
+
+        Converter<ResponseBody, ApiError> converter =
+                ApiGenerator.getInstance(context).getRetrofit()
+                        .responseBodyConverter(ApiError.class, new Annotation[0]);
+
+        ApiError error;
+
+        try {
+            error = converter.convert(response.errorBody());
+        } catch (IOException e) {
+            return new ApiError(response.code(), response.message());
+        }
+
+        return error;
     }
 
     /**

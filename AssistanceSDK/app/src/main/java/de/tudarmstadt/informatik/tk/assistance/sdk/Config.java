@@ -20,9 +20,9 @@ public final class Config {
 
     /*
     *   Assistance login server. Main API entry point
-    *   !!! CAUTION: Please write this address without "/" at the end!
+    *   !!! CAUTION: Please write your API address WITH "/" character at the end!
     */
-    public static final String ASSISTANCE_ENDPOINT = "";
+    public static final String ASSISTANCE_ENDPOINT = "http://192.168.1.19/";
 
     /**
      * Local Android database name
@@ -38,37 +38,37 @@ public final class Config {
      * ASSISTANCE API ENDPOINTS
      */
 
-    public static final String ASSISTANCE_USER_REGISTER_ENDPOINT = "/users/register";
+    public static final String ASSISTANCE_USER_REGISTER_ENDPOINT = "users/register";
 
-    public static final String ASSISTANCE_USER_PASSWORD_ENDPOINT = "/users/password";
+    public static final String ASSISTANCE_USER_PASSWORD_ENDPOINT = "users/password";
 
-    public static final String ASSISTANCE_USER_PROFILE_SHORT_ENDPOINT = "/users/profile/short";
+    public static final String ASSISTANCE_USER_PROFILE_SHORT_ENDPOINT = "users/profile/short";
 
-    public static final String ASSISTANCE_USER_PROFILE_FULL_ENDPOINT = "/users/profile/long";
+    public static final String ASSISTANCE_USER_PROFILE_FULL_ENDPOINT = "users/profile/long";
 
-    public static final String ASSISTANCE_USER_PROFILE_UPDATE_ENDPOINT = "/users/profile";
+    public static final String ASSISTANCE_USER_PROFILE_UPDATE_ENDPOINT = "users/profile";
 
-    public static final String ASSISTANCE_MODULE_LIST_ENDPOINT = "/assistance/list";
+    public static final String ASSISTANCE_MODULE_LIST_ENDPOINT = "assistance/list";
 
-    public static final String ASSISTANCE_MODULE_ACTIVE_ENDPOINT = "/assistance/activations";
+    public static final String ASSISTANCE_MODULE_ACTIVE_ENDPOINT = "assistance/activations";
 
-    public static final String ASSISTANCE_MODULE_ACTIVATE_ENDPOINT = "/assistance/activate";
+    public static final String ASSISTANCE_MODULE_ACTIVATE_ENDPOINT = "assistance/activate";
 
-    public static final String ASSISTANCE_MODULE_DEACTIVATE_ENDPOINT = "/assistance/deactivate";
+    public static final String ASSISTANCE_MODULE_DEACTIVATE_ENDPOINT = "assistance/deactivate";
 
-    public static final String ASSISTANCE_MODULE_FEEDBACK_ENDPOINT = "/assistance/current/{deviceId}";
+    public static final String ASSISTANCE_MODULE_FEEDBACK_ENDPOINT = "assistance/current/{deviceId}";
 
-    public static final String ASSISTANCE_USER_LOGIN_ENDPOINT = "/users/login";
+    public static final String ASSISTANCE_USER_LOGIN_ENDPOINT = "users/login";
 
-    public static final String ASSISTANCE_SENSOR_UPLOAD_SERVICE_ENDPOINT = "/sensordata/upload";
+    public static final String ASSISTANCE_SENSOR_UPLOAD_SERVICE_ENDPOINT = "sensordata/upload";
 
-    public static final String ASSISTANCE_LOGS_SENSOR_UPLOAD_SERVICE_ENDPOINT = "/sensordata/log_responsetime";
+    public static final String ASSISTANCE_LOGS_SENSOR_UPLOAD_SERVICE_ENDPOINT = "sensordata/log_responsetime";
 
-    public static final String DEVICE_REGISTRATION_ENDPOINT = "/devices/register_for_messaging";
+    public static final String DEVICE_REGISTRATION_ENDPOINT = "devices/register_for_messaging";
 
-    public static final String DEVICE_LIST_ENDPOINT = "/devices/list";
+    public static final String DEVICE_LIST_ENDPOINT = "devices/list";
 
-    public static final String DEVICE_SET_USER_DEFINED_NAME_ENDPOINT = "/devices/set_user_defined_name";
+    public static final String DEVICE_SET_USER_DEFINED_NAME_ENDPOINT = "devices/set_user_defined_name";
 
     /**
      * GCM sender identification

@@ -2,9 +2,9 @@ package de.tudarmstadt.informatik.tk.assistance.sdk.model.api.sensing;
 
 
 import de.tudarmstadt.informatik.tk.assistance.sdk.Config;
-import retrofit.http.Body;
-import retrofit.http.Header;
-import retrofit.http.POST;
+import retrofit2.http.Body;
+import retrofit2.http.Header;
+import retrofit2.http.POST;
 import rx.Observable;
 
 /**

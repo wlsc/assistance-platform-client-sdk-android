@@ -40,22 +40,18 @@ dependencies {
     compile('com.onedrive.sdk:onedrive-sdk-android:1.2+') {
         transitive = false
     }
-    // OneDrive auth types
-    //compile ('com.microsoft.services.msa:msa-auth:0.8.+')
-    //compile ('com.microsoft.aad:adal:1.1.+')
     // twitter library
 //    compile 'org.twitter4j:twitter4j-core:4.0.4'
-    // support library
-//    compile 'com.android.support:appcompat-v7:24.2.1'
     // google play library
     compile 'com.google.android.gms:play-services-base:9.0.2'
     compile 'com.google.android.gms:play-services-gcm:9.0.2'
     compile 'com.google.android.gms:play-services-location:9.0.2'
     compile 'com.google.android.gms:play-services-analytics:9.0.2'
     // a type-safe HTTP client
-    compile 'com.squareup.retrofit:retrofit:1.9.0'
-    // efficient HTTP client
-    compile 'com.squareup.okhttp:okhttp:2.7.5'
+    compile 'com.squareup.retrofit2:retrofit:2.1.0'
+    compile 'com.squareup.retrofit2:converter-gson:2.1.0'
+    compile 'com.squareup.retrofit2:adapter-rxjava:2.1.0'
+    compile 'com.squareup.okhttp3:logging-interceptor:3.4.1'
     // database ORM
     compile 'org.greenrobot:greendao:3.2.0'
     // event bus system

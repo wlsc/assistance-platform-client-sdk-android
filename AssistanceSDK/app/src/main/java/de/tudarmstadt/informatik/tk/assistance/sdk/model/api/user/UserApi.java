@@ -6,11 +6,11 @@ import de.tudarmstadt.informatik.tk.assistance.sdk.model.api.user.profile.Update
 import de.tudarmstadt.informatik.tk.assistance.sdk.model.api.user.registration.RegistrationRequestDto;
 import de.tudarmstadt.informatik.tk.assistance.sdk.model.api.user.registration.RegistrationResponseDto;
 import de.tudarmstadt.informatik.tk.assistance.sdk.model.api.user.resetpassword.ResetPasswordRequestDto;
-import retrofit.http.Body;
-import retrofit.http.GET;
-import retrofit.http.Header;
-import retrofit.http.POST;
-import retrofit.http.PUT;
+import retrofit2.http.Body;
+import retrofit2.http.GET;
+import retrofit2.http.Header;
+import retrofit2.http.POST;
+import retrofit2.http.PUT;
 import rx.Observable;
 
 

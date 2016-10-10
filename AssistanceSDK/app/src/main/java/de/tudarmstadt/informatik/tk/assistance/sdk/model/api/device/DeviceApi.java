@@ -3,10 +3,10 @@ package de.tudarmstadt.informatik.tk.assistance.sdk.model.api.device;
 import java.util.List;
 
 import de.tudarmstadt.informatik.tk.assistance.sdk.Config;
-import retrofit.http.Body;
-import retrofit.http.GET;
-import retrofit.http.Header;
-import retrofit.http.POST;
+import retrofit2.http.Body;
+import retrofit2.http.GET;
+import retrofit2.http.Header;
+import retrofit2.http.POST;
 import rx.Observable;
 
 /**

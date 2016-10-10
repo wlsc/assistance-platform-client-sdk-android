@@ -3,19 +3,14 @@ package de.tudarmstadt.informatik.tk.assistance.sdk.model.api;
 import android.content.Context;
 
 import com.google.gson.GsonBuilder;
-import com.squareup.okhttp.Cache;
-import com.squareup.okhttp.OkHttpClient;
 
 import de.tudarmstadt.informatik.tk.assistance.sdk.Config;
 import de.tudarmstadt.informatik.tk.assistance.sdk.model.httpclient.UntrustedOkHttpClient;
 import de.tudarmstadt.informatik.tk.assistance.sdk.provider.PreferenceProvider;
-import de.tudarmstadt.informatik.tk.assistance.sdk.util.AppUtils;
-import retrofit.RestAdapter;
-import retrofit.RestAdapter.Builder;
-import retrofit.RestAdapter.LogLevel;
-import retrofit.android.AndroidLog;
-import retrofit.client.OkClient;
-import retrofit.converter.GsonConverter;
+import okhttp3.OkHttpClient;
+import retrofit2.Retrofit;
+import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
  * Generates Retrofit endpoints
@@ -25,16 +20,14 @@ import retrofit.converter.GsonConverter;
  */
 public final class ApiGenerator {
 
-    public static final long CACHE_SIZE = 1024L * 1024L * 10L;
-
     private static ApiGenerator INSTANCE;
 
     private final Context context;
 
-    private static RestAdapter restAdapter;
+    private Retrofit retrofit;
 
     private ApiGenerator(Context context) {
-        this.context = context;
+        this.context = context.getApplicationContext();
     }
 
     public static ApiGenerator getInstance(Context context) {
@@ -47,6 +40,43 @@ public final class ApiGenerator {
     }
 
     /**
+     * Returns retrofit adapter
+     *
+     * @return
+     */
+    public Retrofit getRetrofit() {
+
+        if (retrofit == null) {
+
+            // JSON parser
+            final GsonBuilder gsonBuilder = new GsonBuilder().excludeFieldsWithoutExposeAnnotation();
+            final GsonConverterFactory jsonConverterFactory = GsonConverterFactory.create(gsonBuilder.create());
+
+            // check for custom endpoint url
+            String endpointUrl = PreferenceProvider
+                    .getInstance(context)
+                    .getCustomEndpointUrl();
+
+            // custom endpoint settings is empty
+            if (endpointUrl.isEmpty()) {
+                endpointUrl = Config.ASSISTANCE_ENDPOINT;
+            }
+
+            // HTTP client setup
+            final OkHttpClient okHttpClient = new UntrustedOkHttpClient().getClient(context);
+
+            retrofit = new Retrofit.Builder()
+                    .baseUrl(endpointUrl)
+                    .client(okHttpClient)
+                    .addConverterFactory(jsonConverterFactory)
+                    .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
+                    .build();
+        }
+
+        return retrofit;
+    }
+
+    /**
      * Generates retrofit custom API HTTP request endpoints
      *
      * @param clazz
@@ -54,75 +84,6 @@ public final class ApiGenerator {
      * @return
      */
     public <T> T create(Class<T> clazz) {
-
-        // JSON parser
-        GsonBuilder gsonBuilder = new GsonBuilder().excludeFieldsWithoutExposeAnnotation();
-        GsonConverter jsonConverter = new GsonConverter(gsonBuilder.create());
-
-        // magic check for debug ON/OFF
-        boolean isDebuggable = AppUtils.isDebug(context);
-
-        LogLevel httpLogLevel = LogLevel.NONE;
-        // setting to output information for http client
-        // in debug mode
-        if (isDebuggable) {
-            httpLogLevel = LogLevel.FULL;
-        }
-
-        AndroidLog logger = new AndroidLog(Config.HTTP_LOGGER_NAME);
-
-        // check for custom endpoint url
-        String endpointUrl = PreferenceProvider
-                .getInstance(context)
-                .getCustomEndpointUrl();
-
-        // custom endpoint settings is empty
-        if (endpointUrl.isEmpty()) {
-            endpointUrl = Config.ASSISTANCE_ENDPOINT;
-        }
-
-        // HTTP client setup
-        OkHttpClient okHttpClient = new UntrustedOkHttpClient().getClient();
-
-        Cache cache = new Cache(context.getCacheDir(), CACHE_SIZE);
-        okHttpClient.setCache(cache);
-
-        OkClient httpClient = new OkClient(okHttpClient);
-
-        // setup actual endpoint adapter
-        RestAdapter adapter = getRestAdapter(
-                jsonConverter,
-                httpLogLevel,
-                logger,
-                endpointUrl,
-                httpClient);
-
-        return adapter.create(clazz);
-    }
-
-    /**
-     * Returns normal REST retrofit adapter
-     *
-     * @param jsonConverter
-     * @param httpLogLevel
-     * @param logger
-     * @param endpointUrl
-     * @param httpClient
-     * @return
-     */
-    private RestAdapter getRestAdapter(GsonConverter jsonConverter, LogLevel httpLogLevel, AndroidLog logger, String endpointUrl, OkClient httpClient) {
-
-        if (restAdapter == null) {
-            restAdapter = new Builder()
-//                .setErrorHandler(new AssistanceErrorHandler())
-                    .setLogLevel(httpLogLevel) // enabling log traces
-                    .setLog(logger)
-                    .setConverter(jsonConverter)
-                    .setEndpoint(endpointUrl)
-                    .setClient(httpClient)
-                    .build();
-        }
-
-        return restAdapter;
+        return getRetrofit().create(clazz);
     }
 }

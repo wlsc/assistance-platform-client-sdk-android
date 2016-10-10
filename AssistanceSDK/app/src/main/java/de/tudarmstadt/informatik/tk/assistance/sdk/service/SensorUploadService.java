@@ -43,8 +43,7 @@ import de.tudarmstadt.informatik.tk.assistance.sdk.util.HardwareUtils;
 import de.tudarmstadt.informatik.tk.assistance.sdk.util.JsonUtils;
 import de.tudarmstadt.informatik.tk.assistance.sdk.util.StringUtils;
 import de.tudarmstadt.informatik.tk.assistance.sdk.util.logger.Log;
-import retrofit.RetrofitError;
-import retrofit.client.Response;
+import retrofit2.adapter.rxjava.HttpException;
 import rx.Subscriber;
 import rx.Subscription;
 
@@ -463,31 +462,21 @@ public class SensorUploadService extends GcmTaskService {
         @Override
         public void onError(Throwable e) {
 
-            if (e instanceof RetrofitError) {
+            if (e instanceof HttpException) {
 
-                RetrofitError error = (RetrofitError) e;
+                HttpException error = (HttpException) e;
 
-                Log.d(TAG, "Server returned error! Kind: " + error.getKind().name());
+                Log.d(TAG, "Server returned error! Code: " + error.code());
 
-                Response response = error.getResponse();
-
-                if (response != null) {
-
-                    // user need relogin
-                    if (response.getStatus() == 401) {
-                        relogin();
-                        // dont need to continue here
-                        return;
-                    }
+                // user need relogin
+                if (error.code() == 401) {
+                    relogin();
+                    // dont need to continue here
+                    return;
                 }
             }
 
-            // fallbacking periodic request
-//            if (!shouldUseConnectionFallback) {
-//                shouldUseConnectionFallback = true;
-
             rescheduleFallbackPeriodicTask();
-//            }
         }
 
         @Override
@@ -535,10 +524,10 @@ public class SensorUploadService extends GcmTaskService {
 
         @Override
         public void onError(Throwable e) {
-            if (e instanceof RetrofitError) {
+            if (e instanceof HttpException) {
                 // ignore by now
-                Log.d(TAG, "login function failed. server status: " +
-                        ((RetrofitError) e).getResponse().getStatus());
+                Log.d(TAG, "login function failed. Code: " +
+                        ((HttpException) e).code());
             }
         }
 
