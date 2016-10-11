@@ -35,7 +35,7 @@ android {
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     // Facebook SDK
-    compile 'com.facebook.android:facebook-android-sdk:4.15.0'
+    compile 'com.facebook.android:facebook-android-sdk:4.16.1'
     // Microsoft OneDrive SDK
     compile('com.onedrive.sdk:onedrive-sdk-android:1.2+') {
         transitive = false

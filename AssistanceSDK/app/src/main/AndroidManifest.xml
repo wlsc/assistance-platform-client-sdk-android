@@ -48,8 +48,7 @@
         <activity
             android:name="com.facebook.FacebookActivity"
             android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
-            android:label="Assistance"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+            android:label="Assistance" />
 
         <service
             android:name="de.tudarmstadt.informatik.tk.assistance.sdk.service.SensorUploadService"
