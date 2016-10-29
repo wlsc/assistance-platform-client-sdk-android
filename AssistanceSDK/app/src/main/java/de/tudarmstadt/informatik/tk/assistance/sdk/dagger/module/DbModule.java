@@ -86,261 +86,234 @@ import de.tudarmstadt.informatik.tk.assistance.sdk.util.db.DbAssistanceOpenHelpe
  * @author Wladimir Schmidt (wlsc.dev@gmail.com)
  * @date 17/10/2016
  */
-@Module
+@Module(includes = ContextModule.class)
 public class DbModule {
 
-    private Context context;
-
-    private DbAssistanceOpenHelper helper;
-
-    private Database mDb;
-
-    private DaoMaster mDaoMaster;
-
-    private DaoSession mDaoSession;
-
-    public DbModule(Context context) {
-        this.context = context;
+    @Singleton
+    @Provides
+    DbAssistanceOpenHelper provideHelper(Context context) {
+        return new DbAssistanceOpenHelper(context, Config.DATABASE_NAME, null);
     }
 
     @Singleton
     @Provides
-    DbAssistanceOpenHelper provideHelper() {
-        helper = new DbAssistanceOpenHelper(context, Config.DATABASE_NAME, null);
-        return helper;
+    Database provideDatabase(DbAssistanceOpenHelper helper) {
+        return helper.getWritableDb();
     }
 
     @Singleton
     @Provides
-    Database provideDatabase() {
-        if (helper == null) {
-            helper = provideHelper();
-        }
-        mDb = helper.getWritableDb();
-        return mDb;
+    DaoMaster provideDaoMaster(Database db) {
+        return new DaoMaster(db);
     }
 
     @Singleton
     @Provides
-    DaoMaster provideDaoMaster() {
-        if (mDb == null) {
-            mDb = provideDatabase();
-        }
-        mDaoMaster = new DaoMaster(mDb);
-        return mDaoMaster;
+    DaoSession provideDaoSession(DaoMaster daoMaster) {
+        return daoMaster.newSession(IdentityScopeType.None);
     }
 
     @Singleton
     @Provides
-    DaoSession provideDaoSession() {
-        if (mDaoMaster == null) {
-            mDaoMaster = provideDaoMaster();
-        }
-        mDaoSession = mDaoMaster.newSession(IdentityScopeType.None);
-        return mDaoSession;
+    UserDao provideUserDao(DaoSession daoSession) {
+        return new UserDaoImpl(daoSession);
     }
 
     @Singleton
     @Provides
-    UserDao provideUserDao() {
-        return new UserDaoImpl(mDaoSession);
+    DeviceDao provideDeviceDao(DaoSession daoSession) {
+        return new DeviceDaoImpl(daoSession);
     }
 
     @Singleton
     @Provides
-    DeviceDao provideDeviceDao() {
-        return new DeviceDaoImpl(mDaoSession);
+    ModuleDao provideModuleDao(DaoSession daoSession) {
+        return new ModuleDaoImpl(daoSession);
     }
 
     @Singleton
     @Provides
-    ModuleDao provideModuleDao() {
-        return new ModuleDaoImpl(mDaoSession);
+    ModuleCapabilityDao provideModuleCapabilityDao(DaoSession daoSession) {
+        return new ModuleCapabilityDaoImpl(daoSession);
     }
 
     @Singleton
     @Provides
-    ModuleCapabilityDao provideModuleCapabilityDao() {
-        return new ModuleCapabilityDaoImpl(mDaoSession);
+    NewsDao provideNewsDao(DaoSession daoSession) {
+        return new NewsDaoImpl(daoSession);
     }
 
     @Singleton
     @Provides
-    NewsDao provideNewsDao() {
-        return new NewsDaoImpl(mDaoSession);
+    SensorUploadLogsDao provideSensorUploadLogsDao(DaoSession daoSession) {
+        return new SensorUploadLogsDaoImpl(daoSession);
     }
 
     @Singleton
     @Provides
-    SensorUploadLogsDao provideSensorUploadLogsDao() {
-        return new SensorUploadLogsDaoImpl(mDaoSession);
+    AccelerometerSensorDao provideAccelerometerSensorDao(DaoSession daoSession) {
+        return new AccelerometerSensorDaoImpl(daoSession);
     }
 
     @Singleton
     @Provides
-    AccelerometerSensorDao provideAccelerometerSensorDao() {
-        return new AccelerometerSensorDaoImpl(mDaoSession);
+    LocationSensorDao provideLocationSensorDao(DaoSession daoSession) {
+        return new LocationSensorDaoImpl(daoSession);
     }
 
     @Singleton
     @Provides
-    LocationSensorDao provideLocationSensorDao() {
-        return new LocationSensorDaoImpl(mDaoSession);
+    MotionActivitySensorDao provideMotionActivitySensorDao(DaoSession daoSession) {
+        return new MotionActivitySensorDaoImpl(daoSession);
     }
 
     @Singleton
     @Provides
-    MotionActivitySensorDao provideMotionActivitySensorDao() {
-        return new MotionActivitySensorDaoImpl(mDaoSession);
+    GyroscopeSensorDao provideGyroscopeSensorDao(DaoSession daoSession) {
+        return new GyroscopeSensorDaoImpl(daoSession);
     }
 
     @Singleton
     @Provides
-    GyroscopeSensorDao provideGyroscopeSensorDao() {
-        return new GyroscopeSensorDaoImpl(mDaoSession);
+    LightSensorDao provideLightSensorDao(DaoSession daoSession) {
+        return new LightSensorDaoImpl(daoSession);
     }
 
     @Singleton
     @Provides
-    LightSensorDao provideLightSensorDao() {
-        return new LightSensorDaoImpl(mDaoSession);
+    MagneticFieldSensorDao provideMagneticFieldSensorDao(DaoSession daoSession) {
+        return new MagneticFieldSensorDaoImpl(daoSession);
     }
 
     @Singleton
     @Provides
-    MagneticFieldSensorDao provideMagneticFieldSensorDao() {
-        return new MagneticFieldSensorDaoImpl(mDaoSession);
+    ForegroundSensorDao provideForegroundSensorDao(DaoSession daoSession) {
+        return new ForegroundSensorDaoImpl(daoSession);
     }
 
     @Singleton
     @Provides
-    ForegroundSensorDao provideForegroundSensorDao() {
-        return new ForegroundSensorDaoImpl(mDaoSession);
+    MobileConnectionSensorDao provideMobileConnectionSensorDao(DaoSession daoSession) {
+        return new MobileConnectionSensorDaoImpl(daoSession);
     }
 
     @Singleton
     @Provides
-    MobileConnectionSensorDao provideMobileConnectionSensorDao() {
-        return new MobileConnectionSensorDaoImpl(mDaoSession);
+    NetworkTrafficSensorDao provideNetworkTrafficSensorDao(DaoSession daoSession) {
+        return new NetworkTrafficSensorDaoImpl(daoSession);
     }
 
     @Singleton
     @Provides
-    NetworkTrafficSensorDao provideNetworkTrafficSensorDao() {
-        return new NetworkTrafficSensorDaoImpl(mDaoSession);
+    CallLogSensorDao provideCallLogSensorDao(DaoSession daoSession) {
+        return new CallLogSensorDaoImpl(daoSession);
     }
 
     @Singleton
     @Provides
-    CallLogSensorDao provideCallLogSensorDao() {
-        return new CallLogSensorDaoImpl(mDaoSession);
+    CalendarSensorDao provideCalendarSensorDao(DaoSession daoSession) {
+        return new CalendarSensorDaoImpl(daoSession);
     }
 
     @Singleton
     @Provides
-    CalendarSensorDao provideCalendarSensorDao() {
-        return new CalendarSensorDaoImpl(mDaoSession);
+    CalendarReminderSensorDao provideCalendarReminderSensorDao(DaoSession daoSession) {
+        return new CalendarReminderSensorDaoImpl(daoSession);
     }
 
     @Singleton
     @Provides
-    CalendarReminderSensorDao provideCalendarReminderSensorDao() {
-        return new CalendarReminderSensorDaoImpl(mDaoSession);
+    ConnectionSensorDao provideConnectionSensorDao(DaoSession daoSession) {
+        return new ConnectionSensorDaoImpl(daoSession);
     }
 
     @Singleton
     @Provides
-    ConnectionSensorDao provideConnectionSensorDao() {
-        return new ConnectionSensorDaoImpl(mDaoSession);
+    WifiConnectionSensorDao provideWifiConnectionSensorDao(DaoSession daoSession) {
+        return new WifiConnectionSensorDaoImpl(daoSession);
     }
 
     @Singleton
     @Provides
-    WifiConnectionSensorDao provideWifiConnectionSensorDao() {
-        return new WifiConnectionSensorDaoImpl(mDaoSession);
+    PowerStateSensorDao providePowerStateSensorDao(DaoSession daoSession) {
+        return new PowerStateSensorDaoImpl(daoSession);
     }
 
     @Singleton
     @Provides
-    PowerStateSensorDao providePowerStateSensorDao() {
-        return new PowerStateSensorDaoImpl(mDaoSession);
+    PowerLevelSensorDao providePowerLevelSensorDao(DaoSession daoSession) {
+        return new PowerLevelSensorDaoImpl(daoSession);
     }
 
     @Singleton
     @Provides
-    PowerLevelSensorDao providePowerLevelSensorDao() {
-        return new PowerLevelSensorDaoImpl(mDaoSession);
+    LoudnessSensorDao provideLoudnessSensorDao(DaoSession daoSession) {
+        return new LoudnessSensorDaoImpl(daoSession);
     }
 
     @Singleton
     @Provides
-    LoudnessSensorDao provideLoudnessSensorDao() {
-        return new LoudnessSensorDaoImpl(mDaoSession);
+    RingtoneSensorDao provideRingtoneSensorDao(DaoSession daoSession) {
+        return new RingtoneSensorDaoImpl(daoSession);
     }
 
     @Singleton
     @Provides
-    RingtoneSensorDao provideRingtoneSensorDao() {
-        return new RingtoneSensorDaoImpl(mDaoSession);
+    AccountReaderSensorDao provideAccountReaderSensorDao(DaoSession daoSession) {
+        return new AccountReaderSensorDaoImpl(daoSession);
     }
 
     @Singleton
     @Provides
-    AccountReaderSensorDao provideAccountReaderSensorDao() {
-        return new AccountReaderSensorDaoImpl(mDaoSession);
+    BrowserHistorySensorDao provideBrowserHistorySensorDao(DaoSession daoSession) {
+        return new BrowserHistorySensorDaoImpl(daoSession);
     }
 
     @Singleton
     @Provides
-    BrowserHistorySensorDao provideBrowserHistorySensorDao() {
-        return new BrowserHistorySensorDaoImpl(mDaoSession);
+    ContactSensorDao provideContactSensorDao(DaoSession daoSession) {
+        return new ContactSensorDaoImpl(daoSession);
     }
 
     @Singleton
     @Provides
-    ContactSensorDao provideContactSensorDao() {
-        return new ContactSensorDaoImpl(mDaoSession);
+    ContactEmailSensorDao provideContactEmailSensorDao(DaoSession daoSession) {
+        return new ContactEmailSensorDaoImpl(daoSession);
     }
 
     @Singleton
     @Provides
-    ContactEmailSensorDao provideContactEmailSensorDao() {
-        return new ContactEmailSensorDaoImpl(mDaoSession);
+    ContactNumberSensorDao provideContactNumberSensorDao(DaoSession daoSession) {
+        return new ContactNumberSensorDaoImpl(daoSession);
     }
 
     @Singleton
     @Provides
-    ContactNumberSensorDao provideContactNumberSensorDao() {
-        return new ContactNumberSensorDaoImpl(mDaoSession);
+    RunningProcessesSensorDao provideRunningProcessesSensorDao(DaoSession daoSession) {
+        return new RunningProcessesSensorDaoImpl(daoSession);
     }
 
     @Singleton
     @Provides
-    RunningProcessesSensorDao provideRunningProcessesSensorDao() {
-        return new RunningProcessesSensorDaoImpl(mDaoSession);
+    RunningServicesSensorDao provideRunningServicesSensorDao(DaoSession daoSession) {
+        return new RunningServicesSensorDaoImpl(daoSession);
     }
 
     @Singleton
     @Provides
-    RunningServicesSensorDao provideRunningServicesSensorDao() {
-        return new RunningServicesSensorDaoImpl(mDaoSession);
+    RunningTasksSensorDao provideRunningTasksSensorDao(DaoSession daoSession) {
+        return new RunningTasksSensorDaoImpl(daoSession);
     }
 
     @Singleton
     @Provides
-    RunningTasksSensorDao provideRunningTasksSensorDao() {
-        return new RunningTasksSensorDaoImpl(mDaoSession);
+    TucanSensorDao provideTucanSensorDao(DaoSession daoSession) {
+        return new TucanSensorDaoImpl(daoSession);
     }
 
     @Singleton
     @Provides
-    TucanSensorDao provideTucanSensorDao() {
-        return new TucanSensorDaoImpl(mDaoSession);
-    }
-
-    @Singleton
-    @Provides
-    FacebookSensorDao provideFacebookSensorDao() {
-        return new FacebookSensorDaoImpl(mDaoSession);
+    FacebookSensorDao provideFacebookSensorDao(DaoSession daoSession) {
+        return new FacebookSensorDaoImpl(daoSession);
     }
 }

@@ -33,8 +33,8 @@ public interface SdkComponent {
             return DaggerSdkComponent
                     .builder()
                     .contextModule(new ContextModule(applicationContext))
-                    .sensorModule(new SensorModule(applicationContext))
-                    .dbModule(new DbModule(applicationContext))
+                    .sensorModule(new SensorModule())
+                    .dbModule(new DbModule())
                     .build();
         }
     }

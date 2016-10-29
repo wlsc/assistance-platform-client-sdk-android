@@ -79,6 +79,7 @@ public final class ForegroundTrafficSensor extends AbstractTriggeredSensor {
 
         if (context != null) {
 
+            this.operationMode = Mode.NORMAL;
             mReceiver = new ScreenReceiver();
             mActivityManager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
             mPackageManager = context.getPackageManager();

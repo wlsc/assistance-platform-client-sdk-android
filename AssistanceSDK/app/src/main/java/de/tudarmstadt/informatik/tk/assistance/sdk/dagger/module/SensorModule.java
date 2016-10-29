@@ -33,38 +33,32 @@ import de.tudarmstadt.informatik.tk.assistance.sdk.sensing.impl.triggered.Motion
  * @author Wladimir Schmidt (wlsc.dev@gmail.com)
  * @date 27/10/2016
  */
-@Module
+@Module(includes = ContextModule.class)
 public class SensorModule {
-
-    private Context context;
-
-    public SensorModule(Context context) {
-        this.context = context;
-    }
 
     @Singleton
     @Provides
-    AccelerometerSensor provideAccelerometerSensor() {
+    AccelerometerSensor provideAccelerometerSensor(Context context) {
         return new AccelerometerSensor(context);
     }
 
     @Singleton
     @Provides
-    ConnectionSensor provideConnectionSensor() {
+    ConnectionSensor provideConnectionSensor(Context context) {
         return new ConnectionSensor(context);
     }
 
 
     @Singleton
     @Provides
-    ForegroundSensor provideForegroundSensor() {
+    ForegroundSensor provideForegroundSensor(Context context) {
         return new ForegroundSensor(context);
     }
 
 
     @Singleton
     @Provides
-    ForegroundTrafficSensor provideForegroundTrafficSensor() {
+    ForegroundTrafficSensor provideForegroundTrafficSensor(Context context) {
         final ForegroundTrafficSensor foregroundTrafficSensor = new ForegroundTrafficSensor(context);
         foregroundTrafficSensor.setOperationMode(ForegroundTrafficSensor.Mode.PERIODIC);
         return foregroundTrafficSensor;
@@ -73,109 +67,109 @@ public class SensorModule {
 
     @Singleton
     @Provides
-    GyroscopeSensor provideGyroscopeSensor() {
+    GyroscopeSensor provideGyroscopeSensor(Context context) {
         return new GyroscopeSensor(context);
     }
 
     @Singleton
     @Provides
-    LightSensor provideLightSensor() {
+    LightSensor provideLightSensor(Context context) {
         return new LightSensor(context);
     }
 
     @Singleton
     @Provides
-    LocationSensor provideLocationSensor() {
+    LocationSensor provideLocationSensor(Context context) {
         return new LocationSensor(context);
     }
 
     @Singleton
     @Provides
-    MagneticFieldSensor provideMagneticFieldSensor() {
+    MagneticFieldSensor provideMagneticFieldSensor(Context context) {
         return new MagneticFieldSensor(context);
     }
 
     @Singleton
     @Provides
-    MotionActivitySensor provideMotionActivitySensor() {
+    MotionActivitySensor provideMotionActivitySensor(Context context) {
         return new MotionActivitySensor(context);
     }
 
     @Singleton
     @Provides
-    PowerLevelSensor providePowerLevelSensor() {
+    PowerLevelSensor providePowerLevelSensor(Context context) {
         return new PowerLevelSensor(context);
     }
 
     @Singleton
     @Provides
-    BackgroundTrafficSensor provideBackgroundTrafficSensor() {
+    BackgroundTrafficSensor provideBackgroundTrafficSensor(Context context) {
         return new BackgroundTrafficSensor(context);
     }
 
     @Singleton
     @Provides
-    RingtoneSensor provideRingtoneSensor() {
+    RingtoneSensor provideRingtoneSensor(Context context) {
         return new RingtoneSensor(context);
     }
 
     @Singleton
     @Provides
-    LoudnessSensor provideLoudnessSensor() {
+    LoudnessSensor provideLoudnessSensor(Context context) {
         return new LoudnessSensor(context);
     }
 
     @Singleton
     @Provides
-    RunningProcessesReaderSensor provideRunningProcessesReaderSensor() {
+    RunningProcessesReaderSensor provideRunningProcessesReaderSensor(Context context) {
         return new RunningProcessesReaderSensor(context);
     }
 
     @Singleton
     @Provides
-    RunningTasksReaderSensor provideRunningTasksReaderSensor() {
+    RunningTasksReaderSensor provideRunningTasksReaderSensor(Context context) {
         return new RunningTasksReaderSensor(context);
     }
 
     @Singleton
     @Provides
-    RunningServicesReaderSensor provideRunningServicesReaderSensor() {
+    RunningServicesReaderSensor provideRunningServicesReaderSensor(Context context) {
         return new RunningServicesReaderSensor(context);
     }
 
     @Singleton
     @Provides
-    BrowserHistorySensor provideBrowserHistorySensor() {
+    BrowserHistorySensor provideBrowserHistorySensor(Context context) {
         return new BrowserHistorySensor(context);
     }
 
     @Singleton
     @Provides
-    CalendarSensor provideCalendarSensor() {
+    CalendarSensor provideCalendarSensor(Context context) {
         return new CalendarSensor(context);
     }
 
     @Singleton
     @Provides
-    ContactsSensor provideContactsSensor() {
+    ContactsSensor provideContactsSensor(Context context) {
         return new ContactsSensor(context);
     }
 
     @Singleton
     @Provides
-    CallLogSensor provideCallLogSensor() {
+    CallLogSensor provideCallLogSensor(Context context) {
         return new CallLogSensor(context);
     }
 
     @Singleton
     @Provides
-    TucanSensor provideTucanSensor() {
+    TucanSensor provideTucanSensor(Context context) {
         return new TucanSensor(context);
     }
 
     @Singleton
     @Provides
-    FacebookSensor provideFacebookSensor() {
+    FacebookSensor provideFacebookSensor(Context context) {
         return new FacebookSensor(context);
     }
 }
