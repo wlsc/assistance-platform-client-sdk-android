@@ -7,7 +7,6 @@ import de.tudarmstadt.informatik.tk.assistance.sdk.event.UpdateSensorIntervalEve
 import de.tudarmstadt.informatik.tk.assistance.sdk.model.enums.EPushType;
 import de.tudarmstadt.informatik.tk.assistance.sdk.provider.DaoProvider;
 import de.tudarmstadt.informatik.tk.assistance.sdk.sensing.ISensor;
-import de.tudarmstadt.informatik.tk.assistance.sdk.service.HarvesterService;
 
 /**
  * @author Unknown
@@ -27,7 +26,7 @@ public abstract class AbstractSensor implements ISensor {
     private boolean isDisabledBySystem;
 
     public AbstractSensor(Context context) {
-        setContext(context);
+        this.context = context;
 
         if (mDaoSession == null) {
             mDaoSession = DaoProvider.getInstance(context).getDaoSession();
@@ -35,14 +34,6 @@ public abstract class AbstractSensor implements ISensor {
 
         if (daoProvider == null) {
             daoProvider = DaoProvider.getInstance(context);
-        }
-    }
-
-    @Override
-    public void setContext(Context context) {
-        this.context = context;
-        if (context instanceof HarvesterService) {
-            this.mDaoSession = ((HarvesterService) context).getDaoSession();
         }
     }
 

@@ -36,11 +36,6 @@ public abstract class DummySensor implements ISensor {
     }
 
     @Override
-    public void setContext(Context context) {
-        this.context = context;
-    }
-
-    @Override
     public boolean isDisabledByUser() {
         return false;
     }
@@ -72,6 +67,5 @@ public abstract class DummySensor implements ISensor {
 
     @Override
     public void setDaoSession(DaoSession daoSession) {
-
     }
 }

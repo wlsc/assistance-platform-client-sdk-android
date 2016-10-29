@@ -19,6 +19,9 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbForegroundSensor;
 import de.tudarmstadt.informatik.tk.assistance.sdk.model.api.sensing.SensorApiType;
 import de.tudarmstadt.informatik.tk.assistance.sdk.model.enums.EPushType;
@@ -35,11 +38,10 @@ import de.tudarmstadt.informatik.tk.assistance.sdk.util.logger.Log;
  * @edited by Wladimir Schmidt (wlsc.dev@gmail.com)
  * @date 08.10.2015
  */
+@Singleton
 public final class ForegroundSensor extends AbstractTriggeredSensor {
 
     static final String TAG = ForegroundSensor.class.getSimpleName();
-
-    private static ForegroundSensor INSTANCE;
 
     public static final int EVENT_APP = 0;
     public static final int EVENT_ACTIVITY = 1;
@@ -61,23 +63,9 @@ public final class ForegroundSensor extends AbstractTriggeredSensor {
     private AccessibilityEventFilterUtils mEventFilter;
     private ScreenReceiver mReceiver;
 
-    private ForegroundSensor(Context context) {
+    @Inject
+    public ForegroundSensor(Context context) {
         super(context);
-    }
-
-    /**
-     * Returns singleton of this class
-     *
-     * @param context
-     * @return
-     */
-    public static ForegroundSensor getInstance(Context context) {
-
-        if (INSTANCE == null) {
-            INSTANCE = new ForegroundSensor(context);
-        }
-
-        return INSTANCE;
     }
 
     @Override

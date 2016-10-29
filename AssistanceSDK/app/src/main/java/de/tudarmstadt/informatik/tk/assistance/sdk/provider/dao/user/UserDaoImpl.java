@@ -2,6 +2,9 @@ package de.tudarmstadt.informatik.tk.assistance.sdk.provider.dao.user;
 
 import android.support.annotation.Nullable;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DaoSession;
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbUser;
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbUserDao.Properties;
@@ -11,25 +14,16 @@ import de.tudarmstadt.informatik.tk.assistance.sdk.provider.dao.CommonDaoImpl;
  * @author Wladimir Schmidt (wlsc.dev@gmail.com)
  * @date 29.10.2015
  */
+@Singleton
 public final class UserDaoImpl extends
         CommonDaoImpl<DbUser> implements
         UserDao {
 
     private static final String TAG = UserDaoImpl.class.getSimpleName();
 
-    private static UserDao INSTANCE;
-
-    private UserDaoImpl(DaoSession daoSession) {
+    @Inject
+    public UserDaoImpl(DaoSession daoSession) {
         super(daoSession.getDbUserDao());
-    }
-
-    public static UserDao getInstance(DaoSession mDaoSession) {
-
-        if (INSTANCE == null) {
-            INSTANCE = new UserDaoImpl(mDaoSession);
-        }
-
-        return INSTANCE;
     }
 
     /**

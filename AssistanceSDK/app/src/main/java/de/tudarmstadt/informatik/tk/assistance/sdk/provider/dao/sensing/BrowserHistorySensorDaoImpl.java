@@ -2,6 +2,9 @@ package de.tudarmstadt.informatik.tk.assistance.sdk.provider.dao.sensing;
 
 import android.support.annotation.Nullable;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DaoSession;
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbBrowserHistorySensor;
 import de.tudarmstadt.informatik.tk.assistance.sdk.model.api.SensorDto;
@@ -11,25 +14,16 @@ import de.tudarmstadt.informatik.tk.assistance.sdk.model.api.sensing.sensor.Brow
  * @author Wladimir Schmidt (wlsc.dev@gmail.com)
  * @date 24.11.2015
  */
+@Singleton
 public final class BrowserHistorySensorDaoImpl extends
         CommonEventDaoImpl<DbBrowserHistorySensor> implements
         BrowserHistorySensorDao {
 
     private static final String TAG = BrowserHistorySensorDaoImpl.class.getSimpleName();
 
-    private static BrowserHistorySensorDao INSTANCE;
-
-    private BrowserHistorySensorDaoImpl(DaoSession daoSession) {
+    @Inject
+    public BrowserHistorySensorDaoImpl(DaoSession daoSession) {
         super(daoSession.getDbBrowserHistorySensorDao());
-    }
-
-    public static BrowserHistorySensorDao getInstance(DaoSession mDaoSession) {
-
-        if (INSTANCE == null) {
-            INSTANCE = new BrowserHistorySensorDaoImpl(mDaoSession);
-        }
-
-        return INSTANCE;
     }
 
     @Nullable

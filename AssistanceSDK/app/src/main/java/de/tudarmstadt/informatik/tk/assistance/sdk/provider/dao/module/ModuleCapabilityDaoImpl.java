@@ -3,6 +3,9 @@ package de.tudarmstadt.informatik.tk.assistance.sdk.provider.dao.module;
 import java.util.Collections;
 import java.util.List;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DaoSession;
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbModuleCapability;
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbModuleCapabilityDao.Properties;
@@ -12,25 +15,16 @@ import de.tudarmstadt.informatik.tk.assistance.sdk.provider.dao.CommonDaoImpl;
  * @author Wladimir Schmidt (wlsc.dev@gmail.com)
  * @date 30.10.2015
  */
+@Singleton
 public final class ModuleCapabilityDaoImpl extends
         CommonDaoImpl<DbModuleCapability> implements
         ModuleCapabilityDao {
 
     private static final String TAG = ModuleCapabilityDaoImpl.class.getSimpleName();
 
-    private static ModuleCapabilityDao INSTANCE;
-
-    private ModuleCapabilityDaoImpl(DaoSession daoSession) {
+    @Inject
+    public ModuleCapabilityDaoImpl(DaoSession daoSession) {
         super(daoSession.getDbModuleCapabilityDao());
-    }
-
-    public static ModuleCapabilityDao getInstance(DaoSession mDaoSession) {
-
-        if (INSTANCE == null) {
-            INSTANCE = new ModuleCapabilityDaoImpl(mDaoSession);
-        }
-
-        return INSTANCE;
     }
 
     @Override

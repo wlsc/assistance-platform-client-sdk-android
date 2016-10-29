@@ -9,6 +9,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DaoSession;
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbContactEmailSensor;
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbContactNumberSensor;
@@ -23,25 +26,16 @@ import de.tudarmstadt.informatik.tk.assistance.sdk.provider.dao.sensing.CommonEv
  * @author Wladimir Schmidt (wlsc.dev@gmail.com)
  * @date 24.11.2015
  */
+@Singleton
 public final class ContactSensorDaoImpl extends
         CommonEventDaoImpl<DbContactSensor> implements
         ContactSensorDao {
 
     private static final String TAG = ContactSensorDaoImpl.class.getSimpleName();
 
-    private static ContactSensorDao INSTANCE;
-
-    private ContactSensorDaoImpl(DaoSession daoSession) {
+    @Inject
+    public ContactSensorDaoImpl(DaoSession daoSession) {
         super(daoSession.getDbContactSensorDao());
-    }
-
-    public static ContactSensorDao getInstance(DaoSession mDaoSession) {
-
-        if (INSTANCE == null) {
-            INSTANCE = new ContactSensorDaoImpl(mDaoSession);
-        }
-
-        return INSTANCE;
     }
 
     @Nullable

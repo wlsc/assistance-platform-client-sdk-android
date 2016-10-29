@@ -14,6 +14,9 @@ import android.telephony.TelephonyManager;
 import java.util.Date;
 import java.util.Locale;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbConnectionSensor;
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbMobileConnectionSensor;
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbWifiConnectionSensor;
@@ -30,11 +33,10 @@ import de.tudarmstadt.informatik.tk.assistance.sdk.util.logger.Log;
  * @edited by Wladimir Schmidt (wlsc.dev@gmail.com)
  * @date 26.10.2015
  */
+@Singleton
 public final class ConnectionSensor extends AbstractTriggeredSensor {
 
-    static final String TAG = ConnectionReceiver.class.getSimpleName();
-
-    private static ConnectionSensor INSTANCE;
+    private static final String TAG = ConnectionReceiver.class.getSimpleName();
 
     private static ConnectionReceiver mReceiver;
 
@@ -59,27 +61,13 @@ public final class ConnectionSensor extends AbstractTriggeredSensor {
     String mobileCarrierCode;
     String mobileNetworkCode;
 
-    private ConnectionSensor(Context context) {
+    @Inject
+    public ConnectionSensor(Context context) {
         super(context);
 
         if (mReceiver == null) {
             mReceiver = new ConnectionReceiver();
         }
-    }
-
-    /**
-     * Returns singleton of this class
-     *
-     * @param context
-     * @return
-     */
-    public static ConnectionSensor getInstance(Context context) {
-
-        if (INSTANCE == null) {
-            INSTANCE = new ConnectionSensor(context);
-        }
-
-        return INSTANCE;
     }
 
     @Override

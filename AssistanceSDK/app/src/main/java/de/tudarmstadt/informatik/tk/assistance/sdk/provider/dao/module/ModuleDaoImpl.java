@@ -5,6 +5,9 @@ import android.support.annotation.Nullable;
 import java.util.Collections;
 import java.util.List;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DaoSession;
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbModule;
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbModuleDao.Properties;
@@ -14,25 +17,16 @@ import de.tudarmstadt.informatik.tk.assistance.sdk.provider.dao.CommonDaoImpl;
  * @author Wladimir Schmidt (wlsc.dev@gmail.com)
  * @date 29.10.2015
  */
+@Singleton
 public final class ModuleDaoImpl extends
         CommonDaoImpl<DbModule> implements
         ModuleDao {
 
     private static final String TAG = ModuleDaoImpl.class.getSimpleName();
 
-    private static ModuleDao INSTANCE;
-
-    private ModuleDaoImpl(DaoSession daoSession) {
+    @Inject
+    public ModuleDaoImpl(DaoSession daoSession) {
         super(daoSession.getDbModuleDao());
-    }
-
-    public static ModuleDao getInstance(DaoSession mDaoSession) {
-
-        if (INSTANCE == null) {
-            INSTANCE = new ModuleDaoImpl(mDaoSession);
-        }
-
-        return INSTANCE;
     }
 
     /**

@@ -5,6 +5,9 @@ import android.content.Context;
 import java.util.Date;
 import java.util.Locale;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbPowerLevelSensor;
 import de.tudarmstadt.informatik.tk.assistance.sdk.model.api.sensing.SensorApiType;
 import de.tudarmstadt.informatik.tk.assistance.sdk.provider.PreferenceProvider;
@@ -17,35 +20,20 @@ import de.tudarmstadt.informatik.tk.assistance.sdk.util.logger.Log;
  * @author Wladimir Schmidt (wlsc.dev@gmail.com)
  * @date 08.12.2015
  */
+@Singleton
 public final class PowerLevelSensor extends AbstractPeriodicSensor {
 
     private static final String TAG = PowerLevelSensor.class.getSimpleName();
-
-    private static PowerLevelSensor INSTANCE;
 
     private int UPDATE_INTERVAL_IN_SEC = 900;
 
     private float lastPercentValue;
 
-    private PowerLevelSensor(Context context) {
+    @Inject
+    public PowerLevelSensor(Context context) {
         super(context);
 
         setDataIntervalInSec(UPDATE_INTERVAL_IN_SEC);
-    }
-
-    /**
-     * Gives singleton of this class
-     *
-     * @param context
-     * @return
-     */
-    public static PowerLevelSensor getInstance(Context context) {
-
-        if (INSTANCE == null) {
-            INSTANCE = new PowerLevelSensor(context);
-        }
-
-        return INSTANCE;
     }
 
     @Override

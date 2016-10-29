@@ -16,6 +16,9 @@ import java.util.Locale;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbForegroundSensor;
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbNetworkTrafficSensor;
 import de.tudarmstadt.informatik.tk.assistance.sdk.model.api.sensing.SensorApiType;
@@ -36,13 +39,12 @@ import de.tudarmstadt.informatik.tk.assistance.sdk.util.logger.Log;
  * @edited by Wladimir Schmidt (wlsc.dev@gmail.com)
  * @date 27.10.2015
  */
+@Singleton
 public final class ForegroundTrafficSensor extends AbstractTriggeredSensor {
 
     static final String TAG = ForegroundTrafficSensor.class.getSimpleName();
 
-    private static ForegroundTrafficSensor INSTANCE;
-
-    private Mode operationMode;
+    private ForegroundTrafficSensor.Mode operationMode;
 
     private int UPDATE_INTERVAL_IN_SEC = 5;
 
@@ -66,48 +68,22 @@ public final class ForegroundTrafficSensor extends AbstractTriggeredSensor {
     }
 
     /**
-     * Constructor of a new Foreground Traffic Sensor
-     *
-     * @param context
-     * @param mode)
-     */
-    private ForegroundTrafficSensor(Context context, Mode mode) {
-        super(context);
-
-        if (context != null) {
-
-            this.operationMode = mode;
-            mReceiver = new ScreenReceiver();
-            mActivityManager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
-            mPackageManager = context.getPackageManager();
-            mEventFilter = new AccessibilityEventFilterUtils(context);
-        }
-    }
-
-    /**
      * Represents normal mode of this sensor
      *
      * @param context
      * @return
      */
-    public static ForegroundTrafficSensor getInstance(Context context) {
-        return getInstance(context, Mode.NORMAL);
-    }
+    @Inject
+    public ForegroundTrafficSensor(Context context) {
+        super(context);
 
-    /**
-     * Returns singleton of this class
-     *
-     * @param context
-     * @param mode
-     * @return
-     */
-    public static ForegroundTrafficSensor getInstance(Context context, Mode mode) {
+        if (context != null) {
 
-        if (INSTANCE == null) {
-            INSTANCE = new ForegroundTrafficSensor(context, mode);
+            mReceiver = new ScreenReceiver();
+            mActivityManager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+            mPackageManager = context.getPackageManager();
+            mEventFilter = new AccessibilityEventFilterUtils(context);
         }
-
-        return INSTANCE;
     }
 
     /**
@@ -178,7 +154,7 @@ public final class ForegroundTrafficSensor extends AbstractTriggeredSensor {
     @Override
     public void updateSensorInterval(Double collectionInterval) {
 
-        if (operationMode == Mode.PERIODIC) {
+        if (operationMode == ForegroundTrafficSensor.Mode.PERIODIC) {
 
             Log.d(TAG, "onUpdate interval");
             Log.d(TAG, "Old update interval: " + UPDATE_INTERVAL_IN_SEC + " sec");
@@ -237,7 +213,7 @@ public final class ForegroundTrafficSensor extends AbstractTriggeredSensor {
                 /**
                  * Normal mode
                  */
-                if (operationMode == Mode.NORMAL) {
+                if (operationMode == ForegroundTrafficSensor.Mode.NORMAL) {
 
                     //  null at start of sensors
                     if (oldEvent == null) {
@@ -258,7 +234,7 @@ public final class ForegroundTrafficSensor extends AbstractTriggeredSensor {
                 /**
                  * Special periodic mode
                  */
-                if (operationMode == Mode.PERIODIC) {
+                if (operationMode == ForegroundTrafficSensor.Mode.PERIODIC) {
 
                     if (event.getEventType() == AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED) {
 
@@ -360,6 +336,14 @@ public final class ForegroundTrafficSensor extends AbstractTriggeredSensor {
                 break;
             }
         }
+    }
+
+    public ForegroundTrafficSensor.Mode getOperationMode() {
+        return this.operationMode;
+    }
+
+    public void setOperationMode(ForegroundTrafficSensor.Mode operationMode) {
+        this.operationMode = operationMode;
     }
 
     /**

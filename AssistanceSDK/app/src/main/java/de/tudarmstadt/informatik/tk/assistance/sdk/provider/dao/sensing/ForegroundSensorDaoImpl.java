@@ -2,6 +2,9 @@ package de.tudarmstadt.informatik.tk.assistance.sdk.provider.dao.sensing;
 
 import android.support.annotation.Nullable;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DaoSession;
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbForegroundSensor;
 import de.tudarmstadt.informatik.tk.assistance.sdk.model.api.sensing.SensorApiType;
@@ -11,25 +14,16 @@ import de.tudarmstadt.informatik.tk.assistance.sdk.model.api.sensing.sensor.Fore
  * @author Wladimir Schmidt (wlsc.dev@gmail.com)
  * @date 30.10.2015
  */
+@Singleton
 public final class ForegroundSensorDaoImpl extends
         CommonEventDaoImpl<DbForegroundSensor> implements
         ForegroundSensorDao {
 
     private static final String TAG = ForegroundSensorDaoImpl.class.getSimpleName();
 
-    private static ForegroundSensorDao INSTANCE;
-
-    private ForegroundSensorDaoImpl(DaoSession daoSession) {
+    @Inject
+    public ForegroundSensorDaoImpl(DaoSession daoSession) {
         super(daoSession.getDbForegroundSensorDao());
-    }
-
-    public static ForegroundSensorDao getInstance(DaoSession mDaoSession) {
-
-        if (INSTANCE == null) {
-            INSTANCE = new ForegroundSensorDaoImpl(mDaoSession);
-        }
-
-        return INSTANCE;
     }
 
     @Nullable

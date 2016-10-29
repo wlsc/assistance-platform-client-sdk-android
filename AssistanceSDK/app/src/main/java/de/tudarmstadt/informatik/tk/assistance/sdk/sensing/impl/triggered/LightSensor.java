@@ -9,6 +9,9 @@ import android.hardware.SensorManager;
 import java.util.Date;
 import java.util.Locale;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbLightSensor;
 import de.tudarmstadt.informatik.tk.assistance.sdk.model.api.sensing.SensorApiType;
 import de.tudarmstadt.informatik.tk.assistance.sdk.provider.DaoProvider;
@@ -22,6 +25,7 @@ import de.tudarmstadt.informatik.tk.assistance.sdk.util.logger.Log;
  * @edited by Wladimir Schmidt (wlsc.dev@gmail.com)
  * @date 26.10.2015
  */
+@Singleton
 public final class LightSensor
         extends AbstractTriggeredSensor
         implements SensorEventListener {
@@ -33,8 +37,6 @@ public final class LightSensor
     private static int UPDATE_INTERVAL_IN_SEC = 5;
     // -----------------------------------------------------
 
-    private static LightSensor INSTANCE;
-
     private DaoProvider daoProvider;
 
     private SensorManager mSensorManager;
@@ -45,7 +47,8 @@ public final class LightSensor
     private int accuracy;
     private int numValues;
 
-    private LightSensor(Context context) {
+    @Inject
+    public LightSensor(Context context) {
         super(context);
 
         if (daoProvider == null) {
@@ -54,21 +57,6 @@ public final class LightSensor
 
         mSensorManager = (SensorManager) this.context.getSystemService(Context.SENSOR_SERVICE);
         mSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_LIGHT);
-    }
-
-    /**
-     * Returns singleton of this class
-     *
-     * @param context
-     * @return
-     */
-    public static LightSensor getInstance(Context context) {
-
-        if (INSTANCE == null) {
-            INSTANCE = new LightSensor(context);
-        }
-
-        return INSTANCE;
     }
 
     @Override

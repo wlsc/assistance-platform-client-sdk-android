@@ -16,6 +16,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbLoudnessSensor;
 import de.tudarmstadt.informatik.tk.assistance.sdk.model.api.sensing.SensorApiType;
 import de.tudarmstadt.informatik.tk.assistance.sdk.provider.PreferenceProvider;
@@ -28,11 +31,10 @@ import de.tudarmstadt.informatik.tk.assistance.sdk.util.logger.Log;
  * @edited by Wladimir Schmidt (wlsc.dev@gmail.com)
  * @date 24.11.2015
  */
+@Singleton
 public final class LoudnessSensor extends AbstractPeriodicSensor implements Callback {
 
     static final String TAG = LoudnessSensor.class.getSimpleName();
-
-    private static LoudnessSensor INSTANCE;
 
     private int UPDATE_INTERVAL_IN_SEC = 120;
 
@@ -110,25 +112,11 @@ public final class LoudnessSensor extends AbstractPeriodicSensor implements Call
         }
     }
 
-    private LoudnessSensor(Context context) {
+    @Inject
+    public LoudnessSensor(Context context) {
         super(context);
 
         setDataIntervalInSec(UPDATE_INTERVAL_IN_SEC);
-    }
-
-    /**
-     * Gives singleton of this class
-     *
-     * @param context
-     * @return
-     */
-    public static LoudnessSensor getInstance(Context context) {
-
-        if (INSTANCE == null) {
-            INSTANCE = new LoudnessSensor(context);
-        }
-
-        return INSTANCE;
     }
 
     @Override

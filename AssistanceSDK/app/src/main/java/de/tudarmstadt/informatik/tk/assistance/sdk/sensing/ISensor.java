@@ -1,7 +1,5 @@
 package de.tudarmstadt.informatik.tk.assistance.sdk.sensing;
 
-import android.content.Context;
-
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DaoSession;
 import de.tudarmstadt.informatik.tk.assistance.sdk.model.enums.EPushType;
 
@@ -13,8 +11,6 @@ public interface ISensor {
     void stopSensor();
 
     int getType();
-
-    void setContext(Context context);
 
     boolean isDisabledByUser();
 

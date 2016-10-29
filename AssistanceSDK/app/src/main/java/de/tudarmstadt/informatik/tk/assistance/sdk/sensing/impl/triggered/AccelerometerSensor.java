@@ -9,6 +9,9 @@ import android.hardware.SensorManager;
 import java.util.Date;
 import java.util.Locale;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbAccelerometerSensor;
 import de.tudarmstadt.informatik.tk.assistance.sdk.model.api.sensing.SensorApiType;
 import de.tudarmstadt.informatik.tk.assistance.sdk.provider.PreferenceProvider;
@@ -21,6 +24,7 @@ import de.tudarmstadt.informatik.tk.assistance.sdk.util.logger.Log;
  * @edited by Wladimir Schmidt (wlsc.dev@gmail.com)
  * @date 08.10.2015
  */
+@Singleton
 public final class AccelerometerSensor extends
         AbstractTriggeredSensor implements
         SensorEventListener {
@@ -32,8 +36,6 @@ public final class AccelerometerSensor extends
     private int UPDATE_INTERVAL_IN_SEC = 5;
     // -----------------------------------------------------
 
-    private static AccelerometerSensor INSTANCE;
-
     private final SensorManager mSensorManager;
     private final Sensor mSensor;
 
@@ -44,30 +46,15 @@ public final class AccelerometerSensor extends
     private int accuracy;
     private int numValues;
 
-    private AccelerometerSensor(Context context) {
+    @Inject
+    public AccelerometerSensor(Context context) {
         super(context);
 
         mSensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
         mSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
     }
 
-    /**
-     * Returns singleton of this class
-     *
-     * @param context
-     * @return
-     */
-    public static AccelerometerSensor getInstance(Context context) {
-
-        if (INSTANCE == null) {
-            INSTANCE = new AccelerometerSensor(context);
-        }
-
-        return INSTANCE;
-    }
-
     @Override
-
     public void dumpData() {
 
         if (numValues > 0) {

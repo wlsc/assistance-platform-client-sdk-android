@@ -21,6 +21,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbMotionActivitySensor;
 import de.tudarmstadt.informatik.tk.assistance.sdk.model.api.sensing.SensorApiType;
 import de.tudarmstadt.informatik.tk.assistance.sdk.provider.PreferenceProvider;
@@ -34,6 +37,7 @@ import de.tudarmstadt.informatik.tk.assistance.sdk.util.logger.Log;
  * @edited by Wladimir Schmidt (wlsc.dev@gmail.com)
  * @date 08.10.2015
  */
+@Singleton
 public final class MotionActivitySensor extends
         AbstractTriggeredSensor implements
         ConnectionCallbacks,
@@ -51,8 +55,6 @@ public final class MotionActivitySensor extends
 
     private static final int CONNECTION_FAILURE_RESOLUTION_REQUEST = 9_000;
 
-    private static MotionActivitySensor INSTANCE;
-
     /**
      * High possibility motion action
      */
@@ -63,25 +65,11 @@ public final class MotionActivitySensor extends
      */
     private List<DetectedActivity> probableActivities;
 
-    private MotionActivitySensor(Context context) {
+    @Inject
+    public MotionActivitySensor(Context context) {
         super(context);
 
         mGoogleApiClient = getGoogleApiClient();
-    }
-
-    /**
-     * Gives singleton of this class
-     *
-     * @param context
-     * @return
-     */
-    public static MotionActivitySensor getInstance(Context context) {
-
-        if (INSTANCE == null) {
-            INSTANCE = new MotionActivitySensor(context);
-        }
-
-        return INSTANCE;
     }
 
     @Override

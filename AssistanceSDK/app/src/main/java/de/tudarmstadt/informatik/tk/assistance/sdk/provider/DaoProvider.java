@@ -4,80 +4,46 @@ package de.tudarmstadt.informatik.tk.assistance.sdk.provider;
 import android.content.Context;
 
 import org.greenrobot.greendao.database.Database;
-import org.greenrobot.greendao.identityscope.IdentityScopeType;
 
-import de.tudarmstadt.informatik.tk.assistance.sdk.Config;
+import javax.inject.Inject;
+
+import de.tudarmstadt.informatik.tk.assistance.sdk.dagger.component.SdkComponent;
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DaoMaster;
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DaoSession;
 import de.tudarmstadt.informatik.tk.assistance.sdk.provider.dao.device.DeviceDao;
-import de.tudarmstadt.informatik.tk.assistance.sdk.provider.dao.device.DeviceDaoImpl;
 import de.tudarmstadt.informatik.tk.assistance.sdk.provider.dao.logs.upload.sensor.SensorUploadLogsDao;
-import de.tudarmstadt.informatik.tk.assistance.sdk.provider.dao.logs.upload.sensor.SensorUploadLogsDaoImpl;
 import de.tudarmstadt.informatik.tk.assistance.sdk.provider.dao.module.ModuleCapabilityDao;
-import de.tudarmstadt.informatik.tk.assistance.sdk.provider.dao.module.ModuleCapabilityDaoImpl;
 import de.tudarmstadt.informatik.tk.assistance.sdk.provider.dao.module.ModuleDao;
-import de.tudarmstadt.informatik.tk.assistance.sdk.provider.dao.module.ModuleDaoImpl;
 import de.tudarmstadt.informatik.tk.assistance.sdk.provider.dao.news.NewsDao;
-import de.tudarmstadt.informatik.tk.assistance.sdk.provider.dao.news.NewsDaoImpl;
 import de.tudarmstadt.informatik.tk.assistance.sdk.provider.dao.sensing.AccelerometerSensorDao;
-import de.tudarmstadt.informatik.tk.assistance.sdk.provider.dao.sensing.AccelerometerSensorDaoImpl;
 import de.tudarmstadt.informatik.tk.assistance.sdk.provider.dao.sensing.AccountReaderSensorDao;
-import de.tudarmstadt.informatik.tk.assistance.sdk.provider.dao.sensing.AccountReaderSensorDaoImpl;
 import de.tudarmstadt.informatik.tk.assistance.sdk.provider.dao.sensing.BrowserHistorySensorDao;
-import de.tudarmstadt.informatik.tk.assistance.sdk.provider.dao.sensing.BrowserHistorySensorDaoImpl;
 import de.tudarmstadt.informatik.tk.assistance.sdk.provider.dao.sensing.CallLogSensorDao;
-import de.tudarmstadt.informatik.tk.assistance.sdk.provider.dao.sensing.CallLogSensorDaoImpl;
 import de.tudarmstadt.informatik.tk.assistance.sdk.provider.dao.sensing.ForegroundSensorDao;
-import de.tudarmstadt.informatik.tk.assistance.sdk.provider.dao.sensing.ForegroundSensorDaoImpl;
 import de.tudarmstadt.informatik.tk.assistance.sdk.provider.dao.sensing.GyroscopeSensorDao;
-import de.tudarmstadt.informatik.tk.assistance.sdk.provider.dao.sensing.GyroscopeSensorDaoImpl;
 import de.tudarmstadt.informatik.tk.assistance.sdk.provider.dao.sensing.LightSensorDao;
-import de.tudarmstadt.informatik.tk.assistance.sdk.provider.dao.sensing.LightSensorDaoImpl;
 import de.tudarmstadt.informatik.tk.assistance.sdk.provider.dao.sensing.LocationSensorDao;
-import de.tudarmstadt.informatik.tk.assistance.sdk.provider.dao.sensing.LocationSensorDaoImpl;
 import de.tudarmstadt.informatik.tk.assistance.sdk.provider.dao.sensing.LoudnessSensorDao;
-import de.tudarmstadt.informatik.tk.assistance.sdk.provider.dao.sensing.LoudnessSensorDaoImpl;
 import de.tudarmstadt.informatik.tk.assistance.sdk.provider.dao.sensing.MagneticFieldSensorDao;
-import de.tudarmstadt.informatik.tk.assistance.sdk.provider.dao.sensing.MagneticFieldSensorDaoImpl;
 import de.tudarmstadt.informatik.tk.assistance.sdk.provider.dao.sensing.MotionActivitySensorDao;
-import de.tudarmstadt.informatik.tk.assistance.sdk.provider.dao.sensing.MotionActivitySensorDaoImpl;
 import de.tudarmstadt.informatik.tk.assistance.sdk.provider.dao.sensing.NetworkTrafficSensorDao;
-import de.tudarmstadt.informatik.tk.assistance.sdk.provider.dao.sensing.NetworkTrafficSensorDaoImpl;
 import de.tudarmstadt.informatik.tk.assistance.sdk.provider.dao.sensing.RingtoneSensorDao;
-import de.tudarmstadt.informatik.tk.assistance.sdk.provider.dao.sensing.RingtoneSensorDaoImpl;
 import de.tudarmstadt.informatik.tk.assistance.sdk.provider.dao.sensing.RunningProcessesSensorDao;
-import de.tudarmstadt.informatik.tk.assistance.sdk.provider.dao.sensing.RunningProcessesSensorDaoImpl;
 import de.tudarmstadt.informatik.tk.assistance.sdk.provider.dao.sensing.RunningServicesSensorDao;
-import de.tudarmstadt.informatik.tk.assistance.sdk.provider.dao.sensing.RunningServicesSensorDaoImpl;
 import de.tudarmstadt.informatik.tk.assistance.sdk.provider.dao.sensing.RunningTasksSensorDao;
-import de.tudarmstadt.informatik.tk.assistance.sdk.provider.dao.sensing.RunningTasksSensorDaoImpl;
 import de.tudarmstadt.informatik.tk.assistance.sdk.provider.dao.sensing.calendar.CalendarReminderSensorDao;
-import de.tudarmstadt.informatik.tk.assistance.sdk.provider.dao.sensing.calendar.CalendarReminderSensorDaoImpl;
 import de.tudarmstadt.informatik.tk.assistance.sdk.provider.dao.sensing.calendar.CalendarSensorDao;
-import de.tudarmstadt.informatik.tk.assistance.sdk.provider.dao.sensing.calendar.CalendarSensorDaoImpl;
 import de.tudarmstadt.informatik.tk.assistance.sdk.provider.dao.sensing.connection.ConnectionSensorDao;
-import de.tudarmstadt.informatik.tk.assistance.sdk.provider.dao.sensing.connection.ConnectionSensorDaoImpl;
 import de.tudarmstadt.informatik.tk.assistance.sdk.provider.dao.sensing.connection.MobileConnectionSensorDao;
-import de.tudarmstadt.informatik.tk.assistance.sdk.provider.dao.sensing.connection.MobileConnectionSensorDaoImpl;
 import de.tudarmstadt.informatik.tk.assistance.sdk.provider.dao.sensing.connection.WifiConnectionSensorDao;
-import de.tudarmstadt.informatik.tk.assistance.sdk.provider.dao.sensing.connection.WifiConnectionSensorDaoImpl;
 import de.tudarmstadt.informatik.tk.assistance.sdk.provider.dao.sensing.contact.ContactEmailSensorDao;
-import de.tudarmstadt.informatik.tk.assistance.sdk.provider.dao.sensing.contact.ContactEmailSensorDaoImpl;
 import de.tudarmstadt.informatik.tk.assistance.sdk.provider.dao.sensing.contact.ContactNumberSensorDao;
-import de.tudarmstadt.informatik.tk.assistance.sdk.provider.dao.sensing.contact.ContactNumberSensorDaoImpl;
 import de.tudarmstadt.informatik.tk.assistance.sdk.provider.dao.sensing.contact.ContactSensorDao;
-import de.tudarmstadt.informatik.tk.assistance.sdk.provider.dao.sensing.contact.ContactSensorDaoImpl;
 import de.tudarmstadt.informatik.tk.assistance.sdk.provider.dao.sensing.external.FacebookSensorDao;
-import de.tudarmstadt.informatik.tk.assistance.sdk.provider.dao.sensing.external.FacebookSensorDaoImpl;
 import de.tudarmstadt.informatik.tk.assistance.sdk.provider.dao.sensing.external.TucanSensorDao;
-import de.tudarmstadt.informatik.tk.assistance.sdk.provider.dao.sensing.external.TucanSensorDaoImpl;
 import de.tudarmstadt.informatik.tk.assistance.sdk.provider.dao.sensing.power.PowerLevelSensorDao;
-import de.tudarmstadt.informatik.tk.assistance.sdk.provider.dao.sensing.power.PowerLevelSensorDaoImpl;
 import de.tudarmstadt.informatik.tk.assistance.sdk.provider.dao.sensing.power.PowerStateSensorDao;
-import de.tudarmstadt.informatik.tk.assistance.sdk.provider.dao.sensing.power.PowerStateSensorDaoImpl;
 import de.tudarmstadt.informatik.tk.assistance.sdk.provider.dao.user.UserDao;
-import de.tudarmstadt.informatik.tk.assistance.sdk.provider.dao.user.UserDaoImpl;
-import de.tudarmstadt.informatik.tk.assistance.sdk.util.db.DbAssistanceOpenHelper;
 
 /**
  * Singleton database provider
@@ -87,13 +53,115 @@ import de.tudarmstadt.informatik.tk.assistance.sdk.util.db.DbAssistanceOpenHelpe
  */
 public final class DaoProvider {
 
-    private static final String TAG = DaoProvider.class.getSimpleName();
-
     private static DaoProvider INSTANCE;
 
-    private Database mDb;
-    private DaoMaster mDaoMaster;
-    private DaoSession mDaoSession;
+    @Inject
+    Database mDb;
+
+    @Inject
+    DaoSession mDaoSession;
+
+    @Inject
+    UserDao userDao;
+
+    @Inject
+    DeviceDao deviceDao;
+
+    @Inject
+    ModuleDao moduleDao;
+
+    @Inject
+    ModuleCapabilityDao moduleCapabilityDao;
+
+    @Inject
+    NewsDao newsDao;
+
+    @Inject
+    SensorUploadLogsDao sensorUploadLogsDao;
+
+    @Inject
+    AccelerometerSensorDao accelerometerSensorDao;
+
+    @Inject
+    LocationSensorDao locationSensorDao;
+
+    @Inject
+    MotionActivitySensorDao motionActivitySensorDao;
+
+    @Inject
+    GyroscopeSensorDao gyroscopeSensorDao;
+
+    @Inject
+    LightSensorDao lightSensorDao;
+
+    @Inject
+    MagneticFieldSensorDao magneticFieldSensorDao;
+
+    @Inject
+    ForegroundSensorDao foregroundSensorDao;
+
+    @Inject
+    MobileConnectionSensorDao mobileConnectionSensorDao;
+
+    @Inject
+    NetworkTrafficSensorDao networkTrafficSensorDao;
+
+    @Inject
+    CallLogSensorDao callLogSensorDao;
+
+    @Inject
+    CalendarSensorDao calendarSensorDao;
+
+    @Inject
+    CalendarReminderSensorDao calendarReminderSensorDao;
+
+    @Inject
+    ConnectionSensorDao connectionSensorDao;
+
+    @Inject
+    WifiConnectionSensorDao wifiConnectionSensorDao;
+
+    @Inject
+    PowerStateSensorDao powerStateSensorDao;
+
+    @Inject
+    PowerLevelSensorDao powerLevelSensorDao;
+
+    @Inject
+    LoudnessSensorDao loudnessSensorDao;
+
+    @Inject
+    RingtoneSensorDao ringtoneSensorDao;
+
+    @Inject
+    AccountReaderSensorDao accountReaderSensorDao;
+
+    @Inject
+    BrowserHistorySensorDao browserHistorySensorDao;
+
+    @Inject
+    ContactSensorDao contactSensorDao;
+
+    @Inject
+    ContactEmailSensorDao contactEmailSensorDao;
+
+    @Inject
+    ContactNumberSensorDao contactNumberSensorDao;
+
+    @Inject
+    RunningProcessesSensorDao runningProcessesSensorDao;
+
+    @Inject
+    RunningServicesSensorDao runningServicesSensorDao;
+
+    @Inject
+    RunningTasksSensorDao runningTasksSensorDao;
+
+    @Inject
+    TucanSensorDao tucanSensorDao;
+
+    @Inject
+    FacebookSensorDao facebookSensorDao;
 
     /**
      * Constructor
@@ -101,12 +169,7 @@ public final class DaoProvider {
      * @param context
      */
     private DaoProvider(Context context) {
-
-        DbAssistanceOpenHelper helper = new DbAssistanceOpenHelper(context, Config.DATABASE_NAME, null);
-        mDb = helper.getWritableDb();
-
-        mDaoMaster = new DaoMaster(mDb);
-        mDaoSession = mDaoMaster.newSession(IdentityScopeType.None);
+        SdkComponent.Initializer.INSTANCE.init(context).inject(this);
     }
 
     /**
@@ -130,7 +193,7 @@ public final class DaoProvider {
      * @return
      */
     public UserDao getUserDao() {
-        return UserDaoImpl.getInstance(mDaoSession);
+        return userDao;
     }
 
     /**
@@ -139,7 +202,7 @@ public final class DaoProvider {
      * @return
      */
     public DeviceDao getDeviceDao() {
-        return DeviceDaoImpl.getInstance(mDaoSession);
+        return deviceDao;
     }
 
     /**
@@ -148,7 +211,7 @@ public final class DaoProvider {
      * @return
      */
     public ModuleDao getModuleDao() {
-        return ModuleDaoImpl.getInstance(mDaoSession);
+        return moduleDao;
     }
 
     /**
@@ -157,7 +220,7 @@ public final class DaoProvider {
      * @return
      */
     public ModuleCapabilityDao getModuleCapabilityDao() {
-        return ModuleCapabilityDaoImpl.getInstance(mDaoSession);
+        return moduleCapabilityDao;
     }
 
     /**
@@ -166,7 +229,7 @@ public final class DaoProvider {
      * @return
      */
     public NewsDao getNewsDao() {
-        return NewsDaoImpl.getInstance(mDaoSession);
+        return newsDao;
     }
 
     /**
@@ -181,7 +244,7 @@ public final class DaoProvider {
      * @return
      */
     public SensorUploadLogsDao getSensorUploadLogsDao() {
-        return SensorUploadLogsDaoImpl.getInstance(mDaoSession);
+        return sensorUploadLogsDao;
     }
 
     /**
@@ -196,7 +259,7 @@ public final class DaoProvider {
      * @return
      */
     public AccelerometerSensorDao getAccelerometerSensorDao() {
-        return AccelerometerSensorDaoImpl.getInstance(mDaoSession);
+        return accelerometerSensorDao;
     }
 
     /**
@@ -205,7 +268,7 @@ public final class DaoProvider {
      * @return
      */
     public LocationSensorDao getLocationSensorDao() {
-        return LocationSensorDaoImpl.getInstance(mDaoSession);
+        return locationSensorDao;
     }
 
     /**
@@ -214,7 +277,7 @@ public final class DaoProvider {
      * @return
      */
     public MotionActivitySensorDao getMotionActivitySensorDao() {
-        return MotionActivitySensorDaoImpl.getInstance(mDaoSession);
+        return motionActivitySensorDao;
     }
 
     /**
@@ -223,7 +286,7 @@ public final class DaoProvider {
      * @return
      */
     public GyroscopeSensorDao getGyroscopeSensorDao() {
-        return GyroscopeSensorDaoImpl.getInstance(mDaoSession);
+        return gyroscopeSensorDao;
     }
 
     /**
@@ -232,7 +295,7 @@ public final class DaoProvider {
      * @return
      */
     public LightSensorDao getLightSensorDao() {
-        return LightSensorDaoImpl.getInstance(mDaoSession);
+        return lightSensorDao;
     }
 
     /**
@@ -241,7 +304,7 @@ public final class DaoProvider {
      * @return
      */
     public MagneticFieldSensorDao getMagneticFieldSensorDao() {
-        return MagneticFieldSensorDaoImpl.getInstance(mDaoSession);
+        return magneticFieldSensorDao;
     }
 
     /**
@@ -250,7 +313,7 @@ public final class DaoProvider {
      * @return
      */
     public ForegroundSensorDao getForegroundSensorDao() {
-        return ForegroundSensorDaoImpl.getInstance(mDaoSession);
+        return foregroundSensorDao;
     }
 
     /**
@@ -259,7 +322,7 @@ public final class DaoProvider {
      * @return
      */
     public MobileConnectionSensorDao getMobileConnectionSensorDao() {
-        return MobileConnectionSensorDaoImpl.getInstance(mDaoSession);
+        return mobileConnectionSensorDao;
     }
 
     /**
@@ -268,7 +331,7 @@ public final class DaoProvider {
      * @return
      */
     public NetworkTrafficSensorDao getNetworkTrafficSensorDao() {
-        return NetworkTrafficSensorDaoImpl.getInstance(mDaoSession);
+        return networkTrafficSensorDao;
     }
 
     /**
@@ -277,7 +340,7 @@ public final class DaoProvider {
      * @return
      */
     public CallLogSensorDao getCallLogSensorDao() {
-        return CallLogSensorDaoImpl.getInstance(mDaoSession);
+        return callLogSensorDao;
     }
 
     /**
@@ -286,7 +349,7 @@ public final class DaoProvider {
      * @return
      */
     public CalendarSensorDao getCalendarSensorDao() {
-        return CalendarSensorDaoImpl.getInstance(mDaoSession);
+        return calendarSensorDao;
     }
 
     /**
@@ -295,7 +358,7 @@ public final class DaoProvider {
      * @return
      */
     public CalendarReminderSensorDao getCalendarReminderSensorDao() {
-        return CalendarReminderSensorDaoImpl.getInstance(mDaoSession);
+        return calendarReminderSensorDao;
     }
 
     /**
@@ -304,7 +367,7 @@ public final class DaoProvider {
      * @return
      */
     public ConnectionSensorDao getConnectionSensorDao() {
-        return ConnectionSensorDaoImpl.getInstance(mDaoSession);
+        return connectionSensorDao;
     }
 
     /**
@@ -313,7 +376,7 @@ public final class DaoProvider {
      * @return
      */
     public WifiConnectionSensorDao getWifiConnectionSensorDao() {
-        return WifiConnectionSensorDaoImpl.getInstance(mDaoSession);
+        return wifiConnectionSensorDao;
     }
 
     /**
@@ -322,7 +385,7 @@ public final class DaoProvider {
      * @return
      */
     public PowerStateSensorDao getPowerStateSensorDao() {
-        return PowerStateSensorDaoImpl.getInstance(mDaoSession);
+        return powerStateSensorDao;
     }
 
     /**
@@ -331,7 +394,7 @@ public final class DaoProvider {
      * @return
      */
     public PowerLevelSensorDao getPowerLevelSensorDao() {
-        return PowerLevelSensorDaoImpl.getInstance(mDaoSession);
+        return powerLevelSensorDao;
     }
 
     /**
@@ -340,7 +403,7 @@ public final class DaoProvider {
      * @return
      */
     public LoudnessSensorDao getLoudnessSensorDao() {
-        return LoudnessSensorDaoImpl.getInstance(mDaoSession);
+        return loudnessSensorDao;
     }
 
     /**
@@ -349,7 +412,7 @@ public final class DaoProvider {
      * @return
      */
     public RingtoneSensorDao getRingtoneSensorDao() {
-        return RingtoneSensorDaoImpl.getInstance(mDaoSession);
+        return ringtoneSensorDao;
     }
 
     /**
@@ -358,7 +421,7 @@ public final class DaoProvider {
      * @return
      */
     public AccountReaderSensorDao getAccountReaderSensorDao() {
-        return AccountReaderSensorDaoImpl.getInstance(mDaoSession);
+        return accountReaderSensorDao;
     }
 
     /**
@@ -367,7 +430,7 @@ public final class DaoProvider {
      * @return
      */
     public BrowserHistorySensorDao getBrowserHistorySensorDao() {
-        return BrowserHistorySensorDaoImpl.getInstance(mDaoSession);
+        return browserHistorySensorDao;
     }
 
     /**
@@ -376,7 +439,7 @@ public final class DaoProvider {
      * @return
      */
     public ContactSensorDao getContactSensorDao() {
-        return ContactSensorDaoImpl.getInstance(mDaoSession);
+        return contactSensorDao;
     }
 
     /**
@@ -385,7 +448,7 @@ public final class DaoProvider {
      * @return
      */
     public ContactEmailSensorDao getContactEmailSensorDao() {
-        return ContactEmailSensorDaoImpl.getInstance(mDaoSession);
+        return contactEmailSensorDao;
     }
 
     /**
@@ -394,7 +457,7 @@ public final class DaoProvider {
      * @return
      */
     public ContactNumberSensorDao getContactNumberSensorDao() {
-        return ContactNumberSensorDaoImpl.getInstance(mDaoSession);
+        return contactNumberSensorDao;
     }
 
     /**
@@ -403,7 +466,7 @@ public final class DaoProvider {
      * @return
      */
     public RunningProcessesSensorDao getRunningProcessesSensorDao() {
-        return RunningProcessesSensorDaoImpl.getInstance(mDaoSession);
+        return runningProcessesSensorDao;
     }
 
     /**
@@ -412,7 +475,7 @@ public final class DaoProvider {
      * @return
      */
     public RunningServicesSensorDao getRunningServicesSensorDao() {
-        return RunningServicesSensorDaoImpl.getInstance(mDaoSession);
+        return runningServicesSensorDao;
     }
 
     /**
@@ -421,7 +484,7 @@ public final class DaoProvider {
      * @return
      */
     public RunningTasksSensorDao getRunningTasksSensorDao() {
-        return RunningTasksSensorDaoImpl.getInstance(mDaoSession);
+        return runningTasksSensorDao;
     }
 
     /**
@@ -430,7 +493,7 @@ public final class DaoProvider {
      * @return
      */
     public TucanSensorDao getTucanSensorDao() {
-        return TucanSensorDaoImpl.getInstance(mDaoSession);
+        return tucanSensorDao;
     }
 
     /**
@@ -439,11 +502,11 @@ public final class DaoProvider {
      * @return
      */
     public FacebookSensorDao getFacebookSensorDao() {
-        return FacebookSensorDaoImpl.getInstance(mDaoSession);
+        return facebookSensorDao;
     }
 
     /**
-     * Hard reset, really hard!
+     * Drop it like its hard!
      */
     public void hardReset() {
         DaoMaster.dropAllTables(mDb, true);

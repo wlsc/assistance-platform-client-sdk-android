@@ -84,7 +84,7 @@ public class HarvesterService extends Service implements Callback {
 
         Log.d(TAG, "Service starting...");
 
-        this.sensorProvider = SensorProvider.getInstance(getApplicationContext());
+        sensorProvider = SensorProvider.getInstance(getApplicationContext());
         mPreferenceProvider = PreferenceProvider.getInstance(getApplicationContext());
 
         String userToken = mPreferenceProvider.getUserToken();

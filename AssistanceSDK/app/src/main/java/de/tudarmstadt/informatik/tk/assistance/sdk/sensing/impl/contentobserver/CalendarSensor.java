@@ -17,6 +17,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbCalendarReminderSensor;
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbCalendarSensor;
 import de.tudarmstadt.informatik.tk.assistance.sdk.model.api.sensing.SensorApiType;
@@ -32,11 +35,10 @@ import de.tudarmstadt.informatik.tk.assistance.sdk.util.logger.Log;
  * @edited by Wladimir Schmidt (wlsc.dev@gmail.com)
  * @date 28.10.2015
  */
+@Singleton
 public final class CalendarSensor extends AbstractContentObserverSensor {
 
     private static final String TAG = CalendarSensor.class.getSimpleName();
-
-    private static CalendarSensor INSTANCE;
 
     static final Uri URI_CALENDAR = Events.CONTENT_URI;
     static final Uri URI_REMINDER = Reminders.CONTENT_URI;
@@ -82,25 +84,11 @@ public final class CalendarSensor extends AbstractContentObserverSensor {
 
     private String reminderSelection;
 
-    private CalendarSensor(Context context) {
+    @Inject
+    public CalendarSensor(Context context) {
         super(context);
         calendarReminderSensorDao = daoProvider.getCalendarReminderSensorDao();
         calendarSensorDao = daoProvider.getCalendarSensorDao();
-    }
-
-    /**
-     * Gives singleton of this class
-     *
-     * @param context
-     * @return
-     */
-    public static CalendarSensor getInstance(Context context) {
-
-        if (INSTANCE == null) {
-            INSTANCE = new CalendarSensor(context);
-        }
-
-        return INSTANCE;
     }
 
     @Override

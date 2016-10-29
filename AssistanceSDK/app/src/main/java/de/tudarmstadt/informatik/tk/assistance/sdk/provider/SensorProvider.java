@@ -11,7 +11,10 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import javax.inject.Inject;
+
 import de.greenrobot.event.EventBus;
+import de.tudarmstadt.informatik.tk.assistance.sdk.dagger.component.SdkComponent;
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbAccelerometerSensor;
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbBrowserHistorySensor;
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbCalendarReminderSensor;
@@ -76,7 +79,6 @@ import de.tudarmstadt.informatik.tk.assistance.sdk.sensing.impl.triggered.Accele
 import de.tudarmstadt.informatik.tk.assistance.sdk.sensing.impl.triggered.ConnectionSensor;
 import de.tudarmstadt.informatik.tk.assistance.sdk.sensing.impl.triggered.ForegroundSensor;
 import de.tudarmstadt.informatik.tk.assistance.sdk.sensing.impl.triggered.ForegroundTrafficSensor;
-import de.tudarmstadt.informatik.tk.assistance.sdk.sensing.impl.triggered.ForegroundTrafficSensor.Mode;
 import de.tudarmstadt.informatik.tk.assistance.sdk.sensing.impl.triggered.GyroscopeSensor;
 import de.tudarmstadt.informatik.tk.assistance.sdk.sensing.impl.triggered.LightSensor;
 import de.tudarmstadt.informatik.tk.assistance.sdk.sensing.impl.triggered.LocationSensor;
@@ -102,7 +104,74 @@ public final class SensorProvider {
 
     private static SensorProvider INSTANCE;
 
-    private Context mContext;
+    @Inject
+    Context mContext;
+
+    @Inject
+    AccelerometerSensor accelerometerSensor;
+
+    @Inject
+    ConnectionSensor connectionSensor;
+
+    @Inject
+    ForegroundSensor foregroundSensor;
+
+    @Inject
+    ForegroundTrafficSensor foregroundTrafficSensor;
+
+    @Inject
+    GyroscopeSensor gyroscopeSensor;
+
+    @Inject
+    LightSensor lightSensor;
+
+    @Inject
+    LocationSensor locationSensor;
+
+    @Inject
+    MagneticFieldSensor magneticFieldSensor;
+
+    @Inject
+    MotionActivitySensor motionActivitySensor;
+
+    @Inject
+    PowerLevelSensor powerLevelEvent;
+
+    @Inject
+    BackgroundTrafficSensor backgroundTrafficEvent;
+
+    @Inject
+    RingtoneSensor ringtoneEvent;
+
+    @Inject
+    LoudnessSensor loudnessSensor;
+
+    @Inject
+    RunningProcessesReaderSensor runningProcessesReaderEvent;
+
+    @Inject
+    RunningTasksReaderSensor runningTasksReaderEvent;
+
+    @Inject
+    RunningServicesReaderSensor runningServicesReaderEvent;
+
+    @Inject
+    BrowserHistorySensor browserHistoryEvent;
+
+    @Inject
+    CalendarSensor calendarEvent;
+
+    @Inject
+    ContactsSensor contactsEvent;
+
+    @Inject
+    CallLogSensor callLogEvent;
+
+    @Inject
+    TucanSensor tucanEvent;
+
+    @Inject
+    FacebookSensor facebookEvent;
 
     private static PreferenceProvider preferenceProvider;
 
@@ -116,26 +185,22 @@ public final class SensorProvider {
     private SensorProvider(Context context) {
         this.mContext = context;
 
+        SdkComponent.Initializer.INSTANCE.init(context).inject(this);
+
         preferenceProvider = PreferenceProvider.getInstance(context);
         daoProvider = DaoProvider.getInstance(context);
 
-        initSensors();
+        initAvailableSensors();
+        initEnabledSensors();
     }
 
     public static SensorProvider getInstance(Context ctx) {
 
         if (INSTANCE == null) {
             INSTANCE = new SensorProvider(ctx);
-        } else {
-            INSTANCE.setContextToSensors(ctx);
         }
 
         return INSTANCE;
-    }
-
-    private void initSensors() {
-        initAvailableSensors();
-        initEnabledSensors();
     }
 
     /**
@@ -149,83 +214,43 @@ public final class SensorProvider {
          * Triggered events / sensors
          */
 
-        AccelerometerSensor accelerometerSensor = AccelerometerSensor.getInstance(mContext);
         availableSensors.put(accelerometerSensor.getType(), accelerometerSensor);
-
-        ConnectionSensor connectionSensor = ConnectionSensor.getInstance(mContext);
         availableSensors.put(connectionSensor.getType(), connectionSensor);
-
-        ForegroundSensor foregroundSensor = ForegroundSensor.getInstance(mContext);
         availableSensors.put(foregroundSensor.getType(), foregroundSensor);
-
-        ForegroundTrafficSensor foregroundTrafficSensor = ForegroundTrafficSensor
-                .getInstance(mContext, Mode.PERIODIC);
         availableSensors.put(foregroundTrafficSensor.getType(), foregroundTrafficSensor);
-
-        GyroscopeSensor gyroscopeSensor = GyroscopeSensor.getInstance(mContext);
         availableSensors.put(gyroscopeSensor.getType(), gyroscopeSensor);
-
-        LightSensor lightSensor = LightSensor.getInstance(mContext);
         availableSensors.put(lightSensor.getType(), lightSensor);
-
-        LocationSensor locationSensor = LocationSensor.getInstance(mContext);
         availableSensors.put(locationSensor.getType(), locationSensor);
-
-        MagneticFieldSensor magneticFieldSensor = MagneticFieldSensor.getInstance(mContext);
         availableSensors.put(magneticFieldSensor.getType(), magneticFieldSensor);
-
-        MotionActivitySensor motionActivitySensor = MotionActivitySensor.getInstance(mContext);
         availableSensors.put(motionActivitySensor.getType(), motionActivitySensor);
 
         /*
          * Periodic events / sensors
          */
 
-        PowerLevelSensor powerLevelEvent = PowerLevelSensor.getInstance(mContext);
         availableSensors.put(powerLevelEvent.getType(), powerLevelEvent);
-
-        BackgroundTrafficSensor backgroundTrafficEvent = BackgroundTrafficSensor.getInstance(mContext);
         availableSensors.put(backgroundTrafficEvent.getType(), backgroundTrafficEvent);
-
-        RingtoneSensor ringtoneEvent = RingtoneSensor.getInstance(mContext);
         availableSensors.put(ringtoneEvent.getType(), ringtoneEvent);
 
         // loudness sensor is blocking microphone and consuming too much battery
-        LoudnessSensor loudnessSensor = LoudnessSensor.getInstance(mContext);
         availableSensors.put(loudnessSensor.getType(), loudnessSensor);
-
-        RunningProcessesReaderSensor runningProcessesReaderEvent = RunningProcessesReaderSensor.getInstance(mContext);
         availableSensors.put(runningProcessesReaderEvent.getType(), runningProcessesReaderEvent);
-
-        RunningTasksReaderSensor runningTasksReaderEvent = RunningTasksReaderSensor.getInstance(mContext);
         availableSensors.put(runningTasksReaderEvent.getType(), runningTasksReaderEvent);
-
-        RunningServicesReaderSensor runningServicesReaderEvent = RunningServicesReaderSensor.getInstance(mContext);
         availableSensors.put(runningServicesReaderEvent.getType(), runningServicesReaderEvent);
 
         /*
          *  Content observers
          */
 
-        BrowserHistorySensor browserHistoryEvent = BrowserHistorySensor.getInstance(mContext);
         availableSensors.put(browserHistoryEvent.getType(), browserHistoryEvent);
-
-        CalendarSensor calendarEvent = CalendarSensor.getInstance(mContext);
         availableSensors.put(calendarEvent.getType(), calendarEvent);
-
-        ContactsSensor contactsEvent = ContactsSensor.getInstance(mContext);
         availableSensors.put(contactsEvent.getType(), contactsEvent);
-
-        CallLogSensor callLogEvent = CallLogSensor.getInstance(mContext);
         availableSensors.put(callLogEvent.getType(), callLogEvent);
 
         /*
          *  GENERAL DUMMY SENSORS / EVENTS
          */
-        TucanSensor tucanEvent = TucanSensor.getInstance(mContext);
         availableSensors.put(tucanEvent.getType(), tucanEvent);
-
-        FacebookSensor facebookEvent = FacebookSensor.getInstance(mContext);
         availableSensors.put(facebookEvent.getType(), facebookEvent);
 
         Log.d(TAG, "Finished. Number of sensors: " + availableSensors.size());
@@ -460,42 +485,6 @@ public final class SensorProvider {
 
         sensor.stopSensor();
         runningSensors.remove(type);
-    }
-
-    /**
-     * Assigns given context to available sensors
-     *
-     * @param context
-     */
-    public void setContextToSensors(Context context) {
-
-        if (context == null) {
-            return;
-        }
-
-        for (int i = 0, size = availableSensors.size(); i < size; i++) {
-
-            ISensor sensor = availableSensors.valueAt(i);
-
-            if (sensor == null) {
-                continue;
-            }
-
-            sensor.setContext(context);
-        }
-
-        for (int i = 0, size = runningSensors.size(); i < size; i++) {
-
-            ISensor sensor = runningSensors.valueAt(i);
-
-            if (sensor == null) {
-                continue;
-            }
-
-            sensor.setContext(context);
-        }
-
-        mContext = context;
     }
 
     /**

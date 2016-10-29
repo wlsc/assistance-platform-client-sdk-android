@@ -9,6 +9,9 @@ import com.google.gson.JsonSyntaxException;
 import java.util.Collections;
 import java.util.List;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
 import de.tudarmstadt.informatik.tk.assistance.model.client.feedback.content.ClientFeedbackDto;
 import de.tudarmstadt.informatik.tk.assistance.model.client.feedback.content.ContentDto;
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DaoSession;
@@ -21,25 +24,16 @@ import de.tudarmstadt.informatik.tk.assistance.sdk.util.logger.Log;
  * @author Wladimir Schmidt (wlsc.dev@gmail.com)
  * @date 30.10.2015
  */
+@Singleton
 public final class NewsDaoImpl extends
         CommonDaoImpl<DbNews> implements
         NewsDao {
 
     private static final String TAG = NewsDaoImpl.class.getSimpleName();
 
-    private static NewsDao INSTANCE;
-
-    private NewsDaoImpl(DaoSession daoSession) {
+    @Inject
+    public NewsDaoImpl(DaoSession daoSession) {
         super(daoSession.getDbNewsDao());
-    }
-
-    public static NewsDao getInstance(DaoSession mDaoSession) {
-
-        if (INSTANCE == null) {
-            INSTANCE = new NewsDaoImpl(mDaoSession);
-        }
-
-        return INSTANCE;
     }
 
     /**

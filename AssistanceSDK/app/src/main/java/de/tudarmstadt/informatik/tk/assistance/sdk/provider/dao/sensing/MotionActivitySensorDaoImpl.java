@@ -2,6 +2,9 @@ package de.tudarmstadt.informatik.tk.assistance.sdk.provider.dao.sensing;
 
 import android.support.annotation.Nullable;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DaoSession;
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbMotionActivitySensor;
 import de.tudarmstadt.informatik.tk.assistance.sdk.model.api.sensing.sensor.MotionActivitySensorDto;
@@ -10,25 +13,16 @@ import de.tudarmstadt.informatik.tk.assistance.sdk.model.api.sensing.sensor.Moti
  * @author Wladimir Schmidt (wlsc.dev@gmail.com)
  * @date 30.10.2015
  */
+@Singleton
 public final class MotionActivitySensorDaoImpl extends
         CommonEventDaoImpl<DbMotionActivitySensor> implements
         MotionActivitySensorDao {
 
     private static final String TAG = MotionActivitySensorDaoImpl.class.getSimpleName();
 
-    private static MotionActivitySensorDao INSTANCE;
-
-    private MotionActivitySensorDaoImpl(DaoSession daoSession) {
+    @Inject
+    public MotionActivitySensorDaoImpl(DaoSession daoSession) {
         super(daoSession.getDbMotionActivitySensorDao());
-    }
-
-    public static MotionActivitySensorDao getInstance(DaoSession mDaoSession) {
-
-        if (INSTANCE == null) {
-            INSTANCE = new MotionActivitySensorDaoImpl(mDaoSession);
-        }
-
-        return INSTANCE;
     }
 
     @Nullable

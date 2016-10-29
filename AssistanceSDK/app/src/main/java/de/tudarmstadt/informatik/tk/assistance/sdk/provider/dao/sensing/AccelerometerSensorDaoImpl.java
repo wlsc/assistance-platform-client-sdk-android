@@ -2,6 +2,9 @@ package de.tudarmstadt.informatik.tk.assistance.sdk.provider.dao.sensing;
 
 import android.support.annotation.Nullable;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DaoSession;
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbAccelerometerSensor;
 import de.tudarmstadt.informatik.tk.assistance.sdk.model.api.sensing.sensor.AccelerometerSensorDto;
@@ -10,25 +13,16 @@ import de.tudarmstadt.informatik.tk.assistance.sdk.model.api.sensing.sensor.Acce
  * @author Wladimir Schmidt (wlsc.dev@gmail.com)
  * @date 30.10.2015
  */
+@Singleton
 public final class AccelerometerSensorDaoImpl extends
         CommonEventDaoImpl<DbAccelerometerSensor> implements
         AccelerometerSensorDao {
 
     private static final String TAG = AccelerometerSensorDaoImpl.class.getSimpleName();
 
-    private static AccelerometerSensorDao INSTANCE;
-
-    private AccelerometerSensorDaoImpl(DaoSession daoSession) {
+    @Inject
+    public AccelerometerSensorDaoImpl(DaoSession daoSession) {
         super(daoSession.getDbAccelerometerSensorDao());
-    }
-
-    public static AccelerometerSensorDao getInstance(DaoSession mDaoSession) {
-
-        if (INSTANCE == null) {
-            INSTANCE = new AccelerometerSensorDaoImpl(mDaoSession);
-        }
-
-        return INSTANCE;
     }
 
     /**

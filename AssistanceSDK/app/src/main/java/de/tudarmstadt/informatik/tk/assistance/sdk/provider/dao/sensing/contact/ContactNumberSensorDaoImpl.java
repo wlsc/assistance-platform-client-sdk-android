@@ -7,6 +7,9 @@ import org.greenrobot.greendao.Property;
 import java.util.Collections;
 import java.util.List;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DaoSession;
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbContactNumberSensor;
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbContactNumberSensorDao.Properties;
@@ -17,25 +20,16 @@ import de.tudarmstadt.informatik.tk.assistance.sdk.provider.dao.sensing.CommonEv
  * @author Wladimir Schmidt (wlsc.dev@gmail.com)
  * @date 24.11.2015
  */
+@Singleton
 public final class ContactNumberSensorDaoImpl extends
         CommonEventDaoImpl<DbContactNumberSensor> implements
         ContactNumberSensorDao {
 
     private static final String TAG = ContactNumberSensorDaoImpl.class.getSimpleName();
 
-    private static ContactNumberSensorDao INSTANCE;
-
-    private ContactNumberSensorDaoImpl(DaoSession daoSession) {
+    @Inject
+    public ContactNumberSensorDaoImpl(DaoSession daoSession) {
         super(daoSession.getDbContactNumberSensorDao());
-    }
-
-    public static ContactNumberSensorDao getInstance(DaoSession mDaoSession) {
-
-        if (INSTANCE == null) {
-            INSTANCE = new ContactNumberSensorDaoImpl(mDaoSession);
-        }
-
-        return INSTANCE;
     }
 
     @Nullable

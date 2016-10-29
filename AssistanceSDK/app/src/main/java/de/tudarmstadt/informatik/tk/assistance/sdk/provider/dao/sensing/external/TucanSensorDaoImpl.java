@@ -2,6 +2,9 @@ package de.tudarmstadt.informatik.tk.assistance.sdk.provider.dao.sensing.externa
 
 import android.support.annotation.Nullable;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DaoSession;
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbTucanSensor;
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbTucanSensorDao.Properties;
@@ -12,25 +15,16 @@ import de.tudarmstadt.informatik.tk.assistance.sdk.model.api.sensing.sensor.exte
  * @author Wladimir Schmidt (wlsc.dev@gmail.com)
  * @date 17.01.2016
  */
+@Singleton
 public final class TucanSensorDaoImpl extends
         CommonSocialEventDaoImpl<DbTucanSensor> implements
         TucanSensorDao {
 
     private static final String TAG = TucanSensorDaoImpl.class.getSimpleName();
 
-    private static TucanSensorDao INSTANCE;
-
-    private TucanSensorDaoImpl(DaoSession daoSession) {
+    @Inject
+    public TucanSensorDaoImpl(DaoSession daoSession) {
         super(daoSession.getDbTucanSensorDao());
-    }
-
-    public static TucanSensorDao getInstance(DaoSession mDaoSession) {
-
-        if (INSTANCE == null) {
-            INSTANCE = new TucanSensorDaoImpl(mDaoSession);
-        }
-
-        return INSTANCE;
     }
 
     @Nullable

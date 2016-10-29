@@ -7,6 +7,9 @@ import org.greenrobot.greendao.Property;
 import java.util.Collections;
 import java.util.List;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DaoSession;
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbCallLogSensor;
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbCallLogSensorDao.Properties;
@@ -16,25 +19,16 @@ import de.tudarmstadt.informatik.tk.assistance.sdk.model.api.sensing.sensor.Call
  * @author Wladimir Schmidt (wlsc.dev@gmail.com)
  * @date 30.10.2015
  */
+@Singleton
 public final class CallLogSensorDaoImpl extends
         CommonEventDaoImpl<DbCallLogSensor> implements
         CallLogSensorDao {
 
     private static final String TAG = CallLogSensorDaoImpl.class.getSimpleName();
 
-    private static CallLogSensorDao INSTANCE;
-
-    private CallLogSensorDaoImpl(DaoSession daoSession) {
+    @Inject
+    public CallLogSensorDaoImpl(DaoSession daoSession) {
         super(daoSession.getDbCallLogSensorDao());
-    }
-
-    public static CallLogSensorDao getInstance(DaoSession mDaoSession) {
-
-        if (INSTANCE == null) {
-            INSTANCE = new CallLogSensorDaoImpl(mDaoSession);
-        }
-
-        return INSTANCE;
     }
 
     @Nullable

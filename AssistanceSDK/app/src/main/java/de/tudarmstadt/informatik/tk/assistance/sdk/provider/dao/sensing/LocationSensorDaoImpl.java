@@ -2,6 +2,9 @@ package de.tudarmstadt.informatik.tk.assistance.sdk.provider.dao.sensing;
 
 import android.support.annotation.Nullable;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DaoSession;
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbPositionSensor;
 import de.tudarmstadt.informatik.tk.assistance.sdk.model.api.sensing.sensor.LocationSensorDto;
@@ -10,25 +13,16 @@ import de.tudarmstadt.informatik.tk.assistance.sdk.model.api.sensing.sensor.Loca
  * @author Wladimir Schmidt (wlsc.dev@gmail.com)
  * @date 30.10.2015
  */
+@Singleton
 public final class LocationSensorDaoImpl extends
         CommonEventDaoImpl<DbPositionSensor> implements
         LocationSensorDao {
 
     private static final String TAG = LocationSensorDaoImpl.class.getSimpleName();
 
-    private static LocationSensorDao INSTANCE;
-
-    private LocationSensorDaoImpl(DaoSession daoSession) {
+    @Inject
+    public LocationSensorDaoImpl(DaoSession daoSession) {
         super(daoSession.getDbPositionSensorDao());
-    }
-
-    public static LocationSensorDao getInstance(DaoSession mDaoSession) {
-
-        if (INSTANCE == null) {
-            INSTANCE = new LocationSensorDaoImpl(mDaoSession);
-        }
-
-        return INSTANCE;
     }
 
     /**

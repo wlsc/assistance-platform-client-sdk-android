@@ -7,6 +7,9 @@ import org.greenrobot.greendao.Property;
 import java.util.Collections;
 import java.util.List;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DaoSession;
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbCalendarReminderSensor;
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbCalendarReminderSensorDao.Properties;
@@ -17,25 +20,16 @@ import de.tudarmstadt.informatik.tk.assistance.sdk.provider.dao.sensing.CommonEv
  * @author Wladimir Schmidt (wlsc.dev@gmail.com)
  * @date 30.10.2015
  */
+@Singleton
 public final class CalendarReminderSensorDaoImpl extends
         CommonEventDaoImpl<DbCalendarReminderSensor> implements
         CalendarReminderSensorDao {
 
     private static final String TAG = CalendarReminderSensorDaoImpl.class.getSimpleName();
 
-    private static CalendarReminderSensorDao INSTANCE;
-
-    private CalendarReminderSensorDaoImpl(DaoSession daoSession) {
+    @Inject
+    public CalendarReminderSensorDaoImpl(DaoSession daoSession) {
         super(daoSession.getDbCalendarReminderSensorDao());
-    }
-
-    public static CalendarReminderSensorDao getInstance(DaoSession mDaoSession) {
-
-        if (INSTANCE == null) {
-            INSTANCE = new CalendarReminderSensorDaoImpl(mDaoSession);
-        }
-
-        return INSTANCE;
     }
 
     @Nullable

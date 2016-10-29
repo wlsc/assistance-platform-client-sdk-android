@@ -8,6 +8,9 @@ import com.google.gson.reflect.TypeToken;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DaoSession;
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbFacebookSensor;
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbFacebookSensorDao.Properties;
@@ -18,25 +21,16 @@ import de.tudarmstadt.informatik.tk.assistance.sdk.model.api.sensing.sensor.exte
  * @author Wladimir Schmidt (wlsc.dev@gmail.com)
  * @date 17.01.2016
  */
+@Singleton
 public final class FacebookSensorDaoImpl extends
         CommonSocialEventDaoImpl<DbFacebookSensor> implements
         FacebookSensorDao {
 
     private static final String TAG = FacebookSensorDaoImpl.class.getSimpleName();
 
-    private static FacebookSensorDao INSTANCE;
-
-    private FacebookSensorDaoImpl(DaoSession daoSession) {
+    @Inject
+    public FacebookSensorDaoImpl(DaoSession daoSession) {
         super(daoSession.getDbFacebookSensorDao());
-    }
-
-    public static FacebookSensorDao getInstance(DaoSession mDaoSession) {
-
-        if (INSTANCE == null) {
-            INSTANCE = new FacebookSensorDaoImpl(mDaoSession);
-        }
-
-        return INSTANCE;
     }
 
     @Nullable

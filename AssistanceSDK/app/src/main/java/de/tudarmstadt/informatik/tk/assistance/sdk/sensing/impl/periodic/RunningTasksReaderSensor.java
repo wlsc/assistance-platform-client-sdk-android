@@ -9,6 +9,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbRunningTasksSensor;
 import de.tudarmstadt.informatik.tk.assistance.sdk.model.api.sensing.SensorApiType;
 import de.tudarmstadt.informatik.tk.assistance.sdk.provider.PreferenceProvider;
@@ -21,11 +24,10 @@ import de.tudarmstadt.informatik.tk.assistance.sdk.util.logger.Log;
  * @edited by Wladimir Schmidt (wlsc.dev@gmail.com)
  * @date 24.11.2015
  */
+@Singleton
 public final class RunningTasksReaderSensor extends AbstractPeriodicSensor {
 
     private static final String TAG = RunningTasksReaderSensor.class.getSimpleName();
-
-    private static RunningTasksReaderSensor INSTANCE;
 
     private static final int MAXIMUM_TASKS = 10;
 
@@ -37,28 +39,14 @@ public final class RunningTasksReaderSensor extends AbstractPeriodicSensor {
     private String currentTaskName;
     private int currentStackPosition;
 
-    private RunningTasksReaderSensor(Context context) {
+    @Inject
+    public RunningTasksReaderSensor(Context context) {
         super(context);
 
         setDataIntervalInSec(UPDATE_INTERVAL_IN_SEC);
 
         mActivityManager = (ActivityManager) context
                 .getSystemService(Context.ACTIVITY_SERVICE);
-    }
-
-    /**
-     * Gives singleton of this class
-     *
-     * @param context
-     * @return
-     */
-    public static RunningTasksReaderSensor getInstance(Context context) {
-
-        if (INSTANCE == null) {
-            INSTANCE = new RunningTasksReaderSensor(context);
-        }
-
-        return INSTANCE;
     }
 
     @Override

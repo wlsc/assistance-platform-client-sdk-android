@@ -2,6 +2,9 @@ package de.tudarmstadt.informatik.tk.assistance.sdk.provider.dao.sensing.connect
 
 import android.support.annotation.Nullable;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DaoSession;
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbMobileConnectionSensor;
 import de.tudarmstadt.informatik.tk.assistance.sdk.model.api.sensing.sensor.MobileConnectionSensorDto;
@@ -11,25 +14,16 @@ import de.tudarmstadt.informatik.tk.assistance.sdk.provider.dao.sensing.CommonEv
  * @author Wladimir Schmidt (wlsc.dev@gmail.com)
  * @date 30.10.2015
  */
+@Singleton
 public final class MobileConnectionSensorDaoImpl extends
         CommonEventDaoImpl<DbMobileConnectionSensor> implements
         MobileConnectionSensorDao {
 
     private static final String TAG = MobileConnectionSensorDaoImpl.class.getSimpleName();
 
-    private static MobileConnectionSensorDao INSTANCE;
-
-    private MobileConnectionSensorDaoImpl(DaoSession daoSession) {
+    @Inject
+    public MobileConnectionSensorDaoImpl(DaoSession daoSession) {
         super(daoSession.getDbMobileConnectionSensorDao());
-    }
-
-    public static MobileConnectionSensorDao getInstance(DaoSession mDaoSession) {
-
-        if (INSTANCE == null) {
-            INSTANCE = new MobileConnectionSensorDaoImpl(mDaoSession);
-        }
-
-        return INSTANCE;
     }
 
     @Nullable

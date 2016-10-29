@@ -2,6 +2,9 @@ package de.tudarmstadt.informatik.tk.assistance.sdk.provider.dao.sensing.connect
 
 import android.support.annotation.Nullable;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DaoSession;
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbWifiConnectionSensor;
 import de.tudarmstadt.informatik.tk.assistance.sdk.model.api.sensing.sensor.WifiConnectionSensorDto;
@@ -11,25 +14,16 @@ import de.tudarmstadt.informatik.tk.assistance.sdk.provider.dao.sensing.CommonEv
  * @author Wladimir Schmidt (wlsc.dev@gmail.com)
  * @date 30.10.2015
  */
+@Singleton
 public final class WifiConnectionSensorDaoImpl extends
         CommonEventDaoImpl<DbWifiConnectionSensor> implements
         WifiConnectionSensorDao {
 
     private static final String TAG = WifiConnectionSensorDaoImpl.class.getSimpleName();
 
-    private static WifiConnectionSensorDao INSTANCE;
-
-    private WifiConnectionSensorDaoImpl(DaoSession daoSession) {
+    @Inject
+    public WifiConnectionSensorDaoImpl(DaoSession daoSession) {
         super(daoSession.getDbWifiConnectionSensorDao());
-    }
-
-    public static WifiConnectionSensorDao getInstance(DaoSession mDaoSession) {
-
-        if (INSTANCE == null) {
-            INSTANCE = new WifiConnectionSensorDaoImpl(mDaoSession);
-        }
-
-        return INSTANCE;
     }
 
     @Nullable

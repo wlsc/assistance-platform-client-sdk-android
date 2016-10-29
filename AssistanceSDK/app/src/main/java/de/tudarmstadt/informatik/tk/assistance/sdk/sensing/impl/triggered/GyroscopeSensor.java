@@ -11,6 +11,9 @@ import android.os.Build.VERSION_CODES;
 import java.util.Date;
 import java.util.Locale;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbGyroscopeSensor;
 import de.tudarmstadt.informatik.tk.assistance.sdk.model.api.sensing.SensorApiType;
 import de.tudarmstadt.informatik.tk.assistance.sdk.provider.PreferenceProvider;
@@ -24,6 +27,7 @@ import de.tudarmstadt.informatik.tk.assistance.sdk.util.logger.Log;
  * @author Wladimir Schmidt (wlsc.dev@gmail.com)
  * @date 27.10.2015
  */
+@Singleton
 public final class GyroscopeSensor extends
         AbstractTriggeredSensor implements
         SensorEventListener {
@@ -34,8 +38,6 @@ public final class GyroscopeSensor extends
     private static final int DELAY_BETWEEN_TWO_EVENTS = SensorManager.SENSOR_DELAY_NORMAL;
     private int UPDATE_INTERVAL_IN_SEC = 10;
     // -----------------------------------------------------
-
-    private static GyroscopeSensor INSTANCE;
 
     private long mLastEventDumpingTimestamp;    // in nanoseconds
 
@@ -55,7 +57,8 @@ public final class GyroscopeSensor extends
     private float yUncalibratedEstimatedDrift;
     private float zUncalibratedEstimatedDrift;
 
-    private GyroscopeSensor(Context context) {
+    @Inject
+    public GyroscopeSensor(Context context) {
         super(context);
 
         mSensorManager = (SensorManager) context
@@ -68,21 +71,6 @@ public final class GyroscopeSensor extends
             mGyroscopeUncalibratedSensor = mSensorManager
                     .getDefaultSensor(Sensor.TYPE_GYROSCOPE_UNCALIBRATED);
         }
-    }
-
-    /**
-     * Returns singleton of this class
-     *
-     * @param context
-     * @return
-     */
-    public static GyroscopeSensor getInstance(Context context) {
-
-        if (INSTANCE == null) {
-            INSTANCE = new GyroscopeSensor(context);
-        }
-
-        return INSTANCE;
     }
 
     /**

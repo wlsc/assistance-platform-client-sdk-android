@@ -7,6 +7,9 @@ import org.greenrobot.greendao.Property;
 import java.util.Collections;
 import java.util.List;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DaoSession;
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbNetworkTrafficSensor;
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbNetworkTrafficSensorDao.Properties;
@@ -16,25 +19,16 @@ import de.tudarmstadt.informatik.tk.assistance.sdk.model.api.sensing.sensor.Netw
  * @author Wladimir Schmidt (wlsc.dev@gmail.com)
  * @date 30.10.2015
  */
+@Singleton
 public final class NetworkTrafficSensorDaoImpl extends
         CommonEventDaoImpl<DbNetworkTrafficSensor> implements
         NetworkTrafficSensorDao {
 
     private static final String TAG = NetworkTrafficSensorDaoImpl.class.getSimpleName();
 
-    private static NetworkTrafficSensorDao INSTANCE;
-
-    private NetworkTrafficSensorDaoImpl(DaoSession daoSession) {
+    @Inject
+    public NetworkTrafficSensorDaoImpl(DaoSession daoSession) {
         super(daoSession.getDbNetworkTrafficSensorDao());
-    }
-
-    public static NetworkTrafficSensorDao getInstance(DaoSession mDaoSession) {
-
-        if (INSTANCE == null) {
-            INSTANCE = new NetworkTrafficSensorDaoImpl(mDaoSession);
-        }
-
-        return INSTANCE;
     }
 
     @Nullable

@@ -10,6 +10,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbNetworkTrafficSensor;
 import de.tudarmstadt.informatik.tk.assistance.sdk.model.api.sensing.SensorApiType;
 import de.tudarmstadt.informatik.tk.assistance.sdk.model.enums.EPushType;
@@ -29,11 +32,10 @@ import de.tudarmstadt.informatik.tk.assistance.sdk.util.logger.Log;
  * @edited by Wladimir Schmidt (wlsc.dev@gmail.com)
  * @date 24.11.2015
  */
+@Singleton
 public final class BackgroundTrafficSensor extends AbstractPeriodicSensor {
 
     private static final String TAG = BackgroundTrafficSensor.class.getSimpleName();
-
-    private static BackgroundTrafficSensor INSTANCE;
 
     private int UPDATE_INTERVAL_IN_SEC = 5 * 60;
 
@@ -44,8 +46,16 @@ public final class BackgroundTrafficSensor extends AbstractPeriodicSensor {
      *
      * @param context global information about assistance app
      */
-    private BackgroundTrafficSensor(Context context) {
+    @Inject
+    public BackgroundTrafficSensor(Context context) {
         super(context);
+        init();
+    }
+
+    /**
+     * Initializer
+     */
+    private void init() {
 
         setDataIntervalInSec(UPDATE_INTERVAL_IN_SEC);
 
@@ -80,21 +90,6 @@ public final class BackgroundTrafficSensor extends AbstractPeriodicSensor {
         Log.d(TAG, "Finished");
 
         getData();
-    }
-
-    /**
-     * Gives singleton of this class
-     *
-     * @param context
-     * @return
-     */
-    public static BackgroundTrafficSensor getInstance(Context context) {
-
-        if (INSTANCE == null) {
-            INSTANCE = new BackgroundTrafficSensor(context);
-        }
-
-        return INSTANCE;
     }
 
     /**

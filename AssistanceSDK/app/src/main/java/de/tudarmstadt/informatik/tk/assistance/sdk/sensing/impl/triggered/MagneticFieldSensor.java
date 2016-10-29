@@ -11,6 +11,9 @@ import android.os.Build.VERSION_CODES;
 import java.util.Date;
 import java.util.Locale;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbMagneticFieldSensor;
 import de.tudarmstadt.informatik.tk.assistance.sdk.model.api.sensing.SensorApiType;
 import de.tudarmstadt.informatik.tk.assistance.sdk.provider.PreferenceProvider;
@@ -22,6 +25,7 @@ import de.tudarmstadt.informatik.tk.assistance.sdk.util.logger.Log;
  * @author Wladimir Schmidt (wlsc.dev@gmail.com)
  * @date 27.10.2015
  */
+@Singleton
 public final class MagneticFieldSensor extends AbstractTriggeredSensor implements SensorEventListener {
 
     private static final String TAG = MagneticFieldSensor.class.getSimpleName();
@@ -30,8 +34,6 @@ public final class MagneticFieldSensor extends AbstractTriggeredSensor implement
     private static final int DELAY_BETWEEN_TWO_EVENTS = SensorManager.SENSOR_DELAY_NORMAL;
     private int UPDATE_INTERVAL_IN_SEC = 10;
     // -----------------------------------------------------
-
-    private static MagneticFieldSensor INSTANCE;
 
     private long mLastEventDumpingTimestamp;    // in nanoseconds
 
@@ -51,7 +53,8 @@ public final class MagneticFieldSensor extends AbstractTriggeredSensor implement
     private float yUncalibratedEstimatedIronBias;
     private float zUncalibratedEstimatedIronBias;
 
-    private MagneticFieldSensor(Context context) {
+    @Inject
+    public MagneticFieldSensor(Context context) {
         super(context);
 
         mSensorManager = (SensorManager) context
@@ -64,21 +67,6 @@ public final class MagneticFieldSensor extends AbstractTriggeredSensor implement
             mMagneticFieldUncalibratedSensor = mSensorManager
                     .getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD_UNCALIBRATED);
         }
-    }
-
-    /**
-     * Returns singleton of this class
-     *
-     * @param context
-     * @return
-     */
-    public static MagneticFieldSensor getInstance(Context context) {
-
-        if (INSTANCE == null) {
-            INSTANCE = new MagneticFieldSensor(context);
-        }
-
-        return INSTANCE;
     }
 
     /**

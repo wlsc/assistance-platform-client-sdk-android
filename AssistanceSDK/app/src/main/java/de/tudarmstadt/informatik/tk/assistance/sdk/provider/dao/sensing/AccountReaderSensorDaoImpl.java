@@ -2,6 +2,9 @@ package de.tudarmstadt.informatik.tk.assistance.sdk.provider.dao.sensing;
 
 import android.support.annotation.Nullable;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DaoSession;
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbAccountReaderSensor;
 import de.tudarmstadt.informatik.tk.assistance.sdk.model.api.SensorDto;
@@ -11,25 +14,16 @@ import de.tudarmstadt.informatik.tk.assistance.sdk.model.api.sensing.sensor.Acco
  * @author Wladimir Schmidt (wlsc.dev@gmail.com)
  * @date 24.11.2015
  */
+@Singleton
 public final class AccountReaderSensorDaoImpl extends
         CommonEventDaoImpl<DbAccountReaderSensor> implements
         AccountReaderSensorDao {
 
     private static final String TAG = AccountReaderSensorDaoImpl.class.getSimpleName();
 
-    private static AccountReaderSensorDao INSTANCE;
-
-    private AccountReaderSensorDaoImpl(DaoSession daoSession) {
+    @Inject
+    public AccountReaderSensorDaoImpl(DaoSession daoSession) {
         super(daoSession.getDbAccountReaderSensorDao());
-    }
-
-    public static AccountReaderSensorDao getInstance(DaoSession mDaoSession) {
-
-        if (INSTANCE == null) {
-            INSTANCE = new AccountReaderSensorDaoImpl(mDaoSession);
-        }
-
-        return INSTANCE;
     }
 
     @Nullable

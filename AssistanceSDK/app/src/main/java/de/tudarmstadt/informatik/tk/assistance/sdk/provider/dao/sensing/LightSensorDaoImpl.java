@@ -2,6 +2,9 @@ package de.tudarmstadt.informatik.tk.assistance.sdk.provider.dao.sensing;
 
 import android.support.annotation.Nullable;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DaoSession;
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbLightSensor;
 import de.tudarmstadt.informatik.tk.assistance.sdk.model.api.sensing.sensor.LightSensorDto;
@@ -10,25 +13,16 @@ import de.tudarmstadt.informatik.tk.assistance.sdk.model.api.sensing.sensor.Ligh
  * @author Wladimir Schmidt (wlsc.dev@gmail.com)
  * @date 30.10.2015
  */
+@Singleton
 public final class LightSensorDaoImpl extends
         CommonEventDaoImpl<DbLightSensor> implements
         LightSensorDao {
 
     private static final String TAG = LightSensorDaoImpl.class.getSimpleName();
 
-    private static LightSensorDao INSTANCE;
-
-    private LightSensorDaoImpl(DaoSession daoSession) {
+    @Inject
+    public LightSensorDaoImpl(DaoSession daoSession) {
         super(daoSession.getDbLightSensorDao());
-    }
-
-    public static LightSensorDao getInstance(DaoSession mDaoSession) {
-
-        if (INSTANCE == null) {
-            INSTANCE = new LightSensorDaoImpl(mDaoSession);
-        }
-
-        return INSTANCE;
     }
 
     @Nullable

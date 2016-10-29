@@ -5,6 +5,8 @@ import android.content.Intent;
 
 import com.google.android.gms.location.ActivityRecognitionResult;
 
+import de.tudarmstadt.informatik.tk.assistance.sdk.model.api.sensing.SensorApiType;
+import de.tudarmstadt.informatik.tk.assistance.sdk.provider.SensorProvider;
 import de.tudarmstadt.informatik.tk.assistance.sdk.sensing.impl.triggered.MotionActivitySensor;
 import de.tudarmstadt.informatik.tk.assistance.sdk.util.logger.Log;
 
@@ -25,7 +27,9 @@ public class ActivitySensorService extends IntentService {
 
             ActivityRecognitionResult result = ActivityRecognitionResult.extractResult(intent);
 
-            MotionActivitySensor motionActivitySensor = MotionActivitySensor.getInstance(getApplicationContext());
+            final SensorProvider sensorProvider = SensorProvider.getInstance(getApplicationContext());
+            final MotionActivitySensor motionActivitySensor =
+                    (MotionActivitySensor) sensorProvider.getEnabledSensor(SensorApiType.MOTION_ACTIVITY);
 
             if (result != null && motionActivitySensor != null) {
 

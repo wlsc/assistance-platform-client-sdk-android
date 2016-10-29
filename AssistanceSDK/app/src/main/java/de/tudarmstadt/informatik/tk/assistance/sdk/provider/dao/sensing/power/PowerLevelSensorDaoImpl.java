@@ -2,6 +2,9 @@ package de.tudarmstadt.informatik.tk.assistance.sdk.provider.dao.sensing.power;
 
 import android.support.annotation.Nullable;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DaoSession;
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbPowerLevelSensor;
 import de.tudarmstadt.informatik.tk.assistance.sdk.model.api.SensorDto;
@@ -12,25 +15,16 @@ import de.tudarmstadt.informatik.tk.assistance.sdk.provider.dao.sensing.CommonEv
  * @author Wladimir Schmidt (wlsc.dev@gmail.com)
  * @date 08.12.2015
  */
+@Singleton
 public final class PowerLevelSensorDaoImpl extends
         CommonEventDaoImpl<DbPowerLevelSensor> implements
         PowerLevelSensorDao {
 
     private static final String TAG = PowerLevelSensorDaoImpl.class.getSimpleName();
 
-    private static PowerLevelSensorDao INSTANCE;
-
-    private PowerLevelSensorDaoImpl(DaoSession daoSession) {
+    @Inject
+    public PowerLevelSensorDaoImpl(DaoSession daoSession) {
         super(daoSession.getDbPowerLevelSensorDao());
-    }
-
-    public static PowerLevelSensorDao getInstance(DaoSession mDaoSession) {
-
-        if (INSTANCE == null) {
-            INSTANCE = new PowerLevelSensorDaoImpl(mDaoSession);
-        }
-
-        return INSTANCE;
     }
 
     @Nullable

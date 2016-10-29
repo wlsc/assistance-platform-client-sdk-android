@@ -2,6 +2,9 @@ package de.tudarmstadt.informatik.tk.assistance.sdk.provider.dao.sensing;
 
 import android.support.annotation.Nullable;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DaoSession;
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbGyroscopeSensor;
 import de.tudarmstadt.informatik.tk.assistance.sdk.model.api.sensing.sensor.GyroscopeSensorDto;
@@ -10,25 +13,16 @@ import de.tudarmstadt.informatik.tk.assistance.sdk.model.api.sensing.sensor.Gyro
  * @author Wladimir Schmidt (wlsc.dev@gmail.com)
  * @date 30.10.2015
  */
+@Singleton
 public final class GyroscopeSensorDaoImpl extends
         CommonEventDaoImpl<DbGyroscopeSensor> implements
         GyroscopeSensorDao {
 
     private static final String TAG = GyroscopeSensorDaoImpl.class.getSimpleName();
 
-    private static GyroscopeSensorDao INSTANCE;
-
-    private GyroscopeSensorDaoImpl(DaoSession daoSession) {
+    @Inject
+    public GyroscopeSensorDaoImpl(DaoSession daoSession) {
         super(daoSession.getDbGyroscopeSensorDao());
-    }
-
-    public static GyroscopeSensorDao getInstance(DaoSession mDaoSession) {
-
-        if (INSTANCE == null) {
-            INSTANCE = new GyroscopeSensorDaoImpl(mDaoSession);
-        }
-
-        return INSTANCE;
     }
 
     @Nullable

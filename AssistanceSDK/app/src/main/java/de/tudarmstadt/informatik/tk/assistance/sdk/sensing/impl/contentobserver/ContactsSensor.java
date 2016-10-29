@@ -30,6 +30,9 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbContactEmailSensor;
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbContactNumberSensor;
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbContactSensor;
@@ -47,11 +50,10 @@ import de.tudarmstadt.informatik.tk.assistance.sdk.util.logger.Log;
  * @edited by Wladimir Schmidt (wlsc.dev@gmail.com)
  * @date 24.11.2015
  */
+@Singleton
 public final class ContactsSensor extends AbstractContentObserverSensor {
 
     private static final String TAG = ContactsSensor.class.getSimpleName();
-
-    private static ContactsSensor INSTANCE;
 
     private static final Uri URI_EMAIL = Email.CONTENT_URI;
     private static final Uri URI_DATA = Data.CONTENT_URI;
@@ -64,23 +66,9 @@ public final class ContactsSensor extends AbstractContentObserverSensor {
 
     private AsyncTask<Void, Void, Void> asyncTask;
 
-    private ContactsSensor(Context context) {
+    @Inject
+    public ContactsSensor(Context context) {
         super(context);
-    }
-
-    /**
-     * Gives singleton of this class
-     *
-     * @param context
-     * @return
-     */
-    public static ContactsSensor getInstance(Context context) {
-
-        if (INSTANCE == null) {
-            INSTANCE = new ContactsSensor(context);
-        }
-
-        return INSTANCE;
     }
 
     @Override

@@ -5,6 +5,9 @@ import android.net.Uri;
 
 import java.lang.reflect.Method;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
 import de.tudarmstadt.informatik.tk.assistance.sdk.model.api.sensing.SensorApiType;
 import de.tudarmstadt.informatik.tk.assistance.sdk.sensing.impl.AbstractContentObserverSensor;
 import de.tudarmstadt.informatik.tk.assistance.sdk.util.logger.Log;
@@ -13,11 +16,10 @@ import de.tudarmstadt.informatik.tk.assistance.sdk.util.logger.Log;
 /**
  * @author Karsten Planz
  */
+@Singleton
 public final class BrowserHistorySensor extends AbstractContentObserverSensor {
 
     private static final String TAG = BrowserHistorySensor.class.getSimpleName();
-
-    private static BrowserHistorySensor INSTANCE;
 
     // this one was deleted in SDK 23
     //        protected static final Uri URI_BROWSER_HISTORY = Browser.BOOKMARKS_URI;
@@ -31,23 +33,9 @@ public final class BrowserHistorySensor extends AbstractContentObserverSensor {
     private Method m_checkDifferenceMethodForHistoryChange;
     private Method m_getKeyMethodForSensorContact;
 
-    private BrowserHistorySensor(Context context) {
+    @Inject
+    public BrowserHistorySensor(Context context) {
         super(context);
-    }
-
-    /**
-     * Gives singleton of this class
-     *
-     * @param context
-     * @return
-     */
-    public static BrowserHistorySensor getInstance(Context context) {
-
-        if (INSTANCE == null) {
-            INSTANCE = new BrowserHistorySensor(context);
-        }
-
-        return INSTANCE;
     }
 
     @Override

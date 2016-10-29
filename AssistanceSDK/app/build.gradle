@@ -34,6 +34,10 @@ android {
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
+    // dagger dependency injector
+    compile 'com.google.dagger:dagger:2.7'
+    annotationProcessor 'com.google.dagger:dagger-compiler:2.7'
+    provided 'javax.annotation:jsr250-api:1.0'
     // Facebook SDK
     compile 'com.facebook.android:facebook-android-sdk:4.16.1'
     // Microsoft OneDrive SDK

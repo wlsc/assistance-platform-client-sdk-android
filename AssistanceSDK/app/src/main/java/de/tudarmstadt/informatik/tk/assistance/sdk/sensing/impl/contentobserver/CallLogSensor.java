@@ -15,6 +15,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbCallLogSensor;
 import de.tudarmstadt.informatik.tk.assistance.sdk.model.api.sensing.SensorApiType;
 import de.tudarmstadt.informatik.tk.assistance.sdk.provider.PreferenceProvider;
@@ -27,11 +30,10 @@ import de.tudarmstadt.informatik.tk.assistance.sdk.util.logger.Log;
  * @edited by Wladimir Schmidt (wlsc.dev@gmail.com)
  * @date 27.10.2015
  */
+@Singleton
 public final class CallLogSensor extends AbstractContentObserverSensor {
 
     private static final String TAG = CallLogSensor.class.getSimpleName();
-
-    private static CallLogSensor INSTANCE;
 
     protected static final Uri URI_CALL_LOG = Calls.CONTENT_URI;
 
@@ -39,23 +41,9 @@ public final class CallLogSensor extends AbstractContentObserverSensor {
 
     private AsyncTask<Void, Void, Void> asyncTask;
 
-    private CallLogSensor(Context context) {
+    @Inject
+    public CallLogSensor(Context context) {
         super(context);
-    }
-
-    /**
-     * Gives singleton of this class
-     *
-     * @param context
-     * @return
-     */
-    public static CallLogSensor getInstance(Context context) {
-
-        if (INSTANCE == null) {
-            INSTANCE = new CallLogSensor(context);
-        }
-
-        return INSTANCE;
     }
 
     @Override

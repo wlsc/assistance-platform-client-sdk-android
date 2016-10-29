@@ -7,6 +7,9 @@ import org.greenrobot.greendao.Property;
 import java.util.Collections;
 import java.util.List;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DaoSession;
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbCalendarSensor;
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbCalendarSensorDao.Properties;
@@ -18,25 +21,16 @@ import de.tudarmstadt.informatik.tk.assistance.sdk.util.DateUtils;
  * @author Wladimir Schmidt (wlsc.dev@gmail.com)
  * @date 30.10.2015
  */
+@Singleton
 public final class CalendarSensorDaoImpl extends
         CommonEventDaoImpl<DbCalendarSensor> implements
         CalendarSensorDao {
 
     private static final String TAG = CalendarSensorDaoImpl.class.getSimpleName();
 
-    private static CalendarSensorDao INSTANCE;
-
-    private CalendarSensorDaoImpl(DaoSession daoSession) {
+    @Inject
+    public CalendarSensorDaoImpl(DaoSession daoSession) {
         super(daoSession.getDbCalendarSensorDao());
-    }
-
-    public static CalendarSensorDao getInstance(DaoSession mDaoSession) {
-
-        if (INSTANCE == null) {
-            INSTANCE = new CalendarSensorDaoImpl(mDaoSession);
-        }
-
-        return INSTANCE;
     }
 
     @Nullable

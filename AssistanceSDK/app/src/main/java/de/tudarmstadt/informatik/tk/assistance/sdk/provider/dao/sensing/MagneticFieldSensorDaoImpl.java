@@ -2,6 +2,9 @@ package de.tudarmstadt.informatik.tk.assistance.sdk.provider.dao.sensing;
 
 import android.support.annotation.Nullable;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DaoSession;
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbMagneticFieldSensor;
 import de.tudarmstadt.informatik.tk.assistance.sdk.model.api.sensing.sensor.MagneticFieldSensorDto;
@@ -10,25 +13,16 @@ import de.tudarmstadt.informatik.tk.assistance.sdk.model.api.sensing.sensor.Magn
  * @author Wladimir Schmidt (wlsc.dev@gmail.com)
  * @date 30.10.2015
  */
+@Singleton
 public final class MagneticFieldSensorDaoImpl extends
         CommonEventDaoImpl<DbMagneticFieldSensor> implements
         MagneticFieldSensorDao {
 
     private static final String TAG = MagneticFieldSensorDaoImpl.class.getSimpleName();
 
-    private static MagneticFieldSensorDao INSTANCE;
-
-    private MagneticFieldSensorDaoImpl(DaoSession daoSession) {
+    @Inject
+    public MagneticFieldSensorDaoImpl(DaoSession daoSession) {
         super(daoSession.getDbMagneticFieldSensorDao());
-    }
-
-    public static MagneticFieldSensorDao getInstance(DaoSession mDaoSession) {
-
-        if (INSTANCE == null) {
-            INSTANCE = new MagneticFieldSensorDaoImpl(mDaoSession);
-        }
-
-        return INSTANCE;
     }
 
     @Nullable

@@ -6,6 +6,9 @@ import android.media.AudioManager;
 import java.util.Date;
 import java.util.Locale;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbRingtoneSensor;
 import de.tudarmstadt.informatik.tk.assistance.sdk.model.api.sensing.SensorApiType;
 import de.tudarmstadt.informatik.tk.assistance.sdk.provider.PreferenceProvider;
@@ -19,37 +22,22 @@ import de.tudarmstadt.informatik.tk.assistance.sdk.util.logger.Log;
  * @edited by Wladimir Schmidt (wlsc.dev@gmail.com)
  * @date 24.11.2015
  */
+@Singleton
 public final class RingtoneSensor extends AbstractPeriodicSensor {
 
     private static final String TAG = RingtoneSensorDao.class.getSimpleName();
-
-    private static RingtoneSensor INSTANCE;
 
     private int UPDATE_INTERVAL_IN_SEC = 60;
 
     private AudioManager audioManager;
     private int lastRingerMode = -1;
 
-    private RingtoneSensor(Context context) {
+    @Inject
+    public RingtoneSensor(Context context) {
         super(context);
 
         setDataIntervalInSec(UPDATE_INTERVAL_IN_SEC);
         audioManager = (AudioManager) this.context.getSystemService(Context.AUDIO_SERVICE);
-    }
-
-    /**
-     * Gives singleton of this class
-     *
-     * @param context
-     * @return
-     */
-    public static RingtoneSensor getInstance(Context context) {
-
-        if (INSTANCE == null) {
-            INSTANCE = new RingtoneSensor(context);
-        }
-
-        return INSTANCE;
     }
 
     @Override

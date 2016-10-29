@@ -9,6 +9,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbRunningProcessesSensor;
 import de.tudarmstadt.informatik.tk.assistance.sdk.model.api.sensing.SensorApiType;
 import de.tudarmstadt.informatik.tk.assistance.sdk.provider.PreferenceProvider;
@@ -21,11 +24,10 @@ import de.tudarmstadt.informatik.tk.assistance.sdk.util.logger.Log;
  * @edited by Wladimir Schmidt (wlsc.dev@gmail.com)
  * @date 24.11.2015
  */
+@Singleton
 public final class RunningProcessesReaderSensor extends AbstractPeriodicSensor {
 
     private static final String TAG = RunningProcessesReaderSensor.class.getSimpleName();
-
-    private static RunningProcessesReaderSensor INSTANCE;
 
     private int UPDATE_INTERVAL_IN_SEC = 30;
 
@@ -34,26 +36,12 @@ public final class RunningProcessesReaderSensor extends AbstractPeriodicSensor {
 
     private String currentProcessName = "";
 
-    private RunningProcessesReaderSensor(Context context) {
+    @Inject
+    public RunningProcessesReaderSensor(Context context) {
         super(context);
 
         setDataIntervalInSec(UPDATE_INTERVAL_IN_SEC);
         mActivityManager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
-    }
-
-    /**
-     * Gives singleton of this class
-     *
-     * @param context
-     * @return
-     */
-    public static RunningProcessesReaderSensor getInstance(Context context) {
-
-        if (INSTANCE == null) {
-            INSTANCE = new RunningProcessesReaderSensor(context);
-        }
-
-        return INSTANCE;
     }
 
     @Override

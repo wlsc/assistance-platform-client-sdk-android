@@ -20,6 +20,9 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
 import de.tudarmstadt.informatik.tk.assistance.sdk.db.DbPositionSensor;
 import de.tudarmstadt.informatik.tk.assistance.sdk.model.api.sensing.SensorApiType;
 import de.tudarmstadt.informatik.tk.assistance.sdk.provider.PreferenceProvider;
@@ -33,6 +36,7 @@ import de.tudarmstadt.informatik.tk.assistance.sdk.util.logger.Log;
  * @edited by Wladimir Schmidt (wlsc.dev@gmail.com)
  * @date 08.10.2015
  */
+@Singleton
 public final class LocationSensor extends
         AbstractTriggeredSensor implements
         ConnectionCallbacks,
@@ -58,8 +62,6 @@ public final class LocationSensor extends
     private int FASTEST_INTERVAL_IN_SEC = 10;
     //-----------------------------------------------------
 
-    private static LocationSensor INSTANCE;
-
     private static GoogleApiClient mGoogleApiClient;
 
     private static final int CONNECTION_FAILURE_RESOLUTION_REQUEST = 9_000;
@@ -76,26 +78,12 @@ public final class LocationSensor extends
     private Float speed;
     private Double altitude;
 
-    private LocationSensor(Context context) {
+    @Inject
+    public LocationSensor(Context context) {
         super(context);
 
         mGoogleApiClient = getGoogleApiClient();
         preferenceProvider = PreferenceProvider.getInstance(context);
-    }
-
-    /**
-     * Returns singleton of this class
-     *
-     * @param context
-     * @return
-     */
-    public static LocationSensor getInstance(Context context) {
-
-        if (INSTANCE == null) {
-            INSTANCE = new LocationSensor(context);
-        }
-
-        return INSTANCE;
     }
 
     @NonNull
