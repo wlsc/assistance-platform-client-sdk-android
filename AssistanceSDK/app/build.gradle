@@ -39,7 +39,7 @@ dependencies {
     annotationProcessor 'com.google.dagger:dagger-compiler:2.7'
     provided 'javax.annotation:jsr250-api:1.0'
     // Facebook SDK
-    compile 'com.facebook.android:facebook-android-sdk:4.16.1'
+    compile 'com.facebook.android:facebook-android-sdk:4.17.0'
     // Microsoft OneDrive SDK
     compile('com.onedrive.sdk:onedrive-sdk-android:1.2+') {
         transitive = false
@@ -61,7 +61,7 @@ dependencies {
     // event bus system
     compile 'de.greenrobot:eventbus:2.4.1'
     // google's guava
-    compile 'com.google.guava:guava:19.0'
+    compile 'com.google.guava:guava:20.0'
     // reactive
     compile 'io.reactivex:rxandroid:1.2.1'
     compile 'io.reactivex:rxjava:1.2.1'
