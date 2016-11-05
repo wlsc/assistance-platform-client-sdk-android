@@ -55,7 +55,7 @@ dependencies {
     compile 'com.squareup.retrofit2:retrofit:2.1.0'
     compile 'com.squareup.retrofit2:converter-gson:2.1.0'
     compile 'com.squareup.retrofit2:adapter-rxjava:2.1.0'
-    compile 'com.squareup.okhttp3:logging-interceptor:3.4.1'
+    compile 'com.squareup.okhttp3:logging-interceptor:3.4.2'
     // database ORM
     compile 'org.greenrobot:greendao:3.2.0'
     // event bus system
@@ -64,7 +64,7 @@ dependencies {
     compile 'com.google.guava:guava:20.0'
     // reactive
     compile 'io.reactivex:rxandroid:1.2.1'
-    compile 'io.reactivex:rxjava:1.2.1'
+    compile 'io.reactivex:rxjava:1.2.2'
     // runtime permissions wrapper
     compile 'com.github.kayvannj:PermissionUtils:1.0.3'
 }
