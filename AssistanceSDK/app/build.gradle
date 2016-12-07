@@ -39,7 +39,7 @@ dependencies {
     annotationProcessor 'com.google.dagger:dagger-compiler:2.8'
     provided 'javax.annotation:jsr250-api:1.0'
     // Facebook SDK
-    compile 'com.facebook.android:facebook-android-sdk:4.17.0'
+    compile 'com.facebook.android:facebook-android-sdk:4.18.0'
     // Microsoft OneDrive SDK
     compile('com.onedrive.sdk:onedrive-sdk-android:1.2.2') {
         transitive = false
@@ -55,7 +55,7 @@ dependencies {
     compile 'com.squareup.retrofit2:retrofit:2.1.0'
     compile 'com.squareup.retrofit2:converter-gson:2.1.0'
     compile 'com.squareup.retrofit2:adapter-rxjava:2.1.0'
-    compile 'com.squareup.okhttp3:logging-interceptor:3.4.2'
+    compile 'com.squareup.okhttp3:logging-interceptor:3.5.0'
     // database ORM
     compile 'org.greenrobot:greendao:3.2.0'
     // event bus system
@@ -64,7 +64,7 @@ dependencies {
     compile 'com.google.guava:guava:20.0'
     // reactive
     compile 'io.reactivex:rxandroid:1.2.1'
-    compile 'io.reactivex:rxjava:1.2.2'
+    compile 'io.reactivex:rxjava:1.2.3'
     // runtime permissions wrapper
     compile 'com.github.kayvannj:PermissionUtils:1.0.3'
 }
