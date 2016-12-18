@@ -3,7 +3,7 @@ apply plugin: 'me.tatarka.retrolambda'
 
 android {
     compileSdkVersion 25
-    buildToolsVersion "25.0.1"
+    buildToolsVersion "25.0.2"
 
     defaultConfig {
         minSdkVersion 16
@@ -64,7 +64,7 @@ dependencies {
     compile 'com.google.guava:guava:20.0'
     // reactive
     compile 'io.reactivex:rxandroid:1.2.1'
-    compile 'io.reactivex:rxjava:1.2.3'
+    compile 'io.reactivex:rxjava:1.2.4'
     // runtime permissions wrapper
     compile 'com.github.kayvannj:PermissionUtils:1.0.3'
 }
