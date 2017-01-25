@@ -13,15 +13,13 @@ import java.util.TimeZone;
  * @author Karsten Planz
  * @edited on 30.08.2015 by  Wladimir Schmidt (wlsc.dev@gmail.com)
  */
-public final class DateUtils {
+public enum DateUtils {
+    ;
 
     /**
      * http://www.w3.org/TR/NOTE-datetime
      */
     private static final String DATE_ISO8601_FORMAT = "yyyy-MM-dd'T'HH:mm:ss'Z'";
-
-    private DateUtils() {
-    }
 
     /**
      * Converts given date to ISO 8601 format

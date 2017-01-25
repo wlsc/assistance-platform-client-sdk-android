@@ -17,10 +17,8 @@ import java.util.Map.Entry;
 /**
  * @author Karsten Planz
  */
-public final class ImageUtils {
-
-    private ImageUtils() {
-    }
+public enum ImageUtils {
+    ;
 
     public static Bitmap drawableToBitmap(Drawable drawable) {
         if (drawable instanceof BitmapDrawable) {

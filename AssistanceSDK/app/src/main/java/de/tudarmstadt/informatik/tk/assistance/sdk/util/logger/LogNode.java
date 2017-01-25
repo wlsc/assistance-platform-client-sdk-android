@@ -24,6 +24,7 @@ package de.tudarmstadt.informatik.tk.assistance.sdk.util.logger;
  * it received to HTML and sent it along to the next node in the chain, without printing it
  * anywhere.
  */
+@FunctionalInterface
 public interface LogNode {
 
     /**

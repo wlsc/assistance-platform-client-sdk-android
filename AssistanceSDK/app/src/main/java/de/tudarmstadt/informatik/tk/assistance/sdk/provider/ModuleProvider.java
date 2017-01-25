@@ -221,7 +221,7 @@ public final class ModuleProvider {
     public String[] getNotGrantedModuleCapabilityPermission(Activity activity, DbModuleCapability capability) {
 
         List<String> result = new ArrayList<>();
-        String[] permsToCheck = PermissionUtils.getInstance(mContext).getDangerousPermissionsToDtoMapping()
+        String[] permsToCheck = PermissionUtils.getDangerousPermissionsToDtoMapping()
                 .get(capability.getType());
 
         if (permsToCheck != null) {

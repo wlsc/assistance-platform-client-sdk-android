@@ -15,27 +15,12 @@ import org.json.JSONObject;
  * @author Wladimir Schmidt (wlsc.dev@gmail.com)
  * @date 17.12.2015
  */
-public final class JsonUtils {
+public enum JsonUtils {
+    ;
 
-    private static JsonUtils INSTANCE;
+    private static final Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
 
-    private static Gson gson;
-
-    private JsonUtils() {
-        GsonBuilder gsonBuilder = new GsonBuilder().excludeFieldsWithoutExposeAnnotation();
-        gson = gsonBuilder.create();
-    }
-
-    public static JsonUtils getInstance() {
-
-        if (INSTANCE == null) {
-            INSTANCE = new JsonUtils();
-        }
-
-        return INSTANCE;
-    }
-
-    public Gson getGson() {
+    public static Gson getGson() {
         return gson;
     }
 
@@ -45,7 +30,7 @@ public final class JsonUtils {
      * @param json
      * @return
      */
-    public boolean isValidJSON(String json) {
+    public static boolean isValidJSON(String json) {
 
         try {
             gson.fromJson(json, Object.class);
@@ -62,7 +47,7 @@ public final class JsonUtils {
      * @return
      */
     @Nullable
-    public JsonElement convert(JSONObject object) {
+    public static JsonElement convert(JSONObject object) {
 
         if (object == null) {
             return null;

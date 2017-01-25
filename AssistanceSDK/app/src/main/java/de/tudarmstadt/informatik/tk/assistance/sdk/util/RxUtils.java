@@ -7,10 +7,8 @@ import rx.subscriptions.CompositeSubscription;
  * @author Wladimir Schmidt (wlsc.dev@gmail.com)
  * @date 02.01.2016
  */
-public final class RxUtils {
-
-    private RxUtils() {
-    }
+public enum RxUtils {
+    ;
 
     /**
      * Unsubscribes a subscription

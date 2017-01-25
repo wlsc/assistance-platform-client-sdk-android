@@ -23,7 +23,8 @@ package de.tudarmstadt.informatik.tk.assistance.sdk.util.logger;
  * Most of the methods in this class server only to map a method call in Log to its equivalent
  * in LogNode.</p>
  */
-public class Log {
+public enum Log {
+    ;
     // Grabbing the native values from Android's native logging facilities,
     // to make for easy migration and interop.
     public static final int NONE = -1;

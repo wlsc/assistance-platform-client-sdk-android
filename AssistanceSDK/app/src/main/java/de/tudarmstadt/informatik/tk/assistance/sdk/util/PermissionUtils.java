@@ -17,45 +17,14 @@ import de.tudarmstadt.informatik.tk.assistance.sdk.model.api.sensing.SensorApiTy
  * @author Wladimir Schmidt (wlsc.dev@gmail.com)
  * @date 02.10.2015
  */
-public final class PermissionUtils {
+public enum PermissionUtils {
+    ;
 
     private static final String TAG = PermissionUtils.class.getSimpleName();
 
-    private static PermissionUtils INSTANCE;
+    public static Map<String, String[]> getDangerousPermissionsToDtoMapping() {
 
-    private final Context mContext;
-
-    private Map<String, String[]> dangerousPermissionsToDtoMapping;
-
-    private PermissionUtils(Context context) {
-        this.mContext = context;
-
-        createDangerousPermissionsToDtoMappings();
-    }
-
-    /**
-     * Initializes and returns an instance of this class
-     *
-     * @param context
-     * @return
-     */
-    public static PermissionUtils getInstance(Context context) {
-
-        if (INSTANCE == null) {
-            INSTANCE = new PermissionUtils(context);
-        }
-
-        return INSTANCE;
-    }
-
-    /**
-     * creating mapping between API definitions and permissions
-     * key: capability type of a module
-     * value: needed permissions for that
-     */
-    private void createDangerousPermissionsToDtoMappings() {
-
-        dangerousPermissionsToDtoMapping = new HashMap<>();
+        Map<String, String[]> dangerousPermissionsToDtoMapping = new HashMap<>();
 
         dangerousPermissionsToDtoMapping.put(
                 SensorApiType.getApiName(SensorApiType.CALENDAR),
@@ -89,10 +58,8 @@ public final class PermissionUtils {
                         permission.ACCESS_FINE_LOCATION
                 }
         );
-    }
 
-    public Map<String, String[]> getDangerousPermissionsToDtoMapping() {
-        return this.dangerousPermissionsToDtoMapping;
+        return dangerousPermissionsToDtoMapping;
     }
 
     /**
@@ -101,8 +68,8 @@ public final class PermissionUtils {
      * @param permission
      * @return
      */
-    public boolean isGranted(String permission) {
-        return permission != null && ContextCompat.checkSelfPermission(mContext, permission) == PackageManager.PERMISSION_GRANTED;
+    public static boolean isGranted(Context context, String permission) {
+        return permission != null && ContextCompat.checkSelfPermission(context, permission) == PackageManager.PERMISSION_GRANTED;
 
     }
 
@@ -112,7 +79,7 @@ public final class PermissionUtils {
      * @param grantResults
      * @return
      */
-    public boolean handlePermissionResult(@NonNull int... grantResults) {
+    public static boolean handlePermissionResult(@NonNull int... grantResults) {
         return !(grantResults == null || grantResults.length <= 0) && grantResults[0] == PackageManager.PERMISSION_GRANTED;
 
     }
@@ -123,7 +90,7 @@ public final class PermissionUtils {
      * @param perms
      * @return
      */
-    public boolean isGranted(String... perms) {
+    public static boolean isGranted(String... perms) {
 
         if (perms == null) {
             return false;

@@ -9,7 +9,8 @@ import android.provider.Settings.Secure;
  * @author Wladimir Schmidt (wlsc.dev@gmail.com)
  * @date 22.08.2015
  */
-public class HardwareUtils {
+public enum HardwareUtils {
+    ;
 
     /**
      * Returns current version of Android operating system

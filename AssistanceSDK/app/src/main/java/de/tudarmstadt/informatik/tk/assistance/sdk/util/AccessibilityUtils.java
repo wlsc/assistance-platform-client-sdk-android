@@ -16,12 +16,10 @@ import de.tudarmstadt.informatik.tk.assistance.sdk.util.logger.Log;
  *
  * @author Karsten Planz
  */
-public final class AccessibilityUtils {
+public enum AccessibilityUtils {
+    ;
 
     private static final String TAG = AccessibilityUtils.class.getSimpleName();
-
-    private AccessibilityUtils() {
-    }
 
     public static boolean isAccessibilityEnabled(Context context) {
 

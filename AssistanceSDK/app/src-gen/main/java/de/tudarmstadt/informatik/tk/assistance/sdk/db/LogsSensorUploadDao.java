@@ -24,7 +24,8 @@ public class LogsSensorUploadDao extends AbstractDao<LogsSensorUpload, Long> {
      * Properties of entity LogsSensorUpload.<br/>
      * Can be used for QueryBuilder and for referencing column names.
      */
-    public static class Properties {
+    public static enum Properties {
+        ;
         public final static Property Id = new Property(0, Long.class, "id", true, "_id");
         public final static Property StartTime = new Property(1, Long.class, "startTime", false, "START_TIME");
         public final static Property ProcessingTime = new Property(2, Long.class, "processingTime", false, "PROCESSING_TIME");

@@ -20,12 +20,10 @@ import de.tudarmstadt.informatik.tk.assistance.sdk.util.logger.Log;
  * @author Wladimir Schmidt (wlsc.dev@gmail.com)
  * @date 17.12.2015
  */
-public final class ServiceUtils {
+public enum ServiceUtils {
+    ;
 
     private static final String TAG = ServiceUtils.class.getSimpleName();
-
-    private ServiceUtils() {
-    }
 
 
     /**

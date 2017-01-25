@@ -12,10 +12,8 @@ import android.os.PowerManager;
  * @author Wladimir Schmidt (wlsc.dev@gmail.com)
  * @date 31.10.2015
  */
-public final class BatteryUtils {
-
-    private BatteryUtils() {
-    }
+public enum BatteryUtils {
+    ;
 
     /**
      * Phone is plugged in with AC adapter

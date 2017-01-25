@@ -30,12 +30,10 @@ import retrofit2.Response;
  * @author Wladimir Schmidt (wlsc.dev@gmail.com)
  * @date 08.09.2015
  */
-public final class ConverterUtils {
+public enum ConverterUtils {
+    ;
 
     private static final Gson gson = new Gson();
-
-    private ConverterUtils() {
-    }
 
     /**
      * Parses API error response

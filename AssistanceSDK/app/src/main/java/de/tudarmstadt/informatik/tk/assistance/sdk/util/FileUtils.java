@@ -18,10 +18,8 @@ import java.io.UnsupportedEncodingException;
 import java.nio.channels.FileChannel;
 
 
-public final class FileUtils {
-
-    private FileUtils() {
-    }
+public enum FileUtils {
+    ;
 
     /**
      * Checks if external storage is available for read and write.

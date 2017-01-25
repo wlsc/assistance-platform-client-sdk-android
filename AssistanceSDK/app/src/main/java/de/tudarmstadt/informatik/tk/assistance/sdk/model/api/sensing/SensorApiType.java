@@ -17,7 +17,8 @@ import de.tudarmstadt.informatik.tk.assistance.sdk.R.string;
  * @author Wladimir Schmidt (wlsc.dev@gmail.com)
  * @date 30.08.2015
  */
-public final class SensorApiType {
+public enum SensorApiType {
+    ;
 
     // holder of API type string to DTO type mappings
     private static final Map<String, Integer> apiNameToDtoTypeMap = new HashMap<>();
@@ -129,9 +130,6 @@ public final class SensorApiType {
         }
 
         androidSensorToDtoTypeMap.put(Sensor.TYPE_LIGHT, LIGHT);
-    }
-
-    private SensorApiType() {
     }
 
     public static String getName(int type, Resources res) {

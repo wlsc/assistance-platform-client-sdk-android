@@ -7,10 +7,8 @@ import android.hardware.SensorManager;
  * @author Wladimir Schmidt (wlsc.dev@gmail.com)
  * @date 12.10.2015
  */
-public final class DeviceUtils {
-
-    private DeviceUtils() {
-    }
+public enum DeviceUtils {
+    ;
 
     /**
      * Checks if given sensor contains physically on current device

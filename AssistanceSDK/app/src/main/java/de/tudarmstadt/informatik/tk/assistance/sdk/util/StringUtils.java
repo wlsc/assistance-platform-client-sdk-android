@@ -4,10 +4,8 @@ package de.tudarmstadt.informatik.tk.assistance.sdk.util;
  * @author Wladimir Schmidt (wlsc.dev@gmail.com)
  * @date 26.11.2015
  */
-public final class StringUtils {
-
-    private StringUtils() {
-    }
+public enum StringUtils {
+    ;
 
     /**
      * Returns true if string IS null or IS empty

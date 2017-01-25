@@ -17,12 +17,10 @@ import de.tudarmstadt.informatik.tk.assistance.sdk.util.logger.Log;
  * @author Wladimir Schmidt (wlsc.dev@gmail.com)
  * @date 30.09.2015
  */
-public final class GcmUtils {
+public enum GcmUtils {
+    ;
 
     private static final String TAG = GcmUtils.class.getSimpleName();
-
-    private GcmUtils() {
-    }
 
     /**
      * Check the device to make sure it has the Google Play Services APK. If
@@ -34,21 +32,20 @@ public final class GcmUtils {
         GoogleApiAvailability apiAvailability = GoogleApiAvailability.getInstance();
         int resultCode = apiAvailability.isGooglePlayServicesAvailable(activity);
 
-        if (resultCode != ConnectionResult.SUCCESS) {
-
-            if (apiAvailability.isUserResolvableError(resultCode)) {
-
-                apiAvailability
-                        .getErrorDialog(activity, resultCode, Config.PLAY_SERVICES_RESOLUTION_REQUEST)
-                        .show();
-            } else {
-                Log.d(TAG, "This device is not supported!");
-            }
-
-            return false;
+        if (resultCode == ConnectionResult.SUCCESS) {
+            return true;
         }
 
-        return true;
+        if (apiAvailability.isUserResolvableError(resultCode)) {
+
+            apiAvailability
+                    .getErrorDialog(activity, resultCode, Config.PLAY_SERVICES_RESOLUTION_REQUEST)
+                    .show();
+        } else {
+            Log.d(TAG, "This device is not supported!");
+        }
+
+        return false;
     }
 
     /**

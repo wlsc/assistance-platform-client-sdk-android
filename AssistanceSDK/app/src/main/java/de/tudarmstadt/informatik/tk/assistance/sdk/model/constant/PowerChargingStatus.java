@@ -4,7 +4,8 @@ package de.tudarmstadt.informatik.tk.assistance.sdk.model.constant;
  * @author Wladimir Schmidt (wlsc.dev@gmail.com)
  * @date 10.11.2015
  */
-public final class PowerChargingStatus {
+public enum PowerChargingStatus {
+    ;
 
     public static final int NONE = 0;
 
@@ -15,8 +16,5 @@ public final class PowerChargingStatus {
     public static final int FULL = 3;
 
     public static final int MALFUNCTION = 4;
-
-    private PowerChargingStatus() {
-    }
 
 }

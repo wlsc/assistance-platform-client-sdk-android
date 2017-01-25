@@ -9,10 +9,8 @@ import android.webkit.URLUtil;
  * @author Wladimir Schmidt (wlsc.dev@gmail.com)
  * @date 20.01.2016
  */
-public final class UrlUtils {
-
-    private UrlUtils() {
-    }
+public enum UrlUtils {
+    ;
 
     /**
      * Checks if given URL is valid URL

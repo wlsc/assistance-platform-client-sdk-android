@@ -337,7 +337,6 @@ public class SensorUploadService extends GcmTaskService {
      */
     private class SensorUploadSubscriber extends Subscriber<SensorUploadResponseDto> {
 
-        private final JsonUtils jsonUtils;
         private final DbUser user;
         private final SensorUploadRequestDto eventUploadRequest;
         private final SensorUploadLogsDao sensorUploadLogsDao;
@@ -348,7 +347,6 @@ public class SensorUploadService extends GcmTaskService {
 
             this.eventUploadRequest = eventUploadRequest;
             this.logsSensorUpload = new LogsSensorUpload();
-            this.jsonUtils = JsonUtils.getInstance();
             String userToken = mPreferenceProvider.getUserToken();
             this.user = DaoProvider.getInstance(getApplicationContext())
                     .getUserDao()
@@ -362,7 +360,7 @@ public class SensorUploadService extends GcmTaskService {
             super.onStart();
 
             logsSensorUpload.setStartTime(requestStartTimeMillis);
-            logsSensorUpload.setBodySize(Long.valueOf(jsonUtils.getGson().toJson(eventUploadRequest).length()));
+            logsSensorUpload.setBodySize(Long.valueOf(JsonUtils.getGson().toJson(eventUploadRequest).length()));
 
             boolean isWifi = ConnectionUtils.isConnectedWifi(getApplicationContext());
             boolean isMobile = ConnectionUtils.isConnectedMobile(getApplicationContext());

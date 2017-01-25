@@ -18,10 +18,8 @@ import de.tudarmstadt.informatik.tk.assistance.sdk.Config;
  * @author Wladimir Schmidt (wlsc.dev@gmail.com)
  * @date 01.09.2015
  */
-public final class StorageUtils {
-
-    private StorageUtils() {
-    }
+public enum StorageUtils {
+    ;
 
     /**
      * Reads content of a cached internal file

@@ -13,10 +13,8 @@ import android.telephony.TelephonyManager;
  * @author Wladimir Schmidt (wlsc.dev@gmail.com)
  * @date 31.10.2015
  */
-public final class ConnectionUtils {
-
-    private ConnectionUtils() {
-    }
+public enum ConnectionUtils {
+    ;
 
 
     /**

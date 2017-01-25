@@ -3,10 +3,11 @@ package de.tudarmstadt.informatik.tk.assistance.sdk.model.api.error;
 /**
  * HTTP user error codes
  * More info: https://github.com/Telecooperation/server_platform_assistance/wiki/REST-API
- *
+ * <p>
  * Created by Wladimir Schmidt on 28.06.2015.
  */
-public final class ApiHttpErrorCodes {
+public enum ApiHttpErrorCodes {
+    ;
 
     public static final int LOGIN_NO_VALID = 2;
 
@@ -32,6 +33,4 @@ public final class ApiHttpErrorCodes {
 
     public static final int PLATFORM_NOT_SUPPORTED = 13;
 
-    private ApiHttpErrorCodes() {
-    }
 }
