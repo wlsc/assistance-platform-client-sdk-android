@@ -61,7 +61,7 @@ dependencies {
     // event bus system
     compile 'de.greenrobot:eventbus:2.4.1'
     // google's guava
-    compile 'com.google.guava:guava:20.0'
+    compile 'com.google.guava:guava:21.0'
     // reactive
     compile 'io.reactivex:rxandroid:1.2.1'
     compile 'io.reactivex:rxjava:1.2.5'
