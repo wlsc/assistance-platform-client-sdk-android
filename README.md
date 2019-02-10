@@ -1,6 +1,7 @@
 # SDK for Modular Android-based Intelligent Personal Assistant
 [![License](https://img.shields.io/badge/license-Apache-orange.svg?style=flat)](https://opensource.org/licenses/Apache-2.0)
-[![Build Status](https://travis-ci.org/Telecooperation/assistance-platform-client-sdk-android.svg?branch=master)](https://travis-ci.org/Telecooperation/assistance-platform-client-sdk-android) 
+[![Build Status](https://travis-ci.org/Telecooperation/assistance-platform-client-sdk-android.svg?branch=master)](https://travis-ci.org/Telecooperation/assistance-platform-client-sdk-android) [![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fwlsc%2Fassistance-platform-client-sdk-android.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Fwlsc%2Fassistance-platform-client-sdk-android?ref=badge_shield)
+
 [![codebeat badge](https://codebeat.co/badges/0c7f63fa-76eb-40a8-b648-fc57b28fd43a)](https://codebeat.co/projects/github-com-telecooperation-assistance-platform-client-sdk-android)
 
 The Assistance SDK is a library to track user's behavior and interaction with a device.
@@ -17,3 +18,6 @@ distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
+
+
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fwlsc%2Fassistance-platform-client-sdk-android.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2Fwlsc%2Fassistance-platform-client-sdk-android?ref=badge_large)
